@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+        <PackageTags>mocks, unit test, library, client-side, package</PackageTags>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\LibraryInstaller.Mocks.xml</DocumentationFile>
+        <Authors>Microsoft</Authors>
+        <Company>Microsoft Corp.</Company>
+        <Description>A collection of mocks for unit testing custom Library Installer extensions</Description>
+        <Copyright>Copyright © Microsoft</Copyright>
+        <Version>1.0.0-alpha</Version>
+        <Product>Microsoft.Web.LibraryInstaller.Mocks</Product>
+        <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
+        <PackageProjectUrl>https://aka.ms/vsextensibility</PackageProjectUrl>
+        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
+        <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\LibraryInstaller.Contracts\LibraryInstaller.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>

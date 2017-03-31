@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+        <PackageTags>library, package, client-side</PackageTags>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\LibraryInstaller.Contracts.xml</DocumentationFile>
+        <Authors>Microsoft</Authors>
+        <Company>Microsof Corp.</Company>
+        <Description>The contracts assembly for authoring Library Installer extensions</Description>
+        <Copyright>Copyright © Microsoft</Copyright>
+        <Version>1.0.0-alpha</Version>
+        <Product>Microsoft.Web.LibraryInstaller.Contracts</Product>
+        <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
+        <PackageProjectUrl>https://aka.ms/vsextensibility</PackageProjectUrl>
+        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
+        <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
+    </PropertyGroup>
+
+    <Target Name="BuiltProjectOutputGroup" />
+    <Target Name="BuiltProjectOutputGroupDependencies" />
+    <Target Name="GetCopyToOutputDirectoryItems" />
+    <Target Name="SatelliteDllsProjectOutputGroup" />
+    <Target Name="DebugSymbolsProjectOutputGroup" />
+</Project>

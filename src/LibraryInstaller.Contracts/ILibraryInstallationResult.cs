@@ -1,0 +1,34 @@
+﻿using System.Collections.Generic;
+
+namespace LibraryInstaller.Contracts
+{
+    /// <summary>
+    /// Represents the result of <see cref="IProvider.InstallAsync"/>.
+    /// </summary>
+    public interface ILibraryInstallationResult
+    {
+        /// <summary>
+        /// <code>True</code> if the installation was cancelled; otherwise false;
+        /// </summary>
+        bool Cancelled { get; }
+
+        /// <summary>
+        /// <code>True</code> if the install was successfull; otherwise <code>False</code>.
+        /// </summary>
+        /// <remarks>
+        /// The value is usually <code>True</code> if the <see cref="Errors"/> list is empty.
+        /// </remarks>
+        bool Success { get; }
+
+        /// <summary>
+        /// A list of errors that occured during library installation.
+        /// </summary>
+        IList<IError> Errors { get; }
+
+        /// <summary>
+        /// The <see cref="ILibraryInstallationState"/> object passed to the
+        /// <see cref="IProvider"/> for installation.
+        /// </summary>
+        ILibraryInstallationState InstallationState { get; }
+    }
+}
