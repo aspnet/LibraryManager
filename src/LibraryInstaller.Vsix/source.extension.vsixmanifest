@@ -4,7 +4,9 @@
         <Identity Id="69b6bcde-f505-4c03-b071-8981cc1be2b9" Version="0.1" Language="en-US" Publisher="Mads Kristensen" />
         <DisplayName>Library Installer</DisplayName>
         <Description xml:space="preserve">Install client-side libraries easily to any web project</Description>
+        <MoreInfo>https://github.com/aspnet/LibraryInstaller</MoreInfo>
         <License>Resources\LICENSE.txt</License>
+        <ReleaseNotes>https://github.com/aspnet/LibraryInstaller/blob/master/CHANGELOG.md</ReleaseNotes>
         <Icon>Resources\Icon.png</Icon>
         <PreviewImage>Resources\Icon.png</PreviewImage>
         <Tags>library, package, client-side, install</Tags>

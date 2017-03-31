@@ -14,6 +14,7 @@
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
         <PackageProjectUrl>https://aka.ms/vsextensibility</PackageProjectUrl>
         <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
+        <RepositoryUrl>https://github.com/aspnet/LibraryInstaller</RepositoryUrl>
         <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
     </PropertyGroup>
 
