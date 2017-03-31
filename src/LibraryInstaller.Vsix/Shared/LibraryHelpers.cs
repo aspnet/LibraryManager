@@ -67,15 +67,9 @@ namespace LibraryInstaller.Vsix
             var dependencies = Dependencies.FromConfigFile(configFileName);
             Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None);
 
-            manifest?.Clean((filePath) =>
-            {
-                ProjectItem item = VsHelpers.DTE.Solution.FindProjectItem(filePath);
+            manifest?.Clean();
 
-                if (item != null)
-                    item.Delete();
-            });
-
-            Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded, Level.Task);
+            Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded + Environment.NewLine, Level.Task);
         }
 
         private static async Task<IEnumerable<ILibraryInstallationResult>> RestoreLibrariesAsync(string configFilePath, CancellationToken cancellationToken)

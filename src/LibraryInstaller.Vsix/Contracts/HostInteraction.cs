@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using EnvDTE;
 
 namespace LibraryInstaller.Vsix
 {
@@ -48,6 +49,31 @@ namespace LibraryInstaller.Vsix
             Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, path.Replace('\\', '/')), Level.Operation);
 
             return true;
+        }
+
+        public bool DeleteFile(string filePath)
+        {
+            try
+            {
+                ProjectItem item = VsHelpers.DTE.Solution.FindProjectItem(filePath);
+                Project project = item?.ContainingProject;
+
+                if (!project.IsKind(ProjectTypes.DOTNET_Core, ProjectTypes.ASPNET_5))
+                {
+                    item.Delete();
+                }
+                else
+                {
+                    VsHelpers.CheckFileOutOfSourceControl(filePath);
+                    File.Delete(filePath);
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

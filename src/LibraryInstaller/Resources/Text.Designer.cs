@@ -107,6 +107,24 @@ namespace LibraryInstaller.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} deleted.
+        /// </summary>
+        internal static string FileDeleted {
+            get {
+                return ResourceManager.GetString("FileDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete {0}.
+        /// </summary>
+        internal static string FileDeleteFail {
+            get {
+                return ResourceManager.GetString("FileDeleteFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Library restore has been cancelled.
         /// </summary>
         internal static string RestoreCancelled {

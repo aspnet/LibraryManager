@@ -176,16 +176,24 @@ namespace LibraryInstaller
         /// <summary>
         /// Deletes all library output files from disk.
         /// </summary>
-        /// <param name="afterDelete">A callback action that is called after deletion of the file. Can be <code>null</code>.</param>
-        public void Clean(Action<string> afterDelete)
+        public void Clean()
         {
             foreach (ILibraryInstallationState state in Libraries)
                 foreach (string file in state.Files)
                 {
-                    string absolute = Path.Combine(_hostInteraction.WorkingDirectory, state.Path, file);
-                    File.Delete(absolute);
+                    string relativePath = Path.Combine(state.Path, file).Replace('\\', '/');
+                    string absolutePath = Path.Combine(_hostInteraction.WorkingDirectory, relativePath);
 
-                    afterDelete?.Invoke(absolute);
+                    bool deleted = _hostInteraction.DeleteFile(absolutePath);
+
+                    if (deleted)
+                    {
+                        _hostInteraction.Logger.Log(string.Format(Resources.Text.FileDeleted, relativePath), Level.Operation);
+                    }
+                    else
+                    {
+                        _hostInteraction.Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativePath), Level.Operation);
+                    }
                 }
         }
     }
