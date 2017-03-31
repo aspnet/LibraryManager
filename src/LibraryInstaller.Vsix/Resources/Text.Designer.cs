@@ -88,6 +88,24 @@ namespace LibraryInstaller.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} deleted.
+        /// </summary>
+        internal static string FileDeleted {
+            get {
+                return ResourceManager.GetString("FileDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete {0}.
+        /// </summary>
+        internal static string FileDeleteFail {
+            get {
+                return ResourceManager.GetString("FileDeleteFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} written to disk.
         /// </summary>
         internal static string FileWrittenToDisk {

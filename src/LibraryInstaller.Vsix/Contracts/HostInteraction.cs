@@ -54,28 +54,30 @@ namespace LibraryInstaller.Vsix
             return true;
         }
 
-        public bool DeleteFile(string filePath)
+        public void DeleteFile(string relativeFilePath)
         {
+            string absoluteFile = Path.Combine(WorkingDirectory, relativeFilePath);
+
             try
             {
-                ProjectItem item = VsHelpers.DTE.Solution.FindProjectItem(filePath);
+                ProjectItem item = VsHelpers.DTE.Solution.FindProjectItem(absoluteFile);
                 Project project = item?.ContainingProject;
 
-                if (!project.IsKind(ProjectTypes.DOTNET_Core, ProjectTypes.ASPNET_5))
+                if (project != null)
                 {
                     item.Delete();
                 }
                 else
                 {
-                    VsHelpers.CheckFileOutOfSourceControl(filePath);
-                    File.Delete(filePath);
+                    VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
+                    File.Delete(absoluteFile);
                 }
 
-                return true;
+                Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), Level.Operation);
             }
             catch (Exception)
             {
-                return false;
+                Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativeFilePath), Level.Operation);
             }
         }
     }

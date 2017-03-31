@@ -45,6 +45,6 @@ namespace LibraryInstaller.Contracts
         /// Deletes a file from disk.
         /// </summary>
         /// <param name="filePath">The absolute path to the file.</param>
-        bool DeleteFile(string filePath);
+        void DeleteFile(string filePath);
     }
 }

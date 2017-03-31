@@ -150,4 +150,10 @@
   <data name="FileWrittenToDisk" xml:space="preserve">
     <value>{0} written to disk</value>
   </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>{0} deleted</value>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>Failed to delete {0}</value>
+  </data>
 </root>

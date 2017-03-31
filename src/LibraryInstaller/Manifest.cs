@@ -154,6 +154,27 @@ namespace LibraryInstaller
         }
 
         /// <summary>
+        /// Uninstalls the specified library and removes it from the <see cref="Libraries"/> collection.
+        /// </summary>
+        /// <param name="libraryId">The library identifier.</param>
+        public void Uninstall(string libraryId)
+        {
+            ILibraryInstallationState state = Libraries.FirstOrDefault(l => l.LibraryId == libraryId);
+
+            if (state != null)
+            {
+                foreach (string file in state.Files)
+                {
+                    string relativePath = Path.Combine(state.Path, file).Replace('\\', '/');
+
+                    _hostInteraction.DeleteFile(relativePath);
+                }
+
+                Libraries.Remove(state);
+            }
+        }
+
+        /// <summary>
         /// Saves the manifest file to disk.
         /// </summary>
         /// <param name="fileName">The absolute file path to save the <see cref="Manifest"/> to.</param>
@@ -185,18 +206,7 @@ namespace LibraryInstaller
                 foreach (string file in state.Files)
                 {
                     string relativePath = Path.Combine(state.Path, file).Replace('\\', '/');
-                    string absolutePath = Path.Combine(_hostInteraction.WorkingDirectory, relativePath);
-
-                    bool deleted = _hostInteraction.DeleteFile(absolutePath);
-
-                    if (deleted)
-                    {
-                        _hostInteraction.Logger.Log(string.Format(Resources.Text.FileDeleted, relativePath), Level.Operation);
-                    }
-                    else
-                    {
-                        _hostInteraction.Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativePath), Level.Operation);
-                    }
+                    _hostInteraction.DeleteFile(relativePath);
                 }
         }
     }

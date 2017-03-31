@@ -12,6 +12,8 @@ Install and consume 3rd-party client-side libraries with ease.
 - Very fast
 - Full Visual Studio 2017 integration
 
+## Road map and release notes
+See the [CHANGELOG](CHANGELOG.md) for road map and release notes
 
 # Feedback
 

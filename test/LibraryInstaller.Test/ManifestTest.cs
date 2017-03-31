@@ -71,6 +71,76 @@ namespace LibraryInstaller.Test
         }
 
         [TestMethod]
+        public async Task UninstallLibraryAsync()
+        {
+            var manifest = new Manifest(_dependencies);
+            CancellationToken token = CancellationToken.None;
+
+            IProvider provider = _dependencies.GetProvider("cdnjs");
+            var desiredState = new LibraryInstallationState
+            {
+                LibraryId = "jquery@3.1.1",
+                ProviderId = "cdnjs",
+                Path = "lib",
+                Files = new[] { "jquery.js", "jquery.min.js" }
+            };
+
+            manifest.AddLibrary(desiredState);
+            await manifest.RestoreAsync(token);
+
+            string file1 = Path.Combine(_projectFolder, "lib", "jquery.js");
+            string file2 = Path.Combine(_projectFolder, "lib", "jquery.min.js");
+            Assert.IsTrue(File.Exists(file1));
+            Assert.IsTrue(File.Exists(file2));
+
+            manifest.Uninstall(desiredState.LibraryId);
+
+            Assert.IsFalse(File.Exists(file1));
+            Assert.IsFalse(File.Exists(file2));
+        }
+
+        [TestMethod]
+        public async Task CleanAsync()
+        {
+            var manifest = new Manifest(_dependencies);
+            CancellationToken token = CancellationToken.None;
+
+            IProvider provider = _dependencies.GetProvider("cdnjs");
+            var state1 = new LibraryInstallationState
+            {
+                LibraryId = "jquery@3.1.1",
+                ProviderId = "cdnjs",
+                Path = "lib",
+                Files = new[] { "jquery.js", "jquery.min.js" }
+            };
+
+            var state2 = new LibraryInstallationState
+            {
+                LibraryId = "knockout@3.4.2",
+                ProviderId = "cdnjs",
+                Path = "lib",
+                Files = new[] { "knockout-min.js" }
+            };
+
+            manifest.AddLibrary(state1);
+            manifest.AddLibrary(state2);
+            await manifest.RestoreAsync(token);
+
+            string file1 = Path.Combine(_projectFolder, "lib", "jquery.js");
+            string file2 = Path.Combine(_projectFolder, "lib", "jquery.min.js");
+            string file3 = Path.Combine(_projectFolder, "lib", "knockout-min.js");
+            Assert.IsTrue(File.Exists(file1));
+            Assert.IsTrue(File.Exists(file2));
+            Assert.IsTrue(File.Exists(file3));
+
+            manifest.Clean();
+
+            Assert.IsFalse(File.Exists(file1));
+            Assert.IsFalse(File.Exists(file2));
+            Assert.IsFalse(File.Exists(file3));
+        }
+
+        [TestMethod]
         public async Task RestoreLibrariesAsync()
         {
             var manifest = Manifest.FromJson(_doc, _dependencies);

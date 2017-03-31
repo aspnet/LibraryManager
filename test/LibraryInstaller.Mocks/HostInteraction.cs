@@ -84,18 +84,11 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// Deletes a file from disk.
         /// </summary>
-        /// <param name="filePath">The absolute path to the file.</param>
-        public bool DeleteFile(string filePath)
+        /// <param name="relativeFilePath">The absolute path to the file.</param>
+        public void DeleteFile(string relativeFilePath)
         {
-            try
-            {
-                File.Delete(filePath);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            string absoluteFile = Path.Combine(WorkingDirectory, relativeFilePath);
+            File.Delete(absoluteFile);
         }
     }
 }
