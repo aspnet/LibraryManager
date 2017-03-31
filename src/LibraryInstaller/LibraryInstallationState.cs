@@ -16,7 +16,7 @@ namespace LibraryInstaller
         public string LibraryId { get; set; }
 
         [JsonProperty("path")]
-        public string Path { get; set; }
+        public string DestinationPath { get; set; }
 
         [JsonProperty("files")]
         public IReadOnlyList<string> Files { get; set; }
@@ -28,7 +28,7 @@ namespace LibraryInstaller
                 LibraryId = state.LibraryId,
                 ProviderId = state.ProviderId,
                 Files = state.Files,
-                Path = state.Path
+                DestinationPath = state.DestinationPath
             };
         }
     }

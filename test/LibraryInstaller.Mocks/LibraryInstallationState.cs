@@ -30,6 +30,6 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// The path relative to the working directory to copy the files to.
         /// </summary>
-        public string Path { get; set; }
+        public string DestinationPath { get; set; }
     }
 }

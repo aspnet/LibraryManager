@@ -16,14 +16,14 @@ namespace LibraryInstaller.Test
             {
                 ProviderId = "_prov_",
                 LibraryId = "_lib_",
-                Path = "_path_",
+                DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };
 
             var lis = LibraryInstallationState.FromInterface(state);
             Assert.AreEqual(state.ProviderId, lis.ProviderId);
             Assert.AreEqual(state.LibraryId, lis.LibraryId);
-            Assert.AreEqual(state.Path, lis.Path);
+            Assert.AreEqual(state.DestinationPath, lis.DestinationPath);
             Assert.AreEqual(state.Files, lis.Files);
         }
     }

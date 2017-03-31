@@ -38,7 +38,9 @@ namespace LibraryInstaller.Vsix
                 if (stream == null)
                     return false;
 
-                using (FileStream writer = File.Create(absolutePath))
+                VsHelpers.CheckFileOutOfSourceControl(absolutePath);
+
+                using (FileStream writer = File.Create(absolutePath, 4096, FileOptions.Asynchronous))
                 {
                     if (stream.CanSeek)
                     {
@@ -49,7 +51,7 @@ namespace LibraryInstaller.Vsix
                 }
             }
 
-            Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, path.Replace('\\', '/')), Level.Operation);
+            Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, path.Replace('\\', '/')), LogLevel.Operation);
 
             return true;
         }
@@ -73,11 +75,11 @@ namespace LibraryInstaller.Vsix
                     File.Delete(absoluteFile);
                 }
 
-                Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), Level.Operation);
+                Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
             }
             catch (Exception)
             {
-                Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativeFilePath), Level.Operation);
+                Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
             }
         }
     }

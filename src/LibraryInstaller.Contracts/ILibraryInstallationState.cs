@@ -28,6 +28,6 @@ namespace LibraryInstaller.Contracts
         /// <summary>
         /// The path relative to the working directory to copy the files to.
         /// </summary>
-        string Path { get; }
+        string DestinationPath { get; }
     }
 }

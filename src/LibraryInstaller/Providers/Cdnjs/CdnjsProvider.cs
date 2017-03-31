@@ -63,7 +63,7 @@ namespace LibraryInstaller.Providers.Cdnjs
                         return LibraryInstallationResult.FromCancelled(desiredState);
                     }
 
-                    string path = Path.Combine(desiredState.Path, file);
+                    string path = Path.Combine(desiredState.DestinationPath, file);
                     var func = new Func<Stream>(() => GetStream(desiredState, file));
                     bool writeOk = await HostInteraction.WriteFileAsync(path, func, desiredState, cancellationToken).ConfigureAwait(false);
 
@@ -79,7 +79,7 @@ namespace LibraryInstaller.Providers.Cdnjs
             }
             catch (Exception ex)
             {
-                HostInteraction.Logger.Log(ex.ToString(), Level.Error);
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.UnknownException());
             }
 
@@ -106,7 +106,7 @@ namespace LibraryInstaller.Providers.Cdnjs
             if (cancellationToken.IsCancellationRequested)
                 return;
 
-            string libraryDir = Path.Combine(CacheFolder, library.Id);
+            string libraryDir = Path.Combine(CacheFolder, library.Name);
             var tasks = new List<Task>();
 
             foreach (string file in library.Files.Keys)
@@ -115,7 +115,7 @@ namespace LibraryInstaller.Providers.Cdnjs
 
                 if (!File.Exists(localFile))
                 {
-                    string url = string.Format(_downloadUrlFormat, library.Id, library.Version, file);
+                    string url = string.Format(_downloadUrlFormat, library.Name, library.Version, file);
                     Task<string> task = FileHelpers.GetFileTextAsync(url, localFile, 0, cancellationToken);
                     tasks.Add(task);
                 }

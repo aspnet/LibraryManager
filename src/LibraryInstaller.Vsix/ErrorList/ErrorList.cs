@@ -31,7 +31,7 @@ namespace LibraryInstaller.Vsix
 
                     foreach (IError error in result.Errors)
                     {
-                        Logger.LogEvent(error.Message, Level.Operation);
+                        Logger.LogEvent(error.Message, LogLevel.Operation);
                     }
                 }
             }

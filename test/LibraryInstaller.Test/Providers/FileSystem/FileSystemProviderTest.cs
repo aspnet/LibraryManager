@@ -59,14 +59,14 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             {
                 ProviderId = "filesystem",
                 LibraryId = _file1,
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "file1.txt" }
             };
 
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
-            string copiedFile = Path.Combine(_projectFolder, desiredState.Path, desiredState.Files[0]);
+            string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
             Assert.IsTrue(File.Exists(copiedFile), "File1 wasn't copied");
 
             var manifest = Manifest.FromJson("{}", _dependencies);
@@ -86,14 +86,14 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             {
                 ProviderId = "filesystem",
                 LibraryId = "folder/file.txt",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "relative.txt" }
             };
 
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
-            string copiedFile = Path.Combine(_projectFolder, desiredState.Path, desiredState.Files[0]);
+            string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
             Assert.IsTrue(File.Exists(copiedFile), "File1 wasn't copied");
             Assert.IsFalse(result.Cancelled);
             Assert.AreSame(desiredState, result.InstallationState);
@@ -122,15 +122,15 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             {
                 ProviderId = "filesystem",
                 LibraryId = folder,
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "file1.js", "file2.js" }
             };
 
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
-            string file1 = Path.Combine(_projectFolder, desiredState.Path, desiredState.Files[0]);
-            string file2 = Path.Combine(_projectFolder, desiredState.Path, desiredState.Files[1]);
+            string file1 = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
+            string file2 = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[1]);
             Assert.IsTrue(File.Exists(file1), "File1 wasn't copied");
             Assert.IsTrue(File.Exists(file2), "File2 wasn't copied");
 
@@ -158,15 +158,15 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             {
                 ProviderId = "filesystem",
                 LibraryId = relativeFolder.OriginalString,
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "file1.js", "file2.js" }
             };
 
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
-            string file1 = Path.Combine(_projectFolder, desiredState.Path, desiredState.Files[0]);
-            string file2 = Path.Combine(_projectFolder, desiredState.Path, desiredState.Files[1]);
+            string file1 = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
+            string file2 = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[1]);
             Assert.IsTrue(File.Exists(file1), "File1 wasn't copied");
             Assert.IsTrue(File.Exists(file2), "File1 wasn't copied");
 
@@ -184,14 +184,14 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             {
                 ProviderId = "filesystem",
                 LibraryId = "https://raw.githubusercontent.com/jquery/jquery/master/src/event.js",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "event.js" }
             };
 
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
-            string copiedFile = Path.Combine(_projectFolder, desiredState.Path, desiredState.Files[0]);
+            string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
             Assert.IsTrue(File.Exists(copiedFile), "File wasn't copied");
 
             var manifest = Manifest.FromJson("{}", _dependencies);
@@ -211,14 +211,14 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             {
                 ProviderId = "filesystem",
                 LibraryId = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "Flag.png" }
             };
 
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
-            string copiedFile = Path.Combine(_projectFolder, desiredState.Path, desiredState.Files[0]);
+            string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
             Assert.IsTrue(File.Exists(copiedFile), "File wasn't copied");
         }
 
@@ -249,7 +249,7 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             {
                 ProviderId = "filesystem",
                 LibraryId = @"../file/does/not/exist.txt",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "file.js" }
             };
 

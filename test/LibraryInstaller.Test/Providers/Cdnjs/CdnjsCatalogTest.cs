@@ -61,7 +61,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             ILibrary library = await info[0].GetLibraryAsync(token);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
-            Assert.IsNotNull(library.Id);
+            Assert.IsNotNull(library.Name);
             Assert.IsNotNull(library.Version);
             Assert.AreEqual(provider.Id, library.ProviderId);
         }
@@ -73,7 +73,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             ILibrary library = await _catalog.GetLibraryAsync("jquery@3.1.1", token);
 
             Assert.IsNotNull(library);
-            Assert.AreEqual("jquery", library.Id);
+            Assert.AreEqual("jquery", library.Name);
             Assert.AreEqual("3.1.1", library.Version);
         }
 
@@ -81,7 +81,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
         public async Task GetCompletionNameAsync()
         {
             CancellationToken token = CancellationToken.None;
-            Completion result = await _catalog.GetCompletionsAsync("jquery", 0);
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(6, result.Length);
@@ -95,7 +95,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
         public async Task GetCompletionVersionAsync()
         {
             CancellationToken token = CancellationToken.None;
-            Completion result = await _catalog.GetCompletionsAsync("jquery@", 7);
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery@", 7);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(7, result.Length);

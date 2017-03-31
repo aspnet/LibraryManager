@@ -11,6 +11,6 @@ namespace LibraryInstaller.Vsix
         public string LibraryId { get; set; }
         public string ProviderId { get; set; }
         public IReadOnlyList<string> Files { get; set; }
-        public string Path { get; set; }
+        public string DestinationPath { get; set; }
     }
 }

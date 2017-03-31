@@ -15,9 +15,9 @@ namespace LibraryInstaller.Contracts
         /// <summary>
         /// Gets a list of completion spans for use in the JSON file.
         /// </summary>
-        /// <param name="value">The current value of the JSON member.</param>
+        /// <param name="value">The current state of the library ID.</param>
         /// <param name="caretPosition">The caret position inside the <paramref name="value"/>.</param>
-        Task<Completion> GetCompletionsAsync(string value, int caretPosition);
+        Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition);
 
         /// <summary>
         /// Gets the library group from the specified <paramref name="libraryId"/>.

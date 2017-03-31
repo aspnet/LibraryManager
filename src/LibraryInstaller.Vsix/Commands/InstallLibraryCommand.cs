@@ -82,7 +82,7 @@ namespace LibraryInstaller.Vsix
             {
                 LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
-                Path = relativeFolderPath,
+                DestinationPath = relativeFolderPath,
                 Files = new[] { "jquery.js", "jquery.min.js" }
             };
         }

@@ -28,7 +28,7 @@ namespace LibraryInstaller.Providers.Cdnjs
             {
                 Version = Version,
                 Files = _asset.Files.ToDictionary(k => k, b => b == _asset.DefaultFile),
-                Id = _libraryId,
+                Name = _libraryId,
                 ProviderId = _providerId
             };
 

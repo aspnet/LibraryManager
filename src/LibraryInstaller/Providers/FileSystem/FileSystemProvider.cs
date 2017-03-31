@@ -43,7 +43,7 @@ namespace LibraryInstaller.Providers.FileSystem
                         return LibraryInstallationResult.FromCancelled(desiredState);
                     }
 
-                    string path = Path.Combine(desiredState.Path, file);
+                    string path = Path.Combine(desiredState.DestinationPath, file);
                     var func = new Func<Stream>(() => GetStreamAsync(desiredState, file, cancellationToken).Result);
                     bool writeOk = await HostInteraction.WriteFileAsync(path, func, desiredState, cancellationToken).ConfigureAwait(false);
 
@@ -59,7 +59,7 @@ namespace LibraryInstaller.Providers.FileSystem
             }
             catch (Exception ex)
             {
-                HostInteraction.Logger.Log(ex.ToString(), Level.Error);
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.UnknownException());
             }
 

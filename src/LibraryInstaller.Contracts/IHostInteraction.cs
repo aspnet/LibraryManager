@@ -40,11 +40,5 @@ namespace LibraryInstaller.Contracts
         /// <param name="cancellationToken">A token that allows cancellation of the file writing.</param>
         /// <returns><code>True</code> if no issues occured while executing this method; otherwise <code>False</code>.</returns>
         Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Deletes a file from disk.
-        /// </summary>
-        /// <param name="filePath">The absolute path to the file.</param>
-        void DeleteFile(string filePath);
     }
 }

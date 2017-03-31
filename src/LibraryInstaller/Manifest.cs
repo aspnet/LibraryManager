@@ -38,14 +38,14 @@ namespace LibraryInstaller
         /// The version of the <see cref="Manifest"/> document format.
         /// </summary>
         [JsonProperty("version")]
-        public string Version { get; set; } = "1.0";
+        public string Version { get; } = "1.0";
 
         /// <summary>
         /// A list of libraries contained in the <see cref="Manifest"/>.
         /// </summary>
         [JsonProperty("packages")]
         [JsonConverter(typeof(LibraryStateTypeConverter))]
-        public IList<ILibraryInstallationState> Libraries => _libraries;
+        public IEnumerable<ILibraryInstallationState> Libraries => _libraries;
 
         /// <summary>
         /// Creates a new instance of a <see cref="Manifest"/> class from a file on disk.
@@ -88,7 +88,7 @@ namespace LibraryInstaller
             }
             catch (Exception)
             {
-                dependencies.GetHostInteractions().Logger.Log(PredefinedErrors.ManifestMalformed().Message, Level.Task);
+                dependencies.GetHostInteractions().Logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Task);
                 return null;
             }
         }
@@ -122,23 +122,17 @@ namespace LibraryInstaller
                 if (cancellationToken.IsCancellationRequested)
                 {
                     results.Add(LibraryInstallationResult.FromCancelled(state));
-                    _hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, Level.Task);
+                    _hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
                     return results;
                 }
 
-                _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, state.LibraryId), Level.Operation);
+                _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, state.LibraryId), LogLevel.Operation);
 
                 IProvider provider = _dependencies.GetProvider(state.ProviderId);
 
                 if (provider != null)
                 {
-                    IEnumerable<string> files = state.Files.Select(f => Path.Combine(_hostInteraction.WorkingDirectory, state.Path, f));
-                    bool needsUpdate = files.Any(f => !File.Exists(f));
-
-                    if (needsUpdate)
-                    {
-                        tasks.Add(provider.InstallAsync(state, cancellationToken));
-                    }
+                    tasks.Add(provider.InstallAsync(state, cancellationToken));
                 }
                 else
                 {
@@ -157,20 +151,16 @@ namespace LibraryInstaller
         /// Uninstalls the specified library and removes it from the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="libraryId">The library identifier.</param>
-        public void Uninstall(string libraryId)
+        /// <param name="deleteFileAction"></param>
+        public void Uninstall(string libraryId, Action<string> deleteFileAction)
         {
             ILibraryInstallationState state = Libraries.FirstOrDefault(l => l.LibraryId == libraryId);
 
             if (state != null)
             {
-                foreach (string file in state.Files)
-                {
-                    string relativePath = Path.Combine(state.Path, file).Replace('\\', '/');
+                DeleteLibraryFiles(state, deleteFileAction);
 
-                    _hostInteraction.DeleteFile(relativePath);
-                }
-
-                Libraries.Remove(state);
+                _libraries.Remove(state);
             }
         }
 
@@ -200,14 +190,27 @@ namespace LibraryInstaller
         /// <summary>
         /// Deletes all library output files from disk.
         /// </summary>
-        public void Clean()
+        /// <param name="deleteFileAction">An action to delete the files.</param>
+        public void Clean(Action<string> deleteFileAction)
         {
             foreach (ILibraryInstallationState state in Libraries)
-                foreach (string file in state.Files)
+            {
+                DeleteLibraryFiles(state, deleteFileAction);
+            }
+        }
+
+        private void DeleteLibraryFiles(ILibraryInstallationState state, Action<string> deleteFileAction)
+        {
+            foreach (string file in state.Files)
+            {
+                var url = new Uri(file, UriKind.RelativeOrAbsolute);
+
+                if (!url.IsAbsoluteUri)
                 {
-                    string relativePath = Path.Combine(state.Path, file).Replace('\\', '/');
-                    _hostInteraction.DeleteFile(relativePath);
+                    string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
+                    deleteFileAction?.Invoke(relativePath);
                 }
+            }
         }
     }
 }

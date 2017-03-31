@@ -10,7 +10,7 @@ namespace LibraryInstaller.Contracts
     /// A span for use by completion
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct Completion
+    public struct CompletionSet
     {
         // IMPORTANT: Do not change the order of the fields below!!!
 

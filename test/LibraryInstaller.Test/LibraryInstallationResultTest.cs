@@ -57,7 +57,7 @@ namespace LibraryInstaller.Test
             {
                 ProviderId = "_prov_",
                 LibraryId = "_lib_",
-                Path = "_path_",
+                DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };
         }

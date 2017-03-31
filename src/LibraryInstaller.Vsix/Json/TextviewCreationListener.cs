@@ -44,7 +44,7 @@ namespace LibraryInstaller.Vsix.Json
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogEvent(ex.ToString(), Contracts.Level.Error);
+                    Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
                     Telemetry.TrackException("configsaved", ex);
                 }
             }

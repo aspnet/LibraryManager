@@ -29,7 +29,7 @@ namespace LibraryInstaller.Providers.FileSystem
         {
             var library = new FileSystemLibrary
             {
-                Id = _libraryId,
+                Name = _libraryId,
                 ProviderId = _providerId,
                 Files = _files
             };

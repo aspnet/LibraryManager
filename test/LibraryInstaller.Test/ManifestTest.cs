@@ -22,6 +22,7 @@ namespace LibraryInstaller.Test
         private string _cacheFolder;
         private string _projectFolder;
         private IDependencies _dependencies;
+        private HostInteraction _hostInteraction;
 
         [TestInitialize]
         public void Setup()
@@ -30,8 +31,8 @@ namespace LibraryInstaller.Test
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryInstaller");
             _filePath = Path.Combine(_projectFolder, "library.json");
 
-            var hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
-            _dependencies = new Dependencies(hostInteraction, new CdnjsProvider(), new FileSystemProvider());
+            _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
+            _dependencies = new Dependencies(_hostInteraction, new CdnjsProvider(), new FileSystemProvider());
 
             Directory.CreateDirectory(_projectFolder);
             File.WriteAllText(_filePath, _doc);
@@ -53,7 +54,7 @@ namespace LibraryInstaller.Test
             {
                 LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "jquery.min.js" }
             };
 
@@ -66,7 +67,7 @@ namespace LibraryInstaller.Test
             Manifest newManifest = await Manifest.FromFileAsync(_filePath, _dependencies, CancellationToken.None).ConfigureAwait(false);
 
             Assert.IsTrue(File.Exists(_filePath));
-            Assert.AreEqual(manifest.Libraries.Count, newManifest.Libraries.Count);
+            Assert.AreEqual(manifest.Libraries.Count(), newManifest.Libraries.Count());
             Assert.AreEqual(manifest.Version, newManifest.Version);
         }
 
@@ -81,7 +82,7 @@ namespace LibraryInstaller.Test
             {
                 LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "jquery.js", "jquery.min.js" }
             };
 
@@ -93,7 +94,7 @@ namespace LibraryInstaller.Test
             Assert.IsTrue(File.Exists(file1));
             Assert.IsTrue(File.Exists(file2));
 
-            manifest.Uninstall(desiredState.LibraryId);
+            manifest.Uninstall(desiredState.LibraryId, (file) => { _hostInteraction.DeleteFile(file); });
 
             Assert.IsFalse(File.Exists(file1));
             Assert.IsFalse(File.Exists(file2));
@@ -110,7 +111,7 @@ namespace LibraryInstaller.Test
             {
                 LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "jquery.js", "jquery.min.js" }
             };
 
@@ -118,7 +119,7 @@ namespace LibraryInstaller.Test
             {
                 LibraryId = "knockout@3.4.2",
                 ProviderId = "cdnjs",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "knockout-min.js" }
             };
 
@@ -133,7 +134,7 @@ namespace LibraryInstaller.Test
             Assert.IsTrue(File.Exists(file2));
             Assert.IsTrue(File.Exists(file3));
 
-            manifest.Clean();
+            manifest.Clean((file) => { _hostInteraction.DeleteFile(file); });
 
             Assert.IsFalse(File.Exists(file1));
             Assert.IsFalse(File.Exists(file2));
@@ -185,7 +186,7 @@ namespace LibraryInstaller.Test
         {
             Manifest manifest = await Manifest.FromFileAsync(@"c:\file\not\found.json", _dependencies, CancellationToken.None);
             Assert.IsNotNull(manifest);
-            Assert.AreEqual(0, manifest.Libraries.Count);
+            Assert.AreEqual(0, manifest.Libraries.Count());
             Assert.AreEqual("1.0", manifest.Version);
         }
 

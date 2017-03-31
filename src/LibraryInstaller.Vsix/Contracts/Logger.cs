@@ -14,28 +14,28 @@ namespace LibraryInstaller.Vsix
         private static IVsActivityLog _activityLog = VsHelpers.GetService<SVsActivityLog, IVsActivityLog>();
         private static IVsStatusbar statusbar = VsHelpers.GetService<SVsStatusbar, IVsStatusbar>();
 
-        public void Log(string message, Level level)
+        public void Log(string message, LogLevel level)
         {
             LogEvent(message, level);
         }
 
-        public static void LogEvent(string message, Level level)
+        public static void LogEvent(string message, LogLevel level)
         {
             try
             {
                 switch (level)
                 {
-                    case Level.Operation:
+                    case LogLevel.Operation:
                         LogToOutputWindow(message);
                         break;
-                    case Level.Error:
+                    case LogLevel.Error:
                         LogToActivityLog(message, __ACTIVITYLOG_ENTRYTYPE.ALE_ERROR);
                         break;
-                    case Level.Task:
+                    case LogLevel.Task:
                         LogToStatusBar(message);
                         LogToOutputWindow(message);
                         break;
-                    case Level.Status:
+                    case LogLevel.Status:
                         LogToStatusBar(message);
                         break;
                 }

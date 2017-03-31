@@ -61,14 +61,14 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             // Get the library to install
             ILibraryDisplayInfo displayInfo = displayInfos.FirstOrDefault();
             ILibrary library = await displayInfo.GetLibraryAsync(CancellationToken.None).ConfigureAwait(false);
-            Assert.AreEqual(group.Name, library.Id);
+            Assert.AreEqual(group.Name, library.Name);
             Assert.AreEqual(displayInfo.Version, library.Version);
 
             var desiredState = new LibraryInstallationState
             {
                 LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "jquery.js", "jquery.min.js" }
             };
 
@@ -77,7 +77,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
 
             foreach (string file in desiredState.Files)
             {
-                string absolute = Path.Combine(_projectFolder, desiredState.Path, file);
+                string absolute = Path.Combine(_projectFolder, desiredState.DestinationPath, file);
                 Assert.IsTrue(File.Exists(absolute));
             }
 
@@ -96,7 +96,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             {
                 LibraryId = "*&(}:@3.1.1",
                 ProviderId = "cdnjs",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "jquery.min.js" }
             };
 
@@ -114,7 +114,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             {
                 LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
-                Path = "lib",
+                DestinationPath = "lib",
                 Files = new[] { "file1.txt", "file2.txt" }
             };
 

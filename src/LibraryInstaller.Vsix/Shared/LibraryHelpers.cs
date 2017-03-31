@@ -27,7 +27,7 @@ namespace LibraryInstaller.Vsix
 
         public static async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Logger.LogEvent(Resources.Text.RestoringLibraries, Level.Status);
+            Logger.LogEvent(Resources.Text.RestoringLibraries, LogLevel.Status);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -54,25 +54,26 @@ namespace LibraryInstaller.Vsix
                     Resources.Text.RestoreHasErrors :
                     string.Format(Resources.Text.LibrariesRestored, fileCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
 
-                Logger.LogEvent(Environment.NewLine + text + Environment.NewLine, Level.Task);
+                Logger.LogEvent(Environment.NewLine + text + Environment.NewLine, LogLevel.Task);
             }
             else
             {
-                Logger.LogEvent(Environment.NewLine + Resources.Text.LibraryRestoredNoChange + Environment.NewLine, Level.Task);
+                Logger.LogEvent(Environment.NewLine + Resources.Text.LibraryRestoredNoChange + Environment.NewLine, LogLevel.Task);
             }
         }
 
         public static async Task CleanAsync(ProjectItem configProjectItem)
         {
-            Logger.LogEvent(Resources.Text.CleanLibrariesStarted, Level.Task);
+            Logger.LogEvent(Resources.Text.CleanLibrariesStarted, LogLevel.Task);
 
             string configFileName = configProjectItem.FileNames[1];
             var dependencies = Dependencies.FromConfigFile(configFileName);
             Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None);
+            var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
 
-            manifest?.Clean();
+            manifest?.Clean((file) => hostInteraction.DeleteFile(file));
 
-            Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded + Environment.NewLine, Level.Task);
+            Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded + Environment.NewLine, LogLevel.Task);
         }
 
         private static async Task<IEnumerable<ILibraryInstallationResult>> RestoreLibrariesAsync(string configFilePath, CancellationToken cancellationToken)
@@ -92,7 +93,7 @@ namespace LibraryInstaller.Vsix
             {
                 if (state.Success)
                 {
-                    IEnumerable<string> absoluteFiles = state.InstallationState.Files.Select(file => Path.Combine(cwd, state.InstallationState.Path, file).Replace('/', '\\'));
+                    IEnumerable<string> absoluteFiles = state.InstallationState.Files.Select(file => Path.Combine(cwd, state.InstallationState.DestinationPath, file).Replace('/', '\\'));
                     files.AddRange(absoluteFiles.Where(file => !files.Contains(file)));
                 }
             }

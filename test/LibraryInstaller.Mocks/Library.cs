@@ -15,7 +15,7 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// The string that lets the <see cref="T:LibraryInstaller.Contracts.IProvider" /> uniquely identify the specific library.
         /// </summary>
-        public string Id { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// The unique ID of the provider.
@@ -40,7 +40,7 @@ namespace LibraryInstaller.Mocks
         /// </returns>
         public override string ToString()
         {
-            return Id;
+            return Name;
         }
     }
 }

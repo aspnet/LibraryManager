@@ -16,14 +16,14 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// A list of all the log messages recorded by the <see cref="Log"/> method.
         /// </summary>
-        public List<Tuple<string, Level>> Messages = new List<Tuple<string, Level>>();
+        public List<Tuple<string, LogLevel>> Messages = new List<Tuple<string, LogLevel>>();
 
         /// <summary>
         /// Logs the specified message to the host.
         /// </summary>
         /// <param name="message">The message to log.</param>
         /// <param name="level">The level of the message.</param>
-        public void Log(string message, Level level)
+        public void Log(string message, LogLevel level)
         {
             Messages.Add(Tuple.Create(message, level));
         }

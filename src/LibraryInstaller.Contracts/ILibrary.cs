@@ -11,9 +11,9 @@ namespace LibraryInstaller.Contracts
     public interface ILibrary
     {
         /// <summary>
-        /// The string that lets the <see cref="IProvider"/> uniquely identify the specific library.
+        /// The name of the library.
         /// </summary>
-        string Id { get; }
+        string Name { get; }
 
         /// <summary>
         /// The unique ID of the provider.

@@ -83,7 +83,7 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             ILibrary library = await info[0].GetLibraryAsync(token);
             Assert.AreEqual(1, library.Files.Count);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
-            Assert.AreEqual(file, library.Id);
+            Assert.AreEqual(file, library.Name);
             Assert.AreEqual("1.0", library.Version);
             Assert.AreEqual(provider.Id, library.ProviderId);
             Assert.AreEqual(Path.GetFileName(file), library.Files.Keys.ElementAt(0));
@@ -101,7 +101,7 @@ namespace LibraryInstaller.Test.Providers.FileSystem
         [TestMethod]
         public async Task GetCompletionNameAsync()
         {
-            Completion result = await _catalog.GetCompletionsAsync("../file.txt", 0);
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("../file.txt", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);

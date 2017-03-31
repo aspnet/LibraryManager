@@ -67,7 +67,7 @@ namespace LibraryInstaller.Mocks
                 if (stream == null)
                     return false;
 
-                using (FileStream writer = File.Create(absolutePath))
+                using (FileStream writer = File.Create(absolutePath, 8192, FileOptions.Asynchronous))
                 {
                     if (stream.CanSeek)
                     {

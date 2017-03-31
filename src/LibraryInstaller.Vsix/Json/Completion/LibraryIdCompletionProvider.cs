@@ -46,12 +46,12 @@ namespace LibraryInstaller.Vsix
 
             int caretPosition = context.Session.TextView.Caret.Position.BufferPosition - member.Value.Start - 1;
 
-            Task<Completion> task = catalog.GetCompletionsAsync(member.UnquotedValueText, caretPosition);
+            Task<CompletionSet> task = catalog.GetLibraryCompletionSetAsync(member.UnquotedValueText, caretPosition);
             int count = 0;
 
             if (task.IsCompleted)
             {
-                Completion span = task.Result;
+                CompletionSet span = task.Result;
 
                 if (span.Completions != null)
                 {
@@ -69,7 +69,7 @@ namespace LibraryInstaller.Vsix
                 {
                     if (!context.Session.IsDismissed)
                     {
-                        Completion span = task.Result;
+                        CompletionSet span = task.Result;
 
                         if (span.Completions != null)
                         {
