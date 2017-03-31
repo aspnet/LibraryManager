@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
 
 namespace LibraryInstaller.Vsix
 {
@@ -14,7 +15,7 @@ namespace LibraryInstaller.Vsix
     [Name(nameof(LibraryIdCompletionProvider))]
     class LibraryIdCompletionProvider : BaseCompletionProvider
     {
-        private static BitmapSource _libraryIcon = WpfUtil.GetIconForImageMoniker(KnownMonikers.Package, 16, 16);
+        private static ImageMoniker _libraryIcon = KnownMonikers.Package;
 
         public override JSONCompletionContextType ContextType
         {
@@ -51,9 +52,9 @@ namespace LibraryInstaller.Vsix
 
                 if (span.Completions != null)
                 {
-                    foreach (string value in span.Completions.Keys)
+                    foreach (CompletionItem item in span.Completions)
                     {
-                        yield return new SimpleCompletionEntry(value, span.Completions[value], _libraryIcon, context.Session, ++count);
+                        yield return new SimpleCompletionEntry(item.DisplayText, item.InsertionText, item.Description, _libraryIcon, context.Session, ++count);
                     }
                 }
             }
@@ -71,9 +72,9 @@ namespace LibraryInstaller.Vsix
                         {
                             var results = new List<JSONCompletionEntry>();
 
-                            foreach (string value in span.Completions.Keys)
+                            foreach (CompletionItem item in span.Completions)
                             {
-                                results.Add(new SimpleCompletionEntry(value, span.Completions[value], _libraryIcon, context.Session, ++count));
+                                results.Add(new SimpleCompletionEntry(item.DisplayText, item.InsertionText, item.Description, _libraryIcon, context.Session, ++count));
                             }
 
                             UpdateListEntriesSync(context, results);

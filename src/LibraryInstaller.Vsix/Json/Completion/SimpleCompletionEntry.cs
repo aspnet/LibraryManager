@@ -10,17 +10,18 @@ namespace LibraryInstaller.Vsix
     {
         private int _specificVersion;
 
-        public SimpleCompletionEntry(string text, ImageMoniker moniker, IIntellisenseSession session)
-            : this(text, null, WpfUtil.GetIconForImageMoniker(moniker, 16, 16), session)
-        { }
-
         public SimpleCompletionEntry(string text, ImageSource glyph, IIntellisenseSession session)
-            : this(text, text, glyph, session)
+            : base(text, text, null, glyph, null, false, session as ICompletionSession)
         { }
 
-        public SimpleCompletionEntry(string text, string insertionText, ImageSource glyph, IIntellisenseSession session, int specificVersion = 0)
-            : base(text, "\"" + insertionText + "\"", null, glyph, null, false, session as ICompletionSession)
+        public SimpleCompletionEntry(string text, ImageMoniker moniker, IIntellisenseSession session)
+            : this(text, text, null, moniker, session)
+        { }
+
+        public SimpleCompletionEntry(string text, string insertionText, string description, ImageMoniker moniker, IIntellisenseSession session, int specificVersion = 0)
+            : base(text, "\"" + insertionText + "\"", description, null, null, false, session as ICompletionSession)
         {
+            base.SetIconMoniker(moniker);
             _specificVersion = specificVersion;
         }
 

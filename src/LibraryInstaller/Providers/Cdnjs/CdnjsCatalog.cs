@@ -43,7 +43,7 @@ namespace LibraryInstaller.Providers.Cdnjs
             int at = value.IndexOf('@');
             string name = at > -1 ? value.Substring(0, at) : value;
 
-            var completions = new Dictionary<string, string>();
+            var completions = new List<CompletionItem>();
 
             // Name
             if (at == -1 || caretPosition <= at)
@@ -52,7 +52,14 @@ namespace LibraryInstaller.Providers.Cdnjs
 
                 foreach (CdnjsLibraryGroup group in result)
                 {
-                    completions.Add(group.Name, group.Name + "@" + group.Version);
+                    var completion = new CompletionItem
+                    {
+                        DisplayText = group.Name,
+                        InsertionText = group.Name + "@" + group.Version,
+                        Description = group.Description
+                    };
+
+                    completions.Add(completion);
                 }
             }
 
@@ -67,7 +74,13 @@ namespace LibraryInstaller.Providers.Cdnjs
 
                     foreach (ILibraryDisplayInfo info in infos)
                     {
-                        completions.Add(info.Version, $"{name}@{info.Version}");
+                        var completion = new CompletionItem
+                        {
+                            DisplayText = info.Version,
+                            InsertionText = $"{name}@{info.Version}"
+                        };
+
+                        completions.Add(completion);
                     }
                 }
             }

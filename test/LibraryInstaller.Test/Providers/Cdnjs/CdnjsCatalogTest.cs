@@ -82,10 +82,10 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(6, result.Length);
-            Assert.IsTrue(result.Completions.Count > 300);
-            Assert.AreEqual("jquery", result.Completions.First().Key);
-            Assert.IsTrue(result.Completions.First().Value.StartsWith("jquery@"));
-            Assert.IsTrue(result.Completions.First().Value.Length >= 10);
+            Assert.IsTrue(result.Completions.Count() > 300);
+            Assert.AreEqual("jquery", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("jquery@"));
+            Assert.IsTrue(result.Completions.First().InsertionText.Length >= 10);
         }
 
         [TestMethod]
@@ -96,9 +96,9 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(7, result.Length);
-            Assert.IsTrue(result.Completions.Count >= 69);
-            Assert.AreEqual("1.2.3", result.Completions.Last().Key);
-            Assert.AreEqual("jquery@1.2.3", result.Completions.Last().Value);
+            Assert.IsTrue(result.Completions.Count() >= 69);
+            Assert.AreEqual("1.2.3", result.Completions.Last().DisplayText);
+            Assert.AreEqual("jquery@1.2.3", result.Completions.Last().InsertionText);
         }
     }
 }
