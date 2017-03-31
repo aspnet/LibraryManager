@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -212,8 +215,8 @@ namespace LibraryInstaller.Vsix.Controls.Search
             };
 
             GlyphStyle = DefaultGlyphStyle;
-            SearchBox.AddHandler(GotKeyboardFocusEvent, (RoutedEventHandler) SearchBoxGotKeyboardFocus, true);
-            SearchBox.AddHandler(MouseDoubleClickEvent, (RoutedEventHandler) SearchBoxGotKeyboardFocus, true);
+            SearchBox.AddHandler(GotKeyboardFocusEvent, (RoutedEventHandler)SearchBoxGotKeyboardFocus, true);
+            SearchBox.AddHandler(MouseDoubleClickEvent, (RoutedEventHandler)SearchBoxGotKeyboardFocus, true);
             SearchBox.AddHandler(PreviewMouseLeftButtonUpEvent, (RoutedEventHandler)SearchBoxGotKeyboardFocus, true);
             SearchBox.AddHandler(LostFocusEvent, (RoutedEventHandler)SearchBoxLostFocus, true);
         }
@@ -295,7 +298,7 @@ namespace LibraryInstaller.Vsix.Controls.Search
                 case Key.Enter:
                     if (Options.Items.Count > 0)
                     {
-                        SelectedItem = (ISearchItem) ItemsSource[0];
+                        SelectedItem = (ISearchItem)ItemsSource[0];
                         CommitedItem = SelectedItem;
                         e.Handled = true;
                         SearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
@@ -338,7 +341,7 @@ namespace LibraryInstaller.Vsix.Controls.Search
                 case Key.Up:
                     if (Options.SelectedIndex == 0)
                     {
-                        SelectedItem = (ISearchItem) ItemsSource[0];
+                        SelectedItem = (ISearchItem)ItemsSource[0];
                         LostFocus -= OnLostFocus;
                         SearchBox.Focus();
                         SearchBox.CaretIndex = index;
@@ -366,7 +369,7 @@ namespace LibraryInstaller.Vsix.Controls.Search
 
         private void OnItemCommitGesture(object sender, MouseButtonEventArgs e)
         {
-            HitTestResult result = VisualTreeHelper.HitTest((Visual) sender, e.GetPosition((IInputElement) sender));
+            HitTestResult result = VisualTreeHelper.HitTest((Visual)sender, e.GetPosition((IInputElement)sender));
             TextBlock over = result.VisualHit as TextBlock;
 
             if (over != null && over.Inlines.OfType<Hyperlink>().Any(x => x.IsMouseOver))

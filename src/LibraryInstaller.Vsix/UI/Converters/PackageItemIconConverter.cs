@@ -1,3 +1,6 @@
+// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Globalization;
 using System.Windows;
@@ -18,8 +21,8 @@ namespace LibraryInstaller.Vsix.Converters
                 return null;
             }
 
-            int x = (int)(double) values[3];
-            int y = (int)(double) values[4];
+            int x = (int)(double)values[3];
+            int y = (int)(double)values[4];
 
             if (x < 1)
             {
@@ -31,15 +34,15 @@ namespace LibraryInstaller.Vsix.Converters
                 y = 1;
             }
 
-            PackageItemType type = (PackageItemType) values[0];
+            PackageItemType type = (PackageItemType)values[0];
             if (type == PackageItemType.Folder)
             {
-                bool isExpanded = (bool) values[2];
+                bool isExpanded = (bool)values[2];
                 ImageMoniker moniker = isExpanded ? KnownMonikers.FolderOpened : KnownMonikers.FolderClosed;
                 return WpfUtil.ThemeImage((DependencyObject)values[5], WpfUtil.GetIconForImageMoniker(moniker, x, y));
             }
 
-            string name = (string) values[1];
+            string name = (string)values[1];
             bool isThemeIcon;
             ImageSource source = WpfUtil.GetIconForFile((DependencyObject)values[5], name, out isThemeIcon);
             return source;

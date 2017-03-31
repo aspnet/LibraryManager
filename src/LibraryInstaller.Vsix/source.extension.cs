@@ -13,6 +13,6 @@ namespace LibraryInstaller.Vsix
         public const string Language = "en-US";
         public const string Version = "0.1";
         public const string Author = "Mads Kristensen";
-        public const string Tags = "";
+        public const string Tags = "library, package, client-side, install";
     }
 }
