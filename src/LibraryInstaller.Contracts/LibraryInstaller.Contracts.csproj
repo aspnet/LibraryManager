@@ -12,8 +12,8 @@
         <Version>1.0.0-alpha</Version>
         <Product>Microsoft.Web.LibraryInstaller.Contracts</Product>
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
-        <PackageProjectUrl>https://aka.ms/vsextensibility</PackageProjectUrl>
-        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
+        <PackageProjectUrl>https://github.com/aspnet/LibraryInstaller</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/aspnet/LibraryInstaller/blob/master/LICENSE.txt</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/aspnet/LibraryInstaller</RepositoryUrl>
         <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
     </PropertyGroup>
