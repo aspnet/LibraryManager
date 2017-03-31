@@ -17,9 +17,9 @@ namespace LibraryInstaller.Providers.FileSystem
             _providerId = providerId;
         }
 
-        public Task<CompletionSpan> GetCompletionsAsync(string value, int caretPosition)
+        public Task<Completion> GetCompletionsAsync(string value, int caretPosition)
         {
-            return Task.FromResult(default(CompletionSpan));
+            return Task.FromResult(default(Completion));
         }
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)

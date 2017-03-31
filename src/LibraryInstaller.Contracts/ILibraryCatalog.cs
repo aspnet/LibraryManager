@@ -17,7 +17,7 @@ namespace LibraryInstaller.Contracts
         /// </summary>
         /// <param name="value">The current value of the JSON member.</param>
         /// <param name="caretPosition">The caret position inside the <paramref name="value"/>.</param>
-        Task<CompletionSpan> GetCompletionsAsync(string value, int caretPosition);
+        Task<Completion> GetCompletionsAsync(string value, int caretPosition);
 
         /// <summary>
         /// Gets the library group from the specified <paramref name="libraryId"/>.

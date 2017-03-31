@@ -81,7 +81,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
         public async Task GetCompletionNameAsync()
         {
             CancellationToken token = CancellationToken.None;
-            CompletionSpan result = await _catalog.GetCompletionsAsync("jquery", 0);
+            Completion result = await _catalog.GetCompletionsAsync("jquery", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(6, result.Length);
@@ -95,7 +95,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
         public async Task GetCompletionVersionAsync()
         {
             CancellationToken token = CancellationToken.None;
-            CompletionSpan result = await _catalog.GetCompletionsAsync("jquery@", 7);
+            Completion result = await _catalog.GetCompletionsAsync("jquery@", 7);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(7, result.Length);

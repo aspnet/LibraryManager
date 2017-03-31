@@ -32,12 +32,12 @@ namespace LibraryInstaller.Providers.Cdnjs
             _cacheFile = Path.Combine(_providerStorePath, _fileName);
         }
 
-        public async Task<CompletionSpan> GetCompletionsAsync(string value, int caretPosition)
+        public async Task<Completion> GetCompletionsAsync(string value, int caretPosition)
         {
             if (!await EnsureCatalogAsync(CancellationToken.None).ConfigureAwait(false))
-                return default(CompletionSpan);
+                return default(Completion);
 
-            var span = new CompletionSpan
+            var span = new Completion
             {
                 Start = 0,
                 Length = value.Length

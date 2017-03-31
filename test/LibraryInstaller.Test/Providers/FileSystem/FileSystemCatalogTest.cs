@@ -101,7 +101,7 @@ namespace LibraryInstaller.Test.Providers.FileSystem
         [TestMethod]
         public async Task GetCompletionNameAsync()
         {
-            CompletionSpan result = await _catalog.GetCompletionsAsync("../file.txt", 0);
+            Completion result = await _catalog.GetCompletionsAsync("../file.txt", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
