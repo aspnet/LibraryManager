@@ -12,11 +12,9 @@ namespace LibraryInstaller.Contracts
     public interface ILibraryDisplayInfo
     {
         /// <summary>
-        /// Gets the <see cref="ILibrary"/> associated with this <see cref="ILibraryDisplayInfo"/>.
+        /// Gets the unique identifier of the library.
         /// </summary>
-        /// <param name="cancellationToken">A token that allows the operation should be cancelled.</param>
-        /// <returns>A <see cref="ILibrary"/> that matches this <see cref="ILibraryDisplayInfo"/>.</returns>
-        Task<ILibrary> GetLibraryAsync(CancellationToken cancellationToken);
+        string LibraryId { get; }
 
         /// <summary>
         /// The version of the the specific <see cref="ILibrary"/>.

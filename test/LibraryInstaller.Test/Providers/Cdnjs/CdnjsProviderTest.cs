@@ -46,7 +46,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             ILibraryCatalog catalog = provider.GetCatalog();
 
             // Search for libraries to display in search result
-            IReadOnlyList<ILibraryGroup> groups = await catalog.SearchAsync("jquery", 4, CancellationToken.None).ConfigureAwait(false);
+            IReadOnlyList<ILibraryGroup> groups = await catalog.SearchAsync("jquery", 4, CancellationToken.None);
             Assert.AreEqual(4, groups.Count);
 
             // Show details for selected library
@@ -54,13 +54,13 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             Assert.AreEqual("jquery", group.Name);
 
             // Get all libraries in group to display version list
-            IReadOnlyList<ILibraryDisplayInfo> displayInfos = await group.GetDisplayInfosAsync(CancellationToken.None).ConfigureAwait(false);
+            IReadOnlyList<ILibraryDisplayInfo> displayInfos = await group.GetDisplayInfosAsync(CancellationToken.None);
             Assert.IsTrue(displayInfos.Count >= 67);
             Assert.AreEqual("1.2.3", displayInfos.ElementAt(displayInfos.Count - 1).Version, "Library version mismatch");
 
             // Get the library to install
             ILibraryDisplayInfo displayInfo = displayInfos.FirstOrDefault();
-            ILibrary library = await displayInfo.GetLibraryAsync(CancellationToken.None).ConfigureAwait(false);
+            ILibrary library = await catalog.GetLibraryAsync(displayInfo.LibraryId, CancellationToken.None);
             Assert.AreEqual(group.Name, library.Name);
             Assert.AreEqual(displayInfo.Version, library.Version);
 

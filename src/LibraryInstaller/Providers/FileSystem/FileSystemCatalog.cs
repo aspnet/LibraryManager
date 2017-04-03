@@ -5,6 +5,8 @@ using LibraryInstaller.Contracts;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
 
 namespace LibraryInstaller.Providers.FileSystem
 {
@@ -29,10 +31,29 @@ namespace LibraryInstaller.Providers.FileSystem
 
             if (info.Count > 0 && info[0] != null)
             {
-                return await info[0].GetLibraryAsync(cancellationToken).ConfigureAwait(false);
+                return new FileSystemLibrary
+                {
+                    Name = libraryId,
+                    ProviderId = _providerId,
+                    Files = GetFiles(libraryId)
+                };
             }
 
             return null;
+        }
+
+        private IReadOnlyDictionary<string, bool> GetFiles(string libraryId)
+        {
+            if (Directory.Exists(libraryId))
+            {
+                return Directory.EnumerateFiles(libraryId)
+                        .Select(f => Path.GetFileName(f))
+                        .ToDictionary((k) => k, (v) => true);
+            }
+            else
+            {
+                return new Dictionary<string, bool>() { { Path.GetFileName(libraryId), true } };
+            }
         }
 
         public Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken)

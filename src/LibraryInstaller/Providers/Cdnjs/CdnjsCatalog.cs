@@ -125,8 +125,17 @@ namespace LibraryInstaller.Providers.Cdnjs
                 string[] args = libraryId.Split('@');
                 string name = args[0];
                 string version = args[1];
+
                 IReadOnlyList<ILibraryDisplayInfo> displayInfos = await GetDisplayInfosAsync(name, cancellationToken).ConfigureAwait(false);
-                return await displayInfos.First(d => d.Version == version).GetLibraryAsync(cancellationToken);
+                var info = displayInfos.First(d => d.Version == version) as CdnjsLibraryDisplayInfo;
+
+                return new CdnjsLibrary
+                {
+                    Version = info.Version,
+                    Files = info.Asset.Files.ToDictionary(k => k, b => b == info.Asset.DefaultFile),
+                    Name = name,
+                    ProviderId = _providerId
+                };
             }
             catch (Exception)
             {
@@ -197,7 +206,7 @@ namespace LibraryInstaller.Providers.Cdnjs
                     foreach (Asset asset in assets)
                     {
                         asset.DefaultFile = root["filename"]?.Value<string>();
-                        var info = new CdnjsLibraryDisplayInfo(asset, groupName, _providerId);
+                        var info = new CdnjsLibraryDisplayInfo(asset, groupName);
 
                         list.Add(info);
                     }

@@ -58,7 +58,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             IReadOnlyList<ILibraryDisplayInfo> info = await absolute[0].GetDisplayInfosAsync(token);
             Assert.IsTrue(info.Count > 0);
 
-            ILibrary library = await info[0].GetLibraryAsync(token);
+            ILibrary library = await catalog.GetLibraryAsync(info[0].LibraryId, token);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
             Assert.IsNotNull(library.Name);

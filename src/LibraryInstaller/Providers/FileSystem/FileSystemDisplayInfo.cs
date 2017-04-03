@@ -20,35 +20,10 @@ namespace LibraryInstaller.Providers.FileSystem
         {
             _libraryId = libraryId;
             _providerId = providerId;
-            GetFiles(libraryId);
         }
+
+        public string LibraryId => _libraryId;
 
         public string Version => string.Empty;
-
-        public Task<ILibrary> GetLibraryAsync(CancellationToken cancellationToken)
-        {
-            var library = new FileSystemLibrary
-            {
-                Name = _libraryId,
-                ProviderId = _providerId,
-                Files = _files
-            };
-
-            return Task.FromResult<ILibrary>(library);
-        }
-
-        private void GetFiles(string libraryId)
-        {
-            if (Directory.Exists(libraryId))
-            {
-                _files = Directory.EnumerateFiles(libraryId)
-                        .Select(f => Path.GetFileName(f))
-                        .ToDictionary((k) => k, (v) => true);
-            }
-            else
-            {
-                _files.Add(Path.GetFileName(libraryId), true);
-            }
-        }
     }
 }
