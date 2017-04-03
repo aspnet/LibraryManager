@@ -6,13 +6,19 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace LibraryInstaller.Providers.Cdnjs
 {
     internal class CdnjsLibraryGroup : ILibraryGroup
     {
-        public string Name { get; set; }
+        [JsonProperty("name")]
+        public string DisplayName { get; set; }
+
+        [JsonProperty("description")]
         public string Description { get; set; }
+
+        [JsonProperty("version")]
         public string Version { get; set; }
 
         public Task<IReadOnlyList<ILibraryDisplayInfo>> GetDisplayInfosAsync(CancellationToken cancellationToken)
@@ -24,7 +30,7 @@ namespace LibraryInstaller.Providers.Cdnjs
 
         public override string ToString()
         {
-            return Name;
+            return DisplayName;
         }
     }
 }

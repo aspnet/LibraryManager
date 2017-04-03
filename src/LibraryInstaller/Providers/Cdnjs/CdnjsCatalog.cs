@@ -57,8 +57,8 @@ namespace LibraryInstaller.Providers.Cdnjs
                 {
                     var completion = new CompletionItem
                     {
-                        DisplayText = group.Name,
-                        InsertionText = group.Name + "@" + group.Version,
+                        DisplayText = group.DisplayName,
+                        InsertionText = group.DisplayName + "@" + group.Version,
                         Description = group.Description
                     };
 
@@ -69,11 +69,11 @@ namespace LibraryInstaller.Providers.Cdnjs
             // Version
             else
             {
-                CdnjsLibraryGroup group = _libraryGroups.FirstOrDefault(g => g.Name == name);
+                CdnjsLibraryGroup group = _libraryGroups.FirstOrDefault(g => g.DisplayName == name);
 
                 if (group != null)
                 {
-                    IReadOnlyList<ILibraryDisplayInfo> infos = await GetDisplayInfosAsync(group.Name, CancellationToken.None);
+                    IReadOnlyList<ILibraryDisplayInfo> infos = await GetDisplayInfosAsync(group.DisplayName, CancellationToken.None);
 
                     foreach (ILibraryDisplayInfo info in infos)
                     {
@@ -111,7 +111,7 @@ namespace LibraryInstaller.Providers.Cdnjs
 
             foreach (CdnjsLibraryGroup group in results)
             {
-                string groupName = group.Name;
+                string groupName = group.DisplayName;
                 group.DisplayInfosTask = ct => GetDisplayInfosAsync(groupName, ct);
             }
 
@@ -149,13 +149,13 @@ namespace LibraryInstaller.Providers.Cdnjs
 
             foreach (CdnjsLibraryGroup group in _libraryGroups)
             {
-                if (group.Name.Equals(term, StringComparison.OrdinalIgnoreCase))
+                if (group.DisplayName.Equals(term, StringComparison.OrdinalIgnoreCase))
                     list.Add(Tuple.Create(10, group));
 
-                else if (group.Name.StartsWith(term, StringComparison.OrdinalIgnoreCase))
+                else if (group.DisplayName.StartsWith(term, StringComparison.OrdinalIgnoreCase))
                     list.Add(Tuple.Create(5, group));
 
-                else if (group.Name.IndexOf(term, StringComparison.OrdinalIgnoreCase) > -1)
+                else if (group.DisplayName.IndexOf(term, StringComparison.OrdinalIgnoreCase) > -1)
                     list.Add(Tuple.Create(1, group));
             }
 

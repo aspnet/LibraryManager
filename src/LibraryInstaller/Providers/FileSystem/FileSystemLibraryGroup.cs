@@ -10,23 +10,20 @@ namespace LibraryInstaller.Providers.FileSystem
 {
     internal class FileSystemLibraryGroup : ILibraryGroup
     {
-        private string _providerId;
-
-        public FileSystemLibraryGroup(string libraryId, string providerId)
+        public FileSystemLibraryGroup(string groupName)
         {
-            Name = libraryId;
-            _providerId = providerId;
+            DisplayName = groupName;
         }
 
-        public string Name { get; }
+        public string DisplayName { get; }
 
-        public string Description => "";
+        public string Description => string.Empty;
 
         public Task<IReadOnlyList<ILibraryDisplayInfo>> GetDisplayInfosAsync(CancellationToken cancellationToken)
         {
             var infos = new List<ILibraryDisplayInfo>
             {
-                new FileSystemDisplayInfo(Name, _providerId)
+                new FileSystemDisplayInfo(DisplayName)
             };
 
             return Task.FromResult<IReadOnlyList<ILibraryDisplayInfo>>(infos);
@@ -34,7 +31,7 @@ namespace LibraryInstaller.Providers.FileSystem
 
         public override string ToString()
         {
-            return Name;
+            return DisplayName;
         }
     }
 }

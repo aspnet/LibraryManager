@@ -51,7 +51,8 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
 
             // Show details for selected library
             ILibraryGroup group = groups.FirstOrDefault();
-            Assert.AreEqual("jquery", group.Name);
+            Assert.AreEqual("jquery", group.DisplayName);
+            Assert.IsNotNull(group.Description);
 
             // Get all libraries in group to display version list
             IReadOnlyList<ILibraryDisplayInfo> displayInfos = await group.GetDisplayInfosAsync(CancellationToken.None);
@@ -61,7 +62,7 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             // Get the library to install
             ILibraryDisplayInfo displayInfo = displayInfos.FirstOrDefault();
             ILibrary library = await catalog.GetLibraryAsync(displayInfo.LibraryId, CancellationToken.None);
-            Assert.AreEqual(group.Name, library.Name);
+            Assert.AreEqual(group.DisplayName, library.Name);
             Assert.AreEqual(displayInfo.Version, library.Version);
 
             var desiredState = new LibraryInstallationState

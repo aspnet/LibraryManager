@@ -26,7 +26,7 @@ namespace LibraryInstaller.Providers.FileSystem
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            var group = new FileSystemLibraryGroup(libraryId, _providerId);
+            var group = new FileSystemLibraryGroup(libraryId);
             IReadOnlyList<ILibraryDisplayInfo> info = await group.GetDisplayInfosAsync(cancellationToken).ConfigureAwait(false);
 
             if (info.Count > 0 && info[0] != null)
@@ -60,7 +60,7 @@ namespace LibraryInstaller.Providers.FileSystem
         {
             var groups = new List<ILibraryGroup>()
             {
-                new FileSystemLibraryGroup(term, _providerId)
+                new FileSystemLibraryGroup(term)
             };
 
             return Task.FromResult<IReadOnlyList<ILibraryGroup>>(groups);

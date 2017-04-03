@@ -13,9 +13,9 @@ namespace LibraryInstaller.Contracts
     public interface ILibraryGroup
     {
         /// <summary>
-        /// The name of the library.
+        /// The user facing display name of the library.
         /// </summary>
-        string Name { get; }
+        string DisplayName { get; }
 
         /// <summary>
         /// The description of the library.
