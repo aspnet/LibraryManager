@@ -13,10 +13,9 @@
         <Buttons>
             <!-- Folder -->
             <Button guid="guidLibraryInstallerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
-                <!--<Icon guid="ImageCatalogGuid" id="JSWebScript" />
-                <CommandFlag>IconIsMoniker</CommandFlag>-->
+                <Icon guid="ImageCatalogGuid" id="JSWebScript" />
+                <CommandFlag>IconIsMoniker</CommandFlag>
                 <CommandFlag>DefaultInvisible</CommandFlag>
-                <CommandFlag>DefaultDisabled</CommandFlag>
                 <CommandFlag>DynamicVisibility</CommandFlag>
                 <Strings>
                     <ButtonText>Add Client-Side Library...</ButtonText>
@@ -74,13 +73,15 @@
     </CommandPlacements>
 
     <VisibilityConstraints>
-        <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="Clean" context="guidUiContext" />
-        <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="Restore" context="guidUiContext" />
+        <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="InstallPackage" context="guidUiContext" />
+        <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="Clean" context="guidUiContextConfigFile" />
+        <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="Restore" context="guidUiContextConfigFile" />
     </VisibilityConstraints>
 
     <Symbols>
         <GuidSymbol name="guidPackage" value="{75d8574c-9e92-482c-bf99-e7fba087c60e}" />
         <GuidSymbol name="guidUiContext" value="{f8c0db80-39c2-4f32-9be3-701f2d25add8}" />
+        <GuidSymbol name="guidUiContextConfigFile" value="{f8c0db80-39c2-4f32-9be3-701f2d25add9}" />
 
         <GuidSymbol name="guidLibraryInstallerPackageCmdSet" value="{44ee7bda-abda-486e-a5fe-4dd3f4cefac1}">
             <IDSymbol name="ConfigMenuGruop" value="0x1030" />

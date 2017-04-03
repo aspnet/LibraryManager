@@ -14,7 +14,7 @@ namespace LibraryInstaller.Vsix
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideAutoLoad(PackageGuids.guidUiContextString)]
+    //[ProvideAutoLoad(PackageGuids.guidUiContextString)]
     [ProvideUIContextRule(PackageGuids.guidUiContextString, Vsix.Name,
         "WAP | WebSite | DotNetCoreWeb | ProjectK",// | Cordova | Node",
         new string[] {
@@ -33,6 +33,10 @@ namespace LibraryInstaller.Vsix
             "ActiveProjectCapability:DependencyPackageManagement",
             "ActiveProjectFlavor:{3AF33F2E-1136-4D97-BBB7-1795711AC8B8}",
         })]
+    [ProvideUIContextRule(PackageGuids.guidUiContextConfigFileString, "ConfigFile",
+        expression: "Config",
+        termNames: new string[] { "Config" },
+        termValues: new[] { "HierSingleSelectionName:" + Constants.ConfigFileName + "$" })]
     public sealed class LibraryInstallerPackage : AsyncPackage
     {
         protected override async Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)

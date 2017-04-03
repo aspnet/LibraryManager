@@ -14,10 +14,12 @@ namespace LibraryInstaller.Vsix
     {
         public const string guidPackageString = "75d8574c-9e92-482c-bf99-e7fba087c60e";
         public const string guidUiContextString = "f8c0db80-39c2-4f32-9be3-701f2d25add8";
+        public const string guidUiContextConfigFileString = "f8c0db80-39c2-4f32-9be3-701f2d25add9";
         public const string guidLibraryInstallerPackageCmdSetString = "44ee7bda-abda-486e-a5fe-4dd3f4cefac1";
         public const string guidVenusCmdIdString = "c7547851-4e3a-4e5b-9173-fa6e9c8bd82c";
         public static Guid guidPackage = new Guid(guidPackageString);
         public static Guid guidUiContext = new Guid(guidUiContextString);
+        public static Guid guidUiContextConfigFile = new Guid(guidUiContextConfigFileString);
         public static Guid guidLibraryInstallerPackageCmdSet = new Guid(guidLibraryInstallerPackageCmdSetString);
         public static Guid guidVenusCmdId = new Guid(guidVenusCmdIdString);
     }

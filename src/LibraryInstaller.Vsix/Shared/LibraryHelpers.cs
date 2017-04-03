@@ -17,7 +17,19 @@ namespace LibraryInstaller.Vsix
     {
         public static bool IsSupported(this Project project)
         {
-            return project.IsKind(ProjectTypes.WAP, ProjectTypes.DOTNET_Core, ProjectTypes.WEBSITE_PROJECT);
+            if (project.IsKind(ProjectTypes.DOTNET_Core, ProjectTypes.WEBSITE_PROJECT))
+                return true;
+
+            try
+            {
+                // Web Application Project has this property
+                if (project.Properties.Item("WebApplication.AspNetDebugging") != null)
+                    return true;
+            }
+            catch
+            { /* Do nothing. If property doesn't exist, it throws. */ }
+
+            return false;
         }
 
         public static async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken = default(CancellationToken))
