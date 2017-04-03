@@ -28,35 +28,46 @@ indent_size = 2
 # Dotnet code style settings:
 [*.{cs,vb}]
 # Sort using and Import directives with System.* appearing first
-dotnet_sort_system_directives_first                           = true
+dotnet_sort_system_directives_first                             = true
 
 # Avoid "this." and "Me." if not necessary
-dotnet_style_qualification_for_field                          = false : suggestion
-dotnet_style_qualification_for_property                       = false : suggestion
-dotnet_style_qualification_for_method                         = false : suggestion
-dotnet_style_qualification_for_event                          = false : suggestion
+dotnet_style_qualification_for_field                            = false : suggestion
+dotnet_style_qualification_for_property                         = false : suggestion
+dotnet_style_qualification_for_method                           = false : suggestion
+dotnet_style_qualification_for_event                            = false : suggestion
 
 # Use language keywords instead of framework type names for type references
-dotnet_style_predefined_type_for_locals_parameters_members    = true : suggestion
-dotnet_style_predefined_type_for_member_access                = true : suggestion
+dotnet_style_predefined_type_for_locals_parameters_members      = true : suggestion
+dotnet_style_predefined_type_for_member_access                  = true : suggestion
 
 # Suggest more modern language features when available
-dotnet_style_object_initializer                               = true : suggestion
-dotnet_style_collection_initializer                           = true : suggestion
-dotnet_style_coalesce_expression                              = true : suggestion
-dotnet_style_null_propagation                                 = true : suggestion
-dotnet_style_explicit_tuple_names                             = true : suggestion
+dotnet_style_object_initializer                                 = true : suggestion
+dotnet_style_collection_initializer                             = true : suggestion
+dotnet_style_coalesce_expression                                = true : suggestion
+dotnet_style_null_propagation                                   = true : suggestion
+dotnet_style_explicit_tuple_names                               = true : suggestion
 
 # Naming rules - async methods to be prefixed with Async
-dotnet_naming_rule.async_methods_must_end_with_async.severity = warning
-dotnet_naming_rule.async_methods_must_end_with_async.symbols  = method_symbols
-dotnet_naming_rule.async_methods_must_end_with_async.style    = end_in_async_style
+dotnet_naming_rule.async_methods_must_end_with_async.severity   = warning
+dotnet_naming_rule.async_methods_must_end_with_async.symbols    = method_symbols
+dotnet_naming_rule.async_methods_must_end_with_async.style      = end_in_async_style
 
-dotnet_naming_symbols.method_symbols.applicable_kinds         = method
-dotnet_naming_symbols.method_symbols.required_modifiers       = async
+dotnet_naming_symbols.method_symbols.applicable_kinds           = method
+dotnet_naming_symbols.method_symbols.required_modifiers         = async
 
-dotnet_naming_style.end_in_async_style.capitalization         = pascal_case
-dotnet_naming_style.end_in_async_style.required_suffix        = Async
+dotnet_naming_style.end_in_async_style.capitalization           = pascal_case
+dotnet_naming_style.end_in_async_style.required_suffix          = Async
+
+# Naming rules - private fields must start with an underscore
+dotnet_naming_rule.field_must_start_with_underscore.severity    = warning
+dotnet_naming_rule.field_must_start_with_underscore.symbols     = private_fields
+dotnet_naming_rule.field_must_start_with_underscore.style       = start_underscore_style
+
+dotnet_naming_symbols.private_fields.applicable_kinds           = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.start_underscore_style.capitalization       = camel_case
+dotnet_naming_style.start_underscore_style.required_prefix      = _
 
 # CSharp code style settings:
 [*.cs]
