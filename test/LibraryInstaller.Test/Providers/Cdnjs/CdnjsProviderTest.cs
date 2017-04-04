@@ -55,15 +55,13 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             Assert.IsNotNull(group.Description);
 
             // Get all libraries in group to display version list
-            IReadOnlyList<ILibraryDisplayInfo> displayInfos = await group.GetDisplayInfosAsync(CancellationToken.None);
-            Assert.IsTrue(displayInfos.Count >= 67);
-            Assert.AreEqual("1.2.3", displayInfos.ElementAt(displayInfos.Count - 1).Version, "Library version mismatch");
+            IEnumerable<string> libraryIds = await group.GetLibraryIdsAsync(CancellationToken.None);
+            Assert.IsTrue(libraryIds.Count() >= 67);
+            Assert.AreEqual("jquery@1.2.3", libraryIds.Last(), "Library version mismatch");
 
             // Get the library to install
-            ILibraryDisplayInfo displayInfo = displayInfos.FirstOrDefault();
-            ILibrary library = await catalog.GetLibraryAsync(displayInfo.LibraryId, CancellationToken.None);
+            ILibrary library = await catalog.GetLibraryAsync(libraryIds.First(), CancellationToken.None);
             Assert.AreEqual(group.DisplayName, library.Name);
-            Assert.AreEqual(displayInfo.Version, library.Version);
 
             var desiredState = new LibraryInstallationState
             {

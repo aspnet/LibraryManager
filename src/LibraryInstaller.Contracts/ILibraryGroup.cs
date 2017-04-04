@@ -23,10 +23,10 @@ namespace LibraryInstaller.Contracts
         string Description { get; }
 
         /// <summary>
-        /// Gets the <see cref="ILibraryDisplayInfo"/> objects for the different versions of the library.
+        /// Gets a list of IDs for the different versions of the library.
         /// </summary>
         /// <param name="cancellationToken">A token that allows cancellation of the operation.</param>
-        /// <returns>A list of <see cref="ILibraryDisplayInfo"/> used to display library information to the user.</returns>
-        Task<IReadOnlyList<ILibraryDisplayInfo>> GetDisplayInfosAsync(CancellationToken cancellationToken);
+        /// <returns>A list of library IDs used to display library information to the user.</returns>
+        Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken);
     }
 }

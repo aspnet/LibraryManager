@@ -19,14 +19,11 @@ namespace LibraryInstaller.Providers.FileSystem
 
         public string Description => string.Empty;
 
-        public Task<IReadOnlyList<ILibraryDisplayInfo>> GetDisplayInfosAsync(CancellationToken cancellationToken)
+        public Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
         {
-            var infos = new List<ILibraryDisplayInfo>
-            {
-                new FileSystemDisplayInfo(DisplayName)
-            };
+            string[] ids = { DisplayName };
 
-            return Task.FromResult<IReadOnlyList<ILibraryDisplayInfo>>(infos);
+            return Task.FromResult<IEnumerable<string>>(ids);
         }
 
         public override string ToString()

@@ -21,12 +21,12 @@ namespace LibraryInstaller.Providers.Cdnjs
         [JsonProperty("version")]
         public string Version { get; set; }
 
-        public Task<IReadOnlyList<ILibraryDisplayInfo>> GetDisplayInfosAsync(CancellationToken cancellationToken)
+        public Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
         {
-            return DisplayInfosTask?.Invoke(cancellationToken) ?? Task.FromResult<IReadOnlyList<ILibraryDisplayInfo>>(new ILibraryDisplayInfo[0]);
+            return DisplayInfosTask?.Invoke(cancellationToken) ?? Task.FromResult<IEnumerable<string>>(new string[0]);
         }
 
-        public Func<CancellationToken, Task<IReadOnlyList<ILibraryDisplayInfo>>> DisplayInfosTask { get; set; }
+        public Func<CancellationToken, Task<IEnumerable<string>>> DisplayInfosTask { get; set; }
 
         public override string ToString()
         {

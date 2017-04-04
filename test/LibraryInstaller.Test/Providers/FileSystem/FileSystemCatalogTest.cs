@@ -62,10 +62,10 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(folder, 3, token);
             Assert.AreEqual(1, absolute.Count);
 
-            IReadOnlyList<ILibraryDisplayInfo> info = await absolute.First().GetDisplayInfosAsync(token);
-            Assert.AreEqual(1, info.Count);
+            IEnumerable<string> info = await absolute.First().GetLibraryIdsAsync(token);
+            Assert.AreEqual(1, info.Count());
 
-            ILibrary library = await _catalog.GetLibraryAsync(info.First().LibraryId, token);
+            ILibrary library = await _catalog.GetLibraryAsync(info.First(), token);
             Assert.AreEqual(3, library.Files.Count);
 
             Directory.Delete(folder, true);
@@ -77,10 +77,10 @@ namespace LibraryInstaller.Test.Providers.FileSystem
 
             IReadOnlyList<ILibraryGroup> absolute = await catalog.SearchAsync(file, 1, token);
             Assert.AreEqual(1, absolute.Count);
-            IReadOnlyList<ILibraryDisplayInfo> info = await absolute[0].GetDisplayInfosAsync(token);
-            Assert.AreEqual(1, info.Count);
+            IEnumerable<string> info = await absolute[0].GetLibraryIdsAsync(token);
+            Assert.AreEqual(1, info.Count());
 
-            ILibrary library = await catalog.GetLibraryAsync(info[0].LibraryId, token);
+            ILibrary library = await catalog.GetLibraryAsync(info.First(), token);
             Assert.AreEqual(1, library.Files.Count);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
             Assert.AreEqual(file, library.Name);

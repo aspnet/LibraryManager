@@ -24,22 +24,16 @@ namespace LibraryInstaller.Providers.FileSystem
             return Task.FromResult(default(CompletionSet));
         }
 
-        public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
+        public Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            var group = new FileSystemLibraryGroup(libraryId);
-            IReadOnlyList<ILibraryDisplayInfo> info = await group.GetDisplayInfosAsync(cancellationToken).ConfigureAwait(false);
-
-            if (info.Count > 0 && info[0] != null)
+            var library = new FileSystemLibrary
             {
-                return new FileSystemLibrary
-                {
-                    Name = libraryId,
-                    ProviderId = _providerId,
-                    Files = GetFiles(libraryId)
-                };
-            }
+                Name = libraryId,
+                ProviderId = _providerId,
+                Files = GetFiles(libraryId)
+            };
 
-            return null;
+            return Task.FromResult<ILibrary>(library);
         }
 
         private IReadOnlyDictionary<string, bool> GetFiles(string libraryId)

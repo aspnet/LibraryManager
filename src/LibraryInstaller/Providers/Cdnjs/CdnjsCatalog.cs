@@ -73,14 +73,14 @@ namespace LibraryInstaller.Providers.Cdnjs
 
                 if (group != null)
                 {
-                    IReadOnlyList<ILibraryDisplayInfo> infos = await GetDisplayInfosAsync(group.DisplayName, CancellationToken.None);
+                    IEnumerable<Asset> assets = await GetAssetsAsync(name, CancellationToken.None);
 
-                    foreach (ILibraryDisplayInfo info in infos)
+                    foreach (string version in assets.Select(a => a.Version))
                     {
                         var completion = new CompletionItem
                         {
-                            DisplayText = info.Version,
-                            InsertionText = $"{name}@{info.Version}"
+                            DisplayText = version,
+                            InsertionText = $"{name}@{version}"
                         };
 
                         completions.Add(completion);
@@ -126,13 +126,13 @@ namespace LibraryInstaller.Providers.Cdnjs
                 string name = args[0];
                 string version = args[1];
 
-                IReadOnlyList<ILibraryDisplayInfo> displayInfos = await GetDisplayInfosAsync(name, cancellationToken).ConfigureAwait(false);
-                var info = displayInfos.First(d => d.Version == version) as CdnjsLibraryDisplayInfo;
+                IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken);
+                Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
                 return new CdnjsLibrary
                 {
-                    Version = info.Version,
-                    Files = info.Asset.Files.ToDictionary(k => k, b => b == info.Asset.DefaultFile),
+                    Version = asset.Version,
+                    Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
                     Name = name,
                     ProviderId = _providerId
                 };
@@ -188,10 +188,17 @@ namespace LibraryInstaller.Providers.Cdnjs
             }
         }
 
-        private async Task<IReadOnlyList<ILibraryDisplayInfo>> GetDisplayInfosAsync(string groupName, CancellationToken cancellationToken)
+        private async Task<IEnumerable<string>> GetDisplayInfosAsync(string groupName, CancellationToken cancellationToken)
+        {
+            IEnumerable<Asset> assets = await GetAssetsAsync(groupName, cancellationToken);
+
+            return assets?.Select(a => $"{groupName}@{a.Version}");
+        }
+
+        private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)
         {
             string metaFile = Path.Combine(_providerStorePath, groupName, "metadata.json");
-            var list = new List<ILibraryDisplayInfo>();
+            var list = new List<Asset>();
 
             try
             {
@@ -206,9 +213,7 @@ namespace LibraryInstaller.Providers.Cdnjs
                     foreach (Asset asset in assets)
                     {
                         asset.DefaultFile = root["filename"]?.Value<string>();
-                        var info = new CdnjsLibraryDisplayInfo(asset, groupName);
-
-                        list.Add(info);
+                        list.Add(asset);
                     }
                 }
             }

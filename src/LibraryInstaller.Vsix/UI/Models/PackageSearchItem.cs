@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -20,7 +21,7 @@ namespace LibraryInstaller.Vsix.Models
         private string _description;
         private string _homepage;
         private ImageSource _icon;
-        private Lazy<Task<ILibraryDisplayInfo>> _infoTask;
+        private Lazy<Task<string>> _infoTask;
         private static ConcurrentDictionary<string, PackageSearchItem> _cache = new ConcurrentDictionary<string, PackageSearchItem>();
         private bool _special;
         private static PackageSearchItem _missing;
@@ -47,12 +48,12 @@ namespace LibraryInstaller.Vsix.Models
             _dispatcher = Dispatcher.CurrentDispatcher;
             CollapsedItemText = name;
             Icon = WpfUtil.GetIconForImageMoniker(KnownMonikers.Package, 24, 24);
-            _infoTask = new Lazy<Task<ILibraryDisplayInfo>>(async () =>
+            _infoTask = new Lazy<Task<string>>(async () =>
             {
                 ILibraryCatalog catalog = provider.GetCatalog();
                 IReadOnlyList<ILibraryGroup> packageGroups = await catalog.SearchAsync(name, 1, CancellationToken.None).ConfigureAwait(false);
-                IReadOnlyList<ILibraryDisplayInfo> displayInfos = await packageGroups[0].GetDisplayInfosAsync(CancellationToken.None).ConfigureAwait(false);
-                return displayInfos[0];
+                IEnumerable<string> displayInfos = await packageGroups[0].GetLibraryIdsAsync(CancellationToken.None).ConfigureAwait(false);
+                return displayInfos.FirstOrDefault();
             });
         }
 
