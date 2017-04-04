@@ -14,7 +14,7 @@ namespace LibraryInstaller.Vsix
         private int _specificVersion;
 
         public SimpleCompletionEntry(string text, ImageSource glyph, IIntellisenseSession session)
-            : base(text, text, null, glyph, null, false, session as ICompletionSession)
+            : base(text, "\"" + text + "\"", null, glyph, null, false, session as ICompletionSession)
         { }
 
         public SimpleCompletionEntry(string text, ImageMoniker moniker, IIntellisenseSession session)

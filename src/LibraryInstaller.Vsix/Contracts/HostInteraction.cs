@@ -56,30 +56,33 @@ namespace LibraryInstaller.Vsix
             return true;
         }
 
-        public void DeleteFile(string relativeFilePath)
+        public void DeleteFiles(params string[] relativeFilePaths)
         {
-            string absoluteFile = Path.Combine(WorkingDirectory, relativeFilePath);
-
-            try
+            foreach (string relativeFilePath in relativeFilePaths)
             {
-                ProjectItem item = VsHelpers.DTE.Solution.FindProjectItem(absoluteFile);
-                Project project = item?.ContainingProject;
+                string absoluteFile = Path.Combine(WorkingDirectory, relativeFilePath);
 
-                if (project != null)
+                try
                 {
-                    item.Delete();
-                }
-                else
-                {
-                    VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
-                    File.Delete(absoluteFile);
-                }
+                    ProjectItem item = VsHelpers.DTE.Solution.FindProjectItem(absoluteFile);
+                    Project project = item?.ContainingProject;
 
-                Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
-            }
-            catch (Exception)
-            {
-                Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
+                    if (project != null)
+                    {
+                        item.Delete();
+                    }
+                    else
+                    {
+                        VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
+                        File.Delete(absoluteFile);
+                    }
+
+                    Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
+                }
+                catch (Exception)
+                {
+                    Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
+                }
             }
         }
     }

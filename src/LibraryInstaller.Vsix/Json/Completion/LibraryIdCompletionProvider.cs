@@ -34,7 +34,7 @@ namespace LibraryInstaller.Vsix
 
             var parent = member.Parent as JSONObject;
 
-            if (!TryGetProviderId(parent, out string providerId, out string libraryId))
+            if (!JsonHelpers.TryGetProviderId(parent, out string providerId, out string libraryId))
                 yield break;
 
             var dependencies = Dependencies.FromConfigFile(ConfigFilePath);

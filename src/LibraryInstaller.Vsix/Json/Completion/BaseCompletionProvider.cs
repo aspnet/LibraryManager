@@ -48,27 +48,13 @@ namespace LibraryInstaller.Vsix
 
         protected abstract IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context);
 
-        protected static bool TryGetProviderId(JSONObject parent, out string providerId, out string libraryId)
-        {
-            providerId = null;
-            libraryId = null;
-
-            if (parent == null)
-                return false;
-
-            foreach (JSONMember child in parent.Children.OfType<JSONMember>())
-            {
-                if (child.UnquotedNameText == "provider")
-                    providerId = child.UnquotedValueText;
-                else if (child.UnquotedNameText == "id")
-                    libraryId = child.UnquotedValueText;
-            }
-
-            return !string.IsNullOrEmpty(providerId);
-        }
 
         protected void UpdateListEntriesSync(JSONCompletionContext context, IEnumerable<JSONCompletionEntry> allEntries)
         {
+            if (context.Session.IsDismissed)
+                return;
+
+
             foreach (CompletionSet curCompletionSet in (context.Session as ICompletionSession)?.CompletionSets)
             {
                 if (curCompletionSet is WebCompletionSet webCompletionSet)
@@ -77,6 +63,7 @@ namespace LibraryInstaller.Vsix
                     {
                         // only delete our completion entries
                         webCompletionSet.UpdateCompletions(s => s is SimpleCompletionEntry, allEntries);
+
                     });
 
                     // The UpdateCompletions call above may modify the collection we're enumerating. That's ok, as we're done anyways.

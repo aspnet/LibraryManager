@@ -8,6 +8,9 @@ using System;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
+using LibraryInstaller.Contracts;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace LibraryInstaller.Vsix.Json
 {
@@ -16,6 +19,9 @@ namespace LibraryInstaller.Vsix.Json
     [TextViewRole(PredefinedTextViewRoles.Debuggable)]
     public class TextviewCreationListener : IWpfTextViewCreationListener
     {
+        private Manifest _manifest;
+        private Dependencies _dependencies;
+
         [Import]
         private ITextDocumentFactoryService DocumentService { get; set; }
 
@@ -29,8 +35,31 @@ namespace LibraryInstaller.Vsix.Json
             if (!fileName.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
                 return;
 
+            _dependencies = Dependencies.FromConfigFile(doc.FilePath);
+            _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
+
             doc.FileActionOccurred += OnFileSavedAsync;
             textView.Closed += OnViewClosed;
+        }
+
+        private void RemoveFiles(Manifest newManifest)
+        {
+            var hostInteraction = _dependencies.GetHostInteractions() as HostInteraction;
+
+            foreach (ILibraryInstallationState existing in _manifest.Libraries)
+            {
+                ILibraryInstallationState ost = newManifest.Libraries.FirstOrDefault(l => l.LibraryId == existing.LibraryId && l.ProviderId == existing.ProviderId);
+
+                if (ost == null || ost.DestinationPath != existing.DestinationPath)
+                {
+                    hostInteraction.DeleteFiles(existing.Files.Select(f => Path.Combine(existing.DestinationPath, f)).ToArray());
+                }
+                else
+                {
+                    IEnumerable<string> files = existing.Files.Where(f => !ost.Files.Contains(f));
+                    hostInteraction.DeleteFiles(files.Select(f => Path.Combine(existing.DestinationPath, f)).ToArray());
+                }
+            }
         }
 
         private async void OnFileSavedAsync(object sender, TextDocumentFileActionEventArgs e)
@@ -39,6 +68,11 @@ namespace LibraryInstaller.Vsix.Json
             {
                 try
                 {
+                    Manifest newManifest = Manifest.FromFileAsync(e.FilePath, _dependencies, CancellationToken.None).Result;
+                    RemoveFiles(newManifest);
+                    _manifest = newManifest;
+
+
                     await LibraryHelpers.RestoreAsync(e.FilePath, CancellationToken.None);
                     Telemetry.TrackOperation("restoresave");
                 }

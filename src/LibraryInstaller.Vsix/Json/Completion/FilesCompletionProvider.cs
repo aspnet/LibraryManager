@@ -29,14 +29,14 @@ namespace LibraryInstaller.Vsix
 
         protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
         {
-            var member = context.ContextItem?.Parent?.Parent as JSONMember;
+            JSONMember member = context.ContextItem.FindType<JSONMember>();
 
             if (member == null || member.UnquotedNameText != "files")
                 yield break;
 
             var parent = member.Parent as JSONObject;
 
-            if (!TryGetProviderId(parent, out string providerId, out string libraryId))
+            if (!JsonHelpers.TryGetProviderId(parent, out string providerId, out string libraryId))
                 yield break;
 
             if (string.IsNullOrEmpty(libraryId))
@@ -106,7 +106,7 @@ namespace LibraryInstaller.Vsix
 
             foreach (JSONArrayElement arrayElement in array.Elements)
             {
-                if (arrayElement.Value is JSONTokenItem token)
+                if (arrayElement.Value is JSONTokenItem token && token.Text != context.ContextItem.Text)
                 {
                     yield return token.CanonicalizedText;
                 }

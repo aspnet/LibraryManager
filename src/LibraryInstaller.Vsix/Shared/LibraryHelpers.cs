@@ -74,6 +74,15 @@ namespace LibraryInstaller.Vsix
             }
         }
 
+        public static async Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken)
+        {
+            var dependencies = Dependencies.FromConfigFile(configFilePath);
+            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
+            var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
+            manifest.Uninstall(libraryId, (file) => hostInteraction.DeleteFiles(file));
+
+        }
+
         public static async Task CleanAsync(ProjectItem configProjectItem)
         {
             Logger.LogEvent(Resources.Text.CleanLibrariesStarted, LogLevel.Task);
@@ -83,7 +92,7 @@ namespace LibraryInstaller.Vsix
             Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None);
             var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
 
-            manifest?.Clean((file) => hostInteraction.DeleteFile(file));
+            manifest?.Clean((file) => hostInteraction.DeleteFiles(file));
 
             Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded + Environment.NewLine, LogLevel.Task);
         }
