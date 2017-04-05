@@ -62,6 +62,8 @@ namespace LibraryInstaller.Providers.FileSystem
         }
 
         public Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
-            => null;
+        {
+            return Task.FromResult(libraryId);
+        }
     }
 }

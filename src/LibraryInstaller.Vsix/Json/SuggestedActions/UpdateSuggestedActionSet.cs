@@ -15,6 +15,8 @@ namespace LibraryInstaller.Vsix
     {
         private static readonly Guid _guid = new Guid("2975f71b-809a-4ed6-a170-6bbc04058424");
         private SuggestedActionProvider _provider;
+        private Task<List<ISuggestedAction>> _actions;
+
 
         public UpdateSuggestedActionSet(SuggestedActionProvider provider)
             : base(provider.TextBuffer, provider.TextView, Resources.Text.CheckForUpdates, _guid)
@@ -22,22 +24,33 @@ namespace LibraryInstaller.Vsix
             _provider = provider;
         }
 
-        public override bool HasActionSets => true;
+        public override bool HasActionSets
+        {
+            get
+            {
+                var dependencies = Dependencies.FromConfigFile(_provider.ConfigFilePath);
+                IProvider provider = dependencies.GetProvider(_provider.InstallationState.ProviderId);
+                ILibraryCatalog catalog = provider?.GetCatalog();
+
+                if (catalog == null)
+                {
+                    return false;
+                }
+
+                _actions = GetListOfActionsAsync(catalog, CancellationToken.None);
+
+                if (_actions.IsCompleted && _actions.Result.Count == 0)
+                    return false;
+
+                return true;
+            }
+        }
 
         public override async Task<IEnumerable<SuggestedActionSet>> GetActionSetsAsync(CancellationToken cancellationToken)
         {
-            var dependencies = Dependencies.FromConfigFile(_provider.ConfigFilePath);
-            IProvider provider = dependencies.GetProvider(_provider.InstallationState.ProviderId);
-            ILibraryCatalog catalog = provider?.GetCatalog();
-
-            if (catalog == null)
-            {
-                return null;
-            }
-
             try
             {
-                return await GetActionSetAsync(catalog, cancellationToken);
+                return await GetActionSetAsync(cancellationToken);
             }
             catch (Exception ex)
             {
@@ -46,7 +59,19 @@ namespace LibraryInstaller.Vsix
             }
         }
 
-        private async Task<IEnumerable<SuggestedActionSet>> GetActionSetAsync(ILibraryCatalog catalog, CancellationToken cancellationToken)
+        private async Task<IEnumerable<SuggestedActionSet>> GetActionSetAsync(CancellationToken cancellationToken)
+        {
+            List<ISuggestedAction> list = await _actions;
+
+            if (list.Count == 0)
+            {
+                list.Add(new UpdateSuggestedAction(_provider, null, "No updates found", true));
+            }
+
+            return new[] { new SuggestedActionSet(list, "Update library") };
+        }
+
+        private async Task<List<ISuggestedAction>> GetListOfActionsAsync(ILibraryCatalog catalog, CancellationToken cancellationToken)
         {
             var list = new List<ISuggestedAction>();
 
@@ -64,12 +89,7 @@ namespace LibraryInstaller.Vsix
                 list.Add(new UpdateSuggestedAction(_provider, latestPre, $"Pre-release: {latestPre}"));
             }
 
-            if (list.Count == 0)
-            {
-                list.Add(new UpdateSuggestedAction(_provider, null, "No updates found", true));
-            }
-
-            return new[] { new SuggestedActionSet(list, "Update library") };
+            return list;
         }
 
         public override void Invoke(CancellationToken cancellationToken)
