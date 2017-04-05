@@ -2,8 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Microsoft.JSON.Core.Parser.TreeItems;
+using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.Editor.SuggestedActions;
 using System;
 using System.Threading;
@@ -14,13 +14,26 @@ namespace LibraryInstaller.Vsix
     {
         private static readonly Guid _guid = new Guid("2975f71b-809d-4ed6-a170-6bbc04058424");
         private SuggestedActionProvider _provider;
+        private const int _maxlength = 40;
 
         public UninstallSuggestedAction(SuggestedActionProvider provider)
-            : base(provider.TextBuffer, provider.TextView, string.Format(Resources.Text.UninstallLibrary, provider.InstallationState.LibraryId), _guid)
+            : base(provider.TextBuffer, provider.TextView, GetDisplayText(provider), _guid)
         {
             _provider = provider;
+            IconMoniker = KnownMonikers.Cancel;
         }
 
+        private static string GetDisplayText(SuggestedActionProvider provider)
+        {
+            string cleanId = provider.InstallationState.LibraryId;
+
+            if (cleanId.Length > _maxlength + 10)
+            {
+                cleanId = $"...{cleanId.Substring(cleanId.Length - _maxlength)}";
+            }
+
+            return string.Format(Resources.Text.UninstallLibrary, cleanId);
+        }
 
         public override async void Invoke(CancellationToken cancellationToken)
         {

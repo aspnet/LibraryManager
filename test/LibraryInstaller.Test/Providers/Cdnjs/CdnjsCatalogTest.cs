@@ -103,5 +103,23 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
             Assert.AreEqual("1.2.3", result.Completions.Last().DisplayText);
             Assert.AreEqual("jquery@1.2.3", result.Completions.Last().InsertionText);
         }
+
+        [TestMethod]
+        public async Task GetLatestVersionAsync()
+        {
+            CancellationToken token = CancellationToken.None;
+            string libraryId = "twitter-bootstrap@3.3.0";
+            string result = await _catalog.GetLatestVersion(libraryId, false, token);
+
+            Assert.IsNotNull(result);
+
+            string[] latest = result.Split('@');
+            string[] existing = libraryId.Split('@');
+
+            Assert.AreEqual(2, latest.Length);
+
+            Assert.AreNotEqual(libraryId, result);
+            Assert.AreEqual(existing[0], latest[0]);
+        }
     }
 }

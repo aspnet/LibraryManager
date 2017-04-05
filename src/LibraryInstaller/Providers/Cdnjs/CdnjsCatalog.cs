@@ -146,17 +146,40 @@ namespace LibraryInstaller.Providers.Cdnjs
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
         {
             string[] args = libraryId.Split('@');
+
+            if (args.Length < 2)
+            {
+                return null;
+            }
+
             string name = args[0];
 
-            if (!await EnsureCatalogAsync(cancellationToken))
-                return null;
-
-            CdnjsLibraryGroup latest = _libraryGroups.FirstOrDefault(l => l.DisplayName == name);
-
-            if (latest != null)
+            if (!await EnsureCatalogAsync(cancellationToken).ConfigureAwait(false))
             {
-                return $"{name}@{latest.Version}";
+                return null;
             }
+
+            CdnjsLibraryGroup group = _libraryGroups.FirstOrDefault(l => l.DisplayName == name);
+
+            if (group == null)
+            {
+                return null;
+            }
+
+            group.DisplayInfosTask = ct => GetDisplayInfosAsync(group.DisplayName, ct);
+
+            var ids = (await group.GetLibraryIdsAsync(cancellationToken).ConfigureAwait(false)).ToList();
+            string first = ids.First();
+
+            if (!includePreReleases)
+            {
+                first = ids.First(id => id.IndexOf('-', name.Length) == -1);
+            }
+
+            if (!string.IsNullOrEmpty(first) && ids.IndexOf(first) < ids.IndexOf(libraryId))
+            {
+                return first;
+            };
 
             return null;
         }
@@ -208,7 +231,7 @@ namespace LibraryInstaller.Providers.Cdnjs
 
         private async Task<IEnumerable<string>> GetDisplayInfosAsync(string groupName, CancellationToken cancellationToken)
         {
-            IEnumerable<Asset> assets = await GetAssetsAsync(groupName, cancellationToken);
+            IEnumerable<Asset> assets = await GetAssetsAsync(groupName, cancellationToken).ConfigureAwait(false);
 
             return assets?.Select(a => $"{groupName}@{a.Version}");
         }

@@ -34,7 +34,7 @@ namespace LibraryInstaller.Vsix
             TextBuffer = textBuffer;
 
             yield return new UninstallSuggestedAction(this);
-            yield return new UpdateSuggestedAction(this);
+            yield return new UpdateSuggestedActionSet(this);
         }
 
         public bool HasSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, JSONParseItem parseItem)

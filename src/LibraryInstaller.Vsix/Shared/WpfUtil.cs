@@ -68,11 +68,19 @@ namespace LibraryInstaller.Vsix
 
             if (imageService != null && !string.IsNullOrWhiteSpace(file))
             {
-                IVsUIObject image = imageService.GetIconForFileEx(file, format, out iconSource);
-                if (image != null)
+                try
                 {
-                    object imageData = GetObjectData(image);
-                    result = imageData as BitmapSource;
+                    IVsUIObject image = imageService.GetIconForFileEx(file, format, out iconSource);
+
+                    if (image != null)
+                    {
+                        object imageData = GetObjectData(image);
+                        result = imageData as BitmapSource;
+                    }
+                }
+                catch (Exception)
+                {
+                    // ImageService couldn't resolve the image
                 }
             }
 

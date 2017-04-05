@@ -9,6 +9,6 @@ namespace LibraryInstaller.Vsix
     {
         public const string ConfigFileName = "library.json";
         public static string CacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
-        public const string TelemetryNamespace = "WebTools/LibraryInstaller/";
+        public const string TelemetryNamespace = "webtools/libraryinstaller/";
     }
 }

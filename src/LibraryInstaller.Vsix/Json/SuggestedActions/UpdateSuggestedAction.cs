@@ -1,31 +1,44 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using LibraryInstaller.Contracts;
 using Microsoft.JSON.Core.Parser.TreeItems;
+using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.Editor.SuggestedActions;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Windows;
-using Microsoft.VisualStudio.Shell;
 
 namespace LibraryInstaller.Vsix
 {
     internal class UpdateSuggestedAction : SuggestedActionBase
     {
-        private static readonly Guid _guid = new Guid("2975f71b-809a-4ed6-a170-6bbc04058424");
+        private static readonly Guid _guid = new Guid("b3b43e69-7d0a-4acf-99ea-015526f76d84");
         private SuggestedActionProvider _provider;
+        private string _updatedLibraryId;
+        private bool _disabled;
 
-        public UpdateSuggestedAction(SuggestedActionProvider provider)
-            : base(provider.TextBuffer, provider.TextView, Resources.Text.CheckForUpdates, _guid)
+        public UpdateSuggestedAction(SuggestedActionProvider provider, string libraryId, string displayText, bool disabled = false)
+            : base(provider.TextBuffer, provider.TextView, displayText, _guid)
         {
             _provider = provider;
+            _updatedLibraryId = libraryId;
+            _disabled = disabled;
+
+            if (!disabled)
+            {
+                IconMoniker = KnownMonikers.StatusReady;
+            }
         }
 
-        public override async void Invoke(CancellationToken cancellationToken)
+        public override void Invoke(CancellationToken cancellationToken)
         {
+            if (_disabled)
+                return;
+
             try
             {
                 var dependencies = Dependencies.FromConfigFile(_provider.ConfigFilePath);
@@ -37,21 +50,13 @@ namespace LibraryInstaller.Vsix
                     return;
                 }
 
-                string latest = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, false, cancellationToken);
-
-                if (latest == null || latest == _provider.InstallationState.LibraryId)
-                {
-                    MessageBox.Show(Resources.Text.NoUpdatesFound, Vsix.Name, MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
-
                 JSONMember member = _provider.LibraryObject.Children.OfType<JSONMember>().FirstOrDefault(m => m.UnquotedNameText == "id");
 
                 if (member != null)
                 {
                     using (ITextEdit edit = TextBuffer.CreateEdit())
                     {
-                        edit.Replace(new Span(member.Value.Start, member.Value.Length), "\"" + latest + "\"");
+                        edit.Replace(new Span(member.Value.Start, member.Value.Length), "\"" + _updatedLibraryId + "\"");
                         edit.Apply();
                     }
                 }
