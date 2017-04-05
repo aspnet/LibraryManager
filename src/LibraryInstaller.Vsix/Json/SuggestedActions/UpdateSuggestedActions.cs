@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using Microsoft.VisualStudio.Shell;
 
 namespace LibraryInstaller.Vsix
 {
@@ -18,7 +19,7 @@ namespace LibraryInstaller.Vsix
         private SuggestedActionProvider _provider;
 
         public UpdateSuggestedAction(SuggestedActionProvider provider)
-            : base(provider.TextBuffer, provider.TextView, $"Check for updates", _guid)
+            : base(provider.TextBuffer, provider.TextView, Resources.Text.CheckForUpdates, _guid)
         {
             _provider = provider;
         }
@@ -40,7 +41,7 @@ namespace LibraryInstaller.Vsix
 
                 if (latest == null || latest == _provider.InstallationState.LibraryId)
                 {
-                    MessageBox.Show("No updates found at this time", Vsix.Name, MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Resources.Text.NoUpdatesFound, Vsix.Name, MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
 

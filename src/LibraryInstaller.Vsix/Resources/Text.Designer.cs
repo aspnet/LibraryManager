@@ -61,6 +61,15 @@ namespace LibraryInstaller.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        internal static string CheckForUpdates {
+            get {
+                return ResourceManager.GetString("CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clean libraries started....
         /// </summary>
         internal static string CleanLibrariesStarted {
@@ -75,15 +84,6 @@ namespace LibraryInstaller.Vsix.Resources {
         internal static string CleanLibrariesSucceeded {
             get {
                 return ResourceManager.GetString("CleanLibrariesSucceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error restoring &quot;{0}&quot; library from &quot;{1}&quot;.
-        /// </summary>
-        internal static string Error_generic {
-            get {
-                return ResourceManager.GetString("Error_generic", resourceCulture);
             }
         }
         
@@ -115,15 +115,6 @@ namespace LibraryInstaller.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Latest Version.
-        /// </summary>
-        internal static string LatestVersion {
-            get {
-                return ResourceManager.GetString("LatestVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} libraries restored in {1} seconds.
         /// </summary>
         internal static string LibrariesRestored {
@@ -151,6 +142,15 @@ namespace LibraryInstaller.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No updates found at this time.
+        /// </summary>
+        internal static string NoUpdatesFound {
+            get {
+                return ResourceManager.GetString("NoUpdatesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Packages could not be loaded.
         /// </summary>
         internal static string PackagesCouldNotBeLoaded {
@@ -160,7 +160,7 @@ namespace LibraryInstaller.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library restore unsuccessfull.
+        ///   Looks up a localized string similar to Library restore was unsuccessfull.
         /// </summary>
         internal static string RestoreHasErrors {
             get {
@@ -174,6 +174,15 @@ namespace LibraryInstaller.Vsix.Resources {
         internal static string RestoringLibraries {
             get {
                 return ResourceManager.GetString("RestoringLibraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstall {0}.
+        /// </summary>
+        internal static string UninstallLibrary {
+            get {
+                return ResourceManager.GetString("UninstallLibrary", resourceCulture);
             }
         }
     }

@@ -1,9 +1,9 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using LibraryInstaller.Contracts;
 using Microsoft.JSON.Core.Parser;
 using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.JSON.Editor.Document;
 using Microsoft.VisualStudio.JSON.Package.SuggestedActions;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
@@ -11,7 +11,6 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using LibraryInstaller.Contracts;
 
 namespace LibraryInstaller.Vsix
 {
@@ -33,7 +32,8 @@ namespace LibraryInstaller.Vsix
         {
             TextView = textView;
             TextBuffer = textBuffer;
-            yield return new UninstallSuggestedAction(textBuffer, textView, LibraryObject, InstallationState.LibraryId, ConfigFilePath);
+
+            yield return new UninstallSuggestedAction(this);
             yield return new UpdateSuggestedAction(this);
         }
 

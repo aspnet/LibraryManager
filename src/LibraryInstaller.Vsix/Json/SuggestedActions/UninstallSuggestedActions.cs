@@ -13,16 +13,12 @@ namespace LibraryInstaller.Vsix
     internal class UninstallSuggestedAction : SuggestedActionBase
     {
         private static readonly Guid _guid = new Guid("2975f71b-809d-4ed6-a170-6bbc04058424");
-        private JSONObject _libraryObject;
-        private string _libraryId;
-        private string _configFileName;
+        private SuggestedActionProvider _provider;
 
-        public UninstallSuggestedAction(ITextBuffer buffer, ITextView view, JSONObject libraryObject, string libraryId, string configFileName)
-            : base(buffer, view, $"Uninstall {libraryId}", _guid)
+        public UninstallSuggestedAction(SuggestedActionProvider provider)
+            : base(provider.TextBuffer, provider.TextView, string.Format(Resources.Text.UninstallLibrary, provider.InstallationState.LibraryId), _guid)
         {
-            _libraryObject = libraryObject;
-            _libraryId = libraryId;
-            _configFileName = configFileName;
+            _provider = provider;
         }
 
 
@@ -30,11 +26,11 @@ namespace LibraryInstaller.Vsix
         {
             try
             {
-                await LibraryHelpers.UninstallAsync(_configFileName, _libraryId, cancellationToken);
+                await LibraryHelpers.UninstallAsync(_provider.ConfigFilePath, _provider.InstallationState.LibraryId, cancellationToken);
 
                 using (ITextEdit edit = TextBuffer.CreateEdit())
                 {
-                    var arrayElement = _libraryObject.Parent as JSONArrayElement;
+                    var arrayElement = _provider.LibraryObject.Parent as JSONArrayElement;
                     var prev = arrayElement.PreviousSibling as JSONArrayElement;
                     var next = arrayElement.NextSibling as JSONArrayElement;
 
