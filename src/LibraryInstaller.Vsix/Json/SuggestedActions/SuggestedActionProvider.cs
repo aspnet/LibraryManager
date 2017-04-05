@@ -27,7 +27,6 @@ namespace LibraryInstaller.Vsix
         [Import]
         private ITextDocumentFactoryService DocumentService { get; set; }
 
-
         public IEnumerable<ISuggestedAction> GetSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, JSONParseItem parseItem)
         {
             TextView = textView;

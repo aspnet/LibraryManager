@@ -107,5 +107,18 @@ namespace LibraryInstaller.Test.Providers.FileSystem
             Assert.AreEqual(0, result.Length);
             Assert.IsNull(result.Completions);
         }
+
+        [TestMethod]
+        public void GetLatestVersionAsync()
+        {
+            CancellationToken token = CancellationToken.None;
+            string libraryId = "myfile.js";
+            Task<string> result = _catalog.GetLatestVersion(libraryId, false, token);
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.IsCompleted);
+            Assert.AreEqual(libraryId, result.Result);
+
+        }
     }
 }
