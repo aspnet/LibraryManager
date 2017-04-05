@@ -34,11 +34,11 @@ namespace LibraryInstaller.Vsix
 
             var parent = member.Parent as JSONObject;
 
-            if (!JsonHelpers.TryGetProviderId(parent, out string providerId, out string libraryId))
+            if (!JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
                 yield break;
 
             var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
-            IProvider provider = dependencies.GetProvider(providerId);
+            IProvider provider = dependencies.GetProvider(state.ProviderId);
             ILibraryCatalog catalog = provider?.GetCatalog();
 
             if (catalog == null)

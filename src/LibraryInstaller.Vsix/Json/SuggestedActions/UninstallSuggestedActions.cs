@@ -1,13 +1,13 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using Microsoft.JSON.Core.Parser.TreeItems;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.Editor.SuggestedActions;
 using System;
 using System.Threading;
-using Microsoft.JSON.Core.Parser.TreeItems;
 
 namespace LibraryInstaller.Vsix
 {
@@ -53,11 +53,10 @@ namespace LibraryInstaller.Vsix
                     edit.Apply();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
             }
-
         }
     }
 }

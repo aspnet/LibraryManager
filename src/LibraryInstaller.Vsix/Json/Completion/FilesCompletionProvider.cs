@@ -36,20 +36,20 @@ namespace LibraryInstaller.Vsix
 
             var parent = member.Parent as JSONObject;
 
-            if (!JsonHelpers.TryGetProviderId(parent, out string providerId, out string libraryId))
+            if (!JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
                 yield break;
 
-            if (string.IsNullOrEmpty(libraryId))
+            if (string.IsNullOrEmpty(state.LibraryId))
                 yield break;
 
             var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
-            IProvider provider = dependencies.GetProvider(providerId);
+            IProvider provider = dependencies.GetProvider(state.ProviderId);
             ILibraryCatalog catalog = provider?.GetCatalog();
 
             if (catalog == null)
                 yield break;
 
-            Task<ILibrary> task = catalog.GetLibraryAsync(libraryId, CancellationToken.None);
+            Task<ILibrary> task = catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
             FrameworkElement presenter = GetPresenter(context);
             IEnumerable<string> usedFiles = GetUsedFiles(context);
 

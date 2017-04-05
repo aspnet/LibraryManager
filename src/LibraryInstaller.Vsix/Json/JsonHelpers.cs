@@ -1,31 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using LibraryInstaller.Contracts;
 using Microsoft.JSON.Core.Parser.TreeItems;
+using System.Linq;
 
 namespace LibraryInstaller.Vsix
 {
     public static class JsonHelpers
     {
-        public static bool TryGetProviderId(JSONObject parent, out string providerId, out string libraryId)
+        public static bool TryGetInstallationState(JSONObject parent, out ILibraryInstallationState installationState)
         {
-            providerId = null;
-            libraryId = null;
+            installationState = null;
 
             if (parent == null)
                 return false;
 
+            var state = new LibraryInstallationState();
+
             foreach (JSONMember child in parent.Children.OfType<JSONMember>())
             {
                 if (child.UnquotedNameText == "provider")
-                    providerId = child.UnquotedValueText;
+                    state.ProviderId = child.UnquotedValueText;
                 else if (child.UnquotedNameText == "id")
-                    libraryId = child.UnquotedValueText;
+                    state.LibraryId = child.UnquotedValueText;
+                else if (child.UnquotedNameText == "path")
+                    state.DestinationPath = child.UnquotedValueText;
+                else if (child.UnquotedNameText == "files")
+                    state.Files = (child.Value as JSONArray)?.Elements.Select(e => e.UnquotedValueText).ToList();
             }
 
-            return !string.IsNullOrEmpty(providerId);
+            installationState = state;
+
+            return !string.IsNullOrEmpty(installationState.ProviderId);
         }
     }
 }

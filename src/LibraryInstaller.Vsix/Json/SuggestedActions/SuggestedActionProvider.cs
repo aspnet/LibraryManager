@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using LibraryInstaller.Contracts;
 
 namespace LibraryInstaller.Vsix
 {
@@ -18,8 +19,7 @@ namespace LibraryInstaller.Vsix
     [Name(nameof(SuggestedActionProvider))]
     internal class SuggestedActionProvider : IJSONSuggestedActionProvider
     {
-        private string _providerId;
-        private string _libraryId;
+        private ILibraryInstallationState _installationState;
         private JSONObject _libraryObject;
         private string _configFilePath;
 
@@ -29,7 +29,7 @@ namespace LibraryInstaller.Vsix
 
         public IEnumerable<ISuggestedAction> GetSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, JSONParseItem parseItem)
         {
-            yield return new UninstallSuggestedAction(textBuffer, textView, _libraryObject, _libraryId, _configFilePath);
+            yield return new UninstallSuggestedAction(textBuffer, textView, _libraryObject, _installationState.LibraryId, _configFilePath);
         }
 
         public bool HasSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, JSONParseItem parseItem)
@@ -44,7 +44,7 @@ namespace LibraryInstaller.Vsix
                 return false;
             }
 
-            if (!JsonHelpers.TryGetProviderId(parent, out _providerId, out _libraryId))
+            if (!JsonHelpers.TryGetInstallationState(parent, out _installationState))
             {
                 return false;
             }
@@ -52,7 +52,7 @@ namespace LibraryInstaller.Vsix
             _configFilePath = doc.FilePath;
             _libraryObject = parent;
 
-            return true;
+            return !string.IsNullOrEmpty(_installationState.LibraryId);
         }
     }
 }
