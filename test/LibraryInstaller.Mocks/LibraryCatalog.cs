@@ -53,7 +53,7 @@ namespace LibraryInstaller.Mocks
         /// </summary>
         /// <param name="value">The current state of the library ID.</param>
         /// <param name="caretPosition">The caret position inside the <paramref name="value" />.</param>
-        public Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
+        public virtual Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
         {
             var completion = new CompletionSet
             {
@@ -71,7 +71,7 @@ namespace LibraryInstaller.Mocks
         /// <param name="term">The search term.</param>
         /// <param name="maxHits">The maximum number of results to return.</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
-        public Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken)
+        public virtual Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken)
         {
             return Task.FromResult<IReadOnlyList<ILibraryGroup>>(null);
         }
