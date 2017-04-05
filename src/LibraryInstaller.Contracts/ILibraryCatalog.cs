@@ -34,5 +34,14 @@ namespace LibraryInstaller.Contracts
         /// <param name="maxHits">The maximum number of results to return.</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the latest version of the library.
+        /// </summary>
+        /// <param name="libraryId">The library identifier.</param>
+        /// <param name="includePreReleases">if set to <c>true</c> includes pre-releases.</param>
+        /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
+        /// <returns>The library identifier of the latest released version.</returns>
+        Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken);
     }
 }

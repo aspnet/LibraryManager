@@ -42,7 +42,7 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// The collection of providers.
         /// </summary>
-        public List<IProvider> Providers { get; set; } = new List<IProvider>();
+        public virtual List<IProvider> Providers { get; set; } = new List<IProvider>();
 
         /// <summary>
         /// Gets the <see cref="T:LibraryInstaller.Contracts.IHostInteraction" /> used by <see cref="T:LibraryInstaller.Contracts.IProvider" /> to install libraries.
@@ -50,7 +50,7 @@ namespace LibraryInstaller.Mocks
         /// <returns>
         /// The <see cref="T:LibraryInstaller.Contracts.IHostInteraction" /> provided by the host.
         /// </returns>
-        public IHostInteraction GetHostInteractions() => _hostInteractions;
+        public virtual IHostInteraction GetHostInteractions() => _hostInteractions;
 
         /// <summary>
         /// Gets the provider based on the specified providerId.
@@ -59,7 +59,7 @@ namespace LibraryInstaller.Mocks
         /// <returns>
         /// An <see cref="T:LibraryInstaller.Contracts.IProvider" /> or <code>null</code> from the providers resolved by the host.
         /// </returns>
-        public IProvider GetProvider(string providerId)
+        public virtual IProvider GetProvider(string providerId)
         {
             IProvider provider = Providers.FirstOrDefault(p => p.Id == providerId);
 

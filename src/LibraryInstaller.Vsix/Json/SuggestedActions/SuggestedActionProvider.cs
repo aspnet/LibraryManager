@@ -19,9 +19,11 @@ namespace LibraryInstaller.Vsix
     [Name(nameof(SuggestedActionProvider))]
     internal class SuggestedActionProvider : IJSONSuggestedActionProvider
     {
-        private ILibraryInstallationState _installationState;
-        private JSONObject _libraryObject;
-        private string _configFilePath;
+        public ILibraryInstallationState InstallationState;
+        public JSONObject LibraryObject;
+        public string ConfigFilePath;
+        public ITextView TextView;
+        public ITextBuffer TextBuffer;
 
         [Import]
         private ITextDocumentFactoryService DocumentService { get; set; }
@@ -29,7 +31,10 @@ namespace LibraryInstaller.Vsix
 
         public IEnumerable<ISuggestedAction> GetSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, JSONParseItem parseItem)
         {
-            yield return new UninstallSuggestedAction(textBuffer, textView, _libraryObject, _installationState.LibraryId, _configFilePath);
+            TextView = textView;
+            TextBuffer = textBuffer;
+            yield return new UninstallSuggestedAction(textBuffer, textView, LibraryObject, InstallationState.LibraryId, ConfigFilePath);
+            yield return new UpdateSuggestedAction(this);
         }
 
         public bool HasSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, JSONParseItem parseItem)
@@ -44,15 +49,15 @@ namespace LibraryInstaller.Vsix
                 return false;
             }
 
-            if (!JsonHelpers.TryGetInstallationState(parent, out _installationState))
+            if (!JsonHelpers.TryGetInstallationState(parent, out InstallationState))
             {
                 return false;
             }
 
-            _configFilePath = doc.FilePath;
-            _libraryObject = parent;
+            ConfigFilePath = doc.FilePath;
+            LibraryObject = parent;
 
-            return !string.IsNullOrEmpty(_installationState.LibraryId);
+            return !string.IsNullOrEmpty(InstallationState.LibraryId);
         }
     }
 }

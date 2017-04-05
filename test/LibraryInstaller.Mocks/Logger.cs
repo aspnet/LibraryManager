@@ -23,7 +23,7 @@ namespace LibraryInstaller.Mocks
         /// </summary>
         /// <param name="message">The message to log.</param>
         /// <param name="level">The level of the message.</param>
-        public void Log(string message, LogLevel level)
+        public virtual void Log(string message, LogLevel level)
         {
             Messages.Add(Tuple.Create(message, level));
         }

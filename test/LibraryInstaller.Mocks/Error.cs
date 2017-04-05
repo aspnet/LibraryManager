@@ -25,11 +25,11 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// The error code used to uniquely identify the error.
         /// </summary>
-        public string Code { get; set; }
+        public virtual string Code { get; set; }
 
         /// <summary>
         /// The user friendly description of the error.
         /// </summary>
-        public string Message { get; set; }
+        public virtual string Message { get; set; }
     }
 }

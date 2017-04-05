@@ -23,14 +23,14 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// Gets or sets the provider to return from <see cref="CreateProvider"/>.
         /// </summary>
-        public IProvider Provider { get; set; }
+        public virtual IProvider Provider { get; set; }
 
         /// <summary>
         /// Creates an <see cref="T:LibraryInstaller.Contracts.IProvider" /> instance and assigns the <paramref name="hostInteraction"/> to it.
         /// </summary>
         /// <param name="hostInteraction">The <see cref="T:LibraryInstaller.Contracts.IHostInteraction" /> provided by the host to handle file system writes etc.</param>
         /// <returns>A <see cref="T:LibraryInstaller.Contracts.IProvider" /> instance.</returns>
-        public IProvider CreateProvider(IHostInteraction hostInteraction)
+        public virtual IProvider CreateProvider(IHostInteraction hostInteraction)
         {
             Provider.HostInteraction = hostInteraction;
             return Provider;

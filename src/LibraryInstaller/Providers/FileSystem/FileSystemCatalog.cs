@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
+using System;
 
 namespace LibraryInstaller.Providers.FileSystem
 {
@@ -59,5 +60,8 @@ namespace LibraryInstaller.Providers.FileSystem
 
             return Task.FromResult<IReadOnlyList<ILibraryGroup>>(groups);
         }
+
+        public Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
+            => null;
     }
 }

@@ -35,7 +35,7 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// <code>True</code> if the installation was cancelled; otherwise false;
         /// </summary>
-        public bool Cancelled
+        public virtual bool Cancelled
         {
             get;
             set;
@@ -47,7 +47,7 @@ namespace LibraryInstaller.Mocks
         /// <remarks>
         /// The value is usually <code>True</code> if the <see cref="P:LibraryInstaller.Contracts.ILibraryInstallationResult.Errors" /> list is empty.
         /// </remarks>
-        public bool Success
+        public virtual bool Success
         {
             get { return !Errors.Any(); }
         }
@@ -55,7 +55,7 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// A list of errors that occured during library installation.
         /// </summary>
-        public IList<IError> Errors
+        public virtual IList<IError> Errors
         {
             get;
             set;
@@ -65,7 +65,7 @@ namespace LibraryInstaller.Mocks
         /// The <see cref="T:LibraryInstaller.Contracts.ILibraryInstallationState" /> object passed to the
         /// <see cref="T:LibraryInstaller.Contracts.IProvider" /> for installation.
         /// </summary>
-        public ILibraryInstallationState InstallationState
+        public virtual ILibraryInstallationState InstallationState
         {
             get;
             set;

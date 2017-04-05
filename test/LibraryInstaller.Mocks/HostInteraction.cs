@@ -31,17 +31,17 @@ namespace LibraryInstaller.Mocks
         /// <remarks>
         /// The cache directory is not being created, so each <see cref="IProvider"/> should ensure to do that if needed.
         /// </remarks>
-        public string CacheDirectory { get; }
+        public virtual string CacheDirectory { get; }
 
         /// <summary>
         /// The root directory from where file paths are calculated.
         /// </summary>
-        public string WorkingDirectory { get; }
+        public virtual string WorkingDirectory { get; }
 
         /// <summary>
         /// Gets the logger associated with the host.
         /// </summary>
-        public ILogger Logger { get; } = new Logger();
+        public virtual ILogger Logger { get; } = new Logger();
 
         /// <summary>
         /// Writes a file to disk based on the specified <see cref="ILibraryInstallationState"/>.
@@ -51,7 +51,7 @@ namespace LibraryInstaller.Mocks
         /// <param name="state">The desired state of the finished installed library.</param>
         /// <param name="cancellationToken">A token that allows cancellation of the file writing.</param>
         /// <returns><code>True</code> if no issues occured while executing this method; otherwise <code>False</code>.</returns>
-        public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
+        public virtual async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             string absolutePath = Path.Combine(WorkingDirectory, path);
 
@@ -85,7 +85,7 @@ namespace LibraryInstaller.Mocks
         /// Deletes a file from disk.
         /// </summary>
         /// <param name="relativeFilePath">The absolute path to the file.</param>
-        public void DeleteFile(string relativeFilePath)
+        public virtual void DeleteFile(string relativeFilePath)
         {
             string absoluteFile = Path.Combine(WorkingDirectory, relativeFilePath);
             File.Delete(absoluteFile);

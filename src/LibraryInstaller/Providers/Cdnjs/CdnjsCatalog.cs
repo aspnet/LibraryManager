@@ -143,6 +143,24 @@ namespace LibraryInstaller.Providers.Cdnjs
             }
         }
 
+        public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
+        {
+            string[] args = libraryId.Split('@');
+            string name = args[0];
+
+            if (!await EnsureCatalogAsync(cancellationToken))
+                return null;
+
+            CdnjsLibraryGroup latest = _libraryGroups.FirstOrDefault(l => l.DisplayName == name);
+
+            if (latest != null)
+            {
+                return $"{name}@{latest.Version}";
+            }
+
+            return null;
+        }
+
         private IEnumerable<CdnjsLibraryGroup> GetSortedSearchResult(string term)
         {
             var list = new List<Tuple<int, CdnjsLibraryGroup>>();

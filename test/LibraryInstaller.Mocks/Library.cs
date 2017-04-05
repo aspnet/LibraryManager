@@ -15,28 +15,28 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// The string that lets the <see cref="T:LibraryInstaller.Contracts.IProvider" /> uniquely identify the specific library.
         /// </summary>
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         /// <summary>
         /// The unique ID of the provider.
         /// </summary>
-        public string ProviderId { get; set; }
+        public virtual string ProviderId { get; set; }
 
         /// <summary>
         /// The version of the library.
         /// </summary>
-        public string Version { get; set; }
+        public virtual string Version { get; set; }
 
         /// <summary>
         /// A list of files and a <code>bool</code> value to determine if the file is suggested as a default file for this library.
         /// </summary>
-        public IReadOnlyDictionary<string, bool> Files { get; set; }
+        public virtual IReadOnlyDictionary<string, bool> Files { get; set; }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString()
         {

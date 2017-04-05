@@ -14,12 +14,12 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// The user facing display name of the library.
         /// </summary>
-        public string DisplayName { get; set; }
+        public virtual string DisplayName { get; set; }
 
         /// <summary>
         /// The description of the library.
         /// </summary>
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
         /// <summary>
         /// Gets a list of IDs for the different versions of the library.

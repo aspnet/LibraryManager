@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.Editor.SuggestedActions;
@@ -24,7 +23,6 @@ namespace LibraryInstaller.Vsix
             _libraryObject = libraryObject;
             _libraryId = libraryId;
             _configFileName = configFileName;
-            IconMoniker = KnownMonikers.Uninstall;
         }
 
 

@@ -16,28 +16,28 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
-        public string Id { get; set; }
+        public virtual string Id { get; set; }
 
         /// <summary>
         /// An object specified by the host to interact with the file system etc.
         /// </summary>
-        public IHostInteraction HostInteraction { get; set; }
+        public virtual IHostInteraction HostInteraction { get; set; }
 
         /// <summary>
         /// Gets or sets the catalog to return from the <see cref="GetCatalog"/> method.
         /// </summary>
-        public ILibraryCatalog Catalog { get; set; }
+        public virtual ILibraryCatalog Catalog { get; set; }
 
         /// <summary>
         /// Gets or sets the result to return from the <see cref="InstallAsync"/> method.
         /// </summary>
-        public ILibraryInstallationResult Result { get; set; }
+        public virtual ILibraryInstallationResult Result { get; set; }
 
         /// <summary>
         /// Gets the <see cref="T:LibraryInstaller.Contracts.ILibraryCatalog" /> for the <see cref="T:LibraryInstaller.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>
-        public ILibraryCatalog GetCatalog()
+        public virtual ILibraryCatalog GetCatalog()
         {
             return Catalog;
         }
@@ -50,7 +50,7 @@ namespace LibraryInstaller.Mocks
         /// <returns>
         /// The <see cref="T:LibraryInstaller.Contracts.ILibraryInstallationResult" /> from the installation process.
         /// </returns>
-        public Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        public virtual Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             return Task.FromResult(Result);
         }

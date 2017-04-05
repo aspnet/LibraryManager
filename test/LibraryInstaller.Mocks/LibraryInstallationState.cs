@@ -15,21 +15,21 @@ namespace LibraryInstaller.Mocks
         /// <summary>
         /// The identifyer to uniquely identify the library
         /// </summary>
-        public string LibraryId { get; set; }
+        public virtual string LibraryId { get; set; }
 
         /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
-        public string ProviderId { get; set; }
+        public virtual string ProviderId { get; set; }
 
         /// <summary>
         /// The list of file names to install
         /// </summary>
-        public IReadOnlyList<string> Files { get; set; }
+        public virtual IReadOnlyList<string> Files { get; set; }
 
         /// <summary>
         /// The path relative to the working directory to copy the files to.
         /// </summary>
-        public string DestinationPath { get; set; }
+        public virtual string DestinationPath { get; set; }
     }
 }
