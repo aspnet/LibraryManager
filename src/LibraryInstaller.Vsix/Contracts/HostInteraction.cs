@@ -26,10 +26,6 @@ namespace LibraryInstaller.Vsix
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState reqestor, CancellationToken cancellationToken)
         {
             string absolutePath = Path.Combine(WorkingDirectory, path);
-
-            if (File.Exists(absolutePath))
-                return true;
-
             string directory = Path.GetDirectoryName(absolutePath);
 
             Directory.CreateDirectory(directory);
@@ -56,20 +52,6 @@ namespace LibraryInstaller.Vsix
 
             return true;
         }
-
-        //private static bool CompareMemoryStreams(Stream ms1, Stream ms2)
-        //{
-        //    if (ms1.Length != ms2.Length)
-        //        return false;
-
-        //    ms1.Position = 0;
-        //    ms2.Position = 0;
-
-        //    var msArray1 = ms1..ToArray();
-        //    var msArray2 = ms2.ToArray();
-
-        //    return msArray1.SequenceEqual(msArray2);
-        //}
 
         public void DeleteFiles(params string[] relativeFilePaths)
         {

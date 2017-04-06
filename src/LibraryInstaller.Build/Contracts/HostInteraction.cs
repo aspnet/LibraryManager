@@ -25,11 +25,12 @@ namespace LibraryInstaller.Build
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState reqestor, CancellationToken cancellationToken)
         {
             string absolutePath = Path.Combine(WorkingDirectory, path);
-
-            if (File.Exists(absolutePath))
-                return true;
-
             string directory = Path.GetDirectoryName(absolutePath);
+
+            if (File.Exists(absolutePath) && File.GetAttributes(absolutePath).HasFlag(FileAttributes.ReadOnly))
+            {
+                return true;
+            }
 
             Directory.CreateDirectory(directory);
 
