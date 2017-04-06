@@ -6,21 +6,21 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using EnvDTE;
 
-namespace LibraryInstaller.Vsix
+namespace LibraryInstaller.Build
 {
     public class HostInteraction : IHostInteraction
     {
-        public HostInteraction(string configFilePath)
+        public HostInteraction(RestoreTask task)
         {
-            string cwd = Path.GetDirectoryName(configFilePath);
+            string cwd = Path.GetDirectoryName(task.FileName);
             WorkingDirectory = cwd;
+            Logger = new Logger(task);
         }
 
         public string WorkingDirectory { get; }
         public string CacheDirectory => Constants.CacheFolder;
-        public ILogger Logger { get; } = new Logger();
+        public ILogger Logger { get; }
 
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState reqestor, CancellationToken cancellationToken)
         {
@@ -38,8 +38,6 @@ namespace LibraryInstaller.Vsix
                 if (stream == null)
                     return false;
 
-                VsHelpers.CheckFileOutOfSourceControl(absolutePath);
-
                 using (FileStream writer = File.Create(absolutePath, 4096, FileOptions.Asynchronous))
                 {
                     if (stream.CanSeek)
@@ -51,7 +49,7 @@ namespace LibraryInstaller.Vsix
                 }
             }
 
-            Logger.Log(string.Format(LibraryInstaller.Resources.Text.FileWrittenToDisk, path.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
+            Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, path.Replace('\\', '/')), LogLevel.Operation);
 
             return true;
         }
@@ -64,24 +62,13 @@ namespace LibraryInstaller.Vsix
 
                 try
                 {
-                    ProjectItem item = VsHelpers.DTE.Solution.FindProjectItem(absoluteFile);
-                    Project project = item?.ContainingProject;
+                    File.Delete(absoluteFile);
 
-                    if (project != null)
-                    {
-                        item.Delete();
-                    }
-                    else
-                    {
-                        VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
-                        File.Delete(absoluteFile);
-                    }
-
-                    Logger.Log(string.Format(LibraryInstaller.Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
+                    Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
                 }
                 catch (Exception)
                 {
-                    Logger.Log(string.Format(LibraryInstaller.Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
+                    Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
                 }
             }
         }

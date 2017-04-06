@@ -66,7 +66,7 @@ namespace LibraryInstaller.Vsix
             Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, token);
 
             string itemFolder = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("FullPath").Value.ToString();
-            string relativeFolder = PackageUtilities.MakeRelative(rootFolder, itemFolder).Replace('\\', '/').Trim('/');
+            string relativeFolder = PackageUtilities.MakeRelative(rootFolder, itemFolder).Replace(Path.DirectorySeparatorChar, '/').Trim('/');
             ILibraryInstallationState state = GetLibraryToInstall(relativeFolder);
             manifest.AddLibrary(state);
             await manifest.SaveAsync(configFilePath, token);

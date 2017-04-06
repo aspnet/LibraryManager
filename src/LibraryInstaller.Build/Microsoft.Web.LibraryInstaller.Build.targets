@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <BuildDependsOn>
+            LibraryInstallerRestore;
+            $(BuildDependsOn)
+        </BuildDependsOn>
+
+        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">..\tools\netstandard1.3\LibraryInstaller.MSBuild.dll</_LibraryTaskAssembly>
+        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net46\LibraryInstaller.MSBuild.dll</_LibraryTaskAssembly>
+    </PropertyGroup>
+
+    <UsingTask AssemblyFile="$(_LibraryTaskAssembly)" TaskName="LibraryInstaller.MSBuild.RestoreTask"/>
+
+    <Target Name="LibraryInstallerRestore" Condition="'$(LibraryRestore)' != 'False'">
+        <LibraryInstaller.MSBuild.RestoreTask FileName="$(MSBuildProjectDirectory)\library.json" />
+    </Target>
+
+</Project>

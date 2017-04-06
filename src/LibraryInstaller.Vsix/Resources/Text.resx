@@ -125,16 +125,8 @@
     <value>Clean libraries succeeded</value>
     <comment>Status message</comment>
   </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} libraries restored in {1} seconds</value>
-    <comment>Status message</comment>
-  </data>
   <data name="LibraryRestoredNoChange" xml:space="preserve">
     <value>Restore completed. Files already up-to-date</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Library restore was unsuccessfull</value>
     <comment>Status message</comment>
   </data>
   <data name="Loading" xml:space="preserve">
@@ -144,22 +136,6 @@
   <data name="PackagesCouldNotBeLoaded" xml:space="preserve">
     <value>Packages could not be loaded</value>
     <comment>Used in installer dialog</comment>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Restoring libraries...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} written to disk</value>
-    <comment>Shows in Output Window when a file was successfully added to project</comment>
-  </data>
-  <data name="FileDeleted" xml:space="preserve">
-    <value>{0} deleted</value>
-    <comment>Shows in Output Window when a library file is deleted</comment>
-  </data>
-  <data name="FileDeleteFail" xml:space="preserve">
-    <value>Failed to delete {0}</value>
-    <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
     <value>Check for updates</value>

@@ -23,7 +23,7 @@ namespace LibraryInstaller.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Text {
+    public class Text {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -37,7 +37,7 @@ namespace LibraryInstaller.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LibraryInstaller.Resources.Text", typeof(Text).GetTypeInfo().Assembly);
@@ -52,7 +52,7 @@ namespace LibraryInstaller.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,7 +64,7 @@ namespace LibraryInstaller.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {0} could not be written to disk. Make sure the file name is correct.
         /// </summary>
-        internal static string ErrorCouldNotWriteFile {
+        public static string ErrorCouldNotWriteFile {
             get {
                 return ResourceManager.GetString("ErrorCouldNotWriteFile", resourceCulture);
             }
@@ -73,7 +73,7 @@ namespace LibraryInstaller.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The manifest file contains syntax errors.
         /// </summary>
-        internal static string ErrorManifestMalformed {
+        public static string ErrorManifestMalformed {
             get {
                 return ResourceManager.GetString("ErrorManifestMalformed", resourceCulture);
             }
@@ -82,7 +82,7 @@ namespace LibraryInstaller.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; provider could not be found.
         /// </summary>
-        internal static string ErrorProviderUnknown {
+        public static string ErrorProviderUnknown {
             get {
                 return ResourceManager.GetString("ErrorProviderUnknown", resourceCulture);
             }
@@ -91,7 +91,7 @@ namespace LibraryInstaller.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; library could not be resolved by the &quot;{1}&quot; provider.
         /// </summary>
-        internal static string ErrorUnableToResolveSource {
+        public static string ErrorUnableToResolveSource {
             get {
                 return ResourceManager.GetString("ErrorUnableToResolveSource", resourceCulture);
             }
@@ -100,25 +100,79 @@ namespace LibraryInstaller.Resources {
         /// <summary>
         ///   Looks up a localized string similar to An unknown exception occured.
         /// </summary>
-        internal static string ErrorUnknownException {
+        public static string ErrorUnknownException {
             get {
                 return ResourceManager.GetString("ErrorUnknownException", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} deleted.
+        /// </summary>
+        public static string FileDeleted {
+            get {
+                return ResourceManager.GetString("FileDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete {0}.
+        /// </summary>
+        public static string FileDeleteFail {
+            get {
+                return ResourceManager.GetString("FileDeleteFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} written to disk.
+        /// </summary>
+        public static string FileWrittenToDisk {
+            get {
+                return ResourceManager.GetString("FileWrittenToDisk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} libraries restored in {1} seconds.
+        /// </summary>
+        public static string LibrariesRestored {
+            get {
+                return ResourceManager.GetString("LibrariesRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Library restore has been cancelled.
         /// </summary>
-        internal static string RestoreCancelled {
+        public static string RestoreCancelled {
             get {
                 return ResourceManager.GetString("RestoreCancelled", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Library restore was unsuccessfull.
+        /// </summary>
+        public static string RestoreHasErrors {
+            get {
+                return ResourceManager.GetString("RestoreHasErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restoring libraries....
+        /// </summary>
+        public static string RestoringLibraries {
+            get {
+                return ResourceManager.GetString("RestoringLibraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restoring {0}....
         /// </summary>
-        internal static string RestoringLibrary {
+        public static string RestoringLibrary {
             get {
                 return ResourceManager.GetString("RestoringLibrary", resourceCulture);
             }

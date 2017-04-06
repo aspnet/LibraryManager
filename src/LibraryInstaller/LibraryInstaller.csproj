@@ -9,6 +9,7 @@
         <Company>Microsoft Corp.</Company>
         <Description>Create custom providers for the Visual Studio Library Installer</Description>
         <Copyright>Copyright © Microsoft</Copyright>
+        <PackageId>Microsoft.Web.LibraryInstaller</PackageId>
         <Product>Microsoft.Web.LibraryInstaller</Product>
         <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
         <PackageProjectUrl>https://github.com/aspnet/LibraryInstaller</PackageProjectUrl>
@@ -39,7 +40,7 @@
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Update="Resources\Text.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
+            <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>Text.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>

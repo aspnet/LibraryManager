@@ -39,7 +39,7 @@ namespace LibraryInstaller.Vsix
 
         public static async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Logger.LogEvent(Resources.Text.RestoringLibraries, LogLevel.Status);
+            Logger.LogEvent(LibraryInstaller.Resources.Text.RestoringLibraries, LogLevel.Status);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -63,8 +63,8 @@ namespace LibraryInstaller.Vsix
             if (fileCount > 0)
             {
                 string text = hasErrors ?
-                    Resources.Text.RestoreHasErrors :
-                    string.Format(Resources.Text.LibrariesRestored, fileCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
+                    LibraryInstaller.Resources.Text.RestoreHasErrors :
+                    string.Format(LibraryInstaller.Resources.Text.LibrariesRestored, fileCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
 
                 Logger.LogEvent(Environment.NewLine + text + Environment.NewLine, LogLevel.Task);
             }
@@ -114,7 +114,9 @@ namespace LibraryInstaller.Vsix
             {
                 if (state.Success)
                 {
-                    IEnumerable<string> absoluteFiles = state.InstallationState.Files.Select(file => Path.Combine(cwd, state.InstallationState.DestinationPath, file).Replace('/', '\\'));
+                    IEnumerable<string> absoluteFiles = state.InstallationState.Files
+                        .Select(file => Path.Combine(cwd, state.InstallationState.DestinationPath, file)
+                        .Replace('/', Path.DirectorySeparatorChar));
                     files.AddRange(absoluteFiles.Where(file => !files.Contains(file)));
                 }
             }

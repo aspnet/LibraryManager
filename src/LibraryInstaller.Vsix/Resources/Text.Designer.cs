@@ -88,42 +88,6 @@ namespace LibraryInstaller.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} deleted.
-        /// </summary>
-        internal static string FileDeleted {
-            get {
-                return ResourceManager.GetString("FileDeleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to delete {0}.
-        /// </summary>
-        internal static string FileDeleteFail {
-            get {
-                return ResourceManager.GetString("FileDeleteFail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} written to disk.
-        /// </summary>
-        internal static string FileWrittenToDisk {
-            get {
-                return ResourceManager.GetString("FileWrittenToDisk", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} libraries restored in {1} seconds.
-        /// </summary>
-        internal static string LibrariesRestored {
-            get {
-                return ResourceManager.GetString("LibrariesRestored", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
         /// </summary>
         internal static string LibraryRestoredNoChange {
@@ -156,24 +120,6 @@ namespace LibraryInstaller.Vsix.Resources {
         internal static string PackagesCouldNotBeLoaded {
             get {
                 return ResourceManager.GetString("PackagesCouldNotBeLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Library restore was unsuccessfull.
-        /// </summary>
-        internal static string RestoreHasErrors {
-            get {
-                return ResourceManager.GetString("RestoreHasErrors", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restoring libraries....
-        /// </summary>
-        internal static string RestoringLibraries {
-            get {
-                return ResourceManager.GetString("RestoringLibraries", resourceCulture);
             }
         }
         

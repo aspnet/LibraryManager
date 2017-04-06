@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <PackageTags>library, package, client-side, build</PackageTags>
+        <Version>1.0.0-alpha</Version>
+        <Authors>Microsoft</Authors>
+        <Company>Microsoft Corp.</Company>
+        <Description>MSBuild target for the Visual Studio Library Installer</Description>
+        <Copyright>Copyright © Microsoft</Copyright>
+        <PackageId>Microsoft.Web.LibraryInstaller.Build</PackageId>
+        <Title>$(PackageId)</Title>
+        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
+        <PackageProjectUrl>https://github.com/aspnet/LibraryInstaller</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/aspnet/LibraryInstaller/blob/master/LICENSE.txt</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/aspnet/LibraryInstaller</RepositoryUrl>
+        <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
+        <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\LibraryInstaller\LibraryInstaller.csproj" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Build.Framework" Version="15.1.548" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.548" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Microsoft.Web.LibraryInstaller.Build.targets">
+            <Pack>true</Pack>
+            <PackagePath>build</PackagePath>
+        </Content>
+    </ItemGroup>
+
+    <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
+        <!--
+        The include needs to happen after output has been copied to build output folder
+        but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
+        -->
+        <ItemGroup>
+            <_PackageFiles Include="bin\$(Configuration)\*\LibraryInstaller.dll;bin\$(Configuration)\*\LibraryInstaller.Contracts.dll">
+                <PackagePath>tools\%(RecursiveDir)</PackagePath>
+                <Visible>false</Visible>
+                <BuildAction>Content</BuildAction>
+            </_PackageFiles>
+        </ItemGroup>
+    </Target>
+
+</Project>

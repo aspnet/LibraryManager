@@ -4,3 +4,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("LibraryInstaller.Test")]
+[assembly: InternalsVisibleTo("LibraryInstaller.Build")]

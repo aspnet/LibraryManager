@@ -49,6 +49,7 @@
                 <CommandFlag>IconIsMoniker</CommandFlag>
                 <Strings>
                     <ButtonText>Restore Client-Side Libraries</ButtonText>
+                    <CanonicalName>RestoreClientSideLibraries</CanonicalName>
                 </Strings>
             </Button>
         </Buttons>
