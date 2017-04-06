@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace LibraryInstaller.Providers.Cdnjs
 {
@@ -47,16 +48,23 @@ namespace LibraryInstaller.Providers.Cdnjs
                 }
 
                 var catalog = (CdnjsCatalog)GetCatalog();
-                ILibrary pkg = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
+                ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
 
-                if (pkg == null)
+                if (library == null)
                 {
                     throw new InvalidLibraryException(desiredState.LibraryId, Id);
                 }
 
-                await HydrateCacheAsync(pkg, cancellationToken).ConfigureAwait(false);
+                await HydrateCacheAsync(library, cancellationToken).ConfigureAwait(false);
 
-                foreach (string file in desiredState.Files)
+                var files = desiredState.Files?.ToList();
+
+                if (files == null || files.Count == 0)
+                {
+                    files = library.Files.Keys.ToList();
+                }
+
+                foreach (string file in files)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {

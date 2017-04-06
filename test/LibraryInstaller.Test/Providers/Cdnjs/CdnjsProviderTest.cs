@@ -105,6 +105,29 @@ namespace LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
+        public async Task EmptyFilesArrayAsync()
+        {
+            IProvider provider = _dependencies.GetProvider("cdnjs");
+
+            var desiredState = new LibraryInstallationState
+            {
+                ProviderId = "cdnjs",
+                LibraryId = "jquery@1.2.3",
+                DestinationPath = "lib"
+            };
+
+            // Install library
+            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            Assert.IsTrue(result.Success);
+
+            foreach (string file in new[] { "jquery.js", "jquery.min.js" })
+            {
+                string absolute = Path.Combine(_projectFolder, desiredState.DestinationPath, file);
+                Assert.IsTrue(File.Exists(absolute));
+            }
+        }
+
+        [TestMethod]
         public async Task InvalidLibraryFilesAsync()
         {
             IProvider provider = _dependencies.GetProvider("cdnjs");
