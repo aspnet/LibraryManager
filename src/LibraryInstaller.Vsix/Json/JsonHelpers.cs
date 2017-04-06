@@ -4,6 +4,7 @@
 using LibraryInstaller.Contracts;
 using Microsoft.JSON.Core.Parser.TreeItems;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace LibraryInstaller.Vsix
 {
@@ -28,6 +29,21 @@ namespace LibraryInstaller.Vsix
                     state.DestinationPath = child.UnquotedValueText;
                 else if (child.UnquotedNameText == "files")
                     state.Files = (child.Value as JSONArray)?.Elements.Select(e => e.UnquotedValueText).ToList();
+            }
+
+            // Check for defaultProvider
+            if (string.IsNullOrEmpty(state.ProviderId))
+            {
+                IEnumerable<JSONMember> rootMembers = parent.Parent?.FindType<JSONObject>()?.Children?.OfType<JSONMember>();
+
+                if (rootMembers != null)
+                {
+                    foreach (JSONMember child in rootMembers)
+                    {
+                        if (child.UnquotedNameText == "defaultProvider")
+                            state.ProviderId = child.UnquotedValueText;
+                    }
+                }
             }
 
             installationState = state;

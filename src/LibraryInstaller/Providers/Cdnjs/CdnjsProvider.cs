@@ -61,10 +61,16 @@ namespace LibraryInstaller.Providers.Cdnjs
 
                 if (files == null || files.Count == 0)
                 {
-                    files = library.Files.Keys.ToList();
+                    desiredState = new LibraryInstallationState
+                    {
+                        ProviderId = Id,
+                        LibraryId = desiredState.LibraryId,
+                        DestinationPath = desiredState.DestinationPath,
+                        Files = library.Files.Keys.ToList()
+                    };
                 }
 
-                foreach (string file in files)
+                foreach (string file in desiredState.Files)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {

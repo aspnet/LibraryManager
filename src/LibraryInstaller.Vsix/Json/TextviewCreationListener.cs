@@ -11,6 +11,7 @@ using System.Threading;
 using LibraryInstaller.Contracts;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LibraryInstaller.Vsix.Json
 {
@@ -42,24 +43,46 @@ namespace LibraryInstaller.Vsix.Json
             textView.Closed += OnViewClosed;
         }
 
-        private void RemoveFiles(Manifest newManifest)
+        private async void RemoveFilesAsync(Manifest newManifest)
         {
             var hostInteraction = _dependencies.GetHostInteractions() as HostInteraction;
 
-            foreach (ILibraryInstallationState existing in _manifest.Libraries)
+            foreach (ILibraryInstallationState prevState in _manifest.Libraries)
             {
-                ILibraryInstallationState ost = newManifest.Libraries.FirstOrDefault(l => l.LibraryId == existing.LibraryId && l.ProviderId == existing.ProviderId);
+                string providerId = prevState.ProviderId ?? newManifest.DefaultProvider;
+                ILibraryInstallationState newState = newManifest.Libraries.FirstOrDefault(l => l.LibraryId == prevState.LibraryId && (l.ProviderId ?? _manifest.DefaultProvider) == providerId);
 
-                if (ost == null || ost.DestinationPath != existing.DestinationPath)
+                IEnumerable<string> existingFiles = await GetFilesAsync(providerId, prevState);
+
+                if (newState == null || newState.DestinationPath != prevState.DestinationPath)
                 {
-                    hostInteraction.DeleteFiles(existing.Files.Select(f => Path.Combine(existing.DestinationPath, f)).ToArray());
+                    hostInteraction.DeleteFiles(existingFiles?.Select(f => Path.Combine(prevState.DestinationPath, f)).ToArray());
                 }
                 else
                 {
-                    IEnumerable<string> files = existing.Files.Where(f => !ost.Files.Contains(f));
-                    hostInteraction.DeleteFiles(files.Select(f => Path.Combine(existing.DestinationPath, f)).ToArray());
+                    IEnumerable<string> stateFiles = await GetFilesAsync(providerId, newState);
+                    IEnumerable<string> files = existingFiles.Where(f => !stateFiles.Contains(f));
+                    hostInteraction.DeleteFiles(files.Select(f => Path.Combine(prevState.DestinationPath, f)).ToArray());
                 }
             }
+        }
+
+        private async Task<IEnumerable<string>> GetFilesAsync(string providerId, ILibraryInstallationState state)
+        {
+            if (state.Files != null)
+            {
+                return state.Files;
+            }
+
+            ILibraryCatalog catalog = _dependencies.GetProvider(providerId)?.GetCatalog();
+
+            if (catalog != null)
+            {
+                ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+                return library?.Files.Keys.ToList();
+            }
+
+            return null;
         }
 
         private async void OnFileSavedAsync(object sender, TextDocumentFileActionEventArgs e)
@@ -69,9 +92,8 @@ namespace LibraryInstaller.Vsix.Json
                 try
                 {
                     Manifest newManifest = Manifest.FromFileAsync(e.FilePath, _dependencies, CancellationToken.None).Result;
-                    RemoveFiles(newManifest);
+                    RemoveFilesAsync(newManifest);
                     _manifest = newManifest;
-
 
                     await LibraryHelpers.RestoreAsync(e.FilePath, CancellationToken.None);
                     Telemetry.TrackOperation("restoresave");

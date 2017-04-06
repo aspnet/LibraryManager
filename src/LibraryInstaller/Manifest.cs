@@ -41,6 +41,12 @@ namespace LibraryInstaller
         public string Version { get; } = "1.0";
 
         /// <summary>
+        /// The version of the <see cref="Manifest"/> document format.
+        /// </summary>
+        [JsonProperty("defaultProvider")]
+        public string DefaultProvider { get; set; }
+
+        /// <summary>
         /// A list of libraries contained in the <see cref="Manifest"/>.
         /// </summary>
         [JsonProperty("packages")]
@@ -127,8 +133,8 @@ namespace LibraryInstaller
                 }
 
                 _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, state.LibraryId), LogLevel.Operation);
-
-                IProvider provider = _dependencies.GetProvider(state.ProviderId);
+                string providerId = string.IsNullOrEmpty(state.ProviderId) ? DefaultProvider : state.ProviderId;
+                IProvider provider = _dependencies.GetProvider(providerId);
 
                 if (provider != null)
                 {

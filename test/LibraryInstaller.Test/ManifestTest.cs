@@ -152,6 +152,16 @@ namespace LibraryInstaller.Test
         }
 
         [TestMethod]
+        public async Task DefaultProviderAsync()
+        {
+            var manifest = Manifest.FromJson(_docDefaultProvider, _dependencies);
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(1, result.Count(v => v.Success));
+        }
+
+        [TestMethod]
         public async Task RestoreUnknownProviderAsync()
         {
             var dependencies = new Dependencies(_dependencies.GetHostInteractions());
@@ -204,6 +214,19 @@ namespace LibraryInstaller.Test
       ""provider"": ""filesystem"",
       ""path"": ""lib"",
       ""files"": [ ""file.txt"" ]
+    }
+  ]
+}
+";
+
+        private const string _docDefaultProvider = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""packages"": [
+    {
+      ""id"": ""jquery@3.1.1"",
+      ""path"": ""lib"",
+      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
     }
   ]
 }
