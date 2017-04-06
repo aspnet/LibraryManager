@@ -149,4 +149,11 @@
     <value>Uninstall {0}</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
+  <data name="NugetInstallPrompt" xml:space="preserve">
+    <value>A NuGet package will be installed to augment the MSBuild process, but no files will be added to the project.
+
+This may require an internet connection.
+
+Do you want to continue?</value>
+  </data>
 </root>

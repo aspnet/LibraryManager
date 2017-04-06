@@ -2,19 +2,45 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
+        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">..\tools\netstandard1.3\LibraryInstaller.Build.dll</_LibraryTaskAssembly>
+        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net46\LibraryInstaller.Build.dll</_LibraryTaskAssembly>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <BuildDependsOn>
             LibraryInstallerRestore;
             $(BuildDependsOn)
         </BuildDependsOn>
 
-        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">..\tools\netstandard1.3\LibraryInstaller.MSBuild.dll</_LibraryTaskAssembly>
-        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net46\LibraryInstaller.MSBuild.dll</_LibraryTaskAssembly>
+        <CopyAllFilesToSingleFolderForPackageDependsOn>
+            LibraryInstallerRestore;
+            $(CopyAllFilesToSingleFolderForPackageDependsOn);
+        </CopyAllFilesToSingleFolderForPackageDependsOn>
+
+        <CopyAllFilesToSingleFolderForMsdeployDependsOn>
+            LibraryInstallerRestore;
+            $(CopyAllFilesToSingleFolderForMsdeployDependsOn);
+        </CopyAllFilesToSingleFolderForMsdeployDependsOn>
+
+        <CopyFilesToOutputDirectory>
+            LibraryInstallerRestore;
+            $(CopyFilesToOutputDirectory);
+        </CopyFilesToOutputDirectory>
     </PropertyGroup>
 
-    <UsingTask AssemblyFile="$(_LibraryTaskAssembly)" TaskName="LibraryInstaller.MSBuild.RestoreTask"/>
+    <UsingTask AssemblyFile="$(_LibraryTaskAssembly)" TaskName="LibraryInstaller.Build.RestoreTask"/>
 
     <Target Name="LibraryInstallerRestore" Condition="'$(LibraryRestore)' != 'False'">
-        <LibraryInstaller.MSBuild.RestoreTask FileName="$(MSBuildProjectDirectory)\library.json" />
+
+        <LibraryInstaller.Build.RestoreTask FileName="library.json" ProjectDirectory="$(MSBuildProjectDirectory)">
+            <Output TaskParameter="FilesWritten" ItemName="_FilesWritten"/>
+        </LibraryInstaller.Build.RestoreTask>
+
+        <ItemGroup>
+            <FilesForPackagingFromProject  Include="%(_FilesWritten.Identity)">
+                <DestinationRelativePath>%(_FilesWritten.Identity)</DestinationRelativePath>
+            </FilesForPackagingFromProject>
+        </ItemGroup>
     </Target>
 
 </Project>

@@ -115,6 +115,19 @@ namespace LibraryInstaller.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A NuGet package will be installed to augment the MSBuild process, but no files will be added to the project.
+        ///
+        ///This may require an internet connection.
+        ///
+        ///Do you want to continue?.
+        /// </summary>
+        internal static string NugetInstallPrompt {
+            get {
+                return ResourceManager.GetString("NugetInstallPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Packages could not be loaded.
         /// </summary>
         internal static string PackagesCouldNotBeLoaded {

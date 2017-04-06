@@ -41,6 +41,16 @@
                     <ButtonText>Clean</ButtonText>
                 </Strings>
             </Button>
+            <Button guid="guidLibraryInstallerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">
+                <Parent guid="guidLibraryInstallerPackageCmdSet" id="ConfigMenuGruop" />
+                <CommandFlag>DefaultInvisible</CommandFlag>
+                <CommandFlag>DynamicVisibility</CommandFlag>
+                <CommandFlag>TextChanges</CommandFlag>
+                <Strings>
+                    <ButtonText>Enable Restore on Build...</ButtonText>
+                    <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
+                </Strings>
+            </Button>
 
             <!-- Solution -->
             <Button guid="guidLibraryInstallerPackageCmdSet" id="RestoreSolution" priority="0x9999" type="Button">
@@ -90,6 +100,7 @@
             <IDSymbol name="Clean" value="0x0200" />
             <IDSymbol name="Restore" value="0x0300" />
             <IDSymbol name="RestoreSolution" value="0x0400" />
+            <IDSymbol name="RestoreOnBuild" value="0x0500" />
         </GuidSymbol>
 
         <!-- Got this from https://github.com/NuGet/NuGet.VisualStudioExtension/blob/dev/src/VsExtension/NuGetTools.vsct -->

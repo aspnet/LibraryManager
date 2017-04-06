@@ -42,7 +42,7 @@
         but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
         -->
         <ItemGroup>
-            <_PackageFiles Include="bin\$(Configuration)\*\LibraryInstaller.dll;bin\$(Configuration)\*\LibraryInstaller.Contracts.dll">
+            <_PackageFiles Include="bin\$(Configuration)\*\LibraryInstaller.dll;bin\$(Configuration)\*\LibraryInstaller.Contracts.dll;bin\$(Configuration)\*\Newtonsoft.Json.dll">
                 <PackagePath>tools\%(RecursiveDir)</PackagePath>
                 <Visible>false</Visible>
                 <BuildAction>Content</BuildAction>

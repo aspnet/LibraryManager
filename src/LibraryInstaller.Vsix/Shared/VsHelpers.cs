@@ -33,6 +33,11 @@ namespace LibraryInstaller.Vsix
             return Path.Combine(folder, relativePath);
         }
 
+        public static bool IsConfigFile(this ProjectItem item)
+        {
+            return item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase);
+        }
+
         public static void CheckFileOutOfSourceControl(string file)
         {
             if (!File.Exists(file) || DTE.Solution.FindProjectItem(file) == null)

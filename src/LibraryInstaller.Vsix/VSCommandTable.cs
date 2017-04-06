@@ -33,6 +33,7 @@ namespace LibraryInstaller.Vsix
         public const int Clean = 0x0200;
         public const int Restore = 0x0300;
         public const int RestoreSolution = 0x0400;
+        public const int RestoreOnBuild = 0x0500;
         public const int IDG_VENUS_CTX_REFERENCE = 0x001B;
         public const int IDG_CTX_REFERENCE = 0x0102;
     }
