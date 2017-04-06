@@ -38,6 +38,7 @@ namespace LibraryInstaller.Build
             var sw = new Stopwatch();
             sw.Start();
 
+            BuildEngine3.Yield();
             CancellationToken token = CancellationToken.None;
 
             Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.RestoringLibraries);
@@ -46,6 +47,7 @@ namespace LibraryInstaller.Build
             Manifest manifest = Manifest.FromFileAsync(configFilePath.FullName, dependencies, token).Result;
 
             IEnumerable<ILibraryInstallationResult> results = manifest.RestoreAsync(token).Result;
+            BuildEngine3.Reacquire();
 
             sw.Stop();
 

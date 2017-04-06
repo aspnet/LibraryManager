@@ -51,7 +51,7 @@ namespace LibraryInstaller.Vsix
 
             ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
 
-            if (item.IsConfigFile())
+            if (item.IsConfigFile() && item.ContainingProject.IsKind(ProjectTypes.DOTNET_Core, ProjectTypes.WAP))
             {
                 button.Visible = button.Enabled = true;
 
