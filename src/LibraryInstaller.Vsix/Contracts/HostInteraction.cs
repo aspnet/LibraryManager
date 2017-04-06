@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
+using System.Linq;
 
 namespace LibraryInstaller.Vsix
 {
@@ -55,6 +56,20 @@ namespace LibraryInstaller.Vsix
 
             return true;
         }
+
+        //private static bool CompareMemoryStreams(Stream ms1, Stream ms2)
+        //{
+        //    if (ms1.Length != ms2.Length)
+        //        return false;
+
+        //    ms1.Position = 0;
+        //    ms2.Position = 0;
+
+        //    var msArray1 = ms1..ToArray();
+        //    var msArray2 = ms2.ToArray();
+
+        //    return msArray1.SequenceEqual(msArray2);
+        //}
 
         public void DeleteFiles(params string[] relativeFilePaths)
         {

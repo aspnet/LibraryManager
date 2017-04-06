@@ -51,10 +51,16 @@ namespace LibraryInstaller.Build
 
             sw.Stop();
 
+            PopulateFilesWritten(results, dependencies.GetHostInteractions());
+            LogResults(sw, results);
+
+            return !Log.HasLoggedErrors;
+        }
+
+        private void LogResults(Stopwatch sw, IEnumerable<ILibraryInstallationResult> results)
+        {
             int fileCount = results.Sum(r => r.InstallationState.Files.Count);
             bool hasErrors = results.Any(r => !r.Success);
-
-            PopulateFilesWritten(results, dependencies.GetHostInteractions());
 
             foreach (IError error in results.SelectMany(r => r.Errors))
             {
@@ -73,8 +79,6 @@ namespace LibraryInstaller.Build
             {
                 Log.LogMessage(MessageImportance.High, Environment.NewLine + "Restore completed. Files already up-to-date" + Environment.NewLine);
             }
-
-            return !Log.HasLoggedErrors;
         }
 
         private void PopulateFilesWritten(IEnumerable<ILibraryInstallationResult> results, IHostInteraction hostInteraction)

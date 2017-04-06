@@ -5,21 +5,22 @@ using EnvDTE;
 using LibraryInstaller.Contracts;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using NuGet.VisualStudio;
 using System;
 using System.ComponentModel.Design;
-using System.Windows;
-using System.Windows.Interop;
 
 namespace LibraryInstaller.Vsix
 {
     internal sealed class RestoreOnBuildCommand
     {
-        private bool _isInstalled;
+        private bool _isPackageInstalled;
         IComponentModel _componentModel;
+        private Package _package;
 
-        private RestoreOnBuildCommand(OleMenuCommandService commandService)
+        private RestoreOnBuildCommand(Package package, OleMenuCommandService commandService)
         {
+            _package = package;
             _componentModel = VsHelpers.GetService<SComponentModel, IComponentModel>();
 
             var cmdId = new CommandID(PackageGuids.guidLibraryInstallerPackageCmdSet, PackageIds.RestoreOnBuild);
@@ -34,9 +35,14 @@ namespace LibraryInstaller.Vsix
             private set;
         }
 
+        private IServiceProvider ServiceProvider
+        {
+            get { return _package; }
+        }
+
         public static void Initialize(Package package, OleMenuCommandService commandService)
         {
-            Instance = new RestoreOnBuildCommand(commandService);
+            Instance = new RestoreOnBuildCommand(package, commandService);
         }
 
         private void BeforeQueryStatus(object sender, EventArgs e)
@@ -55,10 +61,10 @@ namespace LibraryInstaller.Vsix
             {
                 button.Visible = button.Enabled = true;
 
-                _isInstalled = IsPackageInstalled(item.ContainingProject);
-                button.Checked = _isInstalled;
+                _isPackageInstalled = IsPackageInstalled(item.ContainingProject);
+                button.Checked = _isPackageInstalled;
 
-                if (_isInstalled)
+                if (_isPackageInstalled)
                 {
                     button.Text = "Disable Restore on Build";
                 }
@@ -74,17 +80,15 @@ namespace LibraryInstaller.Vsix
         {
             ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
 
-            System.Threading.Tasks.Task.Run(() =>
+            try
             {
-                try
+                if (!_isPackageInstalled)
                 {
-                    if (!_isInstalled)
+                    if (!UserWantsToInstall())
+                        return;
+
+                    System.Threading.Tasks.Task.Run(() =>
                     {
-                        MessageBoxResult question = MessageBox.Show(Resources.Text.NugetInstallPrompt, Vsix.Name, MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                        if (question == MessageBoxResult.No)
-                            return;
-
                         Logger.LogEvent("Installing NuGet package containing MSBuild target...", LogLevel.Status);
 
                         IVsPackageInstaller2 installer = _componentModel.GetService<IVsPackageInstaller2>();
@@ -92,8 +96,11 @@ namespace LibraryInstaller.Vsix
 
                         Telemetry.TrackUserTask("InstallNugetPackage");
                         Logger.LogEvent("NuGet package installed", LogLevel.Status);
-                    }
-                    else
+                    });
+                }
+                else
+                {
+                    System.Threading.Tasks.Task.Run(() =>
                     {
                         Logger.LogEvent("Uninstalling NuGet package...", LogLevel.Status);
 
@@ -102,14 +109,28 @@ namespace LibraryInstaller.Vsix
 
                         Telemetry.TrackUserTask("UninstallNugetPackage");
                         Logger.LogEvent("NuGet package uninstalled", LogLevel.Status);
-                    }
+                    });
                 }
-                catch (Exception ex)
-                {
-                    Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
-                    Logger.LogEvent("Error installing NuGet package", LogLevel.Status);
-                }
-            });
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
+                Logger.LogEvent("Error installing NuGet package", LogLevel.Status);
+            }
+        }
+
+        private bool UserWantsToInstall()
+        {
+            int answer = VsShellUtilities.ShowMessageBox(
+                        ServiceProvider,
+                        Resources.Text.NugetInstallPrompt,
+                        Vsix.Name,
+                        OLEMSGICON.OLEMSGICON_INFO,
+                        OLEMSGBUTTON.OLEMSGBUTTON_YESNO,
+                        OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST
+                    );
+
+            return answer == 6; // 6 = Yes
         }
 
         private bool IsPackageInstalled(Project project)
