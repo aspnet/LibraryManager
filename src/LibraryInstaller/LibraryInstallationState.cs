@@ -21,12 +21,14 @@ namespace LibraryInstaller
         [JsonProperty("files")]
         public IReadOnlyList<string> Files { get; set; }
 
-        public static LibraryInstallationState FromInterface(ILibraryInstallationState state)
+        public static LibraryInstallationState FromInterface(ILibraryInstallationState state, string defaultProviderId = null)
         {
+            string normalizedProviderId = state.ProviderId ?? defaultProviderId;
+
             return new LibraryInstallationState
             {
                 LibraryId = state.LibraryId,
-                ProviderId = state.ProviderId,
+                ProviderId = normalizedProviderId,
                 Files = state.Files,
                 DestinationPath = state.DestinationPath
             };

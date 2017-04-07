@@ -28,6 +28,9 @@ namespace LibraryInstaller.Vsix
             string absolutePath = Path.Combine(WorkingDirectory, path);
             string directory = Path.GetDirectoryName(absolutePath);
 
+            if (File.Exists(absolutePath))
+                return true;
+
             Directory.CreateDirectory(directory);
 
             using (Stream stream = content.Invoke())

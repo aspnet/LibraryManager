@@ -159,6 +159,7 @@ namespace LibraryInstaller.Test
 
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual(1, result.Count(v => v.Success));
+            Assert.AreEqual(manifest.DefaultProvider, result.First().InstallationState.ProviderId);
         }
 
         [TestMethod]

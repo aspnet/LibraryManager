@@ -43,66 +43,66 @@ namespace LibraryInstaller.Vsix.Json
             textView.Closed += OnViewClosed;
         }
 
-        private async void RemoveFilesAsync(Manifest newManifest)
+        private async Task RemoveFilesAsync(Manifest newManifest)
         {
             var hostInteraction = _dependencies.GetHostInteractions() as HostInteraction;
 
             foreach (ILibraryInstallationState prevState in _manifest.Libraries)
             {
-                string providerId = prevState.ProviderId ?? newManifest.DefaultProvider;
-                ILibraryInstallationState newState = newManifest.Libraries.FirstOrDefault(l => l.LibraryId == prevState.LibraryId && (l.ProviderId ?? _manifest.DefaultProvider) == providerId);
-
-                IEnumerable<string> existingFiles = await GetFilesAsync(providerId, prevState);
+                ILibraryInstallationState newState = newManifest.Libraries.FirstOrDefault(l => l.LibraryId == prevState.LibraryId && l.ProviderId == prevState.ProviderId);
+                IEnumerable<string> prevFiles = await GetFilesAsync(prevState).ConfigureAwait(false);
 
                 if (newState == null || newState.DestinationPath != prevState.DestinationPath)
                 {
-                    hostInteraction.DeleteFiles(existingFiles?.Select(f => Path.Combine(prevState.DestinationPath, f)).ToArray());
+                    hostInteraction.DeleteFiles(prevFiles?.Select(f => Path.Combine(prevState.DestinationPath, f)).ToArray());
                 }
                 else
                 {
-                    IEnumerable<string> stateFiles = await GetFilesAsync(providerId, newState);
-                    IEnumerable<string> files = existingFiles.Where(f => !stateFiles.Contains(f));
-                    hostInteraction.DeleteFiles(files.Select(f => Path.Combine(prevState.DestinationPath, f)).ToArray());
+                    IEnumerable<string> newFiles = await GetFilesAsync(newState).ConfigureAwait(false);
+                    IEnumerable<string> diffFiles = prevFiles.Where(f => !newFiles.Contains(f));
+                    hostInteraction.DeleteFiles(diffFiles.Select(f => Path.Combine(prevState.DestinationPath, f)).ToArray());
                 }
             }
         }
 
-        private async Task<IEnumerable<string>> GetFilesAsync(string providerId, ILibraryInstallationState state)
+        private async Task<IEnumerable<string>> GetFilesAsync(ILibraryInstallationState state)
         {
-            if (state.Files != null)
+            if (state.Files == null)
             {
-                return state.Files;
+                ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
+
+                if (catalog != null)
+                {
+                    ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+                    return library?.Files.Keys.ToList();
+                }
             }
 
-            ILibraryCatalog catalog = _dependencies.GetProvider(providerId)?.GetCatalog();
-
-            if (catalog != null)
-            {
-                ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                return library?.Files.Keys.ToList();
-            }
-
-            return null;
+            return state.Files;
         }
 
-        private async void OnFileSavedAsync(object sender, TextDocumentFileActionEventArgs e)
+        private void OnFileSavedAsync(object sender, TextDocumentFileActionEventArgs e)
         {
             if (e.FileActionType == FileActionTypes.ContentSavedToDisk)
             {
-                try
+                Task.Run(async () =>
                 {
-                    Manifest newManifest = Manifest.FromFileAsync(e.FilePath, _dependencies, CancellationToken.None).Result;
-                    RemoveFilesAsync(newManifest);
-                    _manifest = newManifest;
+                    try
+                    {
+                        Manifest newManifest = await Manifest.FromFileAsync(e.FilePath, _dependencies, CancellationToken.None);
+                        await RemoveFilesAsync(newManifest);
 
-                    await LibraryHelpers.RestoreAsync(e.FilePath, CancellationToken.None);
-                    Telemetry.TrackOperation("restoresave");
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
-                    Telemetry.TrackException("configsaved", ex);
-                }
+                        _manifest = newManifest;
+
+                        await LibraryHelpers.RestoreAsync(e.FilePath, CancellationToken.None);
+                        Telemetry.TrackOperation("restoresave");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
+                        Telemetry.TrackException("configsaved", ex);
+                    }
+                });
             }
         }
 

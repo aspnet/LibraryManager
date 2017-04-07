@@ -90,6 +90,11 @@ namespace LibraryInstaller
                 manifest._dependencies = dependencies;
                 manifest._hostInteraction = dependencies.GetHostInteractions();
 
+                foreach (LibraryInstallationState state in manifest.Libraries.Cast<LibraryInstallationState>())
+                {
+                    state.ProviderId = state.ProviderId ?? manifest.DefaultProvider;
+                }
+
                 return manifest;
             }
             catch (Exception)
@@ -133,8 +138,8 @@ namespace LibraryInstaller
                 }
 
                 _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, state.LibraryId), LogLevel.Operation);
-                string providerId = string.IsNullOrEmpty(state.ProviderId) ? DefaultProvider : state.ProviderId;
-                IProvider provider = _dependencies.GetProvider(providerId);
+
+                IProvider provider = _dependencies.GetProvider(state.ProviderId);
 
                 if (provider != null)
                 {
