@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="110" xml:space="preserve">
-    <value>Library Installer</value>
+    <value>Microsoft Library Installer</value>
   </data>
   <data name="112" xml:space="preserve">
     <value>Install client-side libraries easily to any web project</value>
