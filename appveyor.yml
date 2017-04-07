@@ -9,13 +9,19 @@ before_build:
   - ps: Vsix-TokenReplacement src\LibraryInstaller.Vsix\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
 
 build_script:
-  - dotnet restore LibraryInstaller.sln
+  - dotnet restore LibraryInstaller.sln -Verbosity quiet
   - nuget restore -Verbosity quiet
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+
+test_script:
+  - vstest.console /logger:Appveyor test\LibraryInstaller.Test\bin\Release\netcoreapp1.0\LibraryInstaller.Test.dll
 
 # after_test:
 #  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
 
 artifacts:
-  - path: src\**\*.nupkg
+  - path: artifacts\**\*.nupkg
     name: NuGet package
+
+  - path: src\**\*.vsix
+    name: Visual Studio Extension
