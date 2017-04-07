@@ -54,6 +54,7 @@
 
             <!-- Project -->
             <Button guid="guidLibraryInstallerPackageCmdSet" id="ManageLibraries" priority="0xF106" type="Button">
+                <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_ADD" />
                 <Icon guid="ImageCatalogGuid" id="JSWebScript" />
                 <CommandFlag>IconIsMoniker</CommandFlag>
                 <CommandFlag>DefaultInvisible</CommandFlag>

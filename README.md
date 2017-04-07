@@ -14,6 +14,15 @@ Install and consume 3rd-party client-side libraries with ease.
 - Very fast
 - Full Visual Studio 2017 integration
 
+## Getting started
+Right-click any web project in Solution Explorer and hit **Manage Client-side Libraries...**.
+
+![Context menu](art/context-menu-project.png)
+
+This will create a `library.json` file in the root of the project.
+
+Now use Intellisense in `library.json` to help add libraries to the project.
+
 ## Road map and release notes
 See the [CHANGELOG](CHANGELOG.md) for road map and release notes
 
