@@ -2,6 +2,8 @@
 
 Install and consume 3rd-party client-side libraries with ease.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/vc2ixijbk1ak780e?svg=true)](https://ci.appveyor.com/project/madskristensen/libraryinstaller)
+
 ## Features
 
 - Add any library from [cdnjs.com](https://cdnjs.com/)
