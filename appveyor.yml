@@ -9,7 +9,7 @@ before_build:
   - ps: Vsix-TokenReplacement src\LibraryInstaller.Vsix\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
 
 build_script:
-  - dotnet restore LibraryInstaller.sln -Verbosity quiet
+  - dotnet restore LibraryInstaller.sln
   - nuget restore -Verbosity quiet
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
 
