@@ -52,7 +52,7 @@ namespace LibraryInstaller.Vsix
 
         private void ExecuteAsync(object sender, EventArgs e)
         {
-            Telemetry.TrackUserTask("managelibraries");
+            Telemetry.TrackUserTask("ManageLibraries");
             Project project = VsHelpers.DTE.SelectedItems.Item(1).Project;
             string rootFolder = project.GetRootFolder();
 
@@ -76,6 +76,8 @@ namespace LibraryInstaller.Vsix
 
                         await manifest.SaveAsync(configFilePath, token);
                         project.AddFileToProject(configFilePath);
+
+                        Telemetry.TrackUserTask("ConfigFileCreated");
                     }
 
                     VsHelpers.DTE.ItemOperations.OpenFile(configFilePath);
