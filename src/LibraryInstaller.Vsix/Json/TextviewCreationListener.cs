@@ -17,7 +17,7 @@ namespace LibraryInstaller.Vsix.Json
 {
     [Export(typeof(IWpfTextViewCreationListener))]
     [ContentType("JSON")]
-    [TextViewRole(PredefinedTextViewRoles.Debuggable)]
+    [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
     public class TextviewCreationListener : IWpfTextViewCreationListener
     {
         private Manifest _manifest;

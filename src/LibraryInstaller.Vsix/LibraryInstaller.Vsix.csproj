@@ -48,6 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\ManageLibrariesCommand.cs" />
     <Compile Include="Commands\RestoreOnBuildCommand.cs" />
     <Compile Include="Commands\RestoreSolutionCommand.cs" />
     <Compile Include="Commands\RestoreCommand.cs" />

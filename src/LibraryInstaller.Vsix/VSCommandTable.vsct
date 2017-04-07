@@ -12,7 +12,7 @@
 
         <Buttons>
             <!-- Folder -->
-            <Button guid="guidLibraryInstallerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
+            <!--<Button guid="guidLibraryInstallerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
                 <Icon guid="ImageCatalogGuid" id="JSWebScript" />
                 <CommandFlag>IconIsMoniker</CommandFlag>
                 <CommandFlag>DefaultInvisible</CommandFlag>
@@ -20,7 +20,7 @@
                 <Strings>
                     <ButtonText>Add Client-Side Library...</ButtonText>
                 </Strings>
-            </Button>
+            </Button>-->
 
             <!-- Config file -->
             <Button guid="guidLibraryInstallerPackageCmdSet" id="Restore" priority="0x0100" type="Button">
@@ -49,6 +49,18 @@
                 <Strings>
                     <ButtonText>Enable Restore on Build...</ButtonText>
                     <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
+                </Strings>
+            </Button>
+
+            <!-- Project -->
+            <Button guid="guidLibraryInstallerPackageCmdSet" id="ManageLibraries" priority="0xF106" type="Button">
+                <Icon guid="ImageCatalogGuid" id="JSWebScript" />
+                <CommandFlag>IconIsMoniker</CommandFlag>
+                <CommandFlag>DefaultInvisible</CommandFlag>
+                <CommandFlag>DynamicVisibility</CommandFlag>
+                <Strings>
+                    <ButtonText>Manage Client-Side Libraries...</ButtonText>
+                    <CanonicalName>ManageClientSideLibraries</CanonicalName>
                 </Strings>
             </Button>
 
@@ -81,10 +93,22 @@
         <CommandPlacement guid="guidLibraryInstallerPackageCmdSet" id="ConfigMenuGruop" priority="0x0300">
             <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBITEMNODE"/>
         </CommandPlacement>
+
+        <!-- Manage libraries -->
+        <CommandPlacement guid="guidLibraryInstallerPackageCmdSet" id="ManageLibraries" priority="0xF106">
+            <Parent guid="guidSHLMainMenu" id="IDM_VS_CSCD_PROJECT_WEB"/>
+        </CommandPlacement>
+        <CommandPlacement guid="guidLibraryInstallerPackageCmdSet" id="ManageLibraries" priority="0xF106">
+            <Parent guid="guidVenusCmdId" id="IDG_CTX_REFERENCE"/>
+        </CommandPlacement>
+        <CommandPlacement guid="guidLibraryInstallerPackageCmdSet" id="ManageLibraries" priority="0xF102">
+            <Parent guid="guidSHLMainMenu" id="IDG_VS_PROJ_OPTIONS"/>
+        </CommandPlacement>
     </CommandPlacements>
 
     <VisibilityConstraints>
         <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="InstallPackage" context="guidUiContext" />
+        <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="ManageLibraries" context="guidUiContext" />
         <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="Clean" context="guidUiContextConfigFile" />
         <VisibilityItem guid="guidLibraryInstallerPackageCmdSet" id="Restore" context="guidUiContextConfigFile" />
     </VisibilityConstraints>
@@ -101,6 +125,7 @@
             <IDSymbol name="Restore" value="0x0300" />
             <IDSymbol name="RestoreSolution" value="0x0400" />
             <IDSymbol name="RestoreOnBuild" value="0x0500" />
+            <IDSymbol name="ManageLibraries" value="0x0600" />
         </GuidSymbol>
 
         <!-- Got this from https://github.com/NuGet/NuGet.VisualStudioExtension/blob/dev/src/VsExtension/NuGetTools.vsct -->
