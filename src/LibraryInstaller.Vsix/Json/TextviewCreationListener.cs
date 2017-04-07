@@ -45,24 +45,32 @@ namespace LibraryInstaller.Vsix.Json
 
         private async Task RemoveFilesAsync(Manifest newManifest)
         {
-            var hostInteraction = _dependencies.GetHostInteractions() as HostInteraction;
+            IEnumerable<string> prevFiles = await GetAllManifestFilesAsync(_manifest);
+            IEnumerable<string> newFiles = await GetAllManifestFilesAsync(newManifest);
+            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f));
 
-            foreach (ILibraryInstallationState prevState in _manifest.Libraries)
+            if (filesToRemove.Any())
             {
-                ILibraryInstallationState newState = newManifest.Libraries.FirstOrDefault(l => l.LibraryId == prevState.LibraryId && l.ProviderId == prevState.ProviderId);
-                IEnumerable<string> prevFiles = await GetFilesAsync(prevState).ConfigureAwait(false);
-
-                if (newState == null || newState.DestinationPath != prevState.DestinationPath)
-                {
-                    hostInteraction.DeleteFiles(prevFiles?.Select(f => Path.Combine(prevState.DestinationPath, f)).ToArray());
-                }
-                else
-                {
-                    IEnumerable<string> newFiles = await GetFilesAsync(newState).ConfigureAwait(false);
-                    IEnumerable<string> diffFiles = prevFiles.Where(f => !newFiles.Contains(f));
-                    hostInteraction.DeleteFiles(diffFiles.Select(f => Path.Combine(prevState.DestinationPath, f)).ToArray());
-                }
+                var hostInteraction = _dependencies.GetHostInteractions() as HostInteraction;
+                hostInteraction.DeleteFiles(filesToRemove.ToArray());
             }
+        }
+
+        private async Task<IEnumerable<string>> GetAllManifestFilesAsync(Manifest manifest)
+        {
+            var files = new List<string>();
+
+            foreach (ILibraryInstallationState state in manifest.Libraries.Select(l => l))
+            {
+                IEnumerable<string> stateFiles = await GetFilesAsync(state);
+                IEnumerable<string> filesToAdd = stateFiles
+                    .Select(f => Path.Combine(state.DestinationPath, f))
+                    .Where(f => !files.Contains(f));
+
+                files.AddRange(filesToAdd);
+            }
+
+            return files;
         }
 
         private async Task<IEnumerable<string>> GetFilesAsync(ILibraryInstallationState state)
@@ -73,12 +81,12 @@ namespace LibraryInstaller.Vsix.Json
 
                 if (catalog != null)
                 {
-                    ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+                    ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
                     return library?.Files.Keys.ToList();
                 }
             }
 
-            return state.Files;
+            return state.Files.Distinct();
         }
 
         private void OnFileSavedAsync(object sender, TextDocumentFileActionEventArgs e)
