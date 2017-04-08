@@ -23,7 +23,7 @@ namespace LibraryInstaller.Vsix
         public string Description { get; private set; }
 
         /// <summary>A URL pointing to documentation about the error.</summary>
-        public string HelpLink => string.Format("https://url/{0}", ErrorCode.ToLowerInvariant());
+        public string HelpLink => string.Format(Constants.ErrorCodeLink, ErrorCode.ToLowerInvariant());
 
         /// <summary>The line number containing the error.</summary>
         public int Line { get; private set; } = 0;

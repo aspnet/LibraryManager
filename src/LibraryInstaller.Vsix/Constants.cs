@@ -11,5 +11,6 @@ namespace LibraryInstaller.Vsix
         public static string CacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
         public const string TelemetryNamespace = "webtools/libraryinstaller/";
         public const string NuGetPackageId = "Microsoft.Web.LibraryInstaller.Build";
+        public const string ErrorCodeLink = "https://github.com/aspnet/LibraryInstaller/wiki/Error-codes#{0}";
     }
 }
