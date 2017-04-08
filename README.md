@@ -23,6 +23,8 @@ This will create a `library.json` file in the root of the project.
 
 Now use Intellisense in `library.json` to help add libraries to the project.
 
+See [wiki](https://github.com/aspnet/LibraryInstaller/wiki) for more information.
+
 ## Road map and release notes
 See the [CHANGELOG](CHANGELOG.md) for road map and release notes
 
