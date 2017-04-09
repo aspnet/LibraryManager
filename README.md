@@ -22,7 +22,7 @@ Right-click any web project in Solution Explorer and hit **Manage Client-side Li
 This will create a `library.json` file in the root of the project.
 
 ## library.json
-Edit the library.josn file to install libraries. Every time the file is saved, Visual Studio will install/restore the packages.
+Edit the library.json file to install libraries. Every time the file is saved, Visual Studio will install/restore the packages.
 
 ![library.json](art/library.json%20typing.gif)
 
