@@ -29,12 +29,16 @@ namespace LibraryInstaller.Vsix.Json
         public void TextViewCreated(IWpfTextView textView)
         {
             if (!DocumentService.TryGetTextDocument(textView.TextBuffer, out var doc))
+            {
                 return;
+            }
 
             string fileName = Path.GetFileName(doc.FilePath);
 
             if (!fileName.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
+            {
                 return;
+            }
 
             _dependencies = Dependencies.FromConfigFile(doc.FilePath);
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;

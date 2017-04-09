@@ -37,7 +37,9 @@ namespace LibraryInstaller.Vsix
         public override void Invoke(CancellationToken cancellationToken)
         {
             if (_disabled)
+            {
                 return;
+            }
 
             try
             {

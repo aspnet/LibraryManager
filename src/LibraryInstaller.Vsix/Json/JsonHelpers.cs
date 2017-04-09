@@ -15,20 +15,29 @@ namespace LibraryInstaller.Vsix
             installationState = null;
 
             if (parent == null)
+            {
                 return false;
+            }
 
             var state = new LibraryInstallationState();
 
             foreach (JSONMember child in parent.Children.OfType<JSONMember>())
             {
-                if (child.UnquotedNameText == "provider")
-                    state.ProviderId = child.UnquotedValueText;
-                else if (child.UnquotedNameText == "id")
-                    state.LibraryId = child.UnquotedValueText;
-                else if (child.UnquotedNameText == "path")
-                    state.DestinationPath = child.UnquotedValueText;
-                else if (child.UnquotedNameText == "files")
-                    state.Files = (child.Value as JSONArray)?.Elements.Select(e => e.UnquotedValueText).ToList();
+                switch (child.UnquotedNameText)
+                {
+                    case "provider":
+                        state.ProviderId = child.UnquotedValueText;
+                        break;
+                    case "id":
+                        state.LibraryId = child.UnquotedValueText;
+                        break;
+                    case "path":
+                        state.DestinationPath = child.UnquotedValueText;
+                        break;
+                    case "files":
+                        state.Files = (child.Value as JSONArray)?.Elements.Select(e => e.UnquotedValueText).ToList();
+                        break;
+                }
             }
 
             // Check for defaultProvider

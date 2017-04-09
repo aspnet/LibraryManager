@@ -21,9 +21,14 @@ Right-click any web project in Solution Explorer and hit **Manage Client-side Li
 
 This will create a `library.json` file in the root of the project.
 
-Now use Intellisense in `library.json` to help add libraries to the project.
+## library.json
+Edit the library.josn file to install libraries. Every time the file is saved, Visual Studio will install/restore the packages.
 
-See [wiki](https://github.com/aspnet/LibraryInstaller/wiki) for more information.
+![library.json](art/library.json%20typing.gif)
+
+See [library.json reference](https://github.com/aspnet/LibraryInstaller/wiki/library.json-reference) for more information.
+
+## Restore packages
 
 ## Road map and release notes
 See the [CHANGELOG](CHANGELOG.md) for road map and release notes

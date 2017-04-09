@@ -14,12 +14,12 @@ namespace LibraryInstaller
     {
         public static async Task<string> GetFileTextAsync(string url, string localFile, int expiresAfterDays, CancellationToken cancellationToken)
         {
-            Stream s = await GetFileAsync(url, localFile, expiresAfterDays, cancellationToken).ConfigureAwait(false);
+            Stream stream = await GetFileAsync(url, localFile, expiresAfterDays, cancellationToken).ConfigureAwait(false);
 
-            if (s != null)
+            if (stream != null)
             {
-                using (s)
-                using (var r = new StreamReader(s, Encoding.UTF8, true, 8192, true))
+                using (stream)
+                using (var r = new StreamReader(stream, Encoding.UTF8, true, 8192, true))
                 {
                     return await r.ReadToEndAsync().WithCancellation(cancellationToken).ConfigureAwait(false);
                 }
