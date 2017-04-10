@@ -25,7 +25,7 @@ artifacts:
 
 deploy:
   - provider: NuGet
-  - artifact: artifacts\**\*.nupkg
+    artifact: artifacts\**\*.nupkg
 
 nuget:
   project_feed: true
