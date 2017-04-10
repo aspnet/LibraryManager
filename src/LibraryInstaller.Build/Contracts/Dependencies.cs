@@ -3,6 +3,7 @@
 
 using Microsoft.Web.LibraryInstaller.Contracts;
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Web.LibraryInstaller.Providers.Cdnjs;
@@ -15,21 +16,23 @@ namespace Microsoft.Web.LibraryInstaller.Build
         private IHostInteraction _hostInteraction;
         private static List<IProvider> _providers = new List<IProvider>();
         private static Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
+        private IEnumerable<string> _assemblyPaths;
 
-        private Dependencies(IHostInteraction hostInteraction)
+        private Dependencies(IHostInteraction hostInteraction, IEnumerable<string> assemblyPaths)
         {
             _hostInteraction = hostInteraction;
+            _assemblyPaths = assemblyPaths;
             Initialize();
         }
 
         public IHostInteraction GetHostInteractions() => _hostInteraction;
 
-        public static Dependencies FromTask(RestoreTask task)
+        public static Dependencies FromTask(RestoreTask task, IEnumerable<string> assemblyPaths)
         {
             if (!_cache.ContainsKey(task.FileName))
             {
                 var hostInteraction = new HostInteraction(task);
-                _cache[task.FileName] = new Dependencies(hostInteraction);
+                _cache[task.FileName] = new Dependencies(hostInteraction, assemblyPaths);
             }
 
             return _cache[task.FileName];
@@ -45,12 +48,40 @@ namespace Microsoft.Web.LibraryInstaller.Build
             if (_providers.Any())
                 return;
 
-            IProviderFactory[] factories = { new CdnjsProviderFactory(), new FileSystemProviderFactory() };
+            IEnumerable<IProviderFactory> factories = GetProvidersFromReflection();
 
             foreach (IProviderFactory factory in factories)
             {
-                _providers.Add(factory.CreateProvider(_hostInteraction));
+                if (factory != null)
+                {
+                    _providers.Add(factory.CreateProvider(_hostInteraction));
+                }
             }
+        }
+
+        private IEnumerable<IProviderFactory> GetProvidersFromReflection()
+        {
+            var list = new List<IProviderFactory>();
+
+            foreach (string path in _assemblyPaths)
+            {
+                Assembly assembly;
+#if NET46
+                assembly = Assembly.LoadFile(path);
+#else
+                assembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+
+#endif
+
+                IEnumerable<IProviderFactory> factories = assembly
+                    .DefinedTypes
+                    .Where(p => p.ImplementedInterfaces.Any(i => i.FullName == typeof(IProviderFactory).FullName))
+                    .Select(fac => Activator.CreateInstance(assembly.GetType(fac.FullName)) as IProviderFactory);
+
+                list.AddRange(factories);
+            }
+
+            return list;
         }
     }
 }

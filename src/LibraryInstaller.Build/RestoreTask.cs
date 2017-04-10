@@ -15,12 +15,14 @@ namespace Microsoft.Web.LibraryInstaller.Build
 {
     public class RestoreTask : Task
     {
-        /// <summary>
-        /// The file path of the library.json file
-        /// </summary>
+        [Required]
         public string FileName { get; set; }
 
+        [Required]
         public string ProjectDirectory { get; set; }
+
+        [Required]
+        public ITaskItem[] ProviderAssemblies { get; set; }
 
         [Output]
         public ITaskItem[] FilesWritten { get; set; }
@@ -43,7 +45,7 @@ namespace Microsoft.Web.LibraryInstaller.Build
 
             Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.RestoringLibraries);
 
-            var dependencies = Dependencies.FromTask(this);
+            var dependencies = Dependencies.FromTask(this, ProviderAssemblies.Select(pa => new FileInfo(pa.ItemSpec).FullName));
             Manifest manifest = Manifest.FromFileAsync(configFilePath.FullName, dependencies, token).Result;
 
             IEnumerable<ILibraryInstallationResult> results = manifest.RestoreAsync(token).Result;

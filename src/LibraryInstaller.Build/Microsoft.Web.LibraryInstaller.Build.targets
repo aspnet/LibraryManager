@@ -32,7 +32,11 @@
 
     <Target Name="LibraryInstallerRestore" Condition="'$(LibraryRestore)' != 'False'">
 
-        <Microsoft.Web.LibraryInstaller.Build.RestoreTask FileName="library.json" ProjectDirectory="$(MSBuildProjectDirectory)">
+        <Microsoft.Web.LibraryInstaller.Build.RestoreTask
+            FileName="library.json"
+            ProjectDirectory="$(MSBuildProjectDirectory)"
+            ProviderAssemblies="$(LibraryProviderAssemblies)">
+
             <Output TaskParameter="FilesWritten" ItemName="_FilesWritten"/>
         </Microsoft.Web.LibraryInstaller.Build.RestoreTask>
 

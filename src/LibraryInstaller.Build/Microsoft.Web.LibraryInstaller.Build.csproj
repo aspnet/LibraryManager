@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
+        <TargetFrameworks>netstandard1.5;net46</TargetFrameworks>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <PackageTags>library, package, client-side, build</PackageTags>
@@ -23,9 +23,14 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Build.Framework" Version="15.1.548" PrivateAssets="All" />
         <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.548" PrivateAssets="All" />
+        <PackageReference Include="System.Runtime.Loader" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.5'" />
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="Microsoft.Web.LibraryInstaller.Build.props">
+            <PackagePath>build</PackagePath>
+            <Pack>true</Pack>
+        </Content>
         <Content Include="Microsoft.Web.LibraryInstaller.Build.targets">
             <Pack>true</Pack>
             <PackagePath>build</PackagePath>
@@ -37,7 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryInstaller.csproj" />
+        <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryInstaller.csproj" />
     </ItemGroup>
 
     <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
@@ -46,7 +51,7 @@
         but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
         -->
         <ItemGroup>
-            <_PackageFiles Include="bin\$(Configuration)\*\LibraryInstaller.dll;bin\$(Configuration)\*\LibraryInstaller.Contracts.dll;bin\$(Configuration)\*\Newtonsoft.Json.dll">
+            <_PackageFiles Include="bin\$(Configuration)\*\*.LibraryInstaller.dll;bin\$(Configuration)\*\*.LibraryInstaller.Contracts.dll;bin\$(Configuration)\*\Newtonsoft.Json.dll">
                 <PackagePath>tools\%(RecursiveDir)</PackagePath>
                 <Visible>false</Visible>
                 <BuildAction>Content</BuildAction>
