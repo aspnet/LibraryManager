@@ -22,10 +22,3 @@ artifacts:
 
   - path: src\**\*.vsix
     name: Visual Studio Extension
-
-deploy:
-  - provider: NuGet
-    artifact: artifacts\**\*.nupkg
-
-nuget:
-  project_feed: true
