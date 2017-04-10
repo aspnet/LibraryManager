@@ -23,3 +23,7 @@ artifacts:
 
   - path: src\**\*.vsix
     name: Visual Studio Extension
+
+nuget:
+  project_feed: true
+  disable_publish_on_pr: true
