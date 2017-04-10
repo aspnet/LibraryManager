@@ -4,4 +4,3 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryInstaller.Test")]
-[assembly: InternalsVisibleTo("Microsoft.Web.LibraryInstaller.Build")]

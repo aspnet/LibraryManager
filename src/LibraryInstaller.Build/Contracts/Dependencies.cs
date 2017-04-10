@@ -6,8 +6,6 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Web.LibraryInstaller.Providers.Cdnjs;
-using Microsoft.Web.LibraryInstaller.Providers.FileSystem;
 
 namespace Microsoft.Web.LibraryInstaller.Build
 {
