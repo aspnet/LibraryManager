@@ -19,6 +19,7 @@ build_script:
 artifacts:
   - path: artifacts\**\*.nupkg
     name: NuGet package
+    type: NuGetPackage
 
   - path: src\**\*.vsix
     name: Visual Studio Extension
