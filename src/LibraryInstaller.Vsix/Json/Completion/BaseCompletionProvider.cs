@@ -14,7 +14,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     abstract class BaseCompletionProvider : IJSONCompletionListProvider
     {

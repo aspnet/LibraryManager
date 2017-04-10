@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.VisualStudio.PlatformUI;
 
-namespace LibraryInstaller.Vsix.Controls.Search
+namespace Microsoft.Web.LibraryInstaller.Vsix.Controls.Search
 {
     public partial class ComboSearch
     {

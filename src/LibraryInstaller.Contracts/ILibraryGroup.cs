@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LibraryInstaller.Contracts
+namespace Microsoft.Web.LibraryInstaller.Contracts
 {
     /// <summary>
     /// Represents the search result for a specific library.

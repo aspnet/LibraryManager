@@ -3,7 +3,7 @@
 
 using System.Windows;
 
-namespace LibraryInstaller.Vsix.Controls.Search
+namespace Microsoft.Web.LibraryInstaller.Vsix.Controls.Search
 {
     public class Wrapper : DependencyObject
     {

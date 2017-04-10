@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryInstaller.Resources {
+namespace Microsoft.Web.LibraryInstaller.Resources {
     using System;
     using System.Reflection;
     
@@ -40,7 +40,7 @@ namespace LibraryInstaller.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LibraryInstaller.Resources.Text", typeof(Text).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryInstaller.Resources.Text", typeof(Text).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

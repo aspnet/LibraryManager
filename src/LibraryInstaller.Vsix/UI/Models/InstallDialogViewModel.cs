@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Threading;
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using Microsoft.VisualStudio.Shell;
 
-namespace LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.Models
 {
     public class InstallDialogViewModel : BindableBase
     {

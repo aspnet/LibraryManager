@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace LibraryInstaller.Contracts
+namespace Microsoft.Web.LibraryInstaller.Contracts
 {
     /// <summary>
     /// An interface that describes the library to install.

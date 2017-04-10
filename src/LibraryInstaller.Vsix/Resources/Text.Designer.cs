@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryInstaller.Vsix.Resources {
+namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace LibraryInstaller.Vsix.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LibraryInstaller.Vsix.Resources.Text", typeof(Text).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryInstaller.Vsix.Resources.Text", typeof(Text).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

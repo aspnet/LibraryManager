@@ -20,8 +20,8 @@
     <ProjectGuid>{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LibraryInstaller.Vsix</RootNamespace>
-    <AssemblyName>LibraryInstaller.Vsix</AssemblyName>
+    <RootNamespace>Microsoft.Web.LibraryInstaller.Vsix</RootNamespace>
+    <AssemblyName>Microsoft.Web.LibraryInstaller.Vsix</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -331,6 +331,7 @@
     <EmbeddedResource Include="Resources\Text.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Text.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="source.extension.resx">
       <AutoGen>True</AutoGen>
@@ -341,17 +342,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LibraryInstaller.Contracts\LibraryInstaller.Contracts.csproj">
-      <Project>{FF466454-426B-4AD7-8B00-D50011BE716F}</Project>
-      <Name>LibraryInstaller.Contracts</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    <ProjectReference Include="..\LibraryInstaller.Contracts\Microsoft.Web.LibraryInstaller.Contracts.csproj">
+      <Project>{ff466454-426b-4ad7-8b00-d50011be716f}</Project>
+      <Name>Microsoft.Web.LibraryInstaller.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LibraryInstaller\LibraryInstaller.csproj">
+    <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryInstaller.csproj">
       <Project>{707356dd-96b9-49f6-af2a-9d23b857a1e2}</Project>
-      <Name>LibraryInstaller</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+      <Name>Microsoft.Web.LibraryInstaller</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

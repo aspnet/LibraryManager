@@ -8,7 +8,7 @@ using Microsoft.Web.Editor.SuggestedActions;
 using System;
 using System.Threading;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     internal class UninstallSuggestedAction : SuggestedActionBase
     {

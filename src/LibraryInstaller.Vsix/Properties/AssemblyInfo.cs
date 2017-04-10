@@ -1,7 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using LibraryInstaller.Vsix;
+using Microsoft.Web.LibraryInstaller.Vsix;
 using System.Reflection;
 using System.Runtime.InteropServices;
 

@@ -4,7 +4,7 @@
 using System;
 using System.Windows.Input;
 
-namespace LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.Models
 {
     public class ActionCommand : ICommand
     {

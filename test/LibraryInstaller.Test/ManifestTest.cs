@@ -7,13 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LibraryInstaller.Contracts;
-using LibraryInstaller.Mocks;
-using LibraryInstaller.Providers.Cdnjs;
-using LibraryInstaller.Providers.FileSystem;
+using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Mocks;
+using Microsoft.Web.LibraryInstaller.Providers.Cdnjs;
+using Microsoft.Web.LibraryInstaller.Providers.FileSystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LibraryInstaller.Test
+namespace Microsoft.Web.LibraryInstaller.Test
 {
     [TestClass]
     public class ManifestTest

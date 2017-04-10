@@ -3,7 +3,7 @@
 
 using System;
 
-namespace LibraryInstaller.Build
+namespace Microsoft.Web.LibraryInstaller.Build
 {
     public class Constants
     {

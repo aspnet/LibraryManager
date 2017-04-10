@@ -4,7 +4,7 @@
 using Microsoft.VisualStudio.PlatformUI;
 using System.Windows.Controls;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     /// <summary>
     /// Interaction logic for EditorTooltip.xaml

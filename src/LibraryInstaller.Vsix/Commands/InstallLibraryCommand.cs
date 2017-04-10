@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using EnvDTE;
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using System;
@@ -10,7 +10,7 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Threading;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     internal sealed class InstallLibraryCommand
     {

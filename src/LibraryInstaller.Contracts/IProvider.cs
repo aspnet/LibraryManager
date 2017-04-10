@@ -4,7 +4,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LibraryInstaller.Contracts
+namespace Microsoft.Web.LibraryInstaller.Contracts
 {
     /// <summary>
     /// Represents a library provider.

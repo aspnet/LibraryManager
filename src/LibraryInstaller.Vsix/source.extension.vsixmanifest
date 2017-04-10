@@ -25,6 +25,6 @@
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
-        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="File" d:FileName="LibraryInstaller.dll" Path="LibraryInstaller.dll" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="File" d:FileName="Microsoft.Web.LibraryInstaller.dll" Path="Microsoft.Web.LibraryInstaller.dll" />
     </Assets>
 </PackageManifest>

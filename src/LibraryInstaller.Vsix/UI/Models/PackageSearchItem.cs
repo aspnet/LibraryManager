@@ -9,11 +9,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
-using LibraryInstaller.Contracts;
-using LibraryInstaller.Vsix.Controls.Search;
+using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Vsix.Controls.Search;
 using Microsoft.VisualStudio.Imaging;
 
-namespace LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.Models
 {
     internal class PackageSearchItem : BindableBase, ISearchItem
     {

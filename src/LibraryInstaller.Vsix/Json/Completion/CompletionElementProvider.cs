@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Utilities;
 using System.ComponentModel.Composition;
 using System.Windows;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     [Export(typeof(IUIElementProvider<Completion, ICompletionSession>))]
     [Name(nameof(CompletionElementProvider))]

@@ -1,14 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LibraryInstaller.Providers.Cdnjs;
-using LibraryInstaller.Providers.FileSystem;
+using Microsoft.Web.LibraryInstaller.Providers.Cdnjs;
+using Microsoft.Web.LibraryInstaller.Providers.FileSystem;
 
-namespace LibraryInstaller.Build
+namespace Microsoft.Web.LibraryInstaller.Build
 {
     public class Dependencies : IDependencies
     {

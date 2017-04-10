@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     class SinkManager : IDisposable
     {

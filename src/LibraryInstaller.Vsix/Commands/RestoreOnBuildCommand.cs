@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using EnvDTE;
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -10,7 +10,7 @@ using NuGet.VisualStudio;
 using System;
 using System.ComponentModel.Design;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     internal sealed class RestoreOnBuildCommand
     {

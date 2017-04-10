@@ -3,10 +3,10 @@
 
 using System;
 using System.Collections.Generic;
-using LibraryInstaller.Contracts;
-using LibraryInstaller.Vsix.Controls.Search;
+using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Vsix.Controls.Search;
 
-namespace LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.Models
 {
     public class PackageSorter : IComparer<ISearchItem>
     {

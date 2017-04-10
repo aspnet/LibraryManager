@@ -21,10 +21,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LibraryInstaller\LibraryInstaller.csproj" PrivateAssets="All" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.Build.Framework" Version="15.1.548" PrivateAssets="All" />
         <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.548" PrivateAssets="All" />
     </ItemGroup>
@@ -38,6 +34,10 @@
             <Pack>true</Pack>
             <PackagePath></PackagePath>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryInstaller.csproj" />
     </ItemGroup>
 
     <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">

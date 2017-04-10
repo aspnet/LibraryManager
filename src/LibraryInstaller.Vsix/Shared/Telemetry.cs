@@ -4,7 +4,7 @@
 using System;
 using Microsoft.VisualStudio.Telemetry;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     public static class Telemetry
     {

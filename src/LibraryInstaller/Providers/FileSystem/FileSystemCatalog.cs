@@ -1,7 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System;
 
-namespace LibraryInstaller.Providers.FileSystem
+namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
     internal class FileSystemCatalog : ILibraryCatalog
     {

@@ -2,13 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.IO;
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 
 #if NET45
 using System.ComponentModel.Composition;
 #endif
 
-namespace LibraryInstaller.Providers.Cdnjs
+namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 {
 #if NET45
     [Export(typeof(IProviderFactory))]

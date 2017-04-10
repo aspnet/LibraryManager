@@ -4,9 +4,9 @@
 using System;
 using System.ComponentModel;
 using System.Windows;
-using LibraryInstaller.Vsix.Models;
+using Microsoft.Web.LibraryInstaller.Vsix.Models;
 
-namespace LibraryInstaller.Vsix.Controls.Search
+namespace Microsoft.Web.LibraryInstaller.Vsix.Controls.Search
 {
     public class SearchItemContainer : BindableBase
     {

@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 
-namespace LibraryInstaller
+namespace Microsoft.Web.LibraryInstaller
 {
     /// <summary>
     /// An exception to be thrown when a library is failing to install because the

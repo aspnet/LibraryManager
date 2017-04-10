@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.IO;
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 
-namespace LibraryInstaller
+namespace Microsoft.Web.LibraryInstaller
 {
     /// <summary>
     /// A list of predefined errors any <see cref="IProvider"/> can use.

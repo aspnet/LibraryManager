@@ -3,7 +3,7 @@
 
 using System;
 
-namespace LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.Models
 {
     public class PackageVersion : BindableBase
     {

@@ -8,12 +8,12 @@ using System;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LibraryInstaller.Vsix.Json
+namespace Microsoft.Web.LibraryInstaller.Vsix.Json
 {
     [Export(typeof(IWpfTextViewCreationListener))]
     [ContentType("JSON")]

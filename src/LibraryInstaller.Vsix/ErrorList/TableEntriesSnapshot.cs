@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Shell.TableManager;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     class TableEntriesSnapshot : TableEntriesSnapshotBase
     {

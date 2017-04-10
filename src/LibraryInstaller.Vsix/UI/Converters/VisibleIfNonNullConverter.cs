@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace LibraryInstaller.Vsix.Converters
+namespace Microsoft.Web.LibraryInstaller.Vsix.Converters
 {
     public class VisibleIfNonNullConverter : IValueConverter
     {

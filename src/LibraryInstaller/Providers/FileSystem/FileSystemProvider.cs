@@ -1,14 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LibraryInstaller.Providers.FileSystem
+namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
     internal class FileSystemProvider : IProvider
     {

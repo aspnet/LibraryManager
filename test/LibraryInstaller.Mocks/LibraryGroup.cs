@@ -1,9 +1,9 @@
-﻿using LibraryInstaller.Contracts;
+﻿using Microsoft.Web.LibraryInstaller.Contracts;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LibraryInstaller.Mocks
+namespace Microsoft.Web.LibraryInstaller.Mocks
 {
     /// <summary>
     /// A mock of the <see cref="ILibraryGroup"/> interface.

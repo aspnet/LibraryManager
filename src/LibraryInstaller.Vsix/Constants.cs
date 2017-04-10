@@ -3,7 +3,7 @@
 
 using System;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     public class Constants
     {

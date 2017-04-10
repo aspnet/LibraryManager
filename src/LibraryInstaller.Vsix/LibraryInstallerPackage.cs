@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Tasks = System.Threading.Tasks;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     [Guid(PackageGuids.guidPackageString)]
     [PackageRegistration(UseManagedResourcesOnly = true)]

@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInstaller", "src\LibraryInstaller\LibraryInstaller.csproj", "{707356DD-96B9-49F6-AF2A-9D23B857A1E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryInstaller", "src\LibraryInstaller\Microsoft.Web.LibraryInstaller.csproj", "{707356DD-96B9-49F6-AF2A-9D23B857A1E2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FF466454-426B-4AD7-8B00-D50011BE716F} = {FF466454-426B-4AD7-8B00-D50011BE716F}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInstaller.Test", "test\LibraryInstaller.Test\LibraryInstaller.Test.csproj", "{08C91CC3-4057-4D76-8B9A-B6A0557B64EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryInstaller.Test", "test\LibraryInstaller.Test\Microsoft.Web.LibraryInstaller.Test.csproj", "{08C91CC3-4057-4D76-8B9A-B6A0557B64EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3ABB42B4-4EF4-4CED-9A56-2B910DF710F8}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,17 +18,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInstaller.Contracts", "src\LibraryInstaller.Contracts\LibraryInstaller.Contracts.csproj", "{FF466454-426B-4AD7-8B00-D50011BE716F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryInstaller.Contracts", "src\LibraryInstaller.Contracts\Microsoft.Web.LibraryInstaller.Contracts.csproj", "{FF466454-426B-4AD7-8B00-D50011BE716F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInstaller.Mocks", "test\LibraryInstaller.Mocks\LibraryInstaller.Mocks.csproj", "{18F82568-446D-4729-B65E-EB9DF21C3636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryInstaller.Mocks", "test\LibraryInstaller.Mocks\Microsoft.Web.LibraryInstaller.Mocks.csproj", "{18F82568-446D-4729-B65E-EB9DF21C3636}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryInstaller.Vsix", "src\LibraryInstaller.Vsix\LibraryInstaller.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryInstaller.Vsix", "src\LibraryInstaller.Vsix\Microsoft.Web.LibraryInstaller.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{A72570B1-99EF-4BDD-B629-321CD56C9F7F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryInstaller.Build", "src\LibraryInstaller.Build\LibraryInstaller.Build.csproj", "{7536DF26-B808-4AC2-A9DA-58E408A1E05B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryInstaller.Build", "src\LibraryInstaller.Build\Microsoft.Web.LibraryInstaller.Build.csproj", "{7536DF26-B808-4AC2-A9DA-58E408A1E05B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

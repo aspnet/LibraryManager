@@ -8,7 +8,7 @@ using System.ComponentModel.Design;
 using System.Threading;
 using System.IO;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     internal sealed class ManageLibrariesCommand
     {

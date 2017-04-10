@@ -4,7 +4,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LibraryInstaller
+namespace Microsoft.Web.LibraryInstaller
 {
     internal static class CancellationHelpers
     {

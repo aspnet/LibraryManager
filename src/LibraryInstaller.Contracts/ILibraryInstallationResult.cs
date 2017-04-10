@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace LibraryInstaller.Contracts
+namespace Microsoft.Web.LibraryInstaller.Contracts
 {
     /// <summary>
     /// Represents the result of <see cref="IProvider.InstallAsync"/>.

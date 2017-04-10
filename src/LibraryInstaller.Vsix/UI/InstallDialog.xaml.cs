@@ -8,9 +8,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using LibraryInstaller.Vsix.Models;
+using Microsoft.Web.LibraryInstaller.Vsix.Models;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     public partial class InstallDialog
     {

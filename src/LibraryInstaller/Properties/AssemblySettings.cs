@@ -3,5 +3,5 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("LibraryInstaller.Test")]
-[assembly: InternalsVisibleTo("LibraryInstaller.Build")]
+[assembly: InternalsVisibleTo("Microsoft.Web.LibraryInstaller.Test")]
+[assembly: InternalsVisibleTo("Microsoft.Web.LibraryInstaller.Build")]

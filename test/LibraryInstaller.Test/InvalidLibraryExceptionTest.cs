@@ -3,7 +3,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LibraryInstaller.Test
+namespace Microsoft.Web.LibraryInstaller.Test
 {
     [TestClass]
     public class InvalidLibraryExceptionTest

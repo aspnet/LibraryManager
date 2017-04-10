@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using System.Windows.Media;
 using Microsoft.Web.Editor.Completion;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     class SimpleCompletionEntry : JSONCompletionEntry
     {

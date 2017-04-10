@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using EnvDTE;
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     internal static class LibraryHelpers
     {
@@ -39,7 +39,7 @@ namespace LibraryInstaller.Vsix
 
         public static async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Logger.LogEvent(LibraryInstaller.Resources.Text.RestoringLibraries, LogLevel.Status);
+            Logger.LogEvent(Microsoft.Web.LibraryInstaller.Resources.Text.RestoringLibraries, LogLevel.Status);
 
             var sw = new Stopwatch();
             sw.Start();

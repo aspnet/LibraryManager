@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     internal static class VsHelpers
     {

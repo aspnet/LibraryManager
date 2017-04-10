@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace LibraryInstaller.Vsix.Controls
+namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
 {
     public class ThemedWindow : System.Windows.Window
     {

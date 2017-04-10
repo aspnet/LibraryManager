@@ -8,9 +8,9 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
-using LibraryInstaller.Vsix.Models;
+using Microsoft.Web.LibraryInstaller.Vsix.Models;
 
-namespace LibraryInstaller.Vsix.Converters
+namespace Microsoft.Web.LibraryInstaller.Vsix.Converters
 {
     public class PackageItemIconConverter : IMultiValueConverter
     {

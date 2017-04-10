@@ -6,9 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using LibraryInstaller.Vsix.Models;
+using Microsoft.Web.LibraryInstaller.Vsix.Models;
 
-namespace LibraryInstaller.Vsix.Controls.Search
+namespace Microsoft.Web.LibraryInstaller.Vsix.Controls.Search
 {
     public static class SearchHighlight
     {

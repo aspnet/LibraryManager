@@ -1,7 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using Microsoft.JSON.Core.Parser;
 using Microsoft.JSON.Core.Parser.TreeItems;
 using Microsoft.VisualStudio.JSON.Package.SuggestedActions;
@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.Utilities;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 
-namespace LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     [Export(typeof(IJSONSuggestedActionProvider))]
     [Name(nameof(SuggestedActionProvider))]

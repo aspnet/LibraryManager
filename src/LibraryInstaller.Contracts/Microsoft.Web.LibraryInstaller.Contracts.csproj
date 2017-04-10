@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
-        <PackageTags>mocks, unit test, library, client-side, package</PackageTags>
+        <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+        <PackageTags>library, package, client-side</PackageTags>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\LibraryInstaller.Mocks.xml</DocumentationFile>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryInstaller.Contracts.xml</DocumentationFile>
         <Authors>Microsoft</Authors>
-        <Company>Microsoft Corp.</Company>
-        <Description>A collection of mocks for unit testing custom Library Installer extensions</Description>
+        <Company>Microsof Corp.</Company>
+        <Description>The contracts assembly for authoring Library Installer extensions</Description>
         <Copyright>Copyright © Microsoft</Copyright>
         <Version>1.0.0-alpha</Version>
-        <PackageId>Microsoft.Web.LibraryInstaller.Mocks</PackageId>
+        <PackageId>Microsoft.Web.LibraryInstaller.Contracts</PackageId>
         <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
         <PackageProjectUrl>https://github.com/aspnet/LibraryInstaller</PackageProjectUrl>
@@ -19,8 +19,9 @@
         <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
     </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\src\LibraryInstaller.Contracts\LibraryInstaller.Contracts.csproj" />
-    </ItemGroup>
-
+    <Target Name="BuiltProjectOutputGroup" />
+    <Target Name="BuiltProjectOutputGroupDependencies" />
+    <Target Name="GetCopyToOutputDirectoryItems" />
+    <Target Name="SatelliteDllsProjectOutputGroup" />
+    <Target Name="DebugSymbolsProjectOutputGroup" />
 </Project>
