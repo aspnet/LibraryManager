@@ -65,6 +65,7 @@
     <Compile Include="ErrorList\TableDataSource.cs" />
     <Compile Include="ErrorList\TableEntriesSnapshot.cs" />
     <Compile Include="Json\Completion\CompletionElementProvider.cs" />
+    <Compile Include="Json\Completion\ProviderCompletionProvider.cs" />
     <Compile Include="Json\JsonHelpers.cs" />
     <Compile Include="Json\SuggestedActions\UpdateSuggestedAction.cs" />
     <Compile Include="Json\SuggestedActions\UpdateSuggestedActionSet.cs" />

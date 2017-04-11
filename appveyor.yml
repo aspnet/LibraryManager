@@ -13,17 +13,9 @@ build_script:
   - nuget restore -Verbosity quiet
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
 
-# after_test:
-#  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
-
 artifacts:
   - path: artifacts\**\*.nupkg
     name: NuGet package
-    type: NuGetPackage
 
   - path: src\**\*.vsix
     name: Visual Studio Extension
-
-nuget:
-  project_feed: true
-  disable_publish_on_pr: true

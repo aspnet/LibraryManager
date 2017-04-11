@@ -12,7 +12,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     public class Dependencies : IDependencies
     {
         private IHostInteraction _hostInteraction;
-        private static List<IProvider> _providers = new List<IProvider>();
+        private List<IProvider> _providers = new List<IProvider>();
         private static Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
 
         [ImportMany(typeof(IProviderFactory))]
@@ -23,6 +23,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             _hostInteraction = hostInteraction;
             Initialize();
         }
+
+        public IEnumerable<IProvider> Providers => _providers;
 
         public IHostInteraction GetHostInteractions() => _hostInteraction;
 
@@ -39,7 +41,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public IProvider GetProvider(string providerId)
         {
-            return _providers?.FirstOrDefault(p => p.Id.Equals(providerId, StringComparison.OrdinalIgnoreCase));
+            return Providers?.FirstOrDefault(p => p.Id.Equals(providerId, StringComparison.OrdinalIgnoreCase));
         }
 
         private void Initialize()
