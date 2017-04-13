@@ -65,7 +65,7 @@ namespace Microsoft.Web.LibraryInstaller.Build
             {
                 Assembly assembly;
 #if NET46
-                assembly = Assembly.LoadFile(path);
+                assembly = Assembly.LoadFrom(path);
 #else
                 assembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
 
