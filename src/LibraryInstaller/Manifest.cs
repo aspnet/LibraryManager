@@ -201,6 +201,10 @@ namespace Microsoft.Web.LibraryInstaller
         /// <summary>
         /// Deletes all library output files from disk.
         /// </summary>
+        /// <remarks>
+        /// The host calling this method provides the <paramref name="deleteFileAction"/>
+        /// that deletes the files from the project.
+        /// </remarks>
         /// <param name="deleteFileAction">An action to delete the files.</param>
         public void Clean(Action<string> deleteFileAction)
         {

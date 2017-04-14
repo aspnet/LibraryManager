@@ -17,10 +17,10 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
     {
         public IProvider CreateProvider(IHostInteraction hostInteraction)
         {
-            var provider = new FileSystemProvider();
-            string storePath = Path.Combine(hostInteraction.CacheDirectory, provider.Id);
-            provider.HostInteraction = hostInteraction;
-            return provider;
+            return new FileSystemProvider
+            {
+                HostInteraction = hostInteraction
+            };
         }
     }
 }

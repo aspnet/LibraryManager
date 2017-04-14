@@ -25,30 +25,34 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
             return Task.FromResult(default(CompletionSet));
         }
 
-        public Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
+        public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
             var library = new FileSystemLibrary
             {
                 Name = libraryId,
                 ProviderId = _providerId,
-                Files = GetFiles(libraryId)
+                Files = await GetFilesAsync(libraryId)
             };
 
-            return Task.FromResult<ILibrary>(library);
+            return library;
         }
 
-        private IReadOnlyDictionary<string, bool> GetFiles(string libraryId)
+        private async Task<IReadOnlyDictionary<string, bool>> GetFilesAsync(string libraryId)
         {
-            if (Directory.Exists(libraryId))
+            return await Task.Run(() =>
             {
-                return Directory.EnumerateFiles(libraryId)
-                        .Select(f => Path.GetFileName(f))
-                        .ToDictionary((k) => k, (v) => true);
-            }
-            else
-            {
-                return new Dictionary<string, bool>() { { Path.GetFileName(libraryId), true } };
-            }
+
+                if (Directory.Exists(libraryId))
+                {
+                    return Directory.EnumerateFiles(libraryId)
+                            .Select(f => Path.GetFileName(f))
+                            .ToDictionary((k) => k, (v) => true);
+                }
+                else
+                {
+                    return new Dictionary<string, bool>() { { Path.GetFileName(libraryId), true } };
+                }
+            });
         }
 
         public Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken)

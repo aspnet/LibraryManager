@@ -41,7 +41,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task SearchNoHitsAsync()
+        public async Task SearchAsync_NoHits()
         {
             CancellationToken token = CancellationToken.None;
 
@@ -78,7 +78,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task GetCompletionNameAsync()
+        public async Task GetLibraryCompletionSetAsync_Names()
         {
             CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery", 0);
@@ -92,7 +92,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task GetCompletionVersionAsync()
+        public async Task GetLibraryCompletionSetAsync_Versions()
         {
             CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery@", 7);
@@ -105,7 +105,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task GetLatestVersionAsync()
+        public async Task GetLatestVersion_LatestExist()
         {
             CancellationToken token = CancellationToken.None;
             string libraryId = "twitter-bootstrap@3.3.0";

@@ -45,7 +45,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task InstallLibraryAsync()
+        public async Task InstallLibrary()
         {
             var manifest = new Manifest(_dependencies);
 
@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task UninstallLibraryAsync()
+        public async Task UninstallLibrary()
         {
             var manifest = new Manifest(_dependencies);
             CancellationToken token = CancellationToken.None;
@@ -142,17 +142,19 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task RestoreLibrariesAsync()
+        public async Task RestoreAsync_PartialSuccess()
         {
             var manifest = Manifest.FromJson(_doc, _dependencies);
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(2, result.Count());
             Assert.AreEqual(1, result.Count(v => v.Success));
+            Assert.AreEqual(1, result.Count(v => !v.Success));
+            Assert.AreEqual("LIB002", result.Last().Errors.First().Code);
         }
 
         [TestMethod]
-        public async Task DefaultProviderAsync()
+        public async Task RestoreAsync_UsingDefaultProvider()
         {
             var manifest = Manifest.FromJson(_docDefaultProvider, _dependencies);
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
@@ -163,7 +165,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task RestoreUnknownProviderAsync()
+        public async Task RestoreAsync_UsingUnknownProvider()
         {
             var dependencies = new Dependencies(_dependencies.GetHostInteractions());
             var manifest = Manifest.FromJson(_doc, dependencies);
@@ -174,7 +176,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task RestoreCancelledAsync()
+        public async Task RestoreCancelled()
         {
             var manifest = Manifest.FromJson(_doc, _dependencies);
             var source = new CancellationTokenSource();
@@ -193,7 +195,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task FromFileNotFoundAsync()
+        public async Task FromFileNotFound()
         {
             Manifest manifest = await Manifest.FromFileAsync(@"c:\file\not\found.json", _dependencies, CancellationToken.None);
             Assert.IsNotNull(manifest);

@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task EndToEndTestAsync()
+        public async Task EndToEndTest()
         {
             IProvider provider = _dependencies.GetProvider("cdnjs");
             ILibraryCatalog catalog = provider.GetCatalog();
@@ -87,7 +87,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task InvalidLibraryAsync()
+        public async Task InstallAsync_InvalidState()
         {
             IProvider provider = _dependencies.GetProvider("cdnjs");
 
@@ -105,7 +105,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task EmptyFilesArrayAsync()
+        public async Task InstallAsync_EmptyFilesArray()
         {
             IProvider provider = _dependencies.GetProvider("cdnjs");
 
@@ -128,7 +128,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task InvalidLibraryFilesAsync()
+        public async Task InstallAsync_InvalidLibraryFiles()
         {
             IProvider provider = _dependencies.GetProvider("cdnjs");
 

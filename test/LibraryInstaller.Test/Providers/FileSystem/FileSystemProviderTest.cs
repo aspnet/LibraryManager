@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task InstallAsync()
+        public async Task InstallAsync_Success()
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
 
@@ -78,7 +78,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task InstallRelativeFileAsync()
+        public async Task InstallAsync_RelativeFile()
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
 
@@ -108,7 +108,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task InstallFolderFilesAsync()
+        public async Task InstallAsync_AbsoluteFolderFiles()
         {
             string folder = Path.Combine(Path.GetTempPath(), "LibraryInstaller_test");
             Directory.CreateDirectory(folder);
@@ -140,7 +140,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task InstallRelativeFolderFilesAsync()
+        public async Task InstallAsync_RelativeFolderFiles()
         {
             string folder = Path.Combine(Path.GetTempPath(), "LibraryInstaller_test\\");
             Directory.CreateDirectory(folder);
@@ -176,7 +176,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task InstallUriAsync()
+        public async Task InstallAsync_Uri()
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
 
@@ -203,7 +203,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task InstallUriImageAsync()
+        public async Task InstallAsync_UriImage()
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
 
@@ -223,25 +223,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task RestoreFromManifestAsync()
-        {
-            IProvider provider = _dependencies.GetProvider("filesystem");
-            string config = GetConfig();
-            var manifest = Manifest.FromJson(config, _dependencies);
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
-
-            Assert.IsTrue(result.Count() == 2, "Didn't install");
-
-            string installed1 = Path.Combine(_projectFolder, "lib", "file1.txt");
-            string installed2 = Path.Combine(_projectFolder, "lib", "file2.txt");
-            Assert.IsTrue(File.Exists(installed1), "File1 wasn't copied");
-            Assert.IsTrue(File.Exists(installed2), "File2 wasn't copied");
-            Assert.AreEqual(File.ReadAllText(installed1), "test content");
-            Assert.AreEqual(File.ReadAllText(installed2), "test content");
-        }
-
-        [TestMethod]
-        public async Task InstallFileNotFoundAsync()
+        public async Task InstallAsync_FileNotFound()
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
 
@@ -256,6 +238,24 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB002", result.Errors[0].Code);
+        }
+
+        [TestMethod]
+        public async Task RestoreAsync_Manifest()
+        {
+            IProvider provider = _dependencies.GetProvider("filesystem");
+            string config = GetConfig();
+            var manifest = Manifest.FromJson(config, _dependencies);
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.IsTrue(result.Count() == 2, "Didn't install");
+
+            string installed1 = Path.Combine(_projectFolder, "lib", "file1.txt");
+            string installed2 = Path.Combine(_projectFolder, "lib", "file2.txt");
+            Assert.IsTrue(File.Exists(installed1), "File1 wasn't copied");
+            Assert.IsTrue(File.Exists(installed2), "File2 wasn't copied");
+            Assert.AreEqual(File.ReadAllText(installed1), "test content");
+            Assert.AreEqual(File.ReadAllText(installed2), "test content");
         }
 
         private string GetConfig()

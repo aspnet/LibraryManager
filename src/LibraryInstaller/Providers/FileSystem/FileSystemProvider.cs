@@ -44,8 +44,8 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
                     }
 
                     string path = Path.Combine(desiredState.DestinationPath, file);
-                    var func = new Func<Stream>(() => GetStreamAsync(desiredState, file, cancellationToken).Result);
-                    bool writeOk = await HostInteraction.WriteFileAsync(path, func, desiredState, cancellationToken).ConfigureAwait(false);
+                    var sourceStream = new Func<Stream>(() => GetStreamAsync(desiredState, file, cancellationToken).Result);
+                    bool writeOk = await HostInteraction.WriteFileAsync(path, sourceStream, desiredState, cancellationToken).ConfigureAwait(false);
 
                     if (!writeOk)
                     {
@@ -87,11 +87,11 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
                 {
                     if (Directory.Exists(url.OriginalString))
                     {
-                        return await FileHelpers.ReadFileAsync(Path.Combine(url.OriginalString, file), cancellationToken).ConfigureAwait(false);
+                        return await FileHelpers.OpenFileAsync(Path.Combine(url.OriginalString, file), cancellationToken).ConfigureAwait(false);
                     }
                     else
                     {
-                        return await FileHelpers.ReadFileAsync(sourceFile, cancellationToken).ConfigureAwait(false);
+                        return await FileHelpers.OpenFileAsync(sourceFile, cancellationToken).ConfigureAwait(false);
                     }
                 }
                 // Url

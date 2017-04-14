@@ -35,7 +35,7 @@ namespace Microsoft.Web.LibraryInstaller
                 return await DownloadFileAsync(url, localFile, cancellationToken).ConfigureAwait(false);
             }
 
-            return await ReadFileAsync(localFile, cancellationToken).ConfigureAwait(false);
+            return await OpenFileAsync(localFile, cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task<Stream> DownloadFileAsync(string url, string fileName, CancellationToken cancellationToken)
@@ -69,14 +69,14 @@ namespace Microsoft.Web.LibraryInstaller
 
         public static async Task<string> ReadFileTextAsync(string fileName, CancellationToken cancellationToken)
         {
-            using (Stream s = await ReadFileAsync(fileName, cancellationToken).ConfigureAwait(false))
+            using (Stream s = await OpenFileAsync(fileName, cancellationToken).ConfigureAwait(false))
             using (var r = new StreamReader(s, Encoding.UTF8, true, 8192, true))
             {
                 return await r.ReadToEndAsync().WithCancellation(cancellationToken).ConfigureAwait(false);
             }
         }
 
-        public static Task<Stream> ReadFileAsync(string fileName, CancellationToken cancellationToken)
+        public static Task<Stream> OpenFileAsync(string fileName, CancellationToken cancellationToken)
         {
             return Task.FromResult<Stream>(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read));
         }

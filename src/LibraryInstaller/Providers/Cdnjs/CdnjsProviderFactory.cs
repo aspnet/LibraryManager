@@ -1,7 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System.IO;
 using Microsoft.Web.LibraryInstaller.Contracts;
 
 #if NET45
@@ -17,10 +16,10 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
     {
         public IProvider CreateProvider(IHostInteraction hostInteraction)
         {
-            var provider = new CdnjsProvider();
-            string storePath = Path.Combine(hostInteraction.CacheDirectory, provider.Id);
-            provider.HostInteraction = hostInteraction;
-            return provider;
+            return new CdnjsProvider
+            {
+                HostInteraction = hostInteraction,
+            };
         }
     }
 }

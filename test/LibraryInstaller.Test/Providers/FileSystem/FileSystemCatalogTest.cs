@@ -41,7 +41,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task SearchNoHitsAsync()
+        public async Task SearchAsync_NoHits()
         {
             CancellationToken token = CancellationToken.None;
             IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync("*9)_-|\"?:", 1, token);
@@ -49,7 +49,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task SearchFolderAsync()
+        public async Task SearchAsync_Folder()
         {
             string folder = Path.Combine(Path.GetTempPath(), "LibraryInstaller_test");
             Directory.CreateDirectory(folder);
@@ -99,7 +99,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task GetCompletionNameAsync()
+        public async Task GetLibraryCompletionSetAsync()
         {
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("../file.txt", 0);
 
@@ -109,7 +109,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public void GetLatestVersionAsync()
+        public void GetLatestVersion()
         {
             CancellationToken token = CancellationToken.None;
             string libraryId = "myfile.js";

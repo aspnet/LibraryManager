@@ -21,21 +21,21 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
         const string _metaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}";
 
         private string _cacheFile;
-        private string _providerStorePath;
-        private string _providerId;
+        private CdnjsProvider _provider;
         private IEnumerable<CdnjsLibraryGroup> _libraryGroups;
 
-        public CdnjsCatalog(string providerStorePath, string providerId)
+        public CdnjsCatalog(CdnjsProvider provider)
         {
-            _providerStorePath = providerStorePath;
-            _providerId = providerId;
-            _cacheFile = Path.Combine(_providerStorePath, _fileName);
+            _provider = provider;
+            _cacheFile = Path.Combine(provider.CacheFolder, _fileName);
         }
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
         {
             if (!await EnsureCatalogAsync(CancellationToken.None).ConfigureAwait(false))
+            {
                 return default(CompletionSet);
+            }
 
             var span = new CompletionSet
             {
@@ -59,7 +59,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                     {
                         DisplayText = group.DisplayName,
                         InsertionText = group.DisplayName + "@" + group.Version,
-                        Description = group.Description
+                        Description = group.Description,
                     };
 
                     completions.Add(completion);
@@ -80,7 +80,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                         var completion = new CompletionItem
                         {
                             DisplayText = version,
-                            InsertionText = $"{name}@{version}"
+                            InsertionText = $"{name}@{version}",
                         };
 
                         completions.Add(completion);
@@ -96,7 +96,9 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
         public async Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken)
         {
             if (!await EnsureCatalogAsync(cancellationToken).ConfigureAwait(false))
+            {
                 return Enumerable.Empty<ILibraryGroup>().ToList();
+            }
 
             IEnumerable<CdnjsLibraryGroup> results;
 
@@ -112,7 +114,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             foreach (CdnjsLibraryGroup group in results)
             {
                 string groupName = group.DisplayName;
-                group.DisplayInfosTask = ct => GetDisplayInfosAsync(groupName, ct);
+                group.DisplayInfosTask = ct => GetLibraryIdsAsync(groupName, ct);
             }
 
             return results.ToList();
@@ -129,17 +131,22 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                 IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken);
                 Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
+                if (asset == null)
+                {
+                    throw new InvalidLibraryException(libraryId, _provider.Id);
+                }
+
                 return new CdnjsLibrary
                 {
                     Version = asset.Version,
                     Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
                     Name = name,
-                    ProviderId = _providerId
+                    ProviderId = _provider.Id,
                 };
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(libraryId, _providerId);
+                throw new InvalidLibraryException(libraryId, _provider.Id);
             }
         }
 
@@ -152,12 +159,12 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                 return null;
             }
 
-            string name = args[0];
-
             if (!await EnsureCatalogAsync(cancellationToken).ConfigureAwait(false))
             {
                 return null;
             }
+
+            string name = args[0];
 
             CdnjsLibraryGroup group = _libraryGroups.FirstOrDefault(l => l.DisplayName == name);
 
@@ -166,9 +173,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                 return null;
             }
 
-            group.DisplayInfosTask = ct => GetDisplayInfosAsync(group.DisplayName, ct);
-
-            var ids = (await group.GetLibraryIdsAsync(cancellationToken).ConfigureAwait(false)).ToList();
+            var ids = (await GetLibraryIdsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false)).ToList();
             string first = ids.First();
 
             if (!includePreReleases)
@@ -206,7 +211,9 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
         private async Task<bool> EnsureCatalogAsync(CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
+            {
                 return false;
+            }
 
             try
             {
@@ -229,7 +236,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             }
         }
 
-        private async Task<IEnumerable<string>> GetDisplayInfosAsync(string groupName, CancellationToken cancellationToken)
+        private async Task<IEnumerable<string>> GetLibraryIdsAsync(string groupName, CancellationToken cancellationToken)
         {
             IEnumerable<Asset> assets = await GetAssetsAsync(groupName, cancellationToken).ConfigureAwait(false);
 
@@ -238,29 +245,30 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
         private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)
         {
-            string metaFile = Path.Combine(_providerStorePath, groupName, "metadata.json");
+            string localFile = Path.Combine(_provider.CacheFolder, groupName, "metadata.json");
             var list = new List<Asset>();
 
             try
             {
                 string url = string.Format(_metaPackageUrlFormat, groupName);
-                string json = await FileHelpers.GetFileTextAsync(url, metaFile, _days, cancellationToken).ConfigureAwait(false);
+                string json = await FileHelpers.GetFileTextAsync(url, localFile, _days, cancellationToken).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(json))
                 {
                     var root = JObject.Parse(json);
                     IEnumerable<Asset> assets = JsonConvert.DeserializeObject<IEnumerable<Asset>>(root["assets"].ToString());
+                    string defaultFileName = root["filename"]?.Value<string>();
 
                     foreach (Asset asset in assets)
                     {
-                        asset.DefaultFile = root["filename"]?.Value<string>();
+                        asset.DefaultFile = defaultFileName;
                         list.Add(asset);
                     }
                 }
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(groupName, _providerId);
+                throw new InvalidLibraryException(groupName, _provider.Id);
             }
 
             return list;

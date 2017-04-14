@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+        <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <PackageTags>library, package, client-side</PackageTags>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryInstaller.xml</DocumentationFile>

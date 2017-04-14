@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             set;
         }
 
-        private string CacheFolder
+        internal string CacheFolder
         {
             get { return Path.Combine(HostInteraction.CacheDirectory, Id); }
         }
@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
         {
             if (_catalog == null)
             {
-                _catalog = new CdnjsCatalog(CacheFolder, Id);
+                _catalog = new CdnjsCatalog(this);
             }
 
             return _catalog;
@@ -58,7 +58,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                 await HydrateCacheAsync(library, cancellationToken).ConfigureAwait(false);
 
                 var files = desiredState.Files?.ToList();
-
+                // "Files" is optional on this provider, so when none are specified all should be used
                 if (files == null || files.Count == 0)
                 {
                     desiredState = new LibraryInstallationState
@@ -66,7 +66,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                         ProviderId = Id,
                         LibraryId = desiredState.LibraryId,
                         DestinationPath = desiredState.DestinationPath,
-                        Files = library.Files.Keys.ToList()
+                        Files = library.Files.Keys.ToList(),
                     };
                 }
 
@@ -78,8 +78,8 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                     }
 
                     string path = Path.Combine(desiredState.DestinationPath, file);
-                    var func = new Func<Stream>(() => GetStream(desiredState, file));
-                    bool writeOk = await HostInteraction.WriteFileAsync(path, func, desiredState, cancellationToken).ConfigureAwait(false);
+                    var sourceStream = new Func<Stream>(() => GetStreamAsync(desiredState, file, cancellationToken).Result);
+                    bool writeOk = await HostInteraction.WriteFileAsync(path, sourceStream, desiredState, cancellationToken).ConfigureAwait(false);
 
                     if (!writeOk)
                     {
@@ -100,7 +100,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             return LibraryInstallationResult.FromSuccess(desiredState);
         }
 
-        private Stream GetStream(ILibraryInstallationState state, string sourceFile)
+        private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
             string[] args = state.LibraryId.Split('@');
             string name = args[0];
@@ -109,7 +109,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
             if (File.Exists(absolute))
             {
-                return File.Open(absolute, FileMode.Open, FileAccess.Read);
+                return await FileHelpers.OpenFileAsync(absolute, cancellationToken);
             }
 
             return null;
@@ -118,7 +118,9 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
         public async Task HydrateCacheAsync(ILibrary library, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
+            {
                 return;
+            }
 
             string libraryDir = Path.Combine(CacheFolder, library.Name);
             var tasks = new List<Task>();
