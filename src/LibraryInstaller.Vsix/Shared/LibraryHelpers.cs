@@ -34,12 +34,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public static async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await RestoreAsync(new[] { configFilePath }, cancellationToken);
+            await RestoreAsync(new[] { configFilePath }, cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Logger.LogEvent(Microsoft.Web.LibraryInstaller.Resources.Text.RestoringLibraries, LogLevel.Status);
+            Logger.LogEvent(LibraryInstaller.Resources.Text.RestoringLibraries, LogLevel.Status);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -48,7 +48,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             foreach (string configFilePath in configFilePaths)
             {
-                IEnumerable<ILibraryInstallationResult> result = await RestoreLibrariesAsync(configFilePath, cancellationToken);
+                IEnumerable<ILibraryInstallationResult> result = await RestoreLibrariesAsync(configFilePath, cancellationToken).ConfigureAwait(false);
                 Project project = VsHelpers.DTE.Solution?.FindProjectItem(configFilePath)?.ContainingProject;
                 AddFilesToProject(configFilePath, project, result);
 
@@ -80,7 +80,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
             var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
             manifest.Uninstall(libraryId, (file) => hostInteraction.DeleteFiles(file));
-
         }
 
         public static async Task CleanAsync(ProjectItem configProjectItem)
@@ -89,7 +88,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             string configFileName = configProjectItem.FileNames[1];
             var dependencies = Dependencies.FromConfigFile(configFileName);
-            Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None);
+            Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
             var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
 
             manifest?.Clean((file) => hostInteraction.DeleteFiles(file));
@@ -121,8 +120,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 }
             }
 
-            if (project != null)
-                project.AddFilesToProject(files);
+            project?.AddFilesToProject(files);
         }
     }
 }

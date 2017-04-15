@@ -23,28 +23,16 @@ namespace Microsoft.Web.LibraryInstaller
             InstallationState = installationState;
         }
 
-        public bool Cancelled
-        {
-            get;
-            set;
-        }
+        public bool Cancelled { get; set; }
 
         public bool Success
         {
-            get { return !Cancelled && !Errors.Any(); }
+            get { return !Cancelled && Errors.Count == 0; }
         }
 
-        public IList<IError> Errors
-        {
-            get;
-            set;
-        }
+        public IList<IError> Errors { get; set; }
 
-        public ILibraryInstallationState InstallationState
-        {
-            get;
-            set;
-        }
+        public ILibraryInstallationState InstallationState { get; set; }
 
         public static LibraryInstallationResult FromSuccess(ILibraryInstallationState installationState)
         {

@@ -24,7 +24,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
         private Dependencies _dependencies;
 
         [Import]
-        private ITextDocumentFactoryService DocumentService { get; set; }
+        public ITextDocumentFactoryService DocumentService { get; set; }
 
         public void TextViewCreated(IWpfTextView textView)
         {
@@ -43,14 +43,14 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
             _dependencies = Dependencies.FromConfigFile(doc.FilePath);
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
 
-            doc.FileActionOccurred += OnFileSavedAsync;
+            doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
         }
 
         private async Task RemoveFilesAsync(Manifest newManifest)
         {
-            IEnumerable<string> prevFiles = await GetAllManifestFilesAsync(_manifest);
-            IEnumerable<string> newFiles = await GetAllManifestFilesAsync(newManifest);
+            IEnumerable<string> prevFiles = await GetAllManifestFilesAsync(_manifest).ConfigureAwait(false);
+            IEnumerable<string> newFiles = await GetAllManifestFilesAsync(newManifest).ConfigureAwait(false);
             IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f));
 
             if (filesToRemove.Any())
@@ -66,7 +66,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
 
             foreach (ILibraryInstallationState state in manifest.Libraries.Select(l => l))
             {
-                IEnumerable<string> stateFiles = await GetFilesAsync(state);
+                IEnumerable<string> stateFiles = await GetFilesAsync(state).ConfigureAwait(false);
                 IEnumerable<string> filesToAdd = stateFiles
                     .Select(f => Path.Combine(state.DestinationPath, f))
                     .Where(f => !files.Contains(f));
@@ -93,7 +93,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
             return state.Files.Distinct();
         }
 
-        private void OnFileSavedAsync(object sender, TextDocumentFileActionEventArgs e)
+        private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
         {
             if (e.FileActionType == FileActionTypes.ContentSavedToDisk)
             {
@@ -101,12 +101,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
                 {
                     try
                     {
-                        Manifest newManifest = await Manifest.FromFileAsync(e.FilePath, _dependencies, CancellationToken.None);
-                        await RemoveFilesAsync(newManifest);
+                        Manifest newManifest = await Manifest.FromFileAsync(e.FilePath, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                        await RemoveFilesAsync(newManifest).ConfigureAwait(false);
 
                         _manifest = newManifest;
 
-                        await LibraryHelpers.RestoreAsync(e.FilePath, CancellationToken.None);
+                        await LibraryHelpers.RestoreAsync(e.FilePath, CancellationToken.None).ConfigureAwait(false);
                         Telemetry.TrackOperation("restoresave");
                     }
                     catch (Exception ex)
@@ -124,7 +124,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
 
             if (DocumentService.TryGetTextDocument(view.TextBuffer, out var doc))
             {
-                doc.FileActionOccurred -= OnFileSavedAsync;
+                doc.FileActionOccurred -= OnFileSaved;
             }
         }
     }

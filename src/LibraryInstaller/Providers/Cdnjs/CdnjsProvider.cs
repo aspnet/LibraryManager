@@ -32,12 +32,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
         public ILibraryCatalog GetCatalog()
         {
-            if (_catalog == null)
-            {
-                _catalog = new CdnjsCatalog(this);
-            }
-
-            return _catalog;
+            return _catalog ?? (_catalog = new CdnjsCatalog(this));
         }
 
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
@@ -111,7 +106,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
             if (File.Exists(absolute))
             {
-                return await FileHelpers.OpenFileAsync(absolute, cancellationToken);
+                return await FileHelpers.OpenFileAsync(absolute, cancellationToken).ConfigureAwait(false);
             }
 
             return null;

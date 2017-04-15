@@ -19,16 +19,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             _package = package;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryInstallerPackageCmdSet, PackageIds.ManageLibraries);
-            var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
+            var cmd = new OleMenuCommand(Execute, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);
         }
 
-        public static ManageLibrariesCommand Instance
-        {
-            get;
-            private set;
-        }
+        public static ManageLibrariesCommand Instance { get; private set; }
 
         private IServiceProvider ServiceProvider => _package;
 
@@ -50,7 +46,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             button.Visible = button.Enabled = project.IsSupported();
         }
 
-        private void ExecuteAsync(object sender, EventArgs e)
+        private void Execute(object sender, EventArgs e)
         {
             Telemetry.TrackUserTask("ManageLibraries");
             Project project = VsHelpers.DTE.SelectedItems.Item(1).Project;

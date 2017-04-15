@@ -22,7 +22,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         public string CacheDirectory => Constants.CacheFolder;
         public ILogger Logger { get; } = new Logger();
 
-        public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState reqestor, CancellationToken cancellationToken)
+        public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             string absolutePath = Path.Combine(WorkingDirectory, path);
             string directory = Path.GetDirectoryName(absolutePath);

@@ -11,12 +11,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     public class Dependencies : IDependencies
     {
-        private IHostInteraction _hostInteraction;
-        private List<IProvider> _providers = new List<IProvider>();
-        private static Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
+        private readonly IHostInteraction _hostInteraction;
+        private readonly List<IProvider> _providers = new List<IProvider>();
+        private static readonly Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
 
         [ImportMany(typeof(IProviderFactory))]
-        private IEnumerable<IProviderFactory> _providerFactories { get; set; }
+        private IEnumerable<IProviderFactory> _providerFactories;
 
         private Dependencies(IHostInteraction hostInteraction)
         {
@@ -46,8 +46,10 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         private void Initialize()
         {
-            if (_providers.Any())
+            if (_providers.Count > 0)
+            {
                 return;
+            }
 
             this.SatisfyImportsOnce();
 

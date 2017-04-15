@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.Web.LibraryInstaller.Build
 {
-    public class Constants
+    public static class Constants
     {
         public const string ConfigFileName = "library.json";
         public static string CacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");

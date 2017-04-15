@@ -37,14 +37,14 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             }
 
             PushToErrorList();
-            return Errors.Any();
+            return Errors.Count > 0;
         }
 
         private void PushToErrorList()
         {
             TableDataSource.Instance.CleanErrors(ConfigFileName);
 
-            if (Errors.Any())
+            if (Errors.Count > 0)
             {
                 TableDataSource.Instance.AddErrors(Errors, ProjectName, ConfigFileName);
             }

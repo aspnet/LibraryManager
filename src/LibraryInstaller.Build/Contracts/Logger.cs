@@ -8,7 +8,7 @@ namespace Microsoft.Web.LibraryInstaller.Build
 {
     public class Logger : ILogger
     {
-        private Task _task;
+        private readonly Task _task;
 
         public Logger(Task task)
         {

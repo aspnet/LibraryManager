@@ -16,7 +16,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     internal sealed class RestoreSolutionCommand
     {
         private readonly Package _package;
-        private static string[] _ignore = { "\\node_modules\\", "\\bower_components\\", "\\jspm_packages\\", "\\lib\\", "\\vendor\\" };
+        private static readonly string[] _ignore = { "\\node_modules\\", "\\bower_components\\", "\\jspm_packages\\", "\\lib\\", "\\vendor\\" };
 
         private RestoreSolutionCommand(Package package, OleMenuCommandService commandService)
         {
@@ -27,11 +27,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             commandService.AddCommand(cmd);
         }
 
-        public static RestoreSolutionCommand Instance
-        {
-            get;
-            private set;
-        }
+        public static RestoreSolutionCommand Instance { get; private set; }
 
         private IServiceProvider ServiceProvider => _package;
 
@@ -84,8 +80,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         private static IEnumerable<string> FindConfigFiles(ProjectItems items, List<string> files = null)
         {
-            if (files == null)
-                files = new List<string>();
+            files = files ?? new List<string>();
 
             foreach (ProjectItem item in items)
             {

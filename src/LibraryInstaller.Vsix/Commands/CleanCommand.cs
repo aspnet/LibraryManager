@@ -31,11 +31,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             _solutionEvents.AfterClosing += AfterClosing;
         }
 
-        public static CleanCommand Instance
-        {
-            get;
-            private set;
-        }
+        public static CleanCommand Instance { get; private set; }
 
         private IServiceProvider ServiceProvider => _package;
 

@@ -11,10 +11,10 @@ namespace Microsoft.Web.LibraryInstaller.Build
 {
     public class Dependencies : IDependencies
     {
-        private IHostInteraction _hostInteraction;
-        private static List<IProvider> _providers = new List<IProvider>();
-        private static Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
-        private IEnumerable<string> _assemblyPaths;
+        private readonly IHostInteraction _hostInteraction;
+        private static readonly List<IProvider> _providers = new List<IProvider>();
+        private static readonly Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
+        private readonly IEnumerable<string> _assemblyPaths;
 
         private Dependencies(IHostInteraction hostInteraction, IEnumerable<string> assemblyPaths)
         {
@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryInstaller.Build
 
         private void Initialize()
         {
-            if (_providers.Any())
+            if (_providers.Count > 0)
                 return;
 
             IEnumerable<IProviderFactory> factories = GetProvidersFromReflection();

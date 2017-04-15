@@ -23,11 +23,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             commandService.AddCommand(cmd);
         }
 
-        public static RestoreCommand Instance
-        {
-            get;
-            private set;
-        }
+        public static RestoreCommand Instance { get; private set; }
 
         private IServiceProvider ServiceProvider => _package;
 

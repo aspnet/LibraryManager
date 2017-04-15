@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
     internal class FileSystemCatalog : ILibraryCatalog
     {
-        private string _providerId;
+        private readonly string _providerId;
 
         public FileSystemCatalog(string providerId)
         {
@@ -31,17 +31,16 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
             {
                 Name = libraryId,
                 ProviderId = _providerId,
-                Files = await GetFilesAsync(libraryId)
+                Files = await GetFilesAsync(libraryId).ConfigureAwait(false)
             };
 
             return library;
         }
 
-        private async Task<IReadOnlyDictionary<string, bool>> GetFilesAsync(string libraryId)
+        private Task<IReadOnlyDictionary<string, bool>> GetFilesAsync(string libraryId)
         {
-            return await Task.Run(() =>
+            return Task.Run<IReadOnlyDictionary<string, bool>>(() =>
             {
-
                 if (Directory.Exists(libraryId))
                 {
                     return Directory.EnumerateFiles(libraryId)
@@ -50,7 +49,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
                 }
                 else
                 {
-                    return new Dictionary<string, bool>() { { Path.GetFileName(libraryId), true } };
+                    return new Dictionary<string, bool>() { [Path.GetFileName(libraryId)] = true };
                 }
             });
         }

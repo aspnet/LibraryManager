@@ -89,6 +89,7 @@ namespace Microsoft.Web.LibraryInstaller.Build
             var list = new List<ITaskItem>();
 
             foreach (ILibraryInstallationState state in states)
+            {
                 foreach (string file in state.Files)
                 {
                     string absolutePath = Path.Combine(hostInteraction.WorkingDirectory, state.DestinationPath, file);
@@ -100,6 +101,7 @@ namespace Microsoft.Web.LibraryInstaller.Build
                         list.Add(new TaskItem(relative));
                     }
                 }
+            }
 
             FilesWritten = list.ToArray();
         }

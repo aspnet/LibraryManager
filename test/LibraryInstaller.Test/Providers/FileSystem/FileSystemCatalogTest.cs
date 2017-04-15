@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task SearchAsync()
+        public async Task SearchAsync_File()
         {
             await SearchAsync(_provider, _catalog, @"c:\file.txt");
             await SearchAsync(_provider, _catalog, @"../path/to/file.txt");
@@ -90,9 +90,33 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task GetLibraryAsync()
+        public async Task GetLibraryAsync_File()
         {
             ILibrary library = await _catalog.GetLibraryAsync(@"c:\some\path\to\file.js", CancellationToken.None);
+            Assert.IsNotNull(library);
+            Assert.AreEqual(1, library.Files.Count);
+            Assert.AreEqual("file.js", library.Files.ElementAt(0).Key);
+        }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_Folder()
+        {
+            string folder = Path.Combine(Path.GetTempPath(), "LibraryInstaller_test");
+            Directory.CreateDirectory(folder);
+            File.WriteAllText(Path.Combine(folder, "file1.js"), "");
+            File.WriteAllText(Path.Combine(folder, "file2.js"), "");
+            File.WriteAllText(Path.Combine(folder, "file3.js"), "");
+
+            ILibrary library = await _catalog.GetLibraryAsync(folder, CancellationToken.None);
+            Assert.IsNotNull(library);
+            Assert.AreEqual(3, library.Files.Count);
+            Assert.AreEqual("file1.js", library.Files.ElementAt(0).Key);
+        }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_Uri()
+        {
+            ILibrary library = await _catalog.GetLibraryAsync("http://example.com/file.js", CancellationToken.None);
             Assert.IsNotNull(library);
             Assert.AreEqual(1, library.Files.Count);
             Assert.AreEqual("file.js", library.Files.ElementAt(0).Key);
@@ -103,6 +127,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         {
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("../file.txt", 0);
 
+            Assert.AreEqual(default(CompletionSet), result);
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.IsNull(result.Completions);

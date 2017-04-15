@@ -258,6 +258,15 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
             Assert.AreEqual(File.ReadAllText(installed2), "test content");
         }
 
+        [TestMethod]
+        private void GetCatalog()
+        {
+            IProvider provider = _dependencies.GetProvider("cdnjs");
+            ILibraryCatalog catalog = provider.GetCatalog();
+
+            Assert.IsNotNull(catalog);
+        }
+
         private string GetConfig()
         {
             string config = @"{

@@ -47,10 +47,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             result.get_Data(out object data);
             var glyph = data as BitmapSource;
 
-            if (glyph != null)
-            {
-                glyph.Freeze();
-            }
+            glyph?.Freeze();
 
             return glyph;
         }
@@ -78,13 +75,13 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                         result = imageData as BitmapSource;
                     }
                 }
-                catch (Exception)
+                catch
                 {
                     // ImageService couldn't resolve the image
                 }
             }
 
-            themeIcon = (iconSource == (uint)__VSIconSource.IS_VisualStudio);
+            themeIcon = iconSource == (uint)__VSIconSource.IS_VisualStudio;
 
             if (themeIcon && result != null && owner != null)
             {
@@ -102,7 +99,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         private static object GetObjectData(IVsUIObject obj)
         {
-            Validate.IsNotNull(obj, "obj");
+            Validate.IsNotNull(obj, nameof(obj));
 
             int result = obj.get_Data(out object value);
 
@@ -111,7 +108,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 throw new COMException("Could not get object data", result);
             }
 
-            return (value);
+            return value;
         }
 
         [DllImport("gdi32.dll", SetLastError = true)]

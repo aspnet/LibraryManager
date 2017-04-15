@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using Microsoft.Web.LibraryInstaller.Contracts;
-using Microsoft.JSON.Core.Parser.TreeItems;
+﻿using Microsoft.JSON.Core.Parser.TreeItems;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.Editor.SuggestedActions;
+using Microsoft.Web.LibraryInstaller.Contracts;
+using System;
+using System.Linq;
+using System.Threading;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     internal class UpdateSuggestedAction : SuggestedActionBase
     {
         private static readonly Guid _guid = new Guid("b3b43e69-7d0a-4acf-99ea-015526f76d84");
-        private SuggestedActionProvider _provider;
-        private string _updatedLibraryId;
-        private bool _disabled;
+        private readonly SuggestedActionProvider _provider;
+        private readonly string _updatedLibraryId;
+        private readonly bool _disabled;
 
         public UpdateSuggestedAction(SuggestedActionProvider provider, string libraryId, string displayText, bool disabled = false)
             : base(provider.TextBuffer, provider.TextView, displayText, _guid)

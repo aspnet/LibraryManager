@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         public ITextBuffer TextBuffer;
 
         [Import]
-        private ITextDocumentFactoryService DocumentService { get; set; }
+        public ITextDocumentFactoryService DocumentService { get; set; }
 
         public IEnumerable<ISuggestedAction> GetSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, JSONParseItem parseItem)
         {

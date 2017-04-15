@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     [Export(typeof(IJSONCompletionListProvider))]
     [Name(nameof(FilesCompletionProvider))]
-    class FilesCompletionProvider : BaseCompletionProvider
+    internal class FilesCompletionProvider : BaseCompletionProvider
     {
         public override JSONCompletionContextType ContextType
         {
@@ -117,14 +117,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         {
             var presenter = context?.Session?.Presenter as FrameworkElement;
 
-            if (presenter != null)
+            presenter?.SetBinding(ImageThemingUtilities.ImageBackgroundColorProperty, new Binding("Background")
             {
-                presenter.SetBinding(ImageThemingUtilities.ImageBackgroundColorProperty, new Binding("Background")
-                {
-                    Source = presenter,
-                    Converter = new BrushToColorConverter()
-                });
-            }
+                Source = presenter,
+                Converter = new BrushToColorConverter()
+            });
 
             return presenter;
         }

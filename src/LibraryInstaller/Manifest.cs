@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryInstaller
     public class Manifest
     {
         private IHostInteraction _hostInteraction;
-        private List<ILibraryInstallationState> _libraries;
+        private readonly List<ILibraryInstallationState> _libraries;
         private IDependencies _dependencies;
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Microsoft.Web.LibraryInstaller
         /// <param name="state">An instance of <see cref="ILibraryInstallationState"/> representing the library to add.</param>
         public void AddLibrary(ILibraryInstallationState state)
         {
-            ILibraryInstallationState existing = _libraries.FirstOrDefault(p => p.LibraryId == state.LibraryId && p.ProviderId == state.ProviderId);
+            ILibraryInstallationState existing = _libraries.Find(p => p.LibraryId == state.LibraryId && p.ProviderId == state.ProviderId);
 
             if (existing != null)
                 _libraries.Remove(existing);

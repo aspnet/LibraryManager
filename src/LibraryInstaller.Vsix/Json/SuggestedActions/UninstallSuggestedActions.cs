@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     internal class UninstallSuggestedAction : SuggestedActionBase
     {
         private static readonly Guid _guid = new Guid("2975f71b-809d-4ed6-a170-6bbc04058424");
-        private SuggestedActionProvider _provider;
+        private readonly SuggestedActionProvider _provider;
         private const int _maxlength = 40;
 
         public UninstallSuggestedAction(SuggestedActionProvider provider)
@@ -39,7 +39,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         {
             try
             {
-                await LibraryHelpers.UninstallAsync(_provider.ConfigFilePath, _provider.InstallationState.LibraryId, cancellationToken);
+                await LibraryHelpers.UninstallAsync(_provider.ConfigFilePath, _provider.InstallationState.LibraryId, cancellationToken).ConfigureAwait(false);
 
                 using (ITextEdit edit = TextBuffer.CreateEdit())
                 {

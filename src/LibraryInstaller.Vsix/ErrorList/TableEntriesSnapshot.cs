@@ -9,9 +9,9 @@ using System.Linq;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
-    class TableEntriesSnapshot : TableEntriesSnapshotBase
+    internal class TableEntriesSnapshot : TableEntriesSnapshotBase
     {
-        private string _projectName;
+        private readonly string _projectName;
 
         internal TableEntriesSnapshot(IEnumerable<DisplayError> result, string projectName, string fileName)
         {
@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             Url = fileName;
         }
 
-        public List<DisplayError> Errors { get; private set; }
+        public List<DisplayError> Errors { get; }
 
         public override int VersionNumber { get; } = 1;
 
@@ -30,10 +30,15 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             get { return Errors.Count; }
         }
 
-        public string Url { get; private set; }
+        public string Url { get; }
 
-        public override bool TryGetValue(int index, string columnName, out object content)
+        public override bool TryGetValue(int index, string keyName, out object content)
         {
+            if (keyName == null)
+            {
+                throw new System.ArgumentNullException(nameof(keyName));
+            }
+
             if (index < 0 || index >= Errors.Count)
             {
                 content = null;
@@ -42,7 +47,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             DisplayError error = Errors[index];
 
-            switch (columnName)
+            switch (keyName)
             {
                 case StandardTableKeyNames.DocumentName:
                     content = Url;

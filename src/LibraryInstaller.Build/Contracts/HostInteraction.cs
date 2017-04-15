@@ -22,12 +22,12 @@ namespace Microsoft.Web.LibraryInstaller.Build
         public string CacheDirectory => Constants.CacheFolder;
         public ILogger Logger { get; }
 
-        public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState reqestor, CancellationToken cancellationToken)
+        public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             string absolutePath = Path.Combine(WorkingDirectory, path);
             string directory = Path.GetDirectoryName(absolutePath);
 
-            if (File.Exists(absolutePath) && File.GetAttributes(absolutePath).HasFlag(FileAttributes.ReadOnly))
+            if (File.Exists(absolutePath) && (File.GetAttributes(absolutePath) & FileAttributes.ReadOnly) != 0)
             {
                 return true;
             }

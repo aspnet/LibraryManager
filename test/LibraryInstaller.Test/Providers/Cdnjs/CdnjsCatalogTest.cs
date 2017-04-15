@@ -32,12 +32,25 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             _catalog = _provider.GetCatalog();
         }
 
-        [TestMethod]
-        public async Task SearchAsync()
+        [DataTestMethod]
+        [DataRow("jquery")]
+        [DataRow("bootstrap")]
+        [DataRow("knockout")]
+        public async Task SearchAsync_Success(string searchTerm)
         {
-            await SearchAsync(_provider, _catalog, @"jquery");
-            await SearchAsync(_provider, _catalog, @"bootstrap");
-            await SearchAsync(_provider, _catalog, @"knockout");
+            CancellationToken token = CancellationToken.None;
+
+            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
+            Assert.AreEqual(1, absolute.Count);
+            IEnumerable<string> libraryId = await absolute[0].GetLibraryIdsAsync(token);
+            Assert.IsTrue(libraryId.Any());
+
+            ILibrary library = await _catalog.GetLibraryAsync(libraryId.First(), token);
+            Assert.IsTrue(library.Files.Count > 0);
+            Assert.AreEqual(1, library.Files.Count(f => f.Value));
+            Assert.IsNotNull(library.Name);
+            Assert.IsNotNull(library.Version);
+            Assert.AreEqual(_provider.Id, library.ProviderId);
         }
 
         [TestMethod]
@@ -49,25 +62,8 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             Assert.AreEqual(0, absolute.Count);
         }
 
-        private static async Task SearchAsync(IProvider provider, ILibraryCatalog catalog, string searchTerm)
-        {
-            CancellationToken token = CancellationToken.None;
-
-            IReadOnlyList<ILibraryGroup> absolute = await catalog.SearchAsync(searchTerm, 1, token);
-            Assert.AreEqual(1, absolute.Count);
-            IEnumerable<string> libraryId = await absolute[0].GetLibraryIdsAsync(token);
-            Assert.IsTrue(libraryId.Count() > 0);
-
-            ILibrary library = await catalog.GetLibraryAsync(libraryId.First(), token);
-            Assert.IsTrue(library.Files.Count > 0);
-            Assert.AreEqual(1, library.Files.Count(f => f.Value));
-            Assert.IsNotNull(library.Name);
-            Assert.IsNotNull(library.Version);
-            Assert.AreEqual(provider.Id, library.ProviderId);
-        }
-
         [TestMethod]
-        public async Task GetLibraryAsync()
+        public async Task GetLibraryAsync_Success()
         {
             CancellationToken token = CancellationToken.None;
             ILibrary library = await _catalog.GetLibraryAsync("jquery@3.1.1", token);
@@ -75,6 +71,13 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             Assert.IsNotNull(library);
             Assert.AreEqual("jquery", library.Name);
             Assert.AreEqual("3.1.1", library.Version);
+        }
+
+        [TestMethod, ExpectedException(typeof(InvalidLibraryException))]
+        public async Task GetLibraryAsync_InvalidLibraryId()
+        {
+            CancellationToken token = CancellationToken.None;
+            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", token);
         }
 
         [TestMethod]
@@ -108,7 +111,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         public async Task GetLatestVersion_LatestExist()
         {
             CancellationToken token = CancellationToken.None;
-            string libraryId = "twitter-bootstrap@3.3.0";
+            const string libraryId = "twitter-bootstrap@3.3.0";
             string result = await _catalog.GetLatestVersion(libraryId, false, token);
 
             Assert.IsNotNull(result);

@@ -41,7 +41,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     {
         protected override async Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            if (await GetServiceAsync(typeof(IMenuCommandService)) is OleMenuCommandService commandService)
+            if (await GetServiceAsync(typeof(IMenuCommandService)).ConfigureAwait(false) is OleMenuCommandService commandService)
             {
                 //InstallLibraryCommand.Initialize(this, commandService);
                 CleanCommand.Initialize(this, commandService);

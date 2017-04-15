@@ -9,17 +9,19 @@ using Microsoft.Web.Editor.Completion;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
-    class SimpleCompletionEntry : JSONCompletionEntry
+    internal class SimpleCompletionEntry : JSONCompletionEntry
     {
-        private int _specificVersion;
+        private readonly int _specificVersion;
 
         public SimpleCompletionEntry(string text, ImageSource glyph, IIntellisenseSession session)
             : base(text, "\"" + text + "\"", null, glyph, null, false, session as ICompletionSession)
-        { }
+        {
+        }
 
         public SimpleCompletionEntry(string text, ImageMoniker moniker, IIntellisenseSession session)
             : this(text, text, null, moniker, session)
-        { }
+        {
+        }
 
         public SimpleCompletionEntry(string text, string insertionText, string description, ImageMoniker moniker, IIntellisenseSession session, int specificVersion = 0)
             : base(text, "\"" + insertionText + "\"", description, null, null, false, session as ICompletionSession)

@@ -2,17 +2,16 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Microsoft.VisualStudio.Shell.TableManager;
-using System.Linq;
 using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
-    class SinkManager : IDisposable
+    internal class SinkManager : IDisposable
     {
         private readonly ITableDataSink _sink;
-        private TableDataSource _errorList;
-        private List<TableEntriesSnapshot> _snapshots = new List<TableEntriesSnapshot>();
+        private readonly TableDataSource _errorList;
+        private readonly List<TableEntriesSnapshot> _snapshots = new List<TableEntriesSnapshot>();
 
         internal SinkManager(TableDataSource errorList, ITableDataSink sink)
         {
@@ -31,7 +30,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         {
             foreach (TableEntriesSnapshot snapshot in snapshots)
             {
-                TableEntriesSnapshot existing = _snapshots.FirstOrDefault(s => s.Url == snapshot.Url);
+                TableEntriesSnapshot existing = _snapshots.Find(s => s.Url == snapshot.Url);
 
                 if (existing != null)
                 {
@@ -51,7 +50,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         {
             foreach (string url in urls)
             {
-                TableEntriesSnapshot existing = _snapshots.FirstOrDefault(s => s.Url == url);
+                TableEntriesSnapshot existing = _snapshots.Find(s => s.Url == url);
 
                 if (existing != null)
                 {

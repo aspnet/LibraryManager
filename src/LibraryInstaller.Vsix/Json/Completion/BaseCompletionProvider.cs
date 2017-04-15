@@ -16,15 +16,15 @@ using System.Linq;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
-    abstract class BaseCompletionProvider : IJSONCompletionListProvider
+    internal abstract class BaseCompletionProvider : IJSONCompletionListProvider
     {
-        static readonly IEnumerable<JSONCompletionEntry> _empty = Enumerable.Empty<JSONCompletionEntry>();
+        private static readonly IEnumerable<JSONCompletionEntry> _empty = Enumerable.Empty<JSONCompletionEntry>();
 
         [Import]
         public ITextDocumentFactoryService DocumentService { get; set; }
 
         [Import]
-        IJSONSchemaEvaluationReportCache _reportCache { get; set; }
+        public IJSONSchemaEvaluationReportCache ReportCache { get; set; }
 
         public abstract JSONCompletionContextType ContextType { get; }
 
@@ -48,12 +48,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         protected abstract IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context);
 
-
         protected void UpdateListEntriesSync(JSONCompletionContext context, IEnumerable<JSONCompletionEntry> allEntries)
         {
             if (context.Session.IsDismissed)
+            {
                 return;
-
+            }
 
             foreach (CompletionSet curCompletionSet in (context.Session as ICompletionSession)?.CompletionSets)
             {
@@ -63,7 +63,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                     {
                         // only delete our completion entries
                         webCompletionSet.UpdateCompletions(s => s is SimpleCompletionEntry, allEntries);
-
                     });
 
                     // The UpdateCompletions call above may modify the collection we're enumerating. That's ok, as we're done anyways.

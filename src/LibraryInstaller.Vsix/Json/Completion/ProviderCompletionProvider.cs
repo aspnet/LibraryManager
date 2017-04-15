@@ -14,9 +14,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     [Export(typeof(IJSONCompletionListProvider))]
     [Name(nameof(ProviderCompletionProvider))]
-    class ProviderCompletionProvider : BaseCompletionProvider
+    internal class ProviderCompletionProvider : BaseCompletionProvider
     {
-        private static ImageMoniker _libraryIcon = KnownMonikers.Method;
+        private static readonly ImageMoniker _libraryIcon = KnownMonikers.Method;
 
         public override JSONCompletionContextType ContextType
         {

@@ -8,18 +8,17 @@ using Microsoft.VisualStudio.Shell.TableManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
-    class TableDataSource : ITableDataSource
+    internal class TableDataSource : ITableDataSource
     {
         private static TableDataSource _instance;
         private readonly List<SinkManager> _managers = new List<SinkManager>();
-        private static Dictionary<string, TableEntriesSnapshot> _snapshots = new Dictionary<string, TableEntriesSnapshot>();
+        private static readonly Dictionary<string, TableEntriesSnapshot> _snapshots = new Dictionary<string, TableEntriesSnapshot>();
 
         [Import]
-        private ITableManagerProvider TableManagerProvider { get; set; } = null;
+        public ITableManagerProvider TableManagerProvider { get; set; }
 
         private TableDataSource()
         {
@@ -36,18 +35,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public static TableDataSource Instance
         {
-            get
-            {
-                if (_instance == null)
-                    _instance = new TableDataSource();
-
-                return _instance;
-            }
+            get { return _instance ?? (_instance = new TableDataSource()); }
         }
 
         public bool HasErrors
         {
-            get { return _snapshots.Any(); }
+            get { return _snapshots.Count > 0; }
         }
 
         #region ITableDataSource members
@@ -138,10 +131,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             foreach (string url in _snapshots.Keys)
             {
                 TableEntriesSnapshot snapshot = _snapshots[url];
-                if (snapshot != null)
-                {
-                    snapshot.Dispose();
-                }
+                snapshot?.Dispose();
             }
 
             _snapshots.Clear();

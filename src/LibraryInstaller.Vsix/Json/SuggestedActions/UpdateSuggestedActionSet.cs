@@ -14,9 +14,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     internal class UpdateSuggestedActionSet : SuggestedActionBase
     {
         private static readonly Guid _guid = new Guid("2975f71b-809a-4ed6-a170-6bbc04058424");
-        private SuggestedActionProvider _provider;
+        private readonly SuggestedActionProvider _provider;
         private Task<List<ISuggestedAction>> _actions;
-
 
         public UpdateSuggestedActionSet(SuggestedActionProvider provider)
             : base(provider.TextBuffer, provider.TextView, Resources.Text.CheckForUpdates, _guid)
@@ -50,7 +49,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         {
             try
             {
-                return await GetActionSetAsync(cancellationToken);
+                return await GetActionSetAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -59,7 +58,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             }
         }
 
-        private async Task<IEnumerable<SuggestedActionSet>> GetActionSetAsync(CancellationToken cancellationToken)
+        private async Task<IEnumerable<SuggestedActionSet>> GetActionSetAsync()
         {
             List<ISuggestedAction> list = await _actions;
 
@@ -75,14 +74,14 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         {
             var list = new List<ISuggestedAction>();
 
-            string latestStable = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, false, cancellationToken);
+            string latestStable = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, false, cancellationToken).ConfigureAwait(false);
 
             if (!string.IsNullOrEmpty(latestStable) && latestStable != _provider.InstallationState.LibraryId)
             {
                 list.Add(new UpdateSuggestedAction(_provider, latestStable, $"Stable: {latestStable}"));
             }
 
-            string latestPre = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, true, cancellationToken);
+            string latestPre = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, true, cancellationToken).ConfigureAwait(false);
 
             if (!string.IsNullOrEmpty(latestPre) && latestPre != _provider.InstallationState.LibraryId && latestPre != latestStable)
             {
@@ -94,7 +93,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public override void Invoke(CancellationToken cancellationToken)
         {
-
         }
     }
 }

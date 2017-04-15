@@ -66,7 +66,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                     if (string.IsNullOrEmpty(itemType)
                         || project.IsKind(ProjectTypes.WEBSITE_PROJECT)
                         || project.IsKind(ProjectTypes.UNIVERSAL_APP))
+                    {
                         return;
+                    }
 
                     item.Properties.Item("ItemType").Value = "None";
                 }
@@ -113,7 +115,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                        result);
         }
 
-        /// <summary>Gets the root folder of any Visual Studio project.</summary>
         public static string GetRootFolder(this Project project)
         {
             if (project == null)
@@ -170,10 +171,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public static void SatisfyImportsOnce(this object o)
         {
-            if (_compositionService == null)
-            {
-                _compositionService = GetService<SComponentModel, IComponentModel>();
-            }
+            _compositionService = _compositionService ?? GetService<SComponentModel, IComponentModel>();
 
             if (_compositionService != null)
             {

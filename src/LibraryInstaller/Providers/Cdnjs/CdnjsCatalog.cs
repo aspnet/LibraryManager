@@ -15,13 +15,13 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 {
     internal class CdnjsCatalog : ILibraryCatalog
     {
-        const int _days = 3;
-        const string _fileName = "cache.json";
-        const string _remoteApiUrl = "https://api.cdnjs.com/libraries?fields=name,description,version";
-        const string _metaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}";
+        private const int _days = 3;
+        private const string _fileName = "cache.json";
+        private const string _remoteApiUrl = "https://api.cdnjs.com/libraries?fields=name,description,version";
+        private const string _metaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}";
 
-        private string _cacheFile;
-        private CdnjsProvider _provider;
+        private readonly string _cacheFile;
+        private readonly CdnjsProvider _provider;
         private IEnumerable<CdnjsLibraryGroup> _libraryGroups;
 
         public CdnjsCatalog(CdnjsProvider provider)
@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             // Name
             if (at == -1 || caretPosition <= at)
             {
-                IReadOnlyList<ILibraryGroup> result = await SearchAsync(name, int.MaxValue, CancellationToken.None);
+                IReadOnlyList<ILibraryGroup> result = await SearchAsync(name, int.MaxValue, CancellationToken.None).ConfigureAwait(false);
 
                 foreach (CdnjsLibraryGroup group in result)
                 {
@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
                 if (group != null)
                 {
-                    IEnumerable<Asset> assets = await GetAssetsAsync(name, CancellationToken.None);
+                    IEnumerable<Asset> assets = await GetAssetsAsync(name, CancellationToken.None).ConfigureAwait(false);
 
                     foreach (string version in assets.Select(a => a.Version))
                     {
@@ -128,7 +128,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                 string name = args[0];
                 string version = args[1];
 
-                IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken);
+                IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
                 Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
                 if (asset == null)
@@ -174,7 +174,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             }
 
             var ids = (await GetLibraryIdsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false)).ToList();
-            string first = ids.First();
+            string first = ids[0];
 
             if (!includePreReleases)
             {
@@ -184,7 +184,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             if (!string.IsNullOrEmpty(first) && ids.IndexOf(first) < ids.IndexOf(libraryId))
             {
                 return first;
-            };
+            }
 
             return null;
         }
@@ -197,10 +197,8 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             {
                 if (group.DisplayName.Equals(term, StringComparison.OrdinalIgnoreCase))
                     list.Add(Tuple.Create(10, group));
-
                 else if (group.DisplayName.StartsWith(term, StringComparison.OrdinalIgnoreCase))
                     list.Add(Tuple.Create(5, group));
-
                 else if (group.DisplayName.IndexOf(term, StringComparison.OrdinalIgnoreCase) > -1)
                     list.Add(Tuple.Create(1, group));
             }

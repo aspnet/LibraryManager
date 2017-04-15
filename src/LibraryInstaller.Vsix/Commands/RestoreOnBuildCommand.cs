@@ -15,8 +15,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     internal sealed class RestoreOnBuildCommand
     {
         private bool _isPackageInstalled;
-        IComponentModel _componentModel;
-        private Package _package;
+        private readonly IComponentModel _componentModel;
+        private readonly Package _package;
 
         private RestoreOnBuildCommand(Package package, OleMenuCommandService commandService)
         {
@@ -29,11 +29,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             commandService.AddCommand(cmd);
         }
 
-        public static RestoreOnBuildCommand Instance
-        {
-            get;
-            private set;
-        }
+        public static RestoreOnBuildCommand Instance { get; private set; }
 
         private IServiceProvider ServiceProvider
         {
@@ -73,7 +69,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                     button.Text = "Enable Restore on Build...";
                 }
             }
-
         }
 
         private void Execute(object sender, EventArgs e)

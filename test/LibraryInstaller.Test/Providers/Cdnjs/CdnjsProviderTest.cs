@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task EndToEndTest()
+        public async Task InstallAsync_FullEndToEnd()
         {
             IProvider provider = _dependencies.GetProvider("cdnjs");
             ILibraryCatalog catalog = provider.GetCatalog();
@@ -144,6 +144,15 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB003", result.Errors[0].Code);
+        }
+
+        [TestMethod]
+        private void GetCatalog()
+        {
+            IProvider provider = _dependencies.GetProvider("cdnjs");
+            ILibraryCatalog catalog = provider.GetCatalog();
+
+            Assert.IsNotNull(catalog);
         }
 
         private const string _doc = @"{

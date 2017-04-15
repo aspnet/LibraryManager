@@ -26,11 +26,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             commandService.AddCommand(cmd);
         }
 
-        public static InstallLibraryCommand Instance
-        {
-            get;
-            private set;
-        }
+        public static InstallLibraryCommand Instance { get; private set; }
 
         private IServiceProvider ServiceProvider => _package;
 
@@ -63,16 +59,16 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
             var dependencies = Dependencies.FromConfigFile(configFilePath);
-            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, token);
+            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, token).ConfigureAwait(false);
 
             string itemFolder = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("FullPath").Value.ToString();
             string relativeFolder = PackageUtilities.MakeRelative(rootFolder, itemFolder).Replace(Path.DirectorySeparatorChar, '/').Trim('/');
             ILibraryInstallationState state = GetLibraryToInstall(relativeFolder);
             manifest.AddLibrary(state);
-            await manifest.SaveAsync(configFilePath, token);
+            await manifest.SaveAsync(configFilePath, token).ConfigureAwait(false);
 
             project.AddFileToProject(configFilePath);
-            await LibraryHelpers.RestoreAsync(configFilePath);
+            await LibraryHelpers.RestoreAsync(configFilePath).ConfigureAwait(false);
         }
 
         private ILibraryInstallationState GetLibraryToInstall(string relativeFolderPath)

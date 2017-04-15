@@ -10,9 +10,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     public class Logger : ILogger
     {
         private static IVsOutputWindowPane _pane;
-        private static IVsOutputWindow _output = VsHelpers.GetService<SVsOutputWindow, IVsOutputWindow>();
-        private static IVsActivityLog _activityLog = VsHelpers.GetService<SVsActivityLog, IVsActivityLog>();
-        private static IVsStatusbar statusbar = VsHelpers.GetService<SVsStatusbar, IVsStatusbar>();
+        private static readonly IVsOutputWindow _output = VsHelpers.GetService<SVsOutputWindow, IVsOutputWindow>();
+        private static readonly IVsActivityLog _activityLog = VsHelpers.GetService<SVsActivityLog, IVsActivityLog>();
+        private static readonly IVsStatusbar _statusbar = VsHelpers.GetService<SVsStatusbar, IVsStatusbar>();
 
         public void Log(string message, LogLevel level)
         {
@@ -48,10 +48,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public static void ClearOutputWindow()
         {
-            if (_pane != null)
-            {
-                _pane.Clear();
-            }
+            _pane?.Clear();
         }
 
         private static void LogToActivityLog(string message, __ACTIVITYLOG_ENTRYTYPE type)
@@ -61,9 +58,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public static void LogToStatusBar(string message)
         {
-            statusbar.FreezeOutput(0);
-            statusbar.SetText(message);
-            statusbar.FreezeOutput(1);
+            _statusbar.FreezeOutput(0);
+            _statusbar.SetText(message);
+            _statusbar.FreezeOutput(1);
         }
 
         private static void LogToOutputWindow(object message)
