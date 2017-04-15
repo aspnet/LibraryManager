@@ -21,21 +21,12 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
         /// <summary>
         /// Initializes a new instance of the <see cref="Dependencies"/> class.
         /// </summary>
-        /// <param name="hostInteractions">The host interactions.</param>
-        public Dependencies(IHostInteraction hostInteractions)
+        /// <param name="hostInteraction">The host interactions.</param>
+        /// <param name="factories">The provider factories.</param>
+        public Dependencies(IHostInteraction hostInteraction, params IProviderFactory[] factories)
         {
-            _hostInteractions = hostInteractions;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Dependencies"/> class.
-        /// </summary>
-        /// <param name="hostInteractions">The host interactions.</param>
-        /// <param name="providers">The providers.</param>
-        public Dependencies(IHostInteraction hostInteractions, params IProvider[] providers)
-        {
-            _hostInteractions = hostInteractions;
-            Providers.AddRange(providers);
+            _hostInteractions = hostInteraction;
+            Providers.AddRange(factories.Select(f => f.CreateProvider(hostInteraction)));
         }
 
 
@@ -45,7 +36,7 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
         public virtual List<IProvider> Providers { get; set; } = new List<IProvider>();
 
         /// <summary>
-        /// Gets the <see cref="T:LibraryInstaller.Contracts.IHostInteraction" /> used by <see cref="T:LibraryInstaller.Contracts.IProvider" /> to install libraries.
+        /// Gets the <see cref="T:LibraryInstaller.Contracts.IHotInteraction" /> used by <see cref="T:LibraryInstaller.Contracts.IProvider" /> to install libraries.
         /// </summary>
         /// <returns>
         /// The <see cref="T:LibraryInstaller.Contracts.IHostInteraction" /> provided by the host.
@@ -61,14 +52,7 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
         /// </returns>
         public virtual IProvider GetProvider(string providerId)
         {
-            IProvider provider = Providers.FirstOrDefault(p => p.Id == providerId);
-
-            if (provider != null)
-            {
-                provider.HostInteraction = _hostInteractions;
-            }
-
-            return provider;
+            return Providers.FirstOrDefault(p => p.Id == providerId);
         }
     }
 }

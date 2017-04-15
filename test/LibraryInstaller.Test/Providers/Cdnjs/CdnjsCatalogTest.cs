@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryInstaller");
             string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
-            var dependencies = new Dependencies(hostInteraction, new CdnjsProvider());
+            var dependencies = new Dependencies(hostInteraction, new CdnjsProviderFactory());
 
             _provider = dependencies.GetProvider("cdnjs");
             _catalog = _provider.GetCatalog();

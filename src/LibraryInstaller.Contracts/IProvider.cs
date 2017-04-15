@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryInstaller.Contracts
         /// <summary>
         /// An object specified by the host to interact with the file system etc.
         /// </summary>
-        IHostInteraction HostInteraction { get; set; }
+        IHostInteraction HostInteraction { get; }
 
         /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.

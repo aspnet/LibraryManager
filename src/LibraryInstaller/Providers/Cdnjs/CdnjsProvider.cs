@@ -16,12 +16,14 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
         private const string _downloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}";
         private CdnjsCatalog _catalog;
 
-        public string Id => "cdnjs";
-        public IHostInteraction HostInteraction
+        public CdnjsProvider(IHostInteraction hostInteraction)
         {
-            get;
-            set;
+            HostInteraction = hostInteraction;
         }
+
+        public string Id { get; } = "cdnjs";
+
+        public IHostInteraction HostInteraction { get; }
 
         internal string CacheFolder
         {

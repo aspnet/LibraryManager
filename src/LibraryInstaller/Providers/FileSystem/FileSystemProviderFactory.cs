@@ -17,10 +17,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
     {
         public IProvider CreateProvider(IHostInteraction hostInteraction)
         {
-            return new FileSystemProvider
-            {
-                HostInteraction = hostInteraction
-            };
+            return new FileSystemProvider(hostInteraction);
         }
     }
 }

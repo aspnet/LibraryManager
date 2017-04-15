@@ -12,24 +12,18 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
     internal class FileSystemProvider : IProvider
     {
-        private FileSystemCatalog _catalog;
-
-        public string Id => "filesystem";
-
-        public IHostInteraction HostInteraction
+        public FileSystemProvider(IHostInteraction hostInteraction)
         {
-            get;
-            set;
+            HostInteraction = hostInteraction;
         }
+
+        public string Id { get; } = "filesystem";
+
+        public IHostInteraction HostInteraction { get; }
 
         public ILibraryCatalog GetCatalog()
         {
-            if (_catalog == null)
-            {
-                _catalog = new FileSystemCatalog(Id);
-            }
-
-            return _catalog;
+            return new FileSystemCatalog(Id);
         }
 
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)

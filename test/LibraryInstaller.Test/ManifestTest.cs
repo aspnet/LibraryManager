@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
             _filePath = Path.Combine(_projectFolder, "library.json");
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
-            _dependencies = new Dependencies(_hostInteraction, new CdnjsProvider(), new FileSystemProvider());
+            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory());
 
             Directory.CreateDirectory(_projectFolder);
             File.WriteAllText(_filePath, _doc);

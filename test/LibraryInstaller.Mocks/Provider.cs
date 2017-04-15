@@ -14,6 +14,15 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
     public class Provider : IProvider
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Provider"/> class.
+        /// </summary>
+        /// <param name="hostInteraction">The host interaction.</param>
+        public Provider(IHostInteraction hostInteraction)
+        {
+            HostInteraction = hostInteraction;
+        }
+
+        /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
         public virtual string Id { get; set; }

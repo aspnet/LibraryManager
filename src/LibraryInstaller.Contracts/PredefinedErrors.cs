@@ -1,10 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System.IO;
-using Microsoft.Web.LibraryInstaller.Contracts;
-
-namespace Microsoft.Web.LibraryInstaller
+namespace Microsoft.Web.LibraryInstaller.Contracts
 {
     /// <summary>
     /// A list of predefined errors any <see cref="IProvider"/> can use.
@@ -24,7 +21,7 @@ namespace Microsoft.Web.LibraryInstaller
         /// </remarks>
         /// <returns>The error code LIB000</returns>
         public static IError UnknownException()
-            => new Error("LIB000", Resources.Text.ErrorUnknownException);
+            => new Error("LIB000", Text.ErrorUnknownException);
 
         /// <summary>
         /// The specified provider is unknown to the host.
@@ -32,7 +29,7 @@ namespace Microsoft.Web.LibraryInstaller
         /// <param name="providerId">The unique ID of the <see cref="IProvider"/>.</param>
         /// <returns>The error code LIB001</returns>
         public static IError ProviderUnknown(string providerId)
-            => new Error("LIB001", string.Format(Resources.Text.ErrorProviderUnknown, providerId));
+            => new Error("LIB001", string.Format(Text.ErrorProviderUnknown, providerId));
 
         /// <summary>
         /// The <see cref="IProvider"/> is unable to resolve the source.
@@ -41,7 +38,7 @@ namespace Microsoft.Web.LibraryInstaller
         /// <param name="providerId">The ID of the <see cref="IProvider"/> that could not resolve the resource.</param>
         /// <returns>The error code LIB002</returns>
         public static IError UnableToResolveSource(string libraryId, string providerId)
-            => new Error("LIB002", string.Format(Resources.Text.ErrorUnableToResolveSource, libraryId, providerId));
+            => new Error("LIB002", string.Format(Text.ErrorUnableToResolveSource, libraryId, providerId));
 
         /// <summary>
         /// The <see cref="IProvider"/> failed to write a file in the <see cref="ILibraryInstallationState.Files"/> array.
@@ -49,13 +46,13 @@ namespace Microsoft.Web.LibraryInstaller
         /// <param name="file">The file name that failed to be written to disk.</param>
         /// <returns>The error code LIB003</returns>
         public static IError CouldNotWriteFile(string file)
-            => new Error("LIB003", string.Format(Resources.Text.ErrorCouldNotWriteFile, file));
+            => new Error("LIB003", string.Format(Text.ErrorCouldNotWriteFile, file));
 
         /// <summary>
         /// The manifest JSON file is malformed.
         /// </summary>
         /// <returns>The error code LIB004</returns>
         public static IError ManifestMalformed()
-           => new Error("LIB004", string.Format(Resources.Text.ErrorManifestMalformed));
+           => new Error("LIB004", string.Format(Text.ErrorManifestMalformed));
     }
 }

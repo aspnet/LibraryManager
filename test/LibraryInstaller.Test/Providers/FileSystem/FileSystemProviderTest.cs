@@ -29,7 +29,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
             _relativeSrc = Path.Combine(_projectFolder, "folder", "file.txt");
 
             var hostInteraction = new HostInteraction(_projectFolder, "");
-            _dependencies = new Dependencies(hostInteraction, new FileSystemProvider());
+            _dependencies = new Dependencies(hostInteraction, new FileSystemProviderFactory());
 
             // Create the files to install
             Directory.CreateDirectory(_projectFolder);

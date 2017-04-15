@@ -3,6 +3,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using Microsoft.Web.LibraryInstaller.Contracts;
 
 namespace Microsoft.Web.LibraryInstaller.Test
 {

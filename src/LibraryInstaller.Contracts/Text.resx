@@ -117,34 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FileDeleted" xml:space="preserve">
-    <value>{0} deleted</value>
-    <comment>Shows in Output Window when a library file is deleted</comment>
+  <data name="ErrorCouldNotWriteFile" xml:space="preserve">
+    <value>{0} could not be written to disk. Make sure the file name is correct</value>
   </data>
-  <data name="FileDeleteFail" xml:space="preserve">
-    <value>Failed to delete {0}</value>
-    <comment>Shows in Output Window when a file failed to be deleted</comment>
+  <data name="ErrorManifestMalformed" xml:space="preserve">
+    <value>The manifest file contains syntax errors</value>
   </data>
-  <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} written to disk</value>
-    <comment>Shows in Output Window when a file was successfully added to project</comment>
+  <data name="ErrorProviderUnknown" xml:space="preserve">
+    <value>The "{0}" provider could not be found</value>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>Library restore has been cancelled</value>
+  <data name="ErrorUnableToResolveSource" xml:space="preserve">
+    <value>The "{0}" library could not be resolved by the "{1}" provider</value>
   </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>Restoring {0}...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Restoring libraries...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} libraries restored in {1} seconds</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Library restore was unsuccessfull</value>
-    <comment>Status message</comment>
+  <data name="ErrorUnknownException" xml:space="preserve">
+    <value>An unknown exception occured</value>
   </data>
 </root>

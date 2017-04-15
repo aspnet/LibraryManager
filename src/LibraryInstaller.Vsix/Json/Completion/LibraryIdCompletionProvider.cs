@@ -1,16 +1,15 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryInstaller.Contracts;
 using Microsoft.JSON.Core.Parser.TreeItems;
 using Microsoft.JSON.Editor.Completion;
 using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using Microsoft.VisualStudio.Imaging.Interop;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -18,7 +17,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     [Name(nameof(LibraryIdCompletionProvider))]
     class LibraryIdCompletionProvider : BaseCompletionProvider
     {
-        private static ImageMoniker _libraryIcon = KnownMonikers.Package;
+        private static ImageMoniker _libraryIcon = KnownMonikers.Method;
 
         public override JSONCompletionContextType ContextType
         {

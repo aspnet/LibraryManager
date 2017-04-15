@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryInstaller");
 
             var hostInteraction = new HostInteraction(_projectFolder, "");
-            var dependencies = new Dependencies(hostInteraction, new FileSystemProvider());
+            var dependencies = new Dependencies(hostInteraction, new FileSystemProviderFactory());
             _provider = dependencies.GetProvider("filesystem");
             _catalog = _provider.GetCatalog();
         }

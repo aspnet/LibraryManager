@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+        <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
         <PackageTags>library, package, client-side</PackageTags>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryInstaller.Contracts.xml</DocumentationFile>
@@ -24,4 +24,17 @@
     <Target Name="GetCopyToOutputDirectoryItems" />
     <Target Name="SatelliteDllsProjectOutputGroup" />
     <Target Name="DebugSymbolsProjectOutputGroup" />
+    <ItemGroup>
+      <Compile Update="Text.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Text.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="Text.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Text.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
 </Project>

@@ -16,10 +16,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
     {
         public IProvider CreateProvider(IHostInteraction hostInteraction)
         {
-            return new CdnjsProvider
-            {
-                HostInteraction = hostInteraction,
-            };
+            return new CdnjsProvider(hostInteraction);
         }
     }
 }
