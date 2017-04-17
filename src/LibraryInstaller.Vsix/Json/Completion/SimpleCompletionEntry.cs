@@ -4,8 +4,8 @@
 using Microsoft.JSON.Editor.Completion;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
-using System.Windows.Media;
 using Microsoft.Web.Editor.Completion;
+using System.Windows.Media;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         public SimpleCompletionEntry(string text, string insertionText, string description, ImageMoniker moniker, IIntellisenseSession session, int specificVersion = 0)
             : base(text, "\"" + insertionText + "\"", description, null, null, false, session as ICompletionSession)
         {
-            base.SetIconMoniker(moniker);
+            SetIconMoniker(moniker);
             _specificVersion = specificVersion;
         }
 

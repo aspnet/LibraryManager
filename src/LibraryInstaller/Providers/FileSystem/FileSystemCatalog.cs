@@ -27,8 +27,8 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
                 return Task.FromResult(default(CompletionSet));
             }
 
-            char separator = value.Contains('/') ? '/' : '\\';
-            int index = value.Length >= caretPosition - 1 ? value.LastIndexOf(separator, caretPosition - 1) : value.Length;
+            char separator = value.Contains('\\') ? '\\' : '/';
+            int index = value.Length >= caretPosition - 1 ? value.LastIndexOf(separator, Math.Max(caretPosition - 1, 0)) : value.Length;
             string path = _provider.HostInteraction.WorkingDirectory;
             string prefix = "";
 
@@ -55,7 +55,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
                     var completion = new CompletionItem
                     {
                         DisplayText = item.Name + separator,
-                        InsertionText = prefix + item.Name,
+                        InsertionText = prefix + item.Name + separator,
                     };
 
                     list.Add(completion);

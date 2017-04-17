@@ -23,6 +23,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         private ICompletionBroker _broker;
         private int _delay = 500;
         private DateTime _lastTyped;
+        private ICompletionSession _currentSession;
 
         public CompletionController(IVsTextView adapter, ITextView textView, ICompletionBroker broker)
         {
@@ -41,7 +42,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 {
                     RetriggerAsync();
                 }
-                else if (typedChar == '/' || typedChar == '\\')
+                else if (typedChar == '/' || typedChar == '\\' && !_broker.IsCompletionActive(_textView))
                 {
                     RetriggerAsync();
                 }
@@ -54,7 +55,35 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 }
             }
 
+            if (_broker.IsCompletionActive(_textView))
+            {
+                if (_currentSession == null)
+                {
+                    _currentSession = _broker.GetSessions(_textView)[0];
+                    _currentSession.Committed += OnCommitted;
+                    _currentSession.Dismissed += OnDismissed;
+                }
+            }
+
             return _nextCommandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+        }
+
+        private void OnDismissed(object sender, EventArgs e)
+        {
+            _currentSession.Dismissed -= OnDismissed;
+            _currentSession.Committed -= OnCommitted;
+            _currentSession = null;
+        }
+
+        private void OnCommitted(object sender, EventArgs e)
+        {
+            string text = _currentSession?.SelectedCompletionSet?.SelectionStatus?.Completion?.DisplayText;
+
+            if (text.EndsWith("/") || text.EndsWith("\\"))
+            {
+                System.Windows.Forms.SendKeys.Send("{LEFT}");
+                RetriggerAsync();
+            }
         }
 
         private async void RetriggerAsync()
@@ -79,7 +108,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             JSONMember member = parseItem.FindType<JSONMember>();
 
-            if (!member.UnquotedNameText.Equals("id") && member.UnquotedValueText?.Length <= 1)
+            if (!member.UnquotedNameText.Equals("id") && !member.UnquotedNameText.Equals("path") && member.UnquotedValueText?.Length <= 1)
             {
                 return;
             }

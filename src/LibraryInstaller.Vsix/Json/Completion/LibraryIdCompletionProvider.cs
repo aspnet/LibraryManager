@@ -52,6 +52,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             int caretPosition = context.Session.TextView.Caret.Position.BufferPosition - member.Value.Start - 1;
 
+            if (caretPosition > member.UnquotedValueText.Length)
+            {
+                yield break;
+            }
+
             Task<CompletionSet> task = catalog.GetLibraryCompletionSetAsync(member.UnquotedValueText, caretPosition);
             int count = 0;
 
@@ -63,8 +68,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 {
                     foreach (CompletionItem item in span.Completions)
                     {
+                        string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                         ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                        yield return new SimpleCompletionEntry(item.DisplayText, item.InsertionText, item.Description, moniker, context.Session, ++count);
+                        yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, context.Session, ++count);
                     }
                 }
             }
@@ -84,8 +90,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
                             foreach (CompletionItem item in span.Completions)
                             {
+                                string insertionText = item.InsertionText.Replace("\\", "\\\\");
                                 ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                                results.Add(new SimpleCompletionEntry(item.DisplayText, item.InsertionText, item.Description, moniker, context.Session, ++count));
+                                results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, context.Session, ++count));
                             }
 
                             UpdateListEntriesSync(context, results);
