@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 {
     internal class CdnjsProvider : IProvider
     {
-        private const string _downloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}";
+        private const string _downloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
         private CdnjsCatalog _catalog;
 
         public CdnjsProvider(IHostInteraction hostInteraction)

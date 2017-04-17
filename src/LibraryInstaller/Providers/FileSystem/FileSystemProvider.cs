@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 
         public ILibraryCatalog GetCatalog()
         {
-            return new FileSystemCatalog(Id);
+            return new FileSystemCatalog(this);
         }
 
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)

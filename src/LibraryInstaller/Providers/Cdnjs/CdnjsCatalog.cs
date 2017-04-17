@@ -17,8 +17,8 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
     {
         private const int _days = 3;
         private const string _fileName = "cache.json";
-        private const string _remoteApiUrl = "https://api.cdnjs.com/libraries?fields=name,description,version";
-        private const string _metaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}";
+        private const string _remoteApiUrl = "https://aka.ms/g8irvu";
+        private const string _metaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}"; // https://aka.ms/goycwu/{0}
 
         private readonly string _cacheFile;
         private readonly CdnjsProvider _provider;

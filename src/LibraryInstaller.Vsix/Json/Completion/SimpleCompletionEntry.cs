@@ -30,6 +30,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             _specificVersion = specificVersion;
         }
 
+        public override bool IsCommitChar(char typedCharacter)
+        {
+            return typedCharacter == '/' || typedCharacter == '\\';
+        }
+
         protected override int InternalCompareTo(CompletionEntry other)
         {
             var otherEntry = other as SimpleCompletionEntry;

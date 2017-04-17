@@ -13,16 +13,69 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
     internal class FileSystemCatalog : ILibraryCatalog
     {
-        private readonly string _providerId;
+        private readonly FileSystemProvider _provider;
 
-        public FileSystemCatalog(string providerId)
+        public FileSystemCatalog(FileSystemProvider provider)
         {
-            _providerId = providerId;
+            _provider = provider;
         }
 
         public Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
         {
-            return Task.FromResult(default(CompletionSet));
+            if (value.Contains("://"))
+            {
+                return Task.FromResult(default(CompletionSet));
+            }
+
+            char separator = value.Contains('/') ? '/' : '\\';
+            int index = value.Length >= caretPosition - 1 ? value.LastIndexOf(separator, caretPosition - 1) : value.Length;
+            string path = _provider.HostInteraction.WorkingDirectory;
+            string prefix = "";
+
+            if (index > 0)
+            {
+                prefix = value.Substring(0, index + 1);
+                path = Path.Combine(path, prefix);
+            }
+
+            var dir = new DirectoryInfo(path);
+
+            var set = new CompletionSet
+            {
+                Start = 0,
+                Length = value.Length
+            };
+
+            if (dir.Exists)
+            {
+                var list = new List<CompletionItem>();
+
+                foreach (FileSystemInfo item in dir.EnumerateDirectories())
+                {
+                    var completion = new CompletionItem
+                    {
+                        DisplayText = item.Name + separator,
+                        InsertionText = prefix + item.Name,
+                    };
+
+                    list.Add(completion);
+                }
+
+                foreach (FileSystemInfo item in dir.EnumerateFiles())
+                {
+                    var completion = new CompletionItem
+                    {
+                        DisplayText = item.Name,
+                        InsertionText = prefix + item.Name,
+                    };
+
+                    list.Add(completion);
+                }
+
+                set.Completions = list;
+            }
+
+            return Task.FromResult(set);
         }
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
@@ -30,7 +83,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
             var library = new FileSystemLibrary
             {
                 Name = libraryId,
-                ProviderId = _providerId,
+                ProviderId = _provider.Id,
                 Files = await GetFilesAsync(libraryId).ConfigureAwait(false)
             };
 

@@ -41,6 +41,10 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 {
                     RetriggerAsync();
                 }
+                else if (typedChar == '/' || typedChar == '\\')
+                {
+                    RetriggerAsync();
+                }
             }
             else if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.BACKSPACE)
             {

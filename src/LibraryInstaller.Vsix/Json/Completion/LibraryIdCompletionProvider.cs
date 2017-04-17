@@ -18,6 +18,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     internal class LibraryIdCompletionProvider : BaseCompletionProvider
     {
         private static readonly ImageMoniker _libraryIcon = KnownMonikers.Method;
+        private static readonly ImageMoniker _folderIcon = KnownMonikers.FolderClosed;
 
         public override JSONCompletionContextType ContextType
         {
@@ -62,7 +63,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 {
                     foreach (CompletionItem item in span.Completions)
                     {
-                        yield return new SimpleCompletionEntry(item.DisplayText, item.InsertionText, item.Description, _libraryIcon, context.Session, ++count);
+                        ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
+                        yield return new SimpleCompletionEntry(item.DisplayText, item.InsertionText, item.Description, moniker, context.Session, ++count);
                     }
                 }
             }
@@ -82,7 +84,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
                             foreach (CompletionItem item in span.Completions)
                             {
-                                results.Add(new SimpleCompletionEntry(item.DisplayText, item.InsertionText, item.Description, _libraryIcon, context.Session, ++count));
+                                ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
+                                results.Add(new SimpleCompletionEntry(item.DisplayText, item.InsertionText, item.Description, moniker, context.Session, ++count));
                             }
 
                             UpdateListEntriesSync(context, results);

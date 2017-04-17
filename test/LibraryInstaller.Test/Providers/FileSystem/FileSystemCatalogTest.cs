@@ -135,15 +135,47 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
             Assert.AreEqual("file.js", library.Files.ElementAt(0).Key);
         }
 
-        [TestMethod]
-        public async Task GetLibraryCompletionSetAsync()
+        [DataTestMethod]
+        [DataRow("http://foo.com/file.txt")]
+        [DataRow("https://foo.com/file.txt")]
+        [DataRow("ftp://foo.com/file.txt")]
+        [DataRow("file://foo.com/file.txt")]
+        public async Task GetLibraryCompletionSetAsync_Uri(string url)
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("../file.txt", 0);
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync(url, 0);
 
             Assert.AreEqual(default(CompletionSet), result);
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.IsNull(result.Completions);
+        }
+
+        [DataTestMethod]
+        [DataRow("test/file.txt", 5, 2)]
+        [DataRow("test/file.txt", 4, 1)]
+        [DataRow("test/file.txt", 4, 1)]
+        public async Task GetLibraryCompletionSetAsync_RelativePath(string path, int caretPos, int completions)
+        {
+            Directory.CreateDirectory(Path.Combine(_projectFolder, "test"));
+            File.WriteAllText(Path.Combine(_projectFolder, "test", "file1.txt"), "");
+            File.WriteAllText(Path.Combine(_projectFolder, "test", "file2.txt"), "");
+
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync(path, caretPos);
+
+            Assert.AreEqual(completions, result.Completions.Count());
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_AbsolutePath()
+        {
+            DirectoryInfo dir = Directory.CreateDirectory(Path.Combine(_projectFolder, "test2\\"));
+            File.WriteAllText(Path.Combine(dir.FullName, "file1.txt"), "");
+            File.WriteAllText(Path.Combine(dir.FullName, "file2.txt"), "");
+            File.WriteAllText(Path.Combine(dir.FullName, "file3.txt"), "");
+
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync(dir.FullName, dir.FullName.Length);
+
+            Assert.AreEqual(3, result.Completions.Count());
         }
 
         [TestMethod]
