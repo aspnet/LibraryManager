@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.IO;
 using Microsoft.Web.LibraryInstaller.Contracts;
 
@@ -17,6 +18,11 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
     {
         public IProvider CreateProvider(IHostInteraction hostInteraction)
         {
+            if (hostInteraction == null)
+            {
+                throw new ArgumentNullException(nameof(hostInteraction));
+            }
+
             return new FileSystemProvider(hostInteraction);
         }
     }

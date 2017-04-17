@@ -45,7 +45,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task InstallLibrary()
+        public async Task SaveAsync_Success()
         {
             var manifest = new Manifest(_dependencies);
 
@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task UninstallLibrary()
+        public async Task UninstallAsync_Success()
         {
             var manifest = new Manifest(_dependencies);
             CancellationToken token = CancellationToken.None;
@@ -101,7 +101,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task CleanAsync()
+        public async Task CleanAsync_Success()
         {
             var manifest = new Manifest(_dependencies);
             CancellationToken token = CancellationToken.None;
@@ -176,7 +176,7 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public async Task RestoreCancelled()
+        public async Task RestoreAsync_Cancelled()
         {
             var manifest = Manifest.FromJson(_doc, _dependencies);
             var source = new CancellationTokenSource();
@@ -188,14 +188,14 @@ namespace Microsoft.Web.LibraryInstaller.Test
         }
 
         [TestMethod]
-        public void FromMalformedJson()
+        public void FromJson_Malformed()
         {
             var manifest = Manifest.FromJson("{", _dependencies);
             Assert.IsNull(manifest);
         }
 
         [TestMethod]
-        public async Task FromFileNotFound()
+        public async Task FromFileAsync_FileNotFound()
         {
             Manifest manifest = await Manifest.FromFileAsync(@"c:\file\not\found.json", _dependencies, CancellationToken.None);
             Assert.IsNotNull(manifest);
