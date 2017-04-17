@@ -63,6 +63,22 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
+        public async Task SearchAsync_EmptyString()
+        {
+            CancellationToken token = CancellationToken.None;
+            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync("", 1, token);
+            Assert.AreEqual(1, absolute.Count);
+        }
+
+        [TestMethod]
+        public async Task SearchAsync_NullString()
+        {
+            CancellationToken token = CancellationToken.None;
+            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(null, 1, token);
+            Assert.AreEqual(1, absolute.Count);
+        }
+
+        [TestMethod]
         public async Task GetLibraryAsync_Success()
         {
             CancellationToken token = CancellationToken.None;

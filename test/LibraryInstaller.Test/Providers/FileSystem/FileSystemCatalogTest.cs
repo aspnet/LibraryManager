@@ -1,10 +1,10 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryInstaller.Contracts;
 using Microsoft.Web.LibraryInstaller.Mocks;
 using Microsoft.Web.LibraryInstaller.Providers.FileSystem;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,13 +31,27 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
             _catalog = _provider.GetCatalog();
         }
 
-        [TestMethod]
-        public async Task SearchAsync_File()
+        [DataTestMethod]
+        [DataRow(@"c:\file.txt")]
+        [DataRow(@"../path/to/file.txt")]
+        [DataRow(@"file.txt")]
+        [DataRow(@"http://example.com/file.txt")]
+        public async Task SearchAsync_File(string file)
         {
-            await SearchAsync(_provider, _catalog, @"c:\file.txt");
-            await SearchAsync(_provider, _catalog, @"../path/to/file.txt");
-            await SearchAsync(_provider, _catalog, @"file.txt");
-            await SearchAsync(_provider, _catalog, @"http://example.com/file.txt");
+            CancellationToken token = CancellationToken.None;
+
+            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(file, 1, token);
+            Assert.AreEqual(1, absolute.Count);
+            IEnumerable<string> info = await absolute[0].GetLibraryIdsAsync(token);
+            Assert.AreEqual(1, info.Count());
+
+            ILibrary library = await _catalog.GetLibraryAsync(info.First(), token);
+            Assert.AreEqual(1, library.Files.Count);
+            Assert.AreEqual(1, library.Files.Count(f => f.Value));
+            Assert.AreEqual(file, library.Name);
+            Assert.AreEqual("1.0", library.Version);
+            Assert.AreEqual(_provider.Id, library.ProviderId);
+            Assert.AreEqual(Path.GetFileName(file), library.Files.Keys.ElementAt(0));
         }
 
         [TestMethod]
@@ -71,23 +85,22 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
             Directory.Delete(folder, true);
         }
 
-        private static async Task SearchAsync(IProvider provider, ILibraryCatalog catalog, string file)
+        [TestMethod]
+        public async Task SearchAsync_EmptyString()
         {
             CancellationToken token = CancellationToken.None;
-
-            IReadOnlyList<ILibraryGroup> absolute = await catalog.SearchAsync(file, 1, token);
+            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync("", 1, token);
             Assert.AreEqual(1, absolute.Count);
-            IEnumerable<string> info = await absolute[0].GetLibraryIdsAsync(token);
-            Assert.AreEqual(1, info.Count());
-
-            ILibrary library = await catalog.GetLibraryAsync(info.First(), token);
-            Assert.AreEqual(1, library.Files.Count);
-            Assert.AreEqual(1, library.Files.Count(f => f.Value));
-            Assert.AreEqual(file, library.Name);
-            Assert.AreEqual("1.0", library.Version);
-            Assert.AreEqual(provider.Id, library.ProviderId);
-            Assert.AreEqual(Path.GetFileName(file), library.Files.Keys.ElementAt(0));
         }
+
+        [TestMethod]
+        public async Task SearchAsync_NullString()
+        {
+            CancellationToken token = CancellationToken.None;
+            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(null, 1, token);
+            Assert.AreEqual(1, absolute.Count);
+        }
+
 
         [TestMethod]
         public async Task GetLibraryAsync_File()
