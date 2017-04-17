@@ -61,18 +61,24 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             // Prevents retriggering from happening while typing fast
             if (_lastTyped.AddMilliseconds(_delay) > DateTime.Now)
+            {
                 return;
+            }
 
             var doc = JSONEditorDocument.FromTextView(_textView);
             JSONParseItem parseItem = doc?.JSONDocument.ItemBeforePosition(_textView.Caret.Position.BufferPosition);
 
             if (parseItem == null)
+            {
                 return;
+            }
 
             JSONMember member = parseItem.FindType<JSONMember>();
 
             if (!member.UnquotedNameText.Equals("id") && member.UnquotedValueText?.Length <= 1)
+            {
                 return;
+            }
 
             JSONObject parent = parseItem.FindType<JSONObject>();
 

@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
                 {
                     var completion = new CompletionItem
                     {
-                        DisplayText = group.DisplayName,
+                        DisplayText = AliasedName(group.DisplayName),
                         InsertionText = group.DisplayName + "@" + group.Version,
                         Description = group.Description,
                     };
@@ -208,15 +208,9 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             return list.OrderByDescending(t => t.Item1).Select(t => t.Item2);
         }
 
-        private string NormalizedGroupName(string groupName)
+        private static string NormalizedGroupName(string groupName)
         {
-            switch (groupName)
-            {
-                case "twitter-bootstrap":
-                    return "bootstrap";
-            }
-
-            string cleanName = groupName;
+            string cleanName = AliasedName(groupName);
 
             if (cleanName.EndsWith("js"))
             {
@@ -226,6 +220,18 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             }
 
             return cleanName;
+        }
+
+        private static string AliasedName(string groupName)
+        {
+
+            switch (groupName)
+            {
+                case "twitter-bootstrap":
+                    return "bootstrap";
+            }
+
+            return groupName;
         }
 
         private async Task<bool> EnsureCatalogAsync(CancellationToken cancellationToken)

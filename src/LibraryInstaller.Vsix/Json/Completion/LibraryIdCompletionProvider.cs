@@ -29,19 +29,25 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             var member = context.ContextItem as JSONMember;
 
             if (member == null || member.UnquotedNameText != "id")
+            {
                 yield break;
+            }
 
             var parent = member.Parent as JSONObject;
 
             if (!JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
+            {
                 yield break;
+            }
 
             var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
             IProvider provider = dependencies.GetProvider(state.ProviderId);
             ILibraryCatalog catalog = provider?.GetCatalog();
 
             if (catalog == null)
+            {
                 yield break;
+            }
 
             int caretPosition = context.Session.TextView.Caret.Position.BufferPosition - member.Value.Start - 1;
 
