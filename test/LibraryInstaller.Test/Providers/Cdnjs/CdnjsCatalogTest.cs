@@ -33,10 +33,11 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [DataTestMethod]
-        [DataRow("jquery")]
-        [DataRow("bootstrap")]
-        [DataRow("knockout")]
-        public async Task SearchAsync_Success(string searchTerm)
+        [DataRow("jquery", "jquery")]
+        [DataRow("bootstrap", "twitter-bootstrap")]
+        [DataRow("knockout", "knockout")]
+        [DataRow("backbone", "backbone.js")]
+        public async Task SearchAsync_Success(string searchTerm, string expectedId)
         {
             CancellationToken token = CancellationToken.None;
 
@@ -47,6 +48,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
 
             ILibrary library = await _catalog.GetLibraryAsync(libraryId.First(), token);
             Assert.IsTrue(library.Files.Count > 0);
+            Assert.AreEqual(expectedId, library.Name);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
             Assert.IsNotNull(library.Name);
             Assert.IsNotNull(library.Version);

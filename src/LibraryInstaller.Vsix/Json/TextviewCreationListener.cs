@@ -1,24 +1,27 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Threading;
-using Microsoft.Web.LibraryInstaller.Contracts;
 using System.Linq;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Language.Intellisense;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix.Json
 {
-    [Export(typeof(IWpfTextViewCreationListener))]
+    [Export(typeof(IVsTextViewCreationListener))]
     [ContentType("JSON")]
     [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
-    public class TextviewCreationListener : IWpfTextViewCreationListener
+    public class TextviewCreationListener : IVsTextViewCreationListener
     {
         private Manifest _manifest;
         private Dependencies _dependencies;
@@ -26,8 +29,17 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
         [Import]
         public ITextDocumentFactoryService DocumentService { get; set; }
 
-        public void TextViewCreated(IWpfTextView textView)
+        [Import]
+        IVsEditorAdaptersFactoryService EditorAdaptersFactoryService { get; set; }
+
+        [Import]
+        ICompletionBroker CompletionBroker { get; set; }
+
+        public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
+            IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
+            new CompletionController(textViewAdapter, textView, CompletionBroker);
+
             if (!DocumentService.TryGetTextDocument(textView.TextBuffer, out var doc))
             {
                 return;

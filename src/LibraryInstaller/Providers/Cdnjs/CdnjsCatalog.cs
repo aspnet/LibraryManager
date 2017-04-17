@@ -195,15 +195,37 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
             foreach (CdnjsLibraryGroup group in _libraryGroups)
             {
-                if (group.DisplayName.Equals(term, StringComparison.OrdinalIgnoreCase))
-                    list.Add(Tuple.Create(10, group));
+                string cleanName = NormalizedGroupName(group.DisplayName);
+
+                if (cleanName.Equals(term, StringComparison.OrdinalIgnoreCase))
+                    list.Add(Tuple.Create(50, group));
                 else if (group.DisplayName.StartsWith(term, StringComparison.OrdinalIgnoreCase))
-                    list.Add(Tuple.Create(5, group));
+                    list.Add(Tuple.Create(20 + (term.Length - cleanName.Length), group));
                 else if (group.DisplayName.IndexOf(term, StringComparison.OrdinalIgnoreCase) > -1)
                     list.Add(Tuple.Create(1, group));
             }
 
             return list.OrderByDescending(t => t.Item1).Select(t => t.Item2);
+        }
+
+        private string NormalizedGroupName(string groupName)
+        {
+            switch (groupName)
+            {
+                case "twitter-bootstrap":
+                    return "bootstrap";
+            }
+
+            string cleanName = groupName;
+
+            if (cleanName.EndsWith("js"))
+            {
+                cleanName = cleanName
+                    .Substring(0, cleanName.Length - 2)
+                    .TrimEnd('-', '.');
+            }
+
+            return cleanName;
         }
 
         private async Task<bool> EnsureCatalogAsync(CancellationToken cancellationToken)
