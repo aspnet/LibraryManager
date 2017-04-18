@@ -68,5 +68,12 @@ namespace Microsoft.Web.LibraryInstaller.Contracts
         /// <returns>The error code LIB006</returns>
         public static IError LibraryIdIsUndefined()
            => new Error("LIB006", string.Format(Text.ErrorLibraryIdIsUndefined));
+
+        /// <summary>
+        /// The provider is undefined.
+        /// </summary>
+        /// <returns>The error code LIB007</returns>
+        public static IError ProviderIsUndefined()
+           => new Error("LIB007", string.Format(Text.ErrorProviderIsUndefined));
     }
 }

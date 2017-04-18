@@ -224,6 +224,27 @@ namespace Microsoft.Web.LibraryInstaller.Test
             Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB006"));
         }
 
+        [TestMethod]
+        public async Task FromFileAsync_ProviderUndefined()
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            var state = new LibraryInstallationState
+            {
+                LibraryId = "cdnjs",
+                DestinationPath = "lib",
+                Files = new[] { "knockout-min.js" }
+            };
+
+            manifest.AddLibrary(state);
+
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.IsFalse(result.First().Success);
+            Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB007"));
+        }
+
         private const string _doc = @"{
   ""version"": ""1.0"",
   ""packages"": [

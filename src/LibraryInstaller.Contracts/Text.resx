@@ -129,6 +129,9 @@
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>The "path" is undefined.</value>
   </data>
+  <data name="ErrorProviderIsUndefined" xml:space="preserve">
+    <value>The provider is undefined</value>
+  </data>
   <data name="ErrorProviderUnknown" xml:space="preserve">
     <value>The "{0}" provider could not be found</value>
   </data>

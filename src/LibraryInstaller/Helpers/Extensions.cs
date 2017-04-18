@@ -15,6 +15,11 @@ namespace Microsoft.Web.LibraryInstaller
                 return false;
             }
 
+            if (string.IsNullOrEmpty(state.ProviderId))
+            {
+                list.Add(PredefinedErrors.ProviderIsUndefined());
+            }
+
             if (string.IsNullOrEmpty(state.DestinationPath))
             {
                 list.Add(PredefinedErrors.PathIsUndefined());

@@ -140,6 +140,22 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
+        public async Task InstallAsync_NoProviderDefined()
+        {
+            var desiredState = new LibraryInstallationState
+            {
+                LibraryId = "jquery@1.2.3",
+                DestinationPath = "lib"
+            };
+
+            // Install library
+            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB007", result.Errors.First().Code);
+        }
+
+        [TestMethod]
         public async Task InstallAsync_InvalidLibraryFiles()
         {
             var desiredState = new LibraryInstallationState

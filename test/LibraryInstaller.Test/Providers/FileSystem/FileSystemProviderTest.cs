@@ -275,6 +275,25 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
         }
 
         [TestMethod]
+        public async Task InstallAsync_ProviderNotDefined()
+
+        {
+            IProvider provider = _dependencies.GetProvider("filesystem");
+
+            var desiredState = new LibraryInstallationState
+            {
+                LibraryId = "filesystem",
+                DestinationPath = "lib",
+                Files = new[] { "file.js" }
+            };
+
+            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB007", result.Errors[0].Code);
+        }
+
+        [TestMethod]
         public async Task RestoreAsync_Manifest()
         {
             IProvider provider = _dependencies.GetProvider("filesystem");

@@ -98,6 +98,15 @@ namespace Microsoft.Web.LibraryInstaller.Contracts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The provider is undefined.
+        /// </summary>
+        internal static string ErrorProviderIsUndefined {
+            get {
+                return ResourceManager.GetString("ErrorProviderIsUndefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; provider could not be found.
         /// </summary>
         internal static string ErrorProviderUnknown {
