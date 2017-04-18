@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.Web.Editor.Completion;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Text;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -27,6 +28,14 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             : base(text, "\"" + insertionText + "\"", description, null, null, false, session as ICompletionSession)
         {
             SetIconMoniker(moniker);
+            _specificVersion = specificVersion;
+        }
+
+        public SimpleCompletionEntry(string text, string insertionText, ImageMoniker moniker, ITrackingSpan span, IIntellisenseSession session, int specificVersion = 0)
+         : base(text, "\"" + insertionText + "\"", null, null, null, false, session as ICompletionSession)
+        {
+            SetIconMoniker(moniker);
+            ApplicableTo = span;
             _specificVersion = specificVersion;
         }
 

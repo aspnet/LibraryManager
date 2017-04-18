@@ -27,6 +27,9 @@ namespace Microsoft.Web.LibraryInstaller.Test
             TestError(PredefinedErrors.UnableToResolveSource("_libid_", "_prov_"), "LIB002", "_libid_", "_prov_");
             TestError(PredefinedErrors.CouldNotWriteFile("file.js"), "LIB003", "file.js");
             TestError(PredefinedErrors.ManifestMalformed(), "LIB004");
+            TestError(PredefinedErrors.PathIsUndefined(), "LIB005");
+            TestError(PredefinedErrors.LibraryIdIsUndefined(), "LIB006");
+            TestError(PredefinedErrors.ProviderIsUndefined(), "LIB007");
         }
 
         private void TestError(IError error, string code, params string[] pieces)

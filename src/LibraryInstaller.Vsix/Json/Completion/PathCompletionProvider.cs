@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using Microsoft.VisualStudio.Text;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -48,18 +49,23 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 yield break;
             }
 
-            IEnumerable<Tuple<string, string>> completions = GetCompletions(cwd, member.UnquotedValueText, caretPosition);
+            IEnumerable<Tuple<string, string>> completions = GetCompletions(cwd, member.UnquotedValueText, caretPosition, out Span span);
+            int start = member.Value.Start;
+            ITrackingSpan trackingSpan = context.Snapshot.CreateTrackingSpan(start + 1 + span.Start, span.Length, SpanTrackingMode.EdgeInclusive);
 
             foreach (Tuple<string, string> item in completions)
             {
-                yield return new SimpleCompletionEntry(item.Item1, item.Item2, null, KnownMonikers.FolderClosed, context.Session);
+                yield return new SimpleCompletionEntry(item.Item1, item.Item2, KnownMonikers.FolderClosed, trackingSpan, context.Session);
             }
 
             Telemetry.TrackUserTask("completionpath");
         }
 
-        private IEnumerable<Tuple<string, string>> GetCompletions(string cwd, string value, int caretPosition)
+        private IEnumerable<Tuple<string, string>> GetCompletions(string cwd, string value, int caretPosition, out Span span)
         {
+            span = new Span(0, value.Length);
+            var list = new List<Tuple<string, string>>();
+
             int index = value.Length >= caretPosition - 1 ? value.LastIndexOf('/', Math.Max(caretPosition - 1, 0)) : value.Length;
             string prefix = "";
 
@@ -67,6 +73,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             {
                 prefix = value.Substring(0, index + 1);
                 cwd = Path.Combine(cwd, prefix);
+                span = new Span(index + 1, value.Length - index - 1);
             }
 
             var dir = new DirectoryInfo(cwd);
@@ -75,9 +82,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             {
                 foreach (FileSystemInfo item in dir.EnumerateDirectories())
                 {
-                    yield return Tuple.Create(item.Name + "/", prefix + item.Name + "/");
+                    list.Add(Tuple.Create(item.Name + "/", prefix + item.Name + "/"));
                 }
             }
+
+            return list;
         }
     }
 }

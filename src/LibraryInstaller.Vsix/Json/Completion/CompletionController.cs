@@ -55,15 +55,15 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 }
             }
 
-            if (_broker.IsCompletionActive(_textView))
+            ThreadHelper.Generic.BeginInvoke(() =>
             {
-                if (_currentSession == null)
+                if (_currentSession == null && _broker.IsCompletionActive(_textView))
                 {
                     _currentSession = _broker.GetSessions(_textView)[0];
                     _currentSession.Committed += OnCommitted;
                     _currentSession.Dismissed += OnDismissed;
                 }
-            }
+            });
 
             return _nextCommandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
         }
@@ -117,10 +117,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             if (JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
             {
-                ThreadHelper.Generic.BeginInvoke(() =>
-                {
-                    VsHelpers.DTE.ExecuteCommand("Edit.ListMembers");
-                });
+                VsHelpers.DTE.ExecuteCommand("Edit.ListMembers");
             }
         }
 
