@@ -37,13 +37,19 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return LibraryInstallationResult.FromCancelled(desiredState);
+            }
+
+            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            {
+                return new LibraryInstallationResult(desiredState, errors.ToArray());
+            }
+
+
             try
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return LibraryInstallationResult.FromCancelled(desiredState);
-                }
-
                 var catalog = (CdnjsCatalog)GetCatalog();
                 ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
 

@@ -71,11 +71,29 @@ namespace Microsoft.Web.LibraryInstaller.Contracts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The library id is undefined.
+        /// </summary>
+        internal static string ErrorLibraryIdIsUndefined {
+            get {
+                return ResourceManager.GetString("ErrorLibraryIdIsUndefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The manifest file contains syntax errors.
         /// </summary>
         internal static string ErrorManifestMalformed {
             get {
                 return ResourceManager.GetString("ErrorManifestMalformed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;path&quot; is undefined..
+        /// </summary>
+        internal static string ErrorPathIsUndefined {
+            get {
+                return ResourceManager.GetString("ErrorPathIsUndefined", resourceCulture);
             }
         }
         

@@ -20,6 +20,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         private string _cacheFolder;
         private string _projectFolder;
         private IDependencies _dependencies;
+        private IProvider _provider;
 
         [TestInitialize]
         public void Setup()
@@ -28,6 +29,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryInstaller");
             var hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(hostInteraction, new CdnjsProviderFactory());
+            _provider = _dependencies.GetProvider("cdnjs");
 
             Directory.CreateDirectory(_projectFolder);
         }
@@ -42,8 +44,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         [TestMethod]
         public async Task InstallAsync_FullEndToEnd()
         {
-            IProvider provider = _dependencies.GetProvider("cdnjs");
-            ILibraryCatalog catalog = provider.GetCatalog();
+            ILibraryCatalog catalog = _provider.GetCatalog();
 
             // Search for libraries to display in search result
             IReadOnlyList<ILibraryGroup> groups = await catalog.SearchAsync("jquery", 4, CancellationToken.None);
@@ -72,7 +73,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
 
             foreach (string file in desiredState.Files)
             {
@@ -89,8 +90,6 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         [TestMethod]
         public async Task InstallAsync_InvalidState()
         {
-            IProvider provider = _dependencies.GetProvider("cdnjs");
-
             var desiredState = new LibraryInstallationState
             {
                 LibraryId = "*&(}:@3.1.1",
@@ -100,15 +99,13 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
         }
 
         [TestMethod]
         public async Task InstallAsync_EmptyFilesArray()
         {
-            IProvider provider = _dependencies.GetProvider("cdnjs");
-
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "cdnjs",
@@ -117,7 +114,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
 
             foreach (string file in new[] { "jquery.js", "jquery.min.js" })
@@ -128,10 +125,23 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         }
 
         [TestMethod]
+        public async Task InstallAsync_NoPathDefined()
+        {
+            var desiredState = new LibraryInstallationState
+            {
+                ProviderId = "cdnjs",
+                LibraryId = "jquery@1.2.3"
+            };
+
+            // Install library
+            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual("LIB005", result.Errors.First().Code);
+        }
+
+        [TestMethod]
         public async Task InstallAsync_InvalidLibraryFiles()
         {
-            IProvider provider = _dependencies.GetProvider("cdnjs");
-
             var desiredState = new LibraryInstallationState
             {
                 LibraryId = "jquery@3.1.1",
@@ -141,7 +151,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB003", result.Errors[0].Code);
         }
@@ -149,8 +159,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
         [TestMethod]
         private void GetCatalog()
         {
-            IProvider provider = _dependencies.GetProvider("cdnjs");
-            ILibraryCatalog catalog = provider.GetCatalog();
+            ILibraryCatalog catalog = _provider.GetCatalog();
 
             Assert.IsNotNull(catalog);
         }

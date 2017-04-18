@@ -9,7 +9,7 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
     /// A mock <see cref="IError"/> object.
     /// </summary>
     /// <seealso cref="LibraryInstaller.Contracts.IError" />
-    internal class Error : IError
+    public class Error : IError
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Error"/> class.

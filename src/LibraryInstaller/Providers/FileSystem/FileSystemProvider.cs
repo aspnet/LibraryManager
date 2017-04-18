@@ -7,6 +7,8 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
@@ -28,6 +30,11 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
+            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            {
+                return new LibraryInstallationResult(desiredState, errors.ToArray());
+            }
+
             try
             {
                 foreach (string file in desiredState.Files)

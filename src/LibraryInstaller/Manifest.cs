@@ -137,6 +137,12 @@ namespace Microsoft.Web.LibraryInstaller
                     return results;
                 }
 
+                if (!state.IsValid(out IEnumerable<IError> errors))
+                {
+                    results.Add(new LibraryInstallationResult(state, errors.ToArray()));
+                    continue;
+                }
+
                 _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, state.LibraryId), LogLevel.Operation);
 
                 IProvider provider = _dependencies.GetProvider(state.ProviderId);

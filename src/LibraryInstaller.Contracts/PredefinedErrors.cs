@@ -54,5 +54,19 @@ namespace Microsoft.Web.LibraryInstaller.Contracts
         /// <returns>The error code LIB004</returns>
         public static IError ManifestMalformed()
            => new Error("LIB004", string.Format(Text.ErrorManifestMalformed));
+
+        /// <summary>
+        /// The relative path is undefined.
+        /// </summary>
+        /// <returns>The error code LIB005</returns>
+        public static IError PathIsUndefined()
+           => new Error("LIB005", string.Format(Text.ErrorPathIsUndefined));
+
+        /// <summary>
+        /// The library id is undefined.
+        /// </summary>
+        /// <returns>The error code LIB006</returns>
+        public static IError LibraryIdIsUndefined()
+           => new Error("LIB006", string.Format(Text.ErrorLibraryIdIsUndefined));
     }
 }

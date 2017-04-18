@@ -120,8 +120,14 @@
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
     <value>{0} could not be written to disk. Make sure the file name is correct</value>
   </data>
+  <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
+    <value>The library id is undefined</value>
+  </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
     <value>The manifest file contains syntax errors</value>
+  </data>
+  <data name="ErrorPathIsUndefined" xml:space="preserve">
+    <value>The "path" is undefined.</value>
   </data>
   <data name="ErrorProviderUnknown" xml:space="preserve">
     <value>The "{0}" provider could not be found</value>

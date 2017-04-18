@@ -7,7 +7,7 @@ namespace Microsoft.Web.LibraryInstaller.Contracts
     /// A basic implementation of <see cref="IError"/>.
     /// </summary>
     /// <seealso cref="Microsoft.Web.LibraryInstaller.Contracts.IError" />
-    public class Error : IError
+    internal class Error : IError
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Error"/> class.

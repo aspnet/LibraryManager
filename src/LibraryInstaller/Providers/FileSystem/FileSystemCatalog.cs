@@ -38,13 +38,13 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
                 path = Path.Combine(path, prefix);
             }
 
-            var dir = new DirectoryInfo(path);
-
             var set = new CompletionSet
             {
                 Start = 0,
                 Length = value.Length
             };
+
+            var dir = new DirectoryInfo(path);
 
             if (dir.Exists)
             {
