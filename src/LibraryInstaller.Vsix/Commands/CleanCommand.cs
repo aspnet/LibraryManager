@@ -60,9 +60,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             if (configProjectItem != null)
                 await LibraryHelpers.CleanAsync(configProjectItem);
-
-            TelemetryResult result = configProjectItem != null ? TelemetryResult.Success : TelemetryResult.Failure;
-            Telemetry.TrackUserTask("clean", result);
         }
 
         private void OnBuildBegin(vsBuildScope Scope, vsBuildAction Action)

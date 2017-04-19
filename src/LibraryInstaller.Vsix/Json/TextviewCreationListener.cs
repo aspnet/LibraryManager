@@ -2,11 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
-using Microsoft.Web.LibraryInstaller;
 using Microsoft.Web.LibraryInstaller.Contracts;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Language.Intellisense;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix.Json
 {
@@ -124,7 +123,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
+                        Logger.LogEvent(ex.ToString(), LogLevel.Error);
                         Telemetry.TrackException("configsaved", ex);
                     }
                 });

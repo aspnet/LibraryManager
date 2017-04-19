@@ -52,9 +52,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             if (configProjectItem != null)
                 await LibraryHelpers.RestoreAsync(configProjectItem.FileNames[1]);
-
-            TelemetryResult result = configProjectItem != null ? TelemetryResult.Success : TelemetryResult.Failure;
-            Telemetry.TrackUserTask("restoremanual", result);
         }
     }
 }

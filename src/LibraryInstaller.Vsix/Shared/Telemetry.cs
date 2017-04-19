@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.Telemetry;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
@@ -10,16 +11,31 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     {
         private const string _namespace = Constants.TelemetryNamespace;
 
-        public static void TrackUserTask(string name, TelemetryResult result = TelemetryResult.Success)
+        public static void TrackUserTask(string name, params KeyValuePair<string, object>[] properties)
         {
             string actualName = name.Replace(" ", "_");
-            TelemetryService.DefaultSession.PostUserTask(_namespace + actualName, result);
+
+            var task = new UserTaskEvent(_namespace + actualName, TelemetryResult.None);
+
+            foreach (KeyValuePair<string, object> property in properties)
+            {
+                task.Properties.Add(property);
+            }
+
+            TelemetryService.DefaultSession.PostEvent(task);
         }
 
-        public static void TrackOperation(string name, TelemetryResult result = TelemetryResult.Success)
+        public static void TrackOperation(string name, params KeyValuePair<string, object>[] properties)
         {
             string actualName = name.Replace(" ", "_");
-            TelemetryService.DefaultSession.PostOperation(_namespace + actualName, result);
+            var task = new OperationEvent(_namespace + actualName, TelemetryResult.None);
+
+            foreach (KeyValuePair<string, object> property in properties)
+            {
+                task.Properties.Add(property);
+            }
+
+            TelemetryService.DefaultSession.PostEvent(task);
         }
 
         public static void TrackException(string name, Exception exception)

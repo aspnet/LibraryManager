@@ -212,16 +212,22 @@ namespace Microsoft.Web.LibraryInstaller
         /// that deletes the files from the project.
         /// </remarks>
         /// <param name="deleteFileAction">An action to delete the files.</param>
-        public void Clean(Action<string> deleteFileAction)
+        public int Clean(Action<string> deleteFileAction)
         {
+            int filesDeleted = 0;
+
             foreach (ILibraryInstallationState state in Libraries)
             {
-                DeleteLibraryFiles(state, deleteFileAction);
+                filesDeleted += DeleteLibraryFiles(state, deleteFileAction);
             }
+
+            return filesDeleted;
         }
 
-        private void DeleteLibraryFiles(ILibraryInstallationState state, Action<string> deleteFileAction)
+        private int DeleteLibraryFiles(ILibraryInstallationState state, Action<string> deleteFileAction)
         {
+            int filesDeleted = 0;
+
             foreach (string file in state.Files)
             {
                 var url = new Uri(file, UriKind.RelativeOrAbsolute);
@@ -230,8 +236,11 @@ namespace Microsoft.Web.LibraryInstaller
                 {
                     string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
                     deleteFileAction?.Invoke(relativePath);
+                    filesDeleted++;
                 }
             }
+
+            return filesDeleted;
         }
     }
 }

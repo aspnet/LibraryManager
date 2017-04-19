@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Telemetry;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -43,28 +44,38 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             var sw = new Stopwatch();
             sw.Start();
-            int fileCount = 0;
+            int resultCount = 0;
             bool hasErrors = false;
+            var telResult = new Dictionary<string, double>();
 
             foreach (string configFilePath in configFilePaths)
             {
-                IEnumerable<ILibraryInstallationResult> result = await RestoreLibrariesAsync(configFilePath, cancellationToken).ConfigureAwait(false);
+                IEnumerable<ILibraryInstallationResult> results = await RestoreLibrariesAsync(configFilePath, cancellationToken).ConfigureAwait(false);
                 Project project = VsHelpers.DTE.Solution?.FindProjectItem(configFilePath)?.ContainingProject;
-                AddFilesToProject(configFilePath, project, result);
+                AddFilesToProject(configFilePath, project, results);
 
                 var errorList = new ErrorList(project?.Name, configFilePath);
-                hasErrors |= errorList.HandleErrors(result);
+                hasErrors |= errorList.HandleErrors(results);
 
-                fileCount += result.Count();
+                resultCount += results.Count();
+
+                foreach (ILibraryInstallationResult result in results)
+                {
+                    telResult.TryGetValue(result.InstallationState.ProviderId, out double count);
+                    telResult[result.InstallationState.ProviderId] = count + 1;
+                }
             }
 
             sw.Stop();
 
-            if (fileCount > 0)
+            telResult.Add("time", sw.Elapsed.TotalMilliseconds);
+            Telemetry.TrackUserTask("restore", telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
+
+            if (resultCount > 0)
             {
                 string text = hasErrors ?
                     LibraryInstaller.Resources.Text.RestoreHasErrors :
-                    string.Format(LibraryInstaller.Resources.Text.LibrariesRestored, fileCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
+                    string.Format(LibraryInstaller.Resources.Text.LibrariesRestored, resultCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
 
                 Logger.LogEvent(Environment.NewLine + text + Environment.NewLine, LogLevel.Task);
             }
@@ -80,6 +91,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
             var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
             manifest.Uninstall(libraryId, (file) => hostInteraction.DeleteFiles(file));
+
+            Telemetry.TrackUserTask("libraryuninstall");
         }
 
         public static async Task CleanAsync(ProjectItem configProjectItem)
@@ -91,9 +104,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
             var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
 
-            manifest?.Clean((file) => hostInteraction.DeleteFiles(file));
+            int? filesDeleted = manifest?.Clean((file) => hostInteraction.DeleteFiles(file));
 
             Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded + Environment.NewLine, LogLevel.Task);
+
+            TelemetryResult result = configProjectItem != null ? TelemetryResult.Success : TelemetryResult.Failure;
+            Telemetry.TrackUserTask("clean", new KeyValuePair<string, object>("filesdeleted", filesDeleted));
         }
 
         private static async Task<IEnumerable<ILibraryInstallationResult>> RestoreLibrariesAsync(string configFilePath, CancellationToken cancellationToken)

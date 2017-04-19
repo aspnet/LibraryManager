@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.Web.Editor.SuggestedActions;
 using System;
 using System.Threading;
+using Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -41,6 +42,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             {
                 await LibraryHelpers.UninstallAsync(_provider.ConfigFilePath, _provider.InstallationState.LibraryId, cancellationToken).ConfigureAwait(false);
 
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 using (ITextEdit edit = TextBuffer.CreateEdit())
                 {
                     var arrayElement = _provider.LibraryObject.Parent as JSONArrayElement;

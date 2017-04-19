@@ -32,6 +32,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                     foreach (IError error in result.Errors)
                     {
                         Logger.LogEvent(error.Message, LogLevel.Operation);
+                        Telemetry.TrackOperation("error", new KeyValuePair<string, object>("code", error.Code));
                     }
                 }
             }
