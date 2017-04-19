@@ -118,8 +118,8 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery@", 7);
 
-            Assert.AreEqual(0, result.Start);
-            Assert.AreEqual(7, result.Length);
+            Assert.AreEqual(7, result.Start);
+            Assert.AreEqual(0, result.Length);
             Assert.IsTrue(result.Completions.Count() >= 69);
             Assert.AreEqual("1.2.3", result.Completions.Last().DisplayText);
             Assert.AreEqual("jquery@1.2.3", result.Completions.Last().InsertionText);
