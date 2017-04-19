@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.Web.LibraryInstaller;
 using Microsoft.Web.LibraryInstaller.Contracts;
 using System;
 using System.Collections.Generic;
@@ -76,7 +77,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
         {
             var files = new List<string>();
 
-            foreach (ILibraryInstallationState state in manifest.Libraries.Select(l => l))
+            foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out var errors)))
             {
                 IEnumerable<string> stateFiles = await GetFilesAsync(state).ConfigureAwait(false);
                 IEnumerable<string> filesToAdd = stateFiles

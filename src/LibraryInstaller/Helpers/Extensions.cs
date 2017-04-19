@@ -3,8 +3,19 @@ using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryInstaller
 {
-    internal static class Extensions
+    /// <summary>
+    /// A collection of extension methods.
+    /// </summary>
+    public static class Extensions
     {
+        /// <summary>
+        /// Returns true if the <see cref="ILibraryInstallationState"/> is valid.
+        /// </summary>
+        /// <param name="state">The state to test.</param>
+        /// <param name="errors">The errors contained in the <see cref="ILibraryInstallationState"/> if any.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified state is valid; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsValid(this ILibraryInstallationState state, out IEnumerable<IError> errors)
         {
             errors = null;
