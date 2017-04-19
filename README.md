@@ -28,6 +28,11 @@ Edit the library.json file to install libraries. Every time the file is saved, V
 
 See [library.json reference](https://github.com/aspnet/LibraryInstaller/wiki/library.json-reference) for more information.
 
+### Light bulbs
+Inside library.json there are light bulbs that show up with helpful commands.
+
+![Light bulbs](art/light-bulbs.png)
+
 ## Restore packages
 
 ## Road map and release notes

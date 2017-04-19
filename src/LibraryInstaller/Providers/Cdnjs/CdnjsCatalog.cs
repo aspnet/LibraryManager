@@ -181,7 +181,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
             if (!includePreReleases)
             {
-                first = ids.First(id => id.IndexOf('-', name.Length) == -1);
+                first = ids.First(id => id.Substring(name.Length).Any(c => !char.IsLetter(c)));
             }
 
             if (!string.IsNullOrEmpty(first) && ids.IndexOf(first) < ids.IndexOf(libraryId))

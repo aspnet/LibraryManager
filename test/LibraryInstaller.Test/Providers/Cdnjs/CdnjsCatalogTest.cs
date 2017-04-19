@@ -142,5 +142,24 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
             Assert.AreNotEqual(libraryId, result);
             Assert.AreEqual(existing[0], latest[0]);
         }
+
+        [TestMethod]
+        public async Task GetLatestVersion_PreRelease()
+        {
+            CancellationToken token = CancellationToken.None;
+            const string libraryId = "twitter-bootstrap@3.3.0";
+            string result = await _catalog.GetLatestVersion(libraryId, true, token);
+
+            Assert.IsNotNull(result);
+
+            string[] latest = result.Split('@');
+            string[] existing = libraryId.Split('@');
+
+            Assert.AreEqual(2, latest.Length);
+
+            Assert.AreNotEqual(libraryId, result);
+            Assert.AreEqual(existing[0], latest[0]);
+            Assert.IsTrue(latest[0].Any(c => char.IsLetter(c)));
+        }
     }
 }
