@@ -10,6 +10,7 @@ using Microsoft.Web.LibraryInstaller.Contracts;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Text;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -62,15 +63,17 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             if (task.IsCompleted)
             {
-                CompletionSet span = task.Result;
+                CompletionSet set = task.Result;
+                int start = member.Value.Start;
+                ITrackingSpan trackingSpan = context.Snapshot.CreateTrackingSpan(start + 1 + set.Start, set.Length, SpanTrackingMode.EdgeInclusive);
 
-                if (span.Completions != null)
+                if (set.Completions != null)
                 {
-                    foreach (CompletionItem item in span.Completions)
+                    foreach (CompletionItem item in set.Completions)
                     {
                         string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                         ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                        yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, context.Session, ++count);
+                        yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
                     }
                 }
             }
@@ -82,17 +85,19 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 {
                     if (!context.Session.IsDismissed)
                     {
-                        CompletionSet span = task.Result;
+                        CompletionSet set = task.Result;
+                        int start = member.Value.Start;
+                        ITrackingSpan trackingSpan = context.Snapshot.CreateTrackingSpan(start + 1 + set.Start, set.Length, SpanTrackingMode.EdgeExclusive);
 
-                        if (span.Completions != null)
+                        if (set.Completions != null)
                         {
                             var results = new List<JSONCompletionEntry>();
 
-                            foreach (CompletionItem item in span.Completions)
+                            foreach (CompletionItem item in set.Completions)
                             {
                                 string insertionText = item.InsertionText.Replace("\\", "\\\\");
                                 ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                                results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, context.Session, ++count));
+                                results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
                             }
 
                             UpdateListEntriesSync(context, results);

@@ -40,11 +40,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
                 if (char.IsLetterOrDigit(typedChar) && _broker.IsCompletionActive(_textView))
                 {
-                    RetriggerAsync();
+                    RetriggerAsync(false);
                 }
                 else if (typedChar == '/' || typedChar == '\\' && !_broker.IsCompletionActive(_textView))
                 {
-                    RetriggerAsync();
+                    RetriggerAsync(false);
                 }
             }
             else if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.BACKSPACE)
@@ -82,18 +82,19 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             if (text.EndsWith("/") || text.EndsWith("\\"))
             {
                 System.Windows.Forms.SendKeys.Send("{LEFT}");
-                RetriggerAsync();
+                RetriggerAsync(true);
             }
         }
 
-        private async void RetriggerAsync()
+        private async void RetriggerAsync(bool force)
         {
             _lastTyped = DateTime.Now;
+            int delay = force ? 50 : _delay;
 
-            await System.Threading.Tasks.Task.Delay(_delay);
+            await System.Threading.Tasks.Task.Delay(delay);
 
             // Prevents retriggering from happening while typing fast
-            if (_lastTyped.AddMilliseconds(_delay) > DateTime.Now)
+            if (_lastTyped.AddMilliseconds(delay) > DateTime.Now)
             {
                 return;
             }

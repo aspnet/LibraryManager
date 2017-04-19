@@ -73,6 +73,9 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
                 if (group != null)
                 {
+                    span.Start = at + 1;
+                    span.Length = value.Length - span.Start;
+
                     IEnumerable<Asset> assets = await GetAssetsAsync(name, CancellationToken.None).ConfigureAwait(false);
 
                     foreach (string version in assets.Select(a => a.Version))
