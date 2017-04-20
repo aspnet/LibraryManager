@@ -124,7 +124,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Json
                     catch (Exception ex)
                     {
                         Logger.LogEvent(ex.ToString(), LogLevel.Error);
-                        Telemetry.TrackException("configsaved", ex);
+                        Telemetry.TrackException("restoresavefailed", ex);
                     }
                 });
             }

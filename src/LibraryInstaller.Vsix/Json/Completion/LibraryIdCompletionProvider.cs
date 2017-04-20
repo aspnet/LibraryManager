@@ -105,8 +105,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                     }
                 });
             }
-
-            Telemetry.TrackUserTask("completionlibraryid");
         }
     }
 }

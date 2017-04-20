@@ -93,8 +93,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                     }
                 });
             }
-
-            Telemetry.TrackUserTask("completionfiles");
         }
 
         private static IEnumerable<string> GetUsedFiles(JSONCompletionContext context)

@@ -57,8 +57,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             {
                 yield return new SimpleCompletionEntry(item.Item1, item.Item2, KnownMonikers.FolderClosed, trackingSpan, context.Session);
             }
-
-            Telemetry.TrackUserTask("completionpath");
         }
 
         private IEnumerable<Tuple<string, string>> GetCompletions(string cwd, string value, int caretPosition, out Span span)
