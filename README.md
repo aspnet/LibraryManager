@@ -22,6 +22,13 @@ Right-click any web project in Solution Explorer and hit **Manage Client-side Li
 This will create a `library.json` file in the root of the project.
 
 ## library.json
+
+### Context menu
+Right-click `library.json` in Solution Explorer to access commands that help managing the libraries.
+
+![context menu library.json](art/context-menu-config.png)
+
+### Intellisense
 Edit the library.json file to install libraries. Every time the file is saved, Visual Studio will install/restore the packages.
 
 ![library.json](art/library.json%20typing.gif)
@@ -32,8 +39,6 @@ See [library.json reference](https://github.com/aspnet/LibraryInstaller/wiki/lib
 Inside library.json there are light bulbs that show up with helpful commands.
 
 ![Light bulbs](art/light-bulbs.png)
-
-## Restore packages
 
 ## Road map and release notes
 See the [CHANGELOG](CHANGELOG.md) for road map and release notes

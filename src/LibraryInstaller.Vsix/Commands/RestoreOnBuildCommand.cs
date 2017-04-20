@@ -58,7 +58,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 button.Visible = button.Enabled = true;
 
                 _isPackageInstalled = IsPackageInstalled(item.ContainingProject);
-                button.Checked = _isPackageInstalled;
 
                 if (_isPackageInstalled)
                 {
