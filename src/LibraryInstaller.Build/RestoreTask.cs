@@ -29,6 +29,7 @@ namespace Microsoft.Web.LibraryInstaller.Build
 
         public override bool Execute()
         {
+            Logger.Instance.Clear();
             var configFilePath = new FileInfo(Path.Combine(ProjectDirectory, FileName));
 
             if (!configFilePath.Exists)
@@ -44,17 +45,40 @@ namespace Microsoft.Web.LibraryInstaller.Build
 
             Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.RestoringLibraries);
 
-            var dependencies = Dependencies.FromTask(this, ProviderAssemblies.Select(pa => new FileInfo(pa.ItemSpec).FullName));
+            var dependencies = Dependencies.FromTask(ProjectDirectory, ProviderAssemblies.Select(pa => new FileInfo(pa.ItemSpec).FullName));
             Manifest manifest = Manifest.FromFileAsync(configFilePath.FullName, dependencies, token).Result;
+            var logger = dependencies.GetHostInteractions().Logger as Logger;
+
+            if (manifest == null)
+            {
+                logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Error);
+                FlushLogger(logger);
+                return false;
+            }
 
             IEnumerable<ILibraryInstallationResult> results = manifest.RestoreAsync(token).Result;
 
             sw.Stop();
 
+            FlushLogger(logger);
             PopulateFilesWritten(results, dependencies.GetHostInteractions());
             LogResults(sw, results);
 
             return !Log.HasLoggedErrors;
+        }
+
+        // This is done to fix the issue with async/await in a synchronous Execute() method
+        private void FlushLogger(Logger logger)
+        {
+            foreach (string message in logger.Messages)
+            {
+                Log.LogMessage(MessageImportance.High, message);
+            }
+
+            foreach (string error in logger.Errors)
+            {
+                Log.LogError(error);
+            }
         }
 
         private void LogResults(Stopwatch sw, IEnumerable<ILibraryInstallationResult> results)

@@ -11,16 +11,14 @@ namespace Microsoft.Web.LibraryInstaller.Build
 {
     public class HostInteraction : IHostInteraction
     {
-        public HostInteraction(RestoreTask task)
+        public HostInteraction(string workingDirectory)
         {
-            string cwd = Path.GetDirectoryName(task.FileName);
-            WorkingDirectory = cwd;
-            Logger = new Logger(task);
+            WorkingDirectory = workingDirectory;
         }
 
         public string WorkingDirectory { get; }
         public string CacheDirectory => Constants.CacheFolder;
-        public ILogger Logger { get; }
+        public ILogger Logger => Build.Logger.Instance;
 
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {

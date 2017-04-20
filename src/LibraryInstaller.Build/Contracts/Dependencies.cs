@@ -6,6 +6,7 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace Microsoft.Web.LibraryInstaller.Build
 {
@@ -13,7 +14,6 @@ namespace Microsoft.Web.LibraryInstaller.Build
     {
         private readonly IHostInteraction _hostInteraction;
         private static readonly List<IProvider> _providers = new List<IProvider>();
-        private static readonly Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
         private readonly IEnumerable<string> _assemblyPaths;
 
         private Dependencies(IHostInteraction hostInteraction, IEnumerable<string> assemblyPaths)
@@ -25,15 +25,10 @@ namespace Microsoft.Web.LibraryInstaller.Build
 
         public IHostInteraction GetHostInteractions() => _hostInteraction;
 
-        public static Dependencies FromTask(RestoreTask task, IEnumerable<string> assemblyPaths)
+        public static Dependencies FromTask(string workingDirectory, IEnumerable<string> assemblyPaths)
         {
-            if (!_cache.ContainsKey(task.FileName))
-            {
-                var hostInteraction = new HostInteraction(task);
-                _cache[task.FileName] = new Dependencies(hostInteraction, assemblyPaths);
-            }
-
-            return _cache[task.FileName];
+            var hostInteraction = new HostInteraction(workingDirectory);
+            return new Dependencies(hostInteraction, assemblyPaths);
         }
 
         public IProvider GetProvider(string providerId)

@@ -1,23 +1,40 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryInstaller.Contracts;
-using Microsoft.Build.Utilities;
+using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryInstaller.Build
 {
-    public class Logger : ILogger
+    public class Logger : Contracts.ILogger
     {
-        private readonly Task _task;
-
-        public Logger(Task task)
+        private Logger()
         {
-            _task = task;
         }
 
-        public void Log(string message, LogLevel level)
+        public static Logger Instance { get; } = new Logger();
+
+        public ICollection<string> Messages { get; } = new List<string>();
+        public ICollection<string> Errors { get; } = new List<string>();
+
+        public void Clear()
         {
-            _task.Log.LogMessage(Microsoft.Build.Framework.MessageImportance.High, message);
+            Messages.Clear();
+            Errors.Clear();
+        }
+
+        public void Log(string message, Contracts.LogLevel level)
+        {
+            switch (level)
+            {
+                case Contracts.LogLevel.Error:
+                    Errors.Add(message);
+                    break;
+                case Contracts.LogLevel.Operation:
+                case Contracts.LogLevel.Task:
+                case Contracts.LogLevel.Status:
+                    Messages.Add(message);
+                    break;
+            }
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using Microsoft.Build.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Build.Framework;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Web.LibraryInstaller.Build.Test
 {
@@ -13,6 +12,7 @@ namespace Microsoft.Web.LibraryInstaller.Build.Test
     {
         public ICollection<BuildMessageEventArgs> Messages { get; } = new List<BuildMessageEventArgs>();
         public ICollection<BuildWarningEventArgs> Warnings { get; } = new List<BuildWarningEventArgs>();
+        public ICollection<BuildErrorEventArgs> Errors { get; } = new List<BuildErrorEventArgs>();
 
         public bool IsRunningMultipleNodes => false;
 
@@ -33,9 +33,7 @@ namespace Microsoft.Web.LibraryInstaller.Build.Test
             => Warnings.Add(e);
 
         public void LogErrorEvent(BuildErrorEventArgs e)
-        {
-            Assert.IsFalse(true, e.Message);
-        }
+            => Errors.Add(e);
 
         #region NotImplemented
 
