@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryInstaller.Build
     public class Dependencies : IDependencies
     {
         private readonly IHostInteraction _hostInteraction;
-        private static readonly List<IProvider> _providers = new List<IProvider>();
+        private readonly List<IProvider> _providers = new List<IProvider>();
         private readonly IEnumerable<string> _assemblyPaths;
 
         private Dependencies(IHostInteraction hostInteraction, IEnumerable<string> assemblyPaths)
