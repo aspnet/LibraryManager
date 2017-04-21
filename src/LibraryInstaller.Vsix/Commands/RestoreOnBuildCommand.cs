@@ -9,6 +9,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using NuGet.VisualStudio;
 using System;
 using System.ComponentModel.Design;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -76,6 +78,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             try
             {
+                var dependencies = Dependencies.FromConfigFile(item.FileNames[1]);
+                IEnumerable<string> packageIds = dependencies.Providers.Select(p => p.NuGetPackageId).Distinct();
+
                 if (!_isPackageInstalled)
                 {
                     if (!UserWantsToInstall())
@@ -85,8 +90,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                     {
                         Logger.LogEvent("Installing NuGet package containing MSBuild target...", LogLevel.Status);
 
-                        IVsPackageInstaller2 installer = _componentModel.GetService<IVsPackageInstaller2>();
-                        installer.InstallLatestPackage(null, item.ContainingProject, Constants.NuGetPackageId, true, false);
+                        foreach (string packageId in packageIds)
+                        {
+                            IVsPackageInstaller2 installer = _componentModel.GetService<IVsPackageInstaller2>();
+                            installer.InstallLatestPackage(null, item.ContainingProject, packageId, true, false);
+                        }
 
                         Telemetry.TrackUserTask("InstallNugetPackage");
                         Logger.LogEvent("NuGet package installed", LogLevel.Status);
@@ -98,8 +106,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                     {
                         Logger.LogEvent("Uninstalling NuGet package...", LogLevel.Status);
 
-                        IVsPackageUninstaller uninstaller = _componentModel.GetService<IVsPackageUninstaller>();
-                        uninstaller.UninstallPackage(item.ContainingProject, Constants.NuGetPackageId, false);
+                        foreach (string packageId in packageIds)
+                        {
+                            IVsPackageUninstaller uninstaller = _componentModel.GetService<IVsPackageUninstaller>();
+                            uninstaller.UninstallPackage(item.ContainingProject, packageId, false);
+                        }
 
                         Telemetry.TrackUserTask("UninstallNugetPackage");
                         Logger.LogEvent("NuGet package uninstalled", LogLevel.Status);
@@ -131,7 +142,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         {
             IVsPackageInstallerServices installerServices = _componentModel.GetService<IVsPackageInstallerServices>();
 
-            return installerServices.IsPackageInstalled(project, Constants.NuGetPackageId);
+            return installerServices.IsPackageInstalled(project, Constants.MainNuGetPackageId);
         }
     }
 }

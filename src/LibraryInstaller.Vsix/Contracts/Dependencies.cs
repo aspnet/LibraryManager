@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         private readonly List<IProvider> _providers = new List<IProvider>();
         private static readonly Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
 
-        [ImportMany(typeof(IProviderFactory))]
+        [ImportMany(typeof(IProviderFactory), AllowRecomposition = true)]
         private IEnumerable<IProviderFactory> _providerFactories = null;
 
         private Dependencies(IHostInteraction hostInteraction)

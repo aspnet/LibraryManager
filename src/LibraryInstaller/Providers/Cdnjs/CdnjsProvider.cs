@@ -22,6 +22,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
         }
 
         public string Id { get; } = "cdnjs";
+        public string NuGetPackageId { get; } = "Microsoft.Web.LibraryInstaller.Build";
 
         public IHostInteraction HostInteraction { get; }
 

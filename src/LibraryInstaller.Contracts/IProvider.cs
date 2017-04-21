@@ -17,6 +17,14 @@ namespace Microsoft.Web.LibraryInstaller.Contracts
         string Id { get; }
 
         /// <summary>
+        /// The NuGet Package id for the package including the provider for use by MSBuild.
+        /// </summary>
+        /// <remarks>
+        /// If the provider doesn't have a NuGet package, then return <code>null</code>.
+        /// </remarks>
+        string NuGetPackageId { get; }
+
+        /// <summary>
         /// An object specified by the host to interact with the file system etc.
         /// </summary>
         IHostInteraction HostInteraction { get; }

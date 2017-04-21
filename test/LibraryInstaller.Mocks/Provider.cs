@@ -28,6 +28,14 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
         public virtual string Id { get; set; }
 
         /// <summary>
+        /// The NuGet Package id for the package including the provider for use by MSBuild.
+        /// </summary>
+        /// <remarks>
+        /// If the provider doesn't have a NuGet package, then return <code>null</code>.
+        /// </remarks>
+        public string NuGetPackageId { get; set; }
+
+        /// <summary>
         /// An object specified by the host to interact with the file system etc.
         /// </summary>
         public virtual IHostInteraction HostInteraction { get; set; }

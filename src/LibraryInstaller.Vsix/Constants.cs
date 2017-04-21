@@ -10,7 +10,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
     {
         public const string ConfigFileName = "library.json";
         public const string TelemetryNamespace = "webtools/libraryinstaller/";
-        public const string NuGetPackageId = "Microsoft.Web.LibraryInstaller.Build";
+        public const string MainNuGetPackageId = "Microsoft.Web.LibraryInstaller.Build";
         public const string ErrorCodeLink = "https://github.com/aspnet/LibraryInstaller/wiki/Error-codes#{0}";
 
         public static string CacheFolder

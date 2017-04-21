@@ -20,6 +20,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
         }
 
         public string Id { get; } = "filesystem";
+        public string NuGetPackageId { get; } = "Microsoft.Web.LibraryInstaller.Build";
 
         public IHostInteraction HostInteraction { get; }
 
