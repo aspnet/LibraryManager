@@ -175,6 +175,29 @@ namespace Microsoft.Web.LibraryInstaller.Test
             Assert.AreEqual(2, result.Count(v => !v.Success));
         }
 
+        [DataTestMethod]
+        [DataRow("c:\\foo")]
+        [DataRow("../")]
+        public async Task RestoreAsync_PathOutsideWorkingDir(string path)
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            var state = new LibraryInstallationState
+            {
+                ProviderId = "cdnjs",
+                LibraryId = "jquery@3.2.1",
+                DestinationPath = path,
+                Files = new[] { "knockout-min.js" }
+            };
+
+            manifest.AddLibrary(state);
+
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual("LIB008", result.First().Errors.First().Code);
+        }
+
         [TestMethod]
         public async Task RestoreAsync_Cancelled()
         {

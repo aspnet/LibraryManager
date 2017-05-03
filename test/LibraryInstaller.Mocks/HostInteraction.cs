@@ -53,21 +53,22 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
         /// <returns><code>True</code> if no issues occured while executing this method; otherwise <code>False</code>.</returns>
         public virtual async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            string absolutePath = Path.Combine(WorkingDirectory, path);
+            var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, path));
 
-            if (File.Exists(absolutePath))
+            if (absolutePath.Exists)
                 return true;
 
-            string directory = Path.GetDirectoryName(absolutePath);
+            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+                throw new UnauthorizedAccessException();
 
-            Directory.CreateDirectory(directory);
+            absolutePath.Directory.Create();
 
             using (Stream stream = content.Invoke())
             {
                 if (stream == null)
                     return false;
 
-                using (FileStream writer = File.Create(absolutePath, 8192, FileOptions.Asynchronous))
+                using (FileStream writer = File.Create(absolutePath.FullName, 8192, FileOptions.Asynchronous))
                 {
                     if (stream.CanSeek)
                     {

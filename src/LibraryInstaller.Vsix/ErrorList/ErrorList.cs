@@ -4,6 +4,7 @@
 using Microsoft.Web.LibraryInstaller.Contracts;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -22,11 +23,15 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public bool HandleErrors(IEnumerable<ILibraryInstallationResult> results)
         {
+            IEnumerable<string> json = File.Exists(ConfigFileName) ? File.ReadLines(ConfigFileName) : new string[0];
+
             foreach (ILibraryInstallationResult result in results)
             {
                 if (!result.Success)
                 {
-                    IEnumerable<DisplayError> displayErrors = result.Errors.Select(error => new DisplayError(error));
+                    DisplayError[] displayErrors = result.Errors.Select(error => new DisplayError(error)).ToArray();
+                    AddLineAndColumn(json, result.InstallationState, displayErrors);
+
                     Errors.AddRange(displayErrors);
 
                     foreach (IError error in result.Errors)
@@ -39,6 +44,28 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
             PushToErrorList();
             return Errors.Count > 0;
+        }
+
+        private static void AddLineAndColumn(IEnumerable<string> lines, ILibraryInstallationState state, DisplayError[] errors)
+        {
+            foreach (DisplayError error in errors)
+            {
+                int index = 0;
+
+                for (int i = 0; i < lines.Count(); i++)
+                {
+                    string line = lines.ElementAt(i);
+
+                    if (line.Trim() == "{")
+                        index = i;
+
+                    if (line.Contains(state.LibraryId))
+                    {
+                        error.Line = index > 0 ? index : i;
+                        break;
+                    }
+                }
+            }
         }
 
         private void PushToErrorList()

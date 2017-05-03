@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryInstaller.Contracts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Text {
@@ -98,6 +98,15 @@ namespace Microsoft.Web.LibraryInstaller.Contracts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &quot;path&quot; must be inside the working directory.
+        /// </summary>
+        internal static string ErrorPathOutsideWorkingDirectory {
+            get {
+                return ResourceManager.GetString("ErrorPathOutsideWorkingDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The provider is undefined.
         /// </summary>
         internal static string ErrorProviderIsUndefined {
@@ -125,7 +134,7 @@ namespace Microsoft.Web.LibraryInstaller.Contracts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unknown exception occured.
+        ///   Looks up a localized string similar to An unknown exception occurred.
         /// </summary>
         internal static string ErrorUnknownException {
             get {

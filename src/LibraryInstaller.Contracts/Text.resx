@@ -129,6 +129,9 @@
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>The "path" is undefined.</value>
   </data>
+  <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
+    <value>The "path" must be inside the working directory</value>
+  </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>The provider is undefined</value>
   </data>
@@ -139,6 +142,6 @@
     <value>The "{0}" library could not be resolved by the "{1}" provider</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
-    <value>An unknown exception occured</value>
+    <value>An unknown exception occurred</value>
   </data>
 </root>

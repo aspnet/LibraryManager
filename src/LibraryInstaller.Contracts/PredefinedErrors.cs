@@ -75,5 +75,12 @@ namespace Microsoft.Web.LibraryInstaller.Contracts
         /// <returns>The error code LIB007</returns>
         public static IError ProviderIsUndefined()
            => new Error("LIB007", string.Format(Text.ErrorProviderIsUndefined));
+
+        /// <summary>
+        /// The "path" must be inside the working directory
+        /// </summary>
+        /// <returns>The error code LIB008</returns>
+        public static IError PathOutsideWorkingDirectory()
+           => new Error("LIB008", string.Format(Text.ErrorPathOutsideWorkingDirectory));
     }
 }

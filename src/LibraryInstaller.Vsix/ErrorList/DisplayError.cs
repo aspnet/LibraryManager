@@ -25,10 +25,10 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
         public string HelpLink => string.Format(Constants.ErrorCodeLink, ErrorCode.ToLowerInvariant());
 
         /// <summary>The line number containing the error.</summary>
-        public int Line { get; } = 0;
+        public int Line { get; set; } = 0;
 
         /// <summary>The column number containing the error.</summary>
-        public int Column { get; } = 0;
+        public int Column { get; set; } = 0;
 
         public ImageMoniker Moniker => KnownMonikers.StatusWarning;
     }

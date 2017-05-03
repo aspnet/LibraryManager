@@ -59,6 +59,10 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
             }
+            catch (UnauthorizedAccessException)
+            {
+                return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
+            }
             catch (Exception ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);

@@ -22,22 +22,27 @@ namespace Microsoft.Web.LibraryInstaller.Build
 
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            string absolutePath = Path.Combine(WorkingDirectory, path);
-            string directory = Path.GetDirectoryName(absolutePath);
+            var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, path));
 
-            if (File.Exists(absolutePath) && (File.GetAttributes(absolutePath) & FileAttributes.ReadOnly) != 0)
+            if (absolutePath.Exists)
+                return true;
+
+            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+                throw new UnauthorizedAccessException();
+
+            if (absolutePath.Exists && (absolutePath.Attributes & FileAttributes.ReadOnly) != 0)
             {
                 return true;
             }
 
-            Directory.CreateDirectory(directory);
+            absolutePath.Directory.Create();
 
             using (Stream stream = content.Invoke())
             {
                 if (stream == null)
                     return false;
 
-                using (FileStream writer = File.Create(absolutePath, 4096, FileOptions.Asynchronous))
+                using (FileStream writer = File.Create(absolutePath.FullName, 4096, FileOptions.Asynchronous))
                 {
                     if (stream.CanSeek)
                     {
