@@ -46,6 +46,10 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 {
                     RetriggerAsync(false);
                 }
+                else if (typedChar == '@')
+                {
+                    RetriggerAsync(true);
+                }
             }
             else if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.BACKSPACE)
             {
