@@ -306,8 +306,8 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 
     internal class Asset
     {
-        public string Version;
-        public string[] Files;
-        public string DefaultFile;
+        public string Version { get; set; }
+        public string[] Files { get; set; }
+        public string DefaultFile { get; set; }
     }
 }

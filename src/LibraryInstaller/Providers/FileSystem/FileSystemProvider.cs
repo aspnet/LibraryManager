@@ -12,23 +12,50 @@ using System.Linq;
 
 namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
-    internal class FileSystemProvider : IProvider
+    /// <summary>Internal use only</summary>
+    public class FileSystemProvider : IProvider
     {
+        /// <summary>Internal use only</summary>
         public FileSystemProvider(IHostInteraction hostInteraction)
         {
             HostInteraction = hostInteraction;
         }
 
+        /// <summary>
+        /// The unique identifier of the provider.
+        /// </summary>
         public string Id { get; } = "filesystem";
+
+        /// <summary>
+        /// The NuGet Package id for the package including the provider for use by MSBuild.
+        /// </summary>
+        /// <remarks>
+        /// If the provider doesn't have a NuGet package, then return <code>null</code>.
+        /// </remarks>
         public string NuGetPackageId { get; } = "Microsoft.Web.LibraryInstaller.Build";
 
+        /// <summary>
+        /// An object specified by the host to interact with the file system etc.
+        /// </summary>
         public IHostInteraction HostInteraction { get; }
 
+        /// <summary>
+        /// Gets the <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
+        /// </summary>
+        /// <returns></returns>
         public ILibraryCatalog GetCatalog()
         {
             return new FileSystemCatalog(this);
         }
 
+        /// <summary>
+        /// Installs a library as specified in the <paramref name="desiredState" /> parameter.
+        /// </summary>
+        /// <param name="desiredState">The details about the library to install.</param>
+        /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
+        /// <returns>
+        /// The <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryInstallationResult" /> from the installation process.
+        /// </returns>
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (!desiredState.IsValid(out IEnumerable<IError> errors))

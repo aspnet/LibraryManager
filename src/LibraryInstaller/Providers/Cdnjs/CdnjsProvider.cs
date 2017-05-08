@@ -11,19 +11,37 @@ using System.Linq;
 
 namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
 {
-    internal class CdnjsProvider : IProvider
+    /// <summary>Internal use only</summary>
+    public class CdnjsProvider : IProvider
     {
         private const string _downloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
         private CdnjsCatalog _catalog;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CdnjsProvider"/> class.
+        /// </summary>
+        /// <param name="hostInteraction">The host interaction.</param>
         public CdnjsProvider(IHostInteraction hostInteraction)
         {
             HostInteraction = hostInteraction;
         }
 
+        /// <summary>
+        /// The unique identifier of the provider.
+        /// </summary>
         public string Id { get; } = "cdnjs";
+
+        /// <summary>
+        /// The NuGet Package id for the package including the provider for use by MSBuild.
+        /// </summary>
+        /// <remarks>
+        /// If the provider doesn't have a NuGet package, then return <code>null</code>.
+        /// </remarks>
         public string NuGetPackageId { get; } = "Microsoft.Web.LibraryInstaller.Build";
 
+        /// <summary>
+        /// An object specified by the host to interact with the file system etc.
+        /// </summary>
         public IHostInteraction HostInteraction { get; }
 
         internal string CacheFolder
@@ -31,11 +49,24 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             get { return Path.Combine(HostInteraction.CacheDirectory, Id); }
         }
 
+        /// <summary>
+        /// Gets the <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
+        /// </summary>
+        /// <returns></returns>
         public ILibraryCatalog GetCatalog()
         {
             return _catalog ?? (_catalog = new CdnjsCatalog(this));
         }
 
+        /// <summary>
+        /// Installs a library as specified in the <paramref name="desiredState" /> parameter.
+        /// </summary>
+        /// <param name="desiredState">The details about the library to install.</param>
+        /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
+        /// <returns>
+        /// The <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryInstallationResult" /> from the installation process.
+        /// </returns>
+        /// <exception cref="InvalidLibraryException"></exception>
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -123,7 +154,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
             return null;
         }
 
-        public async Task HydrateCacheAsync(ILibrary library, CancellationToken cancellationToken)
+        private async Task HydrateCacheAsync(ILibrary library, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
