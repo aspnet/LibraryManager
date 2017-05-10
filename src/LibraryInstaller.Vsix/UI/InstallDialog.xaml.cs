@@ -1,38 +1,41 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.Web.LibraryInstaller.Contracts;
 using Microsoft.Web.LibraryInstaller.Vsix.Models;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
     public partial class InstallDialog
     {
+        private readonly IDependencies _deps;
         private readonly string _folder;
+        private string _configFileName;
 
-        public InstallDialog(string folder)
+        public InstallDialog(IDependencies dependencies, string configFileName, string folder)
         {
             InitializeComponent();
 
+            _deps = dependencies;
             _folder = folder;
+            _configFileName = configFileName;
 
             Loaded += OnLoaded;
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        public InstallDialogViewModel ViewModel
         {
-            Icon = BitmapFrame.Create(new Uri("pack://application:,,,/LibraryInstaller.Vsix;component/Resources/dialog-icon.png", UriKind.RelativeOrAbsolute));
-            Title = Vsix.Name;
+            get { return DataContext as InstallDialogViewModel; }
+            set { DataContext = value; }
+        }
 
-            cbName.Focus();
-
-            ViewModel = new InstallDialogViewModel(Dispatcher, CloseDialog);
+        public Task<CompletionSet> PerformSearch(string searchText, int caretPosition)
+        {
+            return ViewModel.SelectedProvider.GetCatalog().GetLibraryCompletionSetAsync(searchText, caretPosition);
         }
 
         private void CloseDialog(bool res)
@@ -41,10 +44,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             Close();
         }
 
-        public InstallDialogViewModel ViewModel
+        private void HyperlinkPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            get { return DataContext as InstallDialogViewModel; }
-            set { DataContext = value; }
         }
 
         private void NavigateToHomepage(object sender, RequestNavigateEventArgs e)
@@ -57,12 +58,16 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             }
 
             e.Handled = true;
-            cbName.ResumeFocusEvents();
         }
 
-        private void HyperlinkPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            cbName.SuspendFocusEvents();
+            Icon = WpfUtil.GetIconForImageMoniker(KnownMonikers.JSWebScript, 16, 16);
+            Title = Vsix.Name;
+
+            ViewModel = new InstallDialogViewModel(Dispatcher, _configFileName, _deps, _folder, CloseDialog);
+
+            FocusManager.SetFocusedElement(cbName, cbName);
         }
     }
 }

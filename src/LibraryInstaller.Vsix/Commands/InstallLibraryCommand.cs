@@ -1,14 +1,11 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using EnvDTE;
-using Microsoft.Web.LibraryInstaller.Contracts;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using System;
+﻿using System;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Threading;
+using EnvDTE;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.Web.LibraryInstaller.Contracts;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix
 {
@@ -26,7 +23,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             commandService.AddCommand(cmd);
         }
 
-        public static InstallLibraryCommand Instance { get; private set; }
+        public static InstallLibraryCommand Instance
+        {
+            get;
+            private set;
+        }
 
         private IServiceProvider ServiceProvider => _package;
 
@@ -54,21 +55,27 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             Telemetry.TrackUserTask("installdialogopened");
 
             CancellationToken token = CancellationToken.None;
+            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+            string target = item.FileNames[1];
+            
             Project project = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.ContainingProject;
             string rootFolder = project.GetRootFolder();
 
             string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-            var dependencies = Dependencies.FromConfigFile(configFilePath);
-            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, token).ConfigureAwait(false);
+            IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, token);
 
-            string itemFolder = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("FullPath").Value.ToString();
-            string relativeFolder = PackageUtilities.MakeRelative(rootFolder, itemFolder).Replace(Path.DirectorySeparatorChar, '/').Trim('/');
-            ILibraryInstallationState state = GetLibraryToInstall(relativeFolder);
-            manifest.AddLibrary(state);
-            await manifest.SaveAsync(configFilePath, token).ConfigureAwait(false);
+            InstallDialog dialog = new InstallDialog(dependencies, configFilePath, target);
+            dialog.ShowDialog();
 
-            project.AddFileToProject(configFilePath);
-            await LibraryHelpers.RestoreAsync(configFilePath).ConfigureAwait(false);
+            //string itemFolder = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("FullPath").Value.ToString();
+            //string relativeFolder = PackageUtilities.MakeRelative(rootFolder, itemFolder).Replace('\\', '/').Trim('/');
+            //ILibraryInstallationState state = GetLibraryToInstall(relativeFolder);
+            //manifest.AddLibrary(state);
+            //await manifest.SaveAsync(configFilePath, token);
+
+            //project.AddFileToProject(configFilePath);
+            //await LibraryHelpers.RestoreAsync(configFilePath);
         }
 
         private ILibraryInstallationState GetLibraryToInstall(string relativeFolderPath)

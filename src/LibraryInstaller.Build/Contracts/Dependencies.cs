@@ -31,6 +31,8 @@ namespace Microsoft.Web.LibraryInstaller.Build
             return new Dependencies(hostInteraction, assemblyPaths);
         }
 
+        public IReadOnlyList<IProvider> Providers => _providers;
+
         public IProvider GetProvider(string providerId)
         {
             return _providers?.FirstOrDefault(p => p.Id.Equals(providerId, StringComparison.OrdinalIgnoreCase));

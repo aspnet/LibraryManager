@@ -12,7 +12,7 @@
 
         <Buttons>
             <!-- Folder -->
-            <!--<Button guid="guidLibraryInstallerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
+            <Button guid="guidLibraryInstallerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
                 <Icon guid="ImageCatalogGuid" id="JSWebScript" />
                 <CommandFlag>IconIsMoniker</CommandFlag>
                 <CommandFlag>DefaultInvisible</CommandFlag>
@@ -20,7 +20,7 @@
                 <Strings>
                     <ButtonText>Add Client-Side Library...</ButtonText>
                 </Strings>
-            </Button>-->
+            </Button>
 
             <!-- Config file -->
             <Button guid="guidLibraryInstallerPackageCmdSet" id="Restore" priority="0x0100" type="Button">

@@ -24,7 +24,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             Initialize();
         }
 
-        public IEnumerable<IProvider> Providers => _providers;
+        public IReadOnlyList<IProvider> Providers => _providers;
 
         public IHostInteraction GetHostInteractions() => _hostInteraction;
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Microsoft.Web.LibraryInstaller.Vsix.Controls.Search;
+using LibraryInstaller.Vsix.Controls.Search;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Models
+namespace LibraryInstaller.Vsix.UI.Controls.Search
 {
     internal class PackageSearchUtil
     {
@@ -14,7 +14,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
         private PackageSearchUtil(string searchTerm)
         {
             SearchTerm = searchTerm;
-            _parts = searchTerm.Split(new[] {' ', '-', '.'}, StringSplitOptions.RemoveEmptyEntries);
+            _parts = searchTerm.Split(new[] { ' ', '-', '.' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public string SearchTerm { get; }
@@ -34,9 +34,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
             int matchIndex = alias?.IndexOf(part, StringComparison.OrdinalIgnoreCase) ?? -1;
             if (matchIndex > -1)
             {
-                double pctUsed = (double) part.Length/alias.Length;
-                double pctThrough = 1 - (double) matchIndex/alias.Length;
-                int score = (int) (100*pctUsed*pctThrough);
+                double pctUsed = (double)part.Length / alias.Length;
+                double pctThrough = 1 - (double)matchIndex / alias.Length;
+                int score = (int)(100 * pctUsed * pctThrough);
                 return score & 0x7F;
             }
 
@@ -199,4 +199,5 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
             }
         }
     }
+
 }
