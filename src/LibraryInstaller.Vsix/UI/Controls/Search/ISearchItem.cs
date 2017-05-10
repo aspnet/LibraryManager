@@ -1,13 +1,21 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+﻿using System.Windows.Media;
+using Microsoft.Web.LibraryInstaller.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Controls.Search
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls.Search
 {
     public interface ISearchItem
     {
+        string Alias { get; }
+
         string CollapsedItemText { get; }
 
-        string Alias { get; }
+        string Description { get; }
+
+        string Homepage { get; }
+
+        ImageSource Icon { get; }
+
+        ILibraryGroup LibraryGroup { get; }
 
         bool IsMatchForSearchTerm(string searchTerm);
     }

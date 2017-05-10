@@ -1,44 +1,38 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using System;
-using System.Diagnostics;
+﻿using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using Microsoft.Web.LibraryInstaller.Vsix.Models;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryInstaller.Vsix.UI.Models;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI
 {
     public partial class InstallDialog
     {
+        private readonly IDependencies _deps;
         private readonly string _folder;
+        private readonly string _configFileName;
 
-        public InstallDialog(string folder)
+        public InstallDialog(IDependencies dependencies, string configFileName, string folder)
         {
             InitializeComponent();
 
+            _deps = dependencies;
             _folder = folder;
+            _configFileName = configFileName;
 
+            LostKeyboardFocus += InstallDialog_LostKeyboardFocus;
             Loaded += OnLoaded;
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private void InstallDialog_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            Icon = BitmapFrame.Create(new Uri("pack://application:,,,/LibraryInstaller.Vsix;component/Resources/dialog-icon.png", UriKind.RelativeOrAbsolute));
-            Title = Vsix.Name;
-
-            cbName.Focus();
-
-            ViewModel = new InstallDialogViewModel(Dispatcher, CloseDialog);
-        }
-
-        private void CloseDialog(bool res)
-        {
-            DialogResult = res;
-            Close();
+            if (!IsKeyboardFocusWithin && !(e.NewFocus is ListBoxItem))
+            {
+                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
+                MoveFocus(request);
+            }
         }
 
         public InstallDialogViewModel ViewModel
@@ -47,22 +41,38 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             set { DataContext = value; }
         }
 
-        private void NavigateToHomepage(object sender, RequestNavigateEventArgs e)
+        public Task<CompletionSet> PerformSearch(string searchText, int caretPosition)
         {
-            Hyperlink link = sender as Hyperlink;
-
-            if (link != null)
-            {
-                Process.Start(link.NavigateUri.AbsoluteUri);
-            }
-
-            e.Handled = true;
-            cbName.ResumeFocusEvents();
+            return ViewModel.SelectedProvider.GetCatalog().GetLibraryCompletionSetAsync(searchText, caretPosition);
         }
 
-        private void HyperlinkPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void CloseDialog(bool res)
         {
-            cbName.SuspendFocusEvents();
+            try
+            {
+                DialogResult = res;
+            }
+            catch { }
+            Close();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Icon = WpfUtil.GetIconForImageMoniker(KnownMonikers.JSWebScript, 16, 16);
+            Title = Vsix.Name;
+
+            ViewModel = new InstallDialogViewModel(Dispatcher, _configFileName, _deps, _folder, CloseDialog);
+
+            FocusManager.SetFocusedElement(cbName, cbName);
+        }
+
+        private void ThemedWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!cbName.IsMouseOver && !cbName.IsMouseOverFlyout)
+            {
+                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
+                MoveFocus(request);
+            }
         }
     }
 }

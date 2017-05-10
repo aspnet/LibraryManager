@@ -26,14 +26,18 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
         public Dependencies(IHostInteraction hostInteraction, params IProviderFactory[] factories)
         {
             _hostInteractions = hostInteraction;
-            Providers.AddRange(factories.Select(f => f.CreateProvider(hostInteraction)));
+            AllProviders.AddRange(factories.Select(f => f.CreateProvider(hostInteraction)));
         }
 
+        /// <summary>
+        /// Gets the set of currently registered providers
+        /// </summary>
+        public IReadOnlyList<IProvider> Providers => AllProviders;
 
         /// <summary>
         /// The collection of providers.
         /// </summary>
-        public virtual List<IProvider> Providers { get; set; } = new List<IProvider>();
+        public virtual List<IProvider> AllProviders { get; set; } = new List<IProvider>();
 
         /// <summary>
         /// Gets the <see cref="T:LibraryInstaller.Contracts.IHotInteraction" /> used by <see cref="T:LibraryInstaller.Contracts.IProvider" /> to install libraries.
@@ -52,7 +56,7 @@ namespace Microsoft.Web.LibraryInstaller.Mocks
         /// </returns>
         public virtual IProvider GetProvider(string providerId)
         {
-            return Providers.FirstOrDefault(p => p.Id == providerId);
+            return AllProviders.FirstOrDefault(p => p.Id == providerId);
         }
     }
 }

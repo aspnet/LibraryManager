@@ -1,10 +1,7 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using System;
+﻿using System;
 using System.Windows.Input;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
 {
     public class ActionCommand : ICommand
     {
@@ -56,12 +53,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
 
         private void OnCanExecuteChanged()
         {
-            EventHandler handler = CanExecuteChanged;
-
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -88,7 +80,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
             }
 
             bool oldCanExecute = _canExecuteValue;
-            _canExecuteValue = _canExecute((T)parameter);
+            _canExecuteValue = _canExecute((T) parameter);
 
             if (oldCanExecute ^ _canExecuteValue)
             {
@@ -100,17 +92,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
 
         public void Execute(object parameter)
         {
-            _execute((T)parameter);
+            _execute((T) parameter);
         }
 
         private void OnCanExecuteChanged()
         {
-            EventHandler handler = CanExecuteChanged;
-
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

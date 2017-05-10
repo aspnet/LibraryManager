@@ -48,6 +48,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         private static void AddLineAndColumn(IEnumerable<string> lines, ILibraryInstallationState state, DisplayError[] errors)
         {
+            if(string.IsNullOrEmpty(state?.LibraryId))
+            {
+                return;
+            }
+
             foreach (DisplayError error in errors)
             {
                 int index = 0;

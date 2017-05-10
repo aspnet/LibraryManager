@@ -1,12 +1,9 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Microsoft.Web.LibraryInstaller.Vsix.Controls.Search;
+using LibraryInstaller.Vsix.Controls.Search;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Models
+namespace LibraryInstaller.Vsix.UI.Controls.Search
 {
     internal class PackageSearchUtil
     {
@@ -202,4 +199,5 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
             }
         }
     }
+
 }

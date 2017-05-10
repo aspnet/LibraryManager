@@ -78,20 +78,21 @@
     <Compile Include="Json\Completion\FilesCompletionProvider.cs" />
     <Compile Include="Json\Completion\LibraryIdCompletionProvider.cs" />
     <Compile Include="Json\Completion\SimpleCompletionEntry.cs" />
+    <Compile Include="UI\Controls\Completion.cs" />
     <Compile Include="UI\Controls\EditorTooltip.xaml.cs">
       <DependentUpon>EditorTooltip.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\BindingProxy.cs" />
     <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
       <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\Search\ComboSearch.xaml.cs">
-      <DependentUpon>ComboSearch.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\Controls\Search\ISearchItem.cs" />
+    <Compile Include="UI\Controls\Search\LogicalAndConverter.cs" />
     <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
-    <Compile Include="UI\Controls\Search\SearchHighlight.cs" />
-    <Compile Include="UI\Controls\Search\SearchItemContainer.cs" />
     <Compile Include="UI\Controls\Search\Wrapper.cs" />
+    <Compile Include="UI\Controls\TheBox.xaml.cs">
+      <DependentUpon>TheBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\ThemedWindow.cs" />
     <Compile Include="UI\Converters\BoldingConverter.cs" />
     <Compile Include="UI\Converters\NotConverter.cs" />
@@ -109,10 +110,6 @@
     <Compile Include="UI\Models\InstallDialogViewModel.cs" />
     <Compile Include="UI\Models\PackageItem.cs" />
     <Compile Include="UI\Models\PackageItemType.cs" />
-    <Compile Include="UI\Models\PackageSearchItem.cs" />
-    <Compile Include="UI\Models\PackageSearchUtil.cs" />
-    <Compile Include="UI\Models\PackageSorter.cs" />
-    <Compile Include="UI\Models\PackageVersion.cs" />
     <Compile Include="Resources\Text.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -342,9 +339,7 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Icon.png">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
+    <EmbeddedResource Include="Resources\Icon.png" />
     <Content Include="source.extension.ico">
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Content>
@@ -352,7 +347,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Text.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Text.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -383,11 +378,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Controls\Search\ComboSearch.xaml">
+    <Page Include="UI\Controls\Shared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Controls\Shared.xaml">
+    <Page Include="UI\Controls\TheBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

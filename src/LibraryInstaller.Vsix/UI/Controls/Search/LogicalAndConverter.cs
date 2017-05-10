@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls.Search
 {
-    public class LogicalOrConverter : IMultiValueConverter
+    public class LogicalAndConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -17,13 +17,13 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls.Search
 
             for (int i = 0; i < values.Length; ++i)
             {
-                if (values[i] is bool && (bool)values[i])
+                if (!(values[i] is bool b) || !b)
                 {
-                    return true;
+                    return false;
                 }
             }
 
-            return false;
+            return true;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

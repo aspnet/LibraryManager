@@ -156,4 +156,10 @@ This may require an internet connection.
 
 Do you want to continue?</value>
   </data>
+  <data name="TypeToSearch" xml:space="preserve">
+    <value>&lt;Type to search&gt;</value>
+  </data>
+  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;Choose a package to select files to install&gt;</value>
+  </data>
 </root>

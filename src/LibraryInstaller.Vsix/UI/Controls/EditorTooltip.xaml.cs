@@ -1,10 +1,10 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.VisualStudio.PlatformUI;
 using System.Windows.Controls;
+using Microsoft.VisualStudio.PlatformUI;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls
 {
     /// <summary>
     /// Interaction logic for EditorTooltip.xaml

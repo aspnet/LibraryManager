@@ -1,23 +1,25 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryInstaller.Contracts;
+using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
-using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Web.LibraryInstaller.Contracts;
 
 namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
-    internal class FileSystemCatalog : ILibraryCatalog
+    public class FileSystemCatalog : ILibraryCatalog
     {
         private readonly FileSystemProvider _provider;
+        private readonly bool _underTest;
 
-        public FileSystemCatalog(FileSystemProvider provider)
+        public FileSystemCatalog(FileSystemProvider provider, bool underTest = false)
         {
             _provider = provider;
+            _underTest = underTest;
         }
 
         public Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
@@ -80,11 +82,32 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            var library = new FileSystemLibrary
+            ILibrary library;
+
+            if (libraryId.Contains("://"))
+            {
+                library = new FileSystemLibrary
+                {
+                    Name = libraryId,
+                    ProviderId = _provider.Id,
+                    Files = await GetFilesAsync(libraryId).ConfigureAwait(false)
+                };
+
+                return library;
+            }
+
+            string path = Path.Combine(_provider.HostInteraction.WorkingDirectory, libraryId);
+
+            if (!_underTest && !File.Exists(path) && !Directory.Exists(path))
+            {
+                return null;
+            }
+
+            library = new FileSystemLibrary
             {
                 Name = libraryId,
                 ProviderId = _provider.Id,
-                Files = await GetFilesAsync(libraryId).ConfigureAwait(false)
+                Files = await GetFilesAsync(path).ConfigureAwait(false)
             };
 
             return library;

@@ -1,7 +1,4 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -15,7 +12,7 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls
 {
     public class ThemedWindow : System.Windows.Window
     {
@@ -151,7 +148,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
         {
             Grid header = new Grid();
             header.ColumnDefinitions.Add(new ColumnDefinition());
-            header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            header.ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
             header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
             //Move grip containing the icon and title

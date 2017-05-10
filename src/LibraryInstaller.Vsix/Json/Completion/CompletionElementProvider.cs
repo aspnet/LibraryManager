@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             {
                 if (!string.IsNullOrEmpty(entry.Description))
                 {
-                    return new EditorTooltip(entry);
+                    return new UI.Controls.EditorTooltip(entry);
                 }
             }
 
