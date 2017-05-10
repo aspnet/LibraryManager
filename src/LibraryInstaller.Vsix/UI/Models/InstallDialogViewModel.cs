@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
                     continue;
                 }
 
-                if(_catalog == null)
+                if (_catalog == null)
                 {
                     _activeProvider = provider;
                     _catalog = catalog;
@@ -267,6 +267,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
                 });
 
                 await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+                EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
+                project?.AddFileToProject(_configFileName);
 
                 await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
                 _dispatcher.Invoke(() =>
