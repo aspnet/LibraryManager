@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Web.LibraryInstaller.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls
 {
     public partial class TheBox : INotifyPropertyChanged
     {
@@ -40,15 +39,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
             set { SetValue(CaretIndexProperty, value); }
         }
 
-        public bool IsMouseOverFlyout
-        {
-            get { return Options.IsMouseOver; }
-        }
+        public bool IsMouseOverFlyout => Options.IsMouseOver;
 
-        public bool IsTextEntryEmpty
-        {
-            get { return string.IsNullOrEmpty(Text); }
-        }
+        public bool IsTextEntryEmpty => string.IsNullOrEmpty(Text);
 
         public bool HasItems => Items.Count > 0;
 
@@ -81,7 +74,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
         {
             TheBox search = d as TheBox;
             search?.RefreshSearch();
-            search.PropertyChanged?.Invoke(search, new PropertyChangedEventArgs(nameof(IsTextEntryEmpty)));
+            search?.PropertyChanged?.Invoke(search, new PropertyChangedEventArgs(nameof(IsTextEntryEmpty)));
         }
 
         private void Commit(Completion completion)
@@ -92,7 +85,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
             }
 
             Text = completion.CompletionItem.InsertionText;
-            SearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText) + completion.CompletionItem.DisplayText.Length;
+            SearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
         }
 
         private void HandleKeyPress(object sender, KeyEventArgs e)
@@ -112,12 +105,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
                     {
                         Options.ScrollIntoView(Options.Items[0]);
                         FrameworkElement fe = (FrameworkElement)Options.ItemContainerGenerator.ContainerFromIndex(0);
-
-                        if (fe != null)
-                        {
-                            fe.Focus();
-                        }
-
+                        fe?.Focus();
                         Options.SelectedIndex = 0;
                         e.Handled = true;
                     }
@@ -232,26 +220,22 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
                             return;
                         }
 
-                        CompletionSet? span = t.Result;
-                        if (!span.HasValue)
-                        {
-                            return;
-                        }
+                        CompletionSet span = t.Result;
 
                         Dispatcher.BeginInvoke((Action)(() =>
                         {
-                            if (Volatile.Read(ref _version) != expect || span.Value.Completions == null)
+                            if (Volatile.Read(ref _version) != expect || span.Completions == null)
                             {
                                 return;
                             }
 
                             Items.Clear();
-                            foreach (CompletionItem entry in span.Value.Completions)
+                            foreach (CompletionItem entry in span.Completions)
                             {
-                                Items.Add(new Completion(entry, span.Value.Start, span.Value.Length));
+                                Items.Add(new Completion(entry, span.Start, span.Length));
                             }
 
-                            PositionCompletions(span.Value.Start);
+                            PositionCompletions(span.Start);
                             OnPropertyChanged(nameof(HasItems));
 
                             if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)

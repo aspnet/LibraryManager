@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Converters
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Converters
 {
     public class NotConverter : IValueConverter
     {

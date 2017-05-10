@@ -8,18 +8,22 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Web.LibraryInstaller.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
 {
     public class InstallDialogViewModel : BindableBase
     {
         private readonly Action<bool> _closeDialog;
-        private readonly Dispatcher _dispatcher;
+        private readonly string _configFileName;
         private readonly IDependencies _deps;
-        private IReadOnlyList<ILibraryGroup> _availablePackages;
-        private ILibrary _selectedPackage;
-        private IProvider _activeProvider;
+        private readonly Dispatcher _dispatcher;
         private readonly string _targetPath;
-        private IReadOnlyList<IProvider> _providers;
+        private IProvider _activeProvider;
+        private IReadOnlyList<ILibraryGroup> _availablePackages;
+        private ILibraryCatalog _catalog;
+        private IReadOnlyList<PackageItem> _displayRoots;
+        private bool _isInstalling;
+        private string _packageId;
+        private ILibrary _selectedPackage;
 
         public InstallDialogViewModel(Dispatcher dispatcher, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
         {
@@ -48,9 +52,15 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
                 providers.Add(provider);
             }
 
-            _providers = providers;
+            Providers = providers;
             InstallPackageCommand = ActionCommand.Create(InstallPackageAsync, CanInstallPackage, false);
             Task t = LoadPackagesAsync();
+        }
+
+        public IReadOnlyList<ILibraryGroup> AvailablePackages
+        {
+            get { return _availablePackages; }
+            set { Set(ref _availablePackages, value); }
         }
 
         public IReadOnlyList<PackageItem> DisplayRoots
@@ -59,39 +69,9 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
             set { Set(ref _displayRoots, value); }
         }
 
-        private async Task LoadPackagesAsync()
-        {
-            IReadOnlyList<ILibraryGroup> groups = await _catalog.SearchAsync(string.Empty, 50, CancellationToken.None).ConfigureAwait(false);
-            AvailablePackages = groups;
-        }
-
-        private ILibraryCatalog _catalog;
-
-        public IReadOnlyList<IProvider> Providers => _providers;
-
-        public IProvider SelectedProvider
-        {
-            get { return _activeProvider; }
-            set
-            {
-                if (Set(ref _activeProvider, value))
-                {
-                    _catalog = value.GetCatalog();
-                    Task t = LoadPackagesAsync();
-                }
-            }
-        }
-
         public ICommand InstallPackageCommand { get; }
-        public IReadOnlyList<ILibraryGroup> AvailablePackages
-        {
-            get { return _availablePackages; }
-            set { Set(ref _availablePackages, value); }
-        }
 
-        private string _packageId;
-        private IReadOnlyList<PackageItem> _displayRoots;
-        private string _configFileName;
+        public bool IsTreeViewEmpty => SelectedPackage == null;
 
         public string PackageId
         {
@@ -102,7 +82,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
                 {
                     SelectedProvider.GetCatalog().GetLibraryAsync(_packageId, CancellationToken.None).ContinueWith(x =>
                     {
-                        if(x.IsFaulted || x.IsCanceled)
+                        if (x.IsFaulted || x.IsCanceled)
                         {
                             SelectedPackage = null;
                             return;
@@ -113,6 +93,10 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
                 }
             }
         }
+
+        public IReadOnlyList<IProvider> Providers { get; }
+
+        public HashSet<string> SelectedFiles { get; private set; }
 
         public ILibrary SelectedPackage
         {
@@ -226,7 +210,18 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
             }
         }
 
-        public HashSet<string> SelectedFiles { get; private set; }
+        public IProvider SelectedProvider
+        {
+            get { return _activeProvider; }
+            set
+            {
+                if (Set(ref _activeProvider, value))
+                {
+                    _catalog = value.GetCatalog();
+                    Task t = LoadPackagesAsync();
+                }
+            }
+        }
 
         private static void SetNodeOpenStates(PackageItem item)
         {
@@ -245,13 +240,6 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
         {
             return !_isInstalling && SelectedPackage != null;
         }
-
-        public bool IsTreeViewEmpty
-        {
-            get { return SelectedPackage == null; }
-        }
-
-        private bool _isInstalling;
 
         private async void InstallPackageAsync()
         {
@@ -281,9 +269,18 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
                 await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
 
                 await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
-                _dispatcher.Invoke(() => { _closeDialog(true); });
+                _dispatcher.Invoke(() =>
+                {
+                    _closeDialog(true);
+                });
             }
             catch { }
+        }
+
+        private async Task LoadPackagesAsync()
+        {
+            IReadOnlyList<ILibraryGroup> groups = await _catalog.SearchAsync(string.Empty, 50, CancellationToken.None).ConfigureAwait(false);
+            AvailablePackages = groups;
         }
     }
 }

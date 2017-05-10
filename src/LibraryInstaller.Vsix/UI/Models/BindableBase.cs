@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
 {
     public class BindableBase : INotifyPropertyChanged
     {
@@ -31,12 +31,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
         private void OnPropertyChangedCore(string propertyName)
         {
             Debug.Assert(propertyName != null, "Property name cannot be null");
-            PropertyChangedEventHandler handler = PropertyChanged;
-
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

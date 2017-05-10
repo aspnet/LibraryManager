@@ -1,4 +1,4 @@
-namespace Microsoft.Web.LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
 {
     public enum PackageItemType
     {

@@ -87,8 +87,8 @@
       <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\Search\ISearchItem.cs" />
+    <Compile Include="UI\Controls\Search\LogicalAndConverter.cs" />
     <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
-    <Compile Include="UI\Controls\Search\SearchHighlight.cs" />
     <Compile Include="UI\Controls\Search\Wrapper.cs" />
     <Compile Include="UI\Controls\TheBox.xaml.cs">
       <DependentUpon>TheBox.xaml</DependentUpon>
@@ -110,9 +110,6 @@
     <Compile Include="UI\Models\InstallDialogViewModel.cs" />
     <Compile Include="UI\Models\PackageItem.cs" />
     <Compile Include="UI\Models\PackageItemType.cs" />
-    <Compile Include="UI\Models\PackageSearchUtil.cs" />
-    <Compile Include="UI\Models\PackageSorter.cs" />
-    <Compile Include="UI\Models\PackageVersion.cs" />
     <Compile Include="Resources\Text.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

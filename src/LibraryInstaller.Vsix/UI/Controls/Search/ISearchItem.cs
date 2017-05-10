@@ -1,21 +1,21 @@
 ﻿using System.Windows.Media;
 using Microsoft.Web.LibraryInstaller.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Controls.Search
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls.Search
 {
     public interface ISearchItem
     {
-        ILibraryGroup LibraryGroup { get; }
-
-        ImageSource Icon { get; }
-
-        string Homepage { get; }
-
-        string Description { get; }
+        string Alias { get; }
 
         string CollapsedItemText { get; }
 
-        string Alias { get; }
+        string Description { get; }
+
+        string Homepage { get; }
+
+        ImageSource Icon { get; }
+
+        ILibraryGroup LibraryGroup { get; }
 
         bool IsMatchForSearchTerm(string searchTerm);
     }

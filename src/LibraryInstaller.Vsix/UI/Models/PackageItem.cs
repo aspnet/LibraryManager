@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Models
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
 {
     public class PackageItem : BindableBase
     {

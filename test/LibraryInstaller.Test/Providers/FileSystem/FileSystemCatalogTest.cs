@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
             var hostInteraction = new HostInteraction(_projectFolder, "");
             var dependencies = new Dependencies(hostInteraction, new FileSystemProviderFactory());
             _provider = dependencies.GetProvider("filesystem");
-            _catalog = _provider.GetCatalog();
+            _catalog = new FileSystemCatalog((FileSystemProvider) _provider, true);
         }
 
         [DataTestMethod]

@@ -1,21 +1,18 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Navigation;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.Web.LibraryInstaller.Contracts;
-using Microsoft.Web.LibraryInstaller.Vsix.Models;
+using Microsoft.Web.LibraryInstaller.Vsix.UI.Models;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI
 {
     public partial class InstallDialog
     {
         private readonly IDependencies _deps;
         private readonly string _folder;
-        private string _configFileName;
+        private readonly string _configFileName;
 
         public InstallDialog(IDependencies dependencies, string configFileName, string folder)
         {
@@ -51,24 +48,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         private void CloseDialog(bool res)
         {
-            DialogResult = res;
-            Close();
-        }
-
-        private void HyperlinkPreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-        }
-
-        private void NavigateToHomepage(object sender, RequestNavigateEventArgs e)
-        {
-            Hyperlink link = sender as Hyperlink;
-
-            if (link != null)
+            try
             {
-                Process.Start(link.NavigateUri.AbsoluteUri);
+                DialogResult = res;
             }
-
-            e.Handled = true;
+            catch { }
+            Close();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

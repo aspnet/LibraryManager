@@ -1,6 +1,6 @@
 ﻿using Microsoft.Web.LibraryInstaller.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
+namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls
 {
     public class Completion
     {
@@ -11,14 +11,14 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
             CompletionItem = completionItem;
         }
 
-        public int Start { get; }
-
-        public int Length { get; }
-
         public CompletionItem CompletionItem { get; }
 
         public string Description => CompletionItem.Description;
 
         public string DisplayText => CompletionItem.DisplayText;
+
+        public int Length { get; }
+
+        public int Start { get; }
     }
 }
