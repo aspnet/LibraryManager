@@ -5,15 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:models="clr-namespace:Microsoft.Web.LibraryInstaller.Vsix.Models"
              xmlns:converters="clr-namespace:Microsoft.Web.LibraryInstaller.Vsix.Converters"
-             xmlns:controls="clr-namespace:Microsoft.Web.LibraryInstaller.Vsix.Controls"
-             mc:Ignorable="d" x:Name="ThisControl"
+             mc:Ignorable="d" x:Name="ThisControl" Focusable="True" GotFocus="ThisControl_GotFocus"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}">
     <UserControl.Resources>
         <converters:BoldingConverter x:Key="BoldingConverter" />
         <converters:PackageItemIconConverter x:Key="IconConverter" />
         <converters:VisibleIfNonNullConverter x:Key="VisibleIfNonNullConverter" />
     </UserControl.Resources>
-    <TreeView ItemsSource="{Binding Path=DisplayRoots}" VirtualizingPanel.IsVirtualizing="True">
+    <TreeView x:Name="CoreTree" ItemsSource="{Binding Path=DisplayRoots}" VirtualizingPanel.IsVirtualizing="True">
         <TreeView.ItemContainerStyle>
             <Style TargetType="{x:Type TreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />

@@ -80,11 +80,18 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
+            string path = Path.Combine(_provider.HostInteraction.WorkingDirectory, libraryId);
+
+            if (!File.Exists(path) && !Directory.Exists(path))
+            {
+                return null;
+            }
+
             var library = new FileSystemLibrary
             {
                 Name = libraryId,
                 ProviderId = _provider.Id,
-                Files = await GetFilesAsync(libraryId).ConfigureAwait(false)
+                Files = await GetFilesAsync(path).ConfigureAwait(false)
             };
 
             return library;

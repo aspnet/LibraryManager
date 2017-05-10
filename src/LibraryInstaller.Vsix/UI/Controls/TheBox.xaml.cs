@@ -256,7 +256,10 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
 
         private void ThisControl_GotFocus(object sender, RoutedEventArgs e)
         {
-            SearchBox.Focus();
+            if (!Options.IsKeyboardFocusWithin && !SearchBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
+            {
+                SearchBox.Focus();
+            }
         }
     }
 }

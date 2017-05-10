@@ -21,8 +21,8 @@
         </Border>
         <local:BindingProxy x:Name="AllOrs">
             <MultiBinding Mode="OneWay" Converter="{StaticResource LogicalOr}">
-                <Binding ElementName="ThisControl" Path="IsKeyboardFocusWithin" />
-                <Binding ElementName="ThisControl" Path="IsFocused" />
+                <Binding ElementName="SearchBox" Path="IsKeyboardFocusWithin" />
+                <Binding ElementName="SearchBox" Path="IsFocused" />
                 <Binding ElementName="Options" Path="IsKeyboardFocusWithin" />
                 <Binding ElementName="Options" Path="IsFocused" />
             </MultiBinding>
