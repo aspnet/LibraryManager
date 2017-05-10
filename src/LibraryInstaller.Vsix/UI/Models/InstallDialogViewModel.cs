@@ -121,6 +121,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
             {
                 if (Set(ref _selectedPackage, value) && value != null)
                 {
+                    OnPropertyChanged(nameof(IsTreeViewEmpty));
                     bool canUpdateInstallStatusValue = false;
                     HashSet<string> selectedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     Func<bool> canUpdateInstallStatus = () => canUpdateInstallStatusValue;
@@ -242,13 +243,23 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
 
         private bool CanInstallPackage()
         {
-            return SelectedPackage != null;
+            return !_isInstalling && SelectedPackage != null;
         }
+
+        public bool IsTreeViewEmpty
+        {
+            get { return SelectedPackage == null; }
+        }
+
+        private bool _isInstalling;
 
         private async void InstallPackageAsync()
         {
             try
             {
+                ILibrary selectedPackage = SelectedPackage;
+                _isInstalling = true;
+                InstallPackageCommand.CanExecute(null);
                 Manifest manifest = await Manifest.FromFileAsync(_configFileName, _deps, CancellationToken.None).ConfigureAwait(false);
                 string targetPath = _targetPath;
 
@@ -262,7 +273,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Models
                 manifest.AddLibrary(new LibraryInstallationState
                 {
                     LibraryId = PackageId,
-                    ProviderId = SelectedPackage.ProviderId,
+                    ProviderId = selectedPackage.ProviderId,
                     DestinationPath = targetPath,
                     Files = SelectedFiles.ToList()
                 });

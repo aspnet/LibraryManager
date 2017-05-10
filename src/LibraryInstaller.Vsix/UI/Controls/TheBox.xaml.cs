@@ -40,6 +40,16 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
             set { SetValue(CaretIndexProperty, value); }
         }
 
+        public bool IsMouseOverFlyout
+        {
+            get { return Options.IsMouseOver; }
+        }
+
+        public bool IsTextEntryEmpty
+        {
+            get { return string.IsNullOrEmpty(Text); }
+        }
+
         public bool HasItems => Items.Count > 0;
 
         public ObservableCollection<Completion> Items { get; } = new ObservableCollection<Completion>();
@@ -71,6 +81,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Controls
         {
             TheBox search = d as TheBox;
             search?.RefreshSearch();
+            search.PropertyChanged?.Invoke(search, new PropertyChangedEventArgs(nameof(IsTextEntryEmpty)));
         }
 
         private void Commit(Completion completion)

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -24,7 +25,17 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             _folder = folder;
             _configFileName = configFileName;
 
+            LostKeyboardFocus += InstallDialog_LostKeyboardFocus;
             Loaded += OnLoaded;
+        }
+
+        private void InstallDialog_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (!IsKeyboardFocusWithin && !(e.NewFocus is ListBoxItem))
+            {
+                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
+                MoveFocus(request);
+            }
         }
 
         public InstallDialogViewModel ViewModel
@@ -68,6 +79,15 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             ViewModel = new InstallDialogViewModel(Dispatcher, _configFileName, _deps, _folder, CloseDialog);
 
             FocusManager.SetFocusedElement(cbName, cbName);
+        }
+
+        private void ThemedWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!cbName.IsMouseOver && !cbName.IsMouseOverFlyout)
+            {
+                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
+                MoveFocus(request);
+            }
         }
     }
 }

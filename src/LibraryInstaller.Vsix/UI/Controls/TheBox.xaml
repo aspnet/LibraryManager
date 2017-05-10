@@ -7,14 +7,21 @@
              xmlns:search="clr-namespace:Microsoft.Web.LibraryInstaller.Vsix.Controls.Search"
              xmlns:local="clr-namespace:Microsoft.Web.LibraryInstaller.Vsix.Controls"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:res="clr-namespace:Microsoft.Web.LibraryInstaller.Vsix.Resources"
              x:Name="ThisControl" Focusable="True" GotFocus="ThisControl_GotFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
         <search:LogicalAndConverter x:Key="LogicalAnd" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <!-- Text Entry -->
         <TextBox x:Name="SearchBox" Text="{Binding ElementName=ThisControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, IsAsync=True}" PreviewKeyDown="HandleKeyPress" KeyUp="HandleKeyUp" Padding="2 2 20 2" PreviewMouseLeftButtonUp="OnMousePositionCaret"/>
+        <!-- Watermark -->
+        <Label Opacity=".5" Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Top">
+            <AccessText Text="{x:Static res:Text.TypeToSearch}" />
+        </Label>
+
         <!-- Expand Grip -->
         <Border BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" IsHitTestVisible="False">
             <Path Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{Binding ElementName=ThisControl, Path=GlyphStyle}" />
@@ -42,7 +49,7 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 SelectedItem="{Binding ElementName=ThisControl, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ItemsSource="{Binding ElementName=ThisControl, Path=Items, Mode=OneWay}"
-                MaxHeight="300">
+                MaxHeight="300" MinWidth="150">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type controls:Completion}">
                         <Label ToolTip="{Binding Path=Description, Mode=OneWay}" Padding="0">

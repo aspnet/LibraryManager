@@ -19,10 +19,10 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Text {
+    public class Text {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryInstaller.Vsix.Resources.Text", typeof(Text).Assembly);
@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Check for updates.
         /// </summary>
-        internal static string CheckForUpdates {
+        public static string CheckForUpdates {
             get {
                 return ResourceManager.GetString("CheckForUpdates", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Clean libraries started....
         /// </summary>
-        internal static string CleanLibrariesStarted {
+        public static string CleanLibrariesStarted {
             get {
                 return ResourceManager.GetString("CleanLibrariesStarted", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Clean libraries succeeded.
         /// </summary>
-        internal static string CleanLibrariesSucceeded {
+        public static string CleanLibrariesSucceeded {
             get {
                 return ResourceManager.GetString("CleanLibrariesSucceeded", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
         /// </summary>
-        internal static string LibraryRestoredNoChange {
+        public static string LibraryRestoredNoChange {
             get {
                 return ResourceManager.GetString("LibraryRestoredNoChange", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Loading....
         /// </summary>
-        internal static string Loading {
+        public static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No updates found at this time.
         /// </summary>
-        internal static string NoUpdatesFound {
+        public static string NoUpdatesFound {
             get {
                 return ResourceManager.GetString("NoUpdatesFound", resourceCulture);
             }
@@ -121,7 +121,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         ///
         ///Do you want to continue?.
         /// </summary>
-        internal static string NugetInstallPrompt {
+        public static string NugetInstallPrompt {
             get {
                 return ResourceManager.GetString("NugetInstallPrompt", resourceCulture);
             }
@@ -130,16 +130,34 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Packages could not be loaded.
         /// </summary>
-        internal static string PackagesCouldNotBeLoaded {
+        public static string PackagesCouldNotBeLoaded {
             get {
                 return ResourceManager.GetString("PackagesCouldNotBeLoaded", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;Choose a package to select files to install&gt;.
+        /// </summary>
+        public static string SelectPackageToSelectFilesToInstall {
+            get {
+                return ResourceManager.GetString("SelectPackageToSelectFilesToInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Type to search&gt;.
+        /// </summary>
+        public static string TypeToSearch {
+            get {
+                return ResourceManager.GetString("TypeToSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uninstall {0}.
         /// </summary>
-        internal static string UninstallLibrary {
+        public static string UninstallLibrary {
             get {
                 return ResourceManager.GetString("UninstallLibrary", resourceCulture);
             }
