@@ -267,10 +267,12 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
                 });
 
                 await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+
                 EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
                 project?.AddFileToProject(_configFileName);
 
-                await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+                await LibraryHelpers.RestoreAsync(_configFileName).ConfigureAwait(false);
+
                 _dispatcher.Invoke(() =>
                 {
                     _closeDialog(true);
