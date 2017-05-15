@@ -2,7 +2,7 @@ image: Visual Studio 2017
 
 install:
 - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
-- powershell -NoProfile -ExecutionPolicy unrestricted -Command "&{iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/dotnet-install.ps1'))}"
+- powershell -NoProfile -ExecutionPolicy unrestricted -Command "&{iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/dotnet/cli/rel/1.0.1/scripts/obtain/dotnet-install.ps1'))}"
 
 before_build:
   - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
@@ -12,13 +12,6 @@ build_script:
   - dotnet restore LibraryInstaller.sln -v quiet
   - nuget restore -Verbosity quiet
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
-
-build:
-  publish_nuget: true
-  publish_nuget_symbols: true
-
-nuget:
-  project_feed: true
 
 artifacts:
   - path: artifacts\**\*.nupkg
