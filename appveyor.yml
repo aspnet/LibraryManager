@@ -13,6 +13,13 @@ build_script:
   - nuget restore -Verbosity quiet
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
 
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+
+nuget:
+  project_feed: true
+
 artifacts:
   - path: artifacts\**\*.nupkg
     name: NuGet package
