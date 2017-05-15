@@ -11,17 +11,32 @@ using Microsoft.Web.LibraryInstaller.Contracts;
 
 namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
 {
+    /// <summary>
+    /// The <see cref="ILibraryCatalog"/> implementation for the <see cref="FileSystemProvider"/>.
+    /// </summary>
+    /// <seealso cref="Microsoft.Web.LibraryInstaller.Contracts.ILibraryCatalog" />
     public class FileSystemCatalog : ILibraryCatalog
     {
         private readonly FileSystemProvider _provider;
         private readonly bool _underTest;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileSystemCatalog"/> class.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="underTest">if set to <c>true</c> [under test].</param>
         public FileSystemCatalog(FileSystemProvider provider, bool underTest = false)
         {
             _provider = provider;
             _underTest = underTest;
         }
 
+        /// <summary>
+        /// Gets a list of completion spans for use in the JSON file.
+        /// </summary>
+        /// <param name="value">The current state of the library ID.</param>
+        /// <param name="caretPosition">The caret position inside the <paramref name="value" />.</param>
+        /// <returns></returns>
         public Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
         {
             if (value.Contains("://"))
@@ -80,6 +95,14 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
             return Task.FromResult(set);
         }
 
+        /// <summary>
+        /// Gets the library group from the specified <paramref name="libraryId" />.
+        /// </summary>
+        /// <param name="libraryId">The unique library identifier.</param>
+        /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
+        /// <returns>
+        /// An instance of <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryGroup" /> or <code>null</code>.
+        /// </returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
             ILibrary library;
@@ -130,6 +153,13 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
             });
         }
 
+        /// <summary>
+        /// Searches the catalog for the specified search term.
+        /// </summary>
+        /// <param name="term">The search term.</param>
+        /// <param name="maxHits">The maximum number of results to return.</param>
+        /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
+        /// <returns></returns>
         public Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken)
         {
             var groups = new List<ILibraryGroup>()
@@ -140,6 +170,15 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
             return Task.FromResult<IReadOnlyList<ILibraryGroup>>(groups);
         }
 
+        /// <summary>
+        /// Gets the latest version of the library.
+        /// </summary>
+        /// <param name="libraryId">The library identifier.</param>
+        /// <param name="includePreReleases">if set to <c>true</c> includes pre-releases.</param>
+        /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
+        /// <returns>
+        /// The library identifier of the latest released version.
+        /// </returns>
         public Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
         {
             return Task.FromResult(libraryId);
