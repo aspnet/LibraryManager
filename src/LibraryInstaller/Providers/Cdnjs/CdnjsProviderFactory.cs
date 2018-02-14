@@ -2,13 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 
 #if NET45
 using System.ComponentModel.Composition;
 #endif
 
-namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
+namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 {
     /// <summary>Internal use only</summary>
 #if NET45
@@ -17,11 +17,11 @@ namespace Microsoft.Web.LibraryInstaller.Providers.Cdnjs
     public class CdnjsProviderFactory : IProviderFactory
     {
         /// <summary>
-        /// Creates an <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.IProvider" /> instance.
+        /// Creates an <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" /> instance.
         /// </summary>
-        /// <param name="hostInteraction">The <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.IHostInteraction" /> provided by the host to handle file system writes etc.</param>
+        /// <param name="hostInteraction">The <see cref="T:Microsoft.Web.LibraryManager.Contracts.IHostInteraction" /> provided by the host to handle file system writes etc.</param>
         /// <returns>
-        /// A <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.IProvider" /> instance.
+        /// A <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" /> instance.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">hostInteraction</exception>
         public IProvider CreateProvider(IHostInteraction hostInteraction)

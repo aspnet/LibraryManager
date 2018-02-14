@@ -104,7 +104,7 @@
       <DependentUpon>InstallDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Json\TextviewCreationListener.cs" />
-    <Compile Include="LibraryInstallerPackage.cs" />
+    <Compile Include="LibraryManagerPackage.cs" />
     <Compile Include="UI\Models\ActionCommand.cs" />
     <Compile Include="UI\Models\BindableBase.cs" />
     <Compile Include="UI\Models\InstallDialogViewModel.cs" />
@@ -360,13 +360,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LibraryInstaller.Contracts\Microsoft.Web.LibraryInstaller.Contracts.csproj">
+    <ProjectReference Include="..\LibraryInstaller.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj">
       <Project>{ff466454-426b-4ad7-8b00-d50011be716f}</Project>
-      <Name>Microsoft.Web.LibraryInstaller.Contracts</Name>
+      <Name>Microsoft.Web.LibraryManager.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryInstaller.csproj">
+    <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryManager.csproj">
       <Project>{707356dd-96b9-49f6-af2a-9d23b857a1e2}</Project>
-      <Name>Microsoft.Web.LibraryInstaller</Name>
+      <Name>Microsoft.Web.LibraryManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

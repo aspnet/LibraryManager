@@ -4,9 +4,9 @@ using System.IO;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class InstallLibraryCommand
     {

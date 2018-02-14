@@ -1,11 +1,11 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Web.LibraryInstaller
+namespace Microsoft.Web.LibraryManager
 {
     /// <summary>Internal use only</summary>
     public class LibraryInstallationResult : ILibraryInstallationResult
@@ -35,7 +35,7 @@ namespace Microsoft.Web.LibraryInstaller
         /// <code>True</code> if the install was successfull; otherwise <code>False</code>.
         /// </summary>
         /// <remarks>
-        /// The value is usually <code>True</code> if the <see cref="P:Microsoft.Web.LibraryInstaller.Contracts.ILibraryInstallationResult.Errors" /> list is empty.
+        /// The value is usually <code>True</code> if the <see cref="P:Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationResult.Errors" /> list is empty.
         /// </remarks>
         public bool Success
         {
@@ -48,8 +48,8 @@ namespace Microsoft.Web.LibraryInstaller
         public IList<IError> Errors { get; set; }
 
         /// <summary>
-        /// The <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryInstallationState" /> object passed to the
-        /// <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.IProvider" /> for installation.
+        /// The <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" /> object passed to the
+        /// <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" /> for installation.
         /// </summary>
         public ILibraryInstallationState InstallationState { get; set; }
 

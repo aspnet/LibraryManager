@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Web.LibraryInstaller.Contracts
+namespace Microsoft.Web.LibraryManager.Contracts
 {
     /// <summary>
     /// An exception to be thrown when a library is failing to install because the

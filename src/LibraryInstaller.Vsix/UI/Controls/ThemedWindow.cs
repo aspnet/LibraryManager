@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
     public class ThemedWindow : System.Windows.Window
     {

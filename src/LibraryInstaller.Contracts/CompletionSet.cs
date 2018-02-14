@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Microsoft.Web.LibraryInstaller.Contracts
+namespace Microsoft.Web.LibraryManager.Contracts
 {
     /// <summary>
     /// A span for use by completion

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls.Search
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search
 {
     public class LogicalAndConverter : IMultiValueConverter
     {

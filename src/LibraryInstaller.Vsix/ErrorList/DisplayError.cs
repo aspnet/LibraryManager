@@ -3,9 +3,9 @@
 
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     public class DisplayError
     {

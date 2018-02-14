@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Microsoft.Web.LibraryInstaller.Build.Test
+namespace Microsoft.Web.LibraryManager.Build.Test
 {
     public class MockEngine : IBuildEngine5
     {

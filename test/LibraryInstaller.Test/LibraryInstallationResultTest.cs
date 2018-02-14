@@ -3,9 +3,9 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Test
+namespace Microsoft.Web.LibraryManager.Test
 {
     [TestClass]
     public class LibraryInstallationResultTest

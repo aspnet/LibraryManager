@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Tasks = System.Threading.Tasks;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     [Guid(PackageGuids.guidPackageString)]
     [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             "ActiveProjectCapability:DependencyPackageManagement",
             "ActiveProjectFlavor:{3AF33F2E-1136-4D97-BBB7-1795711AC8B8}",
         })]
-    public sealed class LibraryInstallerPackage : AsyncPackage
+    public sealed class LibraryManagerPackage : AsyncPackage
     {
         protected override async Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {

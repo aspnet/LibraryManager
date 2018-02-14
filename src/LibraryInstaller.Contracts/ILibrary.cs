@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Microsoft.Web.LibraryInstaller.Contracts
+namespace Microsoft.Web.LibraryManager.Contracts
 {
     /// <summary>
     /// Represents a library package

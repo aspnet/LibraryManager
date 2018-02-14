@@ -2,12 +2,12 @@
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.Editor.SuggestedActions;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.Linq;
 using System.Threading;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class UpdateSuggestedAction : SuggestedActionBase
     {

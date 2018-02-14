@@ -11,7 +11,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using Microsoft.VisualStudio.Telemetry;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class RestoreSolutionCommand
     {

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     [Export(typeof(IJSONCompletionListProvider))]
     [Name(nameof(ProviderCompletionProvider))]

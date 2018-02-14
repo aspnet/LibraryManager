@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.VisualStudio.Shell;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI
+namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
     public static class Theme
     {
@@ -30,8 +30,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix.UI
             ResourceDictionary allResources = new ResourceDictionary();
             ResourceDictionary shellResources = (ResourceDictionary) Application.LoadComponent(new Uri("Microsoft.VisualStudio.Platform.WindowManagement;component/Themes/ThemedDialogDefaultStyles.xaml", UriKind.Relative));
             ResourceDictionary scrollStyleContainer = (ResourceDictionary) Application.LoadComponent(new Uri("Microsoft.VisualStudio.Shell.UI.Internal;component/Styles/ScrollBarStyle.xaml", UriKind.Relative));
-            ResourceDictionary localThemingContainer = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryInstaller.Vsix;component/UI/Controls/Shared.xaml", UriKind.Relative));
-            ResourceDictionary comboTheme = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryInstaller.Vsix;component/UI/Controls/VsThemedComboBox.xaml", UriKind.Relative));
+            ResourceDictionary localThemingContainer = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Controls/Shared.xaml", UriKind.Relative));
+            ResourceDictionary comboTheme = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Controls/VsThemedComboBox.xaml", UriKind.Relative));
             allResources.MergedDictionaries.Add(shellResources);
             allResources.MergedDictionaries.Add(scrollStyleContainer);
             allResources.MergedDictionaries.Add(localThemingContainer);

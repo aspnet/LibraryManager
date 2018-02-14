@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
     public class InstallDialogViewModel : BindableBase
     {

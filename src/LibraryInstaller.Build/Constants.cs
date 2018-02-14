@@ -4,7 +4,7 @@
 using System;
 using System.IO;
 
-namespace Microsoft.Web.LibraryInstaller.Build
+namespace Microsoft.Web.LibraryManager.Build
 {
     public static class Constants
     {

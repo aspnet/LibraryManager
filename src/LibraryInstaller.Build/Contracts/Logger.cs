@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Microsoft.Web.LibraryInstaller.Build
+namespace Microsoft.Web.LibraryManager.Build
 {
     public class Logger : Contracts.ILogger
     {

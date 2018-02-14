@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Linq;
 
-namespace Microsoft.Web.LibraryInstaller.Build.Test
+namespace Microsoft.Web.LibraryManager.Build.Test
 {
     [TestClass]
     public class RestoreTaskTest

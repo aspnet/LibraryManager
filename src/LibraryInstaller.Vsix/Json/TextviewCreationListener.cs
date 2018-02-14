@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -16,7 +16,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.Json
+namespace Microsoft.Web.LibraryManager.Vsix.Json
 {
     [Export(typeof(IVsTextViewCreationListener))]
     [ContentType("JSON")]

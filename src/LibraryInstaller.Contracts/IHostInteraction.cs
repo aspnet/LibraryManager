@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.Web.LibraryInstaller.Contracts
+namespace Microsoft.Web.LibraryManager.Contracts
 {
     /// <summary>
     /// A class provided by the host to handle file writes etc.

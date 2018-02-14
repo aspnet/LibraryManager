@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
     public class BindableBase : INotifyPropertyChanged
     {

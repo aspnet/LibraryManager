@@ -7,14 +7,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
+namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 {
     /// <summary>
     /// The <see cref="ILibraryCatalog"/> implementation for the <see cref="FileSystemProvider"/>.
     /// </summary>
-    /// <seealso cref="Microsoft.Web.LibraryInstaller.Contracts.ILibraryCatalog" />
+    /// <seealso cref="Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" />
     public class FileSystemCatalog : ILibraryCatalog
     {
         private readonly FileSystemProvider _provider;
@@ -101,7 +101,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
         /// <param name="libraryId">The unique library identifier.</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>
-        /// An instance of <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryGroup" /> or <code>null</code>.
+        /// An instance of <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
         /// </returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {

@@ -1,7 +1,7 @@
-﻿using Microsoft.Web.LibraryInstaller.Contracts;
+﻿using Microsoft.Web.LibraryManager.Contracts;
 using System.Collections.Generic;
 
-namespace Microsoft.Web.LibraryInstaller
+namespace Microsoft.Web.LibraryManager
 {
     /// <summary>
     /// A collection of extension methods.

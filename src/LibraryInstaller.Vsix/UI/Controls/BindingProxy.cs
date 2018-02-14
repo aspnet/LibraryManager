@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Markup;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
     [ContentProperty(nameof(Input))]
     public class BindingProxy : FrameworkElement

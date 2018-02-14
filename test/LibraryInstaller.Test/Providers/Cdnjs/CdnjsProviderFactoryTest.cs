@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Web.LibraryInstaller.Contracts;
-using Microsoft.Web.LibraryInstaller.Mocks;
-using Microsoft.Web.LibraryInstaller.Providers.Cdnjs;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Mocks;
+using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 
-namespace Microsoft.Web.LibraryInstaller.Test.Providers.Cdnjs
+namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 {
     [TestClass]
     public class CdnjsProviderFactoryTest

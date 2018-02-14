@@ -2,13 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using EnvDTE;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     public class HostInteraction : IHostInteraction
     {
@@ -52,7 +52,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                 }
             }
 
-            Logger.Log(string.Format(LibraryInstaller.Resources.Text.FileWrittenToDisk, path.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
+            Logger.Log(string.Format(LibraryManager.Resources.Text.FileWrittenToDisk, path.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
 
             return true;
         }
@@ -78,11 +78,11 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
                         File.Delete(absoluteFile);
                     }
 
-                    Logger.Log(string.Format(LibraryInstaller.Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
+                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
                 }
                 catch (Exception)
                 {
-                    Logger.Log(string.Format(LibraryInstaller.Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
+                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
                 }
             }
         }

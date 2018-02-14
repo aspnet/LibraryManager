@@ -1,6 +1,6 @@
-﻿using Microsoft.Web.LibraryInstaller.Contracts;
+﻿using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
     public class Completion
     {

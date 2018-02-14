@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Web.LibraryInstaller.Contracts;
-using Microsoft.Web.LibraryInstaller.Mocks;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Mocks;
 
-namespace Microsoft.Web.LibraryInstaller.Test
+namespace Microsoft.Web.LibraryManager.Test
 {
     [TestClass]
     public class ErrorTest

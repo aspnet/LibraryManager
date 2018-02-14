@@ -4,7 +4,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
-namespace Microsoft.Web.LibraryInstaller.Test
+namespace Microsoft.Web.LibraryManager.Test
 {
     [TestClass]
     public class LibraryInstallationStateTest

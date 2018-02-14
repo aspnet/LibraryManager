@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Web.LibraryInstaller.Contracts {
+namespace Microsoft.Web.LibraryManager.Contracts {
     using System;
     using System.Reflection;
     
@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryInstaller.Contracts {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryInstaller.Contracts.Text", typeof(Text).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryManager.Contracts.Text", typeof(Text).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

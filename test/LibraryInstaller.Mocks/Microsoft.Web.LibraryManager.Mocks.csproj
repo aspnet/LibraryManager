@@ -20,7 +20,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\LibraryInstaller.Contracts\Microsoft.Web.LibraryInstaller.Contracts.csproj" />
+      <ProjectReference Include="..\..\src\LibraryInstaller.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

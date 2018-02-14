@@ -3,10 +3,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.VisualStudio.Imaging;
-using Microsoft.Web.LibraryInstaller.Contracts;
-using Microsoft.Web.LibraryInstaller.Vsix.UI.Models;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI
+namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
     public partial class InstallDialog
     {

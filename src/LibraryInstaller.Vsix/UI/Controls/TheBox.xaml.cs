@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
     public partial class TheBox : INotifyPropertyChanged
     {

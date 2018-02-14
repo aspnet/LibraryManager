@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Models
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
     public class ActionCommand : ICommand
     {

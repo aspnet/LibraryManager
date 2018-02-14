@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using EnvDTE;
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Telemetry;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class LibraryHelpers
     {
@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
 
         public static async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Logger.LogEvent(LibraryInstaller.Resources.Text.RestoringLibraries, LogLevel.Status);
+            Logger.LogEvent(LibraryManager.Resources.Text.RestoringLibraries, LogLevel.Status);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -74,8 +74,8 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             if (resultCount > 0)
             {
                 string text = hasErrors ?
-                    LibraryInstaller.Resources.Text.RestoreHasErrors :
-                    string.Format(LibraryInstaller.Resources.Text.LibrariesRestored, resultCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
+                    LibraryManager.Resources.Text.RestoreHasErrors :
+                    string.Format(LibraryManager.Resources.Text.LibrariesRestored, resultCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
 
                 Logger.LogEvent(Environment.NewLine + text + Environment.NewLine, LogLevel.Task);
             }

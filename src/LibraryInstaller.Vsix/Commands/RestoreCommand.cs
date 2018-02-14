@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Telemetry;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class RestoreCommand
     {

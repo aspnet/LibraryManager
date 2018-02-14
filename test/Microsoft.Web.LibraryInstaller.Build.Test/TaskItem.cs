@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Build.Framework;
 
-namespace Microsoft.Web.LibraryInstaller.Build.Test
+namespace Microsoft.Web.LibraryManager.Build.Test
 {
     public class TaskItem : ITaskItem
     {

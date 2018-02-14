@@ -1,7 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryInstaller.Contracts;
+using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
+namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 {
     /// <summary>Internal use only</summary>
     public class FileSystemProvider : IProvider
@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
         /// <remarks>
         /// If the provider doesn't have a NuGet package, then return <code>null</code>.
         /// </remarks>
-        public string NuGetPackageId { get; } = "Microsoft.Web.LibraryInstaller.Build";
+        public string NuGetPackageId { get; } = "Microsoft.Web.LibraryManager.Build";
 
         /// <summary>
         /// An object specified by the host to interact with the file system etc.
@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
         public IHostInteraction HostInteraction { get; }
 
         /// <summary>
-        /// Gets the <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
+        /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>
         public ILibraryCatalog GetCatalog()
@@ -54,7 +54,7 @@ namespace Microsoft.Web.LibraryInstaller.Providers.FileSystem
         /// <param name="desiredState">The details about the library to install.</param>
         /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
         /// <returns>
-        /// The <see cref="T:Microsoft.Web.LibraryInstaller.Contracts.ILibraryInstallationResult" /> from the installation process.
+        /// The <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationResult" /> from the installation process.
         /// </returns>
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {

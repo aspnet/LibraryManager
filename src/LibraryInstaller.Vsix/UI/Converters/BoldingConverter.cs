@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Converters
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
 {
     public class BoldingConverter : IValueConverter
     {

@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class UninstallSuggestedAction : SuggestedActionBase
     {

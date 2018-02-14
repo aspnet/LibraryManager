@@ -27,11 +27,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Microsoft.Web.LibraryInstaller.Build.props">
+        <Content Include="Microsoft.Web.LibraryManager.Build.props">
             <PackagePath>build</PackagePath>
             <Pack>true</Pack>
         </Content>
-        <Content Include="Microsoft.Web.LibraryInstaller.Build.targets">
+        <Content Include="Microsoft.Web.LibraryManager.Build.targets">
             <Pack>true</Pack>
             <PackagePath>build</PackagePath>
         </Content>
@@ -42,7 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryInstaller.csproj" />
+      <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryManager.csproj" />
     </ItemGroup>
 
     <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">

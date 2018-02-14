@@ -1,18 +1,18 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryInstaller.Contracts;
-using Microsoft.Web.LibraryInstaller.Mocks;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.Web.LibraryInstaller.Providers.FileSystem;
+using Microsoft.Web.LibraryManager.Providers.FileSystem;
 using System;
 using System.Linq;
 
-namespace Microsoft.Web.LibraryInstaller.Test.Providers.FileSystem
+namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 {
     [TestClass]
     public class FileSystemProviderTest

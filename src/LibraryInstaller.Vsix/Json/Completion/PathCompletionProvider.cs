@@ -11,7 +11,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using Microsoft.VisualStudio.Text;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     [Export(typeof(IJSONCompletionListProvider))]
     [Name(nameof(PathCompletionProvider))]

@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace Microsoft.Web.LibraryInstaller.Vsix.UI.Controls.Search
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search
 {
     public class Wrapper : DependencyObject
     {
