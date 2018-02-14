@@ -14,9 +14,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\LibraryInstaller.Build\Microsoft.Web.LibraryManager.Build.csproj" />
-        <ProjectReference Include="..\..\src\LibraryInstaller\Microsoft.Web.LibraryManager.csproj" />
-        <ProjectReference Include="..\LibraryInstaller.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj" />
+        <ProjectReference Include="..\..\src\LibraryManager.Build\Microsoft.Web.LibraryManager.Build.csproj" />
+        <ProjectReference Include="..\..\src\LibraryManager\Microsoft.Web.LibraryManager.csproj" />
+        <ProjectReference Include="..\LibraryManager.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj" />
     </ItemGroup>
 
     <ItemGroup>
