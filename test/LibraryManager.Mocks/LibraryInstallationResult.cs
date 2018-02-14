@@ -10,7 +10,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// A mock <see cref="ILibraryInstallationResult"/> class.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.ILibraryInstallationResult" />
+    /// <seealso cref="LibraryManager.Contracts.ILibraryInstallationResult" />
     public class LibraryInstallationResult : ILibraryInstallationResult
     {
         /// <summary>
@@ -45,7 +45,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <code>True</code> if the install was successfull; otherwise <code>False</code>.
         /// </summary>
         /// <remarks>
-        /// The value is usually <code>True</code> if the <see cref="P:LibraryInstaller.Contracts.ILibraryInstallationResult.Errors" /> list is empty.
+        /// The value is usually <code>True</code> if the <see cref="P:LibraryManager.Contracts.ILibraryInstallationResult.Errors" /> list is empty.
         /// </remarks>
         public virtual bool Success
         {
@@ -62,8 +62,8 @@ namespace Microsoft.Web.LibraryManager.Mocks
         }
 
         /// <summary>
-        /// The <see cref="T:LibraryInstaller.Contracts.ILibraryInstallationState" /> object passed to the
-        /// <see cref="T:LibraryInstaller.Contracts.IProvider" /> for installation.
+        /// The <see cref="T:LibraryManager.Contracts.ILibraryInstallationState" /> object passed to the
+        /// <see cref="T:LibraryManager.Contracts.IProvider" /> for installation.
         /// </summary>
         public virtual ILibraryInstallationState InstallationState
         {

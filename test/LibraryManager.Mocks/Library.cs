@@ -9,11 +9,11 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// A mock <see cref="ILibrary"/> class.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.ILibrary" />
+    /// <seealso cref="LibraryManager.Contracts.ILibrary" />
     public class Library : ILibrary
     {
         /// <summary>
-        /// The string that lets the <see cref="T:LibraryInstaller.Contracts.IProvider" /> uniquely identify the specific library.
+        /// The string that lets the <see cref="T:LibraryManager.Contracts.IProvider" /> uniquely identify the specific library.
         /// </summary>
         public virtual string Name { get; set; }
 

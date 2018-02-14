@@ -8,7 +8,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// A mock of the <see cref="ILibraryGroup"/> interface.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.ILibraryGroup" />
+    /// <seealso cref="LibraryManager.Contracts.ILibraryGroup" />
     public class LibraryGroup : ILibraryGroup
     {
         /// <summary>

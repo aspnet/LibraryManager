@@ -8,7 +8,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// A mock of <see cref="ILibraryCatalog"/> for use in unit testing.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.ILibraryCatalog" />
+    /// <seealso cref="LibraryManager.Contracts.ILibraryCatalog" />
     public class LibraryCatalog : ILibraryCatalog
     {
         /// <summary>
@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <param name="libraryId">The unique library identifier.</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>
-        /// An instance of <see cref="T:LibraryInstaller.Contracts.ILibraryGroup" /> or <code>null</code>.
+        /// An instance of <see cref="T:LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
         /// </returns>
         public virtual Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {

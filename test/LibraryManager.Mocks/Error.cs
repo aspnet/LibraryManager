@@ -8,7 +8,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// A mock <see cref="IError"/> object.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.IError" />
+    /// <seealso cref="LibraryManager.Contracts.IError" />
     public class Error : IError
     {
         /// <summary>

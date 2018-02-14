@@ -10,7 +10,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// Used to pass in dependencies to the Manifest class.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.IDependencies" />
+    /// <seealso cref="LibraryManager.Contracts.IDependencies" />
     /// <remarks>
     /// This should be implemented by the host
     /// </remarks>
@@ -40,10 +40,10 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public virtual List<IProvider> AllProviders { get; set; } = new List<IProvider>();
 
         /// <summary>
-        /// Gets the <see cref="T:LibraryInstaller.Contracts.IHotInteraction" /> used by <see cref="T:LibraryInstaller.Contracts.IProvider" /> to install libraries.
+        /// Gets the <see cref="T:LibraryManager.Contracts.IHotInteraction" /> used by <see cref="T:LibraryManager.Contracts.IProvider" /> to install libraries.
         /// </summary>
         /// <returns>
-        /// The <see cref="T:LibraryInstaller.Contracts.IHostInteraction" /> provided by the host.
+        /// The <see cref="T:LibraryManager.Contracts.IHostInteraction" /> provided by the host.
         /// </returns>
         public virtual IHostInteraction GetHostInteractions() => _hostInteractions;
 
@@ -52,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// </summary>
         /// <param name="providerId">The unique ID of the provider.</param>
         /// <returns>
-        /// An <see cref="T:LibraryInstaller.Contracts.IProvider" /> or <code>null</code> from the providers resolved by the host.
+        /// An <see cref="T:LibraryManager.Contracts.IProvider" /> or <code>null</code> from the providers resolved by the host.
         /// </returns>
         public virtual IProvider GetProvider(string providerId)
         {

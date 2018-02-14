@@ -9,7 +9,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// A mock <see cref="ILibraryInstallationState"/> class.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.ILibraryInstallationState" />
+    /// <seealso cref="LibraryManager.Contracts.ILibraryInstallationState" />
     public class LibraryInstallationState : ILibraryInstallationState
     {
         /// <summary>

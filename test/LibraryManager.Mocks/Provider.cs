@@ -10,7 +10,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// A mock <see cref="IProvider"/> class for use in unit tests.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.IProvider" />
+    /// <seealso cref="LibraryManager.Contracts.IProvider" />
     public class Provider : IProvider
     {
         /// <summary>
@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public virtual ILibraryInstallationResult Result { get; set; }
 
         /// <summary>
-        /// Gets the <see cref="T:LibraryInstaller.Contracts.ILibraryCatalog" /> for the <see cref="T:LibraryInstaller.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
+        /// Gets the <see cref="T:LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>
         public virtual ILibraryCatalog GetCatalog()
@@ -65,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <param name="desiredState">The details about the library to install.</param>
         /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
         /// <returns>
-        /// The <see cref="T:LibraryInstaller.Contracts.ILibraryInstallationResult" /> from the installation process.
+        /// The <see cref="T:LibraryManager.Contracts.ILibraryInstallationResult" /> from the installation process.
         /// </returns>
         public virtual Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {

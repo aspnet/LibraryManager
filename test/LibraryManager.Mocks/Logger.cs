@@ -10,7 +10,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <summary>
     /// A mock of the <see cref="ILogger"/> interface.
     /// </summary>
-    /// <seealso cref="LibraryInstaller.Contracts.ILogger" />
+    /// <seealso cref="LibraryManager.Contracts.ILogger" />
     public class Logger : ILogger
     {
         /// <summary>
