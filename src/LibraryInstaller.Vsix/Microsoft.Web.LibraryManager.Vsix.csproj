@@ -20,8 +20,8 @@
     <ProjectGuid>{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Web.LibraryInstaller.Vsix</RootNamespace>
-    <AssemblyName>Microsoft.Web.LibraryInstaller.Vsix</AssemblyName>
+    <RootNamespace>Microsoft.Web.LibraryManager.Vsix</RootNamespace>
+    <AssemblyName>Microsoft.Web.LibraryManager.Vsix</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
