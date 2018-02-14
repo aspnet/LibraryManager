@@ -8,9 +8,9 @@
         <Version>1.0.0-alpha</Version>
         <Authors>Microsoft</Authors>
         <Company>Microsoft Corp.</Company>
-        <Description>MSBuild target for the Visual Studio Library Installer</Description>
+        <Description>MSBuild target for the Visual Studio Library Manager</Description>
         <Copyright>Copyright © Microsoft</Copyright>
-        <PackageId>Microsoft.Web.LibraryInstaller.Build</PackageId>
+        <PackageId>Microsoft.Web.LibraryManager.Build</PackageId>
         <Title>$(PackageId)</Title>
         <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
         <PackageProjectUrl>https://github.com/aspnet/LibraryInstaller</PackageProjectUrl>
@@ -42,7 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryManager.csproj" />
+      <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" />
     </ItemGroup>
 
     <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
@@ -51,7 +51,7 @@
         but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
         -->
         <ItemGroup>
-            <_PackageFiles Include="bin\$(Configuration)\*\*.LibraryInstaller.dll;bin\$(Configuration)\*\*.LibraryInstaller.Contracts.dll;bin\$(Configuration)\*\Newtonsoft.Json.dll">
+            <_PackageFiles Include="bin\$(Configuration)\*\*.LibraryManager.dll;bin\$(Configuration)\*\*.LibraryManager.Contracts.dll;bin\$(Configuration)\*\Newtonsoft.Json.dll">
                 <PackagePath>tools\%(RecursiveDir)</PackagePath>
                 <Visible>false</Visible>
                 <BuildAction>Content</BuildAction>

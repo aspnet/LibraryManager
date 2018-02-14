@@ -360,11 +360,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LibraryInstaller.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj">
+    <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj">
       <Project>{ff466454-426b-4ad7-8b00-d50011be716f}</Project>
       <Name>Microsoft.Web.LibraryManager.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LibraryInstaller\Microsoft.Web.LibraryManager.csproj">
+    <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj">
       <Project>{707356dd-96b9-49f6-af2a-9d23b857a1e2}</Project>
       <Name>Microsoft.Web.LibraryManager</Name>
     </ProjectReference>
