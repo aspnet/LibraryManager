@@ -12,7 +12,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         private InstallLibraryCommand(OleMenuCommandService commandService)
         {
-            CommandID cmdId = new CommandID(PackageGuids.guidLibraryInstallerPackageCmdSet, PackageIds.InstallPackage);
+            CommandID cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.InstallPackage);
             OleMenuCommand cmd = new OleMenuCommand(ExecuteAsync, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);

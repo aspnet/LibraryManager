@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public void Setup()
         {
             _cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
-            _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryInstaller");
+            _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             _filePath = Path.Combine(_projectFolder, "library.json");
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);

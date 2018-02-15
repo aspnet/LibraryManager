@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.Build.Test
         [TestInitialize]
         public void Setup()
         {
-            _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryInstallerBuild");
+            _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManagerBuild");
             _buildEngine = new MockEngine();
             string path = typeof(Manifest).GetTypeInfo().Assembly.Location;
 

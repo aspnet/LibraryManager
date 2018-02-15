@@ -22,7 +22,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             _package = package;
 
-            var cmdId = new CommandID(PackageGuids.guidLibraryInstallerPackageCmdSet, PackageIds.RestoreSolution);
+            var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.RestoreSolution);
             var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
             commandService.AddCommand(cmd);
         }

@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         [TestInitialize]
         public void Setup()
         {
-            _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryInstaller");
+            _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
 
             var hostInteraction = new HostInteraction(_projectFolder, "");
             var dependencies = new Dependencies(hostInteraction, new FileSystemProviderFactory());
@@ -65,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         [TestMethod]
         public async Task SearchAsync_Folder()
         {
-            string folder = Path.Combine(Path.GetTempPath(), "LibraryInstaller_test");
+            string folder = Path.Combine(Path.GetTempPath(), "LibraryManager_test");
             Directory.CreateDirectory(folder);
             File.WriteAllText(Path.Combine(folder, "file1.js"), "");
             File.WriteAllText(Path.Combine(folder, "file2.js"), "");
@@ -114,7 +114,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         [TestMethod]
         public async Task GetLibraryAsync_Folder()
         {
-            string folder = Path.Combine(Path.GetTempPath(), "LibraryInstaller_test");
+            string folder = Path.Combine(Path.GetTempPath(), "LibraryManager_test");
             Directory.CreateDirectory(folder);
             File.WriteAllText(Path.Combine(folder, "file1.js"), "");
             File.WriteAllText(Path.Combine(folder, "file2.js"), "");

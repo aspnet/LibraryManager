@@ -9,7 +9,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     public static class Constants
     {
         public const string ConfigFileName = "library.json";
-        public const string TelemetryNamespace = "webtools/libraryinstaller/";
+        public const string TelemetryNamespace = "webtools/librarymanager/";
         public const string MainNuGetPackageId = "Microsoft.Web.LibraryManager.Build";
         public const string ErrorCodeLink = "https://github.com/aspnet/LibraryInstaller/wiki/Error-codes#{0}";
 
@@ -24,7 +24,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     envVar = "%USERPROFILE%";
                 }
 
-                return Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".libraryinstaller");
+                return Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".librarymanager");
             }
         }
     }

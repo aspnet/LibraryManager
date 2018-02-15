@@ -18,7 +18,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             _package = package;
 
-            var cmdId = new CommandID(PackageGuids.guidLibraryInstallerPackageCmdSet, PackageIds.ManageLibraries);
+            var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.ManageLibraries);
             var cmd = new OleMenuCommand(Execute, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);

@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _package = package;
             _componentModel = VsHelpers.GetService<SComponentModel, IComponentModel>();
 
-            var cmdId = new CommandID(PackageGuids.guidLibraryInstallerPackageCmdSet, PackageIds.RestoreOnBuild);
+            var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.RestoreOnBuild);
             var cmd = new OleMenuCommand(Execute, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);

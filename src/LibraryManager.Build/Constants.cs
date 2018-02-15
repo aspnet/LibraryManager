@@ -9,7 +9,7 @@ namespace Microsoft.Web.LibraryManager.Build
     public static class Constants
     {
         public const string ConfigFileName = "library.json";
-        public const string TelemetryNamespace = "webtools/libraryinstaller/";
+        public const string TelemetryNamespace = "webtools/librarymanager/";
 
         public static string CacheFolder
         {
@@ -22,7 +22,7 @@ namespace Microsoft.Web.LibraryManager.Build
                     envVar = "%USERPROFILE%";
                 }
 
-                return Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".libraryinstaller");
+                return Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".librarymanager");
             }
         }
     }

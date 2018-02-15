@@ -8,29 +8,29 @@
 
     <PropertyGroup>
         <BuildDependsOn>
-            LibraryInstallerRestore;
+            LibraryManagerRestore;
             $(BuildDependsOn)
         </BuildDependsOn>
 
         <CopyAllFilesToSingleFolderForPackageDependsOn>
-            LibraryInstallerRestore;
+            LibraryManagerRestore;
             $(CopyAllFilesToSingleFolderForPackageDependsOn);
         </CopyAllFilesToSingleFolderForPackageDependsOn>
 
         <CopyAllFilesToSingleFolderForMsdeployDependsOn>
-            LibraryInstallerRestore;
+            LibraryManagerRestore;
             $(CopyAllFilesToSingleFolderForMsdeployDependsOn);
         </CopyAllFilesToSingleFolderForMsdeployDependsOn>
 
         <CopyFilesToOutputDirectory>
-            LibraryInstallerRestore;
+            LibraryManagerRestore;
             $(CopyFilesToOutputDirectory);
         </CopyFilesToOutputDirectory>
     </PropertyGroup>
 
     <UsingTask AssemblyFile="$(_LibraryTaskAssembly)" TaskName="Microsoft.Web.LibraryManager.Build.RestoreTask"/>
 
-    <Target Name="LibraryInstallerRestore" Condition="'$(LibraryRestore)' != 'False'">
+    <Target Name="LibraryManagerRestore" Condition="'$(LibraryRestore)' != 'False'">
 
         <Microsoft.Web.LibraryManager.Build.RestoreTask
             FileName="library.json"

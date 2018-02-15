@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             _package = package;
 
-            var cmdId = new CommandID(PackageGuids.guidLibraryInstallerPackageCmdSet, PackageIds.Clean);
+            var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.Clean);
             var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);
@@ -66,7 +66,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             if (Action == vsBuildAction.vsBuildActionClean || Action == vsBuildAction.vsBuildActionRebuildAll)
             {
-                // Removes all Library Installer errors from the Error List
+                // Removes all Library Manager errors from the Error List
                 TableDataSource.Instance.CleanAllErrors();
             }
         }

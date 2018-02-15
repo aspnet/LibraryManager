@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public void Setup()
         {
             string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
-            string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryInstaller");
+            string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             _hostInteraction = new HostInteraction(projectFolder, cacheFolder);
         }
 
