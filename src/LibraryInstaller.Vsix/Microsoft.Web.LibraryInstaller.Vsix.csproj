@@ -47,13 +47,40 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains(UI_ENABLED))">
+    <Compile Include="Commands\InstallLibraryCommand.cs" />
+    <Compile Include="UI\Controls\BindingProxy.cs" />
+    <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs" >
+      <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\Search\ISearchItem.cs" />
+    <Compile Include="UI\Controls\Search\LogicalAndConverter.cs" />
+    <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
+    <Compile Include="UI\Controls\Search\Wrapper.cs" />
+    <Compile Include="UI\Controls\TheBox.xaml.cs">
+      <DependentUpon>TheBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\ThemedWindow.cs" />
+    <Compile Include="UI\Converters\BoldingConverter.cs" />
+    <Compile Include="UI\Converters\NotConverter.cs" />
+    <Compile Include="UI\Converters\PackageItemIconConverter.cs" />
+    <Compile Include="UI\Converters\VisibleIfNonNullConverter.cs" />
+    <Compile Include="UI\InstallDialog.xaml.cs">
+      <DependentUpon>InstallDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Models\ActionCommand.cs" />
+    <Compile Include="UI\Models\BindableBase.cs" />
+    <Compile Include="UI\Models\InstallDialogViewModel.cs" />
+    <Compile Include="UI\Models\PackageItem.cs" />
+    <Compile Include="UI\Models\PackageItemType.cs" />
+    <Compile Include="UI\Theme.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ManageLibrariesCommand.cs" />
     <Compile Include="Commands\RestoreOnBuildCommand.cs" />
     <Compile Include="Commands\RestoreSolutionCommand.cs" />
     <Compile Include="Commands\RestoreCommand.cs" />
     <Compile Include="Commands\CleanCommand.cs" />
-    <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Contracts\Dependencies.cs" />
     <Compile Include="Contracts\HostInteraction.cs" />
@@ -82,40 +109,15 @@
     <Compile Include="UI\Controls\EditorTooltip.xaml.cs">
       <DependentUpon>EditorTooltip.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\BindingProxy.cs" />
-    <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
-      <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\Search\ISearchItem.cs" />
-    <Compile Include="UI\Controls\Search\LogicalAndConverter.cs" />
-    <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
-    <Compile Include="UI\Controls\Search\Wrapper.cs" />
-    <Compile Include="UI\Controls\TheBox.xaml.cs">
-      <DependentUpon>TheBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\ThemedWindow.cs" />
-    <Compile Include="UI\Converters\BoldingConverter.cs" />
-    <Compile Include="UI\Converters\NotConverter.cs" />
-    <Compile Include="UI\Converters\PackageItemIconConverter.cs" />
-    <Compile Include="UI\Converters\VisibleIfNonNullConverter.cs" />
     <Compile Include="Shared\LibraryHelpers.cs" />
     <Compile Include="Shared\VsHelpers.cs" />
-    <Compile Include="UI\InstallDialog.xaml.cs">
-      <DependentUpon>InstallDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Json\TextviewCreationListener.cs" />
     <Compile Include="LibraryInstallerPackage.cs" />
-    <Compile Include="UI\Models\ActionCommand.cs" />
-    <Compile Include="UI\Models\BindableBase.cs" />
-    <Compile Include="UI\Models\InstallDialogViewModel.cs" />
-    <Compile Include="UI\Models\PackageItem.cs" />
-    <Compile Include="UI\Models\PackageItemType.cs" />
     <Compile Include="Resources\Text.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
-    <Compile Include="UI\Theme.cs" />
     <Compile Include="VSCommandTable.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -374,6 +376,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains(UI_ENABLED))">
     <Page Include="UI\Controls\PackageContentsTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
