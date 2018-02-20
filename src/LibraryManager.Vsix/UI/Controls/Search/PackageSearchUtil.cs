@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using LibraryInstaller.Vsix.Controls.Search;
+using LibraryManager.Vsix.Controls.Search;
 
-namespace LibraryInstaller.Vsix.UI.Controls.Search
+namespace LibraryManager.Vsix.UI.Controls.Search
 {
     internal class PackageSearchUtil
     {

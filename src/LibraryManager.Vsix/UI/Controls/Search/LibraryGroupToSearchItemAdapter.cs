@@ -1,9 +1,9 @@
 ﻿using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using LibraryInstaller.Contracts;
-using LibraryInstaller.Vsix.Models;
+using LibraryManager.Contracts;
+using LibraryManager.Vsix.Models;
 
-namespace LibraryInstaller.Vsix.Controls.Search
+namespace LibraryManager.Vsix.Controls.Search
 {
     internal class LibraryGroupToSearchItemAdapter : ISearchItem
     {
