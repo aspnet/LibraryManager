@@ -44,7 +44,7 @@ namespace Microsoft.Web.LibraryInstaller.Vsix
             if (await GetServiceAsync(typeof(IMenuCommandService)).ConfigureAwait(false) is OleMenuCommandService commandService)
             {
 #if UI_ENABLED
-                    InstallLibraryCommand.Initialize(this, commandService);
+                InstallLibraryCommand.Initialize(this, commandService);
 #endif
                 CleanCommand.Initialize(this, commandService);
                 RestoreCommand.Initialize(this, commandService);
