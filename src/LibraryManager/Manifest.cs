@@ -228,18 +228,15 @@ namespace Microsoft.Web.LibraryManager
         {
             int filesDeleted = 0;
 
-            if (state.Files != null)
+            foreach (string file in state.Files)
             {
-                foreach (string file in state.Files)
-                {
-                    var url = new Uri(file, UriKind.RelativeOrAbsolute);
+                var url = new Uri(file, UriKind.RelativeOrAbsolute);
 
-                    if (!url.IsAbsoluteUri)
-                    {
-                        string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
-                        deleteFileAction?.Invoke(relativePath);
-                        filesDeleted++;
-                    }
+                if (!url.IsAbsoluteUri)
+                {
+                    string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
+                    deleteFileAction?.Invoke(relativePath);
+                    filesDeleted++;
                 }
             }
 
