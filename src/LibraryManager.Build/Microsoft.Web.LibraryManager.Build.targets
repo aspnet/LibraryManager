@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">..\tools\netstandard1.3\Microsoft.Web.LibraryManager.Build.dll</_LibraryTaskAssembly>
+        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net46\Microsoft.Web.LibraryManager.Build.dll</_LibraryTaskAssembly>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <BuildDependsOn>
+            LibraryManagerRestore;
+            $(BuildDependsOn)
+        </BuildDependsOn>
+
+        <CopyAllFilesToSingleFolderForPackageDependsOn>
+            LibraryManagerRestore;
+            $(CopyAllFilesToSingleFolderForPackageDependsOn);
+        </CopyAllFilesToSingleFolderForPackageDependsOn>
+
+        <CopyAllFilesToSingleFolderForMsdeployDependsOn>
+            LibraryManagerRestore;
+            $(CopyAllFilesToSingleFolderForMsdeployDependsOn);
+        </CopyAllFilesToSingleFolderForMsdeployDependsOn>
+
+        <CopyFilesToOutputDirectory>
+            LibraryManagerRestore;
+            $(CopyFilesToOutputDirectory);
+        </CopyFilesToOutputDirectory>
+    </PropertyGroup>
+
+    <UsingTask AssemblyFile="$(_LibraryTaskAssembly)" TaskName="Microsoft.Web.LibraryManager.Build.RestoreTask"/>
+
+    <Target Name="LibraryManagerRestore" Condition="'$(LibraryRestore)' != 'False'">
+
+        <Microsoft.Web.LibraryManager.Build.RestoreTask
+            FileName="library.json"
+            ProjectDirectory="$(MSBuildProjectDirectory)"
+            ProviderAssemblies="$(LibraryProviderAssemblies)">
+
+            <Output TaskParameter="FilesWritten" ItemName="_FilesWritten"/>
+        </Microsoft.Web.LibraryManager.Build.RestoreTask>
+
+        <ItemGroup>
+            <FilesForPackagingFromProject  Include="%(_FilesWritten.Identity)">
+                <DestinationRelativePath>%(_FilesWritten.Identity)</DestinationRelativePath>
+            </FilesForPackagingFromProject>
+        </ItemGroup>
+    </Target>
+
+</Project>

@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+        <PackageTags>library, package, client-side</PackageTags>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.Contracts.xml</DocumentationFile>
+        <Authors>Microsoft</Authors>
+        <Company>Microsof Corp.</Company>
+        <Description>The contracts assembly for authoring Library Manager extensions</Description>
+        <Copyright>Copyright © Microsoft</Copyright>
+        <Version>1.0.0-alpha</Version>
+        <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
+        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
+        <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/aspnet/LibraryInstaller</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/aspnet/LibraryInstaller/blob/master/LICENSE.txt</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/aspnet/LibraryInstaller</RepositoryUrl>
+        <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
+    </PropertyGroup>
+
+    <Target Name="BuiltProjectOutputGroup" />
+    <Target Name="BuiltProjectOutputGroupDependencies" />
+    <Target Name="GetCopyToOutputDirectoryItems" />
+    <Target Name="SatelliteDllsProjectOutputGroup" />
+    <Target Name="DebugSymbolsProjectOutputGroup" />
+    <ItemGroup>
+      <Compile Update="Text.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Text.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="Text.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Text.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+</Project>
