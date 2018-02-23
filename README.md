@@ -2,7 +2,7 @@
 
 Install and consume 3rd-party client-side libraries with ease.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/vc2ixijbk1ak780e?svg=true)](https://ci.appveyor.com/project/madskristensen/libraryinstaller)
+[![Build status](https://ci.appveyor.com/api/projects/status/vc2ixijbk1ak780e?svg=true)](https://ci.appveyor.com/project/madskristensen/LibraryManager)
 
 ## Features
 
@@ -33,7 +33,7 @@ Edit the library.json file to install libraries. Every time the file is saved, V
 
 ![library.json](art/library.json%20typing.gif)
 
-See [library.json reference](https://github.com/aspnet/LibraryInstaller/wiki/library.json-reference) for more information.
+See [library.json reference](https://github.com/aspnet/LibraryManager/wiki/library.json-reference) for more information.
 
 ### Light bulbs
 Inside library.json there are light bulbs that show up with helpful commands.
