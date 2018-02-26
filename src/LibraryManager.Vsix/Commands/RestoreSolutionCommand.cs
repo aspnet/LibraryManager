@@ -35,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             var solution = (IVsSolution)ServiceProvider.GetService(typeof(SVsSolution));
 
-            if (VsHelpers.SolutionContainsConfigFile(solution))
+            if (VsHelpers.SolutionContainsManifestFile(solution))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 Project project = VsHelpers.GetDTEProject(hierarchy);
 
-                if (VsHelpers.ProjectContainsConfigFile(project))
+                if (VsHelpers.ProjectContainsManifestFile(project))
                 {
                     string configFilePath = Path.Combine(project.GetRootFolder(), Constants.ConfigFileName);
                     configFiles.Add(configFilePath);

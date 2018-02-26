@@ -179,7 +179,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        public static bool ProjectContainsConfigFile(Project project)
+        public static bool ProjectContainsManifestFile(Project project)
         {
             string configFilePath = Path.Combine(GetRootFolder(project), Constants.ConfigFileName);
 
@@ -191,7 +191,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return false;
         }
 
-        public static bool SolutionContainsConfigFile(IVsSolution solution)
+        public static bool SolutionContainsManifestFile(IVsSolution solution)
         {
             IEnumerable<IVsHierarchy> hierarchies = GetProjectsInSolution(solution, __VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION);
 
@@ -199,7 +199,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 Project project = GetDTEProject(hierarchy);
 
-                if (project != null && ProjectContainsConfigFile(project))
+                if (project != null && ProjectContainsManifestFile(project))
                 {
                     return true;
                 }
