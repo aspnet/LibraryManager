@@ -17,38 +17,30 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [ProvideAutoLoad(PackageGuids.guidUiContextString)]
     [ProvideUIContextRule(PackageGuids.guidUiContextConfigFileString,
         name: "ConfigFile",
-        expression: "(WAP | WebSite | DotNetCoreWeb | Cordova) & !Node & Config",
+        expression: "(WAP | WebSite | DotNetCoreWeb ) & Config",
         termNames: new string[] {
             "WAP",
             "WebSite",
             "DotNetCoreWeb",
-            "Cordova",
-            "Node",
             "Config"
         },
         termValues: new string[] {
             "ActiveProjectFlavor:{349C5851-65DF-11DA-9384-00065B846F21}",
             "ActiveProjectFlavor:{E24C65DC-7377-472B-9ABA-BC803B73C61A}",
             "ActiveProjectCapability:DotNetCoreWeb",
-            "ActiveProjectCapability:DependencyPackageManagement",
-            "ActiveProjectFlavor:{3AF33F2E-1136-4D97-BBB7-1795711AC8B8}",
             "HierSingleSelectionName:" + Constants.ConfigFileName + "$" })]
     [ProvideUIContextRule(PackageGuids.guidUiContextString, 
         name: Vsix.Name,
-        expression: "(WAP | WebSite | DotNetCoreWeb | Cordova) & !Node",
+        expression: "(WAP | WebSite | DotNetCoreWeb )",
         termNames: new string[] {
             "WAP",
             "WebSite",
-            "DotNetCoreWeb",
-            "Cordova",
-            "Node"
+            "DotNetCoreWeb"
         },
         termValues: new string[] {
             "ActiveProjectFlavor:{349C5851-65DF-11DA-9384-00065B846F21}",
             "ActiveProjectFlavor:{E24C65DC-7377-472B-9ABA-BC803B73C61A}",
-            "ActiveProjectCapability:DotNetCoreWeb",
-            "ActiveProjectCapability:DependencyPackageManagement",
-            "ActiveProjectFlavor:{3AF33F2E-1136-4D97-BBB7-1795711AC8B8}" })]
+            "ActiveProjectCapability:DotNetCoreWeb" })]
 
     public sealed class LibraryManagerPackage : AsyncPackage
     {
