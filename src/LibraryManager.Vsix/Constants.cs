@@ -11,7 +11,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public const string ConfigFileName = "library.json";
         public const string TelemetryNamespace = "webtools/librarymanager/";
         public const string MainNuGetPackageId = "Microsoft.Web.LibraryManager.Build";
-        public const string ErrorCodeLink = "https://github.com/aspnet/LibraryInstaller/wiki/Error-codes#{0}";
+        public const string ErrorCodeLink = "https://github.com/aspnet/LibraryManager/wiki/Error-codes#{0}";
 
         public static string CacheFolder
         {

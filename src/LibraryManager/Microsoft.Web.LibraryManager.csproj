@@ -12,9 +12,9 @@
         <PackageId>Microsoft.Web.LibraryManager</PackageId>
         <Product>Microsoft.Web.LibraryManager</Product>
         <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
-        <PackageProjectUrl>https://github.com/aspnet/LibraryInstaller</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/aspnet/LibraryInstaller/blob/master/LICENSE.txt</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/aspnet/LibraryInstaller</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/aspnet/LibraryManager</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/aspnet/LibraryManager/blob/master/LICENSE.txt</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
         <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
     </PropertyGroup>
 
