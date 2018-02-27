@@ -51,7 +51,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
 
             if (item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
-                button.Visible = button.Enabled = true;
+            {
+                button.Visible = true;
+                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
+            }
         }
 
         private async void ExecuteAsync(object sender, EventArgs e)

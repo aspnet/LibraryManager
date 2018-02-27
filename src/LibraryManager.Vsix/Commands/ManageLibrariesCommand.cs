@@ -20,6 +20,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.ManageLibraries);
             var cmd = new OleMenuCommand(Execute, cmdId);
+            cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);
         }
 
@@ -32,6 +33,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new ManageLibrariesCommand(package, commandService);
         }
 
+        private void BeforeQueryStatus(object sender, EventArgs e)
+        {
+            var button = (OleMenuCommand)sender;
+
+            button.Visible = true;
+            button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
+        }
 
         private void Execute(object sender, EventArgs e)
         {
