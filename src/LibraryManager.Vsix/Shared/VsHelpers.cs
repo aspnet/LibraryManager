@@ -214,9 +214,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 yield break;
 
             Guid guid = Guid.Empty;
-            solution.GetProjectEnum((uint)flags, ref guid, out IEnumHierarchies enumHierarchies);
-            if (enumHierarchies == null)
+            if (ErrorHandler.Failed(solution.GetProjectEnum((uint)flags, ref guid, out IEnumHierarchies enumHierarchies)) || enumHierarchies == null)
+            {
                 yield break;
+            }
 
             IVsHierarchy[] hierarchy = new IVsHierarchy[1];
             while (enumHierarchies.Next(1, hierarchy, out uint fetched) == VSConstants.S_OK && fetched == 1)
@@ -228,8 +229,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static Project GetDTEProject(IVsHierarchy hierarchy)
         {
-            hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object obj);
-            return obj as Project;
+            if (ErrorHandler.Succeeded(hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object obj)))
+            {
+                return obj as Project;
+            }
+
+            return null;
         }
     }
 
