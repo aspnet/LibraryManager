@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props')" />
+  <Import Project ="..\..\LibraryManager.Settings.targets" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -47,10 +48,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Label="MultilingualAppToolkit">
+    <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
+    <MultilingualFallbackLanguage>en</MultilingualFallbackLanguage>
+    <TranslationReport Condition="'$(Configuration)' == 'Release'">true</TranslationReport>
+    <SuppressPseudoWarning Condition="'$(Configuration)' == 'Debug'">true</SuppressPseudoWarning>
+  </PropertyGroup>
   <ItemGroup Condition="$(DefineConstants.Contains(UI_ENABLED))">
     <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
-    <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs" >
+    <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
       <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\Search\ISearchItem.cs" />
@@ -118,10 +125,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
-    <Compile Include="VSCommandTable.cs">
+    <Compile Include="Commands\CommandTable\VSCommandTable.en.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>VSCommandTable.vsct</DependentUpon>
+      <DependentUpon>VSCommandTable.en.vsct</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="source.extension.cs">
@@ -137,7 +144,7 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
       <Generator>VsixManifestGenerator</Generator>
-      <LastGenOutput>source.extension.resx</LastGenOutput>
+      <LastGenOutput>source.extension.en.resx</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -329,10 +336,49 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <VSCTCompile Include="VSCommandTable.vsct">
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.en.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <Generator>VsctGenerator</Generator>
-      <LastGenOutput>VSCommandTable.cs</LastGenOutput>
+      <LastGenOutput>VSCommandTable.en.cs</LastGenOutput>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.cs.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.es.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.fr.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.it.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.ja.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.ko.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.pl.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.pt-BR.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.ru.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.tr.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.zh-Hans.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.zh-Hant.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <VSCTCompile Include="Commands\CommandTable\VSCommandTable.de.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
@@ -346,19 +392,98 @@
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Content>
     <Content Include="version.txt" />
+    <EmbeddedResource Include="Resources\Text.cs.resx" />
+    <EmbeddedResource Include="Resources\Text.de.resx" />
+    <EmbeddedResource Include="Resources\Text.es.resx" />
+    <EmbeddedResource Include="Resources\Text.fr.resx" />
+    <EmbeddedResource Include="Resources\Text.it.resx" />
+    <EmbeddedResource Include="Resources\Text.ja.resx" />
+    <EmbeddedResource Include="Resources\Text.ko.resx" />
+    <EmbeddedResource Include="Resources\Text.pl.resx" />
+    <EmbeddedResource Include="Resources\Text.pt-BR.resx" />
+    <EmbeddedResource Include="Resources\Text.ru.resx" />
+    <EmbeddedResource Include="Resources\Text.tr.resx" />
+    <EmbeddedResource Include="Resources\Text.zh-Hans.resx" />
+    <EmbeddedResource Include="Resources\Text.zh-Hant.resx" />
+    <EmbeddedResource Include="source.extension.cs.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.cs.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.de.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.de.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.es.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.es.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.fr.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.fr.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.it.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.it.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.ja.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.ja.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.ko.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.ko.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.pl.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.pl.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.pt-BR.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.pt-BR.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.ru.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.ru.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.tr.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.tr.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.zh-Hans.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.zh-Hans.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.zh-Hant.resx">
+      <DependentUpon>source.extension.cs</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <LogicalName>VSPackage.zh-Hant.Resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="source.extension.en.resx">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>source.extension.vsixmanifest</DependentUpon>
+      <MergeWithCTO>true</MergeWithCTO>
+      <!--<ManifestResourceName>VSPackage.en</ManifestResourceName>-->
+      <LogicalName>VSPackage.en.Resources</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Text.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Text.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="source.extension.resx">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>source.extension.vsixmanifest</DependentUpon>
-      <MergeWithCTO>true</MergeWithCTO>
-      <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -399,6 +524,22 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Commands\CommandTable\LocalizationFiles\VSCommandTable.*.xlf" />
+  </ItemGroup>
+  <ItemGroup>
+    <XliffResource Include="MultilingualResources\*.xlf" />
+  </ItemGroup>
+  <Target Name="PreCreateVsixContainer" BeforeTargets="CreateVsixContainer">
+    <ItemGroup>
+      <VSIXSourceItem Include="$(OutputPath)%(DstLocales.Identity)\Microsoft.Web.LibraryManager.resources.dll" Condition="Exists('$(OutputPath)\%(DstLocales.Identity)\Microsoft.Web.LibraryManager.resources.dll')">
+        <VSIXSubPath>%(DstLocales.Identity)</VSIXSubPath>
+      </VSIXSourceItem>
+      <VSIXSourceItem Include="$(OutputPath)\%(DstLocales.Identity)\Microsoft.Web.LibraryManager.Contracts.resources.dll" Condition="Exists('$(OutputPath)\%(DstLocales.Identity)\Microsoft.Web.LibraryManager.Contracts.resources.dll')">
+        <VSIXSubPath>%(DstLocales.Identity)</VSIXSubPath>
+      </VSIXSourceItem>
+    </ItemGroup>
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -411,6 +552,10 @@
   </Target>
   <Import Project="..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.targets')" />
   <Import Project="..\..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.16-beta\build\portable-net45+win8+wpa81\Microsoft.Diagnostics.Tracing.EventSource.Redist.targets" Condition="Exists('..\..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.16-beta\build\portable-net45+win8+wpa81\Microsoft.Diagnostics.Tracing.EventSource.Redist.targets')" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
+  <Target Name="MATPrerequisite" BeforeTargets="PrepareForBuild" Condition="!Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets')" Label="MultilingualAppToolkit">
+    <Warning Text="$(MSBuildProjectFile) is Multilingual build enabled, but the Multilingual App Toolkit is unavailable during the build. If building with Visual Studio, please check to ensure that toolkit is properly installed." />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

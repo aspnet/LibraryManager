@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>Odstranil se údaj: {0}</value>
+    <comment>Shows in Output Window when a library file is deleted</comment>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>{0} se nepovedlo odstranit.</value>
+    <comment>Shows in Output Window when a file failed to be deleted</comment>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>{0} zapsány na disk</value>
+    <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="RestoreCancelled" xml:space="preserve">
+    <value>Obnovení knihovny byla zrušena</value>
+  </data>
+  <data name="RestoringLibrary" xml:space="preserve">
+    <value>Obnovení balíčku {0}</value>
+  </data>
+  <data name="RestoringLibraries" xml:space="preserve">
+    <value>Obnovení knihovny...</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="LibrariesRestored" xml:space="preserve">
+    <value>knihovny {0} v {1} sekund</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="RestoreHasErrors" xml:space="preserve">
+    <value>Obnovení knihovny byl unsuccessfull</value>
+    <comment>Status message</comment>
+  </data>
+</root>

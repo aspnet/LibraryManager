@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
+  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="zh-Hant" build-num="bb1380375926">
+    <header>
+      <count-group name="BlackBox wordcount">
+        <count count-type="x-wordCount">17</count>
+        <count count-type="x-adjWordCount">12.65</count>
+        <count count-type="x-curAdjWordCount">12.65</count>
+        <count count-type="x-repeatAdjWordCount">0.75</count>
+        <count count-type="x-termWordCount">0</count>
+      </count-group>
+      <count-group name="BlackBox wordcount analysis">
+        <count count-type="x-match102%">0</count>
+        <count count-type="x-match101%">0</count>
+        <count count-type="x-match100%">0</count>
+        <count count-type="x-match99-90%">0</count>
+        <count count-type="x-match89-75%">0</count>
+        <count count-type="x-mt">17</count>
+        <count count-type="repetition">3</count>
+      </count-group>
+    </header>
+    <body>
+      <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
+        <trans-unit id="InstallPackage|ButtonText">
+          <source xml:lang="en">Add Client-Side Library...</source>
+          <target xml:lang="zh-Hant" state="needs-review-translation" state-qualifier="mt-suggestion">新增用戶端程式庫...</target>
+          <alt-trans match-quality="100%" tool="BlackBox/MSR MT">
+            <target xml:lang="zh-Hant" state-qualifier="mt-suggestion">新增用戶端程式庫...</target>
+          </alt-trans>
+          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="2.55" curWordcount="2.55"</note>
+        </trans-unit>
+        <trans-unit id="Restore|ButtonText">
+          <source xml:lang="en">Restore Client-Side Libraries</source>
+          <target xml:lang="zh-Hant" state="needs-review-translation" state-qualifier="mt-suggestion">還原用戶端程式庫</target>
+          <alt-trans match-quality="100%" tool="BlackBox/MSR MT">
+            <target xml:lang="zh-Hant" state-qualifier="mt-suggestion">還原用戶端程式庫</target>
+          </alt-trans>
+          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="2.55" curWordcount="2.55"</note>
+        </trans-unit>
+        <trans-unit id="Clean|ButtonText">
+          <source xml:lang="en">Clean</source>
+          <target xml:lang="zh-Hant" state="needs-review-translation" state-qualifier="mt-suggestion">清除</target>
+          <alt-trans match-quality="100%" tool="BlackBox/MSR MT">
+            <target xml:lang="zh-Hant" state-qualifier="mt-suggestion">清除</target>
+          </alt-trans>
+          <note from="bb-metadata">fuzzyMatch="15" wordcount="1" adjWordcount="0.85" curWordcount="0.85"</note>
+        </trans-unit>
+        <trans-unit id="RestoreOnBuild|ButtonText">
+          <source xml:lang="en">Enable Restore on Build...</source>
+          <target xml:lang="zh-Hant" state="needs-review-translation" state-qualifier="mt-suggestion">啟用組建上的還原...</target>
+          <alt-trans match-quality="100%" tool="BlackBox/MSR MT">
+            <target xml:lang="zh-Hant" state-qualifier="mt-suggestion">啟用組建上的還原...</target>
+          </alt-trans>
+          <note from="bb-metadata">fuzzyMatch="15" wordcount="4" adjWordcount="3.4" curWordcount="3.4"</note>
+        </trans-unit>
+        <trans-unit id="ManageLibraries|ButtonText">
+          <source xml:lang="en">Manage Client-Side Libraries...</source>
+          <target xml:lang="zh-Hant" state="needs-review-translation" state-qualifier="mt-suggestion">管理用戶端程式庫...</target>
+          <alt-trans match-quality="100%" tool="BlackBox/MSR MT">
+            <target xml:lang="zh-Hant" state-qualifier="mt-suggestion">管理用戶端程式庫...</target>
+          </alt-trans>
+          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="2.55" curWordcount="2.55"</note>
+        </trans-unit>
+        <trans-unit id="RestoreSolution|ButtonText">
+          <source xml:lang="en">Restore Client-Side Libraries</source>
+          <target xml:lang="zh-Hant" state="needs-review-translation" state-qualifier="mt-suggestion">還原用戶端程式庫</target>
+          <alt-trans match-quality="100%" tool="BlackBox/MSR MT">
+            <target xml:lang="zh-Hant" state-qualifier="mt-suggestion">還原用戶端程式庫</target>
+          </alt-trans>
+          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="0.75" curWordcount="0.75"</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

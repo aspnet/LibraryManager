@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ru" original="MICROSOFT.WEB.LIBRARYMANAGER.CONTRACTS/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6810.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="MICROSOFT.WEB.LIBRARYMANAGER.CONTRACTS/RESOURCES/TEXT.RESX" datatype="resx">
+        <trans-unit id="ErrorCouldNotWriteFile" translate="yes" xml:space="preserve">
+          <source>{0} could not be written to disk. Make sure the file name is correct</source>
+          <target state="translated">{0} не может быть записан на диск. Убедитесь, что имя файла указано правильно</target>
+        </trans-unit>
+        <trans-unit id="ErrorLibraryIdIsUndefined" translate="yes" xml:space="preserve">
+          <source>The library id is undefined</source>
+          <target state="translated">Идентификатор библиотеки не определено</target>
+        </trans-unit>
+        <trans-unit id="ErrorManifestMalformed" translate="yes" xml:space="preserve">
+          <source>The manifest file contains syntax errors</source>
+          <target state="translated">Файл манифеста содержит синтаксические ошибки</target>
+        </trans-unit>
+        <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
+          <source>The "path" is undefined.</source>
+          <target state="translated">«Путь» является неопределенным.</target>
+        </trans-unit>
+        <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
+          <source>The "path" must be inside the working directory</source>
+          <target state="translated">«Путь» должен быть внутри рабочего каталога</target>
+        </trans-unit>
+        <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
+          <source>The provider is undefined</source>
+          <target state="translated">Поставщик не определено</target>
+        </trans-unit>
+        <trans-unit id="ErrorProviderUnknown" translate="yes" xml:space="preserve">
+          <source>The "{0}" provider could not be found</source>
+          <target state="translated">Поставщик «{0}» не найден</target>
+        </trans-unit>
+        <trans-unit id="ErrorUnableToResolveSource" translate="yes" xml:space="preserve">
+          <source>The "{0}" library could not be resolved by the "{1}" provider</source>
+          <target state="translated">Библиотека «{0}» не могут быть решены поставщиком «{1}»</target>
+        </trans-unit>
+        <trans-unit id="ErrorUnknownException" translate="yes" xml:space="preserve">
+          <source>An unknown exception occurred</source>
+          <target state="translated">Произошло неизвестное исключение.</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
