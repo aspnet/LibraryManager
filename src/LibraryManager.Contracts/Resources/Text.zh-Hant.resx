@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ErrorCouldNotWriteFile" xml:space="preserve">
+    <value>{0} 無法寫入磁片。請確保檔案名正確</value>
+  </data>
+  <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
+    <value>庫 id 未定義</value>
+  </data>
+  <data name="ErrorManifestMalformed" xml:space="preserve">
+    <value>清單檔包含語法錯誤</value>
+  </data>
+  <data name="ErrorPathIsUndefined" xml:space="preserve">
+    <value>"路徑" 未定義。</value>
+  </data>
+  <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
+    <value>"路徑" 必須在工作目錄中</value>
+  </data>
+  <data name="ErrorProviderIsUndefined" xml:space="preserve">
+    <value>提供程式未定義</value>
+  </data>
+  <data name="ErrorProviderUnknown" xml:space="preserve">
+    <value>找不到 "{0}" 提供程式</value>
+  </data>
+  <data name="ErrorUnableToResolveSource" xml:space="preserve">
+    <value>"{0}" 庫無法由 "{1}" 提供程式解析</value>
+  </data>
+  <data name="ErrorUnknownException" xml:space="preserve">
+    <value>發生未知的例外狀況。</value>
+  </data>
+</root>
