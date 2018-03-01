@@ -1,51 +1,66 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <PackageTags>library, package, client-side</PackageTags>
-        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.xml</DocumentationFile>
-        <Version>1.0.0-alpha</Version>
-        <Authors>Microsoft</Authors>
-        <Company>Microsoft Corp.</Company>
-        <Description>Create custom providers for the Visual Studio Library Manager</Description>
-        <Copyright>Copyright © Microsoft</Copyright>
-        <PackageId>Microsoft.Web.LibraryManager</PackageId>
-        <Product>Microsoft.Web.LibraryManager</Product>
-        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
-        <PackageProjectUrl>https://github.com/aspnet/LibraryManager</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/aspnet/LibraryManager/blob/master/LICENSE.txt</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
-        <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
-    </PropertyGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-        <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' != 'netstandard1.3'">
-        <PackageReference Include="Newtonsoft.Json" Version="8.0.3" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="System.Net.Http" Version="4.3.1" />
-        <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
-        <Reference Include="System.ComponentModel.Composition" Condition="'$(TargetFramework)' != 'netstandard1.3'" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Update="Resources\Text.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Text.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <EmbeddedResource Update="Resources\Text.resx">
-            <Generator>PublicResXFileCodeGenerator</Generator>
-            <LastGenOutput>Text.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-    </ItemGroup>
-
-    <Target Name="BuiltProjectOutputGroup" />
-    <Target Name="BuiltProjectOutputGroupDependencies" />
-    <Target Name="GetCopyToOutputDirectoryItems" />
-    <Target Name="SatelliteDllsProjectOutputGroup" />
-    <Target Name="DebugSymbolsProjectOutputGroup" />
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="MultilingualAppToolkit">
+    <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
+    <MultilingualFallbackLanguage>en</MultilingualFallbackLanguage>
+    <TranslationReport Condition="'$(Configuration)' == 'Release'">true</TranslationReport>
+    <SuppressPseudoWarning Condition="'$(Configuration)' == 'Debug'">true</SuppressPseudoWarning>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageTags>library, package, client-side</PackageTags>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.xml</DocumentationFile>
+    <Version>1.0.0-alpha</Version>
+    <Authors>Microsoft</Authors>
+    <Company>Microsoft Corp.</Company>
+    <Description>Create custom providers for the Visual Studio Library Manager</Description>
+    <Copyright>Copyright © Microsoft</Copyright>
+    <PackageId>Microsoft.Web.LibraryManager</PackageId>
+    <Product>Microsoft.Web.LibraryManager</Product>
+    <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/aspnet/LibraryManager</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/aspnet/LibraryManager/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
+    <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
+  <Target Name="MATPrerequisite" BeforeTargets="PrepareForBuild" Condition="!Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets')" Label="MultilingualAppToolkit">
+    <Warning Text="$(MSBuildProjectFile) is Multilingual build enabled, but the Multilingual App Toolkit is unavailable during the build. If building with Visual Studio, please check to ensure that toolkit is properly installed." />
+  </Target>
+  <ItemGroup>
+    <XliffResource Include="MultilingualResources\*.xlf" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard1.3'">
+    <PackageReference Include="Newtonsoft.Json" Version="8.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" Version="4.3.1" />
+    <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
+    <Reference Include="System.ComponentModel.Composition" Condition="'$(TargetFramework)' != 'netstandard1.3'" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Text.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Text.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Text.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Text.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Target Name="BuiltProjectOutputGroup" />
+  <Target Name="BuiltProjectOutputGroupDependencies" />
+  <Target Name="GetCopyToOutputDirectoryItems" />
+  <Target Name="SatelliteDllsProjectOutputGroup" />
+  <Target Name="DebugSymbolsProjectOutputGroup" />
 </Project>

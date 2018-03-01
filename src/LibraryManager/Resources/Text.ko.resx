@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>{0} 삭제됨</value>
+    <comment>Shows in Output Window when a library file is deleted</comment>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>{0} 삭제 실패</value>
+    <comment>Shows in Output Window when a file failed to be deleted</comment>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>{0} 작성 된 디스크에</value>
+    <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="RestoreCancelled" xml:space="preserve">
+    <value>라이브러리 복원 취소 되었습니다.</value>
+  </data>
+  <data name="RestoringLibrary" xml:space="preserve">
+    <value>복원: {0}</value>
+  </data>
+  <data name="RestoringLibraries" xml:space="preserve">
+    <value>라이브러리 복원...</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="LibrariesRestored" xml:space="preserve">
+    <value>{0} 라이브러리 {1} 초에 복원</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="RestoreHasErrors" xml:space="preserve">
+    <value>라이브러리 복원이 했다 소</value>
+    <comment>Status message</comment>
+  </data>
+</root>
