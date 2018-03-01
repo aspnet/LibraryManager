@@ -43,7 +43,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (item.Kind.Equals(VSConstants.ItemTypeGuid.PhysicalFolder_string, StringComparison.OrdinalIgnoreCase))
             {
-                button.Visible = button.Enabled = true;
+                button.Visible = true;
+                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
             }
         }
 
