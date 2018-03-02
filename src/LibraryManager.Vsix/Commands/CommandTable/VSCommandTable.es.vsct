@@ -9,7 +9,9 @@
     </Groups>
     <Buttons>
       <!-- Folder -->
-      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
+      <!-- Package Manager UI disabled.-->
+      <!-- To enable remove Condition="Defined(UI_ENABLED)" or define UI_ENABLED -->
+      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button" Condition="Defined(UI_ENABLED)">
         <Icon guid="ImageCatalogGuid" id="JSWebScript" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
