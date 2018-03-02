@@ -107,22 +107,27 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
         {
-            if (e.FileActionType == FileActionTypes.ContentSavedToDisk)
+            var textDocument = sender as ITextDocument;
+
+            if (e.FileActionType == FileActionTypes.ContentSavedToDisk && textDocument != null)
             {
                 Task.Run(async () =>
                 {
                     try
                     {
-                        Manifest newManifest = await Manifest.FromFileAsync(e.FilePath, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                        Manifest newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
                         await RemoveFilesAsync(newManifest).ConfigureAwait(false);
 
                         _manifest = newManifest;
 
-                        await LibraryHelpers.RestoreAsync(e.FilePath, CancellationToken.None).ConfigureAwait(false);
+                        await LibraryHelpers.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                         Telemetry.TrackOperation("restoresave");
                     }
                     catch (Exception ex)
                     {
+                        string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.RestoreHasErrors, Environment.NewLine);
+
+                        Logger.LogEvent(textMessage, LogLevel.Task);
                         Logger.LogEvent(ex.ToString(), LogLevel.Error);
                         Telemetry.TrackException("restoresavefailed", ex);
                     }

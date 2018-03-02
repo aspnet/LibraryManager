@@ -35,10 +35,33 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await RestoreAsync(new[] { configFilePath }, cancellationToken).ConfigureAwait(false);
+            Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
+
+            await RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest }, cancellationToken).ConfigureAwait(false);
+        }
+
+        public static async Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest } , cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Dictionary<string, Manifest> manifests = new Dictionary<string, Manifest>();
+
+            foreach (string configFilePath in configFilePaths)
+            {
+                Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+                Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
+
+                manifests.Add(configFilePath, manifest);
+            }
+
+            await RestoreAsync(manifests, cancellationToken).ConfigureAwait(false);
+        }
+
+        private static async Task RestoreAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken = default(CancellationToken))
         {
             Logger.LogEvent(LibraryManager.Resources.Text.RestoringLibraries, LogLevel.Status);
 
@@ -48,13 +71,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             bool hasErrors = false;
             var telResult = new Dictionary<string, double>();
 
-            foreach (string configFilePath in configFilePaths)
+            foreach (KeyValuePair<string, Manifest> manifest in manifests)
             {
-                IEnumerable<ILibraryInstallationResult> results = await RestoreLibrariesAsync(configFilePath, cancellationToken).ConfigureAwait(false);
-                Project project = VsHelpers.DTE.Solution?.FindProjectItem(configFilePath)?.ContainingProject;
-                AddFilesToProject(configFilePath, project, results);
+                IEnumerable<ILibraryInstallationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 
-                var errorList = new ErrorList(project?.Name, configFilePath);
+                Project project = VsHelpers.DTE.Solution?.FindProjectItem(manifest.Key)?.ContainingProject;
+                AddFilesToProject(manifest.Key, project, results);
+
+                var errorList = new ErrorList(project?.Name, manifest.Key);
                 hasErrors |= errorList.HandleErrors(results);
 
                 resultCount += results.Count();
@@ -112,11 +136,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Telemetry.TrackUserTask("clean", new KeyValuePair<string, object>("filesdeleted", filesDeleted));
         }
 
-        private static async Task<IEnumerable<ILibraryInstallationResult>> RestoreLibrariesAsync(string configFilePath, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<ILibraryInstallationResult>> RestoreLibrariesAsync(Manifest manifest, CancellationToken cancellationToken)
         {
-            var dependencies = Dependencies.FromConfigFile(configFilePath);
-
-            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
             return await manifest.RestoreAsync(cancellationToken).ConfigureAwait(false);
         }
 
