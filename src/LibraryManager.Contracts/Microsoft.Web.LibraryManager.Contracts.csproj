@@ -1,4 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Multilingual App Toolkit Properties -->
+    <PropertyGroup Label="MultilingualAppToolkit">
+      <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
+      <MultilingualFallbackLanguage>en</MultilingualFallbackLanguage>
+      <TranslationReport Condition="'$(Configuration)' == 'Release'">true</TranslationReport>
+      <SuppressPseudoWarning Condition="'$(Configuration)' == 'Debug'">true</SuppressPseudoWarning>
+    </PropertyGroup>
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
@@ -19,22 +26,37 @@
         <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
     </PropertyGroup>
 
+  <!-- Warning if Multilingual App Toolkit isn't installed -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
+    <Target Name="MATPrerequisite" BeforeTargets="PrepareForBuild" Condition="!Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets')" Label="MultilingualAppToolkit">
+      <Warning Text="$(MSBuildProjectFile) is Multilingual build enabled, but the Multilingual App Toolkit is unavailable during the build. If building with Visual Studio, please check to ensure that toolkit is properly installed." />
+    </Target>
+
     <Target Name="BuiltProjectOutputGroup" />
     <Target Name="BuiltProjectOutputGroupDependencies" />
     <Target Name="GetCopyToOutputDirectoryItems" />
     <Target Name="SatelliteDllsProjectOutputGroup" />
     <Target Name="DebugSymbolsProjectOutputGroup" />
+
+    <!-- Needed for Multilingual App Toolkit-->
     <ItemGroup>
-      <Compile Update="Text.Designer.cs">
+      <XliffResource Include="MultilingualResources\*.xlf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\Text.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Text.resx</DependentUpon>
       </Compile>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Update="Text.resx">
+      <EmbeddedResource Update="Resources\Text.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Text.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Properties\" />
     </ItemGroup>
 </Project>

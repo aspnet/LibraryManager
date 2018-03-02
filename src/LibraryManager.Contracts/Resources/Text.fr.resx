@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ErrorCouldNotWriteFile" xml:space="preserve">
+    <value>{0} ne peut pas être écrite sur le disque. Assurez-vous que le nom du fichier est correct</value>
+  </data>
+  <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
+    <value>L’id de la bibliothèque n’est pas défini</value>
+  </data>
+  <data name="ErrorManifestMalformed" xml:space="preserve">
+    <value>Le fichier manifeste contient des erreurs de syntaxe</value>
+  </data>
+  <data name="ErrorPathIsUndefined" xml:space="preserve">
+    <value>Le « chemin » n’est pas défini.</value>
+  </data>
+  <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
+    <value>Le « chemin » doit se trouver dans le répertoire de travail</value>
+  </data>
+  <data name="ErrorProviderIsUndefined" xml:space="preserve">
+    <value>Le fournisseur n’est pas défini</value>
+  </data>
+  <data name="ErrorProviderUnknown" xml:space="preserve">
+    <value>Le fournisseur « {0} » est introuvable</value>
+  </data>
+  <data name="ErrorUnableToResolveSource" xml:space="preserve">
+    <value>La bibliothèque « {0} » n’a pas pu être résolue par le fournisseur « {1} »</value>
+  </data>
+  <data name="ErrorUnknownException" xml:space="preserve">
+    <value>Une exception inconnue s'est produite.</value>
+  </data>
+</root>

@@ -1,0 +1,43 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+      <DstLocales Include="zh-Hans">
+        <Lang>chs</Lang>
+      </DstLocales>
+      <DstLocales Include="zh-Hant">
+        <Lang>cht</Lang>
+      </DstLocales>
+      <DstLocales Include="cs">
+        <Lang>csy</Lang>
+      </DstLocales>
+      <DstLocales Include="es">
+        <Lang>esn</Lang>
+      </DstLocales>
+      <DstLocales Include="de">
+        <Lang>deu</Lang>
+      </DstLocales>
+      <DstLocales Include="fr">
+        <Lang>fra</Lang>
+      </DstLocales>
+      <DstLocales Include="it">
+        <Lang>ita</Lang>
+      </DstLocales>
+      <DstLocales Include="ja">
+        <Lang>jpn</Lang>
+      </DstLocales>
+      <DstLocales Include="ko">
+        <Lang>kor</Lang>
+      </DstLocales>
+      <DstLocales Include="pl">
+        <Lang>plk</Lang>
+      </DstLocales>
+      <DstLocales Include="pt-Br">
+        <Lang>ptb</Lang>
+      </DstLocales>
+      <DstLocales Include="ru">
+        <Lang>ru</Lang>
+      </DstLocales>
+      <DstLocales Include="tr">
+        <Lang>trk</Lang>
+      </DstLocales>
+    </ItemGroup>
+</Project>

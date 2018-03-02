@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ErrorCouldNotWriteFile" xml:space="preserve">
+    <value>{0} yazılı diske. Dosya adının doğru olduğundan emin olun</value>
+  </data>
+  <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
+    <value>Kütüphane kimliği tanımlı değil</value>
+  </data>
+  <data name="ErrorManifestMalformed" xml:space="preserve">
+    <value>Bildirim dosyası sözdizimi hataları içeriyor</value>
+  </data>
+  <data name="ErrorPathIsUndefined" xml:space="preserve">
+    <value>"Yol" tanımlı değil.</value>
+  </data>
+  <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
+    <value>"Yol" çalışma dizini içinde olmalıdır</value>
+  </data>
+  <data name="ErrorProviderIsUndefined" xml:space="preserve">
+    <value>Sağlayıcı tanımlı değil</value>
+  </data>
+  <data name="ErrorProviderUnknown" xml:space="preserve">
+    <value>"{0}" sağlayıcısı bulunamadı</value>
+  </data>
+  <data name="ErrorUnableToResolveSource" xml:space="preserve">
+    <value>"{0}" kütüphane "{1}" sağlayıcı tarafından çözümlenemedi</value>
+  </data>
+  <data name="ErrorUnknownException" xml:space="preserve">
+    <value>Bilinmeyen bir özel durum oluştu.</value>
+  </data>
+</root>

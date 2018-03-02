@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+  <Include href="KnownImageIds.vsct" />
+  <Commands package="guidPackage">
+    <Groups>
+      <Group guid="guidLibraryManagerPackageCmdSet" id="ConfigMenuGruop" />
+    </Groups>
+    <Buttons>
+      <!-- Folder -->
+      <!-- Package Manager UI disabled.-->
+      <!-- To enable remove Condition="Defined(UI_ENABLED)" or define UI_ENABLED -->
+      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button" Condition="Defined(UI_ENABLED)">
+        <Icon guid="ImageCatalogGuid" id="JSWebScript" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>클라이언트 라이브러리 추가...</ButtonText>
+        </Strings>
+      </Button>
+      <!-- Config file -->
+      <Button guid="guidLibraryManagerPackageCmdSet" id="Restore" priority="0x0100" type="Button">
+        <Parent guid="guidLibraryManagerPackageCmdSet" id="ConfigMenuGruop" />
+        <Icon guid="ImageCatalogGuid" id="JSWebScript" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>클라이언트 라이브러리를 복원</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
+        <Parent guid="guidLibraryManagerPackageCmdSet" id="ConfigMenuGruop" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>청소</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">
+        <Parent guid="guidLibraryManagerPackageCmdSet" id="ConfigMenuGruop" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>빌드에 대 한 복원을 사용...</ButtonText>
+          <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
+        </Strings>
+      </Button>
+      <!-- Project -->
+      <Button guid="guidLibraryManagerPackageCmdSet" id="ManageLibraries" priority="0xF106" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_ADD" />
+        <Icon guid="ImageCatalogGuid" id="JSWebScript" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>클라이언트 라이브러리를 관리 하는...</ButtonText>
+          <CanonicalName>ManageClientSideLibraries</CanonicalName>
+        </Strings>
+      </Button>
+      <!-- Solution -->
+      <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreSolution" priority="0x9999" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_BUILD" />
+        <Icon guid="ImageCatalogGuid" id="JSWebScript" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>클라이언트 라이브러리를 복원</ButtonText>
+          <CanonicalName>RestoreClientSideLibraries</CanonicalName>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+  <CommandPlacements>
+    <!-- Folder menu -->
+    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0500">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_FOLDER_ADD" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0500">
+      <Parent guid="guidVenusCmdId" id="IDG_CTX_REFERENCE" />
+    </CommandPlacement>
+    <!-- Config file menu -->
+    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="ConfigMenuGruop" priority="0x0300">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="ConfigMenuGruop" priority="0x0300">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBITEMNODE" />
+    </CommandPlacement>
+    <!-- Manage libraries -->
+    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="ManageLibraries" priority="0xF106">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CSCD_PROJECT_WEB" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="ManageLibraries" priority="0xF106">
+      <Parent guid="guidVenusCmdId" id="IDG_CTX_REFERENCE" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="ManageLibraries" priority="0xF102">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_PROJ_OPTIONS" />
+    </CommandPlacement>
+  </CommandPlacements>
+  <VisibilityConstraints>
+    <VisibilityItem guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" context="guidUiContext" />
+    <VisibilityItem guid="guidLibraryManagerPackageCmdSet" id="ManageLibraries" context="guidUiContext" />
+    <VisibilityItem guid="guidLibraryManagerPackageCmdSet" id="Clean" context="guidUiContextConfigFile" />
+    <VisibilityItem guid="guidLibraryManagerPackageCmdSet" id="Restore" context="guidUiContextConfigFile" />
+  </VisibilityConstraints>
+  <Symbols>
+    <GuidSymbol name="guidPackage" value="{75d8574c-9e92-482c-bf99-e7fba087c60e}" />
+    <GuidSymbol name="guidUiContext" value="{f8c0db80-39c2-4f32-9be3-701f2d25add8}" />
+    <GuidSymbol name="guidUiContextConfigFile" value="{f8c0db80-39c2-4f32-9be3-701f2d25add9}" />
+    <GuidSymbol name="guidLibraryManagerPackageCmdSet" value="{44ee7bda-abda-486e-a5fe-4dd3f4cefac1}">
+      <IDSymbol name="ConfigMenuGruop" value="0x1030" />
+      <IDSymbol name="InstallPackage" value="0x0100" />
+      <IDSymbol name="Clean" value="0x0200" />
+      <IDSymbol name="Restore" value="0x0300" />
+      <IDSymbol name="RestoreSolution" value="0x0400" />
+      <IDSymbol name="RestoreOnBuild" value="0x0500" />
+      <IDSymbol name="ManageLibraries" value="0x0600" />
+    </GuidSymbol>
+    <!-- Got this from https://github.com/NuGet/NuGet.VisualStudioExtension/blob/dev/src/VsExtension/NuGetTools.vsct -->
+    <GuidSymbol name="guidVenusCmdId" value="{C7547851-4E3A-4E5B-9173-FA6E9C8BD82C}">
+      <IDSymbol name="IDG_VENUS_CTX_REFERENCE" value="27" />
+      <IDSymbol name="IDG_CTX_REFERENCE" value="0x102" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
