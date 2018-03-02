@@ -20,7 +20,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.ManageLibraries);
             var cmd = new OleMenuCommand(Execute, cmdId);
-            cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);
         }
 
@@ -36,14 +35,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private void BeforeQueryStatus(object sender, EventArgs e)
         {
             var button = (OleMenuCommand)sender;
-            button.Visible = button.Enabled = false;
 
-            if (VsHelpers.DTE.SelectedItems.MultiSelect)
-                return;
-
-            Project project = VsHelpers.DTE.SelectedItems.Item(1).Project;
-
-            button.Visible = button.Enabled = project.IsSupported();
+            button.Visible = true;
+            button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
         }
 
         private void Execute(object sender, EventArgs e)

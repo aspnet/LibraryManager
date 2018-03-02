@@ -57,7 +57,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (item.IsConfigFile() && item.ContainingProject.IsKind(ProjectTypes.DOTNET_Core, ProjectTypes.WAP))
             {
-                button.Visible = button.Enabled = true;
+                button.Visible = true;
+                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
 
                 _isPackageInstalled = IsPackageInstalled(item.ContainingProject);
 

@@ -70,6 +70,8 @@
                 <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_BUILD"/>
                 <Icon guid="ImageCatalogGuid" id="JSWebScript" />
                 <CommandFlag>IconIsMoniker</CommandFlag>
+                <CommandFlag>DefaultInvisible</CommandFlag>
+                <CommandFlag>DynamicVisibility</CommandFlag>
                 <Strings>
                     <ButtonText>Restore Client-Side Libraries</ButtonText>
                     <CanonicalName>RestoreClientSideLibraries</CanonicalName>

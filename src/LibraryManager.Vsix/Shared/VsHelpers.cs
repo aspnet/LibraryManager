@@ -178,6 +178,64 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 _compositionService.DefaultCompositionService.SatisfyImportsOnce(o);
             }
         }
+
+        public static bool ProjectContainsManifestFile(Project project)
+        {
+            string configFilePath = Path.Combine(GetRootFolder(project), Constants.ConfigFileName);
+
+            if (File.Exists(configFilePath))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool SolutionContainsManifestFile(IVsSolution solution)
+        {
+            IEnumerable<IVsHierarchy> hierarchies = GetProjectsInSolution(solution, __VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION);
+
+            foreach (IVsHierarchy hierarchy in hierarchies)
+            {
+                Project project = GetDTEProject(hierarchy);
+
+                if (project != null && ProjectContainsManifestFile(project))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static IEnumerable<IVsHierarchy> GetProjectsInSolution(IVsSolution solution, __VSENUMPROJFLAGS flags)
+        {
+            if (solution == null)
+                yield break;
+
+            Guid guid = Guid.Empty;
+            if (ErrorHandler.Failed(solution.GetProjectEnum((uint)flags, ref guid, out IEnumHierarchies enumHierarchies)) || enumHierarchies == null)
+            {
+                yield break;
+            }
+
+            IVsHierarchy[] hierarchy = new IVsHierarchy[1];
+            while (enumHierarchies.Next(1, hierarchy, out uint fetched) == VSConstants.S_OK && fetched == 1)
+            {
+                if (hierarchy.Length > 0 && hierarchy[0] != null)
+                    yield return hierarchy[0];
+            }
+        }
+
+        public static Project GetDTEProject(IVsHierarchy hierarchy)
+        {
+            if (ErrorHandler.Succeeded(hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object obj)))
+            {
+                return obj as Project;
+            }
+
+            return null;
+        }
     }
 
     public static class ProjectTypes
