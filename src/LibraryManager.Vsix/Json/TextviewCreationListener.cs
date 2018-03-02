@@ -107,7 +107,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
         {
-            var textDocument = (ITextDocument) sender;
+            var textDocument = sender as ITextDocument;
 
             if (e.FileActionType == FileActionTypes.ContentSavedToDisk && textDocument != null)
             {

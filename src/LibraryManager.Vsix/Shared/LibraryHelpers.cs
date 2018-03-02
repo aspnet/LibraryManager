@@ -35,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var dependencies = Dependencies.FromConfigFile(configFilePath);
+            Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
             Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
 
             await RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest }, cancellationToken).ConfigureAwait(false);
@@ -52,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (string configFilePath in configFilePaths)
             {
-                var dependencies = Dependencies.FromConfigFile(configFilePath);
+                Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
                 Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
 
                 manifests.Add(configFilePath, manifest);
@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             await RestoreAsync(manifests, cancellationToken).ConfigureAwait(false);
         }
 
-        private static async Task RestoreAsync(IDictionary<string, Manifest> manifests,CancellationToken cancellationToken = default(CancellationToken))
+        private static async Task RestoreAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken = default(CancellationToken))
         {
             Logger.LogEvent(LibraryManager.Resources.Text.RestoringLibraries, LogLevel.Status);
 
@@ -71,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             bool hasErrors = false;
             var telResult = new Dictionary<string, double>();
 
-            foreach (var manifest in manifests)
+            foreach (KeyValuePair<string, Manifest> manifest in manifests)
             {
                 IEnumerable<ILibraryInstallationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 
