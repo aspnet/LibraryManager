@@ -32,6 +32,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new ManageLibrariesCommand(package, commandService);
         }
 
+        private void BeforeQueryStatus(object sender, EventArgs e)
+        {
+            var button = (OleMenuCommand)sender;
+
+            button.Visible = true;
+            button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
+        }
 
         private void Execute(object sender, EventArgs e)
         {
