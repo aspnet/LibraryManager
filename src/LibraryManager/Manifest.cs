@@ -5,6 +5,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -218,7 +219,7 @@ namespace Microsoft.Web.LibraryManager
 
             foreach (ILibraryInstallationState state in Libraries)
             {
-                filesDeleted += DeleteLibraryFiles(state, deleteFileAction);
+                    filesDeleted += DeleteLibraryFiles(state, deleteFileAction);
             }
 
             return filesDeleted;
@@ -228,16 +229,34 @@ namespace Microsoft.Web.LibraryManager
         {
             int filesDeleted = 0;
 
-            foreach (string file in state.Files)
+            IProvider provider = _dependencies.GetProvider(state.ProviderId);
+            ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, new CancellationToken()).Result;
+            if (updatedStateResult.Success)
             {
-                var url = new Uri(file, UriKind.RelativeOrAbsolute);
-
-                if (!url.IsAbsoluteUri)
+                state = updatedStateResult.InstallationState;
+                foreach (string file in state.Files)
                 {
-                    string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
-                    deleteFileAction?.Invoke(relativePath);
-                    filesDeleted++;
+                    var url = new Uri(file, UriKind.RelativeOrAbsolute);
+
+                    if (!url.IsAbsoluteUri)
+                    {
+                        string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
+                        deleteFileAction?.Invoke(relativePath);
+                        filesDeleted++;
+                    }
                 }
+            }
+            else
+            {
+                _hostInteraction.Logger.Log(string.Format(Resources.Text.LibraryInfoUpdateFailed, state.LibraryId), LogLevel.Error);
+                foreach (IError error in updatedStateResult.Errors)
+                {
+                    // TODO: {alexgav} The logger should have a method to log an IError
+                    _hostInteraction.Logger.Log(error.Message, LogLevel.Error);
+                }
+
+                // TODO: {alexgav} Should we fail the entire Clean operation? 
+                // Not sure since some of the libraries may have gotten cleaned...
             }
 
             return filesDeleted;
