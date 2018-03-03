@@ -13,6 +13,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -235,6 +236,60 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             return null;
+        }
+
+        public static string GetProjectName(string filePath)
+        {
+            if (String.IsNullOrEmpty(filePath))
+            {
+                return null;
+            }
+
+            string projectName = null;
+            IVsHierarchy hierarchy = null;
+            uint vsItemID = (uint)VSConstants.VSITEMID.Nil;
+
+            if (TryGetHierarchy(filePath, out hierarchy, out vsItemID))
+            {
+                object propertyObject;
+
+                int hr = hierarchy.GetProperty((uint)VSConstants.VSITEMID.Root, (int)__VSHPROPID.VSHPROPID_Name, out propertyObject);
+
+                if (hr == VSConstants.S_OK)
+                {
+                    projectName = propertyObject as string;
+                }
+            }
+
+            return projectName;
+        }
+
+        public static bool TryGetHierarchy(string filePath, out IVsHierarchy vsHierarchy, out uint vsItemId)
+        {
+            bool result = true;
+
+            vsHierarchy = null;
+            vsItemId = (uint)VSConstants.VSITEMID.Nil;
+
+            IVsUIShellOpenDocument vsUIShellOpenDocument = ServiceProvider.GlobalProvider.GetService(typeof(SVsUIShellOpenDocument)) as IVsUIShellOpenDocument;
+
+            IOleServiceProvider serviceProviderUnused = null;
+            int docInProject = 0;
+            IVsUIHierarchy uiHier = null;
+
+            int hr = vsUIShellOpenDocument.IsDocumentInAProject(filePath, out uiHier, out vsItemId, out serviceProviderUnused, out docInProject);
+            if (ErrorHandler.Succeeded(hr) && uiHier != null)
+            {
+                vsHierarchy = uiHier;
+            }
+            else
+            {
+                vsHierarchy = null;
+                vsItemId = (uint)VSConstants.VSITEMID.Nil;
+                result = false;
+            }
+
+            return result;
         }
     }
 
