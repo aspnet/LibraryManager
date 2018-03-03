@@ -4,17 +4,20 @@
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using Microsoft.VisualStudio;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public class Logger : ILogger
+    public static class Logger
     {
+        private static Guid _outputPaneGuid = new Guid("cce35aef-ace6-4371-b1e1-8efa3cdc8324");
         private static IVsOutputWindowPane _pane;
         private static readonly IVsOutputWindow _output = VsHelpers.GetService<SVsOutputWindow, IVsOutputWindow>();
         private static readonly IVsActivityLog _activityLog = VsHelpers.GetService<SVsActivityLog, IVsActivityLog>();
         private static readonly IVsStatusbar _statusbar = VsHelpers.GetService<SVsStatusbar, IVsStatusbar>();
 
-        public void Log(string message, LogLevel level)
+
+        public static void Log(string message, LogLevel level)
         {
             LogEvent(message, level);
         }
@@ -75,9 +78,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             if (_pane == null)
             {
-                var guid = Guid.NewGuid();
-                _output.CreatePane(ref guid, Vsix.Name, 1, 1);
-                _output.GetPane(ref guid, out _pane);
+                if (_output != null)
+                {
+                    if (ErrorHandler.Failed(_output.GetPane(ref _outputPaneGuid, out _pane)) &&
+                        ErrorHandler.Succeeded(_output.CreatePane(ref _outputPaneGuid, Vsix.Name, 0, 0)))
+                    {
+                        if (ErrorHandler.Succeeded(_output.GetPane(ref _outputPaneGuid, out _pane)))
+                        {
+                            _pane.Activate();
+                        }
+                    }
+                }
             }
 
             return _pane != null;

@@ -8,6 +8,7 @@ using Microsoft.Web.Editor.SuggestedActions;
 using System;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -64,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
-                Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
+                Logger.LogEvent(ex.ToString(), LogLevel.Error);
             }
         }
     }
