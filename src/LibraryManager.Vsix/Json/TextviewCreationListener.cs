@@ -61,9 +61,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private async Task RemoveFilesAsync(Manifest newManifest)
         {
-            IEnumerable<string> prevFiles = await GetAllManifestFilesAsync(_manifest).ConfigureAwait(false);
-            IEnumerable<string> newFiles = await GetAllManifestFilesAsync(newManifest).ConfigureAwait(false);
-            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f));
+            IEnumerable<string> prevFiles = await GetAllManifestFilesWithVersionsAsync(_manifest).ConfigureAwait(false);
+            IEnumerable<string> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest).ConfigureAwait(false);
+            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Substring(0, f.LastIndexOf(Path.DirectorySeparatorChar)));
 
             if (filesToRemove.Any())
             {
@@ -72,13 +72,22 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             }
         }
 
-        private async Task<IEnumerable<string>> GetAllManifestFilesAsync(Manifest manifest)
+        /// <summary>
+        /// Returns file path of all files in the manifest suffixed with library version number.
+        /// For example, if library jQuery 3.3.0 specifies path "lib\js", then file jQuery.js would
+        /// get returned as lib\js\jQuery.js\3.3.0
+        /// </summary>
+        /// <param name="manifest">Library manifest to use</param>
+        /// <returns>Version-suffixed relative file paths for all libraries in the manifest</returns>
+        private async Task<IEnumerable<string>> GetAllManifestFilesWithVersionsAsync(Manifest manifest)
         {
             var files = new List<string>();
 
             foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out var errors)))
             {
-                IEnumerable<string> stateFiles = await GetFilesAsync(state).ConfigureAwait(false);
+                IEnumerable<string> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
+
+                // TODO: {alexgav} - n-square query? Might be a concern
                 IEnumerable<string> filesToAdd = stateFiles
                     .Select(f => Path.Combine(state.DestinationPath, f))
                     .Where(f => !files.Contains(f));
@@ -89,7 +98,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             return files;
         }
 
-        private async Task<IEnumerable<string>> GetFilesAsync(ILibraryInstallationState state)
+        private async Task<IEnumerable<string>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
             if (state.Files == null)
             {
@@ -98,7 +107,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 if (catalog != null)
                 {
                     ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                    return library?.Files.Keys.ToList();
+                    return library?.Files.Keys.Select((f) => Path.Combine(f, library.Version)).ToList();
                 }
             }
 
