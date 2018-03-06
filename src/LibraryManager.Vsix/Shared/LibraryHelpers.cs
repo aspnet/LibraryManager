@@ -85,8 +85,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 foreach (ILibraryInstallationResult result in results)
                 {
-                    telResult.TryGetValue(result.InstallationState.ProviderId, out double count);
-                    telResult[result.InstallationState.ProviderId] = count + 1;
+                    if (result.InstallationState.ProviderId != null)
+                    {
+                        telResult.TryGetValue(result.InstallationState.ProviderId, out double count);
+                        telResult[result.InstallationState.ProviderId] = count + 1;
+                    }
                 }
             }
 
