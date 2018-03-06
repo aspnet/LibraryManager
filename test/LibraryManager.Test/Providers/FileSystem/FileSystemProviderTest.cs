@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         public void Setup()
         {
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager\\");
-            _configFilePath = Path.Combine(_projectFolder, "library.json");
+            _configFilePath = Path.Combine(_projectFolder, "libman.json");
             _relativeSrc = Path.Combine(_projectFolder, "folder", "file.txt");
 
             var hostInteraction = new HostInteraction(_projectFolder, "");
