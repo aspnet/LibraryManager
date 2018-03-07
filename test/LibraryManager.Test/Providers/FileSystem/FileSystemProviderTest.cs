@@ -324,17 +324,17 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         {
             string config = @"{
   ""version"": ""1.0"",
-  ""packages"": [
+  ""libraries"": [
     {
       ""provider"": ""filesystem"",
-      ""id"": ""_file1"",
-      ""path"": ""lib"",
+      ""library"": ""_file1"",
+      ""destination"": ""lib"",
       ""files"": [ ""file1.txt"" ]
     },
     {
       ""provider"": ""filesystem"",
-      ""id"": ""_file2"",
-      ""path"": ""lib"",
+      ""library"": ""_file2"",
+      ""destination"": ""lib"",
       ""files"": [ ""file2.txt"" ]
     }
   ]

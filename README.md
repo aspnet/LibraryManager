@@ -29,7 +29,7 @@ Right-click `library.json` in Solution Explorer to access commands that help man
 ![context menu library.json](art/context-menu-config.png)
 
 ### Intellisense
-Edit the library.json file to install libraries. Every time the file is saved, Visual Studio will install/restore the packages.
+Edit the library.json file to install libraries. Every time the file is saved, Visual Studio will install/restore the libraries.
 
 ![library.json](art/library.json%20typing.gif)
 

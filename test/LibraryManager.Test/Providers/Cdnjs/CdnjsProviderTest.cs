@@ -182,17 +182,17 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
         private const string _doc = @"{
   ""version"": ""1.0"",
-  ""packages"": [
+  ""libraries"": [
     {
       ""provider"": ""cdnjs"",
-      ""id"": ""jquery@3.1.1"",
-      ""path"": ""lib"",
+      ""library"": ""jquery@3.1.1"",
+      ""destination"": ""lib"",
       ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
     },
     {
       ""provider"": ""cdnjs"",
-      ""id"": ""knockout@3.4.1"",
-      ""path"": ""lib"",
+      ""library"": ""knockout@3.4.1"",
+      ""destination"": ""lib"",
       ""files"": [ ""knockout-min.js"" ]
     }
   ]
