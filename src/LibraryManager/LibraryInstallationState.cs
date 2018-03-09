@@ -23,13 +23,13 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>
         /// The identifyer to uniquely identify the library
         /// </summary>
-        [JsonProperty("id")]
+        [JsonProperty("library")]
         public string LibraryId { get; set; }
 
         /// <summary>
         /// The path relative to the working directory to copy the files to.
         /// </summary>
-        [JsonProperty("path")]
+        [JsonProperty("destination")]
         public string DestinationPath { get; set; }
 
         /// <summary>
@@ -39,16 +39,19 @@ namespace Microsoft.Web.LibraryManager
         public IReadOnlyList<string> Files { get; set; }
 
         /// <summary>Internal use only</summary>
-        public static LibraryInstallationState FromInterface(ILibraryInstallationState state, string defaultProviderId = null)
+        public static LibraryInstallationState FromInterface(ILibraryInstallationState state, 
+                                                             string defaultProviderId = null,
+                                                             string defaultDestination = null)
         {
             string normalizedProviderId = state.ProviderId ?? defaultProviderId;
+            string normalizedDestinationPath = state.DestinationPath ?? defaultDestination;
 
             return new LibraryInstallationState
             {
                 LibraryId = state.LibraryId,
                 ProviderId = normalizedProviderId,
                 Files = state.Files,
-                DestinationPath = state.DestinationPath
+                DestinationPath = normalizedDestinationPath
             };
         }
     }

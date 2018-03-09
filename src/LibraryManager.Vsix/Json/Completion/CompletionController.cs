@@ -113,7 +113,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             JSONMember member = parseItem.FindType<JSONMember>();
 
-            if (!member.UnquotedNameText.Equals("id") && !member.UnquotedNameText.Equals("path") && member.UnquotedValueText?.Length <= 1)
+            if (member == null || (!member.UnquotedNameText.Equals("library") && !member.UnquotedNameText.Equals("destination") && member.UnquotedValueText?.Length <= 1))
             {
                 return;
             }

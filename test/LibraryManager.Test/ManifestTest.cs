@@ -165,6 +165,17 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
+        public async Task RestoreAsync_UsingDefaultDestination()
+        {
+            var manifest = Manifest.FromJson(_docDefaultDestination, _dependencies);
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(1, result.Count(v => v.Success));
+            Assert.AreEqual(manifest.DefaultDestination, result.First().InstallationState.DestinationPath);
+        }
+
+        [TestMethod]
         public async Task RestoreAsync_UsingUnknownProvider()
         {
             var dependencies = new Dependencies(_dependencies.GetHostInteractions());
@@ -270,15 +281,15 @@ namespace Microsoft.Web.LibraryManager.Test
 
         private const string _doc = @"{
   ""version"": ""1.0"",
-  ""packages"": [
+  ""libraries"": [
     {
-      ""id"": ""jquery@3.1.1"",
+      ""library"": ""jquery@3.1.1"",
       ""provider"": ""cdnjs"",
-      ""path"": ""lib"",
+      ""destination"": ""lib"",
       ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
     },
     {
-      ""id"": ""../path/to/file.txt"",
+      ""library"": ""../path/to/file.txt"",
       ""provider"": ""filesystem"",
       ""path"": ""lib"",
       ""files"": [ ""file.txt"" ]
@@ -290,10 +301,23 @@ namespace Microsoft.Web.LibraryManager.Test
         private const string _docDefaultProvider = @"{
   ""version"": ""1.0"",
   ""defaultProvider"": ""cdnjs"",
-  ""packages"": [
+  ""libraries"": [
     {
-      ""id"": ""jquery@3.1.1"",
-      ""path"": ""lib"",
+      ""library"": ""jquery@3.1.1"",
+      ""destination"": ""lib"",
+      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }
+  ]
+}
+";
+
+        private const string _docDefaultDestination = @"{
+  ""version"": ""1.0"",
+  ""defaultDestination"": ""lib"",
+  ""libraries"": [
+    {
+      ""library"": ""jquery@3.1.1"",
+      ""provider"": ""cdnjs"",
       ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
     }
   ]

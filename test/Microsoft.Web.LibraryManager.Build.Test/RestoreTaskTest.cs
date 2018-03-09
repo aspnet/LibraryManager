@@ -95,17 +95,17 @@ namespace Microsoft.Web.LibraryManager.Build.Test
 
         private const string _doc = @"{
   ""version"": ""1.0"",
-  ""packages"": [
+  ""libraries"": [
     {
-      ""id"": ""jquery@3.1.1"",
+      ""library"": ""jquery@3.1.1"",
       ""provider"": ""cdnjs"",
-      ""path"": ""lib"",
+      ""destination"": ""lib"",
       ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
     },
     {
-      ""id"": ""../path/to/file.txt"",
+      ""library"": ""../path/to/file.txt"",
       ""provider"": ""filesystem"",
-      ""path"": ""lib"",
+      ""destination"": ""lib"",
       ""files"": [ ""file.txt"" ]
     }
   ]
