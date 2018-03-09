@@ -115,10 +115,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 {
                     try
                     {
-                        _manifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
-                        await RemoveFilesAsync(_manifest).ConfigureAwait(false);
+                        Manifest newManifest = await Manifest.FromFileAsync(e.FilePath, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                        await RemoveFilesAsync(newManifest).ConfigureAwait(false);
 
-                        //_manifest = newManifest;
+                        _manifest = newManifest;
 
                         await LibraryHelpers.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                         Telemetry.TrackOperation("restoresave");

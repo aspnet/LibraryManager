@@ -41,13 +41,13 @@ namespace Microsoft.Web.LibraryManager
         public string Version { get; } = "1.0";
 
         /// <summary>
-        /// The default <see cref="Manifest"/> document format.
+        /// The default <see cref="Manifest"/> library provider.
         /// </summary>
         [JsonProperty("defaultProvider")]
         public string DefaultProvider { get; set; }
 
         /// <summary>
-        /// The version of the <see cref="Manifest"/> document format.
+        /// The default destination path for libraries.
         /// </summary>
         [JsonProperty("defaultDestination")]
         public string DefaultDestination { get; set; }

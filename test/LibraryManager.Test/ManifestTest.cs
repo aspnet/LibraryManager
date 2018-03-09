@@ -165,6 +165,17 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
+        public async Task RestoreAsync_UsingDefaultDestination()
+        {
+            var manifest = Manifest.FromJson(_docDefaultDestination, _dependencies);
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(1, result.Count(v => v.Success));
+            Assert.AreEqual(manifest.DefaultDestination, result.First().InstallationState.DestinationPath);
+        }
+
+        [TestMethod]
         public async Task RestoreAsync_UsingUnknownProvider()
         {
             var dependencies = new Dependencies(_dependencies.GetHostInteractions());
@@ -294,6 +305,19 @@ namespace Microsoft.Web.LibraryManager.Test
     {
       ""library"": ""jquery@3.1.1"",
       ""destination"": ""lib"",
+      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }
+  ]
+}
+";
+
+        private const string _docDefaultDestination = @"{
+  ""version"": ""1.0"",
+  ""defaultDestination"": ""lib"",
+  ""libraries"": [
+    {
+      ""library"": ""jquery@3.1.1"",
+      ""provider"": ""cdnjs"",
       ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
     }
   ]
