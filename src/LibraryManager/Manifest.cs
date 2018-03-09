@@ -206,31 +206,33 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Deletes all library output files from disk.
+        ///  Deletes all library output files from disk.
         /// </summary>
         /// <remarks>
         /// The host calling this method provides the <paramref name="deleteFileAction"/>
         /// that deletes the files from the project.
         /// </remarks>
-        /// <param name="deleteFileAction">An action to delete the files.</param>
-        public int Clean(Action<string> deleteFileAction)
+        /// <param name="deleteFileAction">>An action to delete the files.</param>
+        /// <returns></returns>
+        public IEnumerable<ILibraryInstallationResult> Clean(Action<string> deleteFileAction)
         {
-            int filesDeleted = 0;
+            List<ILibraryInstallationResult> results = new List<ILibraryInstallationResult>();
 
             foreach (ILibraryInstallationState state in Libraries)
             {
-                    filesDeleted += DeleteLibraryFiles(state, deleteFileAction);
+                results.Add(DeleteLibraryFiles(state, deleteFileAction));
             }
 
-            return filesDeleted;
+            return results;
         }
 
-        private int DeleteLibraryFiles(ILibraryInstallationState state, Action<string> deleteFileAction)
+        private ILibraryInstallationResult DeleteLibraryFiles(ILibraryInstallationState state, Action<string> deleteFileAction)
         {
             int filesDeleted = 0;
 
             IProvider provider = _dependencies.GetProvider(state.ProviderId);
-            ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, new CancellationToken()).Result;
+            ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, CancellationToken.None).Result;
+
             if (updatedStateResult.Success)
             {
                 state = updatedStateResult.InstallationState;
@@ -245,21 +247,14 @@ namespace Microsoft.Web.LibraryManager
                         filesDeleted++;
                     }
                 }
-            }
-            else
-            {
-                _hostInteraction.Logger.Log(string.Format(Resources.Text.LibraryInfoUpdateFailed, state.LibraryId), LogLevel.Error);
-                foreach (IError error in updatedStateResult.Errors)
+
+                if (filesDeleted == state.Files.Count())
                 {
-                    // TODO: {alexgav} The logger should have a method to log an IError
-                    _hostInteraction.Logger.Log(error.Message, LogLevel.Error);
+                    return LibraryInstallationResult.FromSuccess(updatedStateResult.InstallationState);
                 }
-
-                // TODO: {alexgav} Should we fail the entire Clean operation? 
-                // Not sure since some of the libraries may have gotten cleaned...
             }
 
-            return filesDeleted;
+            return updatedStateResult;
         }
     }
 }

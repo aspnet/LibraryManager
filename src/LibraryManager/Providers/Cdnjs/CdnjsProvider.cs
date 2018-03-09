@@ -88,6 +88,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     return result;
                 }
 
+                desiredState = result.InstallationState;
+
                 foreach (string file in desiredState.Files)
                 {
                     if (cancellationToken.IsCancellationRequested)
@@ -104,10 +106,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         return new LibraryInstallationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
                     }
                 }
-            }
-            catch (Exception ex) when (ex is InvalidLibraryException || ex.InnerException is InvalidLibraryException)
-            {
-                return new LibraryInstallationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
             }
             catch (UnauthorizedAccessException)
             {
@@ -130,6 +128,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public async Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return LibraryInstallationResult.FromCancelled(desiredState);
+            }
+
             try
             {
                 if (desiredState.Files != null && desiredState.Files.Count > 0)

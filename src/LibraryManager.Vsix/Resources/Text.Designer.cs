@@ -70,6 +70,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clean libraries failed.
+        /// </summary>
+        public static string CleanLibrariesFailed {
+            get {
+                return ResourceManager.GetString("CleanLibrariesFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clean libraries started....
         /// </summary>
         public static string CleanLibrariesStarted {

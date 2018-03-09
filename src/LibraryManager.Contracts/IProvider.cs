@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
 
         /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.
-        /// </summary>  
+        /// </summary>
         /// <param name="desiredState">The details about the library to install.</param>
         /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
         /// <returns>The <see cref="ILibraryInstallationResult"/> from the installation process.</returns>
