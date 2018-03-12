@@ -33,7 +33,7 @@
     <Target Name="LibraryManagerRestore" Condition="'$(LibraryRestore)' != 'False'">
 
         <Microsoft.Web.LibraryManager.Build.RestoreTask
-            FileName="library.json"
+            FileName="libman.json"
             ProjectDirectory="$(MSBuildProjectDirectory)"
             ProviderAssemblies="$(LibraryProviderAssemblies)">
 
