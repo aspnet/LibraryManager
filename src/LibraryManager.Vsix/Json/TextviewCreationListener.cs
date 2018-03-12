@@ -61,9 +61,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private async Task RemoveFilesAsync(Manifest newManifest)
         {
-            IEnumerable<string> prevFiles = await GetAllManifestFilesWithVersionsAsync(_manifest).ConfigureAwait(false);
-            IEnumerable<string> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest).ConfigureAwait(false);
-            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Substring(0, f.LastIndexOf(Path.DirectorySeparatorChar)));
+            IEnumerable<Tuple<string, string>> prevFiles = await GetAllManifestFilesWithVersionsAsync(_manifest).ConfigureAwait(false);
+            IEnumerable<Tuple<string, string>> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest).ConfigureAwait(false);
+            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Item1);
 
             if (filesToRemove.Any())
             {
@@ -79,39 +79,37 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         /// </summary>
         /// <param name="manifest">Library manifest to use</param>
         /// <returns>Version-suffixed relative file paths for all libraries in the manifest</returns>
-        private async Task<IEnumerable<string>> GetAllManifestFilesWithVersionsAsync(Manifest manifest)
+        private async Task<IEnumerable<Tuple<string, string>>> GetAllManifestFilesWithVersionsAsync(Manifest manifest)
         {
-            var files = new List<string>();
+            var files = new List<Tuple<string, string>>();
 
             foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out var errors)))
             {
-                IEnumerable<string> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
+                IEnumerable<Tuple<string, string>> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
 
-                // TODO: {alexgav} - n-square query? Might be a concern
-                IEnumerable<string> filesToAdd = stateFiles
-                    .Select(f => Path.Combine(state.DestinationPath, f))
-                    .Where(f => !files.Contains(f));
-
-                files.AddRange(filesToAdd);
+                foreach (Tuple<string, string> fileVersion in stateFiles)
+                {
+                    if (!files.Contains(fileVersion))
+                    {
+                        files.Add(fileVersion);
+                    }
+                }
             }
 
             return files;
         }
 
-        private async Task<IEnumerable<string>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
+        private async Task<IEnumerable<Tuple<string, string>>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
-            if (state.Files == null)
-            {
-                ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
+            ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
 
-                if (catalog != null)
-                {
-                    ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                    return library?.Files.Keys.Select((f) => Path.Combine(f, library.Version)).ToList();
-                }
+            if (catalog != null)
+            {
+                ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+                return library?.Files.Select(f => new Tuple<string, string>(Path.Combine(state.DestinationPath, f.Key), library.Version)).ToList();
             }
 
-            return state.Files.Distinct();
+            return null;
         }
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
