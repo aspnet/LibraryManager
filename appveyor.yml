@@ -20,5 +20,5 @@ artifacts:
   - path: src\**\*.vsix
     name: Visual Studio Extension
 
-    - path: src\**\Microsoft.Web.LibraryManager.json
+  - path: src\**\Microsoft.Web.LibraryManager.json
     name: Visual Studio Extension manifest

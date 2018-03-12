@@ -27,7 +27,7 @@
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <TargetVsixContainerName>Microsoft.Web.LibraryManager.vsix</TargetVsixContainerName>
     <ExtensionInstallationRoot>Extensions</ExtensionInstallationRoot>
-    <ExtensionInstallationFolder>Microsoft\Web Tools Azure\WebJobs</ExtensionInstallationFolder>
+    <ExtensionInstallationFolder>Microsoft\Web Tools\Library Manager</ExtensionInstallationFolder>
     <IsProductComponent>true</IsProductComponent>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
