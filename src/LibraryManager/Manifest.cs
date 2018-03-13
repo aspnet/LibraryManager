@@ -37,25 +37,25 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>
         /// The version of the <see cref="Manifest"/> document format.
         /// </summary>
-        [JsonProperty("version")]
+        [JsonProperty(ManifestConstants.Version)]
         public string Version { get; } = "1.0";
 
         /// <summary>
         /// The default <see cref="Manifest"/> library provider.
         /// </summary>
-        [JsonProperty("defaultProvider")]
+        [JsonProperty(ManifestConstants.DefaultProvider)]
         public string DefaultProvider { get; set; }
 
         /// <summary>
         /// The default destination path for libraries.
         /// </summary>
-        [JsonProperty("defaultDestination")]
+        [JsonProperty(ManifestConstants.DefaultDestination)]
         public string DefaultDestination { get; set; }
 
         /// <summary>
         /// A list of libraries contained in the <see cref="Manifest"/>.
         /// </summary>
-        [JsonProperty("libraries")]
+        [JsonProperty(ManifestConstants.Libraries)]
         [JsonConverter(typeof(LibraryStateTypeConverter))]
         public IEnumerable<ILibraryInstallationState> Libraries => _libraries;
 

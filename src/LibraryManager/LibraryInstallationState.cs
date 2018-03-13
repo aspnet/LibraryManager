@@ -17,25 +17,25 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
-        [JsonProperty("provider")]
+        [JsonProperty(ManifestConstants.Provider)]
         public string ProviderId { get; set; }
 
         /// <summary>
         /// The identifyer to uniquely identify the library
         /// </summary>
-        [JsonProperty("library")]
+        [JsonProperty(ManifestConstants.Library)]
         public string LibraryId { get; set; }
 
         /// <summary>
         /// The path relative to the working directory to copy the files to.
         /// </summary>
-        [JsonProperty("destination")]
+        [JsonProperty(ManifestConstants.Destination)]
         public string DestinationPath { get; set; }
 
         /// <summary>
         /// The list of file names to install
         /// </summary>
-        [JsonProperty("files")]
+        [JsonProperty(ManifestConstants.Files)]
         public IReadOnlyList<string> Files { get; set; }
 
         /// <summary>Internal use only</summary>

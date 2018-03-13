@@ -26,17 +26,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             JSONMember member = context.ContextItem.FindType<JSONMember>();
 
-            if (member == null || (member.UnquotedNameText != "destination" && member.UnquotedNameText != "defaultDestination")) 
+            if (member == null || (member.UnquotedNameText != ManifestConstants.Destination && member.UnquotedNameText != ManifestConstants.DefaultDestination)) 
                 yield break;
 
             JSONMember parent = member.FindType<JSONObject>()?.FindType<JSONMember>();
 
-            if (member.UnquotedNameText == "destination" && (parent == null || parent.UnquotedNameText != "libraries"))
+            if (member.UnquotedNameText == ManifestConstants.Destination && (parent == null || parent.UnquotedNameText != ManifestConstants.Libraries))
             {
                 yield break;
             }
 
-            if (member.UnquotedNameText == "defaultDestination" && parent != null)
+            if (member.UnquotedNameText == ManifestConstants.DefaultDestination && parent != null)
             { 
                 yield break;
             }

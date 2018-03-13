@@ -279,49 +279,54 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB007"));
         }
 
-        private const string _doc = @"{
-  ""version"": ""1.0"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.1.1"",
-      ""provider"": ""cdnjs"",
-      ""destination"": ""lib"",
-      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
-    },
-    {
-      ""library"": ""../path/to/file.txt"",
-      ""provider"": ""filesystem"",
-      ""path"": ""lib"",
-      ""files"": [ ""file.txt"" ]
-    }
+        private string _doc = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
+    }}
   ]
-}
+}}
 ";
 
-        private const string _docDefaultProvider = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.1.1"",
-      ""destination"": ""lib"",
-      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
-    }
+        private string _docDefaultProvider = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.DefaultProvider}"": ""cdnjs"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
+    }}
   ]
-}
+}}
 ";
-
-        private const string _docDefaultDestination = @"{
-  ""version"": ""1.0"",
-  ""defaultDestination"": ""lib"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.1.1"",
-      ""provider"": ""cdnjs"",
-      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
-    }
+        private string _docDefaultDestination = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.DefaultDestination}"": ""lib"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }}
   ]
-}
+}}
 ";
     }
 }

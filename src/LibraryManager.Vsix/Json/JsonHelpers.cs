@@ -25,16 +25,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 switch (child.UnquotedNameText)
                 {
-                    case "provider":
+                    case ManifestConstants.Provider:
                         state.ProviderId = child.UnquotedValueText;
                         break;
-                    case "library":
+                    case ManifestConstants.Library:
                         state.LibraryId = child.UnquotedValueText;
                         break;
-                    case "destination":
+                    case ManifestConstants.Destination:
                         state.DestinationPath = child.UnquotedValueText;
                         break;
-                    case "files":
+                    case ManifestConstants.Files:
                         state.Files = (child.Value as JSONArray)?.Elements.Select(e => e.UnquotedValueText).ToList();
                         break;
                 }
@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 {
                     foreach (JSONMember child in rootMembers)
                     {
-                        if (child.UnquotedNameText == "defaultDestination")
+                        if (child.UnquotedNameText == ManifestConstants.DefaultDestination)
                             state.DestinationPath = child.UnquotedValueText;
                     }
                 }
