@@ -61,9 +61,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private async Task RemoveFilesAsync(Manifest newManifest)
         {
-            IEnumerable<Tuple<string, string>> prevFiles = await GetAllManifestFilesWithVersionsAsync(_manifest).ConfigureAwait(false);
-            IEnumerable<Tuple<string, string>> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest).ConfigureAwait(false);
-            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Item1);
+            IEnumerable<FileIdentifier> prevFiles = await GetAllManifestFilesWithVersionsAsync(_manifest).ConfigureAwait(false);
+            IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest).ConfigureAwait(false);
+            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Path);
 
             if (filesToRemove.Any())
             {
@@ -72,26 +72,19 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             }
         }
 
-        /// <summary>
-        /// Returns file path of all files in the manifest suffixed with library version number.
-        /// For example, if library jQuery 3.3.0 specifies path "lib\js", then file jQuery.js would
-        /// get returned as lib\js\jQuery.js\3.3.0
-        /// </summary>
-        /// <param name="manifest">Library manifest to use</param>
-        /// <returns>Version-suffixed relative file paths for all libraries in the manifest</returns>
-        private async Task<IEnumerable<Tuple<string, string>>> GetAllManifestFilesWithVersionsAsync(Manifest manifest)
+        private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(Manifest manifest)
         {
-            var files = new List<Tuple<string, string>>();
+            var files = new List<FileIdentifier>();
 
             foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out var errors)))
             {
-                IEnumerable<Tuple<string, string>> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
+                IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
 
-                foreach (Tuple<string, string> fileVersion in stateFiles)
+                foreach (FileIdentifier fileIdentifier in stateFiles)
                 {
-                    if (!files.Contains(fileVersion))
+                    if (!files.Contains(fileIdentifier))
                     {
-                        files.Add(fileVersion);
+                        files.Add(fileIdentifier);
                     }
                 }
             }
@@ -99,17 +92,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             return files;
         }
 
-        private async Task<IEnumerable<Tuple<string, string>>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
+        private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
             ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
+            IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
 
             if (catalog != null)
             {
                 ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                return library?.Files.Select(f => new Tuple<string, string>(Path.Combine(state.DestinationPath, f.Key), library.Version)).ToList();
+                filesWithVersions = library?.Files.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f.Key), library.Version));
             }
 
-            return null;
+            return filesWithVersions;
         }
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
