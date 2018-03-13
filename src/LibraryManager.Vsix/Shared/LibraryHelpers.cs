@@ -93,7 +93,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             sw.Stop();
 
             telResult.Add("time", sw.Elapsed.TotalMilliseconds);
-            Telemetry.TrackUserTask("restore", telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
+            Telemetry.TrackUserTask("restore", TelemetryResult.None, telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
 
             if (resultCount > 0)
             {
@@ -133,15 +133,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (results != null && results.All(r => r.Success))
             {
                 Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded + Environment.NewLine, LogLevel.Task);
+                Telemetry.TrackUserTask("clean", TelemetryResult.Success, new KeyValuePair<string, object>("librariesdeleted", results.Count()));
             }
             else
             {
                 Logger.LogEvent(Resources.Text.CleanLibrariesFailed + Environment.NewLine, LogLevel.Task);
+                Telemetry.TrackUserTask("clean", TelemetryResult.Failure, new KeyValuePair<string, object>("librariesfailedtodelete", results.Where(r => !r.Success).Count()));
             }
-
-            // Do we need this? We could log the individual errors for each library instead
-            //TelemetryResult result = configProjectItem != null ? TelemetryResult.Success : TelemetryResult.Failure;
-            //Telemetry.TrackUserTask("clean", new KeyValuePair<string, object>("filesdeleted", filesDeleted));
         }
 
         private static async Task<IEnumerable<ILibraryInstallationResult>> RestoreLibrariesAsync(Manifest manifest, CancellationToken cancellationToken)

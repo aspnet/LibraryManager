@@ -248,7 +248,7 @@ namespace Microsoft.Web.LibraryManager
                     }
                 }
 
-                if (filesDeleted == state.Files.Count())
+                if (state.Files != null && filesDeleted == state.Files.Count())
                 {
                     return LibraryInstallationResult.FromSuccess(updatedStateResult.InstallationState);
                 }
