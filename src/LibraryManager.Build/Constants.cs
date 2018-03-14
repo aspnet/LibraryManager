@@ -8,7 +8,7 @@ namespace Microsoft.Web.LibraryManager.Build
 {
     public static class Constants
     {
-        public const string ConfigFileName = "library.json";
+        public const string ConfigFileName = "libman.json";
         public const string TelemetryNamespace = "webtools/librarymanager/";
 
         public static string CacheFolder

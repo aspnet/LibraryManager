@@ -99,6 +99,17 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             return LibraryInstallationResult.FromSuccess(desiredState);
         }
 
+        /// <summary>
+        /// No-op for FileSystemProvider
+        /// </summary>
+        /// <param name="desiredState"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<ILibraryInstallationResult>(LibraryInstallationResult.FromSuccess(desiredState));
+        }
+
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string file, CancellationToken cancellationToken)
         {
             string sourceFile = state.LibraryId;

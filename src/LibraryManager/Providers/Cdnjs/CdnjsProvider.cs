@@ -79,31 +79,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return new LibraryInstallationResult(desiredState, errors.ToArray());
             }
 
-
             try
             {
-                var catalog = (CdnjsCatalog)GetCatalog();
-                ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
+                ILibraryInstallationResult result = await UpdateStateAsync(desiredState, cancellationToken);
 
-                if (library == null)
+                if (!result.Success)
                 {
-                    throw new InvalidLibraryException(desiredState.LibraryId, Id);
+                    return result;
                 }
 
-                await HydrateCacheAsync(library, cancellationToken).ConfigureAwait(false);
-
-                var files = desiredState.Files?.ToList();
-                // "Files" is optional on this provider, so when none are specified all should be used
-                if (files == null || files.Count == 0)
-                {
-                    desiredState = new LibraryInstallationState
-                    {
-                        ProviderId = Id,
-                        LibraryId = desiredState.LibraryId,
-                        DestinationPath = desiredState.DestinationPath,
-                        Files = library.Files.Keys.ToList(),
-                    };
-                }
+                desiredState = result.InstallationState;
 
                 foreach (string file in desiredState.Files)
                 {
@@ -121,6 +106,57 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         return new LibraryInstallationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
                     }
                 }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
+            }
+            catch (Exception ex)
+            {
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                return new LibraryInstallationResult(desiredState, PredefinedErrors.UnknownException());
+            }
+
+            return LibraryInstallationResult.FromSuccess(desiredState);
+        }
+
+        /// <summary>
+        /// Updates file set on the passed in ILibraryInstallationState in case user selected to have all files included
+        /// </summary>
+        /// <param name="desiredState"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return LibraryInstallationResult.FromCancelled(desiredState);
+            }
+
+            try
+            {
+                if (desiredState.Files != null && desiredState.Files.Count > 0)
+                {
+                    return LibraryInstallationResult.FromSuccess(desiredState);
+                }
+
+                var catalog = (CdnjsCatalog)GetCatalog();
+                ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
+
+                if (library == null)
+                {
+                    throw new InvalidLibraryException(desiredState.LibraryId, Id);
+                }
+
+                await HydrateCacheAsync(library, cancellationToken).ConfigureAwait(false);
+
+                desiredState = new LibraryInstallationState
+                {
+                    ProviderId = Id,
+                    LibraryId = desiredState.LibraryId,
+                    DestinationPath = desiredState.DestinationPath,
+                    Files = library.Files.Keys.ToList(),
+                };
             }
             catch (Exception ex) when (ex is InvalidLibraryException || ex.InnerException is InvalidLibraryException)
             {
