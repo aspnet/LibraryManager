@@ -16,7 +16,6 @@
         <Company>Microsof Corp.</Company>
         <Description>The contracts assembly for authoring Library Manager extensions</Description>
         <Copyright>Copyright © Microsoft</Copyright>
-        <Version>1.0.0-alpha</Version>
         <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
         <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
@@ -25,6 +24,10 @@
         <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
         <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NerdBank.GitVersioning" Version="2.1.23" />
+    </ItemGroup>
 
   <!-- Warning if Multilingual App Toolkit isn't installed -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />

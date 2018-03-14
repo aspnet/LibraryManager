@@ -10,6 +10,7 @@
         <PackageReference Include="MSTest.TestFramework" Version="1.1.17" />
         <PackageReference Include="Microsoft.Build.Framework" Version="15.1.1012" />
         <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.1012" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" />
         <PackageReference Include="System.Runtime.Loader" Version="4.3.0" Condition="'$(TargetFramework)' == 'netcoreapp1.0'" />
     </ItemGroup>
 

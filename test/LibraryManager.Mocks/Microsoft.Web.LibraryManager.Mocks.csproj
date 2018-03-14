@@ -23,4 +23,8 @@
       <ProjectReference Include="..\..\src\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" />
+    </ItemGroup>
+
 </Project>

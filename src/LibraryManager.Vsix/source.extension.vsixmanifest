@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="Microsoft.Web.LibraryManager" Version="1.0" Language="en-US" Publisher="Microsoft" />
+        <Identity Id="Microsoft.Web.LibraryManager" Version="|%CurrentProject%;GetBuildVersion|" Language="en-US" Publisher="Microsoft" />
         <DisplayName>Microsoft Library Manager</DisplayName>
         <Description xml:space="preserve">Install client-side libraries easily to any web project</Description>
         <MoreInfo>https://github.com/aspnet/LibraryManager</MoreInfo>

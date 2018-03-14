@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CHANGELOG.md = CHANGELOG.md
 		LibraryManager.Settings.targets = LibraryManager.Settings.targets
 		README.md = README.md
+		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Contracts", "src\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj", "{FF466454-426B-4AD7-8B00-D50011BE716F}"
