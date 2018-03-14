@@ -30,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             var member = context.ContextItem as JSONMember;
 
-            if (member == null || member.UnquotedNameText != "id")
+            if (member == null || member.UnquotedNameText != ManifestConstants.Library)
             {
                 yield break;
             }

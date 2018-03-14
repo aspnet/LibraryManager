@@ -322,23 +322,23 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 
         private string GetConfig()
         {
-            string config = @"{
-  ""version"": ""1.0"",
-  ""packages"": [
-    {
-      ""provider"": ""filesystem"",
-      ""id"": ""_file1"",
-      ""path"": ""lib"",
-      ""files"": [ ""file1.txt"" ]
-    },
-    {
-      ""provider"": ""filesystem"",
-      ""id"": ""_file2"",
-      ""path"": ""lib"",
-      ""files"": [ ""file2.txt"" ]
-    }
+            string config = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Library}"": ""_file1"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file1.txt"" ]
+    }},
+    {{
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Library}"": ""_file2"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file2.txt"" ]
+    }}
   ]
-}
+}}
 ";
 
             return config.Replace("_file1", _file1).Replace("_file2", _file2).Replace("\\", "\\\\");

@@ -27,7 +27,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             var member = context.ContextItem as JSONMember;
 
-            if (member == null || (member.UnquotedNameText != "provider" && member.UnquotedNameText != "defaultProvider"))
+            if (member == null || (member.UnquotedNameText != ManifestConstants.Provider && member.UnquotedNameText != ManifestConstants.DefaultProvider))
                 yield break;
 
             var dependencies = Dependencies.FromConfigFile(ConfigFilePath);

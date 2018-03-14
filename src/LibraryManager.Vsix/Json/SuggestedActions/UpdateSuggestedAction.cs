@@ -47,7 +47,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     return;
                 }
 
-                JSONMember member = _provider.LibraryObject.Children.OfType<JSONMember>().FirstOrDefault(m => m.UnquotedNameText == "id");
+                JSONMember member = _provider.LibraryObject.Children.OfType<JSONMember>().FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Library);
 
                 if (member != null)
                 {

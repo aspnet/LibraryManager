@@ -93,23 +93,23 @@ namespace Microsoft.Web.LibraryManager.Build.Test
             Assert.IsNull(_task.FilesWritten);
         }
 
-        private const string _doc = @"{
-  ""version"": ""1.0"",
-  ""packages"": [
-    {
-      ""id"": ""jquery@3.1.1"",
-      ""provider"": ""cdnjs"",
-      ""path"": ""lib"",
-      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
-    },
-    {
-      ""id"": ""../path/to/file.txt"",
-      ""provider"": ""filesystem"",
-      ""path"": ""lib"",
-      ""files"": [ ""file.txt"" ]
-    }
+        private string _doc = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
+    }}
   ]
-}
+}}
 ";
     }
 }

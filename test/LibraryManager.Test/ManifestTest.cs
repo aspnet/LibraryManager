@@ -165,6 +165,17 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
+        public async Task RestoreAsync_UsingDefaultDestination()
+        {
+            var manifest = Manifest.FromJson(_docDefaultDestination, _dependencies);
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(1, result.Count(v => v.Success));
+            Assert.AreEqual(manifest.DefaultDestination, result.First().InstallationState.DestinationPath);
+        }
+
+        [TestMethod]
         public async Task RestoreAsync_UsingUnknownProvider()
         {
             var dependencies = new Dependencies(_dependencies.GetHostInteractions());
@@ -268,36 +279,54 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB007"));
         }
 
-        private const string _doc = @"{
-  ""version"": ""1.0"",
-  ""packages"": [
-    {
-      ""id"": ""jquery@3.1.1"",
-      ""provider"": ""cdnjs"",
-      ""path"": ""lib"",
-      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
-    },
-    {
-      ""id"": ""../path/to/file.txt"",
-      ""provider"": ""filesystem"",
-      ""path"": ""lib"",
-      ""files"": [ ""file.txt"" ]
-    }
+        private string _doc = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
+    }}
   ]
-}
+}}
 ";
 
-        private const string _docDefaultProvider = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""packages"": [
-    {
-      ""id"": ""jquery@3.1.1"",
-      ""path"": ""lib"",
-      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
-    }
+        private string _docDefaultProvider = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.DefaultProvider}"": ""cdnjs"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
+    }}
   ]
-}
+}}
+";
+        private string _docDefaultDestination = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.DefaultDestination}"": ""lib"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }}
+  ]
+}}
 ";
     }
 }

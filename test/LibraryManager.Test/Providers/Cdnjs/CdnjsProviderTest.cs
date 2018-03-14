@@ -180,23 +180,23 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             Assert.IsNotNull(catalog);
         }
 
-        private const string _doc = @"{
-  ""version"": ""1.0"",
-  ""packages"": [
-    {
-      ""provider"": ""cdnjs"",
-      ""id"": ""jquery@3.1.1"",
-      ""path"": ""lib"",
-      ""files"": [ ""jquery.js"", ""jquery.min.js"" ]
-    },
-    {
-      ""provider"": ""cdnjs"",
-      ""id"": ""knockout@3.4.1"",
-      ""path"": ""lib"",
-      ""files"": [ ""knockout-min.js"" ]
-    }
+        private string _doc = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Library}"": ""knockout@3.4.1"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""knockout-min.js"" ]
+    }}
   ]
-}
+}}
 ";
     }
 }

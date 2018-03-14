@@ -26,13 +26,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             JSONMember member = context.ContextItem.FindType<JSONMember>();
 
-            if (member == null || member.UnquotedNameText != "path")
+            if (member == null || (member.UnquotedNameText != ManifestConstants.Destination && member.UnquotedNameText != ManifestConstants.DefaultDestination)) 
                 yield break;
 
             JSONMember parent = member.FindType<JSONObject>()?.FindType<JSONMember>();
 
-            if (parent == null || parent.UnquotedNameText != "packages")
+            if (member.UnquotedNameText == ManifestConstants.Destination && (parent == null || parent.UnquotedNameText != ManifestConstants.Libraries))
+            {
                 yield break;
+            }
+
+            if (member.UnquotedNameText == ManifestConstants.DefaultDestination && parent != null)
+            { 
+                yield break;
+            }
 
             int caretPosition = context.Session.TextView.Caret.Position.BufferPosition - member.Value.Start - 1;
 

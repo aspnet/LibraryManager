@@ -25,16 +25,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 switch (child.UnquotedNameText)
                 {
-                    case "provider":
+                    case ManifestConstants.Provider:
                         state.ProviderId = child.UnquotedValueText;
                         break;
-                    case "id":
+                    case ManifestConstants.Library:
                         state.LibraryId = child.UnquotedValueText;
                         break;
-                    case "path":
+                    case ManifestConstants.Destination:
                         state.DestinationPath = child.UnquotedValueText;
                         break;
-                    case "files":
+                    case ManifestConstants.Files:
                         state.Files = (child.Value as JSONArray)?.Elements.Select(e => e.UnquotedValueText).ToList();
                         break;
                 }
@@ -55,9 +55,24 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
+            // Check for defaultDestination
+            if (string.IsNullOrEmpty(state.DestinationPath))
+            {
+                IEnumerable<JSONMember> rootMembers = parent.Parent?.FindType<JSONObject>()?.Children?.OfType<JSONMember>();
+
+                if (rootMembers != null)
+                {
+                    foreach (JSONMember child in rootMembers)
+                    {
+                        if (child.UnquotedNameText == ManifestConstants.DefaultDestination)
+                            state.DestinationPath = child.UnquotedValueText;
+                    }
+                }
+            }
+
             installationState = state;
 
-            return !string.IsNullOrEmpty(installationState.ProviderId);
+            return !string.IsNullOrEmpty(installationState.ProviderId) && !string.IsNullOrEmpty(installationState.DestinationPath);
         }
     }
 }
