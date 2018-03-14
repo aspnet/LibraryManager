@@ -5,6 +5,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -205,42 +206,55 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Deletes all library output files from disk.
+        ///  Deletes all library output files from disk.
         /// </summary>
         /// <remarks>
         /// The host calling this method provides the <paramref name="deleteFileAction"/>
         /// that deletes the files from the project.
         /// </remarks>
-        /// <param name="deleteFileAction">An action to delete the files.</param>
-        public int Clean(Action<string> deleteFileAction)
+        /// <param name="deleteFileAction">>An action to delete the files.</param>
+        /// <returns></returns>
+        public IEnumerable<ILibraryInstallationResult> Clean(Action<string> deleteFileAction)
         {
-            int filesDeleted = 0;
+            List<ILibraryInstallationResult> results = new List<ILibraryInstallationResult>();
 
             foreach (ILibraryInstallationState state in Libraries)
             {
-                filesDeleted += DeleteLibraryFiles(state, deleteFileAction);
+                results.Add(DeleteLibraryFiles(state, deleteFileAction));
             }
 
-            return filesDeleted;
+            return results;
         }
 
-        private int DeleteLibraryFiles(ILibraryInstallationState state, Action<string> deleteFileAction)
+        private ILibraryInstallationResult DeleteLibraryFiles(ILibraryInstallationState state, Action<string> deleteFileAction)
         {
             int filesDeleted = 0;
 
-            foreach (string file in state.Files)
-            {
-                var url = new Uri(file, UriKind.RelativeOrAbsolute);
+            IProvider provider = _dependencies.GetProvider(state.ProviderId);
+            ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, CancellationToken.None).Result;
 
-                if (!url.IsAbsoluteUri)
+            if (updatedStateResult.Success)
+            {
+                state = updatedStateResult.InstallationState;
+                foreach (string file in state.Files)
                 {
-                    string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
-                    deleteFileAction?.Invoke(relativePath);
-                    filesDeleted++;
+                    var url = new Uri(file, UriKind.RelativeOrAbsolute);
+
+                    if (!url.IsAbsoluteUri)
+                    {
+                        string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
+                        deleteFileAction?.Invoke(relativePath);
+                        filesDeleted++;
+                    }
+                }
+
+                if (state.Files != null && filesDeleted == state.Files.Count())
+                {
+                    return LibraryInstallationResult.FromSuccess(updatedStateResult.InstallationState);
                 }
             }
 
-            return filesDeleted;
+            return updatedStateResult;
         }
     }
 }

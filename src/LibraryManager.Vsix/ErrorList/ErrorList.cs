@@ -1,10 +1,11 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using Microsoft.VisualStudio.Telemetry;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -37,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     foreach (IError error in result.Errors)
                     {
                         Logger.LogEvent(error.Message, LogLevel.Operation);
-                        Telemetry.TrackOperation("error", new KeyValuePair<string, object>("code", error.Code));
+                        Telemetry.TrackOperation("error", TelemetryResult.Failure, new KeyValuePair<string, object>("code", error.Code));
                     }
                 }
             }

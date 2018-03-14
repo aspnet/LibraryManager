@@ -11,11 +11,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         private const string _namespace = Constants.TelemetryNamespace;
 
-        public static void TrackUserTask(string name, params KeyValuePair<string, object>[] properties)
+        public static void TrackUserTask(string name, TelemetryResult result = TelemetryResult.None, params KeyValuePair<string, object>[] properties)
         {
             string actualName = name.Replace(" ", "_");
 
-            var task = new UserTaskEvent(_namespace + actualName, TelemetryResult.None);
+            var task = new UserTaskEvent(_namespace + actualName, result);
 
             foreach (KeyValuePair<string, object> property in properties)
             {
@@ -25,10 +25,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             TelemetryService.DefaultSession.PostEvent(task);
         }
 
-        public static void TrackOperation(string name, params KeyValuePair<string, object>[] properties)
+        public static void TrackOperation(string name, TelemetryResult result = TelemetryResult.None, params KeyValuePair<string, object>[] properties)
         {
             string actualName = name.Replace(" ", "_");
-            var task = new OperationEvent(_namespace + actualName, TelemetryResult.None);
+            var task = new OperationEvent(_namespace + actualName, result);
 
             foreach (KeyValuePair<string, object> property in properties)
             {

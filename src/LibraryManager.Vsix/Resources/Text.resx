@@ -162,4 +162,7 @@ Do you want to continue?</value>
   <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
     <value>&lt;Choose a package to select files to install&gt;</value>
   </data>
+  <data name="CleanLibrariesFailed" xml:space="preserve">
+    <value>Clean libraries failed</value>
+  </data>
 </root>

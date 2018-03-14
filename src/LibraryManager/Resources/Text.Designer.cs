@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Text {
@@ -94,6 +94,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static string LibrariesRestored {
             get {
                 return ResourceManager.GetString("LibrariesRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update library information for {0}.
+        /// </summary>
+        public static string LibraryInfoUpdateFailed {
+            get {
+                return ResourceManager.GetString("LibraryInfoUpdateFailed", resourceCulture);
             }
         }
         
