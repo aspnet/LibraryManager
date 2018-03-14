@@ -78,11 +78,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                         File.Delete(absoluteFile);
                     }
 
-                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
+                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
+                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleteFail, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
                     Telemetry.TrackException("deletefilefailed", ex);
                 }
             }

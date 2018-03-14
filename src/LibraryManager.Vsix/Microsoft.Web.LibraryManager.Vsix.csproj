@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props')" />
-  <Import Project ="..\..\LibraryManager.Settings.targets" />
+  <Import Project="..\..\LibraryManager.Settings.targets" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -106,6 +106,7 @@
     <Compile Include="Json\Completion\PathCompletionProvider.cs" />
     <Compile Include="Json\Completion\ProviderCompletionProvider.cs" />
     <Compile Include="Json\Completion\CompletionController.cs" />
+    <Compile Include="Json\FileIdentifier.cs" />
     <Compile Include="Json\JsonHelpers.cs" />
     <Compile Include="Json\SuggestedActions\UpdateSuggestedAction.cs" />
     <Compile Include="Json\SuggestedActions\UpdateSuggestedActionSet.cs" />
