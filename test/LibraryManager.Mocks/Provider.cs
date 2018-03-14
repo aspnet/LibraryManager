@@ -71,5 +71,16 @@ namespace Microsoft.Web.LibraryManager.Mocks
         {
             return Task.FromResult(Result);
         }
+
+        /// <summary>
+        /// No-op
+        /// </summary>
+        /// <param name="desiredState"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(Result);
+        }
     }
 }

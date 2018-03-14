@@ -38,6 +38,14 @@ namespace Microsoft.Web.LibraryManager.Contracts
         Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Updates library state using catalog if needed
+        /// </summary>
+        /// <param name="desiredState"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Gets the <see cref="ILibraryCatalog"/> for the <see cref="IProvider"/>. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>

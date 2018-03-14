@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="69b6bcde-f505-4c03-b071-8981cc1be2b9" Version="0.1" Language="en-US" Publisher="Microsoft" />
+        <Identity Id="Microsoft.Web.LibraryManager" Version="1.0" Language="en-US" Publisher="Microsoft" />
         <DisplayName>Microsoft Library Manager</DisplayName>
         <Description xml:space="preserve">Install client-side libraries easily to any web project</Description>
         <MoreInfo>https://github.com/aspnet/LibraryManager</MoreInfo>
@@ -11,8 +11,8 @@
         <PreviewImage>Resources\Icon.png</PreviewImage>
         <Tags>library, package, client-side, install</Tags>
     </Metadata>
-    <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0]" />
+    <Installation AllUsers="true">
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.6,16.0)" />
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -20,7 +20,7 @@
     </Dependencies>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
-        <Prerequisite Id="Microsoft.VisualStudio.Component.Web" Version="[15.0,16.0)" DisplayName="ASP.NET and web development tools" />
+        <Prerequisite Id="Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions" Version="[15.0,16.0)" DisplayName="ASP.NET and web development" />
     </Prerequisites>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />

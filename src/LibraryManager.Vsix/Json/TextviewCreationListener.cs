@@ -61,9 +61,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private async Task RemoveFilesAsync(Manifest newManifest)
         {
-            IEnumerable<string> prevFiles = await GetAllManifestFilesAsync(_manifest).ConfigureAwait(false);
-            IEnumerable<string> newFiles = await GetAllManifestFilesAsync(newManifest).ConfigureAwait(false);
-            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f));
+            IEnumerable<FileIdentifier> prevFiles = await GetAllManifestFilesWithVersionsAsync(_manifest).ConfigureAwait(false);
+            IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest).ConfigureAwait(false);
+            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Path);
 
             if (filesToRemove.Any())
             {
@@ -72,37 +72,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             }
         }
 
-        private async Task<IEnumerable<string>> GetAllManifestFilesAsync(Manifest manifest)
+        private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(Manifest manifest)
         {
-            var files = new List<string>();
+            var files = new List<FileIdentifier>();
 
             foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out var errors)))
             {
-                IEnumerable<string> stateFiles = await GetFilesAsync(state).ConfigureAwait(false);
-                IEnumerable<string> filesToAdd = stateFiles
-                    .Select(f => Path.Combine(state.DestinationPath, f))
-                    .Where(f => !files.Contains(f));
+                IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
 
-                files.AddRange(filesToAdd);
+                foreach (FileIdentifier fileIdentifier in stateFiles)
+                {
+                    if (!files.Contains(fileIdentifier))
+                    {
+                        files.Add(fileIdentifier);
+                    }
+                }
             }
 
             return files;
         }
 
-        private async Task<IEnumerable<string>> GetFilesAsync(ILibraryInstallationState state)
+        private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
-            if (state.Files == null)
-            {
-                ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
+            ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
+            IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
 
-                if (catalog != null)
-                {
-                    ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                    return library?.Files.Keys.ToList();
-                }
+            if (catalog != null)
+            {
+                ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+                filesWithVersions = library?.Files.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f.Key), library.Version));
             }
 
-            return state.Files.Distinct();
+            return filesWithVersions;
         }
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)

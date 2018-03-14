@@ -29,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             _cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
-            _filePath = Path.Combine(_projectFolder, "library.json");
+            _filePath = Path.Combine(_projectFolder, "libman.json");
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory());

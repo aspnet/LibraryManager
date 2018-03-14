@@ -147,4 +147,7 @@
     <value>Library restore was unsuccessfull</value>
     <comment>Status message</comment>
   </data>
+  <data name="LibraryInfoUpdateFailed" xml:space="preserve">
+    <value>Failed to update library information for {0}</value>
+  </data>
 </root>

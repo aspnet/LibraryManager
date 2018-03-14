@@ -22,7 +22,7 @@ namespace Microsoft.Web.LibraryManager.Build.Test
             _task = new RestoreTask()
             {
                 ProjectDirectory = _projectFolder,
-                FileName = Path.Combine(_projectFolder, "library.json"),
+                FileName = Path.Combine(_projectFolder, "libman.json"),
                 BuildEngine = _buildEngine,
                 ProviderAssemblies = new[] { new TaskItem { ItemSpec = path } }
             };

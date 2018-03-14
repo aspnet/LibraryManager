@@ -1,12 +1,12 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using EnvDTE;
-using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using EnvDTE;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -78,11 +78,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                         File.Delete(absoluteFile);
                     }
 
-                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
+                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
+                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleteFail, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
+                    Telemetry.TrackException("deletefilefailed", ex);
                 }
             }
         }
