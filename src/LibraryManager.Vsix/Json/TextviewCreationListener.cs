@@ -76,18 +76,22 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         {
             var files = new List<FileIdentifier>();
 
-            foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out var errors)))
+            if (manifest != null)
             {
-                IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
-
-                foreach (FileIdentifier fileIdentifier in stateFiles)
+                foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out var errors)))
                 {
-                    if (!files.Contains(fileIdentifier))
+                    IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
+
+                    foreach (FileIdentifier fileIdentifier in stateFiles)
                     {
-                        files.Add(fileIdentifier);
+                        if (!files.Contains(fileIdentifier))
+                        {
+                            files.Add(fileIdentifier);
+                        }
                     }
                 }
             }
+
 
             return files;
         }
