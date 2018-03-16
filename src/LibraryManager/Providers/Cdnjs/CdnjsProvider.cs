@@ -135,10 +135,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                if (desiredState.Files != null && desiredState.Files.Count > 0)
-                {
-                    return LibraryInstallationResult.FromSuccess(desiredState);
-                }
 
                 var catalog = (CdnjsCatalog)GetCatalog();
                 ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
@@ -149,6 +145,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 }
 
                 await HydrateCacheAsync(library, cancellationToken).ConfigureAwait(false);
+
+                if (desiredState.Files != null && desiredState.Files.Count > 0)
+                {
+                    return LibraryInstallationResult.FromSuccess(desiredState);
+                }
 
                 desiredState = new LibraryInstallationState
                 {
