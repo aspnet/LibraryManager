@@ -411,6 +411,28 @@
       </VSIXSourceItem>
     </ItemGroup>
   </Target>
+  <!-- This is a copy of the Microsoft.VisualStudio.SDK.EmbedInteropTypes NuGet package, but only the list of
+       assemblies that we need. The package includes things like EnvDTE which are reasonable for consumers, but
+       strange since we actually _implement_ DTE and use it as an exchange type with generics in a few places. -->
+  <Target Name="LinkVSSDKEmbeddableAssemblies" DependsOnTargets="ResolveReferences" AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="
+              '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.10.0'
+              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.11.0'
+              ">
+        <EmbedInteropTypes>false</EmbedInteropTypes>
+      </ReferencePath>
+    </ItemGroup>
+    <ItemGroup>
+      <ReferencePath Condition="
+              '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.15.0.DesignTime'
+              or '%(FileName)' == 'Microsoft.Internal.VisualStudio.Shell.Interop.14.0.DesignTime'
+              or '%(FileName)' == 'Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime'
+              ">
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
