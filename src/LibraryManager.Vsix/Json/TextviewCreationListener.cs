@@ -78,7 +78,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             if (manifest != null)
             {
-                foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out var errors)))
+                foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out IEnumerable<IError> errors)))
                 {
                     IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
 
@@ -91,7 +91,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                     }
                 }
             }
-
 
             return files;
         }
