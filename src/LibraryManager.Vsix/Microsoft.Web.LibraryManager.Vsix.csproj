@@ -425,8 +425,7 @@
     </ItemGroup>
     <ItemGroup>
       <ReferencePath Condition="
-              '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.15.0.DesignTime'
-              or '%(FileName)' == 'Microsoft.Internal.VisualStudio.Shell.Interop.14.0.DesignTime'
+              '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime'
               or '%(FileName)' == 'Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime'
               ">
         <EmbedInteropTypes>true</EmbedInteropTypes>
