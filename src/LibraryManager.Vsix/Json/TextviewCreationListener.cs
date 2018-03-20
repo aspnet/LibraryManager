@@ -80,13 +80,19 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             {
                 foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out IEnumerable<IError> errors)))
                 {
-                    IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(state).ConfigureAwait(false);
+                    IProvider provider = _dependencies.GetProvider(state.ProviderId);
+                    ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, CancellationToken.None).Result;
 
-                    foreach (FileIdentifier fileIdentifier in stateFiles)
+                    if (updatedStateResult.Success)
                     {
-                        if (!files.Contains(fileIdentifier))
+                        IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
+
+                        foreach (FileIdentifier fileIdentifier in stateFiles)
                         {
-                            files.Add(fileIdentifier);
+                            if (!files.Contains(fileIdentifier))
+                            {
+                                files.Add(fileIdentifier);
+                            }
                         }
                     }
                 }
@@ -103,7 +109,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             if (catalog != null)
             {
                 ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                filesWithVersions = library?.Files?.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f.Key), library.Version)) ?? filesWithVersions;
+                IEnumerable<string> libraryStateFiles = state?.Files?.Where(f => library.Files.Keys.Contains(f));
+                if (libraryStateFiles != null && libraryStateFiles.Any())
+                {
+                    filesWithVersions = libraryStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
+                }
             }
 
             return filesWithVersions;
