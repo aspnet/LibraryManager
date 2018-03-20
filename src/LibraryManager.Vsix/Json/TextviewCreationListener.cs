@@ -103,7 +103,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             if (catalog != null)
             {
                 ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                filesWithVersions = library?.Files.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f.Key), library.Version));
+                filesWithVersions = library?.Files?.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f.Key), library.Version)) ?? filesWithVersions;
             }
 
             return filesWithVersions;
