@@ -27,7 +27,7 @@
     <TargetVsixContainerName>Microsoft.Web.LibraryManager.vsix</TargetVsixContainerName>
     <ExtensionInstallationRoot>Extensions</ExtensionInstallationRoot>
     <ExtensionInstallationFolder>Microsoft\Web Tools\Library Manager</ExtensionInstallationFolder>
-    <IsProductComponent>true</IsProductComponent>
+    <IsProductComponent Condition="'$(IsProductComponent)' == ''">false</IsProductComponent>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
