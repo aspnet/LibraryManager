@@ -65,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     content = error.Description;
                     return true;
                 case StandardTableKeyNames.ErrorSeverity:
-                    content = __VSERRORCATEGORY.EC_WARNING;
+                    content = __VSERRORCATEGORY.EC_ERROR;
                     return true;
                 case StandardTableKeyNames.Priority:
                     content = vsTaskPriority.vsTaskPriorityMedium;
