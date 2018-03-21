@@ -89,7 +89,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &quot;path&quot; is undefined..
+        ///   Looks up a localized string similar to The &quot;destination&quot; is undefined..
         /// </summary>
         internal static string ErrorPathIsUndefined {
             get {
@@ -98,7 +98,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &quot;path&quot; must be inside the working directory.
+        ///   Looks up a localized string similar to The &quot;destination&quot; must be inside the working directory.
         /// </summary>
         internal static string ErrorPathOutsideWorkingDirectory {
             get {

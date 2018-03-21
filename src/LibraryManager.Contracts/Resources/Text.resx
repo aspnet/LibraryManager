@@ -127,10 +127,10 @@
     <value>The manifest file contains syntax errors</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>The "path" is undefined.</value>
+    <value>The "destination" is undefined.</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>The "path" must be inside the working directory</value>
+    <value>The "destination" must be inside the working directory</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>The provider is undefined</value>
