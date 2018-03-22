@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             installationState = state;
 
-            return !string.IsNullOrEmpty(installationState.ProviderId) && !string.IsNullOrEmpty(installationState.DestinationPath);
+            return !string.IsNullOrEmpty(installationState.ProviderId);
         }
     }
 }
