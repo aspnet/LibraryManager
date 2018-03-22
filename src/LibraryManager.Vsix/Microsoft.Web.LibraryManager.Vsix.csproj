@@ -426,7 +426,9 @@
     <ItemGroup>
       <ReferencePath Condition="
               '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime'
+              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.12.0'
               or '%(FileName)' == 'Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime'
+              or '%(FileName)' == 'Nuget.VisualStudio'
               ">
         <EmbedInteropTypes>true</EmbedInteropTypes>
       </ReferencePath>
