@@ -205,7 +205,7 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" version="15.0.26201" PrivateAssets="all" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" />
     <PackageReference Include="Newtonsoft.Json" Version="8.0.3" />
-    <PackageReference Include="Nuget.VisualStudio" Version="4.0.0" />
+    <PackageReference Include="Nuget.VisualStudio" Version="4.6.1" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="Commands\CommandTable\VSCommandTable.en.vsct">
