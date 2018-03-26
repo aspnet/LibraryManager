@@ -51,7 +51,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 yield break;
             }
 
-            int caretPosition = context.Session.TextView.Caret.Position.BufferPosition - member.Value.Start - 1;
+            // member.Value is null when there is no value yet, e.g. when typing a space at "library":|
+            // where | represents caret position. In this case, set caretPosition to "1" to short circuit execution of this function
+            // and return no entries (member.UnquotedValueText will be empty string in that case).
+            int caretPosition = member.Value != null ? context.Session.TextView.Caret.Position.BufferPosition - member.Value.Start - 1 : 1;
 
             if (caretPosition > member.UnquotedValueText.Length)
             {
