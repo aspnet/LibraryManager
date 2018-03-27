@@ -10,7 +10,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
-    public class InstallDialogViewModel : BindableBase
+    internal class InstallDialogViewModel : BindableBase
     {
         private readonly Action<bool> _closeDialog;
         private readonly string _configFileName;

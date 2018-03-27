@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
     [Export(typeof(IVsTextViewCreationListener))]
     [ContentType("JSON")]
     [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
-    public class TextviewCreationListener : IVsTextViewCreationListener
+    internal class TextviewCreationListener : IVsTextViewCreationListener
     {
         private Manifest _manifest;
         private Dependencies _dependencies;

@@ -11,7 +11,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [Export(typeof(IUIElementProvider<Completion, ICompletionSession>))]
     [Name(nameof(CompletionElementProvider))]
     [ContentType("JSON")]
-    public class CompletionElementProvider : IUIElementProvider<Completion, ICompletionSession>
+    internal class CompletionElementProvider : IUIElementProvider<Completion, ICompletionSession>
     {
         public UIElement GetUIElement(Completion itemToRender, ICompletionSession context, UIElementType elementType)
         {

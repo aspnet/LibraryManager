@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
-    public class PackageItem : BindableBase
+    internal class PackageItem : BindableBase
     {
         private readonly HashSet<string> _selectedFiles;
         private IReadOnlyList<PackageItem> _children;

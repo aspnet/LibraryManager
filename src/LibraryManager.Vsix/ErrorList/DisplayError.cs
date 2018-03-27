@@ -7,7 +7,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public class DisplayError
+    internal class DisplayError
     {
         public DisplayError(IError error)
         {

@@ -5,7 +5,7 @@ using System.Windows.Markup;
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
     [ContentProperty(nameof(Input))]
-    public class BindingProxy : FrameworkElement
+    internal class BindingProxy : FrameworkElement
     {
         public static readonly DependencyProperty InputProperty = DependencyProperty.Register(
             nameof(Input), typeof(object), typeof(BindingProxy), new PropertyMetadata(default(object), InputChanged));

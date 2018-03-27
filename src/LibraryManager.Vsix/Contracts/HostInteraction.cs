@@ -10,7 +10,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public class HostInteraction : IHostInteraction
+    internal class HostInteraction : IHostInteraction
     {
         public HostInteraction(string configFilePath)
         {

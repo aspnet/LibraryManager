@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public class CompletionController : IOleCommandTarget
+    internal class CompletionController : IOleCommandTarget
     {
         private ITextView _textView;
         private IOleCommandTarget _nextCommandTarget;

@@ -16,7 +16,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
     [Export(typeof(IProviderFactory))]
 #endif
 
-    public class FileSystemProviderFactory : IProviderFactory
+    internal class FileSystemProviderFactory : IProviderFactory
     {
         /// <summary>
         /// Creates an <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" /> instance.

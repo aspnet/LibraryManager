@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public class Dependencies : IDependencies
+    internal class Dependencies : IDependencies
     {
         private readonly IHostInteraction _hostInteraction;
         private readonly List<IProvider> _providers = new List<IProvider>();

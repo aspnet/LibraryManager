@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
     /// The <see cref="ILibraryCatalog"/> implementation for the <see cref="FileSystemProvider"/>.
     /// </summary>
     /// <seealso cref="Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" />
-    public class FileSystemCatalog : ILibraryCatalog
+    internal class FileSystemCatalog : ILibraryCatalog
     {
         private readonly FileSystemProvider _provider;
         private readonly bool _underTest;

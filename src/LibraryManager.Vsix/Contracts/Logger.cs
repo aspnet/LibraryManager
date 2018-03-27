@@ -7,7 +7,7 @@ using System;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public class Logger : ILogger
+    internal class Logger : ILogger
     {
         private static IVsOutputWindowPane _pane;
         private static readonly IVsOutputWindow _output = VsHelpers.GetService<SVsOutputWindow, IVsOutputWindow>();

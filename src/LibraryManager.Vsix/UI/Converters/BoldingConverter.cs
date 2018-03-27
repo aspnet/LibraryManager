@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
 {
-    public class BoldingConverter : IValueConverter
+    internal class BoldingConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

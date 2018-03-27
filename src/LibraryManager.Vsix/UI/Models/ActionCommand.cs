@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
-    public class ActionCommand : ICommand
+    internal class ActionCommand : ICommand
     {
         private readonly Func<bool> _canExecute;
         private readonly Action _execute;
