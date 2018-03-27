@@ -1,13 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.Language.Intellisense;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.Utilities;
-using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -15,6 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Utilities;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Json
 {
@@ -104,15 +104,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
             ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
+            ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
             IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
 
-            if (catalog != null)
+            if (library != null && library.Files != null)
             {
-                ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                IEnumerable<string> libraryStateFiles = state?.Files?.Where(f => library.Files.Keys.Contains(f));
-                if (libraryStateFiles != null && libraryStateFiles.Any())
+                IEnumerable<string> desiredStateFiles = state?.Files?.Where(f => library.Files.Keys.Contains(f));
+                if (desiredStateFiles != null && desiredStateFiles.Any())
                 {
-                    filesWithVersions = libraryStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
+                    filesWithVersions = desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
                 }
             }
 
