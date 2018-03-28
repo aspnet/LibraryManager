@@ -13,23 +13,23 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CleanLibrariesStarted" xml:space="preserve">
-    <value>清理庫已啟動..。</value>
+    <value>已開始清理程式庫...</value>
     <comment>When the "Clean" command is being executed</comment>
   </data>
   <data name="CleanLibrariesSucceeded" xml:space="preserve">
-    <value>清理庫成功</value>
+    <value>已成功清理程式庫</value>
     <comment>Status message</comment>
   </data>
   <data name="LibraryRestoredNoChange" xml:space="preserve">
-    <value>恢復已完成。檔已更新</value>
+    <value>還原已完成，檔案已更新。</value>
     <comment>Status message</comment>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>載入中...</value>
+    <value>正在載入...</value>
     <comment>Used in JSON editor for Intellisense</comment>
   </data>
   <data name="PackagesCouldNotBeLoaded" xml:space="preserve">
-    <value>無法載入包</value>
+    <value>無法載入套件</value>
     <comment>Used in installer dialog</comment>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
@@ -37,7 +37,7 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NoUpdatesFound" xml:space="preserve">
-    <value>此時未找到更新</value>
+    <value>目前未找到任何更新</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="UninstallLibrary" xml:space="preserve">
@@ -45,16 +45,12 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>A NuGet package will be installed to augment the MSBuild process, but no files will be added to the project.
-
-This may require an internet connection.
-
-Do you want to continue?</value>
+    <value>這會安裝 NuGet 套件來增強 MSBuild 處理序，但不會新增任何檔案到專案。這可能需要網際網路連線，您要繼續嗎?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;輸入以搜尋&gt;</value>
+    <value>&lt;請鍵入以搜尋&gt;</value>
   </data>
   <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Choose a package to select files to install&gt;</value>
+    <value>&lt;請選擇套件以選取要安裝的檔案&gt;</value>
   </data>
 </root>

@@ -13,23 +13,23 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CleanLibrariesStarted" xml:space="preserve">
-    <value>Temiz kitaplıkları başladı...</value>
+    <value>Kitaplıkları temizleme işlemi başladı...</value>
     <comment>When the "Clean" command is being executed</comment>
   </data>
   <data name="CleanLibrariesSucceeded" xml:space="preserve">
-    <value>Temiz kitaplıkları başarılı oldu</value>
+    <value>Kitaplıklar başarıyla temizlendi</value>
     <comment>Status message</comment>
   </data>
   <data name="LibraryRestoredNoChange" xml:space="preserve">
-    <value>Geri yükleme tamamlandı. Dosya zaten güncel</value>
+    <value>Geri yükleme tamamlandı. Dosyalar zaten güncel</value>
     <comment>Status message</comment>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Yükleniyor</value>
+    <value>Yükleniyor...</value>
     <comment>Used in JSON editor for Intellisense</comment>
   </data>
   <data name="PackagesCouldNotBeLoaded" xml:space="preserve">
-    <value>Paketleri yüklenemedi</value>
+    <value>Paketler yüklenemedi</value>
     <comment>Used in installer dialog</comment>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
@@ -37,24 +37,20 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NoUpdatesFound" xml:space="preserve">
-    <value>Şu anda bulunan güncelleştirme</value>
+    <value>Şu anda güncelleştirme bulunamadı</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="UninstallLibrary" xml:space="preserve">
-    <value>{0} öğesini kaldır</value>
+    <value>{0} uygulamasını kaldır</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Bir NuGet paket-ecek var olmak installed MSBuild işlemi ek olarak, ama hiçbir dosya projeye eklenir.
-
-Bu Internet bağlantısı gerektiriyor olabilir.
-
-Devam etmek istiyor musunuz?</value>
+    <value>MSBuild işlemini güçlendirmek için bir NuGet paketi yüklenecek ancak projeye herhangi bir dosya eklenmeyecek. Bu işlem İnternet bağlantısı gerektirebilir. Devam etmek istiyor musunuz?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;aramak için yazın&gt;</value>
+    <value>&lt;Aramak için yazın&gt;</value>
   </data>
   <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Yüklenecek dosyaları seçmek için bir paket seçin&gt;</value>
+    <value>&lt;Yüklenecek dosyaları belirlemek için bir paket seçin&gt;</value>
   </data>
 </root>

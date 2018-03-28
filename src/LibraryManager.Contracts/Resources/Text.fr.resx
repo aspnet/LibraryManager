@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
-    <value>{0} ne peut pas être écrite sur le disque. Assurez-vous que le nom du fichier est correct</value>
+    <value>Impossible d'écrire {0} sur le disque. Vérifiez le nom du fichier</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
-    <value>L’id de la bibliothèque n’est pas défini</value>
+    <value>L'ID de la bibliothèque n'est pas défini</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
     <value>Le fichier manifeste contient des erreurs de syntaxe</value>
@@ -28,15 +28,15 @@
     <value>Le « chemin » doit se trouver dans le répertoire de travail</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
-    <value>Le fournisseur n’est pas défini</value>
+    <value>Le fournisseur n'est pas défini</value>
   </data>
   <data name="ErrorProviderUnknown" xml:space="preserve">
-    <value>Le fournisseur « {0} » est introuvable</value>
+    <value>Le fournisseur "{0}" est introuvable</value>
   </data>
   <data name="ErrorUnableToResolveSource" xml:space="preserve">
-    <value>La bibliothèque « {0} » n’a pas pu être résolue par le fournisseur « {1} »</value>
+    <value>La bibliothèque "{0}" n'a pas pu être résolue par le fournisseur "{1}"</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
-    <value>Une exception inconnue s'est produite.</value>
+    <value>Une exception inconnue s'est produite</value>
   </data>
 </root>

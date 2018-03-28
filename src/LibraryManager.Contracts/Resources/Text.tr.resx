@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
-    <value>{0} yazılı diske. Dosya adının doğru olduğundan emin olun</value>
+    <value>{0} diske yazılamadı. Dosya adının doğru olduğundan emin olun</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
-    <value>Kütüphane kimliği tanımlı değil</value>
+    <value>Kitaplık kimliği tanımlı değil</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Bildirim dosyası sözdizimi hataları içeriyor</value>
+    <value>Bildirim dosyası söz dizimi hataları içeriyor</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>"Yol" tanımlı değil.</value>
@@ -34,9 +34,9 @@
     <value>"{0}" sağlayıcısı bulunamadı</value>
   </data>
   <data name="ErrorUnableToResolveSource" xml:space="preserve">
-    <value>"{0}" kütüphane "{1}" sağlayıcı tarafından çözümlenemedi</value>
+    <value>"{0}" kitaplığı "{1}" sağlayıcısı tarafından çözümlenemedi</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
-    <value>Bilinmeyen bir özel durum oluştu.</value>
+    <value>Bilinmeyen bir özel durum oluştu</value>
   </data>
 </root>

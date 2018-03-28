@@ -13,33 +13,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileDeleted" xml:space="preserve">
-    <value>Usunięto element {0}</value>
+    <value>Plik {0} został usunięty</value>
     <comment>Shows in Output Window when a library file is deleted</comment>
   </data>
   <data name="FileDeleteFail" xml:space="preserve">
-    <value>Nie można usunąć aplikacji {0}</value>
+    <value>Nie można usunąć pliku {0}</value>
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0}, napisany na dysku</value>
+    <value>Plik {0} został zapisany na dysku</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
   <data name="RestoreCancelled" xml:space="preserve">
-    <value>Przywracanie biblioteki została anulowana</value>
+    <value>Przywracanie biblioteki zostało anulowane</value>
   </data>
   <data name="RestoringLibrary" xml:space="preserve">
-    <value>Przywracanie pakietu „{0}”</value>
+    <value>Trwa przywracanie pliku {0}...</value>
   </data>
   <data name="RestoringLibraries" xml:space="preserve">
-    <value>Przywracanie biblioteki...</value>
+    <value>Trwa przywracanie bibliotek...</value>
     <comment>Status message</comment>
   </data>
   <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} bibliotek przywrócone w {1} sekund</value>
+    <value>Przywrócone biblioteki: {0}, czas: {1} sek.</value>
     <comment>Status message</comment>
   </data>
   <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Przywracanie biblioteki zaakceptowano rozwi▒zania problemu</value>
+    <value>Przywracanie biblioteki nie powiodło się</value>
     <comment>Status message</comment>
   </data>
 </root>

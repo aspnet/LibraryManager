@@ -12,19 +12,21 @@
         </trans-unit>
         <trans-unit id="ErrorLibraryIdIsUndefined" translate="yes" xml:space="preserve">
           <source>The library id is undefined</source>
-          <target state="translated">El id de la biblioteca no está definido</target>
+          <target state="translated">El id. de la biblioteca no está definido</target>
         </trans-unit>
         <trans-unit id="ErrorManifestMalformed" translate="yes" xml:space="preserve">
           <source>The manifest file contains syntax errors</source>
           <target state="translated">El archivo de manifiesto contiene errores de sintaxis</target>
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
-          <source>The "path" is undefined.</source>
-          <target state="translated">El "camino" no está definido.</target>
+          <source>The "destination" is undefined.</source>
+          <target state="needs-review-translation">El "camino" no está definido.</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
-          <source>The "path" must be inside the working directory</source>
-          <target state="translated">El "camino" debe estar dentro del directorio de trabajo</target>
+          <source>The "destination" must be inside the working directory</source>
+          <target state="needs-review-translation">El "camino" debe estar dentro del directorio de trabajo</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
           <source>The provider is undefined</source>
@@ -36,11 +38,11 @@
         </trans-unit>
         <trans-unit id="ErrorUnableToResolveSource" translate="yes" xml:space="preserve">
           <source>The "{0}" library could not be resolved by the "{1}" provider</source>
-          <target state="translated">La biblioteca "{0}" no pudo resolver el proveedor de "{1}"</target>
+          <target state="translated">El proveedor "{1}" no pudo resolver la biblioteca "{0}"</target>
         </trans-unit>
         <trans-unit id="ErrorUnknownException" translate="yes" xml:space="preserve">
           <source>An unknown exception occurred</source>
-          <target state="translated">Excepción desconocida.</target>
+          <target state="translated">Se produjo una excepción desconocida</target>
         </trans-unit>
       </group>
     </body>

@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
-    <value>{0} не может быть записан на диск. Убедитесь, что имя файла указано правильно</value>
+    <value>Не удалось записать файл {0} на диск. Убедитесь, что имя файла указано правильно</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
-    <value>Идентификатор библиотеки не определено</value>
+    <value>Идентификатор библиотеки не определен</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
     <value>Файл манифеста содержит синтаксические ошибки</value>
@@ -28,15 +28,15 @@
     <value>«Путь» должен быть внутри рабочего каталога</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
-    <value>Поставщик не определено</value>
+    <value>Поставщик не определен</value>
   </data>
   <data name="ErrorProviderUnknown" xml:space="preserve">
-    <value>Поставщик «{0}» не найден</value>
+    <value>Поставщик "{0}" не найден</value>
   </data>
   <data name="ErrorUnableToResolveSource" xml:space="preserve">
-    <value>Библиотека «{0}» не могут быть решены поставщиком «{1}»</value>
+    <value>Поставщику "{1}" не удалось разрешить библиотеку "{0}"</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
-    <value>Произошло неизвестное исключение.</value>
+    <value>Возникло неизвестное исключение</value>
   </data>
 </root>

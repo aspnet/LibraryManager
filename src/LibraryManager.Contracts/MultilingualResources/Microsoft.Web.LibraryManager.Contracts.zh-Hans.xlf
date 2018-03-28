@@ -8,23 +8,25 @@
       <group id="MICROSOFT.WEB.LIBRARYMANAGER.CONTRACTS/RESOURCES/TEXT.RESX" datatype="resx">
         <trans-unit id="ErrorCouldNotWriteFile" translate="yes" xml:space="preserve">
           <source>{0} could not be written to disk. Make sure the file name is correct</source>
-          <target state="translated">{0} 无法写入磁盘。请确保文件名正确</target>
+          <target state="translated">{0} 无法被写入磁盘。请确保文件名正确</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryIdIsUndefined" translate="yes" xml:space="preserve">
           <source>The library id is undefined</source>
-          <target state="translated">库 id 未定义</target>
+          <target state="translated">未定义库 ID</target>
         </trans-unit>
         <trans-unit id="ErrorManifestMalformed" translate="yes" xml:space="preserve">
           <source>The manifest file contains syntax errors</source>
           <target state="translated">清单文件包含语法错误</target>
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
-          <source>The "path" is undefined.</source>
-          <target state="translated">"路径" 未定义。</target>
+          <source>The "destination" is undefined.</source>
+          <target state="needs-review-translation">"路径" 未定义。</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
-          <source>The "path" must be inside the working directory</source>
-          <target state="translated">"路径" 必须在工作目录中</target>
+          <source>The "destination" must be inside the working directory</source>
+          <target state="needs-review-translation">"路径" 必须在工作目录中</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
           <source>The provider is undefined</source>
@@ -40,7 +42,7 @@
         </trans-unit>
         <trans-unit id="ErrorUnknownException" translate="yes" xml:space="preserve">
           <source>An unknown exception occurred</source>
-          <target state="translated">出现未知异常。</target>
+          <target state="translated">发生未知异常</target>
         </trans-unit>
       </group>
     </body>
