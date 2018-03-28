@@ -2,54 +2,32 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
   <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" build-num="bb1380375926" target-language="cs">
     <header>
-      <count-group name="BlackBox wordcount">
-        <count count-type="x-wordCount">17</count>
-        <count count-type="x-adjWordCount">12.65</count>
-        <count count-type="x-curAdjWordCount">12.65</count>
-        <count count-type="x-repeatAdjWordCount">0.75</count>
-        <count count-type="x-termWordCount">0</count>
-      </count-group>
-      <count-group name="BlackBox wordcount analysis">
-        <count count-type="x-match102%">0</count>
-        <count count-type="x-match101%">0</count>
-        <count count-type="x-match100%">0</count>
-        <count count-type="x-match99-90%">0</count>
-        <count count-type="x-match89-75%">0</count>
-        <count count-type="x-mt">17</count>
-        <count count-type="repetition">3</count>
-      </count-group>
     </header>
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
-          <source xml:lang="en">Add Client-Side Library...</source><target state="translated">Přidat klientské knihovny...</target>
-          <alt-trans match-quality="100%" tool="BlackBox/MSR MT" />
-          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="2.55" curWordcount="2.55"</note>
+          <source xml:lang="en">Add Client-Side Library...</source>
+          <target state="translated">Přidat klientské knihovny...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source><target state="translated">Obnovit klientské knihovny</target>
-          <alt-trans match-quality="100%" tool="BlackBox/MSR MT" />
-          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="2.55" curWordcount="2.55"</note>
+          <source xml:lang="en">Restore Client-Side Libraries</source>
+          <target state="translated">Obnovit klientské knihovny</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
-          <source xml:lang="en">Clean</source><target state="translated">Vyčistit</target>
-          <alt-trans match-quality="100%" tool="BlackBox/MSR MT" />
-          <note from="bb-metadata">fuzzyMatch="15" wordcount="1" adjWordcount="0.85" curWordcount="0.85"</note>
+          <source xml:lang="en">Clean</source>
+          <target state="translated">Vyčistit</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
-          <source xml:lang="en">Enable Restore on Build...</source><target state="translated">Povolit obnovení při sestavení...</target>
-          <alt-trans match-quality="100%" tool="BlackBox/MSR MT" />
-          <note from="bb-metadata">fuzzyMatch="15" wordcount="4" adjWordcount="3.4" curWordcount="3.4"</note>
+          <source xml:lang="en">Enable Restore on Build...</source>
+          <target state="translated">Povolit obnovení při sestavení...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
-          <source xml:lang="en">Manage Client-Side Libraries...</source><target state="translated">Spravovat klientské knihovny...</target>
-          <alt-trans match-quality="100%" tool="BlackBox/MSR MT" />
-          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="2.55" curWordcount="2.55"</note>
+          <source xml:lang="en">Manage Client-Side Libraries...</source>
+          <target state="translated">Spravovat klientské knihovny...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source><target state="translated">Obnovit klientské knihovny</target>
-          <alt-trans match-quality="100%" tool="BlackBox/MSR MT" />
-          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="0.75" curWordcount="0.75"</note>
+          <source xml:lang="en">Restore Client-Side Libraries</source>
+          <target state="translated">Obnovit klientské knihovny</target>
         </trans-unit>
       </group>
     </body>
