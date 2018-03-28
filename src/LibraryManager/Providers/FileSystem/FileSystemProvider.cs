@@ -124,7 +124,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
             try
             {
-                var catalog = (FileSystemCatalog)GetCatalog();
+                ILibraryCatalog catalog = GetCatalog();
                 ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
 
                 if (library == null)

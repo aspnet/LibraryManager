@@ -136,7 +136,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             try
             {
 
-                var catalog = (CdnjsCatalog)GetCatalog();
+                ILibraryCatalog catalog = GetCatalog();
                 ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
 
                 if (library == null)
