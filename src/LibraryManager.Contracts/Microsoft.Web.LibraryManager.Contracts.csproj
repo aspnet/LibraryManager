@@ -26,7 +26,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NerdBank.GitVersioning" Version="2.1.23" />
+        <PackageReference Include="NerdBank.GitVersioning" Version="2.1.23" PrivateAssets="all" />
     </ItemGroup>
 
   <!-- Warning if Multilingual App Toolkit isn't installed -->
