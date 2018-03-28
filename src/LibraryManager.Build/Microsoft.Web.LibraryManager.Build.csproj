@@ -22,7 +22,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Build.Framework" Version="15.1.1012" PrivateAssets="All" />
         <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.1012" PrivateAssets="All" />
-        <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" PrivateAssets="All" />
         <PackageReference Include="System.Runtime.Loader" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.5'" />
     </ItemGroup>
 
@@ -42,7 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" />
+      <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" PrivateAssets="all" />
     </ItemGroup>
 
     <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
