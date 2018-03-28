@@ -30,7 +30,5 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".librarymanager");
             }
         }
-
-        
     }
 }
