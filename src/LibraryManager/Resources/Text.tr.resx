@@ -21,25 +21,25 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>Yazılı {0} diske</value>
+    <value>{0} diske yazıldı</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
   <data name="RestoreCancelled" xml:space="preserve">
-    <value>Kitaplığı geri yüklemesi iptal edildi</value>
+    <value>Kitaplık geri yüklemesi iptal edildi</value>
   </data>
   <data name="RestoringLibrary" xml:space="preserve">
-    <value>"{0}" öğesi geri yükleniyor</value>
+    <value>{0} geri yükleniyor...</value>
   </data>
   <data name="RestoringLibraries" xml:space="preserve">
-    <value>Kitaplıkları geri yükleniyor...</value>
+    <value>Kitaplıklar geri yükleniyor...</value>
     <comment>Status message</comment>
   </data>
   <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} {1} saniye içinde geri kitaplıkları</value>
+    <value>{0} kitaplık {1} saniye içinde geri yüklendi</value>
     <comment>Status message</comment>
   </data>
   <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Unsuccessfull kitaplığı geri yüklemesi yapıldı</value>
+    <value>Kitaplık geri yüklemesi başarısız oldu</value>
     <comment>Status message</comment>
   </data>
 </root>

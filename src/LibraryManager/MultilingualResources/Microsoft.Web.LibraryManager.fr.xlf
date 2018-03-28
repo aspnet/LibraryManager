@@ -13,7 +13,7 @@
         </trans-unit>
         <trans-unit id="FileDeleteFail" translate="yes" xml:space="preserve">
           <source>Failed to delete {0}</source>
-          <target state="translated">Échec de la suppression de {0}</target>
+          <target state="translated">Échec de suppression de {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Shows in Output Window when a file failed to be deleted</note>
         </trans-unit>
         <trans-unit id="FileWrittenToDisk" translate="yes" xml:space="preserve">
@@ -23,11 +23,11 @@
         </trans-unit>
         <trans-unit id="RestoreCancelled" translate="yes" xml:space="preserve">
           <source>Library restore has been cancelled</source>
-          <target state="translated">Restauration de la bibliothèque a été annulée</target>
+          <target state="translated">La restauration de la bibliothèque a été annulée</target>
         </trans-unit>
         <trans-unit id="RestoringLibrary" translate="yes" xml:space="preserve">
           <source>Restoring {0}...</source>
-          <target state="translated">Restauration : {0}</target>
+          <target state="translated">Restauration de {0}...</target>
         </trans-unit>
         <trans-unit id="RestoringLibraries" translate="yes" xml:space="preserve">
           <source>Restoring libraries...</source>
@@ -36,13 +36,17 @@
         </trans-unit>
         <trans-unit id="LibrariesRestored" translate="yes" xml:space="preserve">
           <source>{0} libraries restored in {1} seconds</source>
-          <target state="translated">bibliothèques de {0} restaurés dans {1} secondes</target>
+          <target state="translated">{0} bibliothèques restaurées en {1} secondes</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Status message</note>
         </trans-unit>
         <trans-unit id="RestoreHasErrors" translate="yes" xml:space="preserve">
           <source>Library restore was unsuccessfull</source>
-          <target state="translated">Restauration de la bibliothèque a été manquée</target>
+          <target state="translated">Échec de la restauration de la bibliothèque</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Status message</note>
+        </trans-unit>
+        <trans-unit id="LibraryInfoUpdateFailed" translate="yes" xml:space="preserve">
+          <source>Failed to update library information for {0}</source>
+          <target state="new">Failed to update library information for {0}</target>
         </trans-unit>
       </group>
     </body>

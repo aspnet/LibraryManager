@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileDeleted" xml:space="preserve">
-    <value>{0} eliminato/a</value>
+    <value>{0} eliminato</value>
     <comment>Shows in Output Window when a library file is deleted</comment>
   </data>
   <data name="FileDeleteFail" xml:space="preserve">
@@ -21,25 +21,25 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} scritti su disco</value>
+    <value>{0} scritto su disco</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
   <data name="RestoreCancelled" xml:space="preserve">
-    <value>Ripristino della biblioteca è stato annullato</value>
+    <value>Il ripristino della libreria è stato annullato</value>
   </data>
   <data name="RestoringLibrary" xml:space="preserve">
-    <value>Ripristino: {0}</value>
+    <value>Ripristino di {0}...</value>
   </data>
   <data name="RestoringLibraries" xml:space="preserve">
-    <value>Ripristino di librerie...</value>
+    <value>Ripristino delle librerie...</value>
     <comment>Status message</comment>
   </data>
   <data name="LibrariesRestored" xml:space="preserve">
-    <value>biblioteche di {0} restaurati in {1} secondi</value>
+    <value>{0} librerie ripristinate in {1} secondi</value>
     <comment>Status message</comment>
   </data>
   <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Ripristino della libreria è stata mancata</value>
+    <value>Il ripristino della libreria non è riuscito</value>
     <comment>Status message</comment>
   </data>
 </root>

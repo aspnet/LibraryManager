@@ -13,15 +13,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CleanLibrariesStarted" xml:space="preserve">
-    <value>Bibliotecas limpiamos comenzaron...</value>
+    <value>Comenzó la limpieza de las bibliotecas...</value>
     <comment>When the "Clean" command is being executed</comment>
   </data>
   <data name="CleanLibrariesSucceeded" xml:space="preserve">
-    <value>Limpiamos bibliotecas tuvo éxito</value>
+    <value>La limpieza de las bibliotecas se completó correctamente</value>
     <comment>Status message</comment>
   </data>
   <data name="LibraryRestoredNoChange" xml:space="preserve">
-    <value>Restauración completado. Archivos ya actualizados</value>
+    <value>Restauración completada. Archivos ya actualizados</value>
     <comment>Status message</comment>
   </data>
   <data name="Loading" xml:space="preserve">
@@ -29,7 +29,7 @@
     <comment>Used in JSON editor for Intellisense</comment>
   </data>
   <data name="PackagesCouldNotBeLoaded" xml:space="preserve">
-    <value>No se pudieran cargar paquetes</value>
+    <value>No se pudieron cargar paquetes</value>
     <comment>Used in installer dialog</comment>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
@@ -37,7 +37,7 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NoUpdatesFound" xml:space="preserve">
-    <value>No hay actualizaciones encontradas este tiempo</value>
+    <value>No se encontraron actualizaciones en este momento</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="UninstallLibrary" xml:space="preserve">
@@ -52,9 +52,9 @@ Esto puede requerir una conexión a internet.
 ¿Desea continuar?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;Escribir para buscar&gt;</value>
+    <value>&lt;Escriba para buscar&gt;</value>
   </data>
   <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Elija un paquete para seleccionar los archivos que desea instalar&gt;</value>
+    <value>&lt;Elija un paquete para seleccionar los archivos para instalar&gt;</value>
   </data>
 </root>

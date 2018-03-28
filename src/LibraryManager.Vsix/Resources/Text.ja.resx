@@ -13,15 +13,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CleanLibrariesStarted" xml:space="preserve">
-    <value>きれいな図書館が始まった.</value>
+    <value>ライブラリのクリーニングを開始しました...</value>
     <comment>When the "Clean" command is being executed</comment>
   </data>
   <data name="CleanLibrariesSucceeded" xml:space="preserve">
-    <value>成功したきれいなライブラリ</value>
+    <value>ライブラリのクリーニングに成功しました</value>
     <comment>Status message</comment>
   </data>
   <data name="LibraryRestoredNoChange" xml:space="preserve">
-    <value>復元が完了しました。既に最新の状態のファイル</value>
+    <value>復元が完了しました。ファイルはすでに最新です。</value>
     <comment>Status message</comment>
   </data>
   <data name="Loading" xml:space="preserve">
@@ -29,7 +29,7 @@
     <comment>Used in JSON editor for Intellisense</comment>
   </data>
   <data name="PackagesCouldNotBeLoaded" xml:space="preserve">
-    <value>パッケージを読み込むことができませんでした。</value>
+    <value>パッケージを読み込むことができませんでした</value>
     <comment>Used in installer dialog</comment>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
@@ -37,24 +37,20 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NoUpdatesFound" xml:space="preserve">
-    <value>この時点で検出されたない更新</value>
+    <value>更新プログラムが見つかりませんでした</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="UninstallLibrary" xml:space="preserve">
-    <value>{0} をアンインストールしてください</value>
+    <value>{0} をアンインストールします</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>NuGet パッケージを MSBuild プロセスを強化するためにインストールされますが、ファイルはプロジェクトに追加されません。
-
-これはインターネット接続を必要があります。
-
-続行しますか。</value>
+    <value>MSBuild プロセスを向上させるために NuGet パッケージがインストールされますが、ファイルがプロジェクトに追加されることはありません。これにはインターネット接続が必要です。続行しますか?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;検索する種類&gt;</value>
+    <value>&lt;入力して検索&gt;</value>
   </data>
   <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;インストールするファイルを選択するパッケージを選択する&gt;</value>
+    <value>&lt;インストールするファイルを選択するためのパッケージを選択します&gt;</value>
   </data>
 </root>

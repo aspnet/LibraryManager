@@ -8,35 +8,37 @@
       <group id="MICROSOFT.WEB.LIBRARYMANAGER.CONTRACTS/RESOURCES/TEXT.RESX" datatype="resx">
         <trans-unit id="ErrorCouldNotWriteFile" translate="yes" xml:space="preserve">
           <source>{0} could not be written to disk. Make sure the file name is correct</source>
-          <target state="translated">{0} konnte nicht geschrieben werden auf der Festplatte. Stellen Sie sicher, dass der Dateiname korrekt ist</target>
+          <target state="translated">"{0}" konnte nicht auf die Festplatte geschrieben werden. Stellen Sie sicher, dass der Dateiname korrekt ist.</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryIdIsUndefined" translate="yes" xml:space="preserve">
           <source>The library id is undefined</source>
-          <target state="translated">Der Bibliotheksausweis ist nicht definiert</target>
+          <target state="translated">Die Bibliotheks-ID ist nicht definiert.</target>
         </trans-unit>
         <trans-unit id="ErrorManifestMalformed" translate="yes" xml:space="preserve">
           <source>The manifest file contains syntax errors</source>
-          <target state="translated">Die Manifestdatei enthält Syntaxfehler</target>
+          <target state="translated">Die Manifestdatei enthält Syntaxfehler.</target>
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
-          <source>The "path" is undefined.</source>
-          <target state="translated">Der "Weg" ist nicht definiert.</target>
+          <source>The "destination" is undefined.</source>
+          <target state="needs-review-translation">Der "Weg" ist nicht definiert.</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
-          <source>The "path" must be inside the working directory</source>
-          <target state="translated">Der "Pfad" muss in das Arbeitsverzeichnis</target>
+          <source>The "destination" must be inside the working directory</source>
+          <target state="needs-review-translation">Der "Pfad" muss in das Arbeitsverzeichnis</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
           <source>The provider is undefined</source>
-          <target state="translated">Der Anbieter ist nicht definiert</target>
+          <target state="translated">Der Anbieter ist nicht definiert.</target>
         </trans-unit>
         <trans-unit id="ErrorProviderUnknown" translate="yes" xml:space="preserve">
           <source>The "{0}" provider could not be found</source>
-          <target state="translated">Der Anbieter "{0}" konnte nicht gefunden werden</target>
+          <target state="translated">Der Anbieter "{0}" wurde nicht gefunden.</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToResolveSource" translate="yes" xml:space="preserve">
           <source>The "{0}" library could not be resolved by the "{1}" provider</source>
-          <target state="translated">Die Bibliothek "{0}" konnte nicht aufgelöst werden durch den Anbieter "{1}"</target>
+          <target state="translated">Die Bibliothek "{0}" konnte durch den Anbieter "{1}" nicht aufgelöst werden.</target>
         </trans-unit>
         <trans-unit id="ErrorUnknownException" translate="yes" xml:space="preserve">
           <source>An unknown exception occurred</source>

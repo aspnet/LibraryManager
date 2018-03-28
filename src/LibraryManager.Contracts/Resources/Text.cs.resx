@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
-    <value>{0} nelze zapsat na disk. Zkontrolujte, zda je správný název souboru</value>
+    <value>{0} nejde zapsat na disk. Zkontrolujte, jestli je název souboru správný.</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
-    <value>Id knihovny není definován</value>
+    <value>ID knihovny není definováno.</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Soubor manifestu obsahuje chyby syntaxe</value>
+    <value>Soubor manifestu obsahuje chyby syntaxe.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>"Cesta" není definováno.</value>
@@ -28,13 +28,13 @@
     <value>"Cesta" musí být uvnitř pracovní adresář</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
-    <value>Zprostředkovatel není definován</value>
+    <value>Poskytovatel není definován.</value>
   </data>
   <data name="ErrorProviderUnknown" xml:space="preserve">
-    <value>Nebyl nalezen zprostředkovatel "{0}"</value>
+    <value>Nebyl nalezen poskytovatel {0}.</value>
   </data>
   <data name="ErrorUnableToResolveSource" xml:space="preserve">
-    <value>Knihovna "{0}" nelze přeložit poskytovatelem "{1}"</value>
+    <value>Knihovnu {0} nebylo možné přeložit na základě poskytovatele {1}.</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>Došlo k neznámé výjimce.</value>

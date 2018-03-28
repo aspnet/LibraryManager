@@ -13,33 +13,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileDeleted" xml:space="preserve">
-    <value>{0} が削除されました</value>
+    <value>{0} は削除されました</value>
     <comment>Shows in Output Window when a library file is deleted</comment>
   </data>
   <data name="FileDeleteFail" xml:space="preserve">
-    <value>{0} を削除できませんでした</value>
+    <value>{0} を削除できませんでした。</value>
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} の書かれたディスクに</value>
+    <value>{0} はディスクに書き込まれました</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
   <data name="RestoreCancelled" xml:space="preserve">
     <value>ライブラリの復元は取り消されました</value>
   </data>
   <data name="RestoringLibrary" xml:space="preserve">
-    <value>復元しています: {0}</value>
+    <value>{0} を復元しています...</value>
   </data>
   <data name="RestoringLibraries" xml:space="preserve">
-    <value>ライブラリを復元しています.</value>
+    <value>ライブラリを復元しています...</value>
     <comment>Status message</comment>
   </data>
   <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} ライブラリ {1} 秒で復元</value>
+    <value>{0} ライブラリが {1} 秒で復元されました</value>
     <comment>Status message</comment>
   </data>
   <data name="RestoreHasErrors" xml:space="preserve">
-    <value>ライブラリの復元が成功しなかった</value>
+    <value>ライブラリを復元できませんでした</value>
     <comment>Status message</comment>
   </data>
 </root>

@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileDeleted" xml:space="preserve">
-    <value>已刪除 {0}</value>
+    <value>{0} 已刪除</value>
     <comment>Shows in Output Window when a library file is deleted</comment>
   </data>
   <data name="FileDeleteFail" xml:space="preserve">
@@ -21,25 +21,25 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} 寫入磁片</value>
+    <value>{0} 已寫入磁碟</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
   <data name="RestoreCancelled" xml:space="preserve">
-    <value>庫還原已被取消</value>
+    <value>程式庫還原已取消</value>
   </data>
   <data name="RestoringLibrary" xml:space="preserve">
-    <value>正在還原: {0}</value>
+    <value>正在還原 {0}...</value>
   </data>
   <data name="RestoringLibraries" xml:space="preserve">
-    <value>正在還原庫..。</value>
+    <value>正在還原程式庫...</value>
     <comment>Status message</comment>
   </data>
   <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} 庫在 {1} 秒內還原</value>
+    <value>{0} 個程式庫已在 {1} 秒內還原</value>
     <comment>Status message</comment>
   </data>
   <data name="RestoreHasErrors" xml:space="preserve">
-    <value>庫還原被 unsuccessfull</value>
+    <value>未成功還原程式庫</value>
     <comment>Status message</comment>
   </data>
 </root>
