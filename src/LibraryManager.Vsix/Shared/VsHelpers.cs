@@ -96,21 +96,23 @@ namespace Microsoft.Web.LibraryManager.Vsix
             var solutionService = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
 
             IVsHierarchy hierarchy = null;
-            solutionService?.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
+            if (solutionService != null && !ErrorHandler.Failed(solutionService.GetProjectOfUniqueName(project.UniqueName, out hierarchy)))
+            {
+                if (hierarchy == null)
+                    return;
 
-            if (hierarchy == null)
-                return;
+                var ip = (IVsProject)hierarchy;
+                VSADDRESULT[] result = new VSADDRESULT[files.Count()];
 
-            var ip = (IVsProject)hierarchy;
-            VSADDRESULT[] result = new VSADDRESULT[files.Count()];
+                ip.AddItem(VSConstants.VSITEMID_ROOT,
+                           VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE,
+                           string.Empty,
+                           (uint)files.Count(),
+                           files.ToArray(),
+                           IntPtr.Zero,
+                           result);
+            }
 
-            ip.AddItem(VSConstants.VSITEMID_ROOT,
-                       VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE,
-                       string.Empty,
-                       (uint)files.Count(),
-                       files.ToArray(),
-                       IntPtr.Zero,
-                       result);
         }
 
         public static string GetRootFolder(this Project project)
@@ -218,7 +220,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             IVsHierarchy[] hierarchy = new IVsHierarchy[1];
-            while (enumHierarchies.Next(1, hierarchy, out uint fetched) == VSConstants.S_OK && fetched == 1)
+            while (ErrorHandler.Succeeded(enumHierarchies.Next(1, hierarchy, out uint fetched)) && fetched == 1)
             {
                 if (hierarchy.Length > 0 && hierarchy[0] != null)
                     yield return hierarchy[0];
