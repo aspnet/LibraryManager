@@ -58,6 +58,11 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// </returns>
         public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return LibraryInstallationResult.FromCancelled(desiredState);
+            }
+
             if (!desiredState.IsValid(out IEnumerable<IError> errors))
             {
                 return new LibraryInstallationResult(desiredState, errors.ToArray());
@@ -65,6 +70,15 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
             try
             {
+                ILibraryInstallationResult result = await UpdateStateAsync(desiredState, cancellationToken);
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+
+                desiredState = result.InstallationState;
+
                 foreach (string file in desiredState.Files)
                 {
                     if (cancellationToken.IsCancellationRequested)
@@ -82,6 +96,55 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                     }
                 }
             }
+            catch (UnauthorizedAccessException)
+            {
+                return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
+            }
+            catch (Exception ex)
+            {
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                return new LibraryInstallationResult(desiredState, PredefinedErrors.UnknownException());
+            }
+
+            return LibraryInstallationResult.FromSuccess(desiredState);
+        }
+
+        /// <summary>
+        /// Updates file set on the passed in ILibraryInstallationState in case user selected to have all files included
+        /// </summary>
+        /// <param name="desiredState"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return LibraryInstallationResult.FromCancelled(desiredState);
+            }
+
+            try
+            {
+                ILibraryCatalog catalog = GetCatalog();
+                ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
+
+                if (library == null)
+                {
+                    throw new InvalidLibraryException(desiredState.LibraryId, Id);
+                }
+
+                if (desiredState.Files != null && desiredState.Files.Count > 0)
+                {
+                    return LibraryInstallationResult.FromSuccess(desiredState);
+                }
+
+                desiredState = new LibraryInstallationState
+                {
+                    ProviderId = Id,
+                    LibraryId = desiredState.LibraryId,
+                    DestinationPath = desiredState.DestinationPath,
+                    Files = library.Files.Keys.ToList(),
+                };
+            }
             catch (Exception ex) when (ex is InvalidLibraryException || ex.InnerException is InvalidLibraryException)
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
@@ -97,17 +160,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             }
 
             return LibraryInstallationResult.FromSuccess(desiredState);
-        }
-
-        /// <summary>
-        /// No-op for FileSystemProvider
-        /// </summary>
-        /// <param name="desiredState"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
-        {
-            return Task.FromResult<ILibraryInstallationResult>(LibraryInstallationResult.FromSuccess(desiredState));
         }
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string file, CancellationToken cancellationToken)
