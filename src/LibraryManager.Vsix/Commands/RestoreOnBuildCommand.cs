@@ -55,7 +55,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
 
-            if (item.IsConfigFile() && item.ContainingProject.IsKind(ProjectTypes.DOTNET_Core, ProjectTypes.WAP))
+            if (item.IsConfigFile() && (item.ContainingProject.IsKind(Constants.WAP) || 
+                VsHelpers.IsCapabilityMatch(item.ContainingProject, Constants.DotNetCoreWebCapability)))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
