@@ -42,7 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" />
+      <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" PrivateAssets="all" />
     </ItemGroup>
 
     <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
