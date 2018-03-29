@@ -97,6 +97,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable Restore on Build.
+        /// </summary>
+        public static string DisableRestoreOnBuild {
+            get {
+                return ResourceManager.GetString("DisableRestoreOnBuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Restore on Build.
+        /// </summary>
+        public static string EnableRestoreOnBuild {
+            get {
+                return ResourceManager.GetString("EnableRestoreOnBuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
         /// </summary>
         public static string LibraryRestoredNoChange {
@@ -120,6 +138,60 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         public static string NoUpdatesFound {
             get {
                 return ResourceManager.GetString("NoUpdatesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installing NuGet package containing MSBuild target....
+        /// </summary>
+        public static string Nuget_InstallingPackage {
+            get {
+                return ResourceManager.GetString("Nuget_InstallingPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NuGet package failed to install.
+        /// </summary>
+        public static string Nuget_PackageFailedToInstall {
+            get {
+                return ResourceManager.GetString("Nuget_PackageFailedToInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NuGet package failed to uninstall.
+        /// </summary>
+        public static string Nuget_PackageFailedToUninstall {
+            get {
+                return ResourceManager.GetString("Nuget_PackageFailedToUninstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NuGet package installed.
+        /// </summary>
+        public static string Nuget_PackageInstalled {
+            get {
+                return ResourceManager.GetString("Nuget_PackageInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NuGet package uninstalled.
+        /// </summary>
+        public static string Nuget_PackageUninstalled {
+            get {
+                return ResourceManager.GetString("Nuget_PackageUninstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstalling NuGet package....
+        /// </summary>
+        public static string Nuget_UninstallingPackage {
+            get {
+                return ResourceManager.GetString("Nuget_UninstallingPackage", resourceCulture);
             }
         }
         

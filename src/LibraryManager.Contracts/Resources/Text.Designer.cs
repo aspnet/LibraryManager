@@ -89,6 +89,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Version &quot;{0}&quot; is not supported by this version of Library Manager.
+        /// </summary>
+        internal static string ErrorNotSupportedVersion {
+            get {
+                return ResourceManager.GetString("ErrorNotSupportedVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &quot;destination&quot; is undefined..
         /// </summary>
         internal static string ErrorPathIsUndefined {
@@ -121,6 +130,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static string ErrorProviderUnknown {
             get {
                 return ResourceManager.GetString("ErrorProviderUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; file path could not be resolved by the &quot;{1}&quot; provider.
+        /// </summary>
+        internal static string ErrorUnableToResolveFilePath {
+            get {
+                return ResourceManager.GetString("ErrorUnableToResolveFilePath", resourceCulture);
             }
         }
         

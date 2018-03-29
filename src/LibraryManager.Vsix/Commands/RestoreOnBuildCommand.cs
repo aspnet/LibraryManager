@@ -64,11 +64,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (_isPackageInstalled)
                 {
-                    button.Text = "Disable Restore on Build";
+                    button.Text = Resources.Text.DisableRestoreOnBuild;
                 }
                 else
                 {
-                    button.Text = "Enable Restore on Build...";
+                    button.Text = Resources.Text.EnableRestoreOnBuild;
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     System.Threading.Tasks.Task.Run(() =>
                     {
-                        Logger.LogEvent("Installing NuGet package containing MSBuild target...", LogLevel.Status);
+                        Logger.LogEvent(Resources.Text.Nuget_InstallingPackage, LogLevel.Status);
 
                         try
                         {
@@ -100,12 +100,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                             }
 
                             Telemetry.TrackUserTask("InstallNugetPackage");
-                            Logger.LogEvent("NuGet package installed", LogLevel.Status);
+                            Logger.LogEvent(Resources.Text.Nuget_PackageInstalled, LogLevel.Status);
                         }
                         catch (Exception ex)
                         {
                             Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
-                            Logger.LogEvent("NuGet package failed to install", LogLevel.Status);
+                            Logger.LogEvent(Resources.Text.Nuget_PackageFailedToInstall, LogLevel.Status);
                         }
                     });
                 }
@@ -113,7 +113,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 {
                     System.Threading.Tasks.Task.Run(() =>
                     {
-                        Logger.LogEvent("Uninstalling NuGet package...", LogLevel.Status);
+                        Logger.LogEvent(Resources.Text.Nuget_UninstallingPackage, LogLevel.Status);
 
                         try
                         {
@@ -124,12 +124,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                             }
 
                             Telemetry.TrackUserTask("UninstallNugetPackage");
-                            Logger.LogEvent("NuGet package uninstalled", LogLevel.Status);
+                            Logger.LogEvent(Resources.Text.Nuget_PackageUninstalled, LogLevel.Status);
                         }            
                         catch (Exception ex)
                         {
                             Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
-                            Logger.LogEvent("NuGet package failed to uninstall", LogLevel.Status);
+                            Logger.LogEvent(Resources.Text.Nuget_PackageFailedToUninstall, LogLevel.Status);
                         }
                     });
                 }
@@ -137,7 +137,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             catch (Exception ex)
             {
                 Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
-                Logger.LogEvent("Error installing NuGet package", LogLevel.Status);
+                Logger.LogEvent(Resources.Text.Nuget_PackageFailedToInstall, LogLevel.Status);
             }
         }
 
