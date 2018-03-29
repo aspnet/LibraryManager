@@ -62,8 +62,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 Project project = VsHelpers.DTE.Solution?.FindProjectItem(manifest.Key)?.ContainingProject;
                 AddFilesToProject(manifest.Key, project, results);
 
-                var errorList = new ErrorList(project?.Name, manifest.Key);
-                hasErrors |= errorList.HandleErrors(results);
+                hasErrors = Logger.LogToErrorList(results, project?.Name, manifest.Key);
 
                 resultCount += results.Count();
 

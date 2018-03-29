@@ -1,9 +1,10 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -17,6 +18,18 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public void Log(string message, LogLevel level)
         {
             LogEvent(message, level);
+        }
+
+        public static void LogToErrorList(IError error, string projectName, string configPath)
+        {
+            var _errorList = new ErrorList(projectName, configPath);
+            _errorList.HandleError(error);
+        }
+
+        public static bool LogToErrorList(IEnumerable<ILibraryInstallationResult> results, string projectName, string configPath)
+        {
+            var errorList = new ErrorList(projectName, configPath);
+            return errorList.HandleErrors(results);
         }
 
         public static void LogEvent(string message, LogLevel level)

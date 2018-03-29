@@ -268,16 +268,23 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return null;
         }
 
-        public static bool IsCapabilityMatch(Project project, string capability)
+        public static Project GetDTEProjectFromConfig(string file)
         {
-            IVsHierarchy hierarchy = GetHierarchy(project);
-
-            if (hierarchy != null)
+            try
             {
-                return hierarchy.IsCapabilityMatch(capability);
+                ProjectItem projectItem = DTE.Solution.FindProjectItem(file);
+                if (projectItem != null)
+                {
+                    return projectItem.ContainingProject;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Write(ex);
+                // TODO: Implement logging
             }
 
-            return false;
+            return null;
         }
 
         public static IVsHierarchy GetHierarchy(Project project)

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using EnvDTE;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -25,6 +26,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
     {
         private Manifest _manifest;
         private Dependencies _dependencies;
+        private Project _project;
 
         [Import]
         public ITextDocumentFactoryService DocumentService { get; set; }
@@ -54,6 +56,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             _dependencies = Dependencies.FromConfigFile(doc.FilePath);
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
+            _project = VsHelpers.GetDTEProjectFromConfig(doc.FilePath);
+
+            if (_manifest == null)
+            {
+                Logger.LogToErrorList(PredefinedErrors.ManifestMalformed(), _project?.Name, doc.FilePath);
+            }
 
             doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
@@ -139,6 +147,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
                             await LibraryHelpers.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                             Telemetry.TrackOperation("restoresave");
+                        }
+                        else
+                        {
+                            Logger.LogToErrorList(PredefinedErrors.ManifestMalformed(), _project?.Name, textDocument.FilePath);
                         }
                     }
                     catch (Exception ex)
