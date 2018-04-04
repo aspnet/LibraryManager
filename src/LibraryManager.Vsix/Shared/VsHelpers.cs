@@ -268,6 +268,30 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return null;
         }
 
+        public static bool IsCapabilityMatch(Project project, string capability)
+        {
+            IVsHierarchy hierarchy = GetHierarchy(project);
+
+            if (hierarchy != null)
+            {
+                return hierarchy.IsCapabilityMatch(capability);
+            }
+
+            return false;
+        }
+
+        public static IVsHierarchy GetHierarchy(Project project)
+        {
+            IVsSolution solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
+
+            if (ErrorHandler.Succeeded(solution.GetProjectOfUniqueName(project.FullName, out IVsHierarchy hierarchy)))
+            {
+                return hierarchy;
+            }
+
+            return null;
+        }
+
         public static Project GetDTEProjectFromConfig(string file)
         {
             try
@@ -282,18 +306,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 System.Diagnostics.Debug.Write(ex);
                 // TODO: Implement logging
-            }
-
-            return null;
-        }
-
-        public static IVsHierarchy GetHierarchy(Project project)
-        {
-            IVsSolution solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
-
-            if (ErrorHandler.Succeeded(solution.GetProjectOfUniqueName(project.FullName, out IVsHierarchy hierarchy)))
-            {
-                return hierarchy;
             }
 
             return null;
