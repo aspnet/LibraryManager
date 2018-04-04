@@ -96,6 +96,7 @@
     <Compile Include="Contracts\HostInteraction.cs" />
     <Compile Include="Contracts\LibraryInstallationState.cs" />
     <Compile Include="Contracts\Logger.cs" />
+    <Compile Include="Contracts\PerProjectLogger.cs" />
     <Compile Include="ErrorList\DisplayError.cs" />
     <Compile Include="ErrorList\ErrorList.cs" />
     <Compile Include="ErrorList\SinkManager.cs" />

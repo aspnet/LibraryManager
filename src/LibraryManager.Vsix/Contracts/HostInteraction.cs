@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -16,11 +17,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             string cwd = Path.GetDirectoryName(configFilePath);
             WorkingDirectory = cwd;
+            Logger = new PerProjectLogger(VsHelpers.GetProjectName(configFilePath));
         }
 
         public string WorkingDirectory { get; }
         public string CacheDirectory => Constants.CacheFolder;
-        public ILogger Logger { get; } = new Logger();
+        public ILogger Logger { get; } 
 
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
