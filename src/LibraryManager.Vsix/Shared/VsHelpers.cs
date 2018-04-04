@@ -291,5 +291,24 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             return null;
         }
+
+        public static Project GetDTEProjectFromConfig(string file)
+        {
+            try
+            {
+                ProjectItem projectItem = DTE.Solution.FindProjectItem(file);
+                if (projectItem != null)
+                {
+                    return projectItem.ContainingProject;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Write(ex);
+                // TODO: Implement logging
+            }
+
+            return null;
+        }
     }
 }
