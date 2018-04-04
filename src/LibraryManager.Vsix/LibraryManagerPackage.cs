@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         },
         termValues: new string[] {
             "ActiveProjectFlavor:" + Constants.WAP,
-            "ActiveProjectFlavor:" + Constants.WEBSITE_PROJECT,
+            "ActiveProjectFlavor:" + Constants.WebsiteProject,
             "ActiveProjectCapability:" + Constants.DotNetCoreWebCapability,
             "HierSingleSelectionName:" + Constants.ConfigFileName + "$" })]
     [ProvideUIContextRule(PackageGuids.guidUiContextString, 
@@ -39,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         },
         termValues: new string[] {
             "ActiveProjectFlavor:" + Constants.WAP,
-            "ActiveProjectFlavor:" + Constants.WEBSITE_PROJECT,
+            "ActiveProjectFlavor:" + Constants.WebsiteProject,
             "ActiveProjectCapability:" + Constants.DotNetCoreWebCapability })]
 
     public sealed class LibraryManagerPackage : AsyncPackage

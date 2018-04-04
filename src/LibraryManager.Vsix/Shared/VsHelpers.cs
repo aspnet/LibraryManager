@@ -63,7 +63,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 {
                     ProjectItem item = project.ProjectItems.AddFromFile(file);
 
-                    if (string.IsNullOrEmpty(itemType) || project.IsKind(Constants.WEBSITE_PROJECT))
+                    if (string.IsNullOrEmpty(itemType) || project.IsKind(Constants.WebsiteProject))
                     {
                         return;
                     }
@@ -83,7 +83,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
                 return;
 
-            if (project.IsKind(Constants.WEBSITE_PROJECT))
+            if (project.IsKind(Constants.WebsiteProject))
             {
                 Command command = DTE.Commands.Item("SolutionExplorer.Refresh");
 
