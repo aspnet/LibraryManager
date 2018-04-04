@@ -25,9 +25,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             "Config"
         },
         termValues: new string[] {
-            "ActiveProjectFlavor:{349C5851-65DF-11DA-9384-00065B846F21}",
-            "ActiveProjectFlavor:{E24C65DC-7377-472B-9ABA-BC803B73C61A}",
-            "ActiveProjectCapability:DotNetCoreWeb",
+            "ActiveProjectFlavor:" + Constants.WAP,
+            "ActiveProjectFlavor:" + Constants.WebsiteProject,
+            "ActiveProjectCapability:" + Constants.DotNetCoreWebCapability,
             "HierSingleSelectionName:" + Constants.ConfigFileName + "$" })]
     [ProvideUIContextRule(PackageGuids.guidUiContextString, 
         name: Vsix.Name,
@@ -38,9 +38,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             "DotNetCoreWeb"
         },
         termValues: new string[] {
-            "ActiveProjectFlavor:{349C5851-65DF-11DA-9384-00065B846F21}",
-            "ActiveProjectFlavor:{E24C65DC-7377-472B-9ABA-BC803B73C61A}",
-            "ActiveProjectCapability:DotNetCoreWeb" })]
+            "ActiveProjectFlavor:" + Constants.WAP,
+            "ActiveProjectFlavor:" + Constants.WebsiteProject,
+            "ActiveProjectCapability:" + Constants.DotNetCoreWebCapability })]
 
     public sealed class LibraryManagerPackage : AsyncPackage
     {
