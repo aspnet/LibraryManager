@@ -30,6 +30,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static string GetFileInVsix(string relativePath)
         {
             string folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             return Path.Combine(folder, relativePath);
         }
 
@@ -41,10 +42,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void CheckFileOutOfSourceControl(string file)
         {
             if (!File.Exists(file) || DTE.Solution.FindProjectItem(file) == null)
+            {
                 return;
+            }
 
             if (DTE.SourceControl.IsItemUnderSCC(file) && !DTE.SourceControl.IsItemCheckedOut(file))
+            {
                 DTE.SourceControl.CheckOutItem(file);
+            }
 
             var info = new FileInfo(file)
             {
@@ -55,7 +60,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void AddFileToProject(this Project project, string file, string itemType = null)
         {
             if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
+            {
                 return;
+            }
 
             try
             {
@@ -81,14 +88,18 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void AddFilesToProject(this Project project, IEnumerable<string> files)
         {
             if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
+            {
                 return;
+            }
 
             if (project.IsKind(Constants.WebsiteProject))
             {
                 Command command = DTE.Commands.Item("SolutionExplorer.Refresh");
 
                 if (command.IsAvailable)
+                {
                     DTE.ExecuteCommand(command.Name);
+                }
 
                 return;
             }
@@ -96,33 +107,43 @@ namespace Microsoft.Web.LibraryManager.Vsix
             var solutionService = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
 
             IVsHierarchy hierarchy = null;
-            solutionService?.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
+            if (solutionService != null && !ErrorHandler.Failed(solutionService.GetProjectOfUniqueName(project.UniqueName, out hierarchy)))
+            {
+                if (hierarchy == null)
+                {
+                    return;
+                }
 
-            if (hierarchy == null)
-                return;
+                var vsProject = (IVsProject)hierarchy;
+                VSADDRESULT[] result = new VSADDRESULT[files.Count()];
 
-            var ip = (IVsProject)hierarchy;
-            VSADDRESULT[] result = new VSADDRESULT[files.Count()];
+                vsProject.AddItem(VSConstants.VSITEMID_ROOT,
+                           VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE,
+                           string.Empty,
+                           (uint)files.Count(),
+                           files.ToArray(),
+                           IntPtr.Zero,
+                           result);
+            }
 
-            ip.AddItem(VSConstants.VSITEMID_ROOT,
-                       VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE,
-                       string.Empty,
-                       (uint)files.Count(),
-                       files.ToArray(),
-                       IntPtr.Zero,
-                       result);
         }
 
         public static string GetRootFolder(this Project project)
         {
             if (project == null)
+            {
                 return null;
+            }
 
             if (project.IsKind(ProjectKinds.vsProjectKindSolutionFolder))
+            {
                 return Path.GetDirectoryName(DTE.Solution.FullName);
+            }
 
             if (string.IsNullOrEmpty(project.FullName))
+            {
                 return null;
+            }
 
             string fullPath;
 
@@ -145,13 +166,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             if (string.IsNullOrEmpty(fullPath))
+            {
                 return File.Exists(project.FullName) ? Path.GetDirectoryName(project.FullName) : null;
+            }
 
             if (Directory.Exists(fullPath))
+            {
                 return fullPath;
+            }
 
             if (File.Exists(fullPath))
+            {
                 return Path.GetDirectoryName(fullPath);
+            }
 
             return null;
         }
@@ -161,7 +188,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             foreach (string guid in kindGuids)
             {
                 if (project.Kind.Equals(guid, StringComparison.OrdinalIgnoreCase))
+                {
                     return true;
+                }
             }
 
             return false;
@@ -209,7 +238,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static IEnumerable<IVsHierarchy> GetProjectsInSolution(IVsSolution solution, __VSENUMPROJFLAGS flags)
         {
             if (solution == null)
+            {
                 yield break;
+            }
 
             Guid guid = Guid.Empty;
             if (ErrorHandler.Failed(solution.GetProjectEnum((uint)flags, ref guid, out IEnumHierarchies enumHierarchies)) || enumHierarchies == null)
@@ -218,10 +249,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             IVsHierarchy[] hierarchy = new IVsHierarchy[1];
-            while (enumHierarchies.Next(1, hierarchy, out uint fetched) == VSConstants.S_OK && fetched == 1)
+            while (ErrorHandler.Succeeded(enumHierarchies.Next(1, hierarchy, out uint fetched)) && fetched == 1)
             {
                 if (hierarchy.Length > 0 && hierarchy[0] != null)
+                {
                     yield return hierarchy[0];
+                }
             }
         }
 
