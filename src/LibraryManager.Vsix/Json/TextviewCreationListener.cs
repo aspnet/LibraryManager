@@ -130,12 +130,16 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                     try
                     {
                         Manifest newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
-                        await RemoveFilesAsync(newManifest).ConfigureAwait(false);
 
-                        _manifest = newManifest;
+                        if (newManifest != null)
+                        {
+                            await RemoveFilesAsync(newManifest).ConfigureAwait(false);
 
-                        await LibraryHelpers.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
-                        Telemetry.TrackOperation("restoresave");
+                            _manifest = newManifest;
+
+                            await LibraryHelpers.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                            Telemetry.TrackOperation("restoresave");
+                        }
                     }
                     catch (Exception ex)
                     {
