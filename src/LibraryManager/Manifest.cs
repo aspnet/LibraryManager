@@ -153,7 +153,7 @@ namespace Microsoft.Web.LibraryManager
 
             if (!IsValidManifestVersion(Version))
             {
-                results.Add(LibraryInstallationResult.FromError(new IError[]{ PredefinedErrors.VersionIsNotSupported(Version) }));
+                results.Add(LibraryInstallationResult.FromErrors(new IError[]{ PredefinedErrors.VersionIsNotSupported(Version) }));
 
                 return results;
             }

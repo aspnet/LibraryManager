@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>Internal use only</summary>
-        public LibraryInstallationResult(IError[] errors)
+        public LibraryInstallationResult(IEnumerable<IError> errors)
         {
             Errors = new List<IError>(errors);
         }
@@ -74,7 +74,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>Internal use only</summary>
-        public static LibraryInstallationResult FromError(IError[] errors)
+        public static LibraryInstallationResult FromErrors(IEnumerable<IError> errors)
         {
             return new LibraryInstallationResult(errors);
         }

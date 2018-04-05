@@ -165,9 +165,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             {
                 doc.FileActionOccurred -= OnFileSaved;
             }
-
-            // TO DO: Uncomment when bug 592112 is fixed 
-            //_errorList?.ClearErrors();
         }
     }
 }
