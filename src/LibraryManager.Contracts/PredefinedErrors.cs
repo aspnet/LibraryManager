@@ -84,5 +84,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns>The error code LIB008</returns>
         public static IError PathOutsideWorkingDirectory()
            => new Error("LIB008", string.Format(Text.ErrorPathOutsideWorkingDirectory));
+
+        /// <summary>
+        /// The "version" is not supported
+        /// </summary>
+        /// <returns>The error code LIB009</returns>
+        public static IError VersionIsNotSupported(string version)
+           => new Error("LIB009", string.Format(Text.ErrorNotSupportedVersion, version));
+
     }
 }

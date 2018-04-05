@@ -83,5 +83,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 TableDataSource.Instance.AddErrors(Errors, ProjectName, ConfigFileName);
             }
         }
+
+        public void ClearErrors()
+        {
+            TableDataSource.Instance.CleanErrors(ConfigFileName);
+        }
     }
 }

@@ -67,7 +67,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 resultCount += results.Count();
 
-                foreach (ILibraryInstallationResult result in results)
+                foreach (ILibraryInstallationResult result in results.Where(r => r.Success))
                 {
                     if (result.InstallationState.ProviderId != null)
                     {
