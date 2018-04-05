@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Build.Test
             bool succuess = _task.Execute();
 
             Assert.IsTrue(succuess);
-            Assert.AreEqual(0, _buildEngine.Warnings.Count);
+            Assert.AreEqual(1, _buildEngine.Warnings.Count);
             Assert.AreEqual(2, _buildEngine.Messages.Count);
             Assert.AreEqual(0, _task.FilesWritten.Length);
         }

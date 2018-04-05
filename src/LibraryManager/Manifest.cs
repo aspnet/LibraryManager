@@ -19,6 +19,7 @@ namespace Microsoft.Web.LibraryManager
     /// </summary>
     public class Manifest
     {
+        private static readonly string[] _supportedVersions = { "1.0" };
         private IHostInteraction _hostInteraction;
         private readonly List<ILibraryInstallationState> _libraries;
         private IDependencies _dependencies;
@@ -38,7 +39,7 @@ namespace Microsoft.Web.LibraryManager
         /// The version of the <see cref="Manifest"/> document format.
         /// </summary>
         [JsonProperty(ManifestConstants.Version)]
-        public string Version { get; } = "1.0";
+        public string Version { get; set; }
 
         /// <summary>
         /// The default <see cref="Manifest"/> library provider.
@@ -111,6 +112,11 @@ namespace Microsoft.Web.LibraryManager
             }
         }
 
+        private static bool IsValidManifestVersion(string version)
+        {
+            return _supportedVersions.Contains(version);
+        }
+
         /// <summary>
         /// Adds a library to the <see cref="Libraries"/> collection.
         /// </summary>
@@ -126,6 +132,15 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
+        /// Adds a version to the manifest
+        /// </summary>
+        /// <param name="version"></param>
+        public void AddVersion(string version)
+        {
+            Version = version;
+        }
+
+        /// <summary>
         /// Restores all libraries in the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="cancellationToken">A token that allows for cancellation of the operation.</param>
@@ -134,6 +149,13 @@ namespace Microsoft.Web.LibraryManager
             //TODO: This should have an "undo scope"
             var results = new List<ILibraryInstallationResult>();
             var tasks = new List<Task<ILibraryInstallationResult>>();
+
+            if (!IsValidManifestVersion(Version))
+            {
+                results.Add(LibraryInstallationResult.FromErrors(new IError[]{ PredefinedErrors.VersionIsNotSupported(Version) }));
+
+                return results;
+            }
 
             foreach (ILibraryInstallationState state in Libraries)
             {

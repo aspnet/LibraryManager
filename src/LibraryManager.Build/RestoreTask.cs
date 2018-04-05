@@ -83,7 +83,7 @@ namespace Microsoft.Web.LibraryManager.Build
 
         private void LogResults(Stopwatch sw, IEnumerable<ILibraryInstallationResult> results)
         {
-            int fileCount = results.Sum(r => r.InstallationState.Files.Count);
+            int fileCount = results.Where(r => r.Success).Sum(r => r.InstallationState.Files.Count);
             bool hasErrors = results.Any(r => !r.Success);
 
             foreach (IError error in results.SelectMany(r => r.Errors))
@@ -107,7 +107,7 @@ namespace Microsoft.Web.LibraryManager.Build
 
         private void PopulateFilesWritten(IEnumerable<ILibraryInstallationResult> results, IHostInteraction hostInteraction)
         {
-            IEnumerable<ILibraryInstallationState> states = results.Select(r => r.InstallationState);
+            IEnumerable<ILibraryInstallationState> states = results.Where(r => r.Success).Select(r => r.InstallationState);
             var list = new List<ITaskItem>();
 
             foreach (ILibraryInstallationState state in states)

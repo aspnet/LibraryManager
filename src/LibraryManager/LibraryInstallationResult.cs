@@ -1,9 +1,8 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -24,6 +23,12 @@ namespace Microsoft.Web.LibraryManager
             list.AddRange(error);
             Errors = list;
             InstallationState = installationState;
+        }
+
+        /// <summary>Internal use only</summary>
+        public LibraryInstallationResult(IEnumerable<IError> errors)
+        {
+            Errors = new List<IError>(errors);
         }
 
         /// <summary>
@@ -66,6 +71,12 @@ namespace Microsoft.Web.LibraryManager
             {
                 Cancelled = true
             };
+        }
+
+        /// <summary>Internal use only</summary>
+        public static LibraryInstallationResult FromErrors(IEnumerable<IError> errors)
+        {
+            return new LibraryInstallationResult(errors);
         }
     }
 }
