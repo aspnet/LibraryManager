@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         public ErrorList(string projectName, string configFileName)
         {
-            ProjectName = projectName;
+            ProjectName = projectName ?? "";
             ConfigFileName = configFileName;
             Errors = new List<DisplayError>();
         }

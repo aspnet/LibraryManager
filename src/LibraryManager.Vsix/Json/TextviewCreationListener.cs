@@ -182,7 +182,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         {
             if (_errorList == null)
             {
-                _errorList = new ErrorList(_project.Name, _manifestPath);
+                _errorList = new ErrorList(_project?.Name, _manifestPath);
             }
 
             _errorList.HandleError(error);
