@@ -86,6 +86,11 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                         return LibraryInstallationResult.FromCancelled(desiredState);
                     }
 
+                    if (string.IsNullOrEmpty(file))
+                    {
+                        return new LibraryInstallationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
+                    }
+
                     string path = Path.Combine(desiredState.DestinationPath, file);
                     var sourceStream = new Func<Stream>(() => GetStreamAsync(desiredState, file, cancellationToken).Result);
                     bool writeOk = await HostInteraction.WriteFileAsync(path, sourceStream, desiredState, cancellationToken).ConfigureAwait(false);
