@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -92,6 +93,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 TableDataSource.Instance.AddErrors(Errors, ProjectName, ConfigFileName);
             }
+        }
+
+        public void ClearErrors()
+        {
+            TableDataSource.Instance.CleanErrors(ConfigFileName);
         }
     }
 }

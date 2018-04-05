@@ -176,6 +176,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             {
                 doc.FileActionOccurred -= OnFileSaved;
             }
+
+            _errorList?.ClearErrors();
         }
 
         private void AddErrorToList(IError error)
