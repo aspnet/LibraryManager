@@ -12,6 +12,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public const string TelemetryNamespace = "webtools/librarymanager/";
         public const string MainNuGetPackageId = "Microsoft.Web.LibraryManager.Build";
         public const string ErrorCodeLink = "https://github.com/aspnet/LibraryManager/wiki/Error-codes#{0}";
+        public const string WAP = "{349C5851-65DF-11DA-9384-00065B846F21}";
+        public const string WebsiteProject = "{E24C65DC-7377-472B-9ABA-BC803B73C61A}";
+        public const string DotNetCoreWebCapability = "DotNetCoreWeb";
 
         public static string CacheFolder
         {

@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
-    <value>{0} nie może być zapisany na dysku. Upewnij się, że nazwa pliku jest poprawna</value>
+    <value>Nie można zapisać pliku {0} na dysku. Upewnij się, że nazwa pliku jest poprawna</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
-    <value>Identyfikator biblioteki jest niezdefiniowana</value>
+    <value>Identyfikator biblioteki nie został zdefiniowany</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
     <value>Plik manifestu zawiera błędy składni</value>
@@ -28,15 +28,15 @@
     <value>"Ścieżka" musi znajdować się wewnątrz katalogu roboczego</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
-    <value>Dostawca jest niezdefiniowana</value>
+    <value>Dostawca nie został zdefiniowany</value>
   </data>
   <data name="ErrorProviderUnknown" xml:space="preserve">
-    <value>Nie można odnaleźć dostawcy "{0}"</value>
+    <value>Nie można znaleźć dostawcy „{0}”</value>
   </data>
   <data name="ErrorUnableToResolveSource" xml:space="preserve">
-    <value>Biblioteka "{0}" nie można rozpoznać przez dostawcę "{1}"</value>
+    <value>Biblioteka „{0}” nie może zostać rozpoznana przez dostawcę „{1}”</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
-    <value>Wystąpił nieznany wyjątek.</value>
+    <value>Wystąpił nieznany wyjątek</value>
   </data>
 </root>

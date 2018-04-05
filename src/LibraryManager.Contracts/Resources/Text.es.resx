@@ -16,7 +16,7 @@
     <value>{0} no se podría escribir en el disco. Asegúrese de que el nombre del archivo es correcto</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
-    <value>El id de la biblioteca no está definido</value>
+    <value>El id. de la biblioteca no está definido</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
     <value>El archivo de manifiesto contiene errores de sintaxis</value>
@@ -34,9 +34,9 @@
     <value>No se pudo encontrar el proveedor de "{0}"</value>
   </data>
   <data name="ErrorUnableToResolveSource" xml:space="preserve">
-    <value>La biblioteca "{0}" no pudo resolver el proveedor de "{1}"</value>
+    <value>El proveedor "{1}" no pudo resolver la biblioteca "{0}"</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
-    <value>Excepción desconocida.</value>
+    <value>Se produjo una excepción desconocida</value>
   </data>
 </root>

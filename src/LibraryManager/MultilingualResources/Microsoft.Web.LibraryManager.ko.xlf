@@ -8,41 +8,45 @@
       <group id="MICROSOFT.WEB.LIBRARYMANAGER/RESOURCES/TEXT.RESX" datatype="resx">
         <trans-unit id="FileDeleted" translate="yes" xml:space="preserve">
           <source>{0} deleted</source>
-          <target state="translated">{0} 삭제됨</target>
+          <target state="translated">{0}을(를) 삭제했습니다.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Shows in Output Window when a library file is deleted</note>
         </trans-unit>
         <trans-unit id="FileDeleteFail" translate="yes" xml:space="preserve">
           <source>Failed to delete {0}</source>
-          <target state="translated">{0} 삭제 실패</target>
+          <target state="translated">{0}을(를) 삭제하지 못했습니다.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Shows in Output Window when a file failed to be deleted</note>
         </trans-unit>
         <trans-unit id="FileWrittenToDisk" translate="yes" xml:space="preserve">
           <source>{0} written to disk</source>
-          <target state="translated">{0} 작성 된 디스크에</target>
+          <target state="translated">{0}이(가) 디스크에 기록되었습니다.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Shows in Output Window when a file was successfully added to project</note>
         </trans-unit>
         <trans-unit id="RestoreCancelled" translate="yes" xml:space="preserve">
           <source>Library restore has been cancelled</source>
-          <target state="translated">라이브러리 복원 취소 되었습니다.</target>
+          <target state="translated">라이브러리 복원이 취소되었습니다.</target>
         </trans-unit>
         <trans-unit id="RestoringLibrary" translate="yes" xml:space="preserve">
           <source>Restoring {0}...</source>
-          <target state="translated">복원: {0}</target>
+          <target state="translated">{0}을(를) 복원하는 중...</target>
         </trans-unit>
         <trans-unit id="RestoringLibraries" translate="yes" xml:space="preserve">
           <source>Restoring libraries...</source>
-          <target state="translated">라이브러리 복원...</target>
+          <target state="translated">라이브러리를 복원하는 중...</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Status message</note>
         </trans-unit>
         <trans-unit id="LibrariesRestored" translate="yes" xml:space="preserve">
           <source>{0} libraries restored in {1} seconds</source>
-          <target state="translated">{0} 라이브러리 {1} 초에 복원</target>
+          <target state="translated">{0} 라이브러리를 {1}초 후에 복원합니다.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Status message</note>
         </trans-unit>
         <trans-unit id="RestoreHasErrors" translate="yes" xml:space="preserve">
           <source>Library restore was unsuccessfull</source>
-          <target state="translated">라이브러리 복원이 했다 소</target>
+          <target state="translated">라이브러리 복원에 실패했습니다.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Status message</note>
+        </trans-unit>
+        <trans-unit id="LibraryInfoUpdateFailed" translate="yes" xml:space="preserve">
+          <source>Failed to update library information for {0}</source>
+          <target state="new">Failed to update library information for {0}</target>
         </trans-unit>
       </group>
     </body>

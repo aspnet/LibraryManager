@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
-    <value>{0} non possono essere scritti su disco. Assicurarsi che il nome del file sia corretto</value>
+    <value>Non è stato possibile scrivere {0} su disco. Assicurarsi che il nome del file sia corretto</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
-    <value>L'id di libreria non è definito</value>
+    <value>L'ID libreria non è definito</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
     <value>Il file manifesto contiene errori di sintassi</value>
@@ -31,12 +31,12 @@
     <value>Il provider non è definito</value>
   </data>
   <data name="ErrorProviderUnknown" xml:space="preserve">
-    <value>Non è possibile trovare il provider "{0}"</value>
+    <value>Non è stato possibile trovare il provider "{0}"</value>
   </data>
   <data name="ErrorUnableToResolveSource" xml:space="preserve">
-    <value>La libreria "{0}" non può essere risolto dal provider "{1}"</value>
+    <value>Il provider "{1}" non è riuscito a risolvere la libreria "{0}"</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
-    <value>Eccezione sconosciuta.</value>
+    <value>Si è verificata un'eccezione sconosciuta</value>
   </data>
 </root>

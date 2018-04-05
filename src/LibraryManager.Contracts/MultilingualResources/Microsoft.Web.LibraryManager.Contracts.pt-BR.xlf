@@ -8,23 +8,25 @@
       <group id="MICROSOFT.WEB.LIBRARYMANAGER.CONTRACTS/RESOURCES/TEXT.RESX" datatype="resx">
         <trans-unit id="ErrorCouldNotWriteFile" translate="yes" xml:space="preserve">
           <source>{0} could not be written to disk. Make sure the file name is correct</source>
-          <target state="translated">{0} não pode ser gravado em disco. Verifique se que o nome do arquivo está correto</target>
+          <target state="translated">Não foi possível gravar {0} em disco. Verifique se o nome do arquivo está correto</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryIdIsUndefined" translate="yes" xml:space="preserve">
           <source>The library id is undefined</source>
-          <target state="translated">A identificação da biblioteca é indefinida</target>
+          <target state="translated">A id da biblioteca é indefinida</target>
         </trans-unit>
         <trans-unit id="ErrorManifestMalformed" translate="yes" xml:space="preserve">
           <source>The manifest file contains syntax errors</source>
           <target state="translated">O arquivo de manifesto contém erros de sintaxe</target>
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
-          <source>The "path" is undefined.</source>
-          <target state="translated">O "caminho" é indefinido.</target>
+          <source>The "destination" is undefined.</source>
+          <target state="needs-review-translation">O "caminho" é indefinido.</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
-          <source>The "path" must be inside the working directory</source>
-          <target state="translated">O "caminho" deve estar dentro do diretório de trabalho</target>
+          <source>The "destination" must be inside the working directory</source>
+          <target state="needs-review-translation">O "caminho" deve estar dentro do diretório de trabalho</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
           <source>The provider is undefined</source>
@@ -32,7 +34,7 @@
         </trans-unit>
         <trans-unit id="ErrorProviderUnknown" translate="yes" xml:space="preserve">
           <source>The "{0}" provider could not be found</source>
-          <target state="translated">O provedor "{0}" não pôde ser encontrado</target>
+          <target state="translated">Não foi possível localizar o provedor "{0}"</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToResolveSource" translate="yes" xml:space="preserve">
           <source>The "{0}" library could not be resolved by the "{1}" provider</source>
@@ -40,7 +42,7 @@
         </trans-unit>
         <trans-unit id="ErrorUnknownException" translate="yes" xml:space="preserve">
           <source>An unknown exception occurred</source>
-          <target state="translated">Ocorreu uma exceção desconhecida.</target>
+          <target state="translated">Ocorreu uma exceção desconhecida</target>
         </trans-unit>
       </group>
     </body>

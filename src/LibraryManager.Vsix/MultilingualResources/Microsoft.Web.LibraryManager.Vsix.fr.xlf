@@ -8,17 +8,17 @@
       <group id="MICROSOFT.WEB.LIBRARYMANAGER.VSIX/RESOURCES/TEXT.RESX" datatype="resx">
         <trans-unit id="CleanLibrariesStarted" translate="yes" xml:space="preserve">
           <source>Clean libraries started...</source>
-          <target state="translated">Bibliothèques propres a commencé...</target>
+          <target state="translated">Le nettoyage des bibliothèques a commencé...</target>
           <note from="MultilingualBuild" annotates="source" priority="2">When the "Clean" command is being executed</note>
         </trans-unit>
         <trans-unit id="CleanLibrariesSucceeded" translate="yes" xml:space="preserve">
           <source>Clean libraries succeeded</source>
-          <target state="translated">Bibliothèques propres a réussi</target>
+          <target state="translated">Nettoyage des bibliothèques effectué</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Status message</note>
         </trans-unit>
         <trans-unit id="LibraryRestoredNoChange" translate="yes" xml:space="preserve">
           <source>Restore completed. Files already up-to-date</source>
-          <target state="translated">Restauration terminée. Fichiers déjà à jour</target>
+          <target state="translated">Restauration terminée. Fichiers déjà mis à jour</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Status message</note>
         </trans-unit>
         <trans-unit id="Loading" translate="yes" xml:space="preserve">
@@ -28,7 +28,7 @@
         </trans-unit>
         <trans-unit id="PackagesCouldNotBeLoaded" translate="yes" xml:space="preserve">
           <source>Packages could not be loaded</source>
-          <target state="translated">Paquets n’a pas peuvent être chargés</target>
+          <target state="translated">Impossible de charger les packages</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in installer dialog</note>
         </trans-unit>
         <trans-unit id="CheckForUpdates" translate="yes" xml:space="preserve">
@@ -38,7 +38,7 @@
         </trans-unit>
         <trans-unit id="NoUpdatesFound" translate="yes" xml:space="preserve">
           <source>No updates found at this time</source>
-          <target state="translated">Aucune mise à jour trouvée en ce moment</target>
+          <target state="translated">Aucune mise à jour n'a été trouvée pour l'instant</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
         </trans-unit>
         <trans-unit id="UninstallLibrary" translate="yes" xml:space="preserve">
@@ -52,19 +52,19 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">Nous installerons un package NuGet afin d’augmenter le processus MSBuild, mais aucun fichier ne sera ajouté au projet.
-
-Cela peut nécessiter une connexion internet.
-
-Voulez-vous continuer ?</target>
+          <target state="translated">Un package NuGet va être installé pour élargir le processus MSBuild, mais aucun fichier ne sera ajouté au projet. Cette opération peut nécessiter une connexion internet. Voulez-vous continuer ?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated">&lt;entrez le texte recherché&gt;</target>
+          <target state="translated">&lt;Tapez le texte à rechercher&gt;</target>
         </trans-unit>
         <trans-unit id="SelectPackageToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a package to select files to install&gt;</it></source>
-          <target state="translated">&lt;Choisissez un package pour sélectionner des fichiers à installer&gt;</target>
+          <target state="translated">&lt;Choisissez un package pour sélectionner les fichiers à installer&gt;</target>
+        </trans-unit>
+        <trans-unit id="CleanLibrariesFailed" translate="yes" xml:space="preserve">
+          <source>Clean libraries failed</source>
+          <target state="new">Clean libraries failed</target>
         </trans-unit>
       </group>
     </body>

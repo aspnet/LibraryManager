@@ -66,6 +66,8 @@
         <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_BUILD" />
         <Icon guid="ImageCatalogGuid" id="JSWebScript" />
         <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>恢复客户端库</ButtonText>
           <CanonicalName>RestoreClientSideLibraries</CanonicalName>

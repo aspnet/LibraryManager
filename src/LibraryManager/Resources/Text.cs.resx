@@ -13,33 +13,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileDeleted" xml:space="preserve">
-    <value>Odstranil se údaj: {0}</value>
+    <value>Soubor {0} byl smazán.</value>
     <comment>Shows in Output Window when a library file is deleted</comment>
   </data>
   <data name="FileDeleteFail" xml:space="preserve">
-    <value>{0} se nepovedlo odstranit.</value>
+    <value>Soubor {0} nebylo možné smazat.</value>
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} zapsány na disk</value>
+    <value>Soubor {0} byl uložen na disk.</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
   <data name="RestoreCancelled" xml:space="preserve">
-    <value>Obnovení knihovny byla zrušena</value>
+    <value>Obnovení knihovny bylo zrušeno</value>
   </data>
   <data name="RestoringLibrary" xml:space="preserve">
-    <value>Obnovení balíčku {0}</value>
+    <value>Probíhá obnovování knihovny {0}...</value>
   </data>
   <data name="RestoringLibraries" xml:space="preserve">
-    <value>Obnovení knihovny...</value>
+    <value>Probíhá obnovování knihoven...</value>
     <comment>Status message</comment>
   </data>
   <data name="LibrariesRestored" xml:space="preserve">
-    <value>knihovny {0} v {1} sekund</value>
+    <value>{0} knihoven obnoveno za {1} sekund</value>
     <comment>Status message</comment>
   </data>
   <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Obnovení knihovny byl unsuccessfull</value>
+    <value>Obnovení knihovny se nezdařilo</value>
     <comment>Status message</comment>
   </data>
 </root>

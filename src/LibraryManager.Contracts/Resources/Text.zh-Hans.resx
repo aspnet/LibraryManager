@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
-    <value>{0} 无法写入磁盘。请确保文件名正确</value>
+    <value>{0} 无法被写入磁盘。请确保文件名正确</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
-    <value>库 id 未定义</value>
+    <value>未定义库 ID</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
     <value>清单文件包含语法错误</value>
@@ -37,6 +37,6 @@
     <value>"{0}" 库无法由 "{1}" 提供程序解析</value>
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
-    <value>出现未知异常。</value>
+    <value>发生未知异常</value>
   </data>
 </root>
