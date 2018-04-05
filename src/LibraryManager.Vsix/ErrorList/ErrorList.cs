@@ -47,6 +47,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return Errors.Count > 0;
         }
 
+        public void HandleError(IError error)
+        {
+            Errors.Add(new DisplayError(error));
+
+            Logger.LogEvent(error.Message, LogLevel.Operation);
+            Telemetry.TrackOperation("error", TelemetryResult.Failure, new KeyValuePair<string, object>("code", error.Code));
+
+            PushToErrorList();
+        }
+
         private static void AddLineAndColumn(IEnumerable<string> lines, ILibraryInstallationState state, DisplayError[] errors)
         {
             if(string.IsNullOrEmpty(state?.LibraryId))
