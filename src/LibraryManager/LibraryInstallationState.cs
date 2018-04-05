@@ -12,7 +12,7 @@ namespace Microsoft.Web.LibraryManager
     /// For internal use only.
     /// </summary>
     /// <seealso cref="Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" />
-    public class LibraryInstallationState : ILibraryInstallationState
+    internal class LibraryInstallationState : ILibraryInstallationState
     {
         /// <summary>
         /// The unique identifier of the provider.

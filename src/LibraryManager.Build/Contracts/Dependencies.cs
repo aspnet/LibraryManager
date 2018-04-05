@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Microsoft.Web.LibraryManager.Build
 {
-    public class Dependencies : IDependencies
+    internal class Dependencies : IDependencies
     {
         private readonly IHostInteraction _hostInteraction;
         private readonly List<IProvider> _providers = new List<IProvider>();

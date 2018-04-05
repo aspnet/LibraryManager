@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public class LibraryInstallationState : ILibraryInstallationState
+    internal class LibraryInstallationState : ILibraryInstallationState
     {
         public string LibraryId { get; set; }
         public string ProviderId { get; set; }

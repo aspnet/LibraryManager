@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Build
 {
-    public class HostInteraction : IHostInteraction
+    internal class HostInteraction : IHostInteraction
     {
         public HostInteraction(string workingDirectory)
         {

@@ -16,7 +16,7 @@ using Color = System.Windows.Media.Color;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public static class WpfUtil
+    internal static class WpfUtil
     {
         public static BitmapSource GetIconForImageMoniker(ImageMoniker? imageMoniker, int sizeX, int sizeY)
         {

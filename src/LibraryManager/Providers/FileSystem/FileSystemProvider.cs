@@ -13,7 +13,7 @@ using System.Linq;
 namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 {
     /// <summary>Internal use only</summary>
-    public class FileSystemProvider : IProvider
+    internal class FileSystemProvider : IProvider
     {
         /// <summary>Internal use only</summary>
         public FileSystemProvider(IHostInteraction hostInteraction)

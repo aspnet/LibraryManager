@@ -9,7 +9,7 @@ using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
 {
-    public class PackageItemIconConverter : IMultiValueConverter
+    internal class PackageItemIconConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

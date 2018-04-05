@@ -14,7 +14,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 #if NET45
     [Export(typeof(IProviderFactory))]
 #endif
-    public class CdnjsProviderFactory : IProviderFactory
+    internal class CdnjsProviderFactory : IProviderFactory
     {
         /// <summary>
         /// Creates an <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" /> instance.

@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search
 {
-    public class LogicalAndConverter : IMultiValueConverter
+    internal class LogicalAndConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

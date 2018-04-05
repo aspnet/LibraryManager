@@ -9,7 +9,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public class ErrorList
+    internal class ErrorList
     {
         public ErrorList(string projectName, string configFileName)
         {

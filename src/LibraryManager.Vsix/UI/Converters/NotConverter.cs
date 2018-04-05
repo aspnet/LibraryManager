@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
 {
-    public class NotConverter : IValueConverter
+    internal class NotConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

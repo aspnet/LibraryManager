@@ -12,7 +12,7 @@ using System.Linq;
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 {
     /// <summary>Internal use only</summary>
-    public class CdnjsProvider : IProvider
+    internal class CdnjsProvider : IProvider
     {
         private const string _downloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
         private CdnjsCatalog _catalog;

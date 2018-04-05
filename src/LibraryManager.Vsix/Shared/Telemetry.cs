@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Telemetry;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public static class Telemetry
+    internal static class Telemetry
     {
         private const string _namespace = Constants.TelemetryNamespace;
 

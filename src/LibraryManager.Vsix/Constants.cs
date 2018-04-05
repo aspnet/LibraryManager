@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public static class Constants
+    internal static class Constants
     {
         public const string ConfigFileName = "libman.json";
         public const string TelemetryNamespace = "webtools/librarymanager/";

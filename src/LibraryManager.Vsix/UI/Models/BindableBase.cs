@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
-    public class BindableBase : INotifyPropertyChanged
+    internal class BindableBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

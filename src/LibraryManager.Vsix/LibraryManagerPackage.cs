@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             "ActiveProjectFlavor:" + Constants.WebsiteProject,
             "ActiveProjectCapability:" + Constants.DotNetCoreWebCapability })]
 
-    public sealed class LibraryManagerPackage : AsyncPackage
+    internal sealed class LibraryManagerPackage : AsyncPackage
     {
         protected override async Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {

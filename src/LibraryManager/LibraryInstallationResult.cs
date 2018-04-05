@@ -8,7 +8,7 @@ using System.Linq;
 namespace Microsoft.Web.LibraryManager
 {
     /// <summary>Internal use only</summary>
-    public class LibraryInstallationResult : ILibraryInstallationResult
+    internal class LibraryInstallationResult : ILibraryInstallationResult
     {
         /// <summary>Internal use only</summary>
         public LibraryInstallationResult(ILibraryInstallationState installationState)
