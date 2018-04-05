@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         public ErrorList(string projectName, string configFileName)
         {
-            ProjectName = projectName;
+            ProjectName = projectName ?? "";
             ConfigFileName = configFileName;
             Errors = new List<DisplayError>();
         }
@@ -45,6 +46,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             PushToErrorList();
             return Errors.Count > 0;
+        }
+
+        public void HandleError(IError error)
+        {
+            Errors.Add(new DisplayError(error));
+
+            Logger.LogEvent(error.Message, LogLevel.Operation);
+            Telemetry.TrackOperation("error", TelemetryResult.Failure, new KeyValuePair<string, object>("code", error.Code));
+
+            PushToErrorList();
         }
 
         private static void AddLineAndColumn(IEnumerable<string> lines, ILibraryInstallationState state, DisplayError[] errors)
@@ -82,6 +93,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 TableDataSource.Instance.AddErrors(Errors, ProjectName, ConfigFileName);
             }
+        }
+
+        public void ClearErrors()
+        {
+            TableDataSource.Instance.CleanErrors(ConfigFileName);
         }
     }
 }

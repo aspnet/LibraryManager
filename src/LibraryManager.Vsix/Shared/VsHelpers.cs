@@ -80,8 +80,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
+                Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
                 System.Diagnostics.Debug.Write(ex);
-                // TODO: Implement logging
             }
         }
 
@@ -287,6 +287,25 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (ErrorHandler.Succeeded(solution.GetProjectOfUniqueName(project.FullName, out IVsHierarchy hierarchy)))
             {
                 return hierarchy;
+            }
+
+            return null;
+        }
+
+        public static Project GetDTEProjectFromConfig(string file)
+        {
+            try
+            {
+                ProjectItem projectItem = DTE.Solution.FindProjectItem(file);
+                if (projectItem != null)
+                {
+                    return projectItem.ContainingProject;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
+                System.Diagnostics.Debug.Write(ex);
             }
 
             return null;
