@@ -1,16 +1,15 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts;
+using Newtonsoft.Json;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -116,7 +115,7 @@ namespace Microsoft.Web.LibraryManager
         /// Adds a library to the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="state">An instance of <see cref="ILibraryInstallationState"/> representing the library to add.</param>
-        public void AddLibrary(ILibraryInstallationState state)
+        internal void AddLibrary(ILibraryInstallationState state)
         {
             ILibraryInstallationState existing = _libraries.Find(p => p.LibraryId == state.LibraryId && p.ProviderId == state.ProviderId);
 

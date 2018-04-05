@@ -6,7 +6,7 @@ namespace Microsoft.Web.LibraryManager
     /// <summary>
     /// A collection of extension methods.
     /// </summary>
-    internal static class Extensions
+    public static class Extensions
     {
         /// <summary>
         /// Returns true if the <see cref="ILibraryInstallationState"/> is valid.
