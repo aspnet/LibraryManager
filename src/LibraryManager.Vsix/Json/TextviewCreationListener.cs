@@ -81,17 +81,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out IEnumerable<IError> errors)))
                 {
                     IProvider provider = _dependencies.GetProvider(state.ProviderId);
-                    ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, CancellationToken.None).Result;
 
-                    if (updatedStateResult.Success)
+                    if (provider != null)
                     {
-                        IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
+                        ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, CancellationToken.None).Result;
 
-                        foreach (FileIdentifier fileIdentifier in stateFiles)
+                        if (updatedStateResult.Success)
                         {
-                            if (!files.Contains(fileIdentifier))
+                            IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
+
+                            foreach (FileIdentifier fileIdentifier in stateFiles)
                             {
-                                files.Add(fileIdentifier);
+                                if (!files.Contains(fileIdentifier))
+                                {
+                                    files.Add(fileIdentifier);
+                                }
                             }
                         }
                     }
