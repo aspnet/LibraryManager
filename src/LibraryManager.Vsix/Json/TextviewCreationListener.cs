@@ -38,9 +38,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
-            new CompletionController(textViewAdapter, textView, CompletionBroker);
 
-            if (!DocumentService.TryGetTextDocument(textView.TextBuffer, out var doc))
+            if (!DocumentService.TryGetTextDocument(textView.TextBuffer, out ITextDocument doc))
             {
                 return;
             }
@@ -51,6 +50,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             {
                 return;
             }
+
+            new CompletionController(textViewAdapter, textView, CompletionBroker);
+
 
             _dependencies = Dependencies.FromConfigFile(doc.FilePath);
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
