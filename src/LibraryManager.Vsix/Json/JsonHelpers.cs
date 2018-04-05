@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    public static class JsonHelpers
+    internal static class JsonHelpers
     {
         public static bool TryGetInstallationState(JSONObject parent, out ILibraryInstallationState installationState)
         {

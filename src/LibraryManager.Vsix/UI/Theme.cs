@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
-    public static class Theme
+    internal static class Theme
     {
         private static ResourceDictionary ThemeResources { get; } = BuildThemeResources();
 

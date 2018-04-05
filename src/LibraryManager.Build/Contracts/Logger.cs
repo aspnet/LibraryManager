@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryManager.Build
 {
-    public class Logger : Contracts.ILogger
+    internal class Logger : Contracts.ILogger
     {
         private Logger()
         {

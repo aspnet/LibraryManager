@@ -7,7 +7,7 @@ namespace Microsoft.Web.LibraryManager
     /// <summary>
     /// Library Manager constants
     /// </summary>
-    public static class ManifestConstants
+    internal static class ManifestConstants
     {
         /// <summary>
         /// libman.json libraries element 
