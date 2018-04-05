@@ -61,6 +61,7 @@ namespace Microsoft.Web.LibraryManager.Test
             ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
 
+            manifest.AddVersion("1.0");
             manifest.AddLibrary(desiredState);
             await manifest.SaveAsync(_filePath, CancellationToken.None).ConfigureAwait(false);
 
@@ -86,6 +87,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new[] { "jquery.js", "jquery.min.js" }
             };
 
+            manifest.AddVersion("1.0");
             manifest.AddLibrary(desiredState);
             await manifest.RestoreAsync(token);
 
@@ -123,6 +125,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new[] { "knockout-min.js" }
             };
 
+            manifest.AddVersion("1.0");
             manifest.AddLibrary(state1);
             manifest.AddLibrary(state2);
             await manifest.RestoreAsync(token);
@@ -201,6 +204,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new[] { "knockout-min.js" }
             };
 
+            manifest.AddVersion("1.0");
             manifest.AddLibrary(state);
 
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
@@ -234,7 +238,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Manifest manifest = await Manifest.FromFileAsync(@"c:\file\not\found.json", _dependencies, CancellationToken.None);
             Assert.IsNotNull(manifest);
             Assert.AreEqual(0, manifest.Libraries.Count());
-            Assert.AreEqual("1.0", manifest.Version);
+            Assert.IsNull(manifest.Version);
         }
 
         [TestMethod]
@@ -248,6 +252,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new[] { "knockout-min.js" }
             };
 
+            manifest.AddVersion("1.0");
             manifest.AddLibrary(state);
 
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
@@ -270,6 +275,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new[] { "knockout-min.js" }
             };
 
+            manifest.AddVersion("1.0");
             manifest.AddLibrary(state);
 
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);

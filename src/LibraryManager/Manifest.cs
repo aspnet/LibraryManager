@@ -133,6 +133,15 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
+        /// Adds a version to the manifest
+        /// </summary>
+        /// <param name="version"></param>
+        public void AddVersion(string version)
+        {
+            Version = version;
+        }
+
+        /// <summary>
         /// Restores all libraries in the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="cancellationToken">A token that allows for cancellation of the operation.</param>
