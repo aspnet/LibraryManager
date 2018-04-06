@@ -12,15 +12,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class HostInteraction : IHostInteraction
     {
-        public HostInteraction(string configFilePath)
+        public HostInteraction(string configFilePath, ILogger logger)
         {
             string cwd = Path.GetDirectoryName(configFilePath);
             WorkingDirectory = cwd;
+            Logger = logger;
         }
 
         public string WorkingDirectory { get; }
         public string CacheDirectory => Constants.CacheFolder;
-        public ILogger Logger { get; } = new Logger();
+        public ILogger Logger { get; internal set; } 
 
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {

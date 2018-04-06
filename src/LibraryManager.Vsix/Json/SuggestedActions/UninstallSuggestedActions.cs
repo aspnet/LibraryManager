@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
-                Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
+                Logger.LogEvent(ex.ToString(), Microsoft.Web.LibraryManager.Contracts.LogLevel.Error);
             }
         }
     }
