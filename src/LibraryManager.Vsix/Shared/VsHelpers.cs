@@ -1,18 +1,18 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.ComponentModelHost;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -80,7 +80,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
-                Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
+                Logger.LogEvent(ex.ToString(), Microsoft.Web.LibraryManager.Contracts.LogLevel.Error);
                 System.Diagnostics.Debug.Write(ex);
             }
         }
@@ -304,7 +304,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
-                Logger.LogEvent(ex.ToString(), Contracts.LogLevel.Error);
+                Logger.LogEvent(ex.ToString(), LibraryManager.Contracts.LogLevel.Error);
                 System.Diagnostics.Debug.Write(ex);
             }
 

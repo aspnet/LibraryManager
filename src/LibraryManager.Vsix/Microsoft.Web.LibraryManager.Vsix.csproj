@@ -96,6 +96,7 @@
     <Compile Include="Contracts\HostInteraction.cs" />
     <Compile Include="Contracts\LibraryInstallationState.cs" />
     <Compile Include="Contracts\Logger.cs" />
+    <Compile Include="Contracts\PerProjectLogger.cs" />
     <Compile Include="ErrorList\DisplayError.cs" />
     <Compile Include="ErrorList\ErrorList.cs" />
     <Compile Include="ErrorList\SinkManager.cs" />
@@ -416,20 +417,12 @@
        strange since we actually _implement_ DTE and use it as an exchange type with generics in a few places. -->
   <Target Name="LinkVSSDKEmbeddableAssemblies" DependsOnTargets="ResolveReferences" AfterTargets="ResolveReferences">
     <ItemGroup>
-      <ReferencePath Condition="
-              '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.10.0'
-              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.11.0'
-              ">
+      <ReferencePath Condition="&#xD;&#xA;              '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.10.0'&#xD;&#xA;              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.11.0'&#xD;&#xA;              ">
         <EmbedInteropTypes>false</EmbedInteropTypes>
       </ReferencePath>
     </ItemGroup>
     <ItemGroup>
-      <ReferencePath Condition="
-              '%(FileName)' == 'Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime'
-              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.12.0'
-              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime'
-              or '%(FileName)' == 'Nuget.VisualStudio'
-              ">
+      <ReferencePath Condition="&#xD;&#xA;              '%(FileName)' == 'Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime'&#xD;&#xA;              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.12.0'&#xD;&#xA;              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime'&#xD;&#xA;              or '%(FileName)' == 'Nuget.VisualStudio'&#xD;&#xA;              ">
         <EmbedInteropTypes>true</EmbedInteropTypes>
       </ReferencePath>
     </ItemGroup>
