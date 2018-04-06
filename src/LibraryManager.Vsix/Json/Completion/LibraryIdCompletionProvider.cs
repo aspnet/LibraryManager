@@ -64,6 +64,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Task<CompletionSet> task = catalog.GetLibraryCompletionSetAsync(member.UnquotedValueText, caretPosition);
             int count = 0;
 
+            if (!context.Session.Properties.ContainsProperty(CompletionController.RetriggerCompletion))
+            {
+                context.Session.Properties.AddProperty(CompletionController.RetriggerCompletion, true);
+            }
+
             if (task.IsCompleted)
             {
                 CompletionSet set = task.Result;

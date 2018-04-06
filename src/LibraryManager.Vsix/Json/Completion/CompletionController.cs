@@ -12,12 +12,15 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class CompletionController : IOleCommandTarget
     {
+        internal const string RetriggerCompletion = "LibManForceRetrigger";
+
         private ITextView _textView;
         private IOleCommandTarget _nextCommandTarget;
         private ICompletionBroker _broker;
@@ -95,10 +98,26 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _lastTyped = DateTime.Now;
             int delay = force ? 50 : _delay;
 
+            // Don't leave "stale" completion session up while the user is typing, or else we could
+            // get completion from a stale session.
+            ICompletionSession completionSession = _broker.GetSessions(_textView).FirstOrDefault();
+            if (completionSession != null && completionSession.Properties.TryGetProperty<bool>(RetriggerCompletion, out bool retrigger) && retrigger)
+            {
+                completionSession.Dismiss();
+            }
+
             await System.Threading.Tasks.Task.Delay(delay);
 
             // Prevents retriggering from happening while typing fast
             if (_lastTyped.AddMilliseconds(delay) > DateTime.Now)
+            {
+                return;
+            }
+
+            // Completion may have gotten invoked via by Web Editor OnPostTypeChar(). Don't invoke again, or else we get flikering completion list
+            // TODO:Review the design here post-preview 4 and make sure this completion controller doesn't clash with Web Editors JSON completion controller
+            completionSession = _broker.GetSessions(_textView).FirstOrDefault();
+            if (completionSession != null && completionSession.Properties.TryGetProperty<bool>(RetriggerCompletion, out retrigger))
             {
                 return;
             }
