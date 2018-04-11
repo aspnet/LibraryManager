@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel.Design;
 using System.Threading;
 using System.IO;
+using System.Linq;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -63,6 +64,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                         var dependencies = Dependencies.FromConfigFile(configFilePath);
                         Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, token);
                         manifest.DefaultProvider = "cdnjs";
+                        manifest.Version = Manifest.SupportedVersions.Max().ToString();
 
                         await manifest.SaveAsync(configFilePath, token);
                         project.AddFileToProject(configFilePath);
