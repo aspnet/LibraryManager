@@ -116,7 +116,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library restore was unsuccessfull.
+        ///   Looks up a localized string similar to Library restore was unsuccessful.
         /// </summary>
         public static string RestoreHasErrors {
             get {

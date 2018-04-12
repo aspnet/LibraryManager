@@ -144,7 +144,7 @@
     <comment>Status message</comment>
   </data>
   <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Library restore was unsuccessfull</value>
+    <value>Library restore was unsuccessful</value>
     <comment>Status message</comment>
   </data>
   <data name="LibraryInfoUpdateFailed" xml:space="preserve">
