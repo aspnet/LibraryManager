@@ -105,6 +105,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
             }
+<<<<<<< HEAD
             catch (Exception ex) when (ex is ResourceDownloadException || ex.InnerException is ResourceDownloadException)
             {
                 ResourceDownloadException exception = ex as ResourceDownloadException ?? ex.InnerException as ResourceDownloadException;
@@ -112,6 +113,11 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 {
                     return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(exception.Url));
                 }
+=======
+            catch (ResourceDownloadException ex)
+            {
+                return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(ex.Url));
+>>>>>>> Fixing issues with restore and cache management.
             }
             catch (Exception ex)
             {
@@ -207,15 +213,40 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 else
                 {
                     return await GetRemoteResourceAsync(sourceFile);
+<<<<<<< HEAD
                 }
             }
             catch (ResourceDownloadException)
             {
                 throw;
+=======
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ResourceDownloadException)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
+                }
+            }
+        }
+
+        private static async Task<Stream> GetRemoteResourceAsync(string sourceFile)
+        {
+            try
+            {
+                var client = new HttpClient();
+                return await client.GetStreamAsync(sourceFile).ConfigureAwait(false);
+>>>>>>> Fixing issues with restore and cache management.
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
+                // Add telemetry here for failures
+                throw new ResourceDownloadException(sourceFile);
             }
         }
 
