@@ -75,11 +75,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                     else
                     {
-                        VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
-                        File.Delete(absoluteFile);
+                        if (File.Exists(absoluteFile))
+                        {
+                            VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
+                            File.Delete(absoluteFile);
+                            Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
+                        }
                     }
-
-                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
                 }
                 catch (Exception ex)
                 {
