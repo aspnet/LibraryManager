@@ -105,6 +105,10 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
             }
+            catch (ResourceDownloadException ex)
+            {
+                return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(ex.Url));
+            }
             catch (Exception ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
@@ -198,13 +202,33 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 // Url
                 else
                 {
-                    var client = new HttpClient();
-                    return await client.GetStreamAsync(sourceFile).ConfigureAwait(false);
+                    return await GetRemoteResourceAsync(sourceFile);
                 }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ResourceDownloadException)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
+                }
+            }
+        }
+
+        private static async Task<Stream> GetRemoteResourceAsync(string sourceFile)
+        {
+            try
+            {
+                var client = new HttpClient();
+                return await client.GetStreamAsync(sourceFile).ConfigureAwait(false);
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
+                // Add telemetry here for failures
+                throw new ResourceDownloadException(sourceFile);
             }
         }
     }

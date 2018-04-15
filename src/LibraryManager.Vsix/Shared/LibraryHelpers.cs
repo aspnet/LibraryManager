@@ -88,11 +88,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     LibraryManager.Resources.Text.RestoreHasErrors :
                     string.Format(LibraryManager.Resources.Text.LibrariesRestored, resultCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
 
-                Logger.LogEvent(Environment.NewLine + text + Environment.NewLine, LogLevel.Task);
+                Logger.LogEvent(text + Environment.NewLine, LogLevel.Task);
             }
             else
             {
-                Logger.LogEvent(Environment.NewLine + Resources.Text.LibraryRestoredNoChange + Environment.NewLine, LogLevel.Task);
+                Logger.LogEvent(Resources.Text.LibraryRestoredNoChange + Environment.NewLine, LogLevel.Task);
             }
         }
 
