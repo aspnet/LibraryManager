@@ -92,5 +92,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         public static IError VersionIsNotSupported(string version)
            => new Error("LIB009", string.Format(Text.ErrorNotSupportedVersion, version));
 
+        /// <summary>
+        /// Failed to download resource
+        /// </summary>
+        /// <returns>The error code LIB010</returns>
+        public static IError FailedToDownloadResource(string url)
+           => new Error("LIB010", string.Format(Text.ErrorUnableToDownloadResource, url));
     }
 }
