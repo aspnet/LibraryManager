@@ -134,6 +134,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to download resource from &quot;{0}&quot;.
+        /// </summary>
+        internal static string ErrorUnableToDownloadResource {
+            get {
+                return ResourceManager.GetString("ErrorUnableToDownloadResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; file path could not be resolved by the &quot;{1}&quot; provider.
         /// </summary>
         internal static string ErrorUnableToResolveFilePath {
