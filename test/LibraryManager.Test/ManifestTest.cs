@@ -201,7 +201,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 ProviderId = "cdnjs",
                 LibraryId = "jquery@3.2.1",
                 DestinationPath = path,
-                Files = new[] { "knockout-min.js" }
+                Files = new[] { "core.js" }
             };
 
             manifest.AddVersion("1.0");
@@ -283,6 +283,31 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual(1, result.Count());
             Assert.IsFalse(result.First().Success);
             Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB007"));
+        }
+
+        [DataTestMethod]
+        [DataRow("1.5")]
+        [DataRow("2.0")]
+        [DataRow("version")]
+        public async Task RestoreAsync_VersionIsNotSupported(string version)
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            var state = new LibraryInstallationState
+            {
+                ProviderId = "cdnjs",
+                LibraryId = "jquery@3.2.1",
+                DestinationPath = "lib",
+                Files = new[] { "core.js" }
+            };
+
+            manifest.AddVersion(version);
+            manifest.AddLibrary(state);
+
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual("LIB009", result.First().Errors.First().Code);
         }
 
         private string _doc = $@"{{

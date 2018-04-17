@@ -169,7 +169,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             // Install library
             ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB003", result.Errors[0].Code);
+            Assert.AreEqual("LIB010", result.Errors[0].Code);
         }
 
         [TestMethod]
