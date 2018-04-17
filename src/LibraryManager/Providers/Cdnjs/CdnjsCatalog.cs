@@ -247,6 +247,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             try
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 string json = await FileHelpers.GetFileTextAsync(_remoteApiUrl, _cacheFile, _expirationDays, cancellationToken).ConfigureAwait(false);
 =======
                 if (!File.Exists(_cacheFile) || File.GetLastWriteTime(_cacheFile) < DateTime.Now.AddDays(-_expirationDays))
@@ -256,6 +257,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 string json = await FileHelpers.ReadFileTextAsync(_cacheFile, cancellationToken).ConfigureAwait(false);
 >>>>>>> Fixing issues with restore and cache management.
+=======
+                string json = await FileHelpers.GetFileTextAsync(_remoteApiUrl, _cacheFile, _expirationDays, cancellationToken).ConfigureAwait(false);
+>>>>>>> Bug fixes.
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
