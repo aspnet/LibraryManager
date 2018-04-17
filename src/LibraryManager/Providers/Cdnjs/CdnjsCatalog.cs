@@ -285,12 +285,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                if (!File.Exists(localFile) || File.GetLastWriteTime(localFile) < DateTime.Now.AddDays(-_expirationDays))
-                {
-                    await FileHelpers.DownloadFileAsync(url, localFile, cancellationToken);
-                }
-
-                string json = await FileHelpers.ReadFileTextAsync(localFile, cancellationToken).ConfigureAwait(false);
+                string json = await FileHelpers.GetFileTextAsync(url, localFile, _expirationDays, cancellationToken).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -307,7 +302,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
             catch (ResourceDownloadException)
             {
-                throw new ResourceDownloadException(url);
+                throw;
             }
             catch (Exception)
             {
