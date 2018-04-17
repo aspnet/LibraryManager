@@ -105,9 +105,13 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
             }
-            catch (ResourceDownloadException ex)
+            catch (Exception ex) when (ex is ResourceDownloadException || ex.InnerException is ResourceDownloadException)
             {
-                return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(ex.Url));
+                ResourceDownloadException exception = ex as ResourceDownloadException ?? ex.InnerException as ResourceDownloadException;
+                if (exception != null)
+                {
+                    return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(exception.Url));
+                }
             }
             catch (Exception ex)
             {
