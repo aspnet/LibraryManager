@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 {
     internal class CdnjsCatalog : ILibraryCatalog
     {
-        private const int _days = 3;
+        private const int _expirationDays = 3;
         private const string _fileName = "cache.json";
         private const string _remoteApiUrl = "https://aka.ms/g8irvu";
         private const string _metaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}"; // https://aka.ms/goycwu/{0}
@@ -246,7 +246,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await FileHelpers.GetFileTextAsync(_remoteApiUrl, _cacheFile, _days, cancellationToken).ConfigureAwait(false);
+                string json = await FileHelpers.GetFileTextAsync(_remoteApiUrl, _cacheFile, _expirationDays, cancellationToken).ConfigureAwait(false);
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
@@ -257,6 +257,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 _libraryGroups = JsonConvert.DeserializeObject<IEnumerable<CdnjsLibraryGroup>>(obj).ToArray();
                 return true;
+            }
+            catch (ResourceDownloadException)
+            {
+                _provider.HostInteraction.Logger.Log(string.Format(Resources.Text.FailedToDownloadCatalog, _provider.Id), LogLevel.Operation);
+                return false;
             }
             catch (Exception ex)
             {
@@ -274,13 +279,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)
         {
-            string localFile = Path.Combine(_provider.CacheFolder, groupName, "metadata.json");
             var list = new List<Asset>();
+            string localFile = Path.Combine(_provider.CacheFolder, groupName, "metadata.json");
+            string url = string.Format(_metaPackageUrlFormat, groupName);
 
             try
             {
-                string url = string.Format(_metaPackageUrlFormat, groupName);
-                string json = await FileHelpers.GetFileTextAsync(url, localFile, _days, cancellationToken).ConfigureAwait(false);
+                if (!File.Exists(localFile) || File.GetLastWriteTime(localFile) < DateTime.Now.AddDays(-_expirationDays))
+                {
+                    await FileHelpers.DownloadFileAsync(url, localFile, cancellationToken);
+                }
+
+                string json = await FileHelpers.ReadFileTextAsync(localFile, cancellationToken).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -294,6 +304,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         list.Add(asset);
                     }
                 }
+            }
+            catch (ResourceDownloadException)
+            {
+                throw new ResourceDownloadException(url);
             }
             catch (Exception)
             {
