@@ -13,6 +13,16 @@ namespace Microsoft.Web.LibraryManager
 {
     internal static class FileHelpers
     {
+        public static async Task<string> GetFileTextAsync(string url, string localFile, int expiresAfterDays, CancellationToken cancellationToken)
+        {
+            if (!File.Exists(localFile) || File.GetLastWriteTime(localFile) < DateTime.Now.AddDays(-expiresAfterDays))
+            {
+                await DownloadFileAsync(url, localFile, cancellationToken).ConfigureAwait(false);
+            }
+
+            return await ReadFileTextAsync(localFile, cancellationToken).ConfigureAwait(false);
+        }
+
         public static async Task DownloadFileAsync(string url, string fileName, CancellationToken cancellationToken)
         {
             Stream content = null;

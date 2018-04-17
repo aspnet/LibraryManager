@@ -246,12 +246,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                if (!File.Exists(_cacheFile) || File.GetLastWriteTime(_cacheFile) < DateTime.Now.AddDays(-_expirationDays))
-                {
-                    await FileHelpers.DownloadFileAsync(_remoteApiUrl, _cacheFile, cancellationToken);
-                }
-
-                string json = await FileHelpers.ReadFileTextAsync(_cacheFile, cancellationToken).ConfigureAwait(false);
+                string json = await FileHelpers.GetFileTextAsync(_remoteApiUrl, _cacheFile, _expirationDays, cancellationToken).ConfigureAwait(false);
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
