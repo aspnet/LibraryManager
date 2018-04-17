@@ -179,7 +179,7 @@ namespace Microsoft.Web.LibraryManager
                 if (provider != null)
                 {
                     Task<ILibraryInstallationResult> installTask = provider.InstallAsync(state, cancellationToken);
-                    Task continuation = installTask.ContinueWith(t =>
+                    Task loggingTask = installTask.ContinueWith(t =>
                     {
                         if (t.Result.Success)
                         {
