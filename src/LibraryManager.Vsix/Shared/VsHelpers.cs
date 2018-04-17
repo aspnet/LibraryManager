@@ -57,32 +57,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
             };
         }
 
-        internal static ProjectItem GetSelectedProjectItem()
-        {
-            ProjectItem projectItem = null;
-
-            if (DTE?.SelectedItems.Count == 1)
-            {
-                SelectedItem selectedItem = VsHelpers.DTE.SelectedItems.Item(1);
-                projectItem = selectedItem?.ProjectItem;
-            }
-
-            return projectItem;
-        }
-
-        public static Project GetProjectOfSelectedProjectItem()
-        {
-            Project project = null;
-
-            if (DTE?.SelectedItems.Count == 1)
-            {
-                SelectedItem selectedItem = VsHelpers.DTE.SelectedItems.Item(1);
-                project = selectedItem.Project ?? selectedItem.ProjectItem?.ContainingProject;
-            }
-
-            return project;
-        }
-
         public static void AddFileToProject(this Project project, string file, string itemType = null)
         {
             if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
