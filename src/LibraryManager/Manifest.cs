@@ -19,7 +19,10 @@ namespace Microsoft.Web.LibraryManager
     /// </summary>
     public class Manifest
     {
-        private static readonly string[] _supportedVersions = { "1.0" };
+        /// <summary>
+        /// Supported versions of Library Manager
+        /// </summary>
+        public static readonly Version[] SupportedVersions = { new Version("1.0") };
         private IHostInteraction _hostInteraction;
         private readonly List<ILibraryInstallationState> _libraries;
         private IDependencies _dependencies;
@@ -114,7 +117,14 @@ namespace Microsoft.Web.LibraryManager
 
         private static bool IsValidManifestVersion(string version)
         {
-            return _supportedVersions.Contains(version);
+            try
+            {
+                return SupportedVersions.Contains(new Version(version));
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
