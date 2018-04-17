@@ -232,16 +232,13 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 =======
                 }
             }
-            catch (Exception ex)
+            catch (ResourceDownloadException)
             {
-                if (ex is ResourceDownloadException)
-                {
-                    throw;
-                }
-                else
-                {
-                    throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
-                }
+                throw;
+            }
+            catch (Exception)
+            {
+                throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
             }
         }
 

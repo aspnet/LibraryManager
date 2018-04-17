@@ -299,6 +299,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             try
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 string json = await FileHelpers.GetFileTextAsync(url, localFile, _expirationDays, cancellationToken).ConfigureAwait(false);
 =======
                 if (!File.Exists(localFile) || File.GetLastWriteTime(localFile) < DateTime.Now.AddDays(-_expirationDays))
@@ -308,6 +309,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 string json = await FileHelpers.ReadFileTextAsync(localFile, cancellationToken).ConfigureAwait(false);
 >>>>>>> Fixing issues with restore and cache management.
+=======
+                string json = await FileHelpers.GetFileTextAsync(url, localFile, _expirationDays, cancellationToken).ConfigureAwait(false);
+>>>>>>> Updates to exception handling
 
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -325,10 +329,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             catch (ResourceDownloadException)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 throw;
 =======
                 throw new ResourceDownloadException(url);
 >>>>>>> Fixing issues with restore and cache management.
+=======
+                throw;
+>>>>>>> Updates to exception handling
             }
             catch (Exception)
             {
