@@ -190,10 +190,14 @@ namespace Microsoft.Web.LibraryManager
                 {
                     Task<ILibraryInstallationResult> installTask = provider.InstallAsync(state, cancellationToken);
 <<<<<<< HEAD
+<<<<<<< HEAD
                     Task loggingTask = installTask.ContinueWith(t =>
 =======
                     Task continuation = installTask.ContinueWith(t =>
 >>>>>>> Fixing issues with restore and cache management.
+=======
+                    Task loggingTask = installTask.ContinueWith(t =>
+>>>>>>> Bug fixes.
                     {
                         if (t.Result.Success)
                         {

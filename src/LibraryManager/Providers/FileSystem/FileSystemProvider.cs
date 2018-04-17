@@ -106,6 +106,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             catch (Exception ex) when (ex is ResourceDownloadException || ex.InnerException is ResourceDownloadException)
             {
                 ResourceDownloadException exception = ex as ResourceDownloadException ?? ex.InnerException as ResourceDownloadException;
@@ -118,6 +119,15 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(ex.Url));
 >>>>>>> Fixing issues with restore and cache management.
+=======
+            catch (Exception ex) when (ex is ResourceDownloadException || ex.InnerException is ResourceDownloadException)
+            {
+                ResourceDownloadException exception = ex as ResourceDownloadException ?? ex.InnerException as ResourceDownloadException;
+                if (exception != null)
+                {
+                    return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(exception.Url));
+                }
+>>>>>>> Bug fixes.
             }
             catch (Exception ex)
             {
