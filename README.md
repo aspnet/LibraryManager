@@ -4,6 +4,18 @@ Install and consume 3rd-party client-side libraries with ease.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/vc2ixijbk1ak780e?svg=true)](https://ci.appveyor.com/project/madskristensen/LibraryManager)
 
+## Reasons to use LibMan
+1.	For apps not currently using another package manager
+2.	For projects where you think Bower and npm are overkill
+3.	For developers that don't want to use Bower/Yarn or npm
+4.	For developers that value simplicity in their tools
+5.	For using custom or private packages/files
+6.  For orchestrating file placement within your project
+
+## Reasons NOT to use LibMan
+1.	Developer/team likes using tools such Bower, Yarn or npm
+2.	For apps that uses WebPack or Browserify for module loading/bundling
+
 ## Features
 
 - Add any library from [cdnjs.com](https://cdnjs.com/)
