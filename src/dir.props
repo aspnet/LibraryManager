@@ -1,0 +1,17 @@
+<Project>
+  <Import Project="..\build\dependencies.props" />
+
+  <PropertyGroup>
+    <Authors>Microsoft</Authors>
+    <Company>Microsoft Corp.</Company>
+    <Description>Create custom providers for the Visual Studio Library Manager</Description>
+    <Copyright>Copyright © Microsoft</Copyright>
+    
+    <Product>Microsoft.Web.LibraryManager</Product>
+    <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/aspnet/LibraryManager</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/aspnet/LibraryManager/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)\..\artifacts\$(Configuration)</PackageOutputPath>
+  </PropertyGroup>
+</Project>
