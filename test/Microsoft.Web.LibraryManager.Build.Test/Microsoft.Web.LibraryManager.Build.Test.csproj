@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+    <Import Project="..\..\build\testdependencies.props" />
     <PropertyGroup>
         <TargetFrameworks>netcoreapp1.0;net46</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-        <PackageReference Include="MSTest.TestAdapter" Version="1.1.17" />
-        <PackageReference Include="MSTest.TestFramework" Version="1.1.17" />
-        <PackageReference Include="Microsoft.Build.Framework" Version="15.1.1012" />
-        <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.1012" />
-        <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" />
-        <PackageReference Include="System.Runtime.Loader" Version="4.3.0" Condition="'$(TargetFramework)' == 'netcoreapp1.0'" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSDKPackageVersion)" />
+        <PackageReference Include="MSTest.TestAdapter" Version="$(MSTestPackageVersion)" />
+        <PackageReference Include="MSTest.TestFramework" Version="$(MSTestPackageVersion)" />
+        <PackageReference Include="Microsoft.Build.Framework" Version="$(MSBuildPackageVersion)" />
+        <PackageReference Include="Microsoft.Build.Tasks.Core" Version="$(MSBuildPackageVersion)" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" />
+        <PackageReference Include="System.Runtime.Loader" Version="$(SystemRuntimeLoaderPackageVersion)" Condition="'$(TargetFramework)' == 'netcoreapp1.0'" />
     </ItemGroup>
 
     <ItemGroup>

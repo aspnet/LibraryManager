@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="..\..\build\dependencies.props" />
     <!-- Multilingual App Toolkit Properties -->
     <PropertyGroup Label="MultilingualAppToolkit">
       <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
@@ -26,7 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NerdBank.GitVersioning" Version="2.1.23" PrivateAssets="all" />
+        <PackageReference Include="NerdBank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" PrivateAssets="all" />
     </ItemGroup>
 
   <!-- Warning if Multilingual App Toolkit isn't installed -->
