@@ -1,6 +1,7 @@
 <Project>
   <Import Project="$(MsbuildThisFileDirectory)\..\..\build\dependencies.props" />
   <Import Project="$(MsbuildThisFileDirectory)\..\..\build\tasks\RepoTasks.tasks" />
+  <Import Project="$(MsbuildThisFileDirectory)\..\..\build\tasks\RepoInfo.props" />
   <!-- 
   To call the ExtractAppHostToOutput, the following properties need to be set.
   - AppTargetFramework              (should be netcoreapp2.1 for now).
@@ -9,7 +10,7 @@
   - RID                             (win-x86, win-x64, osx-64.)
   - ShimTargetName                  (Name of the tool for which this shim is being generated.)
   - PackageId                       (PackageId of the tool.)
-  - PackageVersion                  (PackageVersion being generated.)
+  - PackageVersion                  (PackageVersion being generated.)    - This comes from RepoInfo.props
   - ShimTargetFileName              (Name of the file to be invoked by the shim. (Usually the $(ShimTargetName).dll))
   -->
 

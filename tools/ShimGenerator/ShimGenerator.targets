@@ -46,10 +46,10 @@
                         ShimTargetName=$(ShimTargetName);
                         ShimTargetFileName=$(ShimTargetFileName);
                         PackageId=$(ShimPackageId);
-                        PackageVersion=$(PackageVersion);
                         Configuration=$(Configuration);
                         AppTargetFramework=$(AppTargetFramework)"
              BuildInParallel="False" />
+                        <!--PackageVersion=$(PackageVersion);-->
   </Target>
   
   <Target Name="GenerateShims_win_x64">
@@ -74,9 +74,9 @@
                         ShimTargetName=$(ShimTargetName);
                         ShimTargetFileName=$(ShimTargetFileName);
                         PackageId=$(ShimPackageId);
-                        PackageVersion=$(PackageVersion);
                         Configuration=$(Configuration);
                         AppTargetFramework=$(AppTargetFramework)" />
+                        <!--PackageVersion=$(PackageVersion);-->
   </Target>
   
   <Target Name="GenerateShims_osx_x64">
@@ -103,9 +103,9 @@
                         ShimTargetName=$(ShimTargetName);
                         ShimTargetFileName=$(ShimTargetFileName);
                         PackageId=$(ShimPackageId);
-                        PackageVersion=$(PackageVersion);
                         Configuration=$(Configuration);
                         AppTargetFramework=$(AppTargetFramework)"/>
+                        <!--PackageVersion=$(PackageVersion);-->
   </Target>
 
 </Project>
