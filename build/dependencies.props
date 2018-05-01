@@ -1,5 +1,13 @@
 <Project>
   <PropertyGroup>
+    <RestoreSources>
+      $(RestoreSources);
+      https://dotnet.myget.org/F/dotnet-core/api/v3/index.json;
+      https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json;
+      https://dotnet.myget.org/F/aspnetcore-tools/api/v3/index.json;
+    </RestoreSources>
+  </PropertyGroup>
+  <PropertyGroup>
     <MSBuildPackageVersion>15.1.1012</MSBuildPackageVersion>
     <NerdbankGitVersioningPackageVersion>2.1.23</NerdbankGitVersioningPackageVersion>
     <NewtonSoftJsonPackageVersion>9.0.1</NewtonSoftJsonPackageVersion>
@@ -23,5 +31,11 @@
     <MicrosoftVisualStudioTelemetryPackageVersion>15.3.789-masterCC863119</MicrosoftVisualStudioTelemetryPackageVersion>
     <MicrosoftVSSDKBuildToolsPackageVersion>15.0.26201</MicrosoftVSSDKBuildToolsPackageVersion>
     <NuGetVisualStudioPackageVersion>4.6.1</NuGetVisualStudioPackageVersion>
+  </PropertyGroup>
+
+  <!-- Global tool specific package version-->
+  <PropertyGroup>
+    <MicrosoftNETCoreDotNetAppHostPackageVersion>2.1.0-rc1-26419-02</MicrosoftNETCoreDotNetAppHostPackageVersion>
+    <MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>2.1.0-rc1-30613</MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>
   </PropertyGroup>
 </Project>
