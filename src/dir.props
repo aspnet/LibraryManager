@@ -14,4 +14,8 @@
     <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
     <PackageOutputPath>$(MSBuildThisFileDirectory)\..\artifacts\$(Configuration)</PackageOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NerdBank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" PrivateAssets="all" />
+  </ItemGroup>
 </Project>

@@ -22,5 +22,6 @@
     <MicrosoftVisualStudioShellInterop14_0DesignTimePackageVersion>15.0.25726-Preview5</MicrosoftVisualStudioShellInterop14_0DesignTimePackageVersion>
     <MicrosoftVisualStudioTelemetryPackageVersion>15.3.789-masterCC863119</MicrosoftVisualStudioTelemetryPackageVersion>
     <MicrosoftVSSDKBuildToolsPackageVersion>15.0.26201</MicrosoftVSSDKBuildToolsPackageVersion>
+    <NuGetVisualStudioPackageVersion>4.6.1</NuGetVisualStudioPackageVersion>
   </PropertyGroup>
 </Project>

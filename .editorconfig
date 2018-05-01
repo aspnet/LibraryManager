@@ -14,7 +14,7 @@ end_of_line  = crlf
 indent_size = 4
 
 # Xml project files
-[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,msbuild}]
 indent_size = 2
 
 # Xml config files

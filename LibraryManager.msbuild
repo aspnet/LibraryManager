@@ -1,0 +1,53 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <LibManSrc>$(MSBuildThisFileDirectory)\src\</LibManSrc>
+    <LibManTest>$(MSBuildThisFileDirectory)\test\</LibManTest>
+    <LibManArtifactsDir>$(MSBuildThisFileDirectory)\artifacts\</LibManArtifactsDir>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)\bin\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)\obj\</BaseIntermediateOutputPath>
+    <Timestamp>$([System.DateTime]::Now.ToString("MMddHHmmss"))</Timestamp>
+
+  </PropertyGroup>
+  <ItemGroup>
+    <SolutionToBuild Include="LibraryManager.sln" />
+    <CommonProjects Include="$(LibManSrc)LibraryManager\Microsoft.Web.LibraryManager.csproj" />
+    <CommonProjects Include="$(LibManSrc)LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
+    <VSIXProject Include="@(CommonProjects)" />
+    <VSIXProject Include="$(LibManSrc)LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj" />
+    <LibraryManagerBuildProject Include="@(CommonProjects)" />
+    <LibraryManagerBuildProject Include="$(LibManSrc)LibraryManager.Build\Microsoft.Web.LibraryManager.Build.csproj" />
+  </ItemGroup>
+
+  <Target Name="PrintTimeStamp">
+    <Message Text="$(TimeStamp)" Importance="high" />
+  </Target>
+  <!--
+  *******************************************************************
+    Restores all projects in the repository
+  *******************************************************************
+   -->
+  <Target Name="Restore">
+    <MsBuild Projects="@(SolutionToBuild)" 
+             Targets="Restore" 
+             Properties="Configuration=$(Configuration);
+                         PackageVersion=$(Version)"/>
+  </Target>
+  <!-- Build VSIX -->
+  <Target Name="BuildVSIX" DependsOnTargets="Restore">
+    <MSBuild Projects="@(VSIXProject)" 
+             Targets="Build" 
+             Properties="Configuration=$(Configuration);
+                         PackageVersion=$(Version)"/>
+  </Target>
+  <!-- Build the MsBuild package -->
+  <Target Name="BuildLibraryManagerBuild" DependsOnTargets="Restore">
+    <MSBuild Projects="@(LibraryManagerBuildProject)"
+             Targets="Build"
+             Properties="Configuration=$(Configuration);
+                         PackageVersion=$(Version)"/>
+  </Target>
+
+  <Target Name="BuildAll" DependsOnTargets="BuildLibraryManagerBuild;BuildVSIX" />
+</Project>
