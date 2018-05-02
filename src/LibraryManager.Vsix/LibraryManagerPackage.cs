@@ -14,7 +14,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideAutoLoad(PackageGuids.guidUiContextString)]
     [ProvideUIContextRule(PackageGuids.guidUiContextConfigFileString,
         name: "ConfigFile",
         expression: "(WAP | WebSite | DotNetCoreWeb ) & Config",
