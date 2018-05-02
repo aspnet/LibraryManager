@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.CommandLineUtils;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Microsoft.Extensions.CommandLineUtils;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
     internal class CacheCommand : BaseCommand
     {
-        public CacheCommand(bool throwOnUnexpectedArg = true) 
-            : base(throwOnUnexpectedArg, "cache", Resources.CacheCommandDesc)
+        public CacheCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true) 
+            : base(throwOnUnexpectedArg, "cache", Resources.CacheCommandDesc, hostEnvironment)
         {
         }
 

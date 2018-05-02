@@ -1,12 +1,20 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
+using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Tools.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
     internal abstract class BaseCommand : CommandLineApplication
     {
-        public BaseCommand(bool throwOnUnexpectedArg, string commandName, string description)
+        public BaseCommand(bool throwOnUnexpectedArg, string commandName, string description, IHostEnvironment environment)
             : base(throwOnUnexpectedArg)
         {
             if (string.IsNullOrEmpty(commandName))
@@ -14,25 +22,81 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new ArgumentException(nameof(commandName));
             }
 
-            this.Name = commandName;
-            this.Description = description;
+            HostEnvironment = environment ?? throw new ArgumentNullException(nameof(environment));
+
+            Name = commandName;
+            Description = description;
         }
+
+        public CommandOption Verbosity { get; private set; }
+        public CommandOption Project { get; private set; }
+        protected ILogger Logger => HostEnvironment.Logger;
+        protected IDependencies ManifestDependencies { get; private set; }
+        protected IHostInteractionInternal HostInteractions => HostEnvironment?.HostInteraction;
+        public virtual string Remarks { get; } = null;
+        public virtual string Examples { get; } = null;
+        protected IHostEnvironment HostEnvironment { get; }
+        protected EnvironmentSettings Settings => HostEnvironment.EnvironmentSettings;
 
         public virtual BaseCommand Configure(CommandLineApplication parent = null)
         {
-            this.HelpOption("--help|-h");
-            
-            this.OnExecute(() => ExecuteInternal());
-            this.Parent = parent;
+            HelpOption("--help|-h");
+            Verbosity = Option("--verbosity", Resources.VerbosityOptionDesc, CommandOptionType.SingleValue);
+            Project = Option("--project|-p", Resources.ProjectPathOptionDesc, CommandOptionType.SingleValue);
 
+            OnExecute(async () =>
+            {
+                if (Project.HasValue())
+                {
+                    HostEnvironment.UpdateWorkingDirectory(GetProjectDirectory());
+                }
+
+                InitializeDependencies();
+
+                return await ExecuteInternalAsync();
+            });
+            Parent = parent;
 
             return this;
+        }
+
+        private void InitializeDependencies()
+        {
+            ManifestDependencies = new Dependencies(HostEnvironment);
+        }
+
+        private string GetProjectDirectory()
+        {
+            string projectPath = Project.Value();
+            if (!Path.IsPathRooted(projectPath))
+            {
+                projectPath = Path.Combine(Directory.GetCurrentDirectory(), projectPath);
+            }
+
+            if (File.Exists(projectPath))
+            {
+                projectPath = Path.GetDirectoryName(projectPath);
+            }
+
+            if (!Directory.Exists(projectPath))
+            {
+                throw new DirectoryNotFoundException(string.Format(Resources.DirectoryNotFoundMessage, projectPath));
+            }
+
+            return projectPath;
         }
 
         protected virtual int ExecuteInternal()
         {
             ShowHelp();
             return 0;
+        }
+
+        protected virtual Task<int> ExecuteInternalAsync()
+        {
+            ShowHelp();
+
+            return Task.FromResult(0);
         }
 
         public override string GetHelpText(string commandName = null)
@@ -54,16 +118,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return help.ToString();
         }
 
-        public virtual string Remarks { get; } = null;
 
-        public virtual string Examples { get; } = null;
 
         protected void PrintOptionsAndArguments()
         {
             StringBuilder outputStr = new StringBuilder($"Options:{Environment.NewLine}");
-            if (this.Options != null)
+            if (Options != null)
             {
-                foreach (var o in this.Options)
+                foreach (var o in Options)
                 {
                     outputStr.Append($"    {o.LongName}: ");
                     if (o.HasValue())
@@ -93,9 +155,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             outputStr.Append($"{Environment.NewLine}Argument:{Environment.NewLine}");
 
-            if (this.Arguments != null)
+            if (Arguments != null)
             {
-                foreach (var arg in this.Arguments)
+                foreach (var arg in Arguments)
                 {
                     outputStr.Append($"    {arg.Name}: ");
                     if (arg.MultipleValues)
@@ -112,6 +174,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
             Console.WriteLine(outputStr.ToString());
+        }
+
+        protected async Task<Manifest> GetManifestAsync()
+        {
+            IDependencies dependencies = ManifestDependencies;
+            Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, dependencies, CancellationToken.None);
+            return manifest;
         }
     }
 }

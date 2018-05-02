@@ -1,11 +1,15 @@
-﻿using Microsoft.Extensions.CommandLineUtils;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System.Threading.Tasks;
+using Microsoft.Extensions.CommandLineUtils;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
     internal class InstallCommand : BaseCommand
     {
-        public InstallCommand(bool throwOnUnexpectedArg = true)
-            : base(throwOnUnexpectedArg, "install", Resources.InstallCommandDesc)
+        public InstallCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
+            : base(throwOnUnexpectedArg, "install", Resources.InstallCommandDesc, hostEnvironment)
         {
         }
 
@@ -18,17 +22,19 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            this.LibraryId = this.Argument("libraryId", Resources.InstallCommandLibraryIdArgumentDesc, false);
-            this.Provider = this.Option("--provider", Resources.ProviderOptionDesc, CommandOptionType.SingleValue);
-            this.Destination = this.Option("--destination", Resources.DestinationOptionDesc, CommandOptionType.SingleValue);
-            this.Files = this.Option("--files", Resources.FilesOptionDesc, CommandOptionType.MultipleValue);
+            LibraryId = Argument("libraryId", Resources.InstallCommandLibraryIdArgumentDesc, false);
+            Provider = Option("--provider", Resources.ProviderOptionDesc, CommandOptionType.SingleValue);
+            Destination = Option("--destination", Resources.DestinationOptionDesc, CommandOptionType.SingleValue);
+            Files = Option("--files", Resources.FilesOptionDesc, CommandOptionType.MultipleValue);
 
             return this;
         }
 
-        protected override int ExecuteInternal()
+        protected override async Task<int> ExecuteInternalAsync()
         {
-            this.PrintOptionsAndArguments();
+            Manifest manifest = await GetManifestAsync();
+
+
             return 0;
         }
 

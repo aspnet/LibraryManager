@@ -88,6 +88,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to clean some files..
+        /// </summary>
+        internal static string CleanFailed {
+            get {
+                return ResourceManager.GetString("CleanFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The path, relative to the current directory, where library files should be installed if no destination is defined for a given library..
         /// </summary>
         internal static string DefaultDestinationOptionDesc {
@@ -115,11 +124,47 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Directory not found {0}.
+        /// </summary>
+        internal static string DirectoryNotFoundMessage {
+            get {
+                return ResourceManager.GetString("DirectoryNotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Examples:.
         /// </summary>
         internal static string ExamplesHeader {
             get {
                 return ResourceManager.GetString("ExamplesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to restore library. [{0}] : {1}.
+        /// </summary>
+        internal static string FailedToRestoreLibraryMessage {
+            get {
+                return ResourceManager.GetString("FailedToRestoreLibraryMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} deleted.
+        /// </summary>
+        internal static string FileDeleted {
+            get {
+                return ResourceManager.GetString("FileDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete {0}.
+        /// </summary>
+        internal static string FileDeleteFail {
+            get {
+                return ResourceManager.GetString("FileDeleteFail", resourceCulture);
             }
         }
         
@@ -133,11 +178,29 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} written to disk.
+        /// </summary>
+        internal static string FileWrittenToDisk {
+            get {
+                return ResourceManager.GetString("FileWrittenToDisk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a new libman.json.
         /// </summary>
         internal static string InitCommandDesc {
             get {
                 return ResourceManager.GetString("InitCommandDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to init: A &apos;libman.json&apos; already exists..
+        /// </summary>
+        internal static string InitFailedLibmanJsonFileExists {
+            get {
+                return ResourceManager.GetString("InitFailedLibmanJsonFileExists", resourceCulture);
             }
         }
         
@@ -207,6 +270,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string LibmanCommandDesc {
             get {
                 return ResourceManager.GetString("LibmanCommandDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path to the project (Current directory is used as default)..
+        /// </summary>
+        internal static string ProjectPathOptionDesc {
+            get {
+                return ResourceManager.GetString("ProjectPathOptionDesc", resourceCulture);
             }
         }
         

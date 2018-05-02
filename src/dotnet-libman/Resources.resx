@@ -214,4 +214,28 @@
   <data name="VerbosityOptionDesc" xml:space="preserve">
     <value>Set the verbosity of output (eg. "normal", "detailed", "quiet")</value>
   </data>
+  <data name="ProjectPathOptionDesc" xml:space="preserve">
+    <value>Path to the project (Current directory is used as default).</value>
+  </data>
+  <data name="DirectoryNotFoundMessage" xml:space="preserve">
+    <value>Directory not found {0}</value>
+  </data>
+  <data name="FailedToRestoreLibraryMessage" xml:space="preserve">
+    <value>Failed to restore library. [{0}] : {1}</value>
+  </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>{0} deleted</value>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>Failed to delete {0}</value>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>{0} written to disk</value>
+  </data>
+  <data name="InitFailedLibmanJsonFileExists" xml:space="preserve">
+    <value>Failed to init: A 'libman.json' already exists.</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>Failed to clean some files.</value>
+  </data>
 </root>

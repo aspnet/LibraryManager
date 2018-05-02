@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.CommandLineUtils;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Microsoft.Extensions.CommandLineUtils;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
     internal class UninstallCommand : BaseCommand
     {
-        public UninstallCommand(bool throwOnUnexpectedArg = true)
-           : base(throwOnUnexpectedArg, "uninstall", Resources.UnInstallCommandDesc)
+        public UninstallCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
+           : base(throwOnUnexpectedArg, "uninstall", Resources.UnInstallCommandDesc, hostEnvironment)
         {
         }
 
@@ -19,15 +19,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            this.LibraryId = this.Argument("libraryId", Resources.UninstallCommandLibraryIdArgumentDesc, false);
-            this.Provider = this.Option("--provider", Resources.UninstallCommandProviderOptionDesc, CommandOptionType.SingleValue);
+            LibraryId = Argument("libraryId", Resources.UninstallCommandLibraryIdArgumentDesc, false);
+            Provider = Option("--provider", Resources.UninstallCommandProviderOptionDesc, CommandOptionType.SingleValue);
 
             return this;
         }
 
         protected override int ExecuteInternal()
         {
-            this.PrintOptionsAndArguments();
+            PrintOptionsAndArguments();
             return 0;
         }
 

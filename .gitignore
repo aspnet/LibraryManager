@@ -266,3 +266,4 @@ __pycache__/
 
 # Custom generated build artifacts
 build/tasks/RepoInfo.props
+/src/dotnet-libman/Properties/launchSettings.json
