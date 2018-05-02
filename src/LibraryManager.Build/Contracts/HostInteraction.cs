@@ -66,9 +66,12 @@ namespace Microsoft.Web.LibraryManager.Build
 
                 try
                 {
-                    File.Delete(absoluteFile);
+                    if (File.Exists(absoluteFile))
+                    {
+                        File.Delete(absoluteFile);
 
-                    Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
+                        Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
+                    }
                 }
                 catch (Exception)
                 {
