@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Microsoft.Web.LibraryManager.Tools.Contracts
@@ -19,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             {
                 string envVar = "%HOME%";
 
-                if (Path.DirectorySeparatorChar == '\\') // Windows
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     envVar = "%USERPROFILE%";
                 }

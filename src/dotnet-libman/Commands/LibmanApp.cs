@@ -29,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             Commands.Add(new CacheCommand(HostEnvironment).Configure(this));
 
             // These are shown by child commands.
-            Project.ShowInHelpText = false;
+            RootDir.ShowInHelpText = false;
             Verbosity.ShowInHelpText = false;
 
             return this;

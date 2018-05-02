@@ -238,4 +238,25 @@
   <data name="CleanFailed" xml:space="preserve">
     <value>Failed to clean some files.</value>
   </data>
+  <data name="LibmanJsonNotFound" xml:space="preserve">
+    <value>libman.json was not found:{0}</value>
+  </data>
+  <data name="DestinationRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>Default destination is not set. Please provide a destination using '--destination'.</value>
+  </data>
+  <data name="LibraryIdRequiredForInstall" xml:space="preserve">
+    <value>LibraryId is required to install</value>
+  </data>
+  <data name="LibraryIdRequiredForUnInstall" xml:space="preserve">
+    <value>LibraryId is required to uninstall</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
+    <value>More than one library found with name '{0}'.</value>
+  </data>
+  <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>Default Provider is not set. Please provide a provider using '--provider'</value>
+  </data>
+  <data name="UseProviderToDisambiguateMessage" xml:space="preserve">
+    <value>Use --provider to disambiguate libraries of same name from different providers in the project.</value>
+  </data>
 </root>

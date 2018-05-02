@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         }
 
         public CommandOption Verbosity { get; private set; }
-        public CommandOption Project { get; private set; }
+        public CommandOption RootDir { get; private set; }
         protected ILogger Logger => HostEnvironment.Logger;
         protected IDependencies ManifestDependencies { get; private set; }
         protected IHostInteractionInternal HostInteractions => HostEnvironment?.HostInteraction;
@@ -42,11 +43,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             HelpOption("--help|-h");
             Verbosity = Option("--verbosity", Resources.VerbosityOptionDesc, CommandOptionType.SingleValue);
-            Project = Option("--project|-p", Resources.ProjectPathOptionDesc, CommandOptionType.SingleValue);
+            RootDir = Option("--root", Resources.ProjectPathOptionDesc, CommandOptionType.SingleValue);
+
+            // Reserving this for now.
+            RootDir.ShowInHelpText = false;
 
             OnExecute(async () =>
             {
-                if (Project.HasValue())
+                if (RootDir.HasValue())
                 {
                     HostEnvironment.UpdateWorkingDirectory(GetProjectDirectory());
                 }
@@ -67,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         private string GetProjectDirectory()
         {
-            string projectPath = Project.Value();
+            string projectPath = RootDir.Value();
             if (!Path.IsPathRooted(projectPath))
             {
                 projectPath = Path.Combine(Directory.GetCurrentDirectory(), projectPath);
@@ -118,68 +122,21 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return help.ToString();
         }
 
-
-
-        protected void PrintOptionsAndArguments()
+        protected async Task<Manifest> GetManifestAsync(bool createIfNotExists = false)
         {
-            StringBuilder outputStr = new StringBuilder($"Options:{Environment.NewLine}");
-            if (Options != null)
+            if (!File.Exists(Settings.ManifestFileName) && !createIfNotExists)
             {
-                foreach (var o in Options)
-                {
-                    outputStr.Append($"    {o.LongName}: ");
-                    if (o.HasValue())
-                    {
-                        switch (o.OptionType)
-                        {
-                            case CommandOptionType.MultipleValue:
-                                outputStr.Append(string.Join("; ", o.Values));
-                                break;
-                            case CommandOptionType.NoValue:
-                                outputStr.Append("Flag specified");
-                                break;
-                            case CommandOptionType.SingleValue:
-                                outputStr.Append(o.Value());
-                                break;
-                        }
-
-                    }
-                    else
-                    {
-                        outputStr.Append("Unspecified");
-                    }
-
-                    outputStr.Append(Environment.NewLine);
-                }
+                throw new InvalidOperationException(string.Format(Resources.LibmanJsonNotFound, Settings.ManifestFileName));
             }
 
-            outputStr.Append($"{Environment.NewLine}Argument:{Environment.NewLine}");
-
-            if (Arguments != null)
-            {
-                foreach (var arg in Arguments)
-                {
-                    outputStr.Append($"    {arg.Name}: ");
-                    if (arg.MultipleValues)
-                    {
-                        outputStr.Append(string.Join(";", arg.Values));
-                    }
-                    else
-                    {
-                        outputStr.Append(arg.Value);
-                    }
-
-                    outputStr.Append(Environment.NewLine);
-                }
-            }
-
-            Console.WriteLine(outputStr.ToString());
-        }
-
-        protected async Task<Manifest> GetManifestAsync()
-        {
             IDependencies dependencies = ManifestDependencies;
             Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, dependencies, CancellationToken.None);
+
+            if (!File.Exists(Settings.ManifestFileName))
+            {
+                manifest.AddVersion(Manifest.SupportedVersions.Last().ToString());
+            }
+
             return manifest;
         }
     }

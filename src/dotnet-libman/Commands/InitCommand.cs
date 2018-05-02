@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            DefaultProvider = Option("--default-provider|-dp", Resources.DefaultProviderOptionDesc, CommandOptionType.SingleValue);
+            DefaultProvider = Option("--default-provider|-p", Resources.DefaultProviderOptionDesc, CommandOptionType.SingleValue);
             DefaultDestination = Option("--default-destination|-d", Resources.DefaultDestinationOptionDesc, CommandOptionType.SingleValue);
 
             return this;
@@ -45,12 +45,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 ? DefaultDestination.Value()
                 : HostEnvironment.InputReader.GetUserInput(nameof(DefaultDestination));
 
-            Manifest manifest = await GetManifestAsync();
+            Manifest manifest = await GetManifestAsync(createIfNotExists: true);
             manifest.DefaultDestination = defaultDestination;
             manifest.DefaultProvider = defaultProvider;
-
-            // Add a version to the file.
-            manifest.AddVersion(Manifest.SupportedVersions.Last().ToString());
 
             await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
 

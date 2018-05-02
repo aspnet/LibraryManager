@@ -131,7 +131,7 @@ namespace Microsoft.Web.LibraryManager
         /// Adds a library to the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="state">An instance of <see cref="ILibraryInstallationState"/> representing the library to add.</param>
-        internal void AddLibrary(ILibraryInstallationState state)
+        public void AddLibrary(ILibraryInstallationState state)
         {
             ILibraryInstallationState existing = _libraries.Find(p => p.LibraryId == state.LibraryId && p.ProviderId == state.ProviderId);
 
@@ -216,6 +216,23 @@ namespace Microsoft.Web.LibraryManager
             {
                 DeleteLibraryFiles(state, deleteFileAction);
 
+                _libraries.Remove(state);
+            }
+        }
+
+        /// <summary>
+        /// Uninstalls the specified library and removes it from the <see cref="Libraries"/> collection.
+        /// </summary>
+        /// <param name="libraryId">The library identifier.</param>
+        /// <param name="provider">Provider id</param>
+        /// <param name="deleteFileAction"></param>
+        public void Uninstall(string libraryId, string provider, Action<string> deleteFileAction)
+        {
+            ILibraryInstallationState state = Libraries.SingleOrDefault(l => l.LibraryId == libraryId && l.ProviderId == provider);
+
+            if (state != null)
+            {
+                DeleteLibraryFiles(state, deleteFileAction);
                 _libraries.Remove(state);
             }
         }

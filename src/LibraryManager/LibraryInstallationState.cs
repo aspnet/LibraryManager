@@ -8,11 +8,9 @@ using System.Collections.Generic;
 namespace Microsoft.Web.LibraryManager
 {
 
-    /// <summary>
-    /// For internal use only.
-    /// </summary>
+    /// <inheritdoc />
     /// <seealso cref="Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" />
-    internal class LibraryInstallationState : ILibraryInstallationState
+    public class LibraryInstallationState : ILibraryInstallationState
     {
         /// <summary>
         /// The unique identifier of the provider.

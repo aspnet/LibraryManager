@@ -124,6 +124,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default destination is not set. Please provide a destination using &apos;--destination&apos;..
+        /// </summary>
+        internal static string DestinationRequiredWhenNoDefaultIsPresent {
+            get {
+                return ResourceManager.GetString("DestinationRequiredWhenNoDefaultIsPresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Directory not found {0}.
         /// </summary>
         internal static string DirectoryNotFoundMessage {
@@ -274,6 +283,42 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to libman.json was not found:{0}.
+        /// </summary>
+        internal static string LibmanJsonNotFound {
+            get {
+                return ResourceManager.GetString("LibmanJsonNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LibraryId is required to install.
+        /// </summary>
+        internal static string LibraryIdRequiredForInstall {
+            get {
+                return ResourceManager.GetString("LibraryIdRequiredForInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LibraryId is required to uninstall.
+        /// </summary>
+        internal static string LibraryIdRequiredForUnInstall {
+            get {
+                return ResourceManager.GetString("LibraryIdRequiredForUnInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More than one library found with name &apos;{0}&apos;..
+        /// </summary>
+        internal static string MoreThanOneLibraryFoundToUninstall {
+            get {
+                return ResourceManager.GetString("MoreThanOneLibraryFoundToUninstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path to the project (Current directory is used as default)..
         /// </summary>
         internal static string ProjectPathOptionDesc {
@@ -288,6 +333,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string ProviderOptionDesc {
             get {
                 return ResourceManager.GetString("ProviderOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Provider is not set. Please provide a provider using &apos;--provider&apos;.
+        /// </summary>
+        internal static string ProviderRequiredWhenNoDefaultIsPresent {
+            get {
+                return ResourceManager.GetString("ProviderRequiredWhenNoDefaultIsPresent", resourceCulture);
             }
         }
         
@@ -385,6 +439,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string UnInstallCommandRemarks {
             get {
                 return ResourceManager.GetString("UnInstallCommandRemarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use --provider to disambiguate libraries of same name from different providers in the project..
+        /// </summary>
+        internal static string UseProviderToDisambiguateMessage {
+            get {
+                return ResourceManager.GetString("UseProviderToDisambiguateMessage", resourceCulture);
             }
         }
         
