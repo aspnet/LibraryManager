@@ -14,9 +14,11 @@ namespace Microsoft.Web.LibraryManager.Tools
         static void Main(string[] args)
         {
 #if DEBUG
-            if (args.Contains("--debug"))
+            int debugIndex = args.ToList().FindIndex(a => a.Equals("--debug", StringComparison.OrdinalIgnoreCase));
+            if (debugIndex > 0)
             {
-                args = args.SkipLast(1).ToArray();
+                var newArgs = args.Take(debugIndex);
+                args = newArgs.Concat(args.Skip(debugIndex + 1)).ToArray();
                 Console.WriteLine($"Attach Debugger to process: {System.Diagnostics.Process.GetCurrentProcess().Id}");
                 while (!System.Diagnostics.Debugger.IsAttached);
             }
@@ -38,7 +40,6 @@ namespace Microsoft.Web.LibraryManager.Tools
             }
             catch (AggregateException ae)
             {
-                //defaultSettings.Logger.Log(ae.Message, LogLevel.Error);
                 foreach (var ie in ae.InnerExceptions)
                 {
                     defaultSettings.Logger.Log(ie.Message, LogLevel.Error);

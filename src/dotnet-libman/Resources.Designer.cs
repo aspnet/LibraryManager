@@ -310,11 +310,29 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than one library found with name &apos;{0}&apos;..
+        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos;..
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUninstall {
             get {
                 return ResourceManager.GetString("MoreThanOneLibraryFoundToUninstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos; for provider &apos;{1}&apos;. Please remove the manually from the libman.json file..
+        /// </summary>
+        internal static string MoreThanOneLibraryFoundToUninstallForProvider {
+            get {
+                return ResourceManager.GetString("MoreThanOneLibraryFoundToUninstallForProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library &apos;{0}&apos; is not installed. Nothing to uninstall..
+        /// </summary>
+        internal static string NoLibraryToUninstall {
+            get {
+                return ResourceManager.GetString("NoLibraryToUninstall", resourceCulture);
             }
         }
         

@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\dir.props" />
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -59,7 +58,5 @@
         packageIconUrl=$(PackageIconUrl);
         -->
     </PropertyGroup>
-</Target>
-
-
+  </Target>
 </Project>

@@ -35,7 +35,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
 
         public IHostInteraction GetHostInteractions() => _hostInteraction;
 
-
         public IReadOnlyList<IProvider> Providers => _providers;
 
         public IProvider GetProvider(string providerId)

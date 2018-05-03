@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="..\dir.props" />
     <!-- Multilingual App Toolkit Properties -->
     <PropertyGroup Label="MultilingualAppToolkit">
       <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
@@ -17,10 +16,6 @@
         <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
     </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="NerdBank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" PrivateAssets="all" />
-    </ItemGroup>
 
   <!-- Warning if Multilingual App Toolkit isn't installed -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />

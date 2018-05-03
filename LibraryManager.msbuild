@@ -1,5 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="dir.props" />
+  <Import Project="Directory.Build.props" />
   <Import Project="tools\ShimGenerator\ShimGenerator.targets" />
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>

@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="..\dir.props" />
     <PropertyGroup>
         <TargetFrameworks>netstandard1.5;net46</TargetFrameworks>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -14,7 +13,6 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Build.Framework" Version="$(MSBuildPackageVersion)" PrivateAssets="All" />
         <PackageReference Include="Microsoft.Build.Tasks.Core" Version="$(MSBuildPackageVersion)" PrivateAssets="All" />
-        <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" PrivateAssets="All" />
         <PackageReference Include="System.Runtime.Loader" Version="$(SystemRuntimeLoaderPackageVersion)" Condition="'$(TargetFramework)' == 'netstandard1.5'" />
     </ItemGroup>
 

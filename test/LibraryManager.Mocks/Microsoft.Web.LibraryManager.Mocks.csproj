@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="..\..\build\testdependencies.props" />
     <PropertyGroup>
         <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
         <PackageTags>mocks, unit test, library, client-side, package</PackageTags>

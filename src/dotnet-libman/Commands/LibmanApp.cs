@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         private string GetVersion()
         {
             FileVersionInfo info = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
-            return $"{info.ProductMajorPart}.{info.ProductMinorPart}.{info.ProductBuildPart}.{info.ProductPrivatePart}";
+            return info.ProductVersion;
         }
     }
 }

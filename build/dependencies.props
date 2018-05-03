@@ -33,9 +33,16 @@
     <NuGetVisualStudioPackageVersion>4.6.1</NuGetVisualStudioPackageVersion>
   </PropertyGroup>
 
+  <!-- Test specific dependencies. -->
+  <PropertyGroup>
+    <MicrosoftNETTestSDKPackageVersion>15.0.0</MicrosoftNETTestSDKPackageVersion>
+    <MSTestAdapterPackageVersion>1.1.17</MSTestAdapterPackageVersion>
+    <MSTestFrameworkPackageVersion>1.1.17</MSTestFrameworkPackageVersion>
+  </PropertyGroup>
+
   <!-- Global tool specific package version-->
   <PropertyGroup>
     <MicrosoftNETCoreDotNetAppHostPackageVersion>2.1.0-rc1-26419-02</MicrosoftNETCoreDotNetAppHostPackageVersion>
-    <MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>2.1.0-rc1-30613</MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>
+    <MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>2.1.0-rtm-30700</MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>
   </PropertyGroup>
 </Project>

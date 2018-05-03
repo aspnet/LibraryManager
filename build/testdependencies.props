@@ -1,7 +1,0 @@
-<Project>
-    <Import Project="dependencies.props" />
-    <PropertyGroup>
-        <MicrosoftNETTestSDKPackageVersion>15.0.0</MicrosoftNETTestSDKPackageVersion>
-        <MSTestPackageVersion>1.1.17</MSTestPackageVersion>
-    </PropertyGroup>
-</Project>

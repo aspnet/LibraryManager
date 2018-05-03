@@ -251,12 +251,18 @@
     <value>LibraryId is required to uninstall</value>
   </data>
   <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
-    <value>More than one library found with name '{0}'.</value>
+    <value>More than one library found with id '{0}'.</value>
   </data>
   <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
     <value>Default Provider is not set. Please provide a provider using '--provider'</value>
   </data>
   <data name="UseProviderToDisambiguateMessage" xml:space="preserve">
     <value>Use --provider to disambiguate libraries of same name from different providers in the project.</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstallForProvider" xml:space="preserve">
+    <value>More than one library found with id '{0}' for provider '{1}'. Please remove the manually from the libman.json file.</value>
+  </data>
+  <data name="NoLibraryToUninstall" xml:space="preserve">
+    <value>Library '{0}' is not installed. Nothing to uninstall.</value>
   </data>
 </root>

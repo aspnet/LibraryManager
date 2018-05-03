@@ -228,7 +228,13 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="deleteFileAction"></param>
         public void Uninstall(string libraryId, string provider, Action<string> deleteFileAction)
         {
-            ILibraryInstallationState state = Libraries.SingleOrDefault(l => l.LibraryId == libraryId && l.ProviderId == provider);
+            // Find a single library with the specified provider. 
+            // Or a library with no provider when the specified provider is the default.
+            ILibraryInstallationState state = Libraries.SingleOrDefault(
+                l => l.LibraryId == libraryId 
+                && (l.ProviderId == provider
+                    || (string.IsNullOrEmpty(l.ProviderId) 
+                        && provider == DefaultProvider)));
 
             if (state != null)
             {

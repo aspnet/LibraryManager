@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
@@ -34,7 +35,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             Manifest manifest = await GetManifestAsync(createIfNotExists: false);
 
-            ValidateParameters(manifest);
+            ILibraryInstallationState installedLibrary = ValidateParametersAndGetLibraryToUninstall(manifest);
+
+            if (installedLibrary == null)
+            {
+                Logger.Log(string.Format(Resources.NoLibraryToUninstall, LibraryId.Value), LogLevel.Operation);
+            }
 
             Action<string> deleteFileAction = (s) => HostInteractions.DeleteFiles(s);
 
@@ -52,20 +58,33 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return 0;
         }
 
-        private void ValidateParameters(Manifest manifest)
+        private ILibraryInstallationState ValidateParametersAndGetLibraryToUninstall(Manifest manifest)
         {
             List<string> errors = new List<string>();
-
+            IEnumerable<ILibraryInstallationState> candidates = null;
             if (string.IsNullOrWhiteSpace(LibraryId.Value))
             {
                 errors.Add(Resources.LibraryIdRequiredForUnInstall);
             }
             else if (!Provider.HasValue())
             {
-                if (manifest.Libraries.Count(l => l.LibraryId == LibraryId.Value) > 1)
+                candidates = manifest.Libraries.Where(l => l.LibraryId == LibraryId.Value);
+                if (candidates.Count() > 1)
                 {
                     errors.Add(string.Format(Resources.MoreThanOneLibraryFoundToUninstall, LibraryId.Value));
                     errors.Add(string.Format(Resources.UseProviderToDisambiguateMessage));
+                }
+            }
+            else
+            {
+                 candidates = manifest.Libraries.Where(
+                    l => l.LibraryId == LibraryId.Value
+                    && (l.ProviderId == Provider.Value()
+                        || (string.IsNullOrEmpty(l.ProviderId) && Provider.Value() == manifest.DefaultProvider)));
+
+                if (candidates.Count() > 1)
+                {
+                    errors.Add(string.Format(Resources.MoreThanOneLibraryFoundToUninstallForProvider, LibraryId.Value, Provider.Value()));
                 }
             }
 
@@ -73,6 +92,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 throw new InvalidOperationException(string.Join(Environment.NewLine, errors));
             }
+
+            return candidates?.FirstOrDefault();
         }
 
         public override string Remarks => Resources.UnInstallCommandRemarks;

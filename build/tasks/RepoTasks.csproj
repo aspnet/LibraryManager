@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\dependencies.props" />
+  <!-- <Import Project="..\dependencies.props" /> -->
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>false</IsPackable>

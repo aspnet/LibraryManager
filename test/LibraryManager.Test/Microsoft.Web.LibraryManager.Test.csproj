@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="..\..\build\testdependencies.props" />
     <PropertyGroup>
         <TargetFrameworks>netcoreapp1.0;net46</TargetFrameworks>
     </PropertyGroup>

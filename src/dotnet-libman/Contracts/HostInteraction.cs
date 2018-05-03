@@ -35,14 +35,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, path));
 
             if (absolutePath.Exists)
-                return true;
-
-            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
-                throw new UnauthorizedAccessException();
-
-            if (absolutePath.Exists && (absolutePath.Attributes & FileAttributes.ReadOnly) != 0)
             {
                 return true;
+            }
+
+            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+            {
+                throw new UnauthorizedAccessException();
             }
 
             absolutePath.Directory.Create();
@@ -50,7 +49,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             using (Stream stream = content.Invoke())
             {
                 if (stream == null)
+                {
                     return false;
+                }
 
                 using (FileStream writer = File.Create(absolutePath.FullName, 4096, FileOptions.Asynchronous))
                 {

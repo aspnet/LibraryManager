@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="$(MSBuildThisFileDirectory)\..\..\..\build\dependencies.props" />
+  <!-- <Import Project="$(MSBuildThisFileDirectory)\..\..\..\build\dependencies.props" /> -->
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>

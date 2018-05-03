@@ -5,8 +5,9 @@ root = true
 
 # Don't use tabs for indentation.
 [*]
-indent_style = space
-end_of_line  = crlf
+indent_style         = space
+end_of_line          = crlf
+insert_final_newline = true
 # (Please don't specify an indent_size here; that has too many unintended consequences.)
 
 # Code files

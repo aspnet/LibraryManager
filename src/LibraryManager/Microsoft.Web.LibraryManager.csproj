@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\dir.props" />
   <PropertyGroup Label="MultilingualAppToolkit">
     <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
     <MultilingualFallbackLanguage>en</MultilingualFallbackLanguage>
@@ -28,7 +27,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="$(NET45NewtonSoftJsonPackageVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" PrivateAssets="all" />
     <PackageReference Include="System.Net.Http" Version="$(SystemNetHttpPackageVersion)" />
     <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
     <Reference Include="System.ComponentModel.Composition" Condition="'$(TargetFramework)' != 'netstandard1.3'" />
