@@ -105,7 +105,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         public override string GetHelpText(string commandName = null)
         {
-            StringBuilder help = new StringBuilder(base.GetHelpText(commandName));
+            string baseHelp = base.GetHelpText(commandName).Replace("dotnet libman", "libman");
+            StringBuilder help = new StringBuilder(baseHelp);
 
             if (!string.IsNullOrWhiteSpace(Remarks))
             {
