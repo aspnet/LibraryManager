@@ -20,7 +20,7 @@
     <LibraryManagerBuildProject Include="@(CommonProjects)" />
     <LibraryManagerBuildProject Include="$(LibManSrc)LibraryManager.Build\Microsoft.Web.LibraryManager.Build.csproj" />
 
-    <GlobalToolProject Include="$(LibmanSrc)dotnet-libman\dotnet-libman.csproj" />
+    <GlobalToolProject Include="$(LibmanSrc)libman\libman.csproj" />
   </ItemGroup>
 
 <!-- 

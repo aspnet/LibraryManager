@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Microsoft.Web.LibraryManager.Tools</RootNamespace>
-    <NuspecFile>dotnet-libman.nuspec</NuspecFile>
+    <NuspecFile>libman.nuspec</NuspecFile>
     <PackageType>DotNetTool</PackageType>
     <Description>Command line tool for Library Manager</Description>
   </PropertyGroup>

@@ -3,9 +3,9 @@
       <AppTargetFramework Condition="'$(AppTargetFramework)' == '' ">netcoreapp2.1</AppTargetFramework>
       <ShimOutputDirectoryBase Condition="'$(ShimOutputDirectoryBase)' == '' ">bin\shims\</ShimOutputDirectoryBase>
       <IntermediateDirectoryForShimsBase Condition="'$(IntermediateDirectoryForShimsBase)' == '' ">$(IntermediateOutputPath)</IntermediateDirectoryForShimsBase>
-      <ShimTargetName Condition="'$(ShimTargetName)' == '' ">dotnet-libman</ShimTargetName>
-      <ShimTargetFileName Condition="'$(ShimTargetFileName)' == '' ">dotnet-libman.dll</ShimTargetFileName>
-      <ShimPackageId Condition="'$(ShimPackageId)' == ''">dotnet-libman</ShimPackageId>
+      <ShimTargetName Condition="'$(ShimTargetName)' == '' ">libman</ShimTargetName>
+      <ShimTargetFileName Condition="'$(ShimTargetFileName)' == '' ">libman.dll</ShimTargetFileName>
+      <ShimPackageId Condition="'$(ShimPackageId)' == ''">libman</ShimPackageId>
   </PropertyGroup>
 
   <Target Name="CleanPreviousOutput">

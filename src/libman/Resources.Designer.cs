@@ -409,6 +409,33 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos; for provider &apos;{1}&apos;..
+        /// </summary>
+        internal static string MoreThanOneLibraryFoundToUpdateForProvider {
+            get {
+                return ResourceManager.GetString("MoreThanOneLibraryFoundToUpdateForProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No libraries to update. Please use install command to install libraries..
+        /// </summary>
+        internal static string NoLibrariesToUpdate {
+            get {
+                return ResourceManager.GetString("NoLibrariesToUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No library found with id &apos;{0}&apos; for provider &apos;{1}&apos; to update..
+        /// </summary>
+        internal static string NoLibraryFoundToUpdate {
+            get {
+                return ResourceManager.GetString("NoLibraryFoundToUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Library &apos;{0}&apos; is not installed. Nothing to uninstall..
         /// </summary>
         internal static string NoLibraryToUninstall {
@@ -479,15 +506,6 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string RestoreCommandRemarks {
             get {
                 return ResourceManager.GetString("RestoreCommandRemarks", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

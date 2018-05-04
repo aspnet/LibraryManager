@@ -8,13 +8,13 @@
 
     <!-- Shim Generation properties -->
     <AppTargetFramework>netcoreapp2.1</AppTargetFramework>
-    <ShimOutputDirectoryBase>$(RepoRoot)\src\dotnet-libman\bin\shims\</ShimOutputDirectoryBase>
-    <IntermediateDirectoryForShimsBase>$(RepoRoot)\src\dotnet-libman\obj\shims\</IntermediateDirectoryForShimsBase>
-    <ShimTargetName>dotnet-libman</ShimTargetName>
-    <ShimTargetFileName>dotnet-libman.dll</ShimTargetFileName>
+    <ShimOutputDirectoryBase>$(RepoRoot)\src\libman\bin\shims\</ShimOutputDirectoryBase>
+    <IntermediateDirectoryForShimsBase>$(RepoRoot)\src\libman\obj\shims\</IntermediateDirectoryForShimsBase>
+    <ShimTargetName>libman</ShimTargetName>
+    <ShimTargetFileName>libman.dll</ShimTargetFileName>
 
     <!-- General properties -->
-    <ToolPublishDir>$(RepoRoot)\src\dotnet-libman\bin\Publish\</ToolPublishDir>
+    <ToolPublishDir>$(RepoRoot)\src\libman\bin\Publish\</ToolPublishDir>
 
     <Authors>Microsoft</Authors>
     <Company>Microsoft Corp.</Company>

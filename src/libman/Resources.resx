@@ -274,9 +274,6 @@
   <data name="CacheCleanProviderArgumentDesc" xml:space="preserve">
     <value>Provider for which the cache files should be cleaned.</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
-  </data>
   <data name="UpdateCommandDesc" xml:space="preserve">
     <value>Updates (upgrades) the specified library (or all libraries if none specified) to the latest version.</value>
   </data>
@@ -319,5 +316,14 @@
   </data>
   <data name="CacheListDetailedOptionDesc" xml:space="preserve">
     <value>List details about the which files are available for each library</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUpdateForProvider" xml:space="preserve">
+    <value>More than one library found with id '{0}' for provider '{1}'.</value>
+  </data>
+  <data name="NoLibrariesToUpdate" xml:space="preserve">
+    <value>No libraries to update. Please use install command to install libraries.</value>
+  </data>
+  <data name="NoLibraryFoundToUpdate" xml:space="preserve">
+    <value>No library found with id '{0}' for provider '{1}' to update.</value>
   </data>
 </root>

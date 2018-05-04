@@ -58,7 +58,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppHostRestorerProject", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppHostRestorerProject", "tools\ShimGenerator\AppHostRestorerProject\AppHostRestorerProject.csproj", "{CE6EDDD4-AFBD-4FCF-89FC-30A0CD034642}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-libman", "src\dotnet-libman\dotnet-libman.csproj", "{E98B5AB3-E58F-482A-8A81-829CFEA63E31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libman", "src\libman\libman.csproj", "{E98B5AB3-E58F-482A-8A81-829CFEA63E31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
