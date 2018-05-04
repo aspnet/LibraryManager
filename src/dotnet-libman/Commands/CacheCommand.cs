@@ -12,10 +12,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
         }
 
-
         public override BaseCommand Configure(CommandLineApplication parent)
         {
-            return base.Configure(parent);
+            base.Configure(parent);
+
+            Commands.Add(new CacheCleanCommand(HostEnvironment).Configure(this));
+            Commands.Add(new CacheListCommand(HostEnvironment).Configure(this));
+
+            return this;
         }
 
         protected override int ExecuteInternal()

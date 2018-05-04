@@ -61,11 +61,92 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete all files from the local machine&apos;s LibMan cache..
+        /// </summary>
+        internal static string CacheCleanCommandDesc {
+            get {
+                return ResourceManager.GetString("CacheCleanCommandDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cache cleaned..
+        /// </summary>
+        internal static string CacheCleanedMessage {
+            get {
+                return ResourceManager.GetString("CacheCleanedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to clean cache: {0}.
+        /// </summary>
+        internal static string CacheCleanFailed {
+            get {
+                return ResourceManager.GetString("CacheCleanFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provider for which the cache files should be cleaned..
+        /// </summary>
+        internal static string CacheCleanProviderArgumentDesc {
+            get {
+                return ResourceManager.GetString("CacheCleanProviderArgumentDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string CacheCommandDesc {
             get {
                 return ResourceManager.GetString("CacheCommandDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cache contents:.
+        /// </summary>
+        internal static string CacheContentMessage {
+            get {
+                return ResourceManager.GetString("CacheContentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (empty).
+        /// </summary>
+        internal static string CacheEmptyMessage {
+            get {
+                return ResourceManager.GetString("CacheEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} cache cleaned..
+        /// </summary>
+        internal static string CacheForProviderCleanedMessage {
+            get {
+                return ResourceManager.GetString("CacheForProviderCleanedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display a list of all libraries that are stored in the local machine’s LibMan cache..
+        /// </summary>
+        internal static string CacheListCommandDesc {
+            get {
+                return ResourceManager.GetString("CacheListCommandDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List details about the which files are available for each library.
+        /// </summary>
+        internal static string CacheListDetailedOptionDesc {
+            get {
+                return ResourceManager.GetString("CacheListDetailedOptionDesc", resourceCulture);
             }
         }
         
@@ -402,6 +483,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json.
         /// </summary>
         internal static string UnInstallCommandDesc {
@@ -457,6 +547,67 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string UnInstallCommandRemarks {
             get {
                 return ResourceManager.GetString("UnInstallCommandRemarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updates (upgrades) the specified library (or all libraries if none specified) to the latest version..
+        /// </summary>
+        internal static string UpdateCommandDesc {
+            get {
+                return ResourceManager.GetString("UpdateCommandDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to     libman update 
+        ///    libman update jquery 
+        ///    libman update --provider cdnjs 
+        ///    libman update jquery --provider cdnjs 
+        ///    libman update jquery -pre 
+        ///    libman update jquery@3.2.1.
+        /// </summary>
+        internal static string UpdateCommandExamples {
+            get {
+                return ResourceManager.GetString("UpdateCommandExamples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library to update to latest version..
+        /// </summary>
+        internal static string UpdateCommandLibraryArgumentDesc {
+            get {
+                return ResourceManager.GetString("UpdateCommandLibraryArgumentDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If specified, the latest pre-release version of the library will be downloaded (where applicable)..
+        /// </summary>
+        internal static string UpdateCommandPreReleaseOptionDesc {
+            get {
+                return ResourceManager.GetString("UpdateCommandPreReleaseOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If specified, only libraries from the specified provider will be updated..
+        /// </summary>
+        internal static string UpdateCommandProviderOptionDesc {
+            get {
+                return ResourceManager.GetString("UpdateCommandProviderOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to     Error if no libman.json in current folder. 
+        ///    Error if specified library doesn&apos;t exist.
+        ///    To specify a specific version, use the Install command..
+        /// </summary>
+        internal static string UpdateCommandRemarks {
+            get {
+                return ResourceManager.GetString("UpdateCommandRemarks", resourceCulture);
             }
         }
         

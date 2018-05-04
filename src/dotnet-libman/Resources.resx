@@ -265,4 +265,59 @@
   <data name="NoLibraryToUninstall" xml:space="preserve">
     <value>Library '{0}' is not installed. Nothing to uninstall.</value>
   </data>
+  <data name="CacheCleanCommandDesc" xml:space="preserve">
+    <value>Delete all files from the local machine's LibMan cache.</value>
+  </data>
+  <data name="CacheListCommandDesc" xml:space="preserve">
+    <value>Display a list of all libraries that are stored in the local machine’s LibMan cache.</value>
+  </data>
+  <data name="CacheCleanProviderArgumentDesc" xml:space="preserve">
+    <value>Provider for which the cache files should be cleaned.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UpdateCommandDesc" xml:space="preserve">
+    <value>Updates (upgrades) the specified library (or all libraries if none specified) to the latest version.</value>
+  </data>
+  <data name="UpdateCommandExamples" xml:space="preserve">
+    <value>    libman update 
+    libman update jquery 
+    libman update --provider cdnjs 
+    libman update jquery --provider cdnjs 
+    libman update jquery -pre 
+    libman update jquery@3.2.1</value>
+  </data>
+  <data name="UpdateCommandRemarks" xml:space="preserve">
+    <value>    Error if no libman.json in current folder. 
+    Error if specified library doesn't exist.
+    To specify a specific version, use the Install command.</value>
+  </data>
+  <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
+    <value>Library to update to latest version.</value>
+  </data>
+  <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
+    <value>If specified, the latest pre-release version of the library will be downloaded (where applicable).</value>
+  </data>
+  <data name="UpdateCommandProviderOptionDesc" xml:space="preserve">
+    <value>If specified, only libraries from the specified provider will be updated.</value>
+  </data>
+  <data name="CacheCleanedMessage" xml:space="preserve">
+    <value>Cache cleaned.</value>
+  </data>
+  <data name="CacheCleanFailed" xml:space="preserve">
+    <value>Failed to clean cache: {0}</value>
+  </data>
+  <data name="CacheContentMessage" xml:space="preserve">
+    <value>Cache contents:</value>
+  </data>
+  <data name="CacheEmptyMessage" xml:space="preserve">
+    <value>(empty)</value>
+  </data>
+  <data name="CacheForProviderCleanedMessage" xml:space="preserve">
+    <value>{0} cache cleaned.</value>
+  </data>
+  <data name="CacheListDetailedOptionDesc" xml:space="preserve">
+    <value>List details about the which files are available for each library</value>
+  </data>
 </root>
