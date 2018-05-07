@@ -224,12 +224,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             string libraryDir = Path.Combine(CacheFolder, name);
 
             try
-            { 
+            {
                 foreach (string sourceFile in state.Files)
                 {
                     string cacheFile = Path.Combine(libraryDir, version, sourceFile);
-<<<<<<< HEAD
-<<<<<<< HEAD
                     string url = string.Format(_downloadUrlFormat, name, version, sourceFile);
 
                     if (!File.Exists(cacheFile) || File.GetLastWriteTime(cacheFile) < DateTime.Now.AddDays(-_expiresAfterDays))
@@ -237,21 +235,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         await FileHelpers.DownloadFileAsync(url, cacheFile, cancellationToken);
                         HostInteraction.Logger.Log(string.Format(Resources.Text.FileWrittenToCache, sourceFile), LogLevel.Operation);
                     }
-=======
-=======
-                    string url = string.Format(_downloadUrlFormat, name, version, sourceFile);
->>>>>>> Bug fixes.
-
-                    if (!File.Exists(cacheFile) || File.GetLastWriteTime(cacheFile) < DateTime.Now.AddDays(-_expiresAfterDays))
-                    {
-                        await FileHelpers.DownloadFileAsync(url, cacheFile, cancellationToken);
-                        HostInteraction.Logger.Log(string.Format(Resources.Text.FileWrittenToCache, sourceFile), LogLevel.Operation);
-                    }
-<<<<<<< HEAD
-                    await FileHelpers.ReadFileTextAsync(cacheFile, cancellationToken);
->>>>>>> Fixing issues with restore and cache management.
-=======
->>>>>>> Bug fixes.
                 }
             }
             catch (ResourceDownloadException ex)

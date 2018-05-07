@@ -105,8 +105,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
             }
-<<<<<<< HEAD
-<<<<<<< HEAD
             catch (Exception ex) when (ex is ResourceDownloadException || ex.InnerException is ResourceDownloadException)
             {
                 ResourceDownloadException exception = ex as ResourceDownloadException ?? ex.InnerException as ResourceDownloadException;
@@ -114,20 +112,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 {
                     return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(exception.Url));
                 }
-=======
-            catch (ResourceDownloadException ex)
-            {
-                return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(ex.Url));
->>>>>>> Fixing issues with restore and cache management.
-=======
-            catch (Exception ex) when (ex is ResourceDownloadException || ex.InnerException is ResourceDownloadException)
-            {
-                ResourceDownloadException exception = ex as ResourceDownloadException ?? ex.InnerException as ResourceDownloadException;
-                if (exception != null)
-                {
-                    return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(exception.Url));
-                }
->>>>>>> Bug fixes.
             }
             catch (Exception ex)
             {
@@ -137,6 +121,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
             return LibraryInstallationResult.FromSuccess(desiredState);
         }
+
 
         /// <summary>
         /// Updates file set on the passed in ILibraryInstallationState in case user selected to have all files included
@@ -223,13 +208,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 else
                 {
                     return await GetRemoteResourceAsync(sourceFile);
-<<<<<<< HEAD
-                }
-            }
-            catch (ResourceDownloadException)
-            {
-                throw;
-=======
                 }
             }
             catch (ResourceDownloadException)
@@ -242,20 +220,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             }
         }
 
-        private static async Task<Stream> GetRemoteResourceAsync(string sourceFile)
-        {
-            try
-            {
-                var client = new HttpClient();
-                return await client.GetStreamAsync(sourceFile).ConfigureAwait(false);
->>>>>>> Fixing issues with restore and cache management.
-            }
-            catch (Exception)
-            {
-                // Add telemetry here for failures
-                throw new ResourceDownloadException(sourceFile);
-            }
-        }
 
         private static async Task<Stream> GetRemoteResourceAsync(string sourceFile)
         {
