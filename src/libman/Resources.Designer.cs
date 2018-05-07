@@ -142,11 +142,20 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List details about the which files are available for each library.
+        ///   Looks up a localized string similar to List files that are cached for each library.
         /// </summary>
-        internal static string CacheListDetailedOptionDesc {
+        internal static string CacheListFilesOptionDesc {
             get {
-                return ResourceManager.GetString("CacheListDetailedOptionDesc", resourceCulture);
+                return ResourceManager.GetString("CacheListFilesOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lists the libraries cached for each provider..
+        /// </summary>
+        internal static string CacheListLibrariesOptionDesc {
+            get {
+                return ResourceManager.GetString("CacheListLibrariesOptionDesc", resourceCulture);
             }
         }
         
@@ -346,6 +355,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to install library..
+        /// </summary>
+        internal static string InstallLibraryFailed {
+            get {
+                return ResourceManager.GetString("InstallLibraryFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid arguments for command: {0}.
         /// </summary>
         internal static string InvalidArgumentsMessage {
@@ -454,6 +472,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provider &apos;{0}&apos; is not installed..
+        /// </summary>
+        internal static string ProviderNotInstalled {
+            get {
+                return ResourceManager.GetString("ProviderNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Provider to use (if not specified, the default provider will be used).
         /// </summary>
         internal static string ProviderOptionDesc {
@@ -506,6 +533,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string RestoreCommandRemarks {
             get {
                 return ResourceManager.GetString("RestoreCommandRemarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Similar libraries: .
+        /// </summary>
+        internal static string SuggestedIdsMessage {
+            get {
+                return ResourceManager.GetString("SuggestedIdsMessage", resourceCulture);
             }
         }
         

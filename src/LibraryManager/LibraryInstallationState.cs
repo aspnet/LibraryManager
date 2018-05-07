@@ -10,7 +10,7 @@ namespace Microsoft.Web.LibraryManager
 
     /// <inheritdoc />
     /// <seealso cref="Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" />
-    public class LibraryInstallationState : ILibraryInstallationState
+    internal class LibraryInstallationState : ILibraryInstallationState
     {
         /// <summary>
         /// The unique identifier of the provider.

@@ -18,13 +18,17 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
         }
 
-        public CommandOption Detailed { get; private set; }
+        public CommandOption Files { get; private set; }
+        
+        // This option is implicit if nothing is specified.
+        public CommandOption Libraries { get; private set; }
 
         public override BaseCommand Configure(CommandLineApplication parent = null)
         {
             base.Configure(parent);
 
-            Detailed = Option("--detailed|-d", Resources.CacheListDetailedOptionDesc, CommandOptionType.NoValue);
+            Files = Option("--files", Resources.CacheListFilesOptionDesc, CommandOptionType.NoValue);
+            Libraries = Option("--libraries", Resources.CacheListLibrariesOptionDesc, CommandOptionType.NoValue);
 
             return this;
         }
@@ -50,19 +54,19 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                     {
                         outputStr.Append(' ', 4);
                         outputStr.AppendLine(Path.GetFileName(library));
-                        if (Detailed.HasValue())
+                        if (Files.HasValue())
                         {
-                            IEnumerable<string> details = Directory.EnumerateFiles(library, "*", SearchOption.AllDirectories);
-                            foreach(string detail in details)
+                            IEnumerable<string> files = Directory.EnumerateFiles(library, "*", SearchOption.AllDirectories);
+                            foreach(string file in files)
                             {
                                 outputStr.Append(' ', 8);
-                                string detailStr = detail.Substring(library.Length);
-                                if (detailStr.StartsWith(Path.DirectorySeparatorChar) || detailStr.StartsWith(Path.AltDirectorySeparatorChar))
+                                string fileStr = file.Substring(library.Length);
+                                if (fileStr.StartsWith(Path.DirectorySeparatorChar) || fileStr.StartsWith(Path.AltDirectorySeparatorChar))
                                 {
-                                    detailStr = detailStr.Substring(1);
+                                    fileStr = fileStr.Substring(1);
                                 }
 
-                                outputStr.AppendLine(detailStr);
+                                outputStr.AppendLine(fileStr);
                             }
                         }
                     }

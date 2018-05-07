@@ -128,10 +128,72 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
+        /// Installs a library with the given libraryId and 
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <param name="providerId"></param>
+        /// <param name="files"></param>
+        /// <param name="destination"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ILibraryInstallationResult> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
+        {
+            ILibraryInstallationResult result = null;
+            List<IError> errors = new List<IError>();
+            if (string.IsNullOrEmpty(libraryId))
+            {
+                errors.Add(PredefinedErrors.LibraryIdIsUndefined());
+            }
+
+            if (string.IsNullOrEmpty(providerId) && string.IsNullOrEmpty(DefaultProvider))
+            {
+                errors.Add(PredefinedErrors.ProviderIsUndefined());
+            }
+
+            providerId = string.IsNullOrEmpty(providerId) ? DefaultProvider : providerId;
+
+            if (string.IsNullOrEmpty(destination) && string.IsNullOrEmpty(DefaultDestination))
+            {
+                errors.Add(PredefinedErrors.PathIsUndefined());
+            }
+
+            destination = string.IsNullOrEmpty(destination) ? DefaultDestination : destination;
+
+            IProvider provider = _dependencies.Providers.FirstOrDefault(p => p.Id == providerId);
+            if (provider == null)
+            {
+                errors.Add(PredefinedErrors.ProviderUnknown(providerId));
+            }
+
+            if (errors.Any())
+            {
+                result = new LibraryInstallationResult(errors);
+                return result;
+            }
+
+            ILibraryInstallationState state = new LibraryInstallationState()
+            {
+                LibraryId = libraryId,
+                Files = files,
+                ProviderId = providerId,
+                DestinationPath = destination
+            };
+
+            result = await provider.InstallAsync(state, cancellationToken);
+
+            if (result.Success)
+            {
+                _libraries.Add(result.InstallationState);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Adds a library to the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="state">An instance of <see cref="ILibraryInstallationState"/> representing the library to add.</param>
-        public void AddLibrary(ILibraryInstallationState state)
+        internal void AddLibrary(ILibraryInstallationState state)
         {
             ILibraryInstallationState existing = _libraries.Find(p => p.LibraryId == state.LibraryId && p.ProviderId == state.ProviderId);
 

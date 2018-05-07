@@ -314,8 +314,8 @@
   <data name="CacheForProviderCleanedMessage" xml:space="preserve">
     <value>{0} cache cleaned.</value>
   </data>
-  <data name="CacheListDetailedOptionDesc" xml:space="preserve">
-    <value>List details about the which files are available for each library</value>
+  <data name="CacheListFilesOptionDesc" xml:space="preserve">
+    <value>List files that are cached for each library</value>
   </data>
   <data name="MoreThanOneLibraryFoundToUpdateForProvider" xml:space="preserve">
     <value>More than one library found with id '{0}' for provider '{1}'.</value>
@@ -325,5 +325,17 @@
   </data>
   <data name="NoLibraryFoundToUpdate" xml:space="preserve">
     <value>No library found with id '{0}' for provider '{1}' to update.</value>
+  </data>
+  <data name="InstallLibraryFailed" xml:space="preserve">
+    <value>Failed to install library.</value>
+  </data>
+  <data name="CacheListLibrariesOptionDesc" xml:space="preserve">
+    <value>Lists the libraries cached for each provider.</value>
+  </data>
+  <data name="ProviderNotInstalled" xml:space="preserve">
+    <value>Provider '{0}' is not installed.</value>
+  </data>
+  <data name="SuggestedIdsMessage" xml:space="preserve">
+    <value>Similar libraries: </value>
   </data>
 </root>
