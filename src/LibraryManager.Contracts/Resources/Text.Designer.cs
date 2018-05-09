@@ -71,6 +71,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; library is already installed by the &quot;{1}&quot; provider.
+        /// </summary>
+        internal static string ErrorLibraryAlreadyInstalled {
+            get {
+                return ResourceManager.GetString("ErrorLibraryAlreadyInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The library id is undefined.
         /// </summary>
         internal static string ErrorLibraryIdIsUndefined {

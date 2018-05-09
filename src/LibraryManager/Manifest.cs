@@ -128,6 +128,102 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
+        /// Installs a library with the given libraryId and 
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <param name="providerId"></param>
+        /// <param name="files"></param>
+        /// <param name="destination"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ILibraryInstallationResult> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
+        {
+            ILibraryInstallationResult result = null;
+            var errors = new List<IError>();
+            if (string.IsNullOrEmpty(libraryId))
+            {
+                errors.Add(PredefinedErrors.LibraryIdIsUndefined());
+            }
+
+            if (string.IsNullOrEmpty(destination) && string.IsNullOrEmpty(DefaultDestination))
+            {
+                errors.Add(PredefinedErrors.PathIsUndefined());
+            }
+            else
+            {
+                destination = string.IsNullOrEmpty(destination) ? DefaultDestination : destination;
+            }
+
+            IProvider provider = null;
+            if (string.IsNullOrEmpty(providerId) && string.IsNullOrEmpty(DefaultProvider))
+            {
+                errors.Add(PredefinedErrors.ProviderIsUndefined());
+            }
+            else
+            {
+                providerId = string.IsNullOrEmpty(providerId) ? DefaultProvider : providerId;
+
+                provider = _dependencies.Providers.FirstOrDefault(p => p.Id == providerId);
+                if (provider == null)
+                {
+                    errors.Add(PredefinedErrors.ProviderUnknown(providerId));
+                }
+            }
+
+            if (errors.Any())
+            {
+                result = new LibraryInstallationResult(errors);
+                return result;
+            }
+
+            var desiredState = new LibraryInstallationState()
+            {
+                LibraryId = libraryId,
+                Files = files,
+                ProviderId = providerId,
+                DestinationPath = destination
+            };
+
+            if (CheckAlreadyInstalled(desiredState))
+            {
+                errors.Add(PredefinedErrors.LibraryAlreadyInstalled(libraryId, providerId));
+            }
+
+            if (errors.Any())
+            {
+                result = new LibraryInstallationResult(errors);
+                return result;
+            }
+
+            result = await provider.InstallAsync(desiredState, cancellationToken);
+
+            // Remove destination and provider if they match the defaults;
+            if (desiredState.DestinationPath == DefaultDestination)
+            {
+                desiredState.DestinationPath = null;
+            }
+
+            if (desiredState.ProviderId == DefaultProvider)
+            {
+                desiredState.ProviderId = null;
+            }
+
+            if (result.Success)
+            {
+                _libraries.Add(desiredState);
+            }
+
+            return result;
+        }
+
+        private bool CheckAlreadyInstalled(LibraryInstallationState desiredState)
+        {
+            return Libraries.Any(l => l.LibraryId == desiredState.LibraryId
+                        && (l.ProviderId == desiredState.ProviderId 
+                            || (l.ProviderId == null && desiredState.ProviderId == DefaultProvider)));
+        }
+
+        /// <summary>
         /// Adds a library to the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="state">An instance of <see cref="ILibraryInstallationState"/> representing the library to add.</param>
@@ -216,6 +312,29 @@ namespace Microsoft.Web.LibraryManager
             {
                 DeleteLibraryFiles(state, deleteFileAction);
 
+                _libraries.Remove(state);
+            }
+        }
+
+        /// <summary>
+        /// Uninstalls the specified library and removes it from the <see cref="Libraries"/> collection.
+        /// </summary>
+        /// <param name="libraryId">The library identifier.</param>
+        /// <param name="provider">Provider id</param>
+        /// <param name="deleteFileAction"></param>
+        public void Uninstall(string libraryId, string provider, Action<string> deleteFileAction)
+        {
+            // Find a single library with the specified provider. 
+            // Or a library with no provider when the specified provider is the default.
+            ILibraryInstallationState state = Libraries.SingleOrDefault(
+                l => l.LibraryId == libraryId 
+                && (l.ProviderId == provider
+                    || (string.IsNullOrEmpty(l.ProviderId) 
+                        && provider == DefaultProvider)));
+
+            if (state != null)
+            {
+                DeleteLibraryFiles(state, deleteFileAction);
                 _libraries.Remove(state);
             }
         }

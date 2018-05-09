@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using Microsoft.Web.LibraryManager.Contracts.Resources;
 
 namespace Microsoft.Web.LibraryManager.Contracts
@@ -92,5 +93,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
         public static IError VersionIsNotSupported(string version)
            => new Error("LIB009", string.Format(Text.ErrorNotSupportedVersion, version));
 
+        /// <summary>
+        /// Library is already installed by the provider.
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <param name="providerId"></param>
+        /// <returns></returns>
+        public static IError LibraryAlreadyInstalled(string libraryId, string providerId)
+            => new Error("LIB010", string.Format(Text.ErrorLibraryAlreadyInstalled, libraryId, providerId));
     }
 }

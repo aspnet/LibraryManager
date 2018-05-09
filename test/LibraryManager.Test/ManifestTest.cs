@@ -285,6 +285,51 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB007"));
         }
 
+        [TestMethod]
+        public async Task InstallLibraryAsync()
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            // Null LibraryId
+            ILibraryInstallationResult result = await manifest.InstallLibraryAsync(null, "cdnjs", null, "wwwroot", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB006", result.Errors[0].Code);
+
+            // Empty ProviderId
+            result = await manifest.InstallLibraryAsync("jquery@3.2.1", "", null, "wwwroot", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB007", result.Errors[0].Code);
+
+            // Null destination
+            result = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", null, null, CancellationToken.None);
+
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB005", result.Errors[0].Code);
+
+
+            // Valid Options all files.
+            result = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual("wwwroot", result.InstallationState.DestinationPath);
+            Assert.AreEqual("jquery@3.2.1", result.InstallationState.LibraryId);
+            Assert.AreEqual("cdnjs", result.InstallationState.ProviderId);
+            Assert.IsNotNull(result.InstallationState.Files);
+
+            // Valid parameters and files.
+            List<string> files = new List<string>() { "jquery.min.js" };
+            result = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", files, "wwwroot", CancellationToken.None);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual("wwwroot", result.InstallationState.DestinationPath);
+            Assert.AreEqual("jquery@3.2.1", result.InstallationState.LibraryId);
+            Assert.AreEqual("cdnjs", result.InstallationState.ProviderId);
+            Assert.AreEqual(1, result.InstallationState.Files.Count);
+            Assert.AreEqual("jquery.min.js", result.InstallationState.Files[0]);
+        }
+
         private string _doc = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [

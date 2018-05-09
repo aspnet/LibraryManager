@@ -12,22 +12,10 @@
         <PackageTags>library, package, client-side</PackageTags>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.Contracts.xml</DocumentationFile>
-        <Authors>Microsoft</Authors>
-        <Company>Microsof Corp.</Company>
         <Description>The contracts assembly for authoring Library Manager extensions</Description>
-        <Copyright>Copyright © Microsoft</Copyright>
         <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
-        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
-        <PackageProjectUrl>https://github.com/aspnet/LibraryManager</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/aspnet/LibraryManager/blob/master/LICENSE.txt</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
-        <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
     </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="NerdBank.GitVersioning" Version="2.1.23" PrivateAssets="all" />
-    </ItemGroup>
 
   <!-- Warning if Multilingual App Toolkit isn't installed -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
