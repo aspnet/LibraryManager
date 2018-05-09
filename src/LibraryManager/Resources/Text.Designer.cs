@@ -62,6 +62,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to download catalog from provider &quot;{0}&quot;.
+        /// </summary>
+        public static string FailedToDownloadCatalog {
+            get {
+                return ResourceManager.GetString("FailedToDownloadCatalog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} deleted.
         /// </summary>
         public static string FileDeleted {
@@ -80,7 +89,16 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} written to disk.
+        ///   Looks up a localized string similar to {0} written to cache.
+        /// </summary>
+        public static string FileWrittenToCache {
+            get {
+                return ResourceManager.GetString("FileWrittenToCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} written to destination.
         /// </summary>
         public static string FileWrittenToDisk {
             get {
@@ -107,6 +125,33 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Library {0} restore was cancelled.
+        /// </summary>
+        public static string LibraryRestorationCancelled {
+            get {
+                return ResourceManager.GetString("LibraryRestorationCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library {0} failed to restore.
+        /// </summary>
+        public static string LibraryRestorationFailed {
+            get {
+                return ResourceManager.GetString("LibraryRestorationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library {0} was restored successfully.
+        /// </summary>
+        public static string LibraryRestoredSuccessfully {
+            get {
+                return ResourceManager.GetString("LibraryRestoredSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Library restore has been cancelled.
         /// </summary>
         public static string RestoreCancelled {
@@ -116,7 +161,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library restore was unsuccessful.
+        ///   Looks up a localized string similar to One or more libraries failed to restore.
         /// </summary>
         public static string RestoreHasErrors {
             get {

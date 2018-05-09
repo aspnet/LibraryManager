@@ -188,7 +188,23 @@ namespace Microsoft.Web.LibraryManager
 
                 if (provider != null)
                 {
-                    tasks.Add(provider.InstallAsync(state, cancellationToken));
+                    Task<ILibraryInstallationResult> installTask = provider.InstallAsync(state, cancellationToken);
+                    Task loggingTask = installTask.ContinueWith(t =>
+                    {
+                        if (t.Result.Success)
+                        {
+                            _hostInteraction.Logger.Log(string.Format(Resources.Text.LibraryRestoredSuccessfully, state.LibraryId), LogLevel.Operation);
+                        }
+                        else if (t.Result.Cancelled)
+                        {
+                            _hostInteraction.Logger.Log(string.Format(Resources.Text.LibraryRestorationCancelled, state.LibraryId), LogLevel.Operation);
+                        }
+                        else if(t.Result.Errors.Any()) 
+                        {
+                            _hostInteraction.Logger.Log(string.Format(Resources.Text.LibraryRestorationFailed, state.LibraryId), LogLevel.Operation);
+                        }
+                    });
+                    tasks.Add(installTask);
                 }
                 else
                 {

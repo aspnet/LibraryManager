@@ -105,6 +105,14 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
             }
+            catch (Exception ex) when (ex is ResourceDownloadException || ex.InnerException is ResourceDownloadException)
+            {
+                ResourceDownloadException exception = ex as ResourceDownloadException ?? ex.InnerException as ResourceDownloadException;
+                if (exception != null)
+                {
+                    return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(exception.Url));
+                }
+            }
             catch (Exception ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
@@ -113,6 +121,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
             return LibraryInstallationResult.FromSuccess(desiredState);
         }
+
 
         /// <summary>
         /// Updates file set on the passed in ILibraryInstallationState in case user selected to have all files included
@@ -198,13 +207,31 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 // Url
                 else
                 {
-                    var client = new HttpClient();
-                    return await client.GetStreamAsync(sourceFile).ConfigureAwait(false);
+                    return await GetRemoteResourceAsync(sourceFile);
                 }
+            }
+            catch (ResourceDownloadException)
+            {
+                throw;
             }
             catch (Exception)
             {
                 throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
+            }
+        }
+
+
+        private static async Task<Stream> GetRemoteResourceAsync(string sourceFile)
+        {
+            try
+            {
+                var client = new HttpClient();
+                return await client.GetStreamAsync(sourceFile).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                // Add telemetry here for failures
+                throw new ResourceDownloadException(sourceFile);
             }
         }
     }
