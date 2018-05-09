@@ -77,5 +77,44 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.AreEqual("wwwroot", manifest.DefaultDestination);
             Assert.AreEqual("cdnjs", manifest.DefaultProvider);
         }
+
+        [TestMethod]
+        public void TestGetManifest_FailsIfInvalidManifest()
+        {
+            var command = new SampleTestCommand(HostEnvironment);
+            command.Configure(null);
+
+            // Invalid Json content. No commas after fields.
+            string content = @"{
+  ""version"": ""1.0""
+  ""defaultProvider"": ""cdnjs""
+  ""defaultDestination"": ""wwwroot""
+  ""libraries"": []
+}";
+
+            string libmanFilePath = Path.Combine(WorkingDir, "libman.json");
+            File.WriteAllText(libmanFilePath, content);
+            try
+            {
+                command.Execute();
+            }
+            catch (AggregateException age)
+            {
+                var ioe = age.InnerExceptions[0] as InvalidOperationException;
+                if (ioe == null)
+                {
+                    Assert.Fail("Unexpected exception thrown");
+                }
+
+                Assert.AreEqual("Please fix the libman.json file and try again", ioe.Message);
+            }
+
+            Manifest manifest = command.Manifest;
+
+            Assert.IsNull(manifest);
+            var logger = HostEnvironment.Logger as TestLogger;
+
+            Assert.AreEqual("The manifest file contains syntax errors", logger.Messages[0].Value);
+        }
     }
 }

@@ -286,6 +286,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please fix the libman.json file and try again.
+        /// </summary>
+        internal static string FixManifestFile {
+            get {
+                return ResourceManager.GetString("FixManifestFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a new libman.json.
         /// </summary>
         internal static string InitCommandDesc {

@@ -127,10 +127,17 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             IDependencies dependencies = ManifestDependencies;
             Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, dependencies, CancellationToken.None);
 
+            if (manifest == null)
+            {
+                throw new InvalidOperationException(Resources.FixManifestFile);
+            }
+
             if (!File.Exists(Settings.ManifestFileName))
             {
                 manifest.AddVersion(Manifest.SupportedVersions.Last().ToString());
             }
+
+
 
             return manifest;
         }
