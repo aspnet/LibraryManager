@@ -43,7 +43,7 @@
 
   <!-- Global tool specific package version-->
   <PropertyGroup>
-    <MicrosoftNETCoreDotNetAppHostPackageVersion>2.1.0-rc1-26419-02</MicrosoftNETCoreDotNetAppHostPackageVersion>
+    <MicrosoftNETCoreDotNetAppHostPackageVersion>2.1.0-rtm-26508-02</MicrosoftNETCoreDotNetAppHostPackageVersion>
     <MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>2.1.0-rtm-30700</MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>
   </PropertyGroup>
 </Project>

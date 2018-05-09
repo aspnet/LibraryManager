@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
 		CHANGELOG.md = CHANGELOG.md
+		Directory.Build.props = Directory.Build.props
 		LibraryManager.Settings.targets = LibraryManager.Settings.targets
 		README.md = README.md
 		version.json = version.json
@@ -60,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppHostRestorerProject", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libman", "src\libman\libman.csproj", "{E98B5AB3-E58F-482A-8A81-829CFEA63E31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libman.Test", "Test\libman.Test\libman.Test.csproj", "{AD605AA7-6E43-47F1-A096-1ACDF67BF1DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libman.Test", "Test\libman.Test\libman.Test.csproj", "{AD605AA7-6E43-47F1-A096-1ACDF67BF1DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
