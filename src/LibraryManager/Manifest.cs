@@ -139,30 +139,35 @@ namespace Microsoft.Web.LibraryManager
         public async Task<ILibraryInstallationResult> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
         {
             ILibraryInstallationResult result = null;
-            List<IError> errors = new List<IError>();
+            var errors = new List<IError>();
             if (string.IsNullOrEmpty(libraryId))
             {
                 errors.Add(PredefinedErrors.LibraryIdIsUndefined());
             }
 
-            if (string.IsNullOrEmpty(providerId) && string.IsNullOrEmpty(DefaultProvider))
-            {
-                errors.Add(PredefinedErrors.ProviderIsUndefined());
-            }
-
-            providerId = string.IsNullOrEmpty(providerId) ? DefaultProvider : providerId;
-
             if (string.IsNullOrEmpty(destination) && string.IsNullOrEmpty(DefaultDestination))
             {
                 errors.Add(PredefinedErrors.PathIsUndefined());
             }
-
-            destination = string.IsNullOrEmpty(destination) ? DefaultDestination : destination;
-
-            IProvider provider = _dependencies.Providers.FirstOrDefault(p => p.Id == providerId);
-            if (provider == null)
+            else
             {
-                errors.Add(PredefinedErrors.ProviderUnknown(providerId));
+                destination = string.IsNullOrEmpty(destination) ? DefaultDestination : destination;
+            }
+
+            IProvider provider = null;
+            if (string.IsNullOrEmpty(providerId) && string.IsNullOrEmpty(DefaultProvider))
+            {
+                errors.Add(PredefinedErrors.ProviderIsUndefined());
+            }
+            else
+            {
+                providerId = string.IsNullOrEmpty(providerId) ? DefaultProvider : providerId;
+
+                provider = _dependencies.Providers.FirstOrDefault(p => p.Id == providerId);
+                if (provider == null)
+                {
+                    errors.Add(PredefinedErrors.ProviderUnknown(providerId));
+                }
             }
 
             if (errors.Any())
@@ -171,7 +176,7 @@ namespace Microsoft.Web.LibraryManager
                 return result;
             }
 
-            ILibraryInstallationState state = new LibraryInstallationState()
+            var desiredState = new LibraryInstallationState()
             {
                 LibraryId = libraryId,
                 Files = files,
@@ -179,14 +184,43 @@ namespace Microsoft.Web.LibraryManager
                 DestinationPath = destination
             };
 
-            result = await provider.InstallAsync(state, cancellationToken);
+            if (CheckAlreadyInstalled(desiredState))
+            {
+                errors.Add(PredefinedErrors.LibraryAlreadyInstalled(libraryId, providerId));
+            }
+
+            if (errors.Any())
+            {
+                result = new LibraryInstallationResult(errors);
+                return result;
+            }
+
+            result = await provider.InstallAsync(desiredState, cancellationToken);
+
+            // Remove destination and provider if they match the defaults;
+            if (desiredState.DestinationPath == DefaultDestination)
+            {
+                desiredState.DestinationPath = null;
+            }
+
+            if (desiredState.ProviderId == DefaultProvider)
+            {
+                desiredState.ProviderId = null;
+            }
 
             if (result.Success)
             {
-                _libraries.Add(result.InstallationState);
+                _libraries.Add(desiredState);
             }
 
             return result;
+        }
+
+        private bool CheckAlreadyInstalled(LibraryInstallationState desiredState)
+        {
+            return Libraries.Any(l => l.LibraryId == desiredState.LibraryId
+                        && (l.ProviderId == desiredState.ProviderId 
+                            || (l.ProviderId == null && desiredState.ProviderId == DefaultProvider)));
         }
 
         /// <summary>

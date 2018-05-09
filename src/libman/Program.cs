@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -17,7 +18,7 @@ namespace Microsoft.Web.LibraryManager.Tools
             int debugIndex = args.ToList().FindIndex(a => a.Equals("--debug", StringComparison.OrdinalIgnoreCase));
             if (debugIndex > 0)
             {
-                var newArgs = args.Take(debugIndex);
+                IEnumerable<string> newArgs = args.Take(debugIndex);
                 args = newArgs.Concat(args.Skip(debugIndex + 1)).ToArray();
                 Console.WriteLine($"Attach Debugger to process: {System.Diagnostics.Process.GetCurrentProcess().Id}");
                 while (!System.Diagnostics.Debugger.IsAttached);
@@ -40,7 +41,7 @@ namespace Microsoft.Web.LibraryManager.Tools
             }
             catch (AggregateException ae)
             {
-                foreach (var ie in ae.InnerExceptions)
+                foreach (Exception ie in ae.InnerExceptions)
                 {
                     defaultSettings.Logger.Log(ie.Message, LogLevel.Error);
                 }

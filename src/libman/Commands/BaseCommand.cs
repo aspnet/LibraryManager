@@ -90,12 +90,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return projectPath;
         }
 
-        protected virtual int ExecuteInternal()
-        {
-            ShowHelp();
-            return 0;
-        }
-
         protected virtual Task<int> ExecuteInternalAsync()
         {
             ShowHelp();

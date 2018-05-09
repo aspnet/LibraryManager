@@ -32,8 +32,8 @@ namespace Microsoft.Web.LibraryManager.Tools
             {
                 Instance = new HostEnvironment(settings);
 
-                Instance.InputReader = ConsoleLogger.Instance;
-                Instance.Logger = ConsoleLogger.Instance;
+                Instance.InputReader = settings.InputReader;
+                Instance.Logger = settings.Logger;
 
                 Instance.HostInteraction = new HostInteraction(settings);
 

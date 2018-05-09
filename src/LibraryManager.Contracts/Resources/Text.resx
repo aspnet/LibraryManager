@@ -120,6 +120,9 @@
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
     <value>{0} could not be written to disk. Make sure the file name is correct</value>
   </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>The "{0}" library is already installed by the "{1}" provider</value>
+  </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
     <value>The library id is undefined</value>
   </data>

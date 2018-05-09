@@ -21,10 +21,5 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             return this;
         }
-
-        protected override int ExecuteInternal()
-        {
-            return base.ExecuteInternal();
-        }
     }
 }
