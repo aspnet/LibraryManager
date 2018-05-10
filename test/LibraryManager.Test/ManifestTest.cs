@@ -320,11 +320,11 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsNotNull(result.InstallationState.Files);
 
             // Valid parameters and files.
-            List<string> files = new List<string>() { "jquery.min.js" };
-            result = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", files, "wwwroot", CancellationToken.None);
+            var files = new List<string>() { "jquery.min.js" };
+            result = await manifest.InstallLibraryAsync("jquery@2.2.0", "cdnjs", files, "wwwroot", CancellationToken.None);
             Assert.IsTrue(result.Success);
             Assert.AreEqual("wwwroot", result.InstallationState.DestinationPath);
-            Assert.AreEqual("jquery@3.2.1", result.InstallationState.LibraryId);
+            Assert.AreEqual("jquery@2.2.0", result.InstallationState.LibraryId);
             Assert.AreEqual("cdnjs", result.InstallationState.ProviderId);
             Assert.AreEqual(1, result.InstallationState.Files.Count);
             Assert.AreEqual("jquery.min.js", result.InstallationState.Files[0]);

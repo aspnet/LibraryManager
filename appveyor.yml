@@ -5,7 +5,8 @@ install:
 
 build_script:
   - msbuild /t:restore /v:m
-  - msbuild /t:BuildAll LibraryManager.msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+  - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+  - msbuild /t:PackGlobalTool LibraryManager.msbuild /p:configuration=Release /v:m
 
 artifacts:
   - path: artifacts\**\*.nupkg
