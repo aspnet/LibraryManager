@@ -45,7 +45,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = VsHelpers.GetSelectedProjectItem();
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
             if (item != null && item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
             {
@@ -56,7 +56,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
-            ProjectItem configProjectItem = VsHelpers.GetSelectedProjectItem();
+            ProjectItem configProjectItem = VsHelpers.GetSelectedItem();
 
             if (configProjectItem != null)
                 await LibraryHelpers.CleanAsync(configProjectItem);

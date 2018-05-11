@@ -45,7 +45,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             Telemetry.TrackUserTask("ManageLibraries");
 
-            Project project = VsHelpers.GetProjectOfSelectedProjectItem();
+            Project project = VsHelpers.GetProjectOfSelectedItem();
 
             if (project != null)
             {

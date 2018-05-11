@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             };
         }
 
-        internal static ProjectItem GetSelectedProjectItem()
+        internal static ProjectItem GetSelectedItem()
         {
             ProjectItem projectItem = null;
 
@@ -70,7 +70,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return projectItem;
         }
 
-        public static Project GetProjectOfSelectedProjectItem()
+        public static Project GetProjectOfSelectedItem()
         {
             Project project = null;
 

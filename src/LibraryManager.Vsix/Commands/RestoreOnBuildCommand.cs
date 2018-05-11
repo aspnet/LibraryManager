@@ -53,7 +53,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
             }
 
-            ProjectItem item = VsHelpers.GetSelectedProjectItem();
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
             if (item != null && item.IsConfigFile() && (item.ContainingProject.IsKind(Constants.WAP) || 
                 VsHelpers.IsCapabilityMatch(item.ContainingProject, Constants.DotNetCoreWebCapability)))
@@ -76,8 +76,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private void Execute(object sender, EventArgs e)
         {
-            ProjectItem item = VsHelpers.GetSelectedProjectItem();
-            Project project = VsHelpers.GetProjectOfSelectedProjectItem();
+            ProjectItem item = VsHelpers.GetSelectedItem();
+            Project project = VsHelpers.GetProjectOfSelectedItem();
 
             try
             {
