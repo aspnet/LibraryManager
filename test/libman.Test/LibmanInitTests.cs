@@ -39,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ""libraries"": []
 }";
 
-            Assert.AreEqual(expectedContents, contents);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedContents), StringHelper.NormalizeNewLines(contents));
         }
 
         [TestMethod]
@@ -69,7 +69,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ""libraries"": []
 }";
 
-            Assert.AreEqual(expectedContents, contents);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedContents), StringHelper.NormalizeNewLines(contents));
         }
     }
 }

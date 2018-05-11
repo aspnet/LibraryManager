@@ -94,6 +94,20 @@ Package the global tool along with the Shims.
                          PackageVersion=$(PackageVersion); -->
   </Target>
 
+<!--
+************************************************************
+Build the test projects.
+************************************************************
+-->
+  <Target Name="BuildTestProjects">
+    <ItemGroup>
+      <TestProjects Include="$(RepoRoot)\test\**\*.csproj" />
+    </ItemGroup>
+    <MSBuild Targets="Build"
+             Projects="@(TestProjects)"
+             Properties="Configuration=$(Configuration);" />
+  </Target>
 
-  <Target Name="BuildAll" DependsOnTargets="BuildLibraryManagerBuild;BuildVSIX;PackGlobalTool" />
+
+  <Target Name="BuildAll" DependsOnTargets="BuildLibraryManagerBuild;BuildVSIX;PackGlobalTool;BuildTestProjects" />
 </Project>

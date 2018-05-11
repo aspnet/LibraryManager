@@ -36,14 +36,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            var expectedString = @"Cache contents:
+            string expectedString = @"Cache contents:
 ---------------
 filesystem:
     (empty)
 cdnjs:
     jquery
 ";
-            Assert.AreEqual(expectedString, logger.Messages[0].Value);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedString), StringHelper.NormalizeNewLines(logger.Messages[0].Value));
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ cdnjs:
         3.2.1\jquery.min.js
         3.2.1\jquery.min.map
 ";
-            Assert.AreEqual(expectedString, logger.Messages[0].Value);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedString), StringHelper.NormalizeNewLines(logger.Messages[0].Value));
         }
     }
 }

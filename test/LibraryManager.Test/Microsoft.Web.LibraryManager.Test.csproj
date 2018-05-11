@@ -7,8 +7,8 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSDKPackageVersion)" />
-        <PackageReference Include="MSTest.TestAdapter" Version="$(MSTestPackageVersion)" />
-        <PackageReference Include="MSTest.TestFramework" Version="$(MSTestPackageVersion)" />
+        <PackageReference Include="MSTest.TestAdapter" Version="$(MSTestAdapterPackageVersion)" />
+        <PackageReference Include="MSTest.TestFramework" Version="$(MSTestFrameworkPackageVersion)" />
         <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" />
     </ItemGroup>
     <ItemGroup>

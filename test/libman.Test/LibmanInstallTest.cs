@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
     }
   ]
 }";
-            Assert.AreEqual(expectedText, text);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(text));
         }
 
 
@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
     }
   ]
 }";
-            Assert.AreEqual(expectedText, actualText);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             int result = command.Execute("jquery@3.2.1", "--provider", "cdnjs");
 
             string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
-            Assert.AreEqual(initialContent, actualText);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(initialContent), StringHelper.NormalizeNewLines(actualText));
 
             var logger = HostEnvironment.Logger as TestLogger;
 
@@ -139,7 +139,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
     }
   ]
 }";
-            Assert.AreEqual(expectedText, actualText);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 }";
             string actualText = File.ReadAllText(libmanjsonPath);
 
-            Assert.AreEqual(expectedText, actualText);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
         }
 
         [TestMethod]
@@ -108,7 +108,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             string actualText = File.ReadAllText(libmanjsonPath);
 
-            Assert.AreEqual(contents, actualText);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(contents), StringHelper.NormalizeNewLines(actualText));
         }
     }
 }
