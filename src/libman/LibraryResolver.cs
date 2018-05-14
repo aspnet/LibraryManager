@@ -1,0 +1,158 @@
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts;
+
+namespace Microsoft.Web.LibraryManager.Tools
+{
+    internal static class LibraryResolver
+    {
+        public static async Task<IReadOnlyList<ILibraryInstallationState>> ResolveAsync(
+            string partialName,
+            Manifest manifest, 
+            IDependencies manifestDependencies,
+            IProvider provider,
+            CancellationToken cancellationToken)
+        {
+            var resolvedLibraries = new List<ILibraryInstallationState>();
+
+            if (manifest?.Libraries == null || !manifest.Libraries.Any() || string.IsNullOrEmpty(partialName))
+            {
+                return resolvedLibraries;
+            }
+
+            Dictionary<string, ILibraryCatalog> catalogs = GetCatalogs(manifest, manifestDependencies, provider);
+
+            var exactMatches = new List<ILibraryInstallationState>();
+
+            bool hasFoundAnyExactMatch = false;
+
+            foreach (KeyValuePair<string, ILibraryCatalog> catalog in catalogs)
+            {
+                try
+                {
+                    ILibrary lib = await catalog.Value.GetLibraryAsync(partialName, cancellationToken);
+                    if (lib != null)
+                    {
+                        // Catalog returned a unique library id for the partial name. 
+                        // If the installed libraries have the exact id for the given provider, then 
+                        // we have found a match.
+
+                        IEnumerable<ILibraryInstallationState> candidates = manifest.Libraries
+                            .Where(l => l.LibraryId.Equals(partialName, StringComparison.OrdinalIgnoreCase)
+                                && IsLibraryInstalledByProvider(l, catalog.Key, manifest.DefaultProvider));
+
+                        if (candidates.Any())
+                        {
+                            hasFoundAnyExactMatch = true;
+                            exactMatches.AddRange(candidates);
+                        }
+
+                        continue;
+                        // No need to search for this provider.
+                    }
+                }
+                catch
+                {
+                    // No Library matched exactly.
+                }
+
+                if (hasFoundAnyExactMatch)
+                {
+                    // If any of the previous providers found an exact match, then we should not perform
+                    // searches anymore.
+                    continue;
+                }
+
+                // For this provider, we did not find exact matches
+                // Try to match on display name of search results.
+
+                IReadOnlyList<ILibraryGroup> searchGroups = await catalog.Value.SearchAsync(partialName, 1, cancellationToken);
+                IEnumerable<ILibraryInstallationState> matchedLibraries = await FindCandidatesFromSearchGroupAsync(
+                    partialName,
+                    manifest,
+                    catalog.Key,
+                    searchGroups,
+                    cancellationToken);
+
+                if (matchedLibraries.Any())
+                {
+                    resolvedLibraries.AddRange(matchedLibraries);
+                }
+            }
+
+            if (exactMatches.Any())
+            {
+                return exactMatches;
+            }
+
+            return resolvedLibraries;
+        }
+
+        private static async Task<IEnumerable<ILibraryInstallationState>> FindCandidatesFromSearchGroupAsync(
+            string partialName,
+            Manifest manifest,
+            string providerId,
+            IReadOnlyList<ILibraryGroup> searchGroups,
+            CancellationToken cancellationToken)
+        {
+            var libraries = new List<ILibraryInstallationState>();
+            if (searchGroups != null && searchGroups.Any())
+            {
+                foreach (ILibraryGroup group in searchGroups)
+                {
+                    if (group.DisplayName.Equals(partialName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        IEnumerable<string> libraryIds = await group.GetLibraryIdsAsync(cancellationToken);
+
+                        var libraryIdSet = libraryIds.ToHashSet(StringComparer.OrdinalIgnoreCase);
+                        IEnumerable<ILibraryInstallationState> candidates = manifest.Libraries
+                            .Where(l => libraryIdSet.Contains(l.LibraryId) 
+                                && IsLibraryInstalledByProvider(l, providerId, manifest.DefaultProvider));
+
+                        if (candidates.Any())
+                        {
+                            libraries.AddRange(candidates);
+                        }
+                    }
+                }
+            }
+
+            return libraries;
+        }
+
+        private static Dictionary<string, ILibraryCatalog> GetCatalogs(Manifest manifest, IDependencies manifestDependencies, IProvider provider)
+        {
+            var catalogs = new Dictionary<string, ILibraryCatalog>(StringComparer.OrdinalIgnoreCase);
+
+            if (provider != null)
+            {
+                catalogs[provider.Id] = provider.GetCatalog();
+            }
+            else
+            {
+                var usedProviders = manifest.Libraries.Select(l => l.ProviderId).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                IEnumerable<IProvider> candidateProviders = manifestDependencies.Providers
+                    .Where(p => manifest.DefaultProvider == p.Id || usedProviders.Contains(p.Id));
+
+                foreach (IProvider p in manifestDependencies.Providers)
+                {
+                    catalogs[p.Id] = p.GetCatalog();
+                }
+            }
+
+            return catalogs;
+        }
+
+        private static bool IsLibraryInstalledByProvider(ILibraryInstallationState l, string providerId, string defaultProvider)
+        {
+            return l.ProviderId == providerId || (string.IsNullOrEmpty(l.ProviderId) && defaultProvider == providerId);
+        }
+    }
+}

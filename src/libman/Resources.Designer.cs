@@ -160,6 +160,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select an option:.
+        /// </summary>
+        internal static string ChooseAnOption {
+            get {
+                return ResourceManager.GetString("ChooseAnOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deletes all library files defined in libman.json from the project.
         /// </summary>
         internal static string CleanCommandDesc {

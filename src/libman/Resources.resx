@@ -341,4 +341,7 @@
   <data name="FixManifestFile" xml:space="preserve">
     <value>Please fix the libman.json file and try again</value>
   </data>
+  <data name="ChooseAnOption" xml:space="preserve">
+    <value>Select an option:</value>
+  </data>
 </root>

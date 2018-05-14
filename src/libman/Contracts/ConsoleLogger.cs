@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         {
             lock(_syncObject)
             {
-                Console.Out.WriteLine($"{fieldName}: ");
+                Console.Out.WriteLine(fieldName);
                 return Console.ReadLine();
             }
         }

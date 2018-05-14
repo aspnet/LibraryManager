@@ -39,11 +39,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             defaultProvider = DefaultProvider.HasValue() 
                 ? DefaultProvider.Value() 
-                : HostEnvironment.InputReader.GetUserInput(nameof(DefaultProvider));
+                : HostEnvironment.InputReader.GetUserInput($"{nameof(DefaultProvider)}:");
 
             defaultDestination = DefaultDestination.HasValue()
                 ? DefaultDestination.Value()
-                : HostEnvironment.InputReader.GetUserInput(nameof(DefaultDestination));
+                : HostEnvironment.InputReader.GetUserInput($"{nameof(DefaultDestination)}:");
 
             Manifest manifest = await GetManifestAsync(createIfNotExists: true);
             manifest.DefaultDestination = defaultDestination;

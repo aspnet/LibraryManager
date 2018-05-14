@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
@@ -35,56 +36,77 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             Manifest manifest = await GetManifestAsync(createIfNotExists: false);
 
-            ILibraryInstallationState installedLibrary = ValidateParametersAndGetLibraryToUninstall(manifest);
+            IEnumerable<ILibraryInstallationState> installedLibraries = await ValidateParametersAndGetLibrariesToUninstallAsync(manifest, CancellationToken.None);
 
-            if (installedLibrary == null)
+            if (installedLibraries == null || !installedLibraries.Any())
             {
                 Logger.Log(string.Format(Resources.NoLibraryToUninstall, LibraryId.Value), LogLevel.Operation);
+                return 0;
+            }
+
+            ILibraryInstallationState libraryToUninstall = null;
+
+            if (installedLibraries.Count() > 1)
+            {
+                Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUninstall, LibraryId.Value), LogLevel.Operation);
+
+                libraryToUninstall = GetLibraryByUserChoice(installedLibraries);
+            }
+            else
+            {
+                libraryToUninstall = installedLibraries.First();
             }
 
             Action<string> deleteFileAction = (s) => HostInteractions.DeleteFiles(s);
 
-            if (Provider.HasValue())
-            {
-                manifest.Uninstall(LibraryId.Value, Provider.Value(), deleteFileAction);
-            }
-            else
-            {
-                manifest.Uninstall(LibraryId.Value, deleteFileAction);
-            }
+            manifest.Uninstall(libraryToUninstall, deleteFileAction);
 
             await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
 
             return 0;
         }
 
-        private ILibraryInstallationState ValidateParametersAndGetLibraryToUninstall(Manifest manifest)
+        private ILibraryInstallationState GetLibraryByUserChoice(IEnumerable<ILibraryInstallationState> installedLibraries)
         {
-            List<string> errors = new List<string>();
-            IEnumerable<ILibraryInstallationState> candidates = null;
+            var sb = new StringBuilder(Resources.ChooseAnOption);
+            sb.AppendLine();
+            sb.Append('-', Resources.ChooseAnOption.Length);
+
+            int index = 1;
+            foreach (ILibraryInstallationState library in installedLibraries)
+            {
+                sb.Append($"{Environment.NewLine}{index}. {library.ToConsoleDisplayString()}");
+                index++;
+            }
+
+            while (true)
+            {
+                string choice = HostEnvironment.InputReader.GetUserInput(sb.ToString());
+
+                if (int.TryParse(choice, out int choiceIndex) && choiceIndex > 0 && choiceIndex < index)
+                {
+                    return installedLibraries.ElementAt(choiceIndex-1);
+                }
+            }
+        }
+
+        private async Task<IEnumerable<ILibraryInstallationState>> ValidateParametersAndGetLibrariesToUninstallAsync(
+            Manifest manifest,
+            CancellationToken cancellationToken)
+        {
+            var errors = new List<string>();
             if (string.IsNullOrWhiteSpace(LibraryId.Value))
             {
                 errors.Add(Resources.LibraryIdRequiredForUnInstall);
             }
-            else if (!Provider.HasValue())
-            {
-                candidates = manifest.Libraries.Where(l => l.LibraryId == LibraryId.Value);
-                if (candidates.Count() > 1)
-                {
-                    errors.Add(string.Format(Resources.MoreThanOneLibraryFoundToUninstall, LibraryId.Value));
-                    errors.Add(string.Format(Resources.UseProviderToDisambiguateMessage));
-                }
-            }
-            else
-            {
-                 candidates = manifest.Libraries.Where(
-                    l => l.LibraryId == LibraryId.Value
-                    && (l.ProviderId == Provider.Value()
-                        || (string.IsNullOrEmpty(l.ProviderId) && Provider.Value() == manifest.DefaultProvider)));
 
-                if (candidates.Count() > 1)
+            IProvider provider = null;
+            if (Provider.HasValue())
+            {
+                provider = ManifestDependencies.GetProvider(Provider.Value());
+                if (provider == null)
                 {
-                    errors.Add(string.Format(Resources.MoreThanOneLibraryFoundToUninstallForProvider, LibraryId.Value, Provider.Value()));
+                    errors.Add(string.Format(Resources.ProviderNotInstalled, Provider.Value()));
                 }
             }
 
@@ -93,7 +115,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new InvalidOperationException(string.Join(Environment.NewLine, errors));
             }
 
-            return candidates?.FirstOrDefault();
+            return await LibraryResolver.ResolveAsync(LibraryId.Value,
+                manifest,
+                ManifestDependencies,
+                provider,
+                cancellationToken);
         }
 
         public override string Remarks => Resources.UnInstallCommandRemarks;
