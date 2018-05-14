@@ -45,9 +45,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             List<string> files = Files.HasValue() ? Files.Values : null;
 
             string providerToUse = Provider.HasValue() ? Provider.Value() : manifest.DefaultProvider;
-            await ValidateLibraryExistsInCatalogAsync(providerToUse, CancellationToken.None);
+            string libraryIdToInstall = await ValidateLibraryExistsInCatalogAsync(providerToUse, CancellationToken.None);
 
-            ILibraryInstallationResult result = await manifest.InstallLibraryAsync(LibraryId.Value, Provider.Value(), files, Destination.Value(), CancellationToken.None);
+            ILibraryInstallationResult result = await manifest.InstallLibraryAsync(libraryIdToInstall, Provider.Value(), files, Destination.Value(), CancellationToken.None);
 
             if (result.Success)
             {
@@ -69,19 +69,24 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return 0;
         }
 
-        private async Task<ILibrary> ValidateLibraryExistsInCatalogAsync(string providerToUse, CancellationToken cancellationToken)
+        private async Task<string> ValidateLibraryExistsInCatalogAsync(string providerToUse, CancellationToken cancellationToken)
         {
-            ILibraryCatalog providerCatalog = GetProviderCatalog(providerToUse);
-            ILibrary libraryToInstall = null;
+            IProvider provider = GetProvider(providerToUse);
+
+            ILibraryCatalog providerCatalog = provider.GetCatalog();
+
             try
             {
-                libraryToInstall = await providerCatalog.GetLibraryAsync(LibraryId.Value, cancellationToken);
-            }
-            catch { }
+                ILibrary libraryToInstall = await providerCatalog.GetLibraryAsync(LibraryId.Value, cancellationToken);
 
-            if (libraryToInstall != null)
+                if (libraryToInstall != null)
+                {
+                    return LibraryId.Value;
+                }
+            }
+            catch
             {
-                return libraryToInstall;
+                // The library id wasn't in the exact format.
             }
 
             IReadOnlyList<ILibraryGroup> libraryGroup = await providerCatalog.SearchAsync(LibraryId.Value, 5, cancellationToken);
@@ -92,14 +97,20 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new InvalidOperationException($"[{invalidLibraryError.Code}]: {invalidLibraryError.Message}");
             }
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (ILibraryGroup libGroup in libraryGroup)
             {
-                var libIds = await libGroup.GetLibraryIdsAsync(cancellationToken);
+                IEnumerable<string> libIds = await libGroup.GetLibraryIdsAsync(cancellationToken);
                 if (libIds == null || !libIds.Any())
                 {
                     continue;
+                }
+
+                if (libGroup.DisplayName.Equals(LibraryId.Value, StringComparison.OrdinalIgnoreCase))
+                {
+                    // Found a group with an exact match.
+                    return libIds.First();
                 }
 
                 sb.AppendLine("  " + libIds.First());
@@ -109,11 +120,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             throw new InvalidOperationException(sb.ToString());
         }
 
-        private ILibraryCatalog GetProviderCatalog(string providerId)
+        private IProvider GetProvider(string providerId)
         {
-            IProvider provider = ManifestDependencies.Providers.FirstOrDefault(p => p.Id == providerId);
-
-            return provider.GetCatalog();
+            return ManifestDependencies.Providers.FirstOrDefault(p => p.Id == providerId);
         }
 
         private void ValidateParameters(Manifest manifest)
