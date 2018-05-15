@@ -50,7 +50,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUninstall, LibraryId.Value), LogLevel.Operation);
 
-                libraryToUninstall = GetLibraryByUserChoice(installedLibraries);
+                libraryToUninstall = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment);
             }
             else
             {
@@ -64,30 +64,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
 
             return 0;
-        }
-
-        private ILibraryInstallationState GetLibraryByUserChoice(IEnumerable<ILibraryInstallationState> installedLibraries)
-        {
-            var sb = new StringBuilder(Resources.ChooseAnOption);
-            sb.AppendLine();
-            sb.Append('-', Resources.ChooseAnOption.Length);
-
-            int index = 1;
-            foreach (ILibraryInstallationState library in installedLibraries)
-            {
-                sb.Append($"{Environment.NewLine}{index}. {library.ToConsoleDisplayString()}");
-                index++;
-            }
-
-            while (true)
-            {
-                string choice = HostEnvironment.InputReader.GetUserInput(sb.ToString());
-
-                if (int.TryParse(choice, out int choiceIndex) && choiceIndex > 0 && choiceIndex < index)
-                {
-                    return installedLibraries.ElementAt(choiceIndex-1);
-                }
-            }
         }
 
         private async Task<IEnumerable<ILibraryInstallationState>> ValidateParametersAndGetLibrariesToUninstallAsync(

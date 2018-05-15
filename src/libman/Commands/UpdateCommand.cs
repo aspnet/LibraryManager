@@ -14,7 +14,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
     internal class UpdateCommand : BaseCommand
     {
-        public UpdateCommand(IHostEnvironment environment, bool throwOnUnexpectedArg=true)
+        public UpdateCommand(IHostEnvironment environment, bool throwOnUnexpectedArg = true)
             : base(throwOnUnexpectedArg, "update", Resources.UpdateCommandDesc, environment)
         {
         }
@@ -41,77 +41,85 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         protected override async Task<int> ExecuteInternalAsync()
         {
             Manifest manifest = await GetManifestAsync(createIfNotExists: false);
+            IEnumerable<ILibraryInstallationState> installedLibraries = await ValidateParametersAndGetLibrariesToUninstallAsync(manifest, CancellationToken.None);
 
-            IEnumerable<ILibraryInstallationState> candidates = manifest.Libraries;
-            if (Provider.HasValue() && string.IsNullOrWhiteSpace(LibraryId.Value))
+            if (installedLibraries == null || !installedLibraries.Any())
             {
-                candidates = manifest.Libraries.Where(
-                    l => l.LibraryId == LibraryId.Value
-                        && (Provider.Value() == l.ProviderId
-                            || (l.ProviderId == null 
-                                && Provider.Value() == manifest.DefaultProvider)));
+                Logger.Log(string.Format(Resources.NoLibraryFoundToUpdate, LibraryId.Value), LogLevel.Operation);
+                return 0;
+            }
 
-                if (candidates.Count() > 1)
+            ILibraryInstallationState libraryToUpdate = null;
+
+            if (installedLibraries.Count() > 1)
+            {
+                Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUpdate, LibraryId.Value), LogLevel.Operation);
+
+                libraryToUpdate = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment);
+            }
+            else
+            {
+                libraryToUpdate = installedLibraries.First();
+            }
+
+            Action<string> deleteFileAction = (s) => HostEnvironment.HostInteraction.DeleteFiles(s);
+
+            ILibraryInstallationResult result = await manifest.UpdateLibraryToLatestAsync(libraryToUpdate, PreRelease.HasValue(), deleteFileAction, CancellationToken.None);
+
+            if (result == null)
+            {
+                // We already have latest version.
+                Logger.Log(string.Format(Resources.LatestVersionAlreadyInstalled, libraryToUpdate.LibraryId), LogLevel.Operation);
+
+                return 0;
+            }
+
+            if (result.Success)
+            {
+                await manifest.SaveAsync(HostEnvironment.EnvironmentSettings.ManifestFileName, CancellationToken.None);
+            }
+            else if (result.Errors != null)
+            {
+                Logger.Log(Resources.InstallLibraryFailed, LogLevel.Error);
+                foreach (IError error in result.Errors)
                 {
-                    throw new InvalidOperationException(
-                        string.Format(
-                            Resources.MoreThanOneLibraryFoundToUpdateForProvider,
-                            LibraryId.Value,
-                            Provider.Value()));
-                }
-
-                if (candidates.Count() == 0)
-                {
-                    throw new InvalidOperationException(
-                        string.Format(Resources.NoLibraryFoundToUpdate,
-                            LibraryId.Value,
-                            Provider.Value()));
+                    Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
                 }
             }
-            else if (string.IsNullOrWhiteSpace(LibraryId.Value))
-            {
-                candidates = manifest.Libraries.Where(l => l.LibraryId == LibraryId.Value);
-            }
-            else if (Provider.HasValue())
-            {
-                candidates = manifest.Libraries.Where(l => l.ProviderId == Provider.Value()
-                        || (l.ProviderId == null && Provider.Value() == manifest.DefaultProvider));
-            }
-
-            await UpdateLibrariesAsync(manifest, candidates, PreRelease.HasValue(), CancellationToken.None);
 
             return 0;
         }
 
-        private async Task UpdateLibrariesAsync(Manifest manifest,
-            IEnumerable<ILibraryInstallationState> candidates,
-            bool includePreRelease,
+        private async Task<IEnumerable<ILibraryInstallationState>> ValidateParametersAndGetLibrariesToUninstallAsync(
+            Manifest manifest,
             CancellationToken cancellationToken)
         {
-            if (!candidates.Any())
+            var errors = new List<string>();
+            if (string.IsNullOrWhiteSpace(LibraryId.Value))
             {
-                Logger.Log(Resources.NoLibrariesToUpdate, LogLevel.Operation);
-                return;
+                errors.Add(Resources.LibraryIdRequiredForUnInstall);
             }
 
-            Dictionary<string, ILibraryCatalog> catalogs = new Dictionary<string, ILibraryCatalog>();
-
-            Dictionary<ILibraryInstallationState, string> latestVersions = new Dictionary<ILibraryInstallationState, string>();
-
-            foreach (ILibraryInstallationState candidate in candidates)
+            IProvider provider = null;
+            if (Provider.HasValue())
             {
-                IProvider provider = ManifestDependencies.Providers.FirstOrDefault(p => p.Id == candidate.ProviderId);
-                if (!catalogs.ContainsKey(provider.Id))
+                provider = ManifestDependencies.GetProvider(Provider.Value());
+                if (provider == null)
                 {
-                    catalogs[provider.Id] = provider.GetCatalog();
+                    errors.Add(string.Format(Resources.ProviderNotInstalled, Provider.Value()));
                 }
-
-                latestVersions[candidate] = await catalogs[provider.Id]
-                    .GetLatestVersion(candidate.LibraryId, includePreRelease, cancellationToken);
             }
 
+            if (errors.Any())
+            {
+                throw new InvalidOperationException(string.Join(Environment.NewLine, errors));
+            }
 
-
+            return await LibraryResolver.ResolveAsync(LibraryId.Value,
+                manifest,
+                ManifestDependencies,
+                provider,
+                cancellationToken);
         }
     }
 }

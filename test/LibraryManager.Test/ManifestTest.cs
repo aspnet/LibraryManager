@@ -330,6 +330,43 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual("jquery.min.js", result.InstallationState.Files[0]);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public async Task UpdateToLatestVersionAsync_ThrowsException()
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            Action<string> deleteFileAction = (file) => { _hostInteraction.DeleteFile(file); };
+            await manifest.UpdateLibraryToLatestAsync(null, false, deleteFileAction, CancellationToken.None);
+        }
+
+        [TestMethod]
+        public async Task UpdateToLatestVersionAsync()
+        {
+            var manifest = Manifest.FromJson(_docOldVersionLibrary, _dependencies);
+
+            Action<string> deleteFileAction = (file) =>
+            {
+                if (File.Exists(file))
+                {
+                    _hostInteraction.DeleteFile(file);
+                }
+            };
+            ILibraryInstallationState state = manifest.Libraries.First();
+
+            ILibraryInstallationResult result = await manifest.UpdateLibraryToLatestAsync(state, false, deleteFileAction, CancellationToken.None);
+
+            Assert.IsTrue(result.Success);
+
+            Assert.AreEqual("jquery@3.3.1", result.InstallationState.LibraryId);
+
+            // Already upto date libraries should just return null result.
+            state = manifest.Libraries.First();
+            result = await manifest.UpdateLibraryToLatestAsync(state, false, deleteFileAction, CancellationToken.None);
+
+            Assert.IsNull(result);
+        }
+
         private string _doc = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
@@ -373,6 +410,18 @@ namespace Microsoft.Web.LibraryManager.Test
   ""{ManifestConstants.Libraries}"": [
     {{
       ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }}
+  ]
+}}
+";
+        private string _docOldVersionLibrary = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.DefaultDestination}"": ""lib"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@2.2.0"",
       ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
     }}

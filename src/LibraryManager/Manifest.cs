@@ -218,9 +218,64 @@ namespace Microsoft.Web.LibraryManager
 
         private bool CheckAlreadyInstalled(LibraryInstallationState desiredState)
         {
+            // compare id, provider and destination
             return Libraries.Any(l => l.LibraryId == desiredState.LibraryId
+                        && (l.DestinationPath == desiredState.DestinationPath)
                         && (l.ProviderId == desiredState.ProviderId 
                             || (l.ProviderId == null && desiredState.ProviderId == DefaultProvider)));
+        }
+
+        /// <summary>
+        /// Updates a given library to the latest version
+        /// </summary>
+        /// <param name="libraryToUpdate">The library to update</param>
+        /// <param name="usePreRelease">Should prelease versions be considered</param>
+        /// <param name="deleteFileAction"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ILibraryInstallationResult> UpdateLibraryToLatestAsync(
+            ILibraryInstallationState libraryToUpdate,
+            bool usePreRelease,
+            Action<string> deleteFileAction,
+            CancellationToken cancellationToken)
+        {
+            if (libraryToUpdate == null)
+            {
+                throw new ArgumentNullException(nameof(libraryToUpdate));
+            }
+
+            string providerId = string.IsNullOrEmpty(libraryToUpdate.ProviderId)
+                ? DefaultProvider
+                : libraryToUpdate.ProviderId;
+
+            IProvider providerToUse = _dependencies.GetProvider(providerId);
+
+            if (providerToUse == null)
+            {
+                throw new InvalidOperationException(string.Format(PredefinedErrors.ProviderUnknown(providerId).Message));
+            }
+
+            ILibraryCatalog catalog = providerToUse.GetCatalog();
+
+            string latestVersion = await catalog.GetLatestVersion(
+                libraryToUpdate.LibraryId,
+                usePreRelease,
+                cancellationToken)
+                .ConfigureAwait(false);
+
+            if (string.IsNullOrEmpty(latestVersion) 
+                || libraryToUpdate.LibraryId.Equals(latestVersion, StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            Uninstall(libraryToUpdate, deleteFileAction);
+
+            return await InstallLibraryAsync(latestVersion,
+                libraryToUpdate.ProviderId,
+                libraryToUpdate.Files,
+                libraryToUpdate.DestinationPath,
+                cancellationToken);
         }
 
         /// <summary>

@@ -223,7 +223,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default destination is not set. Please provide a destination using &apos;--destination&apos;..
+        ///   Looks up a localized string similar to Default destination is not set. Please provide a destination using &apos;--destination&apos;.
         /// </summary>
         internal static string DestinationRequiredWhenNoDefaultIsPresent {
             get {
@@ -313,7 +313,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to init: A &apos;libman.json&apos; already exists..
+        ///   Looks up a localized string similar to Failed to init: A &apos;libman.json&apos; already exists.
         /// </summary>
         internal static string InitFailedLibmanJsonFileExists {
             get {
@@ -351,7 +351,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     CDNJS libraries have a library ID format of “&lt;libraryName&gt;@&lt;libraryVersion&gt;”. 
+        ///   Looks up a localized string similar to     CDNJS libraries have a library ID format of “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
         ///    For CDNJS libraries, if no version is specified in the library ID, the highest version available is used..
         /// </summary>
         internal static string InstallCommandProviderSpecificLogic {
@@ -361,10 +361,10 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     Initializes a libman.json if one does not exist. 
-        ///    If no default provider exists, --provider option is required.
-        ///    If no default destination exists, --destination option is required. 
-        ///    If no files are specified, the entire library is included..
+        ///   Looks up a localized string similar to     Initializes a libman.json if one does not exist
+        ///    If no default provider exists, --provider option is required
+        ///    If no default destination exists, --destination option is required
+        ///    If no files are specified, the entire library is included.
         /// </summary>
         internal static string InstallCommandRemarks {
             get {
@@ -373,7 +373,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to install library..
+        ///   Looks up a localized string similar to Failed to install library.
         /// </summary>
         internal static string InstallLibraryFailed {
             get {
@@ -387,6 +387,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string InvalidArgumentsMessage {
             get {
                 return ResourceManager.GetString("InvalidArgumentsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The library &apos;{0}&apos; is already up to date.
+        /// </summary>
+        internal static string LatestVersionAlreadyInstalled {
+            get {
+                return ResourceManager.GetString("LatestVersionAlreadyInstalled", resourceCulture);
             }
         }
         
@@ -427,7 +436,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos;..
+        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos;.
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUninstall {
             get {
@@ -436,7 +445,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos; for provider &apos;{1}&apos;. Please remove the manually from the libman.json file..
+        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos; for provider &apos;{1}&apos;. Please remove the manually from the libman.json file.
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUninstallForProvider {
             get {
@@ -445,16 +454,16 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos; for provider &apos;{1}&apos;..
+        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos;.
         /// </summary>
-        internal static string MoreThanOneLibraryFoundToUpdateForProvider {
+        internal static string MoreThanOneLibraryFoundToUpdate {
             get {
-                return ResourceManager.GetString("MoreThanOneLibraryFoundToUpdateForProvider", resourceCulture);
+                return ResourceManager.GetString("MoreThanOneLibraryFoundToUpdate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No libraries to update. Please use install command to install libraries..
+        ///   Looks up a localized string similar to No libraries to update. Please use install command to install libraries.
         /// </summary>
         internal static string NoLibrariesToUpdate {
             get {
@@ -463,7 +472,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No library found with id &apos;{0}&apos; for provider &apos;{1}&apos; to update..
+        ///   Looks up a localized string similar to No library found with id &apos;{0}&apos; to update.
         /// </summary>
         internal static string NoLibraryFoundToUpdate {
             get {
@@ -472,7 +481,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library &apos;{0}&apos; is not installed. Nothing to uninstall..
+        ///   Looks up a localized string similar to Library &apos;{0}&apos; is not installed. Nothing to uninstall.
         /// </summary>
         internal static string NoLibraryToUninstall {
             get {
@@ -481,7 +490,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Path to the project (Current directory is used as default)..
+        ///   Looks up a localized string similar to Path to the project (Current directory is used as default).
         /// </summary>
         internal static string ProjectPathOptionDesc {
             get {
@@ -490,7 +499,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provider &apos;{0}&apos; is not installed..
+        ///   Looks up a localized string similar to Provider &apos;{0}&apos; is not installed.
         /// </summary>
         internal static string ProviderNotInstalled {
             get {
@@ -535,7 +544,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Downloads all files from provider and saves them to specified destination..
+        ///   Looks up a localized string similar to Downloads all files from provider and saves them to specified destination.
         /// </summary>
         internal static string RestoreCommandDesc {
             get {
@@ -544,9 +553,9 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     Error if no libman.json in current folder. 
-        ///    If a library specifies a provider, it will override the defaultProvider.  
-        ///    If a library specifies a destination, it will override the defaultDestination..
+        ///   Looks up a localized string similar to     Error if no libman.json in current folder
+        ///    If a library specifies a provider, it will override the defaultProvider
+        ///    If a library specifies a destination, it will override the defaultDestination.
         /// </summary>
         internal static string RestoreCommandRemarks {
             get {
@@ -602,8 +611,8 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     CDNJS libraries have a library ID format of “&lt;libraryName&gt;@&lt;libraryVersion&gt;”. 
-        ///    If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId..
+        ///   Looks up a localized string similar to     CDNJS libraries have a library ID format of “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+        ///    If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId.
         /// </summary>
         internal static string UnInstallCommandProviderSpecificLogic {
             get {
@@ -612,9 +621,9 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     Error if not exactly one library found. 
-        ///    Use the provider attribute to disambiguate libraries of the same name from different providers in the same project. 
-        ///    If there is only one library by the given name in the current project, provider attribute can be omitted..
+        ///   Looks up a localized string similar to     Error if not exactly one library found
+        ///    Use the provider attribute to disambiguate libraries of the same name from different providers in the same project
+        ///    If there is only one library by the given name in the current project, provider attribute can be omitted.
         /// </summary>
         internal static string UnInstallCommandRemarks {
             get {
@@ -623,7 +632,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updates (upgrades) the specified library (or all libraries if none specified) to the latest version..
+        ///   Looks up a localized string similar to Updates (upgrades) the specified library (or all libraries if none specified) to the latest version.
         /// </summary>
         internal static string UpdateCommandDesc {
             get {
@@ -646,7 +655,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library to update to latest version..
+        ///   Looks up a localized string similar to Library to update to latest version.
         /// </summary>
         internal static string UpdateCommandLibraryArgumentDesc {
             get {
@@ -655,7 +664,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If specified, the latest pre-release version of the library will be downloaded (where applicable)..
+        ///   Looks up a localized string similar to If specified, the latest pre-release version of the library will be downloaded (where applicable).
         /// </summary>
         internal static string UpdateCommandPreReleaseOptionDesc {
             get {
@@ -664,7 +673,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If specified, only libraries from the specified provider will be updated..
+        ///   Looks up a localized string similar to If specified, only libraries from the specified provider will be updated.
         /// </summary>
         internal static string UpdateCommandProviderOptionDesc {
             get {
@@ -673,9 +682,9 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     Error if no libman.json in current folder. 
-        ///    Error if specified library doesn&apos;t exist.
-        ///    To specify a specific version, use the Install command..
+        ///   Looks up a localized string similar to     Error if no libman.json in current folder.
+        ///    Error if specified library doesn&apos;t exist
+        ///    To specify a specific version, use the Install command.
         /// </summary>
         internal static string UpdateCommandRemarks {
             get {
@@ -684,7 +693,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use --provider to disambiguate libraries of same name from different providers in the project..
+        ///   Looks up a localized string similar to Use --provider to disambiguate libraries of same name from different providers in the project.
         /// </summary>
         internal static string UseProviderToDisambiguateMessage {
             get {

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -92,6 +93,30 @@ namespace Microsoft.Web.LibraryManager.Tools
             }
 
             return resolvedLibraries;
+        }
+
+        public static ILibraryInstallationState ResolveLibraryByUserChoice(IEnumerable<ILibraryInstallationState> installedLibraries, IHostEnvironment hostEnvironment)
+        {
+            var sb = new StringBuilder(Resources.ChooseAnOption);
+            sb.AppendLine();
+            sb.Append('-', Resources.ChooseAnOption.Length);
+
+            int index = 1;
+            foreach (ILibraryInstallationState library in installedLibraries)
+            {
+                sb.Append($"{Environment.NewLine}{index}. {library.ToConsoleDisplayString()}");
+                index++;
+            }
+
+            while (true)
+            {
+                string choice = hostEnvironment.InputReader.GetUserInput(sb.ToString());
+
+                if (int.TryParse(choice, out int choiceIndex) && choiceIndex > 0 && choiceIndex < index)
+                {
+                    return installedLibraries.ElementAt(choiceIndex - 1);
+                }
+            }
         }
 
         private static async Task<IEnumerable<ILibraryInstallationState>> FindCandidatesFromSearchGroupAsync(
