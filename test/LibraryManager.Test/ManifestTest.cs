@@ -367,6 +367,35 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsNull(result);
         }
 
+        [TestMethod]
+        public async Task UpdateLibraryAsync()
+        {
+            var manifest = Manifest.FromJson(_docOldVersionLibrary, _dependencies);
+
+            Action<string> deleteFileAction = (file) =>
+            {
+                if (File.Exists(file))
+                {
+                    _hostInteraction.DeleteFile(file);
+                }
+            };
+            ILibraryInstallationState state = manifest.Libraries.First();
+
+            ILibraryInstallationResult result = await manifest.UpdateLibraryAsync(state, "jquery@3.3.1", deleteFileAction, CancellationToken.None);
+
+            Assert.IsTrue(result.Success);
+
+            Assert.AreEqual("jquery@3.3.1", result.InstallationState.LibraryId);
+
+            // Already upto date libraries should just return null result.
+            state = manifest.Libraries.First();
+            result = await manifest.UpdateLibraryToLatestAsync(state, false, deleteFileAction, CancellationToken.None);
+
+            Assert.IsNull(result);
+        }
+
+
+
         private string _doc = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [

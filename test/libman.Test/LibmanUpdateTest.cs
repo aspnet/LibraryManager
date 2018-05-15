@@ -151,5 +151,59 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             Assert.AreEqual("No library found with id 'jqu' to update", logger.Messages.Last().Value);
         }
+
+        [TestMethod]
+        public void TestUpdateCommand_ToVersion()
+        {
+            var command = new UpdateCommand(HostEnvironment);
+            command.Configure(null);
+
+            string contents = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""defaultDestination"": ""wwwroot"",
+  ""libraries"": [
+    {
+      ""library"": ""jquery@2.2.0"",
+      ""files"": [ ""jquery.min.js"", ""jquery.js"" ]
+    }
+  ]
+}";
+
+            string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
+            File.WriteAllText(libmanjsonPath, contents);
+
+            var restoreCommand = new RestoreCommand(HostEnvironment);
+            restoreCommand.Configure(null);
+
+            restoreCommand.Execute();
+
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
+
+            int result = command.Execute("jquery@2.2.0", "--to-version", "jquery@2.2.1");
+
+            Assert.AreEqual(0, result);
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
+
+            string actualText = File.ReadAllText(libmanjsonPath);
+
+            string expectedText = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""defaultDestination"": ""wwwroot"",
+  ""libraries"": [
+    {
+      ""library"": ""jquery@2.2.1"",
+      ""files"": [
+        ""jquery.min.js"",
+        ""jquery.js""
+      ]
+    }
+  ]
+}";
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
+        }
     }
 }

@@ -391,6 +391,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is not a valid value for --to-version.
+        /// </summary>
+        internal static string InvalidToVersion {
+            get {
+                return ResourceManager.GetString("InvalidToVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The library &apos;{0}&apos; is already up to date.
         /// </summary>
         internal static string LatestVersionAlreadyInstalled {
@@ -641,12 +650,11 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     libman update 
-        ///    libman update jquery 
-        ///    libman update --provider cdnjs 
-        ///    libman update jquery --provider cdnjs 
+        ///   Looks up a localized string similar to     libman update jquery 
+        ///    libman update jquery --provider cdnjs
+        ///    libman update jquery --provider cdnjs --to-version jquery@3.3.1
         ///    libman update jquery -pre 
-        ///    libman update jquery@3.2.1.
+        ///    libman update jquery@3.3.1.
         /// </summary>
         internal static string UpdateCommandExamples {
             get {
@@ -689,6 +697,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string UpdateCommandRemarks {
             get {
                 return ResourceManager.GetString("UpdateCommandRemarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version to update the library to (needs complete libraryid for the provider).
+        /// </summary>
+        internal static string UpdateCommandToVersionOptionDesc {
+            get {
+                return ResourceManager.GetString("UpdateCommandToVersionOptionDesc", resourceCulture);
             }
         }
         

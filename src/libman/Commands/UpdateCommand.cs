@@ -26,6 +26,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         public CommandArgument LibraryId { get; private set; }
         public CommandOption Provider { get; private set; }
         public CommandOption PreRelease { get; private set; }
+        public CommandOption ToVersion { get; private set; }
 
         public override BaseCommand Configure(CommandLineApplication parent = null)
         {
@@ -34,6 +35,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             LibraryId = Argument("libraryId", Resources.UpdateCommandLibraryArgumentDesc, multipleValues: false);
             Provider = Option("--provider|-p", Resources.UpdateCommandProviderOptionDesc, CommandOptionType.SingleValue);
             PreRelease = Option("-pre", Resources.UpdateCommandPreReleaseOptionDesc, CommandOptionType.NoValue);
+            ToVersion = Option("--to-version", Resources.UpdateCommandToVersionOptionDesc, CommandOptionType.SingleValue);
 
             return this;
         }
@@ -62,9 +64,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 libraryToUpdate = installedLibraries.First();
             }
 
+
             Action<string> deleteFileAction = (s) => HostEnvironment.HostInteraction.DeleteFiles(s);
 
-            ILibraryInstallationResult result = await manifest.UpdateLibraryToLatestAsync(libraryToUpdate, PreRelease.HasValue(), deleteFileAction, CancellationToken.None);
+            ILibraryInstallationResult result = ToVersion.HasValue()
+                ? await manifest.UpdateLibraryAsync(libraryToUpdate, ToVersion.Value(), deleteFileAction, CancellationToken.None)
+                : await manifest.UpdateLibraryToLatestAsync(libraryToUpdate, PreRelease.HasValue(), deleteFileAction, CancellationToken.None);
 
             if (result == null)
             {
@@ -90,6 +95,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return 0;
         }
 
+        private async Task ValidateToVersionIsValidAsync(ILibraryInstallationState libraryToUpdate, string newId, Manifest manifest, CancellationToken cancellationToken)
+        {
+            IProvider providerToUse = ManifestDependencies.GetProvider(libraryToUpdate.ProviderId ?? manifest.DefaultProvider);
+            ILibraryCatalog libraryCatalog = providerToUse.GetCatalog();
+
+            // This will throw if the newId is not a valid libraryId for the given provider.
+            ILibrary newLib = await libraryCatalog.GetLibraryAsync(newId, cancellationToken);
+        }
+
         private async Task<IEnumerable<ILibraryInstallationState>> ValidateParametersAndGetLibrariesToUninstallAsync(
             Manifest manifest,
             CancellationToken cancellationToken)
@@ -108,6 +122,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 {
                     errors.Add(string.Format(Resources.ProviderNotInstalled, Provider.Value()));
                 }
+            }
+
+            if (ToVersion.HasValue() && string.IsNullOrWhiteSpace(ToVersion.Value()))
+            {
+                errors.Add(string.Format(Resources.InvalidToVersion, ToVersion.Value()));
             }
 
             if (errors.Any())

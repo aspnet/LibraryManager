@@ -101,7 +101,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            Assert.AreEqual("Failed to install library.", logger.Messages[0].Value);
+            Assert.AreEqual("Failed to install library", logger.Messages[0].Value);
             Assert.AreEqual("[LIB010]: The \"jquery@3.2.1\" library is already installed by the \"cdnjs\" provider", logger.Messages[1].Value);
         }
 

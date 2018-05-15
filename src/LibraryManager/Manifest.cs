@@ -226,6 +226,23 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="libraryToUpdate"></param>
+        /// <param name="newId"></param>
+        /// <param name="deleteFileAction"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ILibraryInstallationResult> UpdateLibraryAsync(
+            ILibraryInstallationState libraryToUpdate,
+            string newId,
+            Action<string> deleteFileAction,
+            CancellationToken cancellationToken)
+        {
+            return await UpdateLibraryInternalAsync(libraryToUpdate, newId, true, deleteFileAction, cancellationToken);
+        }
+
+        /// <summary>
         /// Updates a given library to the latest version
         /// </summary>
         /// <param name="libraryToUpdate">The library to update</param>
@@ -235,6 +252,16 @@ namespace Microsoft.Web.LibraryManager
         /// <returns></returns>
         public async Task<ILibraryInstallationResult> UpdateLibraryToLatestAsync(
             ILibraryInstallationState libraryToUpdate,
+            bool usePreRelease,
+            Action<string> deleteFileAction,
+            CancellationToken cancellationToken)
+        {
+            return await UpdateLibraryInternalAsync(libraryToUpdate, null ,usePreRelease, deleteFileAction, cancellationToken);
+        }
+
+        private async Task<ILibraryInstallationResult> UpdateLibraryInternalAsync(
+            ILibraryInstallationState libraryToUpdate,
+            string newId,
             bool usePreRelease,
             Action<string> deleteFileAction,
             CancellationToken cancellationToken)
@@ -257,21 +284,24 @@ namespace Microsoft.Web.LibraryManager
 
             ILibraryCatalog catalog = providerToUse.GetCatalog();
 
-            string latestVersion = await catalog.GetLatestVersion(
-                libraryToUpdate.LibraryId,
-                usePreRelease,
-                cancellationToken)
-                .ConfigureAwait(false);
+            if (string.IsNullOrEmpty(newId))
+            {
+                newId = await catalog.GetLatestVersion(
+                    libraryToUpdate.LibraryId,
+                    usePreRelease,
+                    cancellationToken)
+                    .ConfigureAwait(false);
+            }
 
-            if (string.IsNullOrEmpty(latestVersion) 
-                || libraryToUpdate.LibraryId.Equals(latestVersion, StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(newId)
+                || libraryToUpdate.LibraryId.Equals(newId, StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
 
             Uninstall(libraryToUpdate, deleteFileAction);
 
-            return await InstallLibraryAsync(latestVersion,
+            return await InstallLibraryAsync(newId,
                 libraryToUpdate.ProviderId,
                 libraryToUpdate.Files,
                 libraryToUpdate.DestinationPath,

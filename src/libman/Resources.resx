@@ -278,12 +278,11 @@
     <value>Updates (upgrades) the specified library (or all libraries if none specified) to the latest version</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>    libman update 
-    libman update jquery 
-    libman update --provider cdnjs 
-    libman update jquery --provider cdnjs 
+    <value>    libman update jquery 
+    libman update jquery --provider cdnjs
+    libman update jquery --provider cdnjs --to-version jquery@3.3.1
     libman update jquery -pre 
-    libman update jquery@3.2.1</value>
+    libman update jquery@3.3.1</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
     <value>    Error if no libman.json in current folder.
@@ -346,5 +345,11 @@
   </data>
   <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
     <value>The library '{0}' is already up to date</value>
+  </data>
+  <data name="InvalidToVersion" xml:space="preserve">
+    <value>'{0}' is not a valid value for --to-version</value>
+  </data>
+  <data name="UpdateCommandToVersionOptionDesc" xml:space="preserve">
+    <value>The version to update the library to (needs complete libraryid for the provider)</value>
   </data>
 </root>
