@@ -61,6 +61,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available files are : {0}.
+        /// </summary>
+        internal static string AvailableFilesForLibrary {
+            get {
+                return ResourceManager.GetString("AvailableFilesForLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete all files from the local machine&apos;s LibMan cache..
         /// </summary>
         internal static string CacheCleanCommandDesc {
@@ -373,6 +382,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Installed library &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string InstalledLibrary {
+            get {
+                return ResourceManager.GetString("InstalledLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to install library.
         /// </summary>
         internal static string InstallLibraryFailed {
@@ -387,6 +405,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string InvalidArgumentsMessage {
             get {
                 return ResourceManager.GetString("InvalidArgumentsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library &quot;{0}&quot; does not contain the following files: {1}.
+        /// </summary>
+        internal static string InvalidFilesForLibrary {
+            get {
+                return ResourceManager.GetString("InvalidFilesForLibrary", resourceCulture);
             }
         }
         
@@ -637,6 +664,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string UnInstallCommandRemarks {
             get {
                 return ResourceManager.GetString("UnInstallCommandRemarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstalled library &apos;{0}&apos;.
+        /// </summary>
+        internal static string UninstalledLibrary {
+            get {
+                return ResourceManager.GetString("UninstalledLibrary", resourceCulture);
             }
         }
         

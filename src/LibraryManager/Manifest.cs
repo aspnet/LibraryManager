@@ -299,6 +299,29 @@ namespace Microsoft.Web.LibraryManager
                 return null;
             }
 
+            var desiredState = new LibraryInstallationState()
+            {
+                LibraryId = newId,
+                Files = libraryToUpdate.Files,
+                ProviderId = providerId,
+                DestinationPath = string.IsNullOrEmpty(libraryToUpdate.DestinationPath) ? DefaultDestination : libraryToUpdate.DestinationPath
+            };
+
+            if (CheckAlreadyInstalled(desiredState))
+            {
+                IError error = PredefinedErrors.CouldNotUpdateDueToConflicts(libraryToUpdate.LibraryId, desiredState.LibraryId);
+                return LibraryInstallationResult.FromErrors(new[] { error });
+            }
+
+            ILibrary desiredLibrary = await catalog.GetLibraryAsync(newId, cancellationToken);
+            IReadOnlyList<string> invalidFiles = desiredLibrary.GetInvalidFiles(libraryToUpdate.Files);
+
+            if (invalidFiles != null && invalidFiles.Any())
+            {
+                IError error = PredefinedErrors.CouldNotUpdateDueToFileConflicts(libraryToUpdate.LibraryId, newId, invalidFiles);
+                return LibraryInstallationResult.FromErrors(new[] { error });
+            }
+
             Uninstall(libraryToUpdate, deleteFileAction);
 
             return await InstallLibraryAsync(newId,

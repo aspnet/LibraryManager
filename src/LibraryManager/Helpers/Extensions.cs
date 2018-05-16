@@ -1,5 +1,7 @@
 ﻿using Microsoft.Web.LibraryManager.Contracts;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -44,6 +46,37 @@ namespace Microsoft.Web.LibraryManager
             errors = list;
 
             return list.Count == 0;
+        }
+
+        /// <summary>
+        /// Returns files from <paramref name="files"/> that are not part of the <paramref name="library"/>
+        /// </summary>
+        /// <param name="library"></param>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        public static IReadOnlyList<string> GetInvalidFiles(this ILibrary library, IReadOnlyList<string> files)
+        {
+            if (library == null)
+            {
+                throw new ArgumentNullException(nameof(library));
+            }
+
+            var invalidFiles = new List<string>();
+
+            if (files == null || !files.Any())
+            {
+                return invalidFiles;
+            }
+
+            foreach(string file in files)
+            {
+                if (!library.Files.ContainsKey(file))
+                {
+                    invalidFiles.Add(file);
+                }
+            }
+
+            return invalidFiles;
         }
     }
 }

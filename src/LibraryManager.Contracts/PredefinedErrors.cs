@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts.Resources;
 
 namespace Microsoft.Web.LibraryManager.Contracts
@@ -101,5 +102,24 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static IError LibraryAlreadyInstalled(string libraryId, string providerId)
             => new Error("LIB010", string.Format(Text.ErrorLibraryAlreadyInstalled, libraryId, providerId));
+
+        /// <summary>
+        /// Library cannot be updated as updated version is already installed.
+        /// </summary>
+        /// <param name="oldId"></param>
+        /// <param name="newId"></param>
+        /// <returns></returns>
+        public static IError CouldNotUpdateDueToConflicts(string oldId, string newId)
+            => new Error("LIB011", string.Format(Text.ErrorLibraryCannotUpdateDueToConflicts, oldId, newId));
+
+        /// <summary>
+        /// Library cannot be updated as new version does not have specified files.
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <param name="newId"></param>
+        /// <param name="invalidFiles"></param>
+        /// <returns></returns>
+        public static IError CouldNotUpdateDueToFileConflicts(string libraryId, string newId, IReadOnlyList<string> invalidFiles)
+            => new Error("LIB012", string.Format(Text.ErrorLibraryCannotUpdateDueToFileConflicts, libraryId, newId, string.Join(", ", invalidFiles)));
     }
 }

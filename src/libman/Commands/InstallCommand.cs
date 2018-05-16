@@ -73,6 +73,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (result.Success)
             {
                 await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
+                string installDestination = Destination.HasValue() ? Destination.Value() : manifest.DefaultDestination;
+                Logger.Log(string.Format(Resources.InstalledLibrary, libraryIdToInstall, installDestination), LogLevel.Operation);
             }
             else if (result.Errors != null)
             {
@@ -102,6 +104,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 if (libraryToInstall != null)
                 {
+                    ValidateLibraryHasFiles(libraryToInstall, LibraryId.Value);
                     return LibraryId.Value;
                 }
             }
@@ -131,7 +134,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 if (libGroup.DisplayName.Equals(LibraryId.Value, StringComparison.OrdinalIgnoreCase))
                 {
                     // Found a group with an exact match.
-                    return libIds.First();
+                    string libraryId = libIds.First();
+                    ILibrary libraryToInstall = await providerCatalog.GetLibraryAsync(libraryId, cancellationToken);
+                    ValidateLibraryHasFiles(libraryToInstall, libraryId);
+
+                    return libraryId;
                 }
 
                 sb.AppendLine("  " + libIds.First());
@@ -139,6 +146,24 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             sb.Insert(0, $"[{invalidLibraryError.Code}]: {invalidLibraryError.Message} {Environment.NewLine} {Resources.SuggestedIdsMessage}{Environment.NewLine}");
             throw new InvalidOperationException(sb.ToString());
+        }
+
+        private void ValidateLibraryHasFiles(ILibrary library, string libraryId)
+        {
+            if (!Files.HasValue())
+            {
+                return;
+            }
+
+            IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(Files.Values);
+
+            if (invalidFiles.Any())
+            {
+                string message = string.Format(Resources.InvalidFilesForLibrary, libraryId, string.Join(", ", invalidFiles));
+                message += Environment.NewLine + string.Format(Resources.AvailableFilesForLibrary, string.Join(", ", library.Files.Keys));
+
+                throw new InvalidOperationException(message);
+            }
         }
 
         private IProvider GetProvider(string providerId)

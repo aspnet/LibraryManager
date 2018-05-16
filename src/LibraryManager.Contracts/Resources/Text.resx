@@ -123,6 +123,12 @@
   <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
     <value>The "{0}" library is already installed by the "{1}" provider</value>
   </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</value>
+  </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
     <value>The library id is undefined</value>
   </data>

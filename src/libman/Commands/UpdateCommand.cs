@@ -83,6 +83,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 libraryToUpdate = installedLibraries.First();
             }
 
+            if (ToVersion.HasValue())
+            {
+                await ValidateToVersionIsValidAsync(libraryToUpdate, ToVersion.Value(), manifest, CancellationToken.None);
+            }
+
 
             Action<string> deleteFileAction = (s) => HostEnvironment.HostInteraction.DeleteFiles(s);
 

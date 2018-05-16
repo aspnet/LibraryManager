@@ -73,6 +73,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
 
+            Logger.Log(string.Format(Resources.UninstalledLibrary, libraryToUninstall.LibraryId), LogLevel.Operation);
+
             return 0;
         }
 

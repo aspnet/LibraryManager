@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="libraryId">The ID of the invalid library.</param>
         /// <param name="providerId">The ID of the <see cref="IProvider"/> failing to install the library.</param>
         public InvalidLibraryException(string libraryId, string providerId)
-            : base(Text.ErrorUnableToResolveSource)
+            : base(string.Format(Text.ErrorUnableToResolveSource, libraryId, providerId))
         {
             LibraryId = libraryId;
             ProviderId = providerId;

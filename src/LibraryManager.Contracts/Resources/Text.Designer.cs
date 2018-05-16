@@ -80,6 +80,24 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; could not be updated to &quot;{1}&quot;. Another library &quot;{1}&quot; is already installed.
+        /// </summary>
+        internal static string ErrorLibraryCannotUpdateDueToConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotUpdateDueToConflicts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; could not be updated to &quot;{1}&quot;. The following files are not valid for the &quot;{1}&quot;: {2}.
+        /// </summary>
+        internal static string ErrorLibraryCannotUpdateDueToFileConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotUpdateDueToFileConflicts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The library id is undefined.
         /// </summary>
         internal static string ErrorLibraryIdIsUndefined {
