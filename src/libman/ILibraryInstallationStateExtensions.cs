@@ -7,8 +7,16 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools
 {
+    /// <summary>
+    /// Extension Methods for <see cref="ILibraryInstallationState"/>
+    /// </summary>
     internal static class ILibraryInstallationStateExtensions
     {
+        /// <summary>
+        /// Returns a string that can be used to display the library information on the console.
+        /// </summary>
+        /// <param name="libraryInstallationState"></param>
+        /// <returns></returns>
         public static string ToConsoleDisplayString(this ILibraryInstallationState libraryInstallationState)
         {
             if (libraryInstallationState == null)

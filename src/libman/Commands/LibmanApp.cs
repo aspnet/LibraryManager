@@ -1,16 +1,19 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Diagnostics;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Defines the libman command.
+    /// Child commands: init, install, uninstall, restore, clean, cache, update
+    /// </summary>
     internal class LibmanApp : BaseCommand
     {
         public LibmanApp(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true) 
-            : base(throwOnUnexpectedArg, "dotnet libman", Resources.LibmanCommandDesc, hostEnvironment)
+            : base(throwOnUnexpectedArg, "libman", Resources.LibmanCommandDesc, hostEnvironment)
         {
 
         }
@@ -38,7 +41,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         private string GetVersion()
         {
-            FileVersionInfo info = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
+            var info = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
             return info.ProductVersion;
         }
     }

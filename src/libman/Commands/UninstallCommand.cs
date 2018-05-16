@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
@@ -12,6 +11,9 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Defines the libman uninstall command
+    /// </summary>
     internal class UninstallCommand : BaseCommand
     {
         public UninstallCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
@@ -19,7 +21,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
         }
 
+        /// <summary>
+        /// Argument to specify the library to uninstall.
+        /// </summary>
+        /// <remarks>Required argument.</remarks>
         public CommandArgument LibraryId { get; private set; }
+
+        /// <summary>
+        /// Option to specify the provider to use to filter libraryies.
+        /// </summary>
         public CommandOption Provider { get; private set; }
 
         public override BaseCommand Configure(CommandLineApplication parent)

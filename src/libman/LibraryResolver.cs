@@ -11,8 +11,20 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools
 {
+    /// <summary>
+    /// Provides a way to resolve libraries.
+    /// </summary>
     internal static class LibraryResolver
     {
+        /// <summary>
+        /// Resolves libraries that match partial name
+        /// </summary>
+        /// <param name="partialName">Can be display name or library id.</param>
+        /// <param name="manifest"></param>
+        /// <param name="manifestDependencies"></param>
+        /// <param name="provider"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static async Task<IReadOnlyList<ILibraryInstallationState>> ResolveAsync(
             string partialName,
             Manifest manifest, 
@@ -95,6 +107,12 @@ namespace Microsoft.Web.LibraryManager.Tools
             return resolvedLibraries;
         }
 
+        /// <summary>
+        /// Prompts the user to make a choice for the given libraries.
+        /// </summary>
+        /// <param name="installedLibraries"></param>
+        /// <param name="hostEnvironment"></param>
+        /// <returns></returns>
         public static ILibraryInstallationState ResolveLibraryByUserChoice(IEnumerable<ILibraryInstallationState> installedLibraries, IHostEnvironment hostEnvironment)
         {
             var sb = new StringBuilder(Resources.ChooseAnOption);

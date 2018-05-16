@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Defines a command to allow cleaning the libman cache.
+    /// </summary>
     internal class CacheCleanCommand : BaseCommand
     {
         public CacheCleanCommand(IHostEnvironment environment, bool throwOnUnexpectedArg = true)
@@ -15,6 +19,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
         }
 
+        /// <summary>
+        /// Command argument that specifies the provider for which the cache should be cleaned.
+        /// </summary>
         public CommandArgument Provider { get; private set; }
 
         public override BaseCommand Configure(CommandLineApplication parent = null)

@@ -11,6 +11,10 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Defines the cache list command.
+    /// Allows the user to display the contents of the libman cache.
+    /// </summary>
     internal class CacheListCommand : BaseCommand
     {
         public CacheListCommand(IHostEnvironment environment, bool throwOnUnexpectedArg = true)
@@ -18,9 +22,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
         }
 
+        /// <summary>
+        /// Option to allow displaying individual files for all libraries
+        /// </summary>
         public CommandOption Files { get; private set; }
-        
-        // This option is implicit if nothing is specified.
+
+        /// <summary>
+        /// Option to restrict output to only library names.
+        /// </summary>
+        /// <remarks>This option is implicit if nothing is specified.</remarks>
         public CommandOption Libraries { get; private set; }
 
         public override BaseCommand Configure(CommandLineApplication parent = null)
@@ -35,7 +45,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected override Task<int> ExecuteInternalAsync()
         {
-            StringBuilder outputStr = new StringBuilder(Resources.CacheContentMessage);
+            var outputStr = new StringBuilder(Resources.CacheContentMessage);
             outputStr.Append(Environment.NewLine);
             outputStr.Append('-', Resources.CacheContentMessage.Length);
             outputStr.Append(Environment.NewLine);

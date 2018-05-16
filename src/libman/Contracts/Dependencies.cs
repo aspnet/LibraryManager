@@ -10,6 +10,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Contracts
 {
+    /// <inheritdoc />
     internal class Dependencies : IDependencies
     {
         private readonly IHostInteraction _hostInteraction;
@@ -33,10 +34,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             Initialize();
         }
 
+        /// <inheritdoc />
         public IHostInteraction GetHostInteractions() => _hostInteraction;
 
+        /// <inheritdoc />
         public IReadOnlyList<IProvider> Providers => _providers;
 
+        /// <inheritdoc />
         public IProvider GetProvider(string providerId)
         {
             return _providers?.FirstOrDefault(p => p.Id.Equals(providerId, StringComparison.OrdinalIgnoreCase));

@@ -8,8 +8,12 @@ using Microsoft.Web.LibraryManager.Tools.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools
 {
+    /// <inheritdoc />
     internal class HostEnvironment : IHostEnvironment
     {
+        /// <summary>
+        /// Instance of HostEnvironment to be used by libman
+        /// </summary>
         public static HostEnvironment Instance { get; private set; }
 
         private HostEnvironment(EnvironmentSettings settings)
@@ -17,15 +21,29 @@ namespace Microsoft.Web.LibraryManager.Tools
             EnvironmentSettings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-
+        /// <inheritdoc />
         public IInputReader InputReader { get; set; }
+
+        /// <inheritdoc />
         public ILogger Logger { get; set; }
+
+        /// <inheritdoc />
         public IHostInteractionInternal HostInteraction { get; set; }
+
+        /// <inheritdoc />
         public EnvironmentSettings EnvironmentSettings { get; }
+
+        /// <inheritdoc />
         public string ToolInstallationDir { get; } = Path.GetDirectoryName(typeof(HostEnvironment).Assembly.Location);
 
 
         static object _syncObj = new object();
+
+        /// <summary>
+        /// Initiliazes the HostEnvironment using the <paramref name="settings"/>
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         public static HostEnvironment Initialize(EnvironmentSettings settings)
         {
             lock (_syncObj)
@@ -41,6 +59,7 @@ namespace Microsoft.Web.LibraryManager.Tools
             }
         }
 
+        /// <inheritdoc />
         public void UpdateWorkingDirectory(string directory)
         {
             EnvironmentSettings.CurrentWorkingDirectory = directory;

@@ -2,18 +2,22 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Microsoft.Web.LibraryManager.Tools.Contracts
 {
+    /// <summary>
+    /// Defines constants for libman.
+    /// </summary>
     internal static class Constants
     {
         public const string ConfigFileName = "libman.json";
         public const string TelemetryNamespace = "webtools/librarymanager/";
 
+        /// <summary>
+        /// Defines the cache folder to use for libman
+        /// </summary>
         public static string CacheFolder
         {
             get

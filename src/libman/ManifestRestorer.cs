@@ -9,8 +9,18 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools
 {
+    /// <summary>
+    /// Helper class to restore a manifest and display errors if any.
+    /// </summary>
     internal static class ManifestRestorer
     {
+        /// <summary>
+        /// Restore a manifest and display errors if any.
+        /// </summary>
+        /// <param name="manifest"></param>
+        /// <param name="logger"></param>
+        /// <param name="cancelToken"></param>
+        /// <returns></returns>
         public static async Task RestoreManifestAsync(Manifest manifest, ILogger logger, CancellationToken cancelToken)
         {
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(cancelToken);

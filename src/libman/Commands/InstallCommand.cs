@@ -12,6 +12,10 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Defines the libman install command to allow users to install libraries.
+    /// </summary>
+    /// <remarks>Creates a new libman.json if one doesn't exist in current directory.</remarks>
     internal class InstallCommand : BaseCommand
     {
         public InstallCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
@@ -19,9 +23,26 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
         }
 
+        /// <summary>
+        /// Argument to specify the library to install.
+        /// </summary>
+        /// <remarks>LibraryId is required argument.</remarks>
         public CommandArgument LibraryId { get; private set; }
+
+        /// <summary>
+        /// Option to specify the provider to use for installing the library.
+        /// </summary>
         public CommandOption Provider { get; private set; }
+
+        /// <summary>
+        /// Option to specify the destination for the library.
+        /// </summary>
         public CommandOption Destination { get; set; }
+
+        /// <summary>
+        /// Option to specify files for the library.
+        /// </summary>
+        /// <remarks>Allows specifying multiple values</remarks>
         public CommandOption Files { get; set; }
 
         public override BaseCommand Configure(CommandLineApplication parent)
@@ -127,7 +148,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         private void ValidateParameters(Manifest manifest)
         {
-            List<string> errors = new List<string>();
+            var errors = new List<string>();
 
             if (string.IsNullOrWhiteSpace(LibraryId.Value))
             {

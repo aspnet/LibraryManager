@@ -13,6 +13,9 @@ using Microsoft.Web.LibraryManager.Tools.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Provides an abstract base implementation for all libman commands.
+    /// </summary>
     internal abstract class BaseCommand : CommandLineApplication
     {
         public BaseCommand(bool throwOnUnexpectedArg, string commandName, string description, IHostEnvironment environment)
@@ -29,16 +32,39 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             Description = description;
         }
 
+        /// <summary>
+        /// Lets user specify --verbosity to see more output.
+        /// </summary>
         public CommandOption Verbosity { get; private set; }
+
+        /// <summary>
+        /// Lets user to run libman commands by specifying a different root directory.
+        /// </summary>
+        /// <remarks>Currently unused.</remarks>
         public CommandOption RootDir { get; private set; }
+
+        /// <summary>
+        /// Remarks to be shown with the help text.
+        /// </summary>
+        public virtual string Remarks { get; } = null;
+
+        /// <summary>
+        /// Examples to be shown with the help text.
+        /// </summary>
+        public virtual string Examples { get; } = null;
+
         protected ILogger Logger => HostEnvironment.Logger;
         protected IDependencies ManifestDependencies { get; private set; }
         protected IHostInteractionInternal HostInteractions => HostEnvironment?.HostInteraction;
-        public virtual string Remarks { get; } = null;
-        public virtual string Examples { get; } = null;
         protected IHostEnvironment HostEnvironment { get; }
         protected EnvironmentSettings Settings => HostEnvironment.EnvironmentSettings;
 
+        /// <summary>
+        /// Sets up the arugments and options and also defines the operation
+        /// executed by the command during execution.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         public virtual BaseCommand Configure(CommandLineApplication parent = null)
         {
             HelpOption("--help|-h");
@@ -97,10 +123,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return Task.FromResult(0);
         }
 
+        /// <summary>
+        /// Provides the help text for the command.
+        /// </summary>
+        /// <param name="commandName"></param>
+        /// <returns></returns>
         public override string GetHelpText(string commandName = null)
         {
             string baseHelp = base.GetHelpText(commandName).Replace("dotnet libman", "libman");
-            StringBuilder help = new StringBuilder(baseHelp);
+            var help = new StringBuilder(baseHelp);
 
             if (!string.IsNullOrWhiteSpace(Remarks))
             {
@@ -136,8 +167,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 manifest.AddVersion(Manifest.SupportedVersions.Last().ToString());
             }
-
-
 
             return manifest;
         }

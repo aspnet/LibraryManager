@@ -26,8 +26,8 @@ namespace Microsoft.Web.LibraryManager.Tools
 #endif
 
             EnvironmentSettings defaultSettings = EnvironmentSettings.Default;
-            HostEnvironment environment = HostEnvironment.Initialize(defaultSettings);
-            LibmanApp app = new LibmanApp(environment, true);
+            var environment = HostEnvironment.Initialize(defaultSettings);
+            var app = new LibmanApp(environment, true);
 
             app.Configure();
             try

@@ -5,6 +5,10 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Defines the cache command for libman.
+    /// Child commands: clean, list
+    /// </summary>
     internal class CacheCommand : BaseCommand
     {
         public CacheCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true) 

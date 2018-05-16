@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
@@ -12,6 +11,9 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Defines the libman update command.
+    /// </summary>
     internal class UpdateCommand : BaseCommand
     {
         public UpdateCommand(IHostEnvironment environment, bool throwOnUnexpectedArg = true)
@@ -23,9 +25,26 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         public override string Examples => Resources.UpdateCommandExamples;
 
+        /// <summary>
+        /// Arugment to specify the library to update.
+        /// </summary>
+        /// <remarks>Required argument.</remarks>
         public CommandArgument LibraryId { get; private set; }
+
+        /// <summary>
+        /// Option to specify provider to use to filter libraries.
+        /// </summary>
         public CommandOption Provider { get; private set; }
+
+        /// <summary>
+        /// Option to specify whether to allow updating to latest pre-release version where applicable.
+        /// </summary>
         public CommandOption PreRelease { get; private set; }
+
+        /// <summary>
+        /// Option to specify the version to which the library should be updated.
+        /// </summary>
+        /// <remarks>Needs the full library id.</remarks>
         public CommandOption ToVersion { get; private set; }
 
         public override BaseCommand Configure(CommandLineApplication parent = null)

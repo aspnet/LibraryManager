@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
+    /// <summary>
+    /// Defines the libman restore command.
+    /// </summary>
     internal class RestoreCommand : BaseCommand
     {
         public RestoreCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true) 

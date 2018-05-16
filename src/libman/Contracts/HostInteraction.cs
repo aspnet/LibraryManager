@@ -2,15 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Contracts
 {
+    /// <inheritdoc />
     internal class HostInteraction : IHostInteractionInternal
     {
         public HostInteraction(EnvironmentSettings settings)
@@ -26,10 +25,16 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             CacheDirectory = settings.CacheDirectory;
         }
 
+        /// <inheritdoc />
         public string WorkingDirectory { get; private set; }
+
+        /// <inheritdoc />
         public string CacheDirectory { get; }
+
+        /// <inheritdoc />
         public ILogger Logger { get; }
 
+        /// <inheritdoc />
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, path));
@@ -69,6 +74,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             return true;
         }
 
+        /// <inheritdoc />
         public void DeleteFiles(params string[] relativeFilePaths)
         {
             foreach (string relativeFilePath in relativeFilePaths)
@@ -88,6 +94,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             }
         }
 
+        /// <inheritdoc />
         public void UpdateWorkingDirectory(string directory)
         {
             WorkingDirectory = directory;
