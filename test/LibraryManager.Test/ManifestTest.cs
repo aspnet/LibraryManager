@@ -328,6 +328,13 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual("cdnjs", result.InstallationState.ProviderId);
             Assert.AreEqual(1, result.InstallationState.Files.Count);
             Assert.AreEqual("jquery.min.js", result.InstallationState.Files[0]);
+
+            // Valid parameters invalid files
+            files.Add("abc.js");
+            result = await manifest.InstallLibraryAsync("jquery@3.3.1", "cdnjs", files, "wwwroot", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB003", result.Errors[0].Code);
         }
 
         [TestMethod]
@@ -392,6 +399,13 @@ namespace Microsoft.Web.LibraryManager.Test
             result = await manifest.UpdateLibraryToLatestAsync(state, false, deleteFileAction, CancellationToken.None);
 
             Assert.IsNull(result);
+
+            // Try to update to a library that doesn't have the specified files.
+            result = await manifest.UpdateLibraryAsync(state, "twitter-bootstrap@4.0.0", deleteFileAction, CancellationToken.None);
+
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB012", result.Errors[0].Code);
         }
 
 

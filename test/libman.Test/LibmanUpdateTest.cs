@@ -1,9 +1,11 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Tools.Commands;
 
 namespace Microsoft.Web.LibraryManager.Tools.Test
@@ -204,6 +206,53 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ]
 }";
             Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
+        }
+
+        [TestMethod]
+        public void TestUpdateCommand_InvalidUpdatedLibrary()
+        {
+            var command = new UpdateCommand(HostEnvironment);
+            command.Configure(null);
+
+            string contents = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""defaultDestination"": ""wwwroot"",
+  ""libraries"": [
+    {
+      ""library"": ""jquery@2.2.0"",
+      ""files"": [ ""jquery.min.js"", ""jquery.js"" ]
+    }
+  ]
+}";
+
+            string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
+            File.WriteAllText(libmanjsonPath, contents);
+
+            var restoreCommand = new RestoreCommand(HostEnvironment);
+            restoreCommand.Configure(null);
+
+            restoreCommand.Execute();
+
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
+
+            int result = command.Execute("jquery@2.2.0", "--to-version", "twitter-bootstrap@4.0.0");
+
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
+
+            string actualText = File.ReadAllText(libmanjsonPath);
+
+            Assert.AreEqual(StringHelper.NormalizeNewLines(contents), StringHelper.NormalizeNewLines(actualText));
+
+            var logger = HostEnvironment.Logger as TestLogger;
+
+            Assert.AreEqual(LogLevel.Error, logger.Messages.Last().Key);
+
+            string expectedMessage = "[LIB012]: The library \"jquery@2.2.0\" could not be updated to \"twitter-bootstrap@4.0.0\". The following files are not valid for the \"twitter-bootstrap@4.0.0\": jquery.min.js, jquery.js";
+
+            Assert.AreEqual(expectedMessage, logger.Messages.Last().Value);
         }
     }
 }
