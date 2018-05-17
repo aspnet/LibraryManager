@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -83,7 +84,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
 
                 try
                 {
+                    string directoryName = Path.GetDirectoryName(absoluteFile);
                     File.Delete(absoluteFile);
+                    DeleteEmptyDirectories(directoryName);
 
                     Logger.Log(string.Format(Resources.FileDeleted, relativeFilePath), LogLevel.Operation);
                 }
@@ -91,6 +94,20 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
                 {
                     Logger.Log(string.Format(Resources.FileDeleteFail, relativeFilePath), LogLevel.Operation);
                 }
+            }
+        }
+
+        private void DeleteEmptyDirectories(string directoryName)
+        {
+            // Since we did a path.Combine(WorkingDirectory, "...") to arrive at directoryName,
+            // We keep deleting empty directories till we reach back to the workingDirectory.
+            // The working directory will also not be empty because libman.json would in the directory.
+            while (WorkingDirectory.TrimEnd('\\', '/') != directoryName.TrimEnd('\\', '/')
+                    && !Directory.EnumerateFiles(directoryName).Any()
+                    && !Directory.EnumerateDirectories(directoryName).Any())
+            {
+                Directory.Delete(directoryName);
+                directoryName = Path.GetDirectoryName(directoryName);
             }
         }
 
