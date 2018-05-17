@@ -18,6 +18,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             base.Setup();
         }
 
+        [TestCleanup]
+        public override void Cleanup()
+        {
+            base.Cleanup();
+        }
+
         [TestMethod]
         public void TestInstall_CleanDirectory()
         {

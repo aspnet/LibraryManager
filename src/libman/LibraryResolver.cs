@@ -43,10 +43,9 @@ namespace Microsoft.Web.LibraryManager.Tools
 
             var exactMatches = new List<ILibraryInstallationState>();
 
-            bool hasFoundAnyExactMatch = false;
-
             foreach (KeyValuePair<string, ILibraryCatalog> catalog in catalogs)
             {
+                bool exactMatchFound = false;
                 try
                 {
                     ILibrary lib = await catalog.Value.GetLibraryAsync(partialName, cancellationToken);
@@ -62,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Tools
 
                         if (candidates.Any())
                         {
-                            hasFoundAnyExactMatch = true;
+                            exactMatchFound = true;
                             exactMatches.AddRange(candidates);
                         }
 
@@ -75,10 +74,10 @@ namespace Microsoft.Web.LibraryManager.Tools
                     // No Library matched exactly.
                 }
 
-                if (hasFoundAnyExactMatch)
+                if (exactMatchFound)
                 {
-                    // If any of the previous providers found an exact match, then we should not perform
-                    // searches anymore.
+                    // If found any exact matches, then we should not perform
+                    // search for this provider.
                     continue;
                 }
 
@@ -99,12 +98,9 @@ namespace Microsoft.Web.LibraryManager.Tools
                 }
             }
 
-            if (exactMatches.Any())
-            {
-                return exactMatches;
-            }
+            exactMatches.AddRange(resolvedLibraries);
 
-            return resolvedLibraries;
+            return exactMatches;
         }
 
         /// <summary>

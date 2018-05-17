@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.IO;
-using System.Text;
 
 namespace Microsoft.Web.LibraryManager.Tools.Test
 {
@@ -13,12 +14,23 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
         public virtual void Setup()
         {
-            WorkingDir = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString());
+            WorkingDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             CacheDir = Path.Combine(WorkingDir, "cache");
             Directory.CreateDirectory(CacheDir);
 
             HostEnvironment = TestEnvironmentHelper.GetTestHostEnvironment(WorkingDir, CacheDir);
         }
 
+        public virtual void Cleanup()
+        {
+            try
+            {
+                Directory.Delete(WorkingDir, true);
+            }
+            catch
+            {
+                // Don't fail the tests if cleanup failed.
+            }
+        }
     }
 }
