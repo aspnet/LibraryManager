@@ -23,7 +23,6 @@ namespace Microsoft.Web.LibraryManager.Test
         private string _projectFolder;
         private IDependencies _dependencies;
         private HostInteraction _hostInteraction;
-
         [TestInitialize]
         public void Setup()
         {
@@ -41,7 +40,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestCleanup]
         public void Cleanup()
         {
-            Directory.Delete(_projectFolder, true);
+            TestUtils.DeleteDirectoryWithRetries(_projectFolder);
         }
 
         [TestMethod]
@@ -89,17 +88,21 @@ namespace Microsoft.Web.LibraryManager.Test
 
             manifest.AddVersion("1.0");
             manifest.AddLibrary(desiredState);
-            await manifest.RestoreAsync(token);
+            IEnumerable<ILibraryInstallationResult> results = await manifest.RestoreAsync(token);
 
             string file1 = Path.Combine(_projectFolder, "lib", "jquery.js");
             string file2 = Path.Combine(_projectFolder, "lib", "jquery.min.js");
             Assert.IsTrue(File.Exists(file1));
             Assert.IsTrue(File.Exists(file2));
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsTrue(results.First().Success);
 
-            manifest.Uninstall(desiredState.LibraryId, (file) => { _hostInteraction.DeleteFile(file); });
+            ILibraryInstallationResult uninstallResult = await manifest.UninstallAsync(desiredState.LibraryId, (file) => _hostInteraction.DeleteFilesAsync(file, token), token);
 
             Assert.IsFalse(File.Exists(file1));
             Assert.IsFalse(File.Exists(file2));
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsTrue(results.First().Success);
         }
 
         [TestMethod]
@@ -137,11 +140,13 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsTrue(File.Exists(file2));
             Assert.IsTrue(File.Exists(file3));
 
-            manifest.Clean((file) => { _hostInteraction.DeleteFile(file); });
+            IEnumerable<ILibraryInstallationResult> results = await manifest.CleanAsync((file) => _hostInteraction.DeleteFilesAsync(file, token), token);
 
             Assert.IsFalse(File.Exists(file1));
             Assert.IsFalse(File.Exists(file2));
             Assert.IsFalse(File.Exists(file3));
+            Assert.IsTrue(results.Count() == 2);
+            Assert.IsTrue(results.All(r => r.Success));
         }
 
         [TestMethod]
@@ -201,7 +206,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 ProviderId = "cdnjs",
                 LibraryId = "jquery@3.2.1",
                 DestinationPath = path,
-                Files = new[] { "knockout-min.js" }
+                Files = new[] { "core.js" }
             };
 
             manifest.AddVersion("1.0");
@@ -214,15 +219,16 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        public async Task RestoreAsync_Cancelled()
+        public async Task RestoreAsync_AllRestoreOperationsCancelled()
         {
             var manifest = Manifest.FromJson(_doc, _dependencies);
             var source = new CancellationTokenSource();
             source.Cancel();
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(source.Token);
 
-            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(2, result.Count());
             Assert.IsTrue(result.ElementAt(0).Cancelled);
+            Assert.IsTrue(result.ElementAt(1).Cancelled);
         }
 
         [TestMethod]
@@ -283,6 +289,54 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual(1, result.Count());
             Assert.IsFalse(result.First().Success);
             Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB007"));
+        }
+
+        [DataTestMethod]
+        [DataRow("1.5")]
+        [DataRow("2.0")]
+        [DataRow("version")]
+        public async Task RestoreAsync_VersionIsNotSupported(string version)
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            var state = new LibraryInstallationState
+            {
+                ProviderId = "cdnjs",
+                LibraryId = "jquery@3.2.1",
+                DestinationPath = "lib",
+                Files = new[] { "core.js" }
+            };
+
+            manifest.AddVersion(version);
+            manifest.AddLibrary(state);
+
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual("LIB009", result.First().Errors.First().Code);
+        }
+
+        [TestMethod]
+        [Ignore]
+        public async Task RestoreAsync_DestinationPathHasAltDirectorySeparatorChar()
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            var state = new LibraryInstallationState
+            {
+                ProviderId = "cdnjs",
+                LibraryId = "jquery@3.2.1",
+                DestinationPath = "lib/js",
+                Files = new[] { "core/core.js" }
+            };
+
+            manifest.AddVersion("1.0");
+            manifest.AddLibrary(state);
+
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.First().Success);
         }
 
         private string _doc = $@"{{

@@ -3,6 +3,7 @@
 
 using Microsoft.Web.LibraryManager.Contracts;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,10 +26,14 @@ namespace Microsoft.Web.LibraryManager.Build
             var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, path));
 
             if (absolutePath.Exists)
+            {
                 return true;
+            }
 
             if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+            {
                 throw new UnauthorizedAccessException();
+            }
 
             if (absolutePath.Exists && (absolutePath.Attributes & FileAttributes.ReadOnly) != 0)
             {
@@ -39,17 +44,9 @@ namespace Microsoft.Web.LibraryManager.Build
 
             using (Stream stream = content.Invoke())
             {
-                if (stream == null)
-                    return false;
-
-                using (FileStream writer = File.Create(absolutePath.FullName, 4096, FileOptions.Asynchronous))
+                if (stream == null || !await WriteToFileAsync(absolutePath.FullName, stream).ConfigureAwait(false))
                 {
-                    if (stream.CanSeek)
-                    {
-                        stream.Seek(0, SeekOrigin.Begin);
-                    }
-
-                    await stream.CopyToAsync(writer, 8192, cancellationToken).ConfigureAwait(false);
+                    return false;
                 }
             }
 
@@ -58,25 +55,28 @@ namespace Microsoft.Web.LibraryManager.Build
             return true;
         }
 
-        public void DeleteFiles(params string[] relativeFilePaths)
+        internal static async Task<bool> WriteToFileAsync(string fileName, Stream libraryStream)
         {
-            foreach (string relativeFilePath in relativeFilePaths)
+            try
             {
-                string absoluteFile = Path.Combine(WorkingDirectory, relativeFilePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
 
-                try
+                using (FileStream destination = File.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                 {
-                    if (File.Exists(absoluteFile))
-                    {
-                        File.Delete(absoluteFile);
-                        Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
-                    }
+                    await libraryStream.CopyToAsync(destination);
                 }
-                catch (Exception)
-                {
-                    Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
-                }
+
+                return true;
             }
+            catch(Exception)
+            {
+                return false;
+            }
+        }
+
+        public Task<bool> DeleteFilesAsync(IEnumerable<string> relativeFilePaths, CancellationToken cancellationToken, bool deleteCleanFolders = true)
+        {
+            throw new NotImplementedException();
         }
     }
 }

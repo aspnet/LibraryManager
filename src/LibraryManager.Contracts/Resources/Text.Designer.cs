@@ -62,11 +62,29 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to delete one or more files in the library {0}.
+        /// </summary>
+        internal static string ErrorCouldNotDeleteLibrary {
+            get {
+                return ResourceManager.GetString("ErrorCouldNotDeleteLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} could not be written to disk. Make sure the file name is correct.
         /// </summary>
         internal static string ErrorCouldNotWriteFile {
             get {
                 return ResourceManager.GetString("ErrorCouldNotWriteFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; destination file path has invalid characters.
+        /// </summary>
+        internal static string ErrorDestinationPathHasInvalidCharacter {
+            get {
+                return ResourceManager.GetString("ErrorDestinationPathHasInvalidCharacter", resourceCulture);
             }
         }
         
@@ -130,6 +148,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static string ErrorProviderUnknown {
             get {
                 return ResourceManager.GetString("ErrorProviderUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to download resource from &quot;{0}&quot;.
+        /// </summary>
+        internal static string ErrorUnableToDownloadResource {
+            get {
+                return ResourceManager.GetString("ErrorUnableToDownloadResource", resourceCulture);
             }
         }
         

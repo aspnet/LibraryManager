@@ -33,7 +33,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <returns>
         /// An instance of <see cref="T:LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
         /// </returns>
-        public virtual Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
+        public virtual Task<ILibrary> GetLibraryMetadataAsync(string libraryId, CancellationToken cancellationToken)
         {
             var library = new Library
             {

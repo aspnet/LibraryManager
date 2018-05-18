@@ -1,5 +1,6 @@
 ﻿using Microsoft.Web.LibraryManager.Contracts;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -34,6 +35,10 @@ namespace Microsoft.Web.LibraryManager
             if (string.IsNullOrEmpty(state.DestinationPath))
             {
                 list.Add(PredefinedErrors.PathIsUndefined());
+            }
+            else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            {
+                list.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
             }
 
             if (string.IsNullOrEmpty(state.LibraryId))

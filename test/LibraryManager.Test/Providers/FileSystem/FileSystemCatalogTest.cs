@@ -45,7 +45,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             IEnumerable<string> info = await absolute[0].GetLibraryIdsAsync(token);
             Assert.AreEqual(1, info.Count());
 
-            ILibrary library = await _catalog.GetLibraryAsync(info.First(), token);
+            ILibrary library = await _catalog.GetLibraryMetadataAsync(info.First(), token);
             Assert.AreEqual(1, library.Files.Count);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
             Assert.AreEqual(file, library.Name);
@@ -79,7 +79,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             IEnumerable<string> info = await absolute.First().GetLibraryIdsAsync(token);
             Assert.AreEqual(1, info.Count());
 
-            ILibrary library = await _catalog.GetLibraryAsync(info.First(), token);
+            ILibrary library = await _catalog.GetLibraryMetadataAsync(info.First(), token);
             Assert.AreEqual(3, library.Files.Count);
 
             Directory.Delete(folder, true);
@@ -105,7 +105,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         [TestMethod]
         public async Task GetLibraryAsync_File()
         {
-            ILibrary library = await _catalog.GetLibraryAsync(@"c:\some\path\to\file.js", CancellationToken.None);
+            ILibrary library = await _catalog.GetLibraryMetadataAsync(@"c:\some\path\to\file.js", CancellationToken.None);
             Assert.IsNotNull(library);
             Assert.AreEqual(1, library.Files.Count);
             Assert.AreEqual("file.js", library.Files.ElementAt(0).Key);
@@ -120,7 +120,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             File.WriteAllText(Path.Combine(folder, "file2.js"), "");
             File.WriteAllText(Path.Combine(folder, "file3.js"), "");
 
-            ILibrary library = await _catalog.GetLibraryAsync(folder, CancellationToken.None);
+            ILibrary library = await _catalog.GetLibraryMetadataAsync(folder, CancellationToken.None);
             Assert.IsNotNull(library);
             Assert.AreEqual(3, library.Files.Count);
             Assert.AreEqual("file1.js", library.Files.ElementAt(0).Key);
@@ -129,7 +129,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         [TestMethod]
         public async Task GetLibraryAsync_Uri()
         {
-            ILibrary library = await _catalog.GetLibraryAsync("http://example.com/file.js", CancellationToken.None);
+            ILibrary library = await _catalog.GetLibraryMetadataAsync("http://example.com/file.js", CancellationToken.None);
             Assert.IsNotNull(library);
             Assert.AreEqual(1, library.Files.Count);
             Assert.AreEqual("file.js", library.Files.ElementAt(0).Key);

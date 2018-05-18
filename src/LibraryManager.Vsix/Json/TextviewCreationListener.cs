@@ -1,7 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using EnvDTE;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -9,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EnvDTE;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             textView.Closed += OnViewClosed;
         }
 
-        private async Task RemoveFilesAsync(Manifest newManifest)
+        private async Task RemoveFilesAsync(Manifest newManifest, CancellationToken cancellationToken)
         {
             IEnumerable<FileIdentifier> prevFiles = await GetAllManifestFilesWithVersionsAsync(_manifest).ConfigureAwait(false);
             IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest).ConfigureAwait(false);
@@ -81,7 +81,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             if (filesToRemove.Any())
             {
                 var hostInteraction = _dependencies.GetHostInteractions() as HostInteraction;
-                hostInteraction.DeleteFiles(filesToRemove.ToArray());
+                hostInteraction?.DeleteFilesAsync(filesToRemove, cancellationToken);
             }
         }
 
@@ -121,7 +121,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
             ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
-            ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+            ILibrary library = await catalog?.GetLibraryMetadataAsync(state.LibraryId, CancellationToken.None);
             IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
 
             if (library != null && library.Files != null)
@@ -150,7 +150,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
                         if (newManifest != null)
                         {
-                            await RemoveFilesAsync(newManifest).ConfigureAwait(false);
+                            await RemoveFilesAsync(newManifest, new CancellationToken()).ConfigureAwait(false);
 
                             _manifest = newManifest;
 
@@ -159,11 +159,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         }
                         else
                         {
+                            // TO DO: Restore to previous state
+                            // and add a warning to the Error List
                             AddErrorToList(PredefinedErrors.ManifestMalformed());
                         }
                     }
                     catch (Exception ex)
                     {
+
+                        // TO DO: Restore to previous state
+                        // and add a warning to the Error List
+
                         string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.RestoreHasErrors, Environment.NewLine);
 
                         Logger.LogEvent(textMessage, LogLevel.Task);

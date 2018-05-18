@@ -1,12 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.JSON.Editor.Completion;
-using Microsoft.VisualStudio.Imaging;
-using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio.Utilities;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -15,6 +9,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using Microsoft.JSON.Core.Parser.TreeItems;
+using Microsoft.JSON.Editor.Completion;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Utilities;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -49,7 +49,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (catalog == null)
                 yield break;
 
-            Task<ILibrary> task = catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+            Task<ILibrary> task = catalog.GetLibraryMetadataAsync(state.LibraryId, CancellationToken.None);
             FrameworkElement presenter = GetPresenter(context);
             IEnumerable<string> usedFiles = GetUsedFiles(context);
 

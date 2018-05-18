@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts.Resources;
 
 namespace Microsoft.Web.LibraryManager.Contracts
@@ -14,6 +15,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
     /// </remarks>
     public static class PredefinedErrors
     {
+
         /// <summary>
         /// Represents an unhandled exception that occured in the provider.
         /// </summary>
@@ -92,5 +94,25 @@ namespace Microsoft.Web.LibraryManager.Contracts
         public static IError VersionIsNotSupported(string version)
            => new Error("LIB009", string.Format(Text.ErrorNotSupportedVersion, version));
 
+        /// <summary>
+        /// Failed to download resource
+        /// </summary>
+        /// <returns>The error code LIB010</returns>
+        public static IError FailedToDownloadResource(string url)
+           => new Error("LIB010", string.Format(Text.ErrorUnableToDownloadResource, url));
+
+        /// <summary>
+        /// Failed to delete library
+        /// </summary>
+        /// <returns>The error code LIB011</returns>
+        public static IError CouldNotDeleteLibrary(string libraryId)
+           => new Error("LIB011", string.Format(Text.ErrorCouldNotDeleteLibrary, libraryId));
+
+        /// <summary>
+        /// Destination path has invalid characters
+        /// </summary>
+        /// <returns>The error code LIB012</returns>
+        public static IError DestinationPathHasInvalidCharacters(string destinationPath)
+           => new Error("LIB012", string.Format(Text.ErrorDestinationPathHasInvalidCharacter, destinationPath));
     }
 }

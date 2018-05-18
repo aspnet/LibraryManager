@@ -126,7 +126,7 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} written to disk</value>
+    <value>{0} written to destination</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
   <data name="RestoreCancelled" xml:space="preserve">
@@ -144,10 +144,25 @@
     <comment>Status message</comment>
   </data>
   <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Library restore was unsuccessful</value>
+    <value>One or more libraries failed to restore</value>
     <comment>Status message</comment>
   </data>
   <data name="LibraryInfoUpdateFailed" xml:space="preserve">
     <value>Failed to update library information for {0}</value>
+  </data>
+  <data name="FileWrittenToCache" xml:space="preserve">
+    <value>{0} written to cache</value>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>Failed to download catalog from provider "{0}"</value>
+  </data>
+  <data name="LibraryRestorationCancelled" xml:space="preserve">
+    <value>Library {0} restore was cancelled</value>
+  </data>
+  <data name="LibraryRestorationFailed" xml:space="preserve">
+    <value>{0} libraries  failed to restore</value>
+  </data>
+  <data name="LibraryRestoredSuccessfully" xml:space="preserve">
+    <value>Library {0} was restored successfully</value>
   </data>
 </root>
