@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="fr" original="MICROSOFT.WEB.LIBRARYMANAGER.CONTRACTS/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
       <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6810.0" tool-company="Microsoft" />
@@ -8,7 +8,7 @@
       <group id="MICROSOFT.WEB.LIBRARYMANAGER.CONTRACTS/RESOURCES/TEXT.RESX" datatype="resx">
         <trans-unit id="ErrorCouldNotWriteFile" translate="yes" xml:space="preserve">
           <source>{0} could not be written to disk. Make sure the file name is correct</source>
-          <target state="translated">Impossible d'écrire {0} sur le disque. Vérifiez le nom du fichier</target>
+          <target state="translated">Impossible d'écrire {0} sur le disque. Vérifiez que le nom du fichier est correct</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryIdIsUndefined" translate="yes" xml:space="preserve">
           <source>The library id is undefined</source>
@@ -20,13 +20,11 @@
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
           <source>The "destination" is undefined.</source>
-          <target state="needs-review-translation">Le « chemin » n’est pas défini.</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <target state="translated">La "destination" n'est pas définie.</target>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
           <source>The "destination" must be inside the working directory</source>
-          <target state="needs-review-translation">Le « chemin » doit se trouver dans le répertoire de travail</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <target state="translated">La "destination" doit être dans le répertoire de travail</target>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
           <source>The provider is undefined</source>
