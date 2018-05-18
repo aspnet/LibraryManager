@@ -454,6 +454,16 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Library &apos;{0}&apos; cannot be installed. &apos;{1}&apos; is already installed at &apos;{2}&apos;.
+        ///Please specify a different destination..
+        /// </summary>
+        internal static string LibraryCannotBeInstalledDueToConflictingLibraries {
+            get {
+                return ResourceManager.GetString("LibraryCannotBeInstalledDueToConflictingLibraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LibraryId is required to install.
         /// </summary>
         internal static string LibraryIdRequiredForInstall {

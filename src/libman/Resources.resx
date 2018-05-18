@@ -364,4 +364,8 @@
   <data name="InvalidFilesForLibrary" xml:space="preserve">
     <value>Library "{0}" does not contain the following files: {1}</value>
   </data>
+  <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
+    <value>Library '{0}' cannot be installed. '{1}' is already installed at '{2}'.
+Please specify a different destination.</value>
+  </data>
 </root>
