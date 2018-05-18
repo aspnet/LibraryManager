@@ -100,17 +100,21 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ]
 }";
 
+            bool isExceptionCaught = false;
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
+            try
+            {
+                int result = command.Execute("jquery@3.2.1", "--provider", "cdnjs");
+            }catch (AggregateException age) when (age.InnerExceptions[0] is InvalidOperationException ex)
+            {
+                isExceptionCaught = true;
+                Assert.IsTrue(ex.Message.StartsWith("Library 'jquery@3.2.1' cannot be installed. 'jquery@3.2.1' is already installed at 'wwwroot'."));
+            }
 
-            int result = command.Execute("jquery@3.2.1", "--provider", "cdnjs");
+            Assert.IsTrue(isExceptionCaught, "Expected exception was not thrown");
 
             string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
             Assert.AreEqual(StringHelper.NormalizeNewLines(initialContent), StringHelper.NormalizeNewLines(actualText));
-
-            var logger = HostEnvironment.Logger as TestLogger;
-
-            Assert.AreEqual("Failed to install library", logger.Messages[0].Value);
-            Assert.AreEqual("[LIB010]: The \"jquery@3.2.1\" library is already installed by the \"cdnjs\" provider", logger.Messages[1].Value);
         }
 
         [TestMethod]
