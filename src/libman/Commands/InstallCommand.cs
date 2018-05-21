@@ -108,7 +108,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 await _manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
                 string installDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
-                Logger.Log(string.Format(Resources.InstalledLibrary, libraryIdToInstall, installDestination), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.InstalledLibrary, libraryIdToInstall.libraryId, installDestination), LogLevel.Operation);
             }
             else if (result.Errors != null)
             {
