@@ -123,6 +123,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             var doc = JSONEditorDocument.FromTextBuffer(_textView.TextDataModel.DocumentBuffer);
+
+            if (doc == null)
+            {
+                return;
+            }
+
             JSONParseItem parseItem = GetItemBeforePosition(_textView.Caret.Position.BufferPosition, doc);
 
             if (parseItem == null)
