@@ -72,13 +72,37 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private JSONParseItem GetPreviousSibling(JSONArrayElement arrayElement)
         {
             JSONComplexItem parent = arrayElement.Parent;
-            return parent != null ? parent.PreviousChild(arrayElement) : null;
+            return parent != null ? GetPreviousChild(arrayElement, parent.Children) : null;
         }
 
         private JSONParseItem GetNextSibling(JSONArrayElement arrayElement)
         {
             JSONComplexItem parent = arrayElement.Parent;
-            return parent != null ? parent.NextChild(arrayElement) : null;
+            return parent != null ? GetNextChild(arrayElement, parent.Children) : null;
+        }
+
+        private JSONParseItem GetPreviousChild(JSONParseItem child, JSONParseItemList children)
+        {
+            int index = (child != null) ? children.IndexOf(child) : -1;
+
+            if (index > 0)
+            {
+                return children[index - 1];
+            }
+
+            return null;
+        }
+
+        private JSONParseItem GetNextChild(JSONParseItem child, JSONParseItemList children)
+        {
+            int index = (child != null) ? children.IndexOf(child) : -1;
+
+            if (index != -1 && index + 1 < children.Count)
+            {
+                return children[index + 1];
+            }
+
+            return null;
         }
     }
 }
