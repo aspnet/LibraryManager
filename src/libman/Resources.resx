@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CacheCommandDesc" xml:space="preserve">
-    <value />
+    <value>List or clean libman cache contents</value>
   </data>
   <data name="CleanCommandDesc" xml:space="preserve">
     <value>Deletes all library files defined in libman.json from the project</value>

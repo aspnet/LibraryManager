@@ -106,7 +106,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to List or clean libman cache contents.
         /// </summary>
         internal static string CacheCommandDesc {
             get {
