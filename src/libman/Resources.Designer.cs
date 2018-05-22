@@ -482,6 +482,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LibraryId is required for update.
+        /// </summary>
+        internal static string LibraryIdRequiredForUpdate {
+            get {
+                return ResourceManager.GetString("LibraryIdRequiredForUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos;.
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUninstall {

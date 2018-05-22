@@ -135,7 +135,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             var errors = new List<string>();
             if (string.IsNullOrWhiteSpace(LibraryId.Value))
             {
-                errors.Add(Resources.LibraryIdRequiredForUnInstall);
+                errors.Add(Resources.LibraryIdRequiredForUpdate);
             }
 
             IProvider provider = null;

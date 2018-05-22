@@ -368,4 +368,7 @@
     <value>Library '{0}' cannot be installed. '{1}' is already installed at '{2}'.
 Please specify a different destination.</value>
   </data>
+  <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
+    <value>LibraryId is required for update</value>
+  </data>
 </root>
