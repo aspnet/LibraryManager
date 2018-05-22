@@ -75,11 +75,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                     else
                     {
-                        if (File.Exists(absoluteFile))
-                        {
-                            VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
-                            File.Delete(absoluteFile);
-                        }
+                        VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
+                        File.Delete(absoluteFile);
                     }
 
                     Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);

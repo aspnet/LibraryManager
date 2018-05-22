@@ -45,9 +45,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = VsHelpers.GetSelectedItem();
+            if (VsHelpers.DTE.SelectedItems.MultiSelect)
+                return;
 
-            if (item != null && item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
+            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+
+            if (item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -56,7 +59,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
-            ProjectItem configProjectItem = VsHelpers.GetSelectedItem();
+            ProjectItem configProjectItem = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
 
             if (configProjectItem != null)
                 await LibraryHelpers.CleanAsync(configProjectItem);

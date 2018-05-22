@@ -44,24 +44,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private void Execute(object sender, EventArgs e)
         {
             Telemetry.TrackUserTask("ManageLibraries");
+            Project project = VsHelpers.DTE.SelectedItems.Item(1).Project;
+            string rootFolder = project.GetRootFolder();
 
-            Project project = VsHelpers.GetProjectOfSelectedItem();
+            string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
 
-            if (project != null)
+            if (File.Exists(configFilePath))
             {
-                string rootFolder = project.GetRootFolder();
-
-                string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-
-                if (File.Exists(configFilePath))
+                VsHelpers.DTE.ItemOperations.OpenFile(configFilePath);
+            }
+            else
+            {
+                System.Threading.Tasks.Task.Run(async () =>
                 {
-                    VsHelpers.DTE.ItemOperations.OpenFile(configFilePath);
-                }
-                else
-                {
-                    System.Threading.Tasks.Task.Run(async () =>
-                    {
-                        CancellationToken token = CancellationToken.None;
+                    CancellationToken token = CancellationToken.None;
 
                     if (!File.Exists(configFilePath))
                     {
@@ -70,15 +66,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
                         manifest.DefaultProvider = "cdnjs";
                         manifest.Version = Manifest.SupportedVersions.Max().ToString();
 
-                            await manifest.SaveAsync(configFilePath, token);
-                            project.AddFileToProject(configFilePath);
+                        await manifest.SaveAsync(configFilePath, token);
+                        project.AddFileToProject(configFilePath);
 
-                            Telemetry.TrackUserTask("ConfigFileCreated");
-                        }
+                        Telemetry.TrackUserTask("ConfigFileCreated");
+                    }
 
-                        VsHelpers.DTE.ItemOperations.OpenFile(configFilePath);
-                    });
-                }
+                    VsHelpers.DTE.ItemOperations.OpenFile(configFilePath);
+                });
             }
         }
     }
