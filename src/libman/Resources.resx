@@ -192,9 +192,8 @@
     <value>Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>    libman uninstall jquery 
-    libman uninstall jquery --provider cdnjs 
-    libman uninstall myCalendar –p filesystem</value>
+    <value>    libman uninstall jquery
+    libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
     <value>Library to uninstall</value>
@@ -207,9 +206,9 @@
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
-    <value>    Error if not exactly one library found
-    Use the provider attribute to disambiguate libraries of the same name from different providers in the same project
-    If there is only one library by the given name in the current project, provider attribute can be omitted</value>
+    <value>    Error if no libman.json in current folder
+    Error if specified library doesn't exist
+    If there's more than one library with the same libraryId, you'll be prompted to choose.</value>
   </data>
   <data name="VerbosityOptionDesc" xml:space="preserve">
     <value>Set the verbosity of output (eg. "normal", "detailed", "quiet")</value>
@@ -275,22 +274,22 @@
     <value>Provider for which the cache files should be cleaned.</value>
   </data>
   <data name="UpdateCommandDesc" xml:space="preserve">
-    <value>Updates (upgrades) the specified library (or all libraries if none specified) to the latest version</value>
+    <value>Updates the specified library</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
     <value>    libman update jquery 
-    libman update jquery --provider cdnjs
-    libman update jquery --provider cdnjs --to-version jquery@3.3.1
+    libman update jquery --to jquery@3.3.1
+    libman update jquery@2.2.0
     libman update jquery -pre 
-    libman update jquery@3.3.1</value>
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
-    <value>    Error if no libman.json in current folder.
+    <value>    Error if no libman.json in current folder
     Error if specified library doesn't exist
-    To specify a specific version, use the Install command</value>
+    If there's more than one library with the same libraryId, you'll be prompted to choose.</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
-    <value>Library to update to latest version</value>
+    <value>Library to update</value>
   </data>
   <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
     <value>If specified, the latest pre-release version of the library will be downloaded (where applicable)</value>

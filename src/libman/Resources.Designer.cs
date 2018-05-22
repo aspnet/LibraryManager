@@ -637,9 +637,8 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     libman uninstall jquery 
-        ///    libman uninstall jquery --provider cdnjs 
-        ///    libman uninstall myCalendar –p filesystem.
+        ///   Looks up a localized string similar to     libman uninstall jquery
+        ///    libman uninstall jquery@3.3.1.
         /// </summary>
         internal static string UnInstallCommandExamples {
             get {
@@ -676,9 +675,9 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     Error if not exactly one library found
-        ///    Use the provider attribute to disambiguate libraries of the same name from different providers in the same project
-        ///    If there is only one library by the given name in the current project, provider attribute can be omitted.
+        ///   Looks up a localized string similar to     Error if no libman.json in current folder
+        ///    Error if specified library doesn&apos;t exist
+        ///    If there&apos;s more than one library with the same libraryId, you&apos;ll be prompted to choose..
         /// </summary>
         internal static string UnInstallCommandRemarks {
             get {
@@ -696,7 +695,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updates (upgrades) the specified library (or all libraries if none specified) to the latest version.
+        ///   Looks up a localized string similar to Updates the specified library.
         /// </summary>
         internal static string UpdateCommandDesc {
             get {
@@ -706,10 +705,10 @@ namespace Microsoft.Web.LibraryManager.Tools {
         
         /// <summary>
         ///   Looks up a localized string similar to     libman update jquery 
-        ///    libman update jquery --provider cdnjs
-        ///    libman update jquery --provider cdnjs --to-version jquery@3.3.1
+        ///    libman update jquery --to jquery@3.3.1
+        ///    libman update jquery@2.2.0
         ///    libman update jquery -pre 
-        ///    libman update jquery@3.3.1.
+        ///.
         /// </summary>
         internal static string UpdateCommandExamples {
             get {
@@ -718,7 +717,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library to update to latest version.
+        ///   Looks up a localized string similar to Library to update.
         /// </summary>
         internal static string UpdateCommandLibraryArgumentDesc {
             get {
@@ -745,9 +744,9 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     Error if no libman.json in current folder.
+        ///   Looks up a localized string similar to     Error if no libman.json in current folder
         ///    Error if specified library doesn&apos;t exist
-        ///    To specify a specific version, use the Install command.
+        ///    If there&apos;s more than one library with the same libraryId, you&apos;ll be prompted to choose..
         /// </summary>
         internal static string UpdateCommandRemarks {
             get {

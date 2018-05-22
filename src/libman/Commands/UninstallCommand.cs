@@ -39,6 +39,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             LibraryId = Argument("libraryId", Resources.UninstallCommandLibraryIdArgumentDesc, false);
             Provider = Option("--provider|-p", Resources.UninstallCommandProviderOptionDesc, CommandOptionType.SingleValue);
 
+            // Reserve this.
+            Provider.ShowInHelpText = false;
+
             return this;
         }
 
