@@ -321,9 +321,9 @@ namespace Microsoft.Web.LibraryManager.Test
 
             // Valid parameters and files.
             var files = new List<string>() { "jquery.min.js" };
-            result = await manifest.InstallLibraryAsync("jquery@2.2.0", "cdnjs", files, "wwwroot", CancellationToken.None);
+            result = await manifest.InstallLibraryAsync("jquery@2.2.0", "cdnjs", files, "wwwroot2", CancellationToken.None);
             Assert.IsTrue(result.Success);
-            Assert.AreEqual("wwwroot", result.InstallationState.DestinationPath);
+            Assert.AreEqual("wwwroot2", result.InstallationState.DestinationPath);
             Assert.AreEqual("jquery@2.2.0", result.InstallationState.LibraryId);
             Assert.AreEqual("cdnjs", result.InstallationState.ProviderId);
             Assert.AreEqual(1, result.InstallationState.Files.Count);
@@ -331,7 +331,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             // Valid parameters invalid files
             files.Add("abc.js");
-            result = await manifest.InstallLibraryAsync("jquery@3.3.1", "cdnjs", files, "wwwroot", CancellationToken.None);
+            result = await manifest.InstallLibraryAsync("jquery@3.3.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
             Assert.IsFalse(result.Success);
             Assert.AreEqual(1, result.Errors.Count);
             Assert.AreEqual("LIB003", result.Errors[0].Code);

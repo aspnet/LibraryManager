@@ -62,6 +62,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conflicting libraries found: {0}.
+        /// </summary>
+        internal static string ErrorConflictingLibraries {
+            get {
+                return ResourceManager.GetString("ErrorConflictingLibraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} could not be written to disk. Make sure the file name is correct.
         /// </summary>
         internal static string ErrorCouldNotWriteFile {
@@ -76,6 +85,16 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static string ErrorLibraryAlreadyInstalled {
             get {
                 return ResourceManager.GetString("ErrorLibraryAlreadyInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; cannot be installed as it conflicts with &quot;{1}&quot;.
+        ///Please specify a different destination..
+        /// </summary>
+        internal static string ErrorLibraryCannotInstallDueToConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotInstallDueToConflicts", resourceCulture);
             }
         }
         

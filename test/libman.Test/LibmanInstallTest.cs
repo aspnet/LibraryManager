@@ -100,18 +100,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ]
 }";
 
-            bool isExceptionCaught = false;
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
-            try
-            {
-                int result = command.Execute("jquery@3.2.1", "--provider", "cdnjs");
-            }catch (AggregateException age) when (age.InnerExceptions[0] is InvalidOperationException ex)
-            {
-                isExceptionCaught = true;
-                Assert.IsTrue(ex.Message.StartsWith("Library 'jquery@3.2.1' cannot be installed. 'jquery@3.2.1' is already installed at 'wwwroot'."));
-            }
 
-            Assert.IsTrue(isExceptionCaught, "Expected exception was not thrown");
+            int result = command.Execute("jquery@3.2.1", "--provider", "cdnjs");
+
+            var testLogger = HostEnvironment.Logger as TestLogger;
+            Assert.IsTrue(testLogger.Messages.Last().Value.StartsWith("[LIB014]: The library \"jquery@3.2.1\" cannot be installed as it conflicts with \"jquery@3.2.1\"."));
 
             string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
             Assert.AreEqual(StringHelper.NormalizeNewLines(initialContent), StringHelper.NormalizeNewLines(actualText));

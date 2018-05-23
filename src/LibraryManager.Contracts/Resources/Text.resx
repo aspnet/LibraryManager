@@ -117,11 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>Conflicting libraries found: {0}</value>
+  </data>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
     <value>{0} could not be written to disk. Make sure the file name is correct</value>
   </data>
   <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
     <value>The "{0}" library is already installed by the "{1}" provider</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>The library "{0}" cannot be installed as it conflicts with "{1}".
+Please specify a different destination.</value>
   </data>
   <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
     <value>The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</value>

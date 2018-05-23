@@ -189,7 +189,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
 
-            int result = command.Execute("jquery@2.2.0", "--to-version", "jquery@2.2.1");
+            int result = command.Execute("jquery@2.2.0", "--to", "jquery@2.2.1");
 
             Assert.AreEqual(0, result);
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
@@ -243,7 +243,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
 
-            int result = command.Execute("jquery@2.2.0", "--to-version", "twitter-bootstrap@4.0.0");
+            int result = command.Execute("jquery@2.2.0", "--to", "twitter-bootstrap@4.0.0");
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));

@@ -121,14 +121,14 @@ namespace Microsoft.Web.LibraryManager
             {
                 return SupportedVersions.Contains(new Version(version));
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
         }
 
         /// <summary>
-        /// Installs a library with the given libraryId and 
+        /// Installs a library with the given libraryId
         /// </summary>
         /// <param name="libraryId"></param>
         /// <param name="providerId"></param>
@@ -184,9 +184,14 @@ namespace Microsoft.Web.LibraryManager
                 DestinationPath = destination
             };
 
-            if (CheckAlreadyInstalled(desiredState))
+            List<ILibraryInstallationState> conflictingLibraries = await CheckLibraryForConflictsAsync(desiredState, cancellationToken);
+
+            if (conflictingLibraries != null)
             {
-                errors.Add(PredefinedErrors.LibraryAlreadyInstalled(libraryId, providerId));
+                conflictingLibraries.Remove(desiredState);
+                errors.Add(PredefinedErrors.LibraryCannotBeInstalledDueToConflicts(
+                    desiredState.LibraryId,
+                    conflictingLibraries.Select(l => l.LibraryId).ToList()));
             }
 
             if (errors.Any())
@@ -214,6 +219,80 @@ namespace Microsoft.Web.LibraryManager
             }
 
             return result;
+        }
+
+        private async Task<List<ILibraryInstallationState>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        {
+            var libraries = new List<ILibraryInstallationState>(Libraries);
+            libraries.Add(desiredState);
+            IEnumerable<List<ILibraryInstallationState>> conflictingLibraryGroups = await FindAllConflictingLibrariesAsync(libraries, cancellationToken);
+            if (conflictingLibraryGroups.Any())
+            {
+                foreach(List<ILibraryInstallationState> conflictingGroup in conflictingLibraryGroups)
+                {
+                    if (conflictingGroup.Contains(desiredState))
+                    {
+                        return conflictingGroup;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Checks the manifest for conflicting libraries.
+        /// </summary>
+        /// <param name="libraries"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<List<ILibraryInstallationState>>> FindAllConflictingLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var providerCatalog = new Dictionary<IProvider, ILibraryCatalog>();
+
+            var libraryToIdMap = new Dictionary<string, List<ILibraryInstallationState>>(StringComparer.OrdinalIgnoreCase);
+
+            foreach(ILibraryInstallationState state in libraries)
+            {
+                if (!state.IsValid(out IEnumerable<IError> _))
+                {
+                    continue;
+                }
+
+                string installDestination = string.IsNullOrEmpty(state.DestinationPath) ? DefaultDestination : state.DestinationPath;
+                string providerId = string.IsNullOrEmpty(state.ProviderId) ? DefaultProvider : state.ProviderId;
+                IProvider provider = _dependencies.GetProvider(providerId);
+
+                if (provider == null)
+                {
+                    continue;
+                }
+
+                if (!providerCatalog.ContainsKey(provider))
+                {
+                    ILibraryCatalog catalog = provider.GetCatalog();
+                    if (catalog == null)
+                    {
+                        continue;
+                    }
+                    providerCatalog[provider] = catalog;
+                }
+
+                ILibrary library = await providerCatalog[provider].GetLibraryAsync(state.LibraryId, cancellationToken);
+                string libraryId = library?.Name ?? state.LibraryId;
+
+                string key = libraryId + providerId + installDestination;
+                if (!libraryToIdMap.ContainsKey(key))
+                {
+                    libraryToIdMap[key] = new List<ILibraryInstallationState>();
+                }
+
+                libraryToIdMap[key].Add(state);
+            }
+
+            return libraryToIdMap.Where(l => l.Value.Count > 1).Select(list => list.Value);
         }
 
         private bool CheckAlreadyInstalled(LibraryInstallationState desiredState)
@@ -371,6 +450,30 @@ namespace Microsoft.Web.LibraryManager
                 return results;
             }
 
+            IEnumerable<List<ILibraryInstallationState>> conflictingLibraries = null;
+            try
+            {
+                conflictingLibraries = await FindAllConflictingLibrariesAsync(Libraries, cancellationToken);
+                if (conflictingLibraries.Any())
+                {
+                    var errors = new List<IError>();
+                    foreach (List<ILibraryInstallationState> conflictingLibraryGroup in conflictingLibraries)
+                    {
+                        errors.Add(PredefinedErrors.ConflictingLibrariesInManifest(conflictingLibraryGroup.Select(l => l.LibraryId).ToList()));
+                    }
+
+                    results.Add(LibraryInstallationResult.FromErrors(errors));
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                results.Add(LibraryInstallationResult.FromCancelled(Libraries.FirstOrDefault()));
+                _hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
+                return results;
+            }
+
+            var conflictingLibraryIds = new HashSet<ILibraryInstallationState>(conflictingLibraries.SelectMany(c => c));
+
             foreach (ILibraryInstallationState state in Libraries)
             {
                 if (cancellationToken.IsCancellationRequested)
@@ -378,6 +481,12 @@ namespace Microsoft.Web.LibraryManager
                     results.Add(LibraryInstallationResult.FromCancelled(state));
                     _hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
                     return results;
+                }
+
+                if (conflictingLibraryIds.Contains(state))
+                {
+                    // The error for this library is already added to results.
+                    continue;
                 }
 
                 if (!state.IsValid(out IEnumerable<IError> errors))

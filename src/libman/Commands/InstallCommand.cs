@@ -98,17 +98,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             List<string> files = Files.HasValue() ? Files.Values : null;
 
-            (string libraryId, ILibrary library) libraryIdToInstall = await ValidateLibraryExistsInCatalogAsync(CancellationToken.None);
+            (string libraryId, ILibrary library) = await ValidateLibraryExistsInCatalogAsync(CancellationToken.None);
 
-            await ValidateConflictingLibrariesAsync(libraryIdToInstall.libraryId, libraryIdToInstall.library, CancellationToken.None);
-
-            ILibraryInstallationResult result = await _manifest.InstallLibraryAsync(libraryIdToInstall.libraryId, Provider.Value(), files, Destination.Value(), CancellationToken.None);
+            ILibraryInstallationResult result = await _manifest.InstallLibraryAsync(libraryId, Provider.Value(), files, Destination.Value(), CancellationToken.None);
 
             if (result.Success)
             {
                 await _manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
                 string installDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
-                Logger.Log(string.Format(Resources.InstalledLibrary, libraryIdToInstall.libraryId, installDestination), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.InstalledLibrary, libraryId, installDestination), LogLevel.Operation);
             }
             else if (result.Errors != null)
             {
@@ -124,27 +122,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
             return 0;
-        }
-
-        private async Task ValidateConflictingLibrariesAsync(string libraryId, ILibrary library, CancellationToken cancellationToken)
-        {
-            string installDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
-            foreach (ILibraryInstallationState lib in _manifest.Libraries)
-            {
-                if ((ProviderId.Equals(lib.ProviderId, StringComparison.Ordinal) 
-                        || (lib.ProviderId == null && ProviderId.Equals(_manifest.DefaultProvider)))
-                    && (installDestination.Equals(lib.DestinationPath) 
-                        || (lib.DestinationPath == null && installDestination.Equals(_manifest.DefaultDestination))))
-                {
-                    ILibrary candidateLibrary = await ProviderCatalog.GetLibraryAsync(lib.LibraryId, cancellationToken);
-
-                    if (candidateLibrary.Name.Equals(library.Name, StringComparison.Ordinal))
-                    {
-                        throw new InvalidOperationException(
-                            string.Format(Resources.LibraryCannotBeInstalledDueToConflictingLibraries, libraryId, lib.LibraryId, installDestination));
-                    }
-                }
-            }
         }
 
         private async Task<(string libraryId, ILibrary library)> ValidateLibraryExistsInCatalogAsync(CancellationToken cancellationToken)
