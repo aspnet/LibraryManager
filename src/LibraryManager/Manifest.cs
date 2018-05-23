@@ -495,7 +495,7 @@ namespace Microsoft.Web.LibraryManager
                     continue;
                 }
 
-                _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, state.LibraryId), LogLevel.Operation);
+                _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, state.LibraryId, state.DestinationPath), LogLevel.Operation);
 
                 IProvider provider = _dependencies.GetProvider(state.ProviderId);
 

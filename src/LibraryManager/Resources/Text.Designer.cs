@@ -134,7 +134,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restoring {0}....
+        ///   Looks up a localized string similar to Restoring {0} -&gt; {1}.
         /// </summary>
         public static string RestoringLibrary {
             get {

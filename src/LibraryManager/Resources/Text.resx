@@ -133,7 +133,7 @@
     <value>Library restore has been cancelled</value>
   </data>
   <data name="RestoringLibrary" xml:space="preserve">
-    <value>Restoring {0}...</value>
+    <value>Restoring {0} -&gt; {1}</value>
   </data>
   <data name="RestoringLibraries" xml:space="preserve">
     <value>Restoring libraries...</value>
