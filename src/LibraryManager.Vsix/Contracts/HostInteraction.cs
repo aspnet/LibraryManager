@@ -4,13 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -66,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            List<string> filePathsToDelete = new List<string>();
+            List<string> absolutePaths = new List<string>();
 
             foreach (string filePath in relativeFilePaths)
             {
@@ -75,20 +73,22 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (file.Exists)
                 {
-                    filePathsToDelete.Add(absoluteFilePath);
+                    absolutePaths.Add(absoluteFilePath);
                 }
             }
 
+            //Delete from project 
             var logAction = new Action<string, LogLevel>((message, level) => { Logger.Log(message, level); });
-
             Project project = VsHelpers.GetDTEProjectFromConfig(_configFilePath);
-            bool deleteFromProject = await VsHelpers.DeleteFilesFromProjectAsync(project, filePathsToDelete, logAction, cancellationToken);
+            bool deleteFromProject = await VsHelpers.DeleteFilesFromProjectAsync(project, absolutePaths, logAction, cancellationToken);
             if (deleteFromProject)
             {
                 return true;
             }
 
-            return await DeleteFilesFromDiskAsync(relativeFilePaths, cancellationToken);
+            // Delete from file system 
+
+            return await DeleteFilesFromDisk(absolutePaths, cancellationToken);
 
         }
 
@@ -109,45 +109,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }, cancellationToken);
         }
 
-        private Task<bool> DeleteFilesFromDiskAsync(IEnumerable<string> absoluteFilePaths, CancellationToken cancellationToken)
+        private Task<bool> DeleteFilesFromDisk(IEnumerable<string> filePaths, CancellationToken cancellationToken)
         {
-            return System.Threading.Tasks.Task.Run(() => 
+            return Task.Run(() =>
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                HashSet<string> directories = new HashSet<string>();
-
-                try
-                {
-                    foreach (string absoluteFilePath in absoluteFilePaths)
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-
-                        if (File.Exists(absoluteFilePath))
-                        {
-                            FileHelpers.DeleteFileFromDisk(absoluteFilePath);
-                        }
-
-                        string directoryPath = Path.GetDirectoryName(absoluteFilePath);
-                        if (Directory.Exists(directoryPath))
-                        {
-                            if (!directories.Contains(directoryPath))
-                            {
-                                directories.Add(directoryPath);
-                                // TO DO : replace for DeleteFolder that also calls 
-                                // DeleteFolderFromProject as needed
-                            }
-                        }
-                    }
-
-                    FileHelpers.DeleteEmptyFoldersFromDisk(directories);
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-
+                return FileHelpers.DeleteFiles(filePaths);
             }, cancellationToken);
         }
     }

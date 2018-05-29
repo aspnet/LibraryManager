@@ -60,7 +60,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 IEnumerable<ILibraryInstallationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 
-                AddFilesToProject(manifest.Key, project, results);
+                await AddFilesToProjectAsync(manifest.Key, project, results, cancellationToken);
                 AddErrorsToErrorList(project?.Name, manifest.Key, results);
 
                 totalResults.AddRange(results);
@@ -135,7 +135,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return await manifest.RestoreAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private static void AddFilesToProject(string configFilePath, Project project, IEnumerable<ILibraryInstallationResult> results)
+        private static async Task AddFilesToProjectAsync(string configFilePath, Project project, IEnumerable<ILibraryInstallationResult> results, CancellationToken cancellationToken)
         {
             string cwd = Path.GetDirectoryName(configFilePath);
             var files = new List<string>();
@@ -151,7 +151,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
-            project?.AddFilesToProject(files);
+            if (project != null)
+            {
+                var logAction = new Action<string, LogLevel>((message, level) => { Logger.LogEvent(message, level); });
+                await VsHelpers.AddFilesToProjectAsync(project, files, logAction, cancellationToken);
+            }
         }
     }
 }

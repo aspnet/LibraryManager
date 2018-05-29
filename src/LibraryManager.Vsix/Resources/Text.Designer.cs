@@ -88,6 +88,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not add libraries to project.
+        /// </summary>
+        public static string FailToAddLibrariesToProject {
+            get {
+                return ResourceManager.GetString("FailToAddLibrariesToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not delete libraries from project.
         /// </summary>
         public static string FailToDeleteLibrariesFromProject {
@@ -97,7 +106,16 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library {0} was successfully deleted from project.
+        ///   Looks up a localized string similar to Library {0} was successfuly added to project.
+        /// </summary>
+        public static string LibraryAddedToProject {
+            get {
+                return ResourceManager.GetString("LibraryAddedToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library {0} was successfuly deleted from project.
         /// </summary>
         public static string LibraryDeletedFromProject {
             get {

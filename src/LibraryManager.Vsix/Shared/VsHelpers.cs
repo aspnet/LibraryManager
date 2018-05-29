@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -44,7 +45,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static void CheckFileOutOfSourceControl(string file)
         {
-            
             if (!File.Exists(file) || DTE.Solution.FindProjectItem(file) == null)
             {
                 return;
@@ -110,13 +110,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
-                Logger.LogEvent(ex.ToString(), Microsoft.Web.LibraryManager.Contracts.LogLevel.Error);
+                Logger.LogEvent(ex.ToString(), LogLevel.Error);
                 System.Diagnostics.Debug.Write(ex);
             }
         }
 
-        public static void AddFilesToProject(this Project project, IEnumerable<string> files)
+        public static async Task AddFilesToProjectAsync(Project project, IEnumerable<string> files, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
+            {
+                return;
+            }
+
             if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
             {
                 return;
@@ -145,15 +152,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
 
                 var vsProject = (IVsProject)hierarchy;
-                VSADDRESULT[] result = new VSADDRESULT[files.Count()];
 
-                vsProject.AddItem(VSConstants.VSITEMID_ROOT,
-                           VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE,
-                           string.Empty,
-                           (uint)files.Count(),
-                           files.ToArray(),
-                           IntPtr.Zero,
-                           result);
+                await AddFilesToHierarchyAsync(hierarchy, files, logAction, cancellationToken);
             }
 
         }
@@ -228,6 +228,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static async Task<bool> DeleteFilesFromProjectAsync (Project project, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
+            if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
+            {
+                return true;
+            }
+
             int batchSize = 10;
 
             IVsHierarchy hierarchy = GetHierarchy(project);
@@ -238,7 +243,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 List<string> nextBatch = filesToRemove.Take(batchSize).ToList();
                 bool success = await DeleteProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
-                if(! success)
+
+                if(!success)
                 {
                     return false;
                 }
@@ -247,50 +253,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 int countToDelete = filesToRemove.Count() >= batchSize ? batchSize : filesToRemove.Count();
                 filesToRemove.RemoveRange(0, countToDelete);
-            }
-
-            return true;
-        }
-
-        private static async Task<bool> DeleteProjectItemsInBatchAsync(IVsHierarchy hierarchy, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
-        {
-
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
-
-            try
-            {
-                if (bldSystem != null)
-                {
-                    bldSystem.StartBatchEdit();
-                }
-
-                foreach (string filePath in filePaths)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    ProjectItem item = DTE.Solution.FindProjectItem(filePath);
-                    if (item != null)
-                    {
-                        string itemName = item.Name;
-                        item.Delete();
-                        logAction.Invoke(string.Format(Resources.Text.LibraryDeletedFromProject, filePath.Replace('\\', '/')), LogLevel.Operation);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                logAction.Invoke(string.Format(Resources.Text.FailToDeleteLibrariesFromProject), LogLevel.Operation);
-
-                return false;
-            }
-            finally
-            {
-                if (bldSystem != null)
-                {
-                    bldSystem.EndBatchEdit();
-                }
             }
 
             return true;
@@ -410,5 +372,123 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             return null;
         }
+
+        private static async Task<bool> AddFilesToHierarchyAsync(IVsHierarchy hierarchy, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        {
+            int batchSize = 10;
+
+            List<string> filesToAdd = filePaths.ToList();
+
+            while (filesToAdd.Any())
+            {
+                List<string> nextBatch = filesToAdd.Take(batchSize).ToList();
+                bool success = await AddProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
+
+                if (!success)
+                {
+                    return false;
+                }
+
+                await System.Threading.Tasks.Task.Yield();
+
+                int countToDelete = filesToAdd.Count() >= batchSize ? batchSize : filesToAdd.Count();
+                filesToAdd.RemoveRange(0, countToDelete);
+            }
+
+            return true;
+        }
+
+        private static async Task<bool> AddProjectItemsInBatchAsync(IVsHierarchy vsHierarchy, List<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            IVsProjectBuildSystem bldSystem = vsHierarchy as IVsProjectBuildSystem;
+
+            try
+            {
+                if (bldSystem != null)
+                {
+                    bldSystem.StartBatchEdit();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var vsProject = (IVsProject)vsHierarchy;
+                VSADDRESULT[] result = new VSADDRESULT[filePaths.Count()];
+
+                vsProject.AddItem(VSConstants.VSITEMID_ROOT,
+                            VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE,
+                            string.Empty,
+                            (uint)filePaths.Count(),
+                            filePaths.ToArray(),
+                            IntPtr.Zero,
+                            result);
+
+                foreach (string filePath in filePaths)
+                {
+                    logAction.Invoke(string.Format(Resources.Text.LibraryAddedToProject, filePath.Replace('\\', '/')), LogLevel.Operation);
+                }
+            }
+            catch (Exception)
+            {
+                logAction.Invoke(string.Format(Resources.Text.FailToAddLibrariesToProject), LogLevel.Operation);
+
+                return false;
+            }
+            finally
+            {
+                if (bldSystem != null)
+                {
+                    bldSystem.EndBatchEdit();
+                }
+            }
+
+            return true;
+        }
+
+        private static async Task<bool> DeleteProjectItemsInBatchAsync(IVsHierarchy hierarchy, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        {
+
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
+
+            try
+            {
+                if (bldSystem != null)
+                {
+                    bldSystem.StartBatchEdit();
+                }
+
+                foreach (string filePath in filePaths)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    ProjectItem item = DTE.Solution.FindProjectItem(filePath);
+                    if (item != null)
+                    {
+                        string itemName = item.Name;
+                        item.Delete();
+                        logAction.Invoke(string.Format(Resources.Text.LibraryDeletedFromProject, filePath.Replace('\\', '/')), LogLevel.Operation);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                logAction.Invoke(string.Format(Resources.Text.FailToDeleteLibrariesFromProject), LogLevel.Operation);
+
+                return false;
+            }
+            finally
+            {
+                if (bldSystem != null)
+                {
+                    bldSystem.EndBatchEdit();
+                }
+            }
+
+            return true;
+        }
+
     }
 }
