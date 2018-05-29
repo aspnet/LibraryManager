@@ -9,15 +9,16 @@ namespace Microsoft.Web.LibraryManager
     /// <summary>
     /// A comparer to check for path equality.
     /// It normalizes path to handle cases with '..' and '.' or leading and trailing '/' or '\'
+    /// Note: This is a workaround till we have https://github.com/dotnet/corefx/issues/10120
     /// </summary>
-    internal class PathEqualityComparer : IEqualityComparer<string>
+    internal class RelativePathEqualityComparer : IEqualityComparer<string>
     {
-        private PathEqualityComparer() { }
+        private RelativePathEqualityComparer() { }
 
         /// <summary>
         /// Singleton instance.
         /// </summary>
-        public static PathEqualityComparer Instance { get; } = new PathEqualityComparer();
+        public static RelativePathEqualityComparer Instance { get; } = new RelativePathEqualityComparer();
 
         /// <inheritdoc />
         public bool Equals(string x, string y)
@@ -45,12 +46,20 @@ namespace Microsoft.Web.LibraryManager
             {
                 return path;
             }
-#if NET451
-            path.ToLower();
-#endif
+
+            // net451 does not have the OSPlatform apis to determine if the OS is windows or not.
+            // This also does not handle the fact that MacOS can be configured to be either sensitive or insenstive 
+            // to the casing.
+            if (Path.DirectorySeparatorChar == '\\')
+            {
+                path.ToLower();
+            }
+
+            // All paths should be treated as relative paths for comparison purposes.
+            // '/abc/def' and 'abc/def' have different meanings in Windows vs linux or mac.
+            path = path.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
             return Path.GetFullPath(path)
-                .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                 .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
     }

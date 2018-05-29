@@ -12,7 +12,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 namespace Microsoft.Web.LibraryManager
 {
     /// <summary>
-    /// Finds conflicts between different libraries, based on clashing files.
+    /// Finds conflicts between different libraries, based on files brought in by each library.
     /// </summary>
     internal class LibraryConflictDetector
     {
@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager
             _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
             _defaultDestination = defaultDestination;
             _defaultProvider = defaultProvider;
-            _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(PathEqualityComparer.Instance);
+            _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
         }
 
         private string _defaultDestination;
@@ -29,35 +29,13 @@ namespace Microsoft.Web.LibraryManager
         private IDependencies _dependencies;
         private Dictionary<string, List<ILibraryInstallationState>> _fileToLibraryMap;
 
-        public ISet<ILibraryInstallationState> ConflictingLibraries { get; private set; }
-
-        public IEnumerable<KeyValuePair<string, List<ILibraryInstallationState>>> FileConflicts =>
-            _fileToLibraryMap.Where(f => f.Value.Count > 1);
-
-
-        /// <summary>
-        /// Finds all Libraries, that have conflicting files.
-        /// </summary>
-        /// <param name="libraries"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<ISet<ILibraryInstallationState>> FindAllConflictingLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries,
-            CancellationToken cancellationToken)
-        {
-            await DetectConflictsAsync(libraries, cancellationToken);
-
-            return ConflictingLibraries;
-        }
-
-
-        public async Task<IEnumerable<FileBasedConflict>> DetectConflictsAsync(
+        public async Task<IEnumerable<FileConflict>> DetectConflictsAsync(
             IEnumerable<ILibraryInstallationState> libraries,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             _fileToLibraryMap.Clear();
-            ConflictingLibraries = new HashSet<ILibraryInstallationState>();
 
             foreach (ILibraryInstallationState state in libraries)
             {
@@ -86,35 +64,17 @@ namespace Microsoft.Web.LibraryManager
                         {
                             _fileToLibraryMap[file] = new List<ILibraryInstallationState>();
                         }
-                        else
-                        {
-                            ConflictingLibraries.Add(state);
-                        }
 
                         _fileToLibraryMap[file].Add(state);
                     }
                 }
             }
 
-            return _fileToLibraryMap.Where(f => f.Value.Count > 1).Select(f => new FileBasedConflict(f.Key, f.Value));
+            return _fileToLibraryMap
+                .Where(f => f.Value.Count > 1)
+                .Select(f => new FileConflict(f.Key, f.Value));
         }
     }
 
-    internal class FileBasedConflict
-    {
 
-        public FileBasedConflict(string file, List<ILibraryInstallationState> libraries)
-        {
-            if (string.IsNullOrEmpty(file))
-            {
-                throw new ArgumentException(nameof(file));
-            }
-
-            File = file;
-            Libraries = libraries ?? throw new ArgumentNullException(nameof(libraries));
-        }
-
-        public string File { get; }
-        public IList<ILibraryInstallationState> Libraries { get; }
-    }
 }

@@ -120,7 +120,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            Assert.AreEqual("The library 'jquery@3.3.1' is already up to date", logger.Messages.Last().Value);
+            Assert.AreEqual("The library \"jquery@3.3.1\" is already up to date", logger.Messages.Last().Value);
         }
 
         [TestMethod]
@@ -157,7 +157,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            Assert.AreEqual("No library found with id 'jqu' to update", logger.Messages.Last().Value);
+            Assert.AreEqual("No library found with id \"jqu\" to update", logger.Messages.Last().Value);
         }
 
         [TestMethod]

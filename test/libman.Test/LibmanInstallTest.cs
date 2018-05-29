@@ -105,7 +105,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             int result = command.Execute("jquery@3.2.1", "--provider", "cdnjs");
 
             var testLogger = HostEnvironment.Logger as TestLogger;
-            Assert.IsTrue(testLogger.Messages.Last().Value.StartsWith("[LIB014]: The library \"jquery@3.2.1\" cannot be installed as it conflicts with \"jquery@3.2.1\"."));
+            Assert.AreEqual("Please specify a different destination.", testLogger.Messages.Last().Value);
 
             string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
             Assert.AreEqual(StringHelper.NormalizeNewLines(initialContent), StringHelper.NormalizeNewLines(actualText));

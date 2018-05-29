@@ -184,11 +184,11 @@ namespace Microsoft.Web.LibraryManager
                 DestinationPath = destination
             };
 
-            List<FileBasedConflict> conflictingLibraries = await CheckLibraryForConflictsAsync(desiredState, cancellationToken);
+            List<FileConflict> conflictingLibraries = await CheckLibraryForConflictsAsync(desiredState, cancellationToken);
 
             if (conflictingLibraries != null && conflictingLibraries.Any())
             {
-                foreach(FileBasedConflict conflict in conflictingLibraries)
+                foreach(FileConflict conflict in conflictingLibraries)
                 {
                     conflict.Libraries.Remove(desiredState);
                     errors.Add(PredefinedErrors.LibraryCannotBeInstalledDueToConflicts(
@@ -224,19 +224,19 @@ namespace Microsoft.Web.LibraryManager
             return result;
         }
 
-        private async Task<List<FileBasedConflict>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        private async Task<List<FileConflict>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             var libraries = new List<ILibraryInstallationState>(Libraries);
             libraries.Add(desiredState);
             var conflictDetector = new LibraryConflictDetector(_dependencies, DefaultDestination, DefaultProvider);
 
-            IEnumerable<FileBasedConflict> conflictingLibraries = await conflictDetector.DetectConflictsAsync(libraries, cancellationToken);
+            IEnumerable<FileConflict> fileConflicts = await conflictDetector.DetectConflictsAsync(libraries, cancellationToken);
 
-            var conflictsOfInterest = new List<FileBasedConflict>();
+            var conflictsOfInterest = new List<FileConflict>();
 
-            if (conflictingLibraries.Any())
+            if (fileConflicts.Any())
             {
-                foreach(FileBasedConflict conflictingGroup in conflictingLibraries)
+                foreach(FileConflict conflictingGroup in fileConflicts)
                 {
                     if (conflictingGroup.Libraries.Contains(desiredState))
                     {
@@ -403,24 +403,24 @@ namespace Microsoft.Web.LibraryManager
                 return results;
             }
 
-            IEnumerable<FileBasedConflict> conflictingLibraries = null;
-            LibraryInstallationResult conflictingLibrariesError = null;
+            IEnumerable<FileConflict> fileConflicts = null;
+            LibraryInstallationResult fileConflictErrors = null;
             try
             {
                 var conflictDetector = new LibraryConflictDetector(_dependencies, DefaultDestination, DefaultProvider);
 
-                conflictingLibraries = await conflictDetector.DetectConflictsAsync(Libraries, cancellationToken);
+                fileConflicts = await conflictDetector.DetectConflictsAsync(Libraries, cancellationToken);
 
-                if (conflictingLibraries.Any())
+                if (fileConflicts.Any())
                 {
                     var errors = new List<IError>();
-                    foreach (FileBasedConflict conflictingLibraryGroup in conflictingLibraries)
+                    foreach (FileConflict conflictingLibraryGroup in fileConflicts)
                     {
                         errors.Add(PredefinedErrors.ConflictingLibrariesInManifest(conflictingLibraryGroup.File, conflictingLibraryGroup.Libraries.Select(l=> l.LibraryId).ToList()));
                     }
 
                     // This error is added to the bottom of the error list.
-                    conflictingLibrariesError = LibraryInstallationResult.FromErrors(errors);
+                    fileConflictErrors = LibraryInstallationResult.FromErrors(errors);
                 }
             }
             catch (OperationCanceledException)
@@ -430,7 +430,7 @@ namespace Microsoft.Web.LibraryManager
                 return results;
             }
 
-            var conflictingLibraryIds = new HashSet<ILibraryInstallationState>(conflictingLibraries.SelectMany(c => c.Libraries));
+            var conflictingLibraryIds = new HashSet<ILibraryInstallationState>(fileConflicts.SelectMany(c => c.Libraries));
 
             foreach (ILibraryInstallationState state in Libraries)
             {
@@ -471,9 +471,9 @@ namespace Microsoft.Web.LibraryManager
             await Task.WhenAll(tasks).ConfigureAwait(false);
 
             results.AddRange(tasks.Select(t => t.Result));
-            if (conflictingLibrariesError != null)
+            if (fileConflictErrors != null)
             {
-                results.Add(conflictingLibrariesError);
+                results.Add(fileConflictErrors);
             }
 
             return results;

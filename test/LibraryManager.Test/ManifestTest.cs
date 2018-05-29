@@ -226,6 +226,17 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
+        public async Task RestorAsync_ConflictingLibraries()
+        {
+            var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
+
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.Last().Errors.Any(e => e.Code == "LIB013"), "LIB013 error code expected.");
+        }
+
+        [TestMethod]
         public void FromJson_Malformed()
         {
             var manifest = Manifest.FromJson("{", _dependencies);
@@ -468,6 +479,30 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
     }}
+  ]
+}}
+";
+        private string _docConflictingLibraries = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@2.2.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
+    }},
   ]
 }}
 ";

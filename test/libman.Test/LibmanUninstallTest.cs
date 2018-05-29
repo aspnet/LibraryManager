@@ -110,7 +110,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            Assert.AreEqual("Library 'jquery@2.2.1' is not installed. Nothing to uninstall", logger.Messages[logger.Messages.Count-1].Value);
+            Assert.AreEqual("Library \"jquery@2.2.1\" is not installed. Nothing to uninstall", logger.Messages[logger.Messages.Count-1].Value);
 
             string actualText = File.ReadAllText(libmanjsonPath);
 
