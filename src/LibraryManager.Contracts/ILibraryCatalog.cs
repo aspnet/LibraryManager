@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="libraryId">The unique library identifier.</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>An instance of <see cref="ILibraryGroup"/> or <code>null</code>.</returns>
-        Task<ILibrary> GetLibraryMetadataAsync(string libraryId, CancellationToken cancellationToken);
+        Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Searches the catalog for the specified search term.

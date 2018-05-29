@@ -330,7 +330,7 @@ namespace Microsoft.Web.LibraryManager
         private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
             ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
-            ILibrary library = await catalog?.GetLibraryMetadataAsync(state.LibraryId, CancellationToken.None);
+            ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
             IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
 
             if (library != null && library.Files != null)

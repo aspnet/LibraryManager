@@ -49,7 +49,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (catalog == null)
                 yield break;
 
-            Task<ILibrary> task = catalog.GetLibraryMetadataAsync(state.LibraryId, CancellationToken.None);
+            Task<ILibrary> task = catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
             FrameworkElement presenter = GetPresenter(context);
             IEnumerable<string> usedFiles = GetUsedFiles(context);
 

@@ -103,7 +103,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <returns>
         /// An instance of <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
         /// </returns>
-        public async Task<ILibrary> GetLibraryMetadataAsync(string libraryId, CancellationToken cancellationToken)
+        public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
             ILibrary library;
 

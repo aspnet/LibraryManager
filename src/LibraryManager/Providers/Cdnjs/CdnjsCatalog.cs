@@ -125,7 +125,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return results.ToList();
         }
 
-        public async Task<ILibrary> GetLibraryMetadataAsync(string libraryId, CancellationToken cancellationToken)
+        public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
             try
             {

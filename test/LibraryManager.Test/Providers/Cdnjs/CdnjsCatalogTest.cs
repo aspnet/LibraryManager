@@ -46,7 +46,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             IEnumerable<string> libraryId = await absolute[0].GetLibraryIdsAsync(token);
             Assert.IsTrue(libraryId.Any());
 
-            ILibrary library = await _catalog.GetLibraryMetadataAsync(libraryId.First(), token);
+            ILibrary library = await _catalog.GetLibraryAsync(libraryId.First(), token);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual(expectedId, library.Name);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
@@ -84,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLibraryAsync_Success()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryMetadataAsync("jquery@3.1.1", token);
+            ILibrary library = await _catalog.GetLibraryAsync("jquery@3.1.1", token);
 
             Assert.IsNotNull(library);
             Assert.AreEqual("jquery", library.Name);
@@ -95,7 +95,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryMetadataAsync("invalid_id", token);
+            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", token);
         }
 
         [TestMethod]

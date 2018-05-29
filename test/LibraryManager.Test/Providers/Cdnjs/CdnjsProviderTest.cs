@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             Assert.AreEqual("jquery@1.2.3", libraryIds.Last(), "Library version mismatch");
 
             // Get the library to install
-            ILibrary library = await catalog.GetLibraryMetadataAsync(libraryIds.First(), CancellationToken.None);
+            ILibrary library = await catalog.GetLibraryAsync(libraryIds.First(), CancellationToken.None);
             Assert.AreEqual(group.DisplayName, library.Name);
 
             var desiredState = new LibraryInstallationState
