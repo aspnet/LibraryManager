@@ -62,11 +62,56 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conflicting file &quot;{0}&quot; found in more than one library: {1}.
+        /// </summary>
+        internal static string ErrorConflictingLibraries {
+            get {
+                return ResourceManager.GetString("ErrorConflictingLibraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} could not be written to disk. Make sure the file name is correct.
         /// </summary>
         internal static string ErrorCouldNotWriteFile {
             get {
                 return ResourceManager.GetString("ErrorCouldNotWriteFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; library is already installed by the &quot;{1}&quot; provider.
+        /// </summary>
+        internal static string ErrorLibraryAlreadyInstalled {
+            get {
+                return ResourceManager.GetString("ErrorLibraryAlreadyInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file &quot;{0}&quot; is already installed by {1}..
+        /// </summary>
+        internal static string ErrorLibraryCannotInstallDueToConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotInstallDueToConflicts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; could not be updated to &quot;{1}&quot;. Another library &quot;{1}&quot; is already installed.
+        /// </summary>
+        internal static string ErrorLibraryCannotUpdateDueToConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotUpdateDueToConflicts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; could not be updated to &quot;{1}&quot;. The following files are not valid for the &quot;{1}&quot;: {2}.
+        /// </summary>
+        internal static string ErrorLibraryCannotUpdateDueToFileConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotUpdateDueToFileConflicts", resourceCulture);
             }
         }
         
