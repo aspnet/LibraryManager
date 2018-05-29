@@ -125,18 +125,20 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// Restore errors due to conflicting libraries.
         /// </summary>
+        /// <param name="file"></param>
         /// <param name="conflictingLibraryIds"></param>
         /// <returns></returns>
-        public static IError ConflictingLibrariesInManifest(IReadOnlyList<string> conflictingLibraryIds)
-            => new Error("LIB013", string.Format(Text.ErrorConflictingLibraries, string.Join(", ", conflictingLibraryIds)));
+        public static IError ConflictingLibrariesInManifest(string file, IReadOnlyList<string> conflictingLibraryIds)
+            => new Error("LIB013", string.Format(Text.ErrorConflictingLibraries, file, string.Join(", ", conflictingLibraryIds)));
 
         /// <summary>
         /// Library cannot be installed as conflicting libraries are installed.
         /// </summary>
         /// <param name="libraryId"></param>
         /// <param name="conflictingLibraries"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public static IError LibraryCannotBeInstalledDueToConflicts(string libraryId, List<string> conflictingLibraries)
-        => new Error("LIB014", string.Format(Text.ErrorLibraryCannotInstallDueToConflicts, libraryId, string.Join(", ", conflictingLibraries)));
+        public static IError LibraryCannotBeInstalledDueToConflicts(string file, List<string> conflictingLibraries)
+        => new Error("LIB014", string.Format(Text.ErrorLibraryCannotInstallDueToConflicts, file, string.Join(", ", conflictingLibraries)));
     }
 }

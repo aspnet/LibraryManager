@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -28,11 +29,31 @@ namespace Microsoft.Web.LibraryManager.Tools
             IEnumerable<ILibraryInstallationResult> failures = result.Where(r => !r.Success);
             if (failures.Any())
             {
-                IEnumerable<IError> errors = failures.SelectMany(r => r.Errors);
-
-                foreach (IError e in errors)
+                var librarySpecificErrors = new StringBuilder();
+                var otherErrors = new StringBuilder();
+                foreach (ILibraryInstallationResult f in failures)
                 {
-                    logger.Log(string.Format(Resources.FailedToRestoreLibraryMessage, e.Code, e.Message), LogLevel.Error);
+                    if (f.InstallationState != null)
+                    {
+                        librarySpecificErrors.AppendLine(string.Format(Resources.FailedToRestoreLibraryMessage, f.InstallationState.ToConsoleDisplayString()));
+                        foreach (IError e in f.Errors)
+                        {
+                            librarySpecificErrors.AppendLine($"  - [{e.Code}]: {e.Message}");
+                        }
+                    }
+                    else
+                    {
+                        foreach (IError e in f.Errors)
+                        {
+                            otherErrors.AppendLine($"[{e.Code}]: {e.Message}");
+                        }
+                    }
+                }
+
+                logger.Log(librarySpecificErrors.ToString(), LogLevel.Error);
+                if (otherErrors.Length > 0)
+                {
+                    logger.Log(otherErrors.ToString(), LogLevel.Error);
                 }
             }
         }

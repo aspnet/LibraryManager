@@ -110,10 +110,20 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
             else if (result.Errors != null)
             {
-                Logger.Log(Resources.InstallLibraryFailed, LogLevel.Error);
+                bool isFileConflicts = false;
+                Logger.Log(string.Format(Resources.InstallLibraryFailed, libraryId), LogLevel.Error);
                 foreach (IError error in result.Errors)
                 {
                     Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
+                    if(error.Code == PredefinedErrors.LibraryCannotBeInstalledDueToConflicts("", new List<string>()).Code)
+                    {
+                        isFileConflicts = true;
+                    }
+                }
+
+                if (isFileConflicts)
+                {
+                    Logger.Log(Resources.SpecifyDifferentDestination, LogLevel.Error);
                 }
             }
             else

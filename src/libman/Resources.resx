@@ -220,7 +220,7 @@
     <value>Directory not found {0}</value>
   </data>
   <data name="FailedToRestoreLibraryMessage" xml:space="preserve">
-    <value>Failed to restore library. [{0}] : {1}</value>
+    <value>Failed to restore "{0}"</value>
   </data>
   <data name="FileDeleted" xml:space="preserve">
     <value>{0} deleted</value>
@@ -250,7 +250,7 @@
     <value>LibraryId is required to uninstall</value>
   </data>
   <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
-    <value>More than one library found with id '{0}'</value>
+    <value>More than one library found with id "{0}"</value>
   </data>
   <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
     <value>Default Provider is not set. Please provide a provider using '--provider'</value>
@@ -259,10 +259,10 @@
     <value>Use --provider to disambiguate libraries of same name from different providers in the project</value>
   </data>
   <data name="MoreThanOneLibraryFoundToUninstallForProvider" xml:space="preserve">
-    <value>More than one library found with id '{0}' for provider '{1}'. Please remove the manually from the libman.json file</value>
+    <value>More than one library found with id "{0}" for provider "{1}". Please remove the manually from the libman.json file</value>
   </data>
   <data name="NoLibraryToUninstall" xml:space="preserve">
-    <value>Library '{0}' is not installed. Nothing to uninstall</value>
+    <value>Library "{0}" is not installed. Nothing to uninstall</value>
   </data>
   <data name="CacheCleanCommandDesc" xml:space="preserve">
     <value>Delete all files from the local machine's LibMan cache.</value>
@@ -316,22 +316,22 @@
     <value>List files that are cached for each library</value>
   </data>
   <data name="MoreThanOneLibraryFoundToUpdate" xml:space="preserve">
-    <value>More than one library found with id '{0}'</value>
+    <value>More than one library found with id "{0}"</value>
   </data>
   <data name="NoLibrariesToUpdate" xml:space="preserve">
     <value>No libraries to update. Please use install command to install libraries</value>
   </data>
   <data name="NoLibraryFoundToUpdate" xml:space="preserve">
-    <value>No library found with id '{0}' to update</value>
+    <value>No library found with id "{0}" to update</value>
   </data>
   <data name="InstallLibraryFailed" xml:space="preserve">
-    <value>Failed to install library</value>
+    <value>Failed to install library "{0}"</value>
   </data>
   <data name="CacheListLibrariesOptionDesc" xml:space="preserve">
     <value>Lists the libraries cached for each provider.</value>
   </data>
   <data name="ProviderNotInstalled" xml:space="preserve">
-    <value>Provider '{0}' is not installed</value>
+    <value>Provider "{0}" is not installed</value>
   </data>
   <data name="SuggestedIdsMessage" xml:space="preserve">
     <value>Similar libraries: </value>
@@ -343,19 +343,19 @@
     <value>Select an option:</value>
   </data>
   <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
-    <value>The library '{0}' is already up to date</value>
+    <value>The library "{0}" is already up to date</value>
   </data>
   <data name="InvalidToVersion" xml:space="preserve">
-    <value>'{0}' is not a valid value for --to-version</value>
+    <value>"{0}" is not a valid value for --to-version</value>
   </data>
   <data name="UpdateCommandToVersionOptionDesc" xml:space="preserve">
     <value>The version to update the library to (needs complete libraryid for the provider)</value>
   </data>
   <data name="InstalledLibrary" xml:space="preserve">
-    <value>Installed library '{0}' to '{1}'</value>
+    <value>Installed library "{0}" to "{1}"</value>
   </data>
   <data name="UninstalledLibrary" xml:space="preserve">
-    <value>Uninstalled library '{0}'</value>
+    <value>Uninstalled library "{0}"</value>
   </data>
   <data name="AvailableFilesForLibrary" xml:space="preserve">
     <value>Available files are : {0}</value>
@@ -364,10 +364,13 @@
     <value>Library "{0}" does not contain the following files: {1}</value>
   </data>
   <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
-    <value>Library '{0}' cannot be installed. '{1}' is already installed at '{2}'.
+    <value>Library "{0}" cannot be installed. "{1}" is already installed at "{2}".
 Please specify a different destination.</value>
   </data>
   <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
     <value>LibraryId is required for update</value>
+  </data>
+  <data name="SpecifyDifferentDestination" xml:space="preserve">
+    <value>Please specify a different destination.</value>
   </data>
 </root>

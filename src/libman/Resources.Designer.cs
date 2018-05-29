@@ -259,7 +259,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to restore library. [{0}] : {1}.
+        ///   Looks up a localized string similar to Failed to restore &quot;{0}&quot;.
         /// </summary>
         internal static string FailedToRestoreLibraryMessage {
             get {
@@ -382,7 +382,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Installed library &apos;{0}&apos; to &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Installed library &quot;{0}&quot; to &quot;{1}&quot;.
         /// </summary>
         internal static string InstalledLibrary {
             get {
@@ -391,7 +391,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to install library.
+        ///   Looks up a localized string similar to Failed to install library &quot;{0}&quot;.
         /// </summary>
         internal static string InstallLibraryFailed {
             get {
@@ -418,7 +418,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is not a valid value for --to-version.
+        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid value for --to-version.
         /// </summary>
         internal static string InvalidToVersion {
             get {
@@ -427,7 +427,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The library &apos;{0}&apos; is already up to date.
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; is already up to date.
         /// </summary>
         internal static string LatestVersionAlreadyInstalled {
             get {
@@ -454,7 +454,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library &apos;{0}&apos; cannot be installed. &apos;{1}&apos; is already installed at &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Library &quot;{0}&quot; cannot be installed. &quot;{1}&quot; is already installed at &quot;{2}&quot;.
         ///Please specify a different destination..
         /// </summary>
         internal static string LibraryCannotBeInstalledDueToConflictingLibraries {
@@ -491,7 +491,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos;.
+        ///   Looks up a localized string similar to More than one library found with id &quot;{0}&quot;.
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUninstall {
             get {
@@ -500,7 +500,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos; for provider &apos;{1}&apos;. Please remove the manually from the libman.json file.
+        ///   Looks up a localized string similar to More than one library found with id &quot;{0}&quot; for provider &quot;{1}&quot;. Please remove the manually from the libman.json file.
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUninstallForProvider {
             get {
@@ -509,7 +509,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than one library found with id &apos;{0}&apos;.
+        ///   Looks up a localized string similar to More than one library found with id &quot;{0}&quot;.
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUpdate {
             get {
@@ -527,7 +527,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No library found with id &apos;{0}&apos; to update.
+        ///   Looks up a localized string similar to No library found with id &quot;{0}&quot; to update.
         /// </summary>
         internal static string NoLibraryFoundToUpdate {
             get {
@@ -536,7 +536,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library &apos;{0}&apos; is not installed. Nothing to uninstall.
+        ///   Looks up a localized string similar to Library &quot;{0}&quot; is not installed. Nothing to uninstall.
         /// </summary>
         internal static string NoLibraryToUninstall {
             get {
@@ -554,7 +554,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provider &apos;{0}&apos; is not installed.
+        ///   Looks up a localized string similar to Provider &quot;{0}&quot; is not installed.
         /// </summary>
         internal static string ProviderNotInstalled {
             get {
@@ -615,6 +615,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string RestoreCommandRemarks {
             get {
                 return ResourceManager.GetString("RestoreCommandRemarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a different destination..
+        /// </summary>
+        internal static string SpecifyDifferentDestination {
+            get {
+                return ResourceManager.GetString("SpecifyDifferentDestination", resourceCulture);
             }
         }
         
@@ -686,7 +695,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstalled library &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Uninstalled library &quot;{0}&quot;.
         /// </summary>
         internal static string UninstalledLibrary {
             get {

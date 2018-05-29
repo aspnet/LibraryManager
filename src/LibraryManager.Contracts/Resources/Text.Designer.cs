@@ -62,7 +62,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conflicting libraries found: {0}.
+        ///   Looks up a localized string similar to Conflicting file &quot;{0}&quot; found in more than one library: {1}.
         /// </summary>
         internal static string ErrorConflictingLibraries {
             get {
@@ -89,8 +89,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The library &quot;{0}&quot; cannot be installed as it conflicts with &quot;{1}&quot;.
-        ///Please specify a different destination..
+        ///   Looks up a localized string similar to The file &quot;{0}&quot; is already installed by {1}..
         /// </summary>
         internal static string ErrorLibraryCannotInstallDueToConflicts {
             get {
