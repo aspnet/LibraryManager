@@ -19,6 +19,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private CdnjsCatalog _catalog;
         private CacheService _cacheService;
+        private string absolute;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdnjsProvider"/> class.
@@ -128,9 +129,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                             return new LibraryInstallationResult(state, PredefinedErrors.CouldNotWriteFile(file));
                         }
 
-                        string path = Path.Combine(state.DestinationPath, file);
+                        string destinationPath = Path.Combine(state.DestinationPath, file);
                         var sourceStream = new Func<Stream>(() => GetStreamAsync(state, file, cancellationToken).Result);
-                        bool writeOk = await HostInteraction.WriteFileAsync(path, sourceStream, state, cancellationToken).ConfigureAwait(false);
+                        bool writeOk = await HostInteraction.WriteFileAsync(destinationPath, sourceStream, state, cancellationToken).ConfigureAwait(false);
 
                         if (!writeOk)
                         {
@@ -208,19 +209,49 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
+            string name = GetLibraryName(state);
+            string version = GetLibraryVersion(state);
+
             string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
 
             if (File.Exists(absolute))
             {
-                return await FileHelpers.OpenFileAsync(absolute, cancellationToken).ConfigureAwait(false);
+                return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
             }
 
             return null;
         }
 
+        private string GetCacheFileAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
+        {
+            string name = GetLibraryName(state);
+            string version = GetLibraryVersion(state);
+
+            string absolutePath = Path.Combine(CacheFolder, name, version, sourceFile);
+
+            if (File.Exists(absolutePath))
+            {
+                return absolutePath;
+            }
+
+            return null;
+        }
+
+        private string GetLibraryName(ILibraryInstallationState state)
+        {
+            string[] args = state.LibraryId.Split('@');
+            string name = args[0];
+
+            return name;
+        }
+
+        private string GetLibraryVersion(ILibraryInstallationState state)
+        {
+            string[] args = state.LibraryId.Split('@');
+            string version = args[1];
+
+            return version;
+        }
 
         /// <summary>
         /// Copies ILibraryInstallationState files to cache
@@ -250,7 +281,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     string cacheFile = Path.Combine(libraryDir, version, sourceFile);
                     string url = string.Format(_downloadUrlFormat, name, version, sourceFile);
 
-                    librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
+                    CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                    if (!librariesMetadata.Contains(newEntry))
+                    {
+                        librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
+                    }
                 }
                 await _cacheService.HydrateCacheAsync(librariesMetadata, cancellationToken);
             }
@@ -288,7 +323,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
                     var cacheFile = new FileInfo(Path.Combine(cacheDir, sourceFile).Replace('\\', '/'));
 
-                    if (!destinationFile.Exists || !cacheFile.Exists || !IsFileUpToDate(destinationFile, cacheFile))
+                    if (!destinationFile.Exists || !cacheFile.Exists || !FileHelpers.AreFilesUpToDate(destinationFile, cacheFile))
                     {
                         return false;
                     }
@@ -303,14 +338,5 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return true;
         }
 
-        private bool IsFileUpToDate(FileInfo destinationFile, FileInfo cacheFile)
-        {
-            if (cacheFile.Length != destinationFile.Length || cacheFile.LastWriteTime.CompareTo(destinationFile.LastWriteTime) > 0)
-            {
-                return false;
-            }
-
-            return true;
-        }
     }
 }

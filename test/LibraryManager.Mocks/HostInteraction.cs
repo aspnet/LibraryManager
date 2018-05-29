@@ -88,7 +88,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// </summary>
         /// <param name="relativeFilePaths">The absolute path to the file.</param>
         /// <param name="cancellationToken"></param>
-        public virtual Task<bool> DeleteFilesAsync(IEnumerable<string> relativeFilePaths, CancellationToken cancellationToken)
+        public Task<bool> DeleteFilesAsync(IEnumerable<string> relativeFilePaths, CancellationToken cancellationToken)
         {
             foreach (var path in relativeFilePaths)
             {
@@ -99,7 +99,37 @@ namespace Microsoft.Web.LibraryManager.Mocks
             return Task.FromResult<bool>(true);
         }
 
-        public Task<bool> DeleteFilesAsync(IEnumerable<string> relativeFilePaths, CancellationToken cancellationToken, bool deleteCleanFolders = true)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<Stream> ReadFileAsync(string filePath, CancellationToken cancellationToken)
+        {
+            return await FileHelpers.ReadFileAsStreamAsync(filePath, cancellationToken);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="sourcePath"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<bool> CopyFileAsync(string path, Func<string> sourcePath, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourcePath"></param>
+        /// <param name="destinationPath"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

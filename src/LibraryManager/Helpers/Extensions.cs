@@ -1,6 +1,6 @@
-﻿using Microsoft.Web.LibraryManager.Contracts;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager
 {

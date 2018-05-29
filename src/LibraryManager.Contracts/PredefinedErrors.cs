@@ -15,7 +15,6 @@ namespace Microsoft.Web.LibraryManager.Contracts
     /// </remarks>
     public static class PredefinedErrors
     {
-
         /// <summary>
         /// Represents an unhandled exception that occured in the provider.
         /// </summary>

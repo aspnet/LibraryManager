@@ -19,8 +19,6 @@ namespace Microsoft.Web.LibraryManager
         private WebRequestHandler()
         {
             HttpClientHandler httpMessageHandler = new HttpClientHandler();
-            httpMessageHandler.MaxConnectionsPerServer = 1000;
-
             _httpClient = new HttpClient(httpMessageHandler);
         }
 

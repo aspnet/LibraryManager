@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Web.LibraryManager.Vsix.Json
+namespace Microsoft.Web.LibraryManager
 {
     /// <summary>
     /// Represents a unique identifier for a version of a library file 

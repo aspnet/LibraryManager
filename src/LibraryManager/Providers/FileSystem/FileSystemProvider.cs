@@ -192,11 +192,11 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 {
                     if (Directory.Exists(url.OriginalString))
                     {
-                        return await FileHelpers.OpenFileAsync(Path.Combine(url.OriginalString, file), cancellationToken).ConfigureAwait(false);
+                        return await FileHelpers.ReadFileAsStreamAsync(Path.Combine(url.OriginalString, file), cancellationToken).ConfigureAwait(false);
                     }
                     else
                     {
-                        return await FileHelpers.OpenFileAsync(sourceFile, cancellationToken).ConfigureAwait(false);
+                        return await FileHelpers.ReadFileAsStreamAsync(sourceFile, cancellationToken).ConfigureAwait(false);
                     }
                 }
                 // Url

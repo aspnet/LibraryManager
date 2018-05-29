@@ -47,10 +47,6 @@
       <XliffResource Include="MultilingualResources\*.xlf" />
     </ItemGroup>
     <ItemGroup>
-      <Compile Remove="ICacheService.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Update="Resources\Text.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>

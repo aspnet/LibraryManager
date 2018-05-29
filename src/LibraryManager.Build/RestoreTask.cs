@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Build
 
             CancellationToken token = CancellationToken.None;
 
-            Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.RestoringLibraries);
+            Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.RestoreLibrariesStarted);
 
             var dependencies = Dependencies.FromTask(ProjectDirectory, ProviderAssemblies.Select(pa => new FileInfo(pa.ItemSpec).FullName));
             Manifest manifest = Manifest.FromFileAsync(configFilePath.FullName, dependencies, token).Result;

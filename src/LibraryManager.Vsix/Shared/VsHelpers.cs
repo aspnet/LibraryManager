@@ -7,12 +7,15 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -41,6 +44,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static void CheckFileOutOfSourceControl(string file)
         {
+            
             if (!File.Exists(file) || DTE.Solution.FindProjectItem(file) == null)
             {
                 return;
@@ -220,6 +224,73 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             return false;
+        }
+
+        public static async Task<bool> DeleteFilesFromProjectAsync (string configFilePath, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        {
+            int batchSize = 10;
+
+            Project project = GetDTEProjectFromConfig(configFilePath);
+            IVsHierarchy hierarchy = GetHierarchy(project);
+            IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
+            List<string> filesToRemove = filePaths.ToList();
+
+            while (filesToRemove.Any())
+            {
+                List<string> nextBatch = filesToRemove.Take(batchSize).ToList();
+
+                await DeleteProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
+                await System.Threading.Tasks.Task.Yield();
+
+                int countToDelete = filesToRemove.Count() >= batchSize ? batchSize : filesToRemove.Count();
+                filesToRemove.RemoveRange(0, countToDelete);
+            }
+
+            return true;
+        }
+
+        private static async Task<bool> DeleteProjectItemsInBatchAsync(IVsHierarchy hierarchy, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        {
+
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
+
+            try
+            {
+                if (bldSystem != null)
+                {
+                    bldSystem.StartBatchEdit();
+                }
+
+                foreach (string filePath in filePaths)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    ProjectItem item = DTE.Solution.FindProjectItem(filePath);
+                    if (item != null)
+                    {
+                        string itemName = item.Name;
+                        item.Delete();
+                        logAction.Invoke(string.Format(Resources.Text.LibraryDeletedFromProject, filePath.Replace('\\', '/')), LogLevel.Operation);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                logAction.Invoke(string.Format(Resources.Text.FailToDeleteLibrariesFromProject), LogLevel.Operation);
+
+                return false;
+            }
+            finally
+            {
+                if (bldSystem != null)
+                {
+                    bldSystem.EndBatchEdit();
+                }
+            }
+
+            return true;
         }
 
         public static void SatisfyImportsOnce(this object o)

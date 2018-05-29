@@ -3,6 +3,9 @@
         <TargetFrameworks>netcoreapp1.0;net46</TargetFrameworks>
     </PropertyGroup>
     <ItemGroup>
+      <Compile Remove="FileHelperTest.cs" />
+    </ItemGroup>
+    <ItemGroup>
       <None Remove=".editorconfig" />
     </ItemGroup>
     <ItemGroup>

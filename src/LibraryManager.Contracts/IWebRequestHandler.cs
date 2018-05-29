@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Net.Http;
 
 namespace Microsoft.Web.LibraryManager.Contracts
 {
@@ -17,6 +16,5 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<Stream> GetStreamAsync(string url, CancellationToken cancellationToken);
-        
     }
 }

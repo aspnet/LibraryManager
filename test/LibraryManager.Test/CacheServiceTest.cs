@@ -26,6 +26,7 @@ namespace Microsoft.Web.LibraryManager.Test
         private IDependencies _dependencies;
         private HostInteraction _hostInteraction;
         private CacheService _cacheService;
+
         [TestInitialize]
         public void Setup()
         {

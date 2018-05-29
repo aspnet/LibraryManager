@@ -52,20 +52,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="cacheFile"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-
         public async Task<string> GetMetadataAsync(string url, string cacheFile, CancellationToken cancellationToken)
-        {
-            return await GetResourceAsync(url, cacheFile, _libraryExpiresAfterDays, cancellationToken);
-        }
-
-        /// <summary>
-        /// Retruns the library content from the provider url and writes to cacheFile
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="cacheFile"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<string> GetLibraryAsync(string url, string cacheFile, CancellationToken cancellationToken)
         {
             return await GetResourceAsync(url, cacheFile, _libraryExpiresAfterDays, cancellationToken);
         }
@@ -79,23 +66,22 @@ namespace Microsoft.Web.LibraryManager
         /// <returns></returns>
         private async Task DownloadToFileAsync(string url, string fileName, CancellationToken cancellationToken)
         {
-            Stream libraryStream = await _requestHandler.GetStreamAsync(url, cancellationToken);
-            await FileHelpers.WriteToFileAsync(fileName, libraryStream, cancellationToken);
+            using (Stream libraryStream = await _requestHandler.GetStreamAsync(url, cancellationToken))
+            {
+                await FileHelpers.WriteToFileAsync(fileName, libraryStream, cancellationToken);
+            }
         }
 
         private async Task<string> GetResourceAsync(string url, string localFile, int expiration, CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-            }
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (!File.Exists(localFile) || File.GetLastWriteTime(localFile) < DateTime.Now.AddDays(-expiration))
             {
                 await DownloadToFileAsync(url, localFile, cancellationToken).ConfigureAwait(false);
             }
 
-            return await FileHelpers.ReadFileTextAsync(localFile, cancellationToken).ConfigureAwait(false);
+            return await FileHelpers.ReadFileAsTextAsync(localFile, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -106,10 +92,7 @@ namespace Microsoft.Web.LibraryManager
         /// <returns></returns>
         public async Task HydrateCacheAsync(IEnumerable<CacheServiceMetadata> librariesCacheMetadata, CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-            }
+            cancellationToken.ThrowIfCancellationRequested();
 
             List<Task> hydrateTasks = new List<Task>();
 
@@ -118,6 +101,7 @@ namespace Microsoft.Web.LibraryManager
                 if (!File.Exists(metadata.DestinationPath) || File.GetLastWriteTime(metadata.DestinationPath) < DateTime.Now.AddDays(-_libraryExpiresAfterDays))
                 {
                     Task readFileTask = DownloadToFileAsync(metadata.Source, metadata.DestinationPath, cancellationToken);
+                    await readFileTask;
                     hydrateTasks.Add(readFileTask);
                 }
             }

@@ -16,7 +16,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class LibraryHelpers
     {
-
         public static async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
@@ -47,16 +46,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static async Task RestoreAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Stopwatch sw = new Stopwatch();
+            Logger.LogEventsHeader(OperationType.Restore);
 
-            Logger.LogEvent(LibraryManager.Resources.Text.RestoringLibraries, LogLevel.Task);
+            Stopwatch sw = new Stopwatch();
             List<ILibraryInstallationResult> totalResults = new List<ILibraryInstallationResult>();
 
             sw.Start();
 
             foreach (KeyValuePair<string, Manifest> manifest in manifests)
             {
-                Project project = VsHelpers.DTE.Solution?.FindProjectItem(manifest.Key)?.ContainingProject;
+                Project project = VsHelpers.GetDTEProjectFromConfig(manifest.Key);
                 Logger.LogEvent(string.Format("Restoring packages for {0}...", project.FullName), LogLevel.Operation);
 
                 IEnumerable<ILibraryInstallationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
@@ -69,81 +68,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             sw.Stop();
 
-            Logger.LogEvent("Restoring libraries completed", LogLevel.Status);
-
+            Logger.LogEventsSummary(totalResults, OperationType.Restore, sw.Elapsed);
             PostRestoreTelemetryData(totalResults, sw.Elapsed);
-            LogEventsSummary(totalResults, sw.Elapsed);
-
-        }
-
-        private static void LogEventsSummary(List<ILibraryInstallationResult> totalResults, TimeSpan elapsedTime)
-        {
-            int totalResultsCounts = totalResults.Count();
-            IEnumerable<ILibraryInstallationResult> successfulRestores = totalResults.Where(r => r.Success);
-            IEnumerable<ILibraryInstallationResult> failedRestores = totalResults.Where(r => !r.Success);
-            IEnumerable<ILibraryInstallationResult> cancelledRestores = totalResults.Where(r => r.Cancelled);
-            IEnumerable<ILibraryInstallationResult> upToDateRestores = totalResults.Where(r => r.UpToDate);
-
-            bool allSuccess = successfulRestores.Count() == totalResultsCounts;
-            bool allFailed = failedRestores.Count() == totalResultsCounts;
-            bool allCancelled = cancelledRestores.Count() == totalResultsCounts;
-            bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
-            bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
-
-            if (allUpToDate)
-            {
-                Logger.LogEvent(Resources.Text.LibraryRestoredNoChange + Environment.NewLine, LogLevel.Operation);
-            }
-            else if (allSuccess)
-            {
-                string successText = string.Format(LibraryManager.Resources.Text.LibrariesRestored, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
-                Logger.LogEvent(successText + Environment.NewLine, LogLevel.Operation);
-            }
-            else if (allCancelled)
-            {
-                string canceledText = string.Format(LibraryManager.Resources.Text.LibraryRestorationCancelled, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
-                Logger.LogEvent(canceledText + Environment.NewLine, LogLevel.Operation);
-            }
-            else if (allFailed)
-            {
-                string failedText = string.Format(LibraryManager.Resources.Text.LibraryRestorationFailed, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
-                Logger.LogEvent(failedText + Environment.NewLine, LogLevel.Operation);
-            }
-            else
-            {
-                var summarySuccessText = string.Format("{0} libraries restored successfuly", successfulRestores.Count());
-                Logger.LogEvent(summarySuccessText + Environment.NewLine, LogLevel.Operation);
-                foreach (var result in successfulRestores)
-                {
-                    var successText = string.Format("Successfuly restored library: {0}", result.InstallationState.LibraryId);
-                    Logger.LogEvent(successText, LogLevel.Operation);
-                }
-
-                if (failedRestores.Any())
-                {
-                    var summaryErrorText = string.Format("{0} libraries failed to restore", failedRestores.Count());
-                    Logger.LogEvent(Environment.NewLine + summaryErrorText + Environment.NewLine, LogLevel.Operation);
-                    foreach (var result in failedRestores)
-                    {
-                        var errorText = string.Format("Failed to restore library: {0}", result.InstallationState.LibraryId);
-                        Logger.LogEvent(errorText, LogLevel.Operation);
-                    }
-                }
-
-                if (cancelledRestores.Any())
-                {
-                    var summaryCancellationText = string.Format("{0} libraries had restore cancelled", cancelledRestores.Count());
-                    Logger.LogEvent(Environment.NewLine + summaryCancellationText + Environment.NewLine, LogLevel.Operation);
-                    foreach (var result in cancelledRestores)
-                    {
-                        var cancellationText = string.Format("Cancelled restore of library: {0}", result.InstallationState.LibraryId);
-                        Logger.LogEvent(cancellationText, LogLevel.Operation);
-                    }
-                }
-            }
-
-            Logger.LogEvent(string.Format("Time Elapsed: {0}", elapsedTime), LogLevel.Operation);
-            Logger.LogEvent("========== Finished ==========" + Environment.NewLine, LogLevel.Operation);
         }
 
         private static void PostRestoreTelemetryData(IEnumerable<ILibraryInstallationResult> results, TimeSpan elapsedTime)
@@ -169,43 +95,39 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static async Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken)
         {
+            Logger.LogEventsHeader(OperationType.Uninstall);
+
+            Stopwatch sw = new Stopwatch();
             var dependencies = Dependencies.FromConfigFile(configFilePath);
             Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-            var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
-            await manifest.UninstallAsync(libraryId, async (file) => await hostInteraction.DeleteFilesAsync(file, cancellationToken), cancellationToken);
+            IHostInteraction hostInteraction = dependencies.GetHostInteractions();
 
+            sw.Start();
+            ILibraryInstallationResult result = await manifest.UninstallAsync(libraryId, async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+            sw.Stop();
+
+            Logger.LogEventsSummary(new List<ILibraryInstallationResult> { result }, OperationType.Uninstall, sw.Elapsed);
             Telemetry.TrackUserTask("libraryuninstall");
         }
 
         public static async Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken)
         {
-            Stopwatch sw = new Stopwatch();
-            Logger.LogEvent(Resources.Text.CleanLibrariesStarted, LogLevel.Task);
+            Logger.LogEventsHeader(OperationType.Clean);
 
+            Stopwatch sw = new Stopwatch();
             string configFileName = configProjectItem.FileNames[1];
             var dependencies = Dependencies.FromConfigFile(configFileName);
             Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
-            var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
+            IHostInteraction hostInteraction = dependencies.GetHostInteractions();
 
-            sw.Start();
-
-            IEnumerable<ILibraryInstallationResult> results = await manifest?.CleanAsync(async (file) => await hostInteraction.DeleteFilesAsync(file, cancellationToken), cancellationToken);
-
-            sw.Stop();
-
-            if (results != null && results.All(r => r.Success))
+            if (manifest != null)
             {
-                Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded + Environment.NewLine, LogLevel.Task);
-                Telemetry.TrackUserTask("clean", TelemetryResult.Success, new KeyValuePair<string, object>("librariesdeleted", results.Count()));
-            }
-            else
-            {
-                Logger.LogEvent(Resources.Text.CleanLibrariesFailed + Environment.NewLine, LogLevel.Task);
-                Telemetry.TrackUserTask("clean", TelemetryResult.Failure, new KeyValuePair<string, object>("librariesfailedtodelete", results.Where(r => !r.Success).Count()));
-            }
+                sw.Start();
+                IEnumerable<ILibraryInstallationResult> results = await manifest.CleanAsync(async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+                sw.Stop();
 
-            Logger.LogEvent(string.Format("Time Elapsed: {0}", sw.Elapsed), LogLevel.Operation);
-            Logger.LogEvent("========== Finished ==========" + Environment.NewLine, LogLevel.Operation);
+                Logger.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
+            }
         }
 
         private static async Task<IEnumerable<ILibraryInstallationResult>> RestoreLibrariesAsync(Manifest manifest, CancellationToken cancellationToken)
