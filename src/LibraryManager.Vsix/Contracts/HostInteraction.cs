@@ -80,7 +80,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             var logAction = new Action<string, LogLevel>((message, level) => { Logger.Log(message, level); });
-            bool deleteFromProject = await VsHelpers.DeleteFilesFromProjectAsync(_configFilePath, filePathsToDelete, logAction, cancellationToken);
+
+            Project project = VsHelpers.GetDTEProjectFromConfig(_configFilePath);
+            bool deleteFromProject = await VsHelpers.DeleteFilesFromProjectAsync(project, filePathsToDelete, logAction, cancellationToken);
             if (deleteFromProject)
             {
                 return true;

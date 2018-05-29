@@ -226,11 +226,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return false;
         }
 
-        public static async Task<bool> DeleteFilesFromProjectAsync (string configFilePath, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        public static async Task<bool> DeleteFilesFromProjectAsync (Project project, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
             int batchSize = 10;
 
-            Project project = GetDTEProjectFromConfig(configFilePath);
             IVsHierarchy hierarchy = GetHierarchy(project);
             IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
             List<string> filesToRemove = filePaths.ToList();
@@ -238,8 +237,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             while (filesToRemove.Any())
             {
                 List<string> nextBatch = filesToRemove.Take(batchSize).ToList();
+                bool success = await DeleteProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
+                if(! success)
+                {
+                    return false;
+                }
 
-                await DeleteProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
                 await System.Threading.Tasks.Task.Yield();
 
                 int countToDelete = filesToRemove.Count() >= batchSize ? batchSize : filesToRemove.Count();
