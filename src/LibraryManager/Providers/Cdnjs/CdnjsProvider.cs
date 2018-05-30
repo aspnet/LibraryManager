@@ -94,7 +94,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             desiredState = updateResult.InstallationState;
 
             // Refresh cache if needed
-            ILibraryInstallationResult cacheUpdateResult = await HydrateCacheAsync(desiredState, cancellationToken);
+            ILibraryInstallationResult cacheUpdateResult = await RefreshCacheAsync(desiredState, cancellationToken);
             if (!cacheUpdateResult.Success)
             {
                 return cacheUpdateResult;
@@ -259,7 +259,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <param name="state"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<LibraryInstallationResult> HydrateCacheAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
+        private async Task<LibraryInstallationResult> RefreshCacheAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -287,7 +287,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
                     }
                 }
-                await _cacheService.HydrateCacheAsync(librariesMetadata, cancellationToken);
+                await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
             }
             catch (ResourceDownloadException ex)
             {

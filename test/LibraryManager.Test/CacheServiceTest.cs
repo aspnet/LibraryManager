@@ -152,7 +152,7 @@ namespace Microsoft.Web.LibraryManager.Test
             };
 
             tokenSource.Cancel();
-            await _cacheService.HydrateCacheAsync(desiredCasheFiles, tokenSource.Token);
+            await _cacheService.RefreshCacheAsync(desiredCasheFiles, tokenSource.Token);
 
         }
 
@@ -173,7 +173,7 @@ namespace Microsoft.Web.LibraryManager.Test
             };
 
             // act 
-            await _cacheService.HydrateCacheAsync(desiredCasheFiles, CancellationToken.None);
+            await _cacheService.RefreshCacheAsync(desiredCasheFiles, CancellationToken.None);
 
             // verify
             Assert.IsTrue(File.Exists(libraryFile1_Path));
@@ -185,7 +185,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task CacheAndRestoreMultipleLibraries_WritesAndReadsSuccessfuly()
         {
             IEnumerable<CacheServiceMetadata> metadata = GetMetadata(100);
-            await _cacheService.HydrateCacheAsync(metadata, CancellationToken.None);
+            await _cacheService.RefreshCacheAsync(metadata, CancellationToken.None);
             var manifest = Manifest.FromJson(GetLibManConfig(100), _dependencies);
             
             // act 

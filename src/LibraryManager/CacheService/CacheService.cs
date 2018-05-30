@@ -90,11 +90,11 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="librariesCacheMetadata"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task HydrateCacheAsync(IEnumerable<CacheServiceMetadata> librariesCacheMetadata, CancellationToken cancellationToken)
+        public async Task RefreshCacheAsync(IEnumerable<CacheServiceMetadata> librariesCacheMetadata, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            List<Task> hydrateTasks = new List<Task>();
+            List<Task> refreshTasks = new List<Task>();
 
             foreach (CacheServiceMetadata metadata in librariesCacheMetadata)
             {
@@ -102,11 +102,11 @@ namespace Microsoft.Web.LibraryManager
                 {
                     Task readFileTask = DownloadToFileAsync(metadata.Source, metadata.DestinationPath, cancellationToken);
                     await readFileTask;
-                    hydrateTasks.Add(readFileTask);
+                    refreshTasks.Add(readFileTask);
                 }
             }
 
-            await Task.WhenAll(hydrateTasks).ConfigureAwait(false);
+            await Task.WhenAll(refreshTasks).ConfigureAwait(false);
         }
     }
 }
