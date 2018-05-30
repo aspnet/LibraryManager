@@ -142,7 +142,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 if (libraryToInstall != null)
                 {
-                    ValidateLibraryHasFiles(libraryToInstall, LibraryId.Value);
                     return (LibraryId.Value, libraryToInstall);
                 }
             }
@@ -174,7 +173,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                     // Found a group with an exact match.
                     string libraryId = libIds.First();
                     ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(libraryId, cancellationToken);
-                    ValidateLibraryHasFiles(libraryToInstall, libraryId);
 
                     return (libraryId, libraryToInstall);
                 }
@@ -184,24 +182,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             sb.Insert(0, $"[{invalidLibraryError.Code}]: {invalidLibraryError.Message} {Environment.NewLine} {Resources.SuggestedIdsMessage}{Environment.NewLine}");
             throw new InvalidOperationException(sb.ToString());
-        }
-
-        private void ValidateLibraryHasFiles(ILibrary library, string libraryId)
-        {
-            if (!Files.HasValue())
-            {
-                return;
-            }
-
-            IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(Files.Values);
-
-            if (invalidFiles.Any())
-            {
-                string message = string.Format(Resources.InvalidFilesForLibrary, libraryId, string.Join(", ", invalidFiles));
-                message += Environment.NewLine + string.Format(Resources.AvailableFilesForLibrary, string.Join(", ", library.Files.Keys));
-
-                throw new InvalidOperationException(message);
-            }
         }
 
         private void ValidateParameters(Manifest manifest)

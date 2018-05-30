@@ -162,22 +162,16 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ]
 }";
 
-            bool exceptionCaught = false;
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
-            try
-            {
-                command.Execute("jquery", "--files", "abc.js");
-            }
-            catch (AggregateException age) when (age.InnerExceptions[0] is InvalidOperationException ex)
-            {
-                exceptionCaught = true;
-                string expectedMessage = "Library \"jquery@3.3.1\" does not contain the following files: abc.js";
-                Assert.IsTrue(ex.Message.StartsWith(expectedMessage));
-                string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
-                Assert.AreEqual(StringHelper.NormalizeNewLines(initialContent), StringHelper.NormalizeNewLines(actualText));
-            }
+            command.Execute("jquery", "--files", "abc.js");
+            string expectedMessage = @"[LIB018]: ""jquery@3.3.1"" does not contain the following: abc.js
+Valid files are core.js, jquery.js, jquery.min.js, jquery.min.map, jquery.slim.js, jquery.slim.min.js, jquery.slim.min.map";
 
-            Assert.IsTrue(exceptionCaught, "Expected exception not thrown.");
+            var logger = HostEnvironment.Logger as TestLogger;
+            Assert.AreEqual(expectedMessage, logger.Messages.Last().Value);
+
+            string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
+            Assert.AreEqual(StringHelper.NormalizeNewLines(initialContent), StringHelper.NormalizeNewLines(actualText));
         }
     }
 }

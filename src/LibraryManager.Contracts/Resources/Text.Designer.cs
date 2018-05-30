@@ -69,7 +69,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
                 return ResourceManager.GetString("ErrorConflictingLibraries", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Failed to delete one or more files in the library {0}.
         /// </summary>
@@ -85,6 +85,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static string ErrorCouldNotWriteFile {
             get {
                 return ResourceManager.GetString("ErrorCouldNotWriteFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; destination file path has invalid characters.
+        /// </summary>
+        internal static string ErrorDestinationPathHasInvalidCharacter {
+            get {
+                return ResourceManager.GetString("ErrorDestinationPathHasInvalidCharacter", resourceCulture);
             }
         }
         
@@ -123,13 +132,14 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
                 return ResourceManager.GetString("ErrorLibraryCannotUpdateDueToFileConflicts", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to The &quot;{0}&quot; destination file path has invalid characters.
+        ///   Looks up a localized string similar to &quot;{0}&quot; does not contain the following: {1}
+        ///Valid files are {2}.
         /// </summary>
-        internal static string ErrorDestinationPathHasInvalidCharacter {
+        internal static string ErrorLibraryHasInvalidFiles {
             get {
-                return ResourceManager.GetString("ErrorDestinationPathHasInvalidCharacter", resourceCulture);
+                return ResourceManager.GetString("ErrorLibraryHasInvalidFiles", resourceCulture);
             }
         }
         

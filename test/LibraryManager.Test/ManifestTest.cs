@@ -351,7 +351,7 @@ namespace Microsoft.Web.LibraryManager.Test
             result = await manifest.InstallLibraryAsync("jquery@3.3.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
             Assert.IsFalse(result.Success);
             Assert.AreEqual(1, result.Errors.Count);
-            Assert.AreEqual("LIB010", result.Errors[0].Code);
+            Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
 
         [TestMethod]

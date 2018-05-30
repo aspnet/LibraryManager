@@ -160,5 +160,15 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static IError LibraryCannotBeInstalledDueToConflicts(string file, List<string> conflictingLibraries)
             => new Error("LIB017", string.Format(Text.ErrorLibraryCannotInstallDueToConflicts, file, string.Join(", ", conflictingLibraries)));
+
+        /// <summary>
+        /// File is not valid for the library.
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <param name="invalidFile"></param>
+        /// <param name="validFiles"></param>
+        /// <returns></returns>
+        public static IError InvalidFilesInLibrary(string libraryId, IEnumerable<string> invalidFile, IEnumerable<string> validFiles)
+            => new Error("LIB018", string.Format(Text.ErrorLibraryHasInvalidFiles, libraryId, string.Join(", ", invalidFile), string.Join(", ", validFiles)));
     }
 }
