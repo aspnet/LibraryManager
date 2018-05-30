@@ -116,7 +116,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var inputReader = HostEnvironment.InputReader as TestInputReader;
 
-            string outputStr = "Select an option:\r\n-----------------\r\n1. { jquery@3.3.1, cdnjs, wwwroot }\r\n2. { jquery@2.2.0, cdnjs, lib }\r\n3. { jquery, filesystem, wwwroot }";
+            string outputStr = "Select an option:\r\n-----------------\r\n1. {jquery@3.3.1, cdnjs, wwwroot}\r\n2. {jquery@2.2.0, cdnjs, lib}\r\n3. {jquery, filesystem, wwwroot}";
 
             inputReader.Inputs[outputStr] = "1";
 

@@ -373,4 +373,7 @@ Please specify a different destination.</value>
   <data name="SpecifyDifferentDestination" xml:space="preserve">
     <value>Please specify a different destination.</value>
   </data>
+  <data name="UninstallFailed" xml:space="preserve">
+    <value>Failed to uninstall "{0}"</value>
+  </data>
 </root>

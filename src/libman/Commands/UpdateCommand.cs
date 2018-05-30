@@ -91,14 +91,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 await ValidateToVersionIsValidAsync(libraryToUpdate, ToVersion.Value(), manifest, CancellationToken.None);
             }
 
-
             Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
             ILibraryInstallationResult result = ToVersion.HasValue()
                 ? await manifest.UpdateLibraryAsync(libraryToUpdate, ToVersion.Value(), deleteFileAction, CancellationToken.None)
                 : await manifest.UpdateLibraryToLatestAsync(libraryToUpdate, PreRelease.HasValue(), deleteFileAction, CancellationToken.None);
 
-            if (result == null)
+            if (result == null || result.UpToDate)
             {
                 // We already have latest version.
                 Logger.Log(string.Format(Resources.LatestVersionAlreadyInstalled, libraryToUpdate.LibraryId), LogLevel.Operation);

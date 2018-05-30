@@ -100,11 +100,7 @@ namespace Microsoft.Web.LibraryManager
                 manifest._dependencies = dependencies;
                 manifest._hostInteraction = dependencies.GetHostInteractions();
 
-                foreach (LibraryInstallationState state in manifest.Libraries.Cast<LibraryInstallationState>())
-                {
-                    state.ProviderId = state.ProviderId ?? manifest.DefaultProvider;
-                    state.DestinationPath = state.DestinationPath ?? manifest.DefaultDestination;
-                }
+                UpdateLibraryProviderAndDestination(manifest);
 
                 return manifest;
             }
@@ -112,6 +108,24 @@ namespace Microsoft.Web.LibraryManager
             {
                 dependencies.GetHostInteractions().Logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Task);
                 return null;
+            }
+        }
+
+        private static void UpdateLibraryProviderAndDestination(Manifest manifest)
+        {
+            foreach (LibraryInstallationState state in manifest.Libraries.Cast<LibraryInstallationState>())
+            {
+                if (state.ProviderId == null)
+                {
+                    state.ProviderId = manifest.DefaultProvider;
+                    state.IsUsingDefaultProvider = true;
+                }
+
+                if (state.DestinationPath == null)
+                {
+                    state.DestinationPath = manifest.DefaultDestination;
+                    state.IsUsingDefaultDestination = true;
+                }
             }
         }
 
@@ -139,7 +153,10 @@ namespace Microsoft.Web.LibraryManager
         public async Task<ILibraryInstallationResult> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
         {
             ILibraryInstallationResult result = null;
+            bool isDefaultProvider = false;
+            bool isDefaultDestination = false;
             var errors = new List<IError>();
+
             if (string.IsNullOrEmpty(libraryId))
             {
                 errors.Add(PredefinedErrors.LibraryIdIsUndefined());
@@ -149,9 +166,10 @@ namespace Microsoft.Web.LibraryManager
             {
                 errors.Add(PredefinedErrors.PathIsUndefined());
             }
-            else
+            else if (string.IsNullOrEmpty(destination))
             {
-                destination = string.IsNullOrEmpty(destination) ? DefaultDestination : destination;
+                destination = DefaultDestination;
+                isDefaultDestination = true;
             }
 
             IProvider provider = null;
@@ -161,7 +179,11 @@ namespace Microsoft.Web.LibraryManager
             }
             else
             {
-                providerId = string.IsNullOrEmpty(providerId) ? DefaultProvider : providerId;
+                if (string.IsNullOrEmpty(providerId))
+                {
+                    providerId = DefaultProvider;
+                    isDefaultProvider = true;
+                }
 
                 provider = _dependencies.Providers.FirstOrDefault(p => p.Id == providerId);
                 if (provider == null)
@@ -181,7 +203,9 @@ namespace Microsoft.Web.LibraryManager
                 LibraryId = libraryId,
                 Files = files,
                 ProviderId = providerId,
-                DestinationPath = destination
+                DestinationPath = destination,
+                IsUsingDefaultDestination = isDefaultDestination,
+                IsUsingDefaultProvider = isDefaultProvider
             };
 
             List<FileConflict> conflictingLibraries = await CheckLibraryForConflictsAsync(desiredState, cancellationToken);
@@ -204,17 +228,6 @@ namespace Microsoft.Web.LibraryManager
             }
 
             result = await provider.InstallAsync(desiredState, cancellationToken);
-
-            // Remove destination and provider if they match the defaults;
-            if (desiredState.DestinationPath == DefaultDestination)
-            {
-                desiredState.DestinationPath = null;
-            }
-
-            if (desiredState.ProviderId == DefaultProvider)
-            {
-                desiredState.ProviderId = null;
-            }
 
             if (result.Success)
             {
@@ -339,6 +352,12 @@ namespace Microsoft.Web.LibraryManager
                 DestinationPath = string.IsNullOrEmpty(libraryToUpdate.DestinationPath) ? DefaultDestination : libraryToUpdate.DestinationPath
             };
 
+            if (libraryToUpdate is LibraryInstallationState libraryState)
+            {
+                desiredState.IsUsingDefaultDestination = libraryState.IsUsingDefaultDestination;
+                desiredState.IsUsingDefaultProvider = libraryState.IsUsingDefaultProvider;
+            }
+
             if (CheckAlreadyInstalled(desiredState))
             {
                 IError error = PredefinedErrors.CouldNotUpdateDueToConflicts(libraryToUpdate.LibraryId, desiredState.LibraryId);
@@ -354,12 +373,17 @@ namespace Microsoft.Web.LibraryManager
                 return LibraryInstallationResult.FromError(error);
             }
 
-            await UninstallAsync(libraryToUpdate, deleteFileAction, cancellationToken);
+            ILibraryInstallationResult uninstallationResult = await UninstallAsync(libraryToUpdate, deleteFileAction, cancellationToken);
+
+            if (!uninstallationResult.Success)
+            {
+                return uninstallationResult;
+            }
 
             return await InstallLibraryAsync(newId,
-                libraryToUpdate.ProviderId,
+                desiredState.IsUsingDefaultProvider ? null : libraryToUpdate.ProviderId,
                 libraryToUpdate.Files,
-                libraryToUpdate.DestinationPath,
+                desiredState.IsUsingDefaultDestination? null : libraryToUpdate.DestinationPath,
                 cancellationToken);
         }
 
@@ -516,13 +540,20 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="libraryToUninstall">Provider id</param>
         /// <param name="deleteFileAction"></param>
         /// <param name="cancellationToken"></param>
-        public async Task UninstallAsync(ILibraryInstallationState libraryToUninstall, Func<IEnumerable<string>, Task<bool>> deleteFileAction, CancellationToken cancellationToken)
+        public async Task<ILibraryInstallationResult> UninstallAsync(ILibraryInstallationState libraryToUninstall, Func<IEnumerable<string>, Task<bool>> deleteFileAction, CancellationToken cancellationToken)
         {
             if (libraryToUninstall != null)
             {
-                await DeleteLibraryFilesAsync(libraryToUninstall, deleteFileAction, cancellationToken);
-                _libraries.Remove(libraryToUninstall);
+                ILibraryInstallationResult result = await DeleteLibraryFilesAsync(libraryToUninstall, deleteFileAction, cancellationToken);
+                if (result.Success)
+                {
+                    _libraries.Remove(libraryToUninstall);
+                }
+
+                return result;
             }
+
+            return LibraryInstallationResult.FromError(PredefinedErrors.LibraryIdIsUndefined());
         }
 
         /// <summary>
@@ -539,7 +570,25 @@ namespace Microsoft.Web.LibraryManager
                 NullValueHandling = NullValueHandling.Ignore,
             };
 
+            foreach (ILibraryInstallationState library in _libraries)
+            {
+                if (library is LibraryInstallationState state)
+                {
+                    if (state.IsUsingDefaultDestination)
+                    {
+                        state.DestinationPath = null;
+                    }
+                    if (state.IsUsingDefaultProvider)
+                    {
+                        state.ProviderId = null;
+                    }
+                }
+            }
+
             string json = JsonConvert.SerializeObject(this, settings);
+
+            UpdateLibraryProviderAndDestination(this);
+
             byte[] buffer = Encoding.UTF8.GetBytes(json);
 
             using (FileStream writer = File.Create(fileName, 4096, FileOptions.Asynchronous))

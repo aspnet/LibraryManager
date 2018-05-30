@@ -15,11 +15,5 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         /// </summary>
         /// <param name="directory"></param>
         void UpdateWorkingDirectory(string directory);
-
-        /// <summary>
-        /// Provides interaction to delete files.
-        /// </summary>
-        /// <param name="relativeFilePaths"></param>
-        void DeleteFiles(params string[] relativeFilePaths);
     }
 }

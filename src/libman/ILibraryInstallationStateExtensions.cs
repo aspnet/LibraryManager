@@ -24,7 +24,7 @@ namespace Microsoft.Web.LibraryManager.Tools
                 throw new ArgumentNullException(nameof(libraryInstallationState));
             }
 
-            var sb = new StringBuilder("{ "+libraryInstallationState.LibraryId);
+            var sb = new StringBuilder("{"+libraryInstallationState.LibraryId);
 
             if (!string.IsNullOrEmpty(libraryInstallationState.ProviderId))
             {
@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Tools
                 sb.Append(", " + libraryInstallationState.DestinationPath);
             }
 
-            sb.Append(" }");
+            sb.Append("}");
 
             return sb.ToString();
         }

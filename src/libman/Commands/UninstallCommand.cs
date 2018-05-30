@@ -72,11 +72,21 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
-            await manifest.UninstallAsync(libraryToUninstall, deleteFileAction, CancellationToken.None);
+            ILibraryInstallationResult result = await manifest.UninstallAsync(libraryToUninstall, deleteFileAction, CancellationToken.None);
 
-            await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
-
-            Logger.Log(string.Format(Resources.UninstalledLibrary, libraryToUninstall.LibraryId), LogLevel.Operation);
+            if (result.Success)
+            {
+                await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
+                Logger.Log(string.Format(Resources.UninstalledLibrary, libraryToUninstall.LibraryId), LogLevel.Operation);
+            }
+            else
+            {
+                Logger.Log(string.Format(Resources.UninstallFailed, libraryToUninstall.LibraryId), LogLevel.Error);
+                foreach (IError error in result.Errors)
+                {
+                    Logger.Log($"[{error.Code}]: {error.Message}", LogLevel.Error);
+                }
+            }
 
             return 0;
         }

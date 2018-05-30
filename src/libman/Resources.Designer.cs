@@ -704,6 +704,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to uninstall &quot;{0}&quot;.
+        /// </summary>
+        internal static string UninstallFailed {
+            get {
+                return ResourceManager.GetString("UninstallFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updates the specified library.
         /// </summary>
         internal static string UpdateCommandDesc {
