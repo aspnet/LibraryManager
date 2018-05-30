@@ -78,7 +78,7 @@ namespace Microsoft.Web.LibraryManager
         {
             if (File.Exists(fileName))
             {
-                string json = await FileHelpers.ReadFileTextAsync(fileName, cancellationToken).ConfigureAwait(false);
+                string json = await FileHelpers.ReadFileAsTextAsync(fileName, cancellationToken).ConfigureAwait(false);
                 return FromJson(json, dependencies);
             }
 
@@ -172,7 +172,7 @@ namespace Microsoft.Web.LibraryManager
 
             if (errors.Any())
             {
-                result = new LibraryInstallationResult(errors);
+                result = new LibraryInstallationResult(errors.ToArray());
                 return result;
             }
 
@@ -199,7 +199,7 @@ namespace Microsoft.Web.LibraryManager
 
             if (errors.Any())
             {
-                result = new LibraryInstallationResult(errors);
+                result = new LibraryInstallationResult(errors.ToArray());
                 return result;
             }
 
@@ -268,7 +268,7 @@ namespace Microsoft.Web.LibraryManager
         public async Task<ILibraryInstallationResult> UpdateLibraryAsync(
             ILibraryInstallationState libraryToUpdate,
             string newId,
-            Action<string> deleteFileAction,
+            Func<IEnumerable<string>, Task<bool>> deleteFileAction,
             CancellationToken cancellationToken)
         {
             return await UpdateLibraryInternalAsync(libraryToUpdate, newId, true, deleteFileAction, cancellationToken);
@@ -285,7 +285,7 @@ namespace Microsoft.Web.LibraryManager
         public async Task<ILibraryInstallationResult> UpdateLibraryToLatestAsync(
             ILibraryInstallationState libraryToUpdate,
             bool usePreRelease,
-            Action<string> deleteFileAction,
+            Func<IEnumerable<string>, Task<bool>> deleteFileAction,
             CancellationToken cancellationToken)
         {
             return await UpdateLibraryInternalAsync(libraryToUpdate, null ,usePreRelease, deleteFileAction, cancellationToken);
@@ -295,7 +295,7 @@ namespace Microsoft.Web.LibraryManager
             ILibraryInstallationState libraryToUpdate,
             string newId,
             bool usePreRelease,
-            Action<string> deleteFileAction,
+            Func<IEnumerable<string>, Task<bool>> deleteFileAction,
             CancellationToken cancellationToken)
         {
             if (libraryToUpdate == null)
@@ -342,7 +342,7 @@ namespace Microsoft.Web.LibraryManager
             if (CheckAlreadyInstalled(desiredState))
             {
                 IError error = PredefinedErrors.CouldNotUpdateDueToConflicts(libraryToUpdate.LibraryId, desiredState.LibraryId);
-                return LibraryInstallationResult.FromErrors(new[] { error });
+                return LibraryInstallationResult.FromError(error);
             }
 
             ILibrary desiredLibrary = await catalog.GetLibraryAsync(newId, cancellationToken);
@@ -351,10 +351,10 @@ namespace Microsoft.Web.LibraryManager
             if (invalidFiles != null && invalidFiles.Any())
             {
                 IError error = PredefinedErrors.CouldNotUpdateDueToFileConflicts(libraryToUpdate.LibraryId, newId, invalidFiles);
-                return LibraryInstallationResult.FromErrors(new[] { error });
+                return LibraryInstallationResult.FromError(error);
             }
 
-            Uninstall(libraryToUpdate, deleteFileAction);
+            await UninstallAsync(libraryToUpdate, deleteFileAction, cancellationToken);
 
             return await InstallLibraryAsync(newId,
                 libraryToUpdate.ProviderId,
@@ -394,13 +394,10 @@ namespace Microsoft.Web.LibraryManager
         {
             //TODO: This should have an "undo scope"
             var results = new List<ILibraryInstallationResult>();
-            var tasks = new List<Task<ILibraryInstallationResult>>();
 
             if (!IsValidManifestVersion(Version))
             {
-                results.Add(LibraryInstallationResult.FromErrors(new IError[]{ PredefinedErrors.VersionIsNotSupported(Version) }));
-
-                return results;
+                return new ILibraryInstallationResult[] { LibraryInstallationResult.FromError(PredefinedErrors.VersionIsNotSupported(Version)) };
             }
 
             IEnumerable<FileConflict> fileConflicts = null;
@@ -420,80 +417,97 @@ namespace Microsoft.Web.LibraryManager
                     }
 
                     // This error is added to the bottom of the error list.
-                    fileConflictErrors = LibraryInstallationResult.FromErrors(errors);
+                    fileConflictErrors = new LibraryInstallationResult(errors.ToArray());
                 }
             }
             catch (OperationCanceledException)
             {
-                results.Add(LibraryInstallationResult.FromCancelled(Libraries.FirstOrDefault()));
-                _hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
-                return results;
+                //results.Add(LibraryInstallationResult.FromCancelled(Libraries.FirstOrDefault()));
+                //_hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
+                //return results;
             }
 
-            var conflictingLibraryIds = new HashSet<ILibraryInstallationState>(fileConflicts.SelectMany(c => c.Libraries));
+            HashSet<ILibraryInstallationState> conflictingLibraryIds = fileConflicts != null
+                ? new HashSet<ILibraryInstallationState>(fileConflicts.SelectMany(c => c.Libraries))
+                : new HashSet<ILibraryInstallationState>();
 
             foreach (ILibraryInstallationState state in Libraries)
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    results.Add(LibraryInstallationResult.FromCancelled(state));
-                    _hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
-                    return results;
-                }
-
                 if (conflictingLibraryIds.Contains(state))
                 {
                     // The error for this library is already added to results.
                     continue;
                 }
 
-                if (!state.IsValid(out IEnumerable<IError> errors))
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    results.Add(new LibraryInstallationResult(state, errors.ToArray()));
+                    results.Add(LibraryInstallationResult.FromCancelled(state));
+                    _hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
                     continue;
                 }
 
-                _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, state.LibraryId, state.DestinationPath), LogLevel.Operation);
-
-                IProvider provider = _dependencies.GetProvider(state.ProviderId);
-
-                if (provider != null)
-                {
-                    tasks.Add(provider.InstallAsync(state, cancellationToken));
-                }
-                else
-                {
-                    results.Add(new LibraryInstallationResult(state, PredefinedErrors.ProviderUnknown(state.ProviderId)));
-                }
+                results.Add(await RestoreLibraryAsync(state, cancellationToken));
             }
 
-
-            await Task.WhenAll(tasks).ConfigureAwait(false);
-
-            results.AddRange(tasks.Select(t => t.Result));
-            if (fileConflictErrors != null)
-            {
+            if (fileConflictErrors != null){
                 results.Add(fileConflictErrors);
             }
 
             return results;
         }
 
+
+        private async Task<ILibraryInstallationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
+        {
+            _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, libraryState.LibraryId, libraryState.DestinationPath), LogLevel.Operation);
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return LibraryInstallationResult.FromCancelled(libraryState);
+            }
+
+            if (!libraryState.IsValid(out IEnumerable<IError> errors))
+            {
+                return new LibraryInstallationResult(libraryState, errors.ToArray());
+            }
+
+            IProvider provider = _dependencies.GetProvider(libraryState.ProviderId);
+            if (provider == null)
+            {
+                return new LibraryInstallationResult(libraryState, new IError[] { PredefinedErrors.ProviderUnknown(libraryState.ProviderId) });
+            }
+
+            return await provider.InstallAsync(libraryState, cancellationToken).ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Uninstalls the specified library and removes it from the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="libraryId">The library identifier.</param>
-        /// <param name="deleteFileAction"></param>
-        public void Uninstall(string libraryId, Action<string> deleteFileAction)
+        /// <param name="deleteFilesFunction"></param>
+        /// <param name="cancellationToken"></param>
+        public async Task<ILibraryInstallationResult> UninstallAsync(string libraryId, Func<IEnumerable<string>, Task<bool>> deleteFilesFunction, CancellationToken cancellationToken)
         {
             ILibraryInstallationState state = Libraries.FirstOrDefault(l => l.LibraryId == libraryId);
 
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return LibraryInstallationResult.FromCancelled(state);
+            }
+
+            ILibraryInstallationResult result = LibraryInstallationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(state.LibraryId));
+
             if (state != null)
             {
-                DeleteLibraryFiles(state, deleteFileAction);
+                result = await DeleteLibraryFilesAsync(state, deleteFilesFunction, cancellationToken);
 
-                _libraries.Remove(state);
+                if (result.Success)
+                {
+                    _libraries.Remove(state);
+                }
             }
+
+            return result;
         }
 
         /// <summary>
@@ -501,11 +515,12 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         /// <param name="libraryToUninstall">Provider id</param>
         /// <param name="deleteFileAction"></param>
-        public void Uninstall(ILibraryInstallationState libraryToUninstall, Action<string> deleteFileAction)
+        /// <param name="cancellationToken"></param>
+        public async Task UninstallAsync(ILibraryInstallationState libraryToUninstall, Func<IEnumerable<string>, Task<bool>> deleteFileAction, CancellationToken cancellationToken)
         {
             if (libraryToUninstall != null)
             {
-                DeleteLibraryFiles(libraryToUninstall, deleteFileAction);
+                await DeleteLibraryFilesAsync(libraryToUninstall, deleteFileAction, cancellationToken);
                 _libraries.Remove(libraryToUninstall);
             }
         }
@@ -541,48 +556,143 @@ namespace Microsoft.Web.LibraryManager
         /// that deletes the files from the project.
         /// </remarks>
         /// <param name="deleteFileAction">>An action to delete the files.</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public IEnumerable<ILibraryInstallationResult> Clean(Action<string> deleteFileAction)
+        public async Task<IEnumerable<ILibraryInstallationResult>> CleanAsync(Func<IEnumerable<string>, Task<bool>> deleteFileAction, CancellationToken cancellationToken)
         {
-            List<ILibraryInstallationResult> results = new List<ILibraryInstallationResult>();
+            var results = new List<ILibraryInstallationResult>();
 
             foreach (ILibraryInstallationState state in Libraries)
             {
-                results.Add(DeleteLibraryFiles(state, deleteFileAction));
+                results.Add(await DeleteLibraryFilesAsync(state, deleteFileAction, cancellationToken));
             }
 
             return results;
         }
 
-        private ILibraryInstallationResult DeleteLibraryFiles(ILibraryInstallationState state, Action<string> deleteFileAction)
+        /// <summary>
+        /// Removes unwanted library files
+        /// </summary>
+        /// <param name="newManifest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveUnwantedFilesAsync(Manifest newManifest, CancellationToken cancellationToken)
         {
-            int filesDeleted = 0;
-
-            IProvider provider = _dependencies.GetProvider(state.ProviderId);
-            ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, CancellationToken.None).Result;
-
-            if (updatedStateResult.Success)
+            if (newManifest != null)
             {
-                state = updatedStateResult.InstallationState;
-                foreach (string file in state.Files)
-                {
-                    var url = new Uri(file, UriKind.RelativeOrAbsolute);
+                IEnumerable<FileIdentifier> existingFiles = await GetAllManifestFilesWithVersionsAsync(Libraries).ConfigureAwait(false);
+                IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest.Libraries).ConfigureAwait(false);
+                IEnumerable<string> filesToRemove = existingFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Path);
 
-                    if (!url.IsAbsoluteUri)
-                    {
-                        string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
-                        deleteFileAction?.Invoke(relativePath);
-                        filesDeleted++;
-                    }
-                }
-
-                if (state.Files != null && filesDeleted == state.Files.Count())
+                if (filesToRemove.Any())
                 {
-                    return LibraryInstallationResult.FromSuccess(updatedStateResult.InstallationState);
+                    IHostInteraction hostInteraction = _dependencies.GetHostInteractions();
+                    return await hostInteraction.DeleteFilesAsync(filesToRemove, cancellationToken);
                 }
             }
 
-            return updatedStateResult;
+            return false;
+        }
+
+        private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(IEnumerable<ILibraryInstallationState> libraries)
+        {
+            var files = new List<FileIdentifier>();
+
+            if (libraries != null)
+            {
+                foreach (ILibraryInstallationState state in libraries.Where(l => l.IsValid(out IEnumerable<IError> errors)))
+                {
+                    IProvider provider = _dependencies.GetProvider(state.ProviderId);
+
+                    if (provider != null)
+                    {
+                        ILibraryInstallationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None);
+
+                        if (updatedStateResult.Success)
+                        {
+                            IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
+
+                            foreach (FileIdentifier fileIdentifier in stateFiles)
+                            {
+                                if (!files.Contains(fileIdentifier))
+                                {
+                                    files.Add(fileIdentifier);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return files;
+        }
+
+        private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
+        {
+            ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
+            ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+            IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
+
+            if (library != null && library.Files != null)
+            {
+                IEnumerable<string> desiredStateFiles = state?.Files?.Where(f => library.Files.Keys.Contains(f));
+                if (desiredStateFiles != null && desiredStateFiles.Any())
+                {
+                    filesWithVersions = desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
+                }
+            }
+
+            return filesWithVersions;
+        }
+
+        private async Task<ILibraryInstallationResult> DeleteLibraryFilesAsync(ILibraryInstallationState state,
+                                                       Func<IEnumerable<string>, Task<bool>> deleteFilesFunction,
+                                                       CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return LibraryInstallationResult.FromCancelled(state);
+            }
+
+            try
+            {
+                IProvider provider = _dependencies.GetProvider(state.ProviderId);
+                ILibraryInstallationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None);
+
+                if (updatedStateResult.Success)
+                {
+                    List<string> filesToDelete = new List<string>();
+                    state = updatedStateResult.InstallationState;
+
+                    foreach (string file in state.Files)
+                    {
+                        var url = new Uri(file, UriKind.RelativeOrAbsolute);
+
+                        if (!url.IsAbsoluteUri)
+                        {
+                            string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
+                            filesToDelete.Add(relativePath);
+                        }
+                    }
+
+                    bool success = await deleteFilesFunction?.Invoke(filesToDelete);
+
+                    if (success)
+                    {
+                        return LibraryInstallationResult.FromSuccess(updatedStateResult.InstallationState);
+                    }
+                    else
+                    {
+                        return LibraryInstallationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(state.LibraryId));
+                    }
+                }
+
+                return updatedStateResult;
+            }
+            catch (Exception)
+            {
+                return LibraryInstallationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(state.LibraryId));
+            }
         }
     }
 }

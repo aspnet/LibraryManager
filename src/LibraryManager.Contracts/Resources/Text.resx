@@ -120,6 +120,9 @@
   <data name="ErrorConflictingLibraries" xml:space="preserve">
     <value>Conflicting file "{0}" found in more than one library: {1}</value>
   </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>Failed to delete one or more files in the library {0}</value>
+  </data>
   <data name="ErrorCouldNotWriteFile" xml:space="preserve">
     <value>{0} could not be written to disk. Make sure the file name is correct</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
     <value>The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>The "{0}" destination file path has invalid characters</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
     <value>The library id is undefined</value>
@@ -155,6 +161,9 @@
   </data>
   <data name="ErrorProviderUnknown" xml:space="preserve">
     <value>The "{0}" provider could not be found</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>Failed to download resource from "{0}"</value>
   </data>
   <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
     <value>The "{0}" file path could not be resolved by the "{1}" provider</value>

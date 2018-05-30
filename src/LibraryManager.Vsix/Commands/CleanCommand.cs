@@ -1,11 +1,11 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using EnvDTE;
-using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel.Design;
-using Microsoft.VisualStudio.Telemetry;
+using System.Threading;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -45,12 +45,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            if (VsHelpers.DTE.SelectedItems.MultiSelect)
-                return;
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
-            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
-
-            if (item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
+            if (item != null && item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -59,10 +56,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
-            ProjectItem configProjectItem = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+            ProjectItem configProjectItem = VsHelpers.GetSelectedItem();
 
             if (configProjectItem != null)
-                await LibraryHelpers.CleanAsync(configProjectItem);
+            {
+                await LibraryHelpers.CleanAsync(configProjectItem, new CancellationToken());
+            }
         }
 
         private void OnBuildBegin(vsBuildScope Scope, vsBuildAction Action)

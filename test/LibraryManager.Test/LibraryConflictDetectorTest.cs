@@ -19,7 +19,6 @@ namespace Microsoft.Web.LibraryManager.Test
     [TestClass]
     public class LibraryConflictDetectorTest
     {
-        private string _filePath;
         private string _cacheFolder;
         private string _projectFolder;
         private IDependencies _dependencies;

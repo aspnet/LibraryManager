@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 
@@ -23,7 +24,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         protected override async Task<int> ExecuteInternalAsync()
         {
             Manifest manifest = await GetManifestAsync();
-            IEnumerable<ILibraryInstallationResult> result = manifest.Clean((s) => HostEnvironment.HostInteraction.DeleteFiles(s));
+
+            Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
+
+            IEnumerable<ILibraryInstallationResult> result = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
+
             IEnumerable<ILibraryInstallationResult> failures = result.Where(r => !r.Success);
 
             if (failures.Any())

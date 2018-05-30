@@ -40,9 +40,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (VsHelpers.DTE.SelectedItems.MultiSelect)
                 return;
 
-            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
-            if (item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
+            if (item != null && item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
-            ProjectItem configProjectItem = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+            ProjectItem configProjectItem = VsHelpers.GetSelectedItem(); ;
 
             if (configProjectItem != null)
                 await LibraryHelpers.RestoreAsync(configProjectItem.FileNames[1]);

@@ -19,6 +19,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="CacheService.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\src\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
     </ItemGroup>
 

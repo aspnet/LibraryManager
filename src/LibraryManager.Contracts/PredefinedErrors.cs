@@ -95,13 +95,34 @@ namespace Microsoft.Web.LibraryManager.Contracts
            => new Error("LIB009", string.Format(Text.ErrorNotSupportedVersion, version));
 
         /// <summary>
+        /// Failed to download resource
+        /// </summary>
+        /// <returns>The error code LIB010</returns>
+        public static IError FailedToDownloadResource(string url)
+           => new Error("LIB010", string.Format(Text.ErrorUnableToDownloadResource, url));
+
+        /// <summary>
+        /// Failed to delete library
+        /// </summary>
+        /// <returns>The error code LIB011</returns>
+        public static IError CouldNotDeleteLibrary(string libraryId)
+           => new Error("LIB011", string.Format(Text.ErrorCouldNotDeleteLibrary, libraryId));
+
+        /// <summary>
+        /// Destination path has invalid characters
+        /// </summary>
+        /// <returns>The error code LIB012</returns>
+        public static IError DestinationPathHasInvalidCharacters(string destinationPath)
+           => new Error("LIB012", string.Format(Text.ErrorDestinationPathHasInvalidCharacter, destinationPath));
+
+        /// <summary>
         /// Library is already installed by the provider.
         /// </summary>
         /// <param name="libraryId"></param>
         /// <param name="providerId"></param>
         /// <returns></returns>
         public static IError LibraryAlreadyInstalled(string libraryId, string providerId)
-            => new Error("LIB010", string.Format(Text.ErrorLibraryAlreadyInstalled, libraryId, providerId));
+            => new Error("LIB013", string.Format(Text.ErrorLibraryAlreadyInstalled, libraryId, providerId));
 
         /// <summary>
         /// Library cannot be updated as updated version is already installed.
@@ -110,7 +131,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="newId"></param>
         /// <returns></returns>
         public static IError CouldNotUpdateDueToConflicts(string oldId, string newId)
-            => new Error("LIB011", string.Format(Text.ErrorLibraryCannotUpdateDueToConflicts, oldId, newId));
+            => new Error("LIB014", string.Format(Text.ErrorLibraryCannotUpdateDueToConflicts, oldId, newId));
 
         /// <summary>
         /// Library cannot be updated as new version does not have specified files.
@@ -120,7 +141,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="invalidFiles"></param>
         /// <returns></returns>
         public static IError CouldNotUpdateDueToFileConflicts(string libraryId, string newId, IReadOnlyList<string> invalidFiles)
-            => new Error("LIB012", string.Format(Text.ErrorLibraryCannotUpdateDueToFileConflicts, libraryId, newId, string.Join(", ", invalidFiles)));
+            => new Error("LIB015", string.Format(Text.ErrorLibraryCannotUpdateDueToFileConflicts, libraryId, newId, string.Join(", ", invalidFiles)));
 
         /// <summary>
         /// Restore errors due to conflicting libraries.
@@ -129,16 +150,15 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="conflictingLibraryIds"></param>
         /// <returns></returns>
         public static IError ConflictingLibrariesInManifest(string file, IReadOnlyList<string> conflictingLibraryIds)
-            => new Error("LIB013", string.Format(Text.ErrorConflictingLibraries, file, string.Join(", ", conflictingLibraryIds)));
+            => new Error("LIB016", string.Format(Text.ErrorConflictingLibraries, file, string.Join(", ", conflictingLibraryIds)));
 
         /// <summary>
         /// Library cannot be installed as conflicting libraries are installed.
         /// </summary>
-        /// <param name="libraryId"></param>
-        /// <param name="conflictingLibraries"></param>
         /// <param name="file"></param>
+        /// <param name="conflictingLibraries"></param>
         /// <returns></returns>
         public static IError LibraryCannotBeInstalledDueToConflicts(string file, List<string> conflictingLibraries)
-        => new Error("LIB014", string.Format(Text.ErrorLibraryCannotInstallDueToConflicts, file, string.Join(", ", conflictingLibraries)));
+            => new Error("LIB017", string.Format(Text.ErrorLibraryCannotInstallDueToConflicts, file, string.Join(", ", conflictingLibraries)));
     }
 }

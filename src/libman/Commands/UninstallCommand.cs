@@ -70,9 +70,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 libraryToUninstall = installedLibraries.First();
             }
 
-            Action<string> deleteFileAction = (s) => HostInteractions.DeleteFiles(s);
+            Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
-            manifest.Uninstall(libraryToUninstall, deleteFileAction);
+            await manifest.UninstallAsync(libraryToUninstall, deleteFileAction, CancellationToken.None);
 
             await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
 

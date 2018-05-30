@@ -1,7 +1,11 @@
-﻿using Microsoft.Web.LibraryManager.Contracts;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -36,6 +40,10 @@ namespace Microsoft.Web.LibraryManager
             if (string.IsNullOrEmpty(state.DestinationPath))
             {
                 list.Add(PredefinedErrors.PathIsUndefined());
+            }
+            else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            {
+                list.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
             }
 
             if (string.IsNullOrEmpty(state.LibraryId))

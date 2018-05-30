@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             int result = command.Execute();
             Assert.AreEqual(0, result);
 
-            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "core.js")));
 
             var logger = HostEnvironment.Logger as TestLogger;

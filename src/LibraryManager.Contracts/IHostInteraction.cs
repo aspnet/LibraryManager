@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,11 +35,36 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// Writes a file to disk based on the specified <see cref="ILibraryInstallationState"/>.
         /// </summary>
-        /// <param name="path">The full file path</param>
+        /// <param name="filePath">The relative file path to the WorkingDirectory </param>
         /// <param name="content">The content of the file to write.</param>
         /// <param name="state">The desired state of the finished installed library.</param>
         /// <param name="cancellationToken">A token that allows cancellation of the file writing.</param>
         /// <returns><code>True</code> if no issues occured while executing this method; otherwise <code>False</code>.</returns>
-        Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken);
+        Task<bool> WriteFileAsync(string filePath, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Deletes files based on the given collection of relative paths to the WorkingDirectory
+        /// </summary>
+        /// <param name="filePaths"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> DeleteFilesAsync(IEnumerable<string> filePaths, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Reads a file as a Stream 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Stream> ReadFileAsync(string filePath, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourcePath"></param>
+        /// <param name="destinationPath"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken);
     }
 }

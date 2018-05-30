@@ -17,6 +17,10 @@
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="System.Net.Http" Version="$(SystemNetHttpPackageVersion)" Condition="'$(TargetFramework)' != 'netstandard1.3'" />
+    </ItemGroup>
+
   <!-- Warning if Multilingual App Toolkit isn't installed -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
     <Target Name="MATPrerequisite" BeforeTargets="PrepareForBuild" Condition="!Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets')" Label="MultilingualAppToolkit">
@@ -33,7 +37,6 @@
     <ItemGroup>
       <XliffResource Include="MultilingualResources\*.xlf" />
     </ItemGroup>
-
     <ItemGroup>
       <Compile Update="Resources\Text.Designer.cs">
         <DesignTime>True</DesignTime>

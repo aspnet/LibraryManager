@@ -70,33 +70,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean libraries failed.
-        /// </summary>
-        public static string CleanLibrariesFailed {
-            get {
-                return ResourceManager.GetString("CleanLibrariesFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Clean libraries started....
-        /// </summary>
-        public static string CleanLibrariesStarted {
-            get {
-                return ResourceManager.GetString("CleanLibrariesStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Clean libraries succeeded.
-        /// </summary>
-        public static string CleanLibrariesSucceeded {
-            get {
-                return ResourceManager.GetString("CleanLibrariesSucceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Disable Restore on Build.
         /// </summary>
         public static string DisableRestoreOnBuild {
@@ -115,11 +88,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
+        ///   Looks up a localized string similar to Could not add libraries to project.
         /// </summary>
-        public static string LibraryRestoredNoChange {
+        public static string FailToAddLibrariesToProject {
             get {
-                return ResourceManager.GetString("LibraryRestoredNoChange", resourceCulture);
+                return ResourceManager.GetString("FailToAddLibrariesToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not delete libraries from project.
+        /// </summary>
+        public static string FailToDeleteLibrariesFromProject {
+            get {
+                return ResourceManager.GetString("FailToDeleteLibrariesFromProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library {0} was successfuly added to project.
+        /// </summary>
+        public static string LibraryAddedToProject {
+            get {
+                return ResourceManager.GetString("LibraryAddedToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library {0} was successfuly deleted from project.
+        /// </summary>
+        public static string LibraryDeletedFromProject {
+            get {
+                return ResourceManager.GetString("LibraryDeletedFromProject", resourceCulture);
             }
         }
         

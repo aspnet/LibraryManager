@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             OleMenuCommand button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem;
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
             if (item?.ContainingProject == null || !item.ContainingProject.IsSupported())
             {
@@ -52,17 +52,25 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             Telemetry.TrackUserTask("installdialogopened");
 
-            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
-            string target = item.FileNames[1];
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
-            Project project = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.ContainingProject;
-            string rootFolder = project.GetRootFolder();
+            if (item != null)
+            {
+                string target = item.FileNames[1];
 
-            string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-            IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+                Project project = VsHelpers.GetSelectedItemProject();
 
-            UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target);
-            dialog.ShowDialog();
+                if (project != null)
+                {
+                    string rootFolder = project.GetRootFolder();
+
+                    string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
+                    IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+
+                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target);
+                    dialog.ShowDialog();
+                }
+            }
         }
     }
 }

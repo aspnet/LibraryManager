@@ -92,7 +92,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
 
-            Action<string> deleteFileAction = (s) => HostEnvironment.HostInteraction.DeleteFiles(s);
+            Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
             ILibraryInstallationResult result = ToVersion.HasValue()
                 ? await manifest.UpdateLibraryAsync(libraryToUpdate, ToVersion.Value(), deleteFileAction, CancellationToken.None)

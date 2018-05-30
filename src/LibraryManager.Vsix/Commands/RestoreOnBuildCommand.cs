@@ -53,9 +53,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
             }
 
-            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
-            if (item.IsConfigFile() && (item.ContainingProject.IsKind(Constants.WAP) || 
+            if (item != null && item.IsConfigFile() && (item.ContainingProject.IsKind(Constants.WAP) || 
                 VsHelpers.IsCapabilityMatch(item.ContainingProject, Constants.DotNetCoreWebCapability)))
             {
                 button.Visible = true;
@@ -76,7 +76,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private void Execute(object sender, EventArgs e)
         {
-            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+            ProjectItem item = VsHelpers.GetSelectedItem();
+            Project project = VsHelpers.GetProjectOfSelectedItem();
 
             try
             {
@@ -97,7 +98,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                             foreach (string packageId in packageIds)
                             {
                                 IVsPackageInstaller2 installer = _componentModel.GetService<IVsPackageInstaller2>();
-                                installer.InstallLatestPackage(null, item.ContainingProject, packageId, true, false);
+                                installer.InstallLatestPackage(null, project, packageId, true, false);
                             }
 
                             Telemetry.TrackUserTask("InstallNugetPackage");
@@ -121,7 +122,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                             foreach (string packageId in packageIds)
                             {
                                 IVsPackageUninstaller uninstaller = _componentModel.GetService<IVsPackageUninstaller>();
-                                uninstaller.UninstallPackage(item.ContainingProject, packageId, false);
+                                uninstaller.UninstallPackage(project, packageId, false);
                             }
 
                             Telemetry.TrackUserTask("UninstallNugetPackage");

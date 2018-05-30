@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -115,6 +116,28 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         public void UpdateWorkingDirectory(string directory)
         {
             WorkingDirectory = directory;
+        }
+
+        public Task<bool> DeleteFilesAsync(IEnumerable<string> filePaths, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                filePaths = filePaths.Select(f => Path.Combine(WorkingDirectory, f));
+                return FileHelpers.DeleteFiles(filePaths);
+            }, cancellationToken);
+        }
+
+        public Task<Stream> ReadFileAsync(string relativeFilePath, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return FileHelpers.ReadFileAsStreamAsync(relativeFilePath, cancellationToken);
+        }
+
+        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

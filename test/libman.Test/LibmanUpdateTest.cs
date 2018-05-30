@@ -256,7 +256,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             Assert.AreEqual(LogLevel.Error, logger.Messages.Last().Key);
 
-            string expectedMessage = "[LIB012]: The library \"jquery@2.2.0\" could not be updated to \"twitter-bootstrap@4.0.0\". The following files are not valid for the \"twitter-bootstrap@4.0.0\": jquery.min.js, jquery.js";
+            string expectedMessage = "[LIB015]: The library \"jquery@2.2.0\" could not be updated to \"twitter-bootstrap@4.0.0\". The following files are not valid for the \"twitter-bootstrap@4.0.0\": jquery.min.js, jquery.js";
 
             Assert.AreEqual(expectedMessage, logger.Messages.Last().Value);
         }

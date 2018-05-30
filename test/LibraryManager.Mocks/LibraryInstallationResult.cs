@@ -72,6 +72,14 @@ namespace Microsoft.Web.LibraryManager.Mocks
         }
 
         /// <summary>
+        /// </summary>
+        public virtual bool UpToDate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Creates a new <see cref="LibraryInstallationResult"/> that is in a successfull state.
         /// </summary>
         public static LibraryInstallationResult FromSuccess()

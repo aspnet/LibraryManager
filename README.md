@@ -2,7 +2,9 @@
 
 Install and consume 3rd-party client-side libraries with ease.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/vc2ixijbk1ak780e?svg=true)](https://ci.appveyor.com/project/madskristensen/LibraryManager)
+[![AppVeyor build status][appveyor-badge]](https://ci.appveyor.com/project/aspnetci/librarymanager/branch/master)
+
+[appveyor-badge]: https://img.shields.io/appveyor/ci/aspnetci/librarymanager/master.svg?label=appveyor&style=flat-square
 
 ## Reasons to use LibMan
 1.	For apps not currently using another package manager
