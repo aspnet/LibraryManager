@@ -138,10 +138,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
                     string directoryPath = Path.GetDirectoryName(filePath);
                     if (Directory.Exists(directoryPath))
                     {
-                        if (!directories.Contains(directoryPath))
-                        {
-                            directories.Add(directoryPath);
-                        }
+                        directories.Add(directoryPath);
                     }
                 }
 

@@ -230,7 +230,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
             {
-                return true;
+                return false;
             }
 
             int batchSize = 10;
@@ -452,6 +452,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
+            HashSet<ProjectItem> folders = new HashSet<ProjectItem>();
 
             try
             {
@@ -465,13 +466,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     cancellationToken.ThrowIfCancellationRequested();
 
                     ProjectItem item = DTE.Solution.FindProjectItem(filePath);
+
                     if (item != null)
                     {
-                        string itemName = item.Name;
+                        ProjectItem parentFolder = item.Collection.Parent as ProjectItem;
+                        folders.Add(parentFolder);
                         item.Delete();
                         logAction.Invoke(string.Format(Resources.Text.LibraryDeletedFromProject, filePath.Replace('\\', '/')), LogLevel.Operation);
                     }
                 }
+
+                DeleteEmptyFolders(folders);
             }
             catch (Exception)
             {
@@ -490,5 +495,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return true;
         }
 
+        private static void DeleteEmptyFolders(HashSet<ProjectItem> folders)
+        {
+            foreach (ProjectItem folder in folders)
+            {
+                if (folder.ProjectItems.Count == 0)
+                {
+                    folder.Delete();
+                }
+            }
+        }
     }
 }
