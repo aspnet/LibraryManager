@@ -1,33 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
   <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="zh-Hans" build-num="bb1380375926">
-    <header>
-    </header>
+    <header />
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
           <source xml:lang="en">Add Client-Side Library...</source>
-          <target xml:lang="zh-Hans" state="needs-review-translation" state-qualifier="mt-suggestion">添加客户端库...</target>
+          <target state="translated">添加客户端库...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
           <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target xml:lang="zh-Hans" state="needs-review-translation" state-qualifier="mt-suggestion">恢复客户端库</target>
+          <target state="translated">还原客户端库</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
           <source xml:lang="en">Clean</source>
-          <target xml:lang="zh-Hans" state="needs-review-translation" state-qualifier="mt-suggestion">清除</target>
+          <target state="translated">清理</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
           <source xml:lang="en">Enable Restore on Build...</source>
-          <target xml:lang="zh-Hans" state="needs-review-translation" state-qualifier="mt-suggestion">启用还原生成...</target>
+          <target state="translated">在内部版本上启用还原...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
           <source xml:lang="en">Manage Client-Side Libraries...</source>
-          <target xml:lang="zh-Hans" state="needs-review-translation" state-qualifier="mt-suggestion">管理客户端库...</target>
+          <target state="translated">管理客户端库...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
           <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target xml:lang="zh-Hans" state="needs-review-translation" state-qualifier="mt-suggestion">恢复客户端库</target>
+          <target state="translated">还原客户端库</target>
         </trans-unit>
       </group>
     </body>

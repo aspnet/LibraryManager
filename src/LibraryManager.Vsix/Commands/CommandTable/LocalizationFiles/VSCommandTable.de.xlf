@@ -1,34 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
   <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="de" build-num="bb1380375926">
-    <header>
-    </header>
+    <header />
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
           <source xml:lang="en">Add Client-Side Library...</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Clientseitige Bibliothek hinzufügen</target>
+          <target state="translated">Clientseitige Bibliothek hinzufügen...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
           <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Clientseitige wiederherstellen</target>
+          <target state="translated">Clientseitige Bibliotheken wiederherstellen</target>
           <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="2.55" curWordcount="2.55"</note>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
           <source xml:lang="en">Clean</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Bereinigen</target>
+          <target state="translated">Bereinigen</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
           <source xml:lang="en">Enable Restore on Build...</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Aktivieren Sie auf Build...</target>
+          <target state="translated">Wiederherstellung bei Build aktivieren...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
           <source xml:lang="en">Manage Client-Side Libraries...</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Verwalten Sie clientseitige Bibliotheken...</target>
+          <target state="translated">Clientseitige Bibliotheken verwalten...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
           <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Clientseitige wiederherstellen</target>
+          <target state="translated">Clientseitige Bibliotheken wiederherstellen</target>
         </trans-unit>
       </group>
     </body>
