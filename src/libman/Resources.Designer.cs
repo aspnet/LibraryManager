@@ -782,6 +782,24 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to update &quot;{0}&quot; to &quot;{1}&quot;.
+        /// </summary>
+        internal static string UpdateLibraryFailed {
+            get {
+                return ResourceManager.GetString("UpdateLibraryFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update &quot;{0}&quot; to latest.
+        /// </summary>
+        internal static string UpdateLibraryToLatestFailed {
+            get {
+                return ResourceManager.GetString("UpdateLibraryToLatestFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use --provider to disambiguate libraries of same name from different providers in the project.
         /// </summary>
         internal static string UseProviderToDisambiguateMessage {

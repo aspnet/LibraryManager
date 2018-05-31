@@ -86,11 +86,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 libraryToUpdate = installedLibraries.First();
             }
 
-            if (ToVersion.HasValue())
-            {
-                await ValidateToVersionIsValidAsync(libraryToUpdate, ToVersion.Value(), manifest, CancellationToken.None);
-            }
-
             Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
             ILibraryInstallationResult result = ToVersion.HasValue()
@@ -111,7 +106,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
             else if (result.Errors != null)
             {
-                Logger.Log(Resources.InstallLibraryFailed, LogLevel.Error);
+                if (ToVersion.HasValue())
+                {
+                    Logger.Log(string.Format(Resources.UpdateLibraryFailed, libraryToUpdate.LibraryId, ToVersion.Value()), LogLevel.Error);
+                }
+                else
+                {
+                    Logger.Log(string.Format(Resources.UpdateLibraryToLatestFailed, libraryToUpdate.LibraryId), LogLevel.Error);
+                }
                 foreach (IError error in result.Errors)
                 {
                     Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
@@ -119,15 +121,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
             return 0;
-        }
-
-        private async Task ValidateToVersionIsValidAsync(ILibraryInstallationState libraryToUpdate, string newId, Manifest manifest, CancellationToken cancellationToken)
-        {
-            IProvider providerToUse = ManifestDependencies.GetProvider(libraryToUpdate.ProviderId ?? manifest.DefaultProvider);
-            ILibraryCatalog libraryCatalog = providerToUse.GetCatalog();
-
-            // This will throw if the newId is not a valid libraryId for the given provider.
-            ILibrary newLib = await libraryCatalog.GetLibraryAsync(newId, cancellationToken);
         }
 
         private async Task<IEnumerable<ILibraryInstallationState>> ValidateParametersAndGetLibrariesToUninstallAsync(

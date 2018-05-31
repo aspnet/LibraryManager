@@ -410,7 +410,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(1, result.Errors.Count);
-            Assert.AreEqual("LIB015", result.Errors[0].Code);
+            Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
 
         [DataTestMethod]

@@ -245,8 +245,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             int result = command.Execute("jquery@2.2.0", "--to", "twitter-bootstrap@4.0.0");
 
-            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
-            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
+            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
 
             string actualText = File.ReadAllText(libmanjsonPath);
 
@@ -256,9 +256,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             Assert.AreEqual(LogLevel.Error, logger.Messages.Last().Key);
 
-            string expectedMessage = "[LIB015]: The library \"jquery@2.2.0\" could not be updated to \"twitter-bootstrap@4.0.0\". The following files are not valid for the \"twitter-bootstrap@4.0.0\": jquery.min.js, jquery.js";
+            string expectedMessage = "Failed to update \"jquery@2.2.0\" to \"twitter-bootstrap@4.0.0\"";
 
-            Assert.AreEqual(expectedMessage, logger.Messages.Last().Value);
+            Assert.AreEqual(expectedMessage, logger.Messages[3].Value);
         }
     }
 }

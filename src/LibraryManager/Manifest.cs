@@ -358,21 +358,6 @@ namespace Microsoft.Web.LibraryManager
                 desiredState.IsUsingDefaultProvider = libraryState.IsUsingDefaultProvider;
             }
 
-            if (CheckAlreadyInstalled(desiredState))
-            {
-                IError error = PredefinedErrors.CouldNotUpdateDueToConflicts(libraryToUpdate.LibraryId, desiredState.LibraryId);
-                return LibraryInstallationResult.FromError(error);
-            }
-
-            ILibrary desiredLibrary = await catalog.GetLibraryAsync(newId, cancellationToken);
-            IReadOnlyList<string> invalidFiles = desiredLibrary.GetInvalidFiles(libraryToUpdate.Files);
-
-            if (invalidFiles != null && invalidFiles.Any())
-            {
-                IError error = PredefinedErrors.CouldNotUpdateDueToFileConflicts(libraryToUpdate.LibraryId, newId, invalidFiles);
-                return LibraryInstallationResult.FromError(error);
-            }
-
             ILibraryInstallationResult uninstallationResult = await UninstallAsync(libraryToUpdate, deleteFileAction, cancellationToken);
 
             if (!uninstallationResult.Success)
