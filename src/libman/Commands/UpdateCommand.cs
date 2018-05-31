@@ -136,11 +136,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 if (ToVersion.HasValue())
                 {
-                    Logger.Log(string.Format(Resources.UpdateLibraryFailed, libraryToUpdate.LibraryId, ToVersion.Value()), LogLevel.Error);
+                    Logger.Log(string.Format(Resources.UpdateLibraryFailed, oldLibraryId, ToVersion.Value()), LogLevel.Error);
                 }
                 else
                 {
-                    Logger.Log(string.Format(Resources.UpdateLibraryToLatestFailed, libraryToUpdate.LibraryId), LogLevel.Error);
+                    Logger.Log(string.Format(Resources.UpdateLibraryToLatestFailed, oldLibraryId), LogLevel.Error);
                 }
                 foreach (IError error in result.Errors)
                 {

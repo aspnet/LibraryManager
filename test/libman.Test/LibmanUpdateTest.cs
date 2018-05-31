@@ -258,7 +258,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             string expectedMessage = "Failed to update \"jquery@2.2.0\" to \"twitter-bootstrap@4.0.0\"";
 
-            Assert.AreEqual(expectedMessage, logger.Messages[3].Value);
+            Assert.IsTrue(logger.Messages.Any(m => m.Value == expectedMessage));
         }
     }
 }

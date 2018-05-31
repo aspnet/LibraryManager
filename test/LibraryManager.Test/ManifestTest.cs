@@ -354,65 +354,6 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public async Task UpdateToLatestVersionAsync_ThrowsException()
-        {
-            var manifest = Manifest.FromJson("{}", _dependencies);
-
-            Task<bool> deleteFileAction(IEnumerable<string> s) => _hostInteraction.DeleteFilesAsync(s, CancellationToken.None);
-            await manifest.UpdateLibraryToLatestAsync(null, false, deleteFileAction, CancellationToken.None);
-        }
-
-        [TestMethod]
-        public async Task UpdateToLatestVersionAsync()
-        {
-            var manifest = Manifest.FromJson(_docOldVersionLibrary, _dependencies);
-
-            Task<bool> deleteFileAction(IEnumerable<string> s) => _hostInteraction.DeleteFilesAsync(s, CancellationToken.None);
-            ILibraryInstallationState state = manifest.Libraries.First();
-
-            ILibraryInstallationResult result = await manifest.UpdateLibraryToLatestAsync(state, false, deleteFileAction, CancellationToken.None);
-
-            Assert.IsTrue(result.Success);
-
-            Assert.AreEqual("jquery@3.3.1", result.InstallationState.LibraryId);
-
-            // Already upto date libraries should just return null result.
-            state = manifest.Libraries.First();
-            result = await manifest.UpdateLibraryToLatestAsync(state, false, deleteFileAction, CancellationToken.None);
-
-            Assert.IsNull(result);
-        }
-
-        [TestMethod]
-        public async Task UpdateLibraryAsync()
-        {
-            var manifest = Manifest.FromJson(_docOldVersionLibrary, _dependencies);
-
-            Task<bool> deleteFileAction(IEnumerable<string> s) => _hostInteraction.DeleteFilesAsync(s, CancellationToken.None);
-            ILibraryInstallationState state = manifest.Libraries.First();
-
-            ILibraryInstallationResult result = await manifest.UpdateLibraryAsync(state, "jquery@3.3.1", deleteFileAction, CancellationToken.None);
-
-            Assert.IsTrue(result.Success);
-
-            Assert.AreEqual("jquery@3.3.1", result.InstallationState.LibraryId);
-
-            // Already upto date libraries should just return null result.
-            state = manifest.Libraries.First();
-            result = await manifest.UpdateLibraryToLatestAsync(state, false, deleteFileAction, CancellationToken.None);
-
-            Assert.IsNull(result);
-
-            // Try to update to a library that doesn't have the specified files.
-            result = await manifest.UpdateLibraryAsync(state, "twitter-bootstrap@4.0.0", deleteFileAction, CancellationToken.None);
-
-            Assert.IsFalse(result.Success);
-            Assert.AreEqual(1, result.Errors.Count);
-            Assert.AreEqual("LIB018", result.Errors[0].Code);
-        }
-
         [DataTestMethod]
         [DataRow("1.5")]
         [DataRow("2.0")]
