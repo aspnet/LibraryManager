@@ -111,6 +111,19 @@ namespace Microsoft.Web.LibraryManager
             }
         }
 
+        /// <summary>
+        /// Removes the library from the <see cref="Libraries"/>
+        /// </summary>
+        /// <param name="libraryToUpdate"></param>
+        /// <param name="newlibraryId"></param>
+        public void ReplaceLibraryId(ILibraryInstallationState libraryToUpdate, string newlibraryId)
+        {
+            if (libraryToUpdate != null && libraryToUpdate is LibraryInstallationState state)
+            {
+                state.LibraryId = newlibraryId;
+            }
+        }
+
         private static void UpdateLibraryProviderAndDestination(Manifest manifest)
         {
             foreach (LibraryInstallationState state in manifest.Libraries.Cast<LibraryInstallationState>())
@@ -139,6 +152,35 @@ namespace Microsoft.Web.LibraryManager
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Creates a deep copy of the manifest.
+        /// </summary>
+        /// <returns></returns>
+        public Manifest Clone()
+        {
+            var manifest = new Manifest(_dependencies)
+            {
+                Version = Version
+            };
+
+            foreach (LibraryInstallationState lib in _libraries.Cast<LibraryInstallationState>())
+            {
+                var newState = new LibraryInstallationState()
+                {
+                    LibraryId = lib.LibraryId,
+                    DestinationPath = lib.DestinationPath,
+                    Files = lib.Files == null ? null : new List<string>(lib.Files),
+                    ProviderId = lib.ProviderId,
+                    IsUsingDefaultDestination = lib.IsUsingDefaultDestination,
+                    IsUsingDefaultProvider = lib.IsUsingDefaultProvider
+                };
+
+                manifest._libraries.Add(newState);
+            }
+
+            return manifest;
         }
 
         /// <summary>

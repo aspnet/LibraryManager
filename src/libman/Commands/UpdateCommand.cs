@@ -86,23 +86,51 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 libraryToUpdate = installedLibraries.First();
             }
 
-            Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
+            string newLibraryId = ToVersion.HasValue() ? ToVersion.Value() : null;
 
-            ILibraryInstallationResult result = ToVersion.HasValue()
-                ? await manifest.UpdateLibraryAsync(libraryToUpdate, ToVersion.Value(), deleteFileAction, CancellationToken.None)
-                : await manifest.UpdateLibraryToLatestAsync(libraryToUpdate, PreRelease.HasValue(), deleteFileAction, CancellationToken.None);
-
-            if (result == null || result.UpToDate)
+            if (newLibraryId == null)
             {
-                // We already have latest version.
-                Logger.Log(string.Format(Resources.LatestVersionAlreadyInstalled, libraryToUpdate.LibraryId), LogLevel.Operation);
+                newLibraryId = await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
+            }
 
+            if (newLibraryId == null || newLibraryId == libraryToUpdate.LibraryId)
+            {
+                Logger.Log(string.Format(Resources.LatestVersionAlreadyInstalled, libraryToUpdate.LibraryId), LogLevel.Operation);
                 return 0;
+            }
+
+            Manifest backup = manifest.Clone();
+            string oldLibraryId = libraryToUpdate.LibraryId;
+            manifest.ReplaceLibraryId(libraryToUpdate, newLibraryId);
+
+            // Delete files from old version of the library.
+            await backup.RemoveUnwantedFilesAsync(manifest, CancellationToken.None);
+
+            IEnumerable<ILibraryInstallationResult> results = await manifest.RestoreAsync(CancellationToken.None);
+
+            ILibraryInstallationResult result = null;
+
+            foreach (ILibraryInstallationResult r in results)
+            {
+                if (!r.Success && r.Errors.Any(e => e.Message.Contains(libraryToUpdate.LibraryId)))
+                {
+                    result = r;
+                    break;
+                }
+                else if (r.Success
+                    && r.InstallationState.LibraryId == libraryToUpdate.LibraryId
+                    && r.InstallationState.ProviderId == libraryToUpdate.ProviderId
+                    && r.InstallationState.DestinationPath == libraryToUpdate.DestinationPath)
+                {
+                    result = r;
+                    break;
+                }
             }
 
             if (result.Success)
             {
                 await manifest.SaveAsync(HostEnvironment.EnvironmentSettings.ManifestFileName, CancellationToken.None);
+                Logger.Log(string.Format(Resources.LibraryUpdated, oldLibraryId, newLibraryId), LogLevel.Operation);
             }
             else if (result.Errors != null)
             {
@@ -121,6 +149,24 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
             return 0;
+        }
+
+        private async Task<string> GetLatestVersionAsync(ILibraryInstallationState libraryToUpdate, CancellationToken cancellationToken)
+        {
+            ILibraryCatalog catalog = ManifestDependencies.GetProvider(libraryToUpdate.ProviderId)?.GetCatalog();
+            if (catalog == null)
+            {
+                throw new InvalidOperationException(PredefinedErrors.LibraryIdIsUndefined().Message);
+            }
+
+            try
+            {
+                return await catalog.GetLatestVersion(libraryToUpdate.LibraryId, PreRelease.HasValue(), cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(string.Format(Resources.UnableToFindLatestVersionForLibrary, libraryToUpdate.LibraryId), ex);
+            }
         }
 
         private async Task<IEnumerable<ILibraryInstallationState>> ValidateParametersAndGetLibrariesToUninstallAsync(

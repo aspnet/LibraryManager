@@ -491,6 +491,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updated &quot;{0}&quot; to &quot;{1}&quot;.
+        /// </summary>
+        internal static string LibraryUpdated {
+            get {
+                return ResourceManager.GetString("LibraryUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to More than one library found with id &quot;{0}&quot;.
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUninstall {
@@ -633,6 +642,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         internal static string SuggestedIdsMessage {
             get {
                 return ResourceManager.GetString("SuggestedIdsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not determine the latest version for &quot;{0}&quot;.
+        /// </summary>
+        internal static string UnableToFindLatestVersionForLibrary {
+            get {
+                return ResourceManager.GetString("UnableToFindLatestVersionForLibrary", resourceCulture);
             }
         }
         

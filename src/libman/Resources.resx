@@ -382,4 +382,10 @@ Please specify a different destination.</value>
   <data name="UpdateLibraryToLatestFailed" xml:space="preserve">
     <value>Failed to update "{0}" to latest</value>
   </data>
+  <data name="LibraryUpdated" xml:space="preserve">
+    <value>Updated "{0}" to "{1}"</value>
+  </data>
+  <data name="UnableToFindLatestVersionForLibrary" xml:space="preserve">
+    <value>Could not determine the latest version for "{0}"</value>
+  </data>
 </root>
