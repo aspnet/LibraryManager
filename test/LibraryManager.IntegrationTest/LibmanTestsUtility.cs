@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Test.Apex.Editor;
 using Microsoft.Test.Apex.VisualStudio.Editor;
 using Omni.Common;
@@ -10,7 +9,28 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
     public class LibmanTestsUtility
     {
-        public static string WaitForCompletionEntries(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout)
+        public static void WaitForCompletionEntries(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout)
+        {
+            string errorMessage = WaitForCompletionEntriesHelper(editor, expectedCompletionEntries, caseInsensitive, timeout);
+
+            if (errorMessage != null)
+            {
+                string newErrorMessage = WaitForCompletionEntriesHelper(editor, expectedCompletionEntries, caseInsensitive, timeout);
+
+                if (newErrorMessage != null)
+                {
+                    errorMessage = String.Concat(errorMessage, "\r\nFailed even when forcing completion with double timeout");
+                }
+                else
+                {
+                    errorMessage = String.Concat(errorMessage, "\r\n*Didn't* fail when forcing completion with double timeout");
+                }
+
+                throw new TimeoutException(errorMessage);
+            }
+        }
+
+        private static string WaitForCompletionEntriesHelper(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout)
         {
             string errorMessage = null;
             WaitFor.TryIsTrue(() =>
@@ -24,11 +44,10 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                         return false;
                     }
 
-                    Dictionary<string, CompletionItem> comparisonSet = null;
-                    StringComparer comparer = caseInsensitive ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
-                    if (caseInsensitive)
+                    HashSet<string> comparisonSet = caseInsensitive ? new HashSet<string>(StringComparer.OrdinalIgnoreCase) : new HashSet<string>();
+                    foreach (CompletionItem item in completionList.Items)
                     {
-                        comparisonSet = completionList.Items.ToDictionary(x => x.Text, x => x, comparer);
+                        comparisonSet.Add(item.Text);
                     }
 
                     errorMessage = null;
@@ -36,18 +55,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                     {
                         foreach (string curEntry in expectedCompletionEntries)
                         {
-                            CompletionItem entry;
-
-                            if (caseInsensitive)
-                            {
-                                comparisonSet.TryGetValue(curEntry, out entry);
-                            }
-                            else
-                            {
-                                entry = completionList[curEntry];
-                            }
-
-                            if (entry == null)
+                            if (!comparisonSet.Contains(curEntry))
                             {
                                 errorMessage = String.Concat(errorMessage, "\r\nTimed out waiting for completion entry: ", curEntry, ".");
                             }

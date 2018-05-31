@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Test.Apex.VisualStudio;
 using Microsoft.Test.Apex.VisualStudio.Editor;
@@ -95,6 +96,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                         _instance.VisualStudio.ObjectModel.Solution.Close();
                     }
 
+                    PostMessage(_instance.VisualStudio.MainWindowHandle, 0x10, IntPtr.Zero, IntPtr.Zero); // WM_CLOSE
+                    visualStudioProcess.WaitForExit(5000);
+
                     if (!visualStudioProcess.HasExited)
                     {
                         visualStudioProcess.Kill();
@@ -103,5 +107,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
             catch (Exception) { }
         }
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
     }
 }
