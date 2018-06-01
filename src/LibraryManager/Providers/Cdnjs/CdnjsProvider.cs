@@ -19,7 +19,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private CdnjsCatalog _catalog;
         private CacheService _cacheService;
-        private string absolute;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdnjsProvider"/> class.
@@ -92,6 +91,27 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             desiredState = updateResult.InstallationState;
+
+            ILibraryCatalog catalog = GetCatalog();
+            ILibrary libraryMetadata = null;
+            try
+            {
+                libraryMetadata = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken);
+            }
+            catch (InvalidLibraryException)
+            {
+                return new LibraryInstallationResult(desiredState, new IError[] { PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId) });
+            }
+
+            if (libraryMetadata != null && desiredState.Files != null)
+            {
+                IReadOnlyList<string> invalidFiles = libraryMetadata.GetInvalidFiles(desiredState.Files);
+                if (invalidFiles.Any())
+                {
+                    var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, libraryMetadata.Files.Keys);
+                    return new LibraryInstallationResult(desiredState, invalidFilesError);
+                }
+            }
 
             // Refresh cache if needed
             ILibraryInstallationResult cacheUpdateResult = await RefreshCacheAsync(desiredState, cancellationToken);

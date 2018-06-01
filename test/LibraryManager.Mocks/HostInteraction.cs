@@ -93,7 +93,10 @@ namespace Microsoft.Web.LibraryManager.Mocks
             foreach (var path in relativeFilePaths)
             {
                 string absoluteFile = Path.Combine(WorkingDirectory, path);
-                File.Delete(absoluteFile);
+                if (File.Exists(absoluteFile))
+                {
+                    File.Delete(absoluteFile);
+                }
             }
 
             return Task.FromResult<bool>(true);

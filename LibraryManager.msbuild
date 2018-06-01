@@ -1,0 +1,113 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="Directory.Build.props" />
+  <Import Project="tools\ShimGenerator\ShimGenerator.targets" />
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <LibManSrc>$(RepoRoot)\src\</LibManSrc>
+    <LibManTest>$(RepoRoot)\test\</LibManTest>
+    <LibManArtifactsDir>$(RepoRoot)\artifacts\</LibManArtifactsDir>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <BaseOutputPath>$(RepoRoot)\bin\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(RepoRoot)\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SolutionToBuild Include="LibraryManager.sln" />
+    <CommonProjects Include="$(LibManSrc)LibraryManager\Microsoft.Web.LibraryManager.csproj" />
+    <CommonProjects Include="$(LibManSrc)LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
+    <VSIXProject Include="@(CommonProjects)" />
+    <VSIXProject Include="$(LibManSrc)LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj" />
+    <LibraryManagerBuildProject Include="@(CommonProjects)" />
+    <LibraryManagerBuildProject Include="$(LibManSrc)LibraryManager.Build\Microsoft.Web.LibraryManager.Build.csproj" />
+
+    <GlobalToolProject Include="$(LibmanSrc)libman\libman.csproj" />
+  </ItemGroup>
+
+<!-- 
+***********************************************************
+Build the RepoTasks project and publishes the output task
+dll to $(RepoTasksPublishDir)
+***********************************************************
+-->
+  <Target Name="BuildRepoTasks" Condition="Exists('$(RepoTasksDir)RepoTasks.csproj')">
+    <MSBuild Projects="$(RepoTasksDir)/RepoTasks.csproj"
+             Targets="Restore;Build;Publish"
+             Properties="PublishDir=$(RepoTasksPublishDir)" 
+             BuildInParallel="False" />
+  </Target>
+
+  <!--
+  *******************************************************************
+    Restores all projects in the repository
+  *******************************************************************
+   -->
+  <Target Name="Restore">
+    <MSBuild Projects="@(SolutionToBuild)" 
+             Targets="Restore" 
+             Properties="Configuration=$(Configuration);"/>
+  </Target>
+  <!-- Build VSIX -->
+  <Target Name="BuildVSIX" DependsOnTargets="Restore">
+    <MSBuild Projects="@(VSIXProject)" 
+             Targets="Build" 
+             Properties="Configuration=$(Configuration);"/>
+  </Target>
+  <!-- Build the MsBuild package -->
+  <Target Name="BuildLibraryManagerBuild" DependsOnTargets="Restore">
+    <MSBuild Projects="@(LibraryManagerBuildProject)"
+             Targets="Build"
+             Properties="Configuration=$(Configuration);"/>
+  </Target>
+
+<!-- 
+***********************************************************
+Publish the global tool.
+***********************************************************
+-->
+  <Target Name="PublishTool">
+    <MSBuild Targets="Restore;Build;Publish"
+             Projects="@(GlobalToolProject)" 
+             Properties="Configuration=$(Configuration);
+                         PublishDir=$(ToolPublishDir);"
+             BuildInParallel="false" />
+  </Target>
+
+<!-- 
+***********************************************************
+Package the global tool along with the Shims.
+***********************************************************
+-->
+  <Target Name="PackGlobalTool" DependsOnTargets="BuildRepoTasks;PublishTool;GenerateShims">
+    <MSBuild Targets="Pack"
+             Projects="@(GlobalToolProject)"
+             Properties="IncludeBuildOutput=false;
+                         PublishDir=$(ToolPublishDir);
+                         PackageLicenseUrl=$(PackageLicenseUrl);
+                         PackageProjectUrl=$(PackageProjectUrl);
+                         Copyright=$(Copyright);
+                         Description=$(Description);
+                         RepositoryUrl=$(RepositoryUrl);
+                         RepositoryCommit='abc';
+                         Serviceable=true" />
+    <!-- 
+    RepositoryCommit=$(RepositoryCommit);
+                         PackageVersion=$(PackageVersion); -->
+  </Target>
+
+<!--
+************************************************************
+Build the test projects.
+************************************************************
+-->
+  <Target Name="BuildTestProjects">
+    <ItemGroup>
+      <TestProjects Include="$(RepoRoot)\test\**\*.csproj" />
+    </ItemGroup>
+    <MSBuild Targets="Build"
+             Projects="@(TestProjects)"
+             Properties="Configuration=$(Configuration);" />
+  </Target>
+
+
+  <Target Name="BuildAll" DependsOnTargets="BuildLibraryManagerBuild;BuildVSIX;PackGlobalTool;BuildTestProjects" />
+</Project>

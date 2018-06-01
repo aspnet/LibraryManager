@@ -133,7 +133,11 @@
     <value>Libraries restore has been cancelled</value>
   </data>
   <data name="RestoringLibrary" xml:space="preserve">
-    <value>Restoring library {0}...</value>
+    <value>Restoring {0} -&gt; {1}</value>
+  </data>
+  <data name="RestoringLibraries" xml:space="preserve">
+    <value>Restoring libraries...</value>
+    <comment>Status message</comment>
   </data>
   <data name="LibrariesRestored" xml:space="preserve">
     <value>{0} libraries restored in {1} seconds</value>

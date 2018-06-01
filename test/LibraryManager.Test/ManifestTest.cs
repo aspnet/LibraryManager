@@ -232,6 +232,17 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
+        public async Task RestorAsync_ConflictingLibraries()
+        {
+            var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
+
+            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.Last().Errors.Any(e => e.Code == "LIB016"), "LIB016 error code expected.");
+        }
+
+        [TestMethod]
         public void FromJson_Malformed()
         {
             var manifest = Manifest.FromJson("{", _dependencies);
@@ -289,6 +300,58 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual(1, result.Count());
             Assert.IsFalse(result.First().Success);
             Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB007"));
+        }
+
+        [TestMethod]
+        public async Task InstallLibraryAsync()
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            // Null LibraryId
+            ILibraryInstallationResult result = await manifest.InstallLibraryAsync(null, "cdnjs", null, "wwwroot", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB006", result.Errors[0].Code);
+
+            // Empty ProviderId
+            result = await manifest.InstallLibraryAsync("jquery@3.2.1", "", null, "wwwroot", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB007", result.Errors[0].Code);
+
+            // Null destination
+            result = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", null, null, CancellationToken.None);
+
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB005", result.Errors[0].Code);
+
+
+            // Valid Options all files.
+            result = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual("wwwroot", result.InstallationState.DestinationPath);
+            Assert.AreEqual("jquery@3.2.1", result.InstallationState.LibraryId);
+            Assert.AreEqual("cdnjs", result.InstallationState.ProviderId);
+            Assert.IsNotNull(result.InstallationState.Files);
+
+            // Valid parameters and files.
+            var files = new List<string>() { "jquery.min.js" };
+            result = await manifest.InstallLibraryAsync("jquery@2.2.0", "cdnjs", files, "wwwroot2", CancellationToken.None);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual("wwwroot2", result.InstallationState.DestinationPath);
+            Assert.AreEqual("jquery@2.2.0", result.InstallationState.LibraryId);
+            Assert.AreEqual("cdnjs", result.InstallationState.ProviderId);
+            Assert.AreEqual(1, result.InstallationState.Files.Count);
+            Assert.AreEqual("jquery.min.js", result.InstallationState.Files[0]);
+
+            // Valid parameters invalid files
+            files.Add("abc.js");
+            result = await manifest.InstallLibraryAsync("jquery@3.3.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
 
         [DataTestMethod]
@@ -385,6 +448,42 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
     }}
+  ]
+}}
+";
+        private string _docOldVersionLibrary = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.DefaultDestination}"": ""lib"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@2.2.0"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }}
+  ]
+}}
+";
+        private string _docConflictingLibraries = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
+      ""{ManifestConstants.Provider}"": ""filesystem"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@2.2.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
+    }},
   ]
 }}
 ";
