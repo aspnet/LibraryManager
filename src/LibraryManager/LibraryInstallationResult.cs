@@ -29,9 +29,11 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>Internal use only</summary>
         public LibraryInstallationResult(params IError[] error)
         {
-            var list = new List<IError>();
-            list.AddRange(error);
-            Errors = list;
+            Errors = new List<IError>();
+            foreach (IError e in error)
+            {
+                Errors.Add(e);
+            }
         }
 
         /// <summary>

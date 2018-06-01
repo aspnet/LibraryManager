@@ -554,8 +554,8 @@ namespace Microsoft.Web.LibraryManager
         {
             if (newManifest != null)
             {
-                IEnumerable<FileIdentifier> existingFiles = await GetAllManifestFilesWithVersionsAsync(Libraries).ConfigureAwait(false);
-                IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest.Libraries).ConfigureAwait(false);
+                ISet<FileIdentifier> existingFiles = await GetAllManifestFilesWithVersionsAsync(Libraries).ConfigureAwait(false);
+                ISet<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest.Libraries).ConfigureAwait(false);
                 IEnumerable<string> filesToRemove = existingFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Path);
 
                 if (filesToRemove.Any())
@@ -565,35 +565,36 @@ namespace Microsoft.Web.LibraryManager
                 }
             }
 
-            return false;
+            return true;
         }
 
-        private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(IEnumerable<ILibraryInstallationState> libraries)
+        private async Task<ISet<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(IEnumerable<ILibraryInstallationState> libraries)
         {
-            var files = new List<FileIdentifier>();
+            var files = new HashSet<FileIdentifier>();
 
-            if (libraries != null)
+            if (libraries == null)
             {
-                foreach (ILibraryInstallationState state in libraries.Where(l => l.IsValid(out IEnumerable<IError> errors)))
+                return files;
+            }
+
+            foreach (ILibraryInstallationState state in libraries.Where(l => l.IsValid(out _)))
+            {
+                IProvider provider = _dependencies.GetProvider(state.ProviderId);
+
+                if (provider == null)
                 {
-                    IProvider provider = _dependencies.GetProvider(state.ProviderId);
+                    continue;
+                }
 
-                    if (provider != null)
+                ILibraryInstallationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None);
+
+                if (updatedStateResult.Success)
+                {
+                    IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
+
+                    foreach (FileIdentifier fileIdentifier in stateFiles)
                     {
-                        ILibraryInstallationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None);
-
-                        if (updatedStateResult.Success)
-                        {
-                            IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
-
-                            foreach (FileIdentifier fileIdentifier in stateFiles)
-                            {
-                                if (!files.Contains(fileIdentifier))
-                                {
-                                    files.Add(fileIdentifier);
-                                }
-                            }
-                        }
+                        files.Add(fileIdentifier);
                     }
                 }
             }
@@ -604,8 +605,14 @@ namespace Microsoft.Web.LibraryManager
         private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
             ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
-            ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
             IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
+
+            if (catalog == null)
+            {
+                return filesWithVersions;
+            }
+
+            ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
 
             if (library != null && library.Files != null)
             {
@@ -649,7 +656,11 @@ namespace Microsoft.Web.LibraryManager
                         }
                     }
 
-                    bool success = await deleteFilesFunction?.Invoke(filesToDelete);
+                    bool success = true;
+                    if (deleteFilesFunction != null)
+                    {
+                        success = await deleteFilesFunction.Invoke(filesToDelete);
+                    }
 
                     if (success)
                     {

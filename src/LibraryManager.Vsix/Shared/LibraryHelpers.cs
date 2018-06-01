@@ -56,7 +56,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             foreach (KeyValuePair<string, Manifest> manifest in manifests)
             {
                 Project project = VsHelpers.GetDTEProjectFromConfig(manifest.Key);
-                Logger.LogEvent(string.Format("Restoring packages for {0}...", project.FullName), LogLevel.Operation);
+                Logger.LogEvent(string.Format(Resources.Text.RestoringLibrariesForProjectMessage, project.FullName), LogLevel.Operation);
 
                 IEnumerable<ILibraryInstallationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 

@@ -134,8 +134,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             else if (allCancelled)
             {
                 string canceledText = operation == OperationType.Clean ?
-                                    string.Format(LibraryManager.Resources.Text.RestoreLibrariesCancelled, totalResultsCounts):
-                                    string.Format(LibraryManager.Resources.Text.CleanLibrariesCancelled, totalResultsCounts);
+                                    string.Format(LibraryManager.Resources.Text.CleanLibrariesCancelled, totalResultsCounts):
+                                    string.Format(LibraryManager.Resources.Text.RestoreLibrariesCancelled, totalResultsCounts);
 
                 LogEvent(canceledText + Environment.NewLine, LogLevel.Operation);
             }

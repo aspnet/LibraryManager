@@ -89,7 +89,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &quot;{0}&quot; destination file path has invalid characters.
+        ///   Looks up a localized string similar to The destination file path &quot;{0}&quot; has invalid characters.
         /// </summary>
         internal static string ErrorDestinationPathHasInvalidCharacter {
             get {

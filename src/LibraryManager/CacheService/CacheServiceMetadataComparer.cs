@@ -29,7 +29,15 @@ namespace Microsoft.Web.LibraryManager
 
         public int GetHashCode(CacheServiceMetadata obj)
         {
-            return obj.GetHashCode();
+            if (obj == null)
+            {
+                return 0;
+            }
+
+            int destinationCode = obj.DestinationPath == null ? 0 : obj.DestinationPath.GetHashCode();
+            int sourceCode = obj.Source == null ? 0 : obj.Source.GetHashCode();
+
+            return destinationCode ^ sourceCode;
         }
     }
 }

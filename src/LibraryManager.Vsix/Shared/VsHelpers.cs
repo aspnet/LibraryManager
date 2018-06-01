@@ -119,11 +119,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
-            {
-                return;
-            }
-
             if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
             {
                 return;
@@ -228,9 +223,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static async Task<bool> DeleteFilesFromProjectAsync (Project project, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
-            if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
+            if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
             {
-                return false;
+                return true;
             }
 
             int batchSize = 10;
@@ -251,7 +246,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 await System.Threading.Tasks.Task.Yield();
 
-                int countToDelete = filesToRemove.Count() >= batchSize ? batchSize : filesToRemove.Count();
+                int countToDelete = Math.Min(filesToRemove.Count(), batchSize);
                 filesToRemove.RemoveRange(0, countToDelete);
             }
 

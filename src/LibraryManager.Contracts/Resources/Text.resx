@@ -139,7 +139,7 @@
     <value>The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</value>
   </data>
   <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
-    <value>The "{0}" destination file path has invalid characters</value>
+    <value>The destination file path "{0}" has invalid characters</value>
   </data>
   <data name="ErrorLibraryIdIsUndefined" xml:space="preserve">
     <value>The library id is undefined</value>

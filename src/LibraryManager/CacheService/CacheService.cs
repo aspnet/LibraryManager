@@ -16,21 +16,14 @@ namespace Microsoft.Web.LibraryManager
     internal class CacheService
     {
         // TO DO: Move these expirations to the provider 
-        private readonly int _catalogExpiresAfterDays = 3;
-        private readonly int _libraryExpiresAfterDays = 1;
+        private readonly int _catalogExpiresAfterDays = 1;
+        private readonly int _metadataExpiresAfterDays = 1;
+        private readonly int _libraryExpiresAfterDays = 30;
         private IWebRequestHandler _requestHandler;
 
         public CacheService(IWebRequestHandler requestHandler)
         {
             _requestHandler = requestHandler;
-        }
-
-        /// <summary>
-        /// Deletes files from cache 
-        /// </summary>
-        public void ClearCache()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -54,7 +47,7 @@ namespace Microsoft.Web.LibraryManager
         /// <returns></returns>
         public async Task<string> GetMetadataAsync(string url, string cacheFile, CancellationToken cancellationToken)
         {
-            return await GetResourceAsync(url, cacheFile, _libraryExpiresAfterDays, cancellationToken);
+            return await GetResourceAsync(url, cacheFile, _metadataExpiresAfterDays, cancellationToken);
         }
 
         /// <summary>

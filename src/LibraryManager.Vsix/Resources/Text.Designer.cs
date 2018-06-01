@@ -79,6 +79,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time Elapsed: {0}.
+        /// </summary>
+        public static string ElapsedTimeMessage {
+            get {
+                return ResourceManager.GetString("ElapsedTimeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Restore on Build.
         /// </summary>
         public static string EnableRestoreOnBuild {
@@ -106,6 +115,33 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} libraries had restore cancelled.
+        /// </summary>
+        public static string LibrariesRestoreCancelledSummary {
+            get {
+                return ResourceManager.GetString("LibrariesRestoreCancelledSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} libraries restored successfully.
+        /// </summary>
+        public static string LibrariesRestoredSuccessfullySummary {
+            get {
+                return ResourceManager.GetString("LibrariesRestoredSuccessfullySummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} libraries failed to restore.
+        /// </summary>
+        public static string LibrariesRestoreFailedSummary {
+            get {
+                return ResourceManager.GetString("LibrariesRestoreFailedSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Library {0} was successfuly added to project.
         /// </summary>
         public static string LibraryAddedToProject {
@@ -120,6 +156,33 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         public static string LibraryDeletedFromProject {
             get {
                 return ResourceManager.GetString("LibraryDeletedFromProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelled restore of library: {0}.
+        /// </summary>
+        public static string LibraryRestoreCancelledMessage {
+            get {
+                return ResourceManager.GetString("LibraryRestoreCancelledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfuly restored library: {0}.
+        /// </summary>
+        public static string LibraryRestoredSuccessMessage {
+            get {
+                return ResourceManager.GetString("LibraryRestoredSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to restore library: {0}.
+        /// </summary>
+        public static string LibraryRestoreFailedMessage {
+            get {
+                return ResourceManager.GetString("LibraryRestoreFailedMessage", resourceCulture);
             }
         }
         
@@ -209,11 +272,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ========== Finished ==========.
+        /// </summary>
+        public static string OperationFinishedMessage {
+            get {
+                return ResourceManager.GetString("OperationFinishedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Packages could not be loaded.
         /// </summary>
         public static string PackagesCouldNotBeLoaded {
             get {
                 return ResourceManager.GetString("PackagesCouldNotBeLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restoring libraries completed.
+        /// </summary>
+        public static string RestoreLibrariesCompleted {
+            get {
+                return ResourceManager.GetString("RestoreLibrariesCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restoring libraries for {0}....
+        /// </summary>
+        public static string RestoringLibrariesForProjectMessage {
+            get {
+                return ResourceManager.GetString("RestoringLibrariesForProjectMessage", resourceCulture);
             }
         }
         

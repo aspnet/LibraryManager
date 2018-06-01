@@ -49,7 +49,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
             bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
             bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
 
-            Logger.LogEvent("Restoring libraries completed", LogLevel.Status);
+            Logger.LogEvent(Resources.Text.RestoreLibrariesCompleted, LogLevel.Status);
 
             if (allUpToDate)
             {
@@ -72,39 +72,39 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
             }
             else
             {
-                var summarySuccessText = string.Format("{0} libraries restored successfuly", successfulRestores.Count());
+                var summarySuccessText = string.Format(Resources.Text.LibrariesRestoredSuccessfullySummary, successfulRestores.Count());
                 Logger.LogEvent(summarySuccessText + Environment.NewLine, LogLevel.Operation);
                 foreach (var result in successfulRestores)
                 {
-                    var successText = string.Format("Successfuly restored library: {0}", result.InstallationState.LibraryId);
+                    var successText = string.Format(Resources.Text.LibraryRestoredSuccessMessage, result.InstallationState.LibraryId);
                     Logger.LogEvent(successText, LogLevel.Operation);
                 }
 
                 if (failedRestores.Any())
                 {
-                    var summaryErrorText = string.Format("{0} libraries failed to restore", failedRestores.Count());
+                    var summaryErrorText = string.Format(Resources.Text.LibrariesRestoreFailedSummary, failedRestores.Count());
                     Logger.LogEvent(Environment.NewLine + summaryErrorText + Environment.NewLine, LogLevel.Operation);
                     foreach (var result in failedRestores)
                     {
-                        var errorText = string.Format("Failed to restore library: {0}", result.InstallationState.LibraryId);
+                        var errorText = string.Format(Resources.Text.LibraryRestoreFailedMessage, result.InstallationState.LibraryId);
                         Logger.LogEvent(errorText, LogLevel.Operation);
                     }
                 }
 
                 if (cancelledRestores.Any())
                 {
-                    var summaryCancellationText = string.Format("{0} libraries had restore cancelled", cancelledRestores.Count());
+                    var summaryCancellationText = string.Format(Resources.Text.LibrariesRestoreCancelledSummary, cancelledRestores.Count());
                     Logger.LogEvent(Environment.NewLine + summaryCancellationText + Environment.NewLine, LogLevel.Operation);
                     foreach (var result in cancelledRestores)
                     {
-                        var cancellationText = string.Format("Cancelled restore of library: {0}", result.InstallationState.LibraryId);
+                        var cancellationText = string.Format(Resources.Text.LibraryRestoreCancelledMessage, result.InstallationState.LibraryId);
                         Logger.LogEvent(cancellationText, LogLevel.Operation);
                     }
                 }
             }
 
-            Logger.LogEvent(string.Format("Time Elapsed: {0}", elapsedTime), LogLevel.Operation);
-            Logger.LogEvent("========== Finished ==========" + Environment.NewLine, LogLevel.Operation);
+            Logger.LogEvent(string.Format(Resources.Text.ElapsedTimeMessage, elapsedTime), LogLevel.Operation);
+            Logger.LogEvent(Resources.Text.OperationFinishedMessage + Environment.NewLine, LogLevel.Operation);
         }
     }
 }
