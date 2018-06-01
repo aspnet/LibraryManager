@@ -17,3 +17,8 @@ artifacts:
 
   - path: src\**\Microsoft.Web.LibraryManager.json
     name: Visual Studio Extension manifest
+
+test:
+  - assemblies:
+      except:
+        - test\LibraryManager.IntegrationTest\bin\Debug\net461\Microsoft.Web.LibraryManager.IntegrationTest.dll
