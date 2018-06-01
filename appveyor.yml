@@ -21,4 +21,4 @@ artifacts:
 test:
   assemblies:
     except:
-      - test\LibraryManager.IntegrationTest\bin\Debug\net461\Microsoft.Web.LibraryManager.IntegrationTest.dll
+      - test\LibraryManager.IntegrationTest\bin\Release\net461\Microsoft.Web.LibraryManager.IntegrationTest.dll
