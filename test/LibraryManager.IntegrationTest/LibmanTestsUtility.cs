@@ -9,7 +9,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
     public class LibmanTestsUtility
     {
-        public static void WaitForCompletionEntries(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout)
+        public static void WaitForCompletionEntries(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout = 1000)
         {
             string errorMessage = WaitForCompletionEntriesHelper(editor, expectedCompletionEntries, caseInsensitive, timeout);
 
@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             {
                 try
                 {
-                    IVisualStudioCompletionListTestExtension completionList = editor.Intellisense.GetActiveCompletionList();
+                    IVisualStudioCompletionListTestExtension completionList = editor.Intellisense.InvokeCompletionList();
                     if (completionList == null)
                     {
                         errorMessage = "Completion list not present.";
@@ -58,6 +58,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                             if (!comparisonSet.Contains(curEntry))
                             {
                                 errorMessage = String.Concat(errorMessage, "\r\nTimed out waiting for completion entry: ", curEntry, ".");
+                                completionList.Dismiss();
                             }
                         }
                     }

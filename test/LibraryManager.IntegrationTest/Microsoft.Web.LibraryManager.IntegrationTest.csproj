@@ -3,12 +3,6 @@
     <TargetFrameworks>net461</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove=".editorconfig" />
-    <None Remove="TestSolution\testFile.txt" />
-    <None Remove="TestSolution\WebApplication1\Web.Debug.config" />
-    <None Remove="TestSolution\WebApplication1\Web.Release.config" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="Microsoft.Test.Apex.VisualStudio" Version="15.8.27703" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.1" />
@@ -16,13 +10,12 @@
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TestSolution\**\*">
-      <LogicalName>TestSolution\%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-    </EmbeddedResource>
+    <Content Include="TestSolution\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="TestSolution\WebApplication1\Program.cs" />
-    <Compile Remove="TestSolution\WebApplication1\Startup.cs" />
+    <Compile Remove="TestSolution\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>

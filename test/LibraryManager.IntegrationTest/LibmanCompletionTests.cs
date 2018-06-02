@@ -5,13 +5,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
     [TestClass]
-    public class AutoCompletionTests : VisualStudioLibmanHostTest
+    public class LibmanCompletionTests : VisualStudioLibmanHostTest
     {
         [TestMethod]
-        public void AutoCompletion_ProvidePathForDestinationProperty()
+        public void LibCompletion_ProvidePathForDestinationProperty()
         {
             ProjectTestExtension webProject;
-            string projectName = "WebApplication1";
+            string projectName = "TestProjectCore20";
 
             webProject = Solution.ProjectsRecursive[projectName];
 
@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             libManConfig.Open();
             string[] expectedCompletionEntries = new [] {
                 "Properties/",
-                "wwwroot/"
+                "wwwroot/",
             };
 
             Editor.Caret.MoveToBeginningOfFile();
@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"destination\":");
 
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 10000);
+            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
         }
     }
 }

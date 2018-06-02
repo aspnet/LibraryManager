@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
     [TestClass]
+    [DeploymentItem(_rootDirectoryName, _rootDirectoryName)]
     public class VisualStudioLibmanHostTest : VisualStudioHostTest
     {
         // Solution consts
@@ -72,19 +73,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             _resultPath = context.DeploymentDirectory;
             _solutionRootPath = Path.Combine(_resultPath, _rootDirectoryName);
             _solutionPath = Path.Combine(_solutionRootPath, _testSolutionName);
-
-            // Deploy the TestSolution folder
-            FilesDeployer.DeployDirectory(Assembly.GetExecutingAssembly(), _resultPath, _rootDirectoryName);
         }
 
         [AssemblyCleanup()]
         public static void AssemblyCleanup()
         {
-            if (!string.IsNullOrEmpty(_solutionRootPath))
-            {
-                FilesDeployer.ForceDeleteDirectory(_solutionRootPath);
-            }
-
             try
             {
                 if (_instance != null)
