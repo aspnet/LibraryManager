@@ -8,7 +8,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     public class LibmanCompletionTests : VisualStudioLibmanHostTest
     {
         [TestMethod]
-        public void LibCompletion_ProvidePathForDestinationProperty()
+        public void LibmanCompletion_ProvidePathForDestinationProperty()
         {
             ProjectTestExtension webProject;
             string projectName = "TestProjectCore20";
@@ -24,8 +24,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
             Editor.Caret.MoveToBeginningOfFile();
             Editor.Caret.MoveDown(4);
-            Editor.Caret.MoveToEndOfLine();
-            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"destination\":");
 
             LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
