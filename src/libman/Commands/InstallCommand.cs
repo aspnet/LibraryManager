@@ -117,7 +117,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                     foreach (IError error in result.Errors)
                     {
                         Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
-                        if (error.Code == PredefinedErrors.LibraryCannotBeInstalledDueToConflicts("", new List<string>()).Code)
+                        if(error.Code == PredefinedErrors.ConflictingLibrariesInManifest("", new List<string>()).Code)
                         {
                             isFileConflicts = true;
                         }
