@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -12,13 +11,13 @@ using Microsoft.Web.LibraryManager.Vsix.Resources;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
-    internal class InstallDialogViewModel : BindableBase, INotifyPropertyChanged
+    internal class InstallDialogViewModel : BindableBase
     {
         private readonly Action<bool> _closeDialog;
         private readonly string _configFileName;
         private readonly IDependencies _deps;
         private readonly Dispatcher _dispatcher;
-        private string _targetPath;
+        private readonly string _targetPath;
         private IProvider _activeProvider;
         private IReadOnlyList<ILibraryGroup> _availablePackages;
         private ILibraryCatalog _catalog;

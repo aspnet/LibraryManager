@@ -151,7 +151,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             header.ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
             header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-
             //Move grip containing the icon and title
             Grid moveGrip = new Grid();
             moveGrip.ColumnDefinitions.Add(new ColumnDefinition
