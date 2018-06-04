@@ -133,11 +133,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
 
-                if (!assets.Any())
-                {
-                    return null;
-                }
-
                 Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
                 if (asset == null)
