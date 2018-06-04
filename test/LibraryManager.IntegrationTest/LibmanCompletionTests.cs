@@ -7,17 +7,22 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     [TestClass]
     public class LibmanCompletionTests : VisualStudioLibmanHostTest
     {
-        [TestMethod]
-        public void LibmanCompletion_ProvidePathForDestinationProperty()
+        ProjectItemTestExtension _libManConfig;
+
+        [TestInitialize()]
+        public void initialize()
         {
-            ProjectTestExtension webProject;
             string projectName = "TestProjectCore20";
 
-            webProject = Solution.ProjectsRecursive[projectName];
+            ProjectTestExtension webProject = Solution.ProjectsRecursive[projectName];
+            _libManConfig = webProject.Find(SolutionItemFind.FileName, "libman.json");
+        }
 
-            ProjectItemTestExtension libManConfig = webProject.Find(SolutionItemFind.FileName, "libman.json");
-            libManConfig.Open();
-            string[] expectedCompletionEntries = new [] {
+        [TestMethod]
+        public void LibmanCompletion_Destination()
+        {
+            _libManConfig.Open();
+            string[] expectedCompletionEntries = new[] {
                 "Properties/",
                 "wwwroot/",
             };
