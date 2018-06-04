@@ -21,58 +21,120 @@ namespace Microsoft.Web.LibraryManager
             _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
             _defaultDestination = defaultDestination;
             _defaultProvider = defaultProvider;
-            _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
         }
 
         private string _defaultDestination;
         private string _defaultProvider;
         private IDependencies _dependencies;
-        private Dictionary<string, List<ILibraryInstallationState>> _fileToLibraryMap;
 
-        public async Task<IEnumerable<FileConflict>> DetectConflictsAsync(
+        public async Task<IEnumerable<ILibraryInstallationResult>> DetectConflictsAsync(
             IEnumerable<ILibraryInstallationState> libraries,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            _fileToLibraryMap.Clear();
+            IEnumerable<ILibraryInstallationResult> validateLibraries = ValidateLibrariesAsync(libraries, cancellationToken);
 
-            foreach (ILibraryInstallationState state in libraries)
+            if (!validateLibraries.All(t => t.Success))
             {
-                if (!state.IsValid(out IEnumerable<IError> _))
-                {
-                    continue;
-                }
+                return validateLibraries;
+            }
 
-                string installDestination = string.IsNullOrEmpty(state.DestinationPath) ? _defaultDestination : state.DestinationPath;
-                string providerId = string.IsNullOrEmpty(state.ProviderId) ? _defaultProvider : state.ProviderId;
+            IEnumerable<ILibraryInstallationResult> expandLibraries= await ExpandLibrariesAsync(libraries, cancellationToken);
+            if (!expandLibraries.All(t => t.Success))
+            {
+                return expandLibraries;
+            }
+
+            libraries = expandLibraries.Select(l => l.InstallationState);
+
+
+            return new List<ILibraryInstallationResult> { GetConflictErrors(GetFilesConflicts(libraries, cancellationToken)) };
+
+        }
+
+        private IEnumerable<ILibraryInstallationResult> ValidateLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        {
+            List<ILibraryInstallationResult> validationStatus = new List<ILibraryInstallationResult>();
+
+            foreach (ILibraryInstallationState library in libraries)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (!library.IsValid(out IEnumerable<IError> errors))
+                {
+                    validationStatus.Add(new LibraryInstallationResult(library, errors.ToArray()));
+                }
+                else
+                {
+                    validationStatus.Add(LibraryInstallationResult.FromSuccess(library));
+                }
+            }
+
+            return validationStatus;
+        }
+
+        private async Task<IEnumerable<ILibraryInstallationResult>> ExpandLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        {
+            List<ILibraryInstallationResult> expandedLibraries = new List<ILibraryInstallationResult>();
+
+            foreach (ILibraryInstallationState library in libraries)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                string installDestination = string.IsNullOrEmpty(library.DestinationPath) ? _defaultDestination : library.DestinationPath;
+                string providerId = string.IsNullOrEmpty(library.ProviderId) ? _defaultProvider : library.ProviderId;
                 IProvider provider = _dependencies.GetProvider(providerId);
 
-                if (provider == null)
-                {
-                    continue;
-                }
+                ILibraryInstallationResult desiredState = await provider.UpdateStateAsync(library, cancellationToken);
 
-                ILibraryInstallationResult desiredState = await provider.UpdateStateAsync(state, cancellationToken);
-                if (desiredState.Success)
-                {
-                    IEnumerable<string> files = desiredState.InstallationState.Files.Select(f => Path.Combine(installDestination, f));
+                expandedLibraries.Add(desiredState);
+            }
 
-                    foreach (string file in files)
+            return expandedLibraries;
+        }
+
+        public IEnumerable<FileConflict> GetFilesConflicts(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        {
+            Dictionary<string, List<ILibraryInstallationState>> _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
+
+            foreach (ILibraryInstallationState library in libraries)
+            {
+                string destinationPath = library.DestinationPath;
+
+                IEnumerable<string> files = library.Files.Select(f => Path.Combine(destinationPath, f));
+
+                foreach (string file in files)
+                {
+                    if (!_fileToLibraryMap.ContainsKey(file))
                     {
-                        if (!_fileToLibraryMap.ContainsKey(file))
-                        {
-                            _fileToLibraryMap[file] = new List<ILibraryInstallationState>();
-                        }
-
-                        _fileToLibraryMap[file].Add(state);
+                        _fileToLibraryMap[file] = new List<ILibraryInstallationState>();
                     }
+
+                    _fileToLibraryMap[file].Add(library);
                 }
             }
 
             return _fileToLibraryMap
-                .Where(f => f.Value.Count > 1)
-                .Select(f => new FileConflict(f.Key, f.Value));
+                    .Where(f => f.Value.Count > 1)
+                    .Select(f => new FileConflict(f.Key, f.Value));
+
+        }
+
+        private ILibraryInstallationResult GetConflictErrors(IEnumerable<FileConflict> fileConflicts)
+        {
+            if (fileConflicts.Any())
+            {
+                var errors = new List<IError>();
+                foreach (FileConflict conflictingLibraryGroup in fileConflicts)
+                {
+                    errors.Add(PredefinedErrors.ConflictingLibrariesInManifest(conflictingLibraryGroup.File, conflictingLibraryGroup.Libraries.Select(l => l.LibraryId).ToList()));
+                }
+
+                return new LibraryInstallationResult(errors.ToArray());
+            }
+
+            return LibraryInstallationResult.FromSuccess(null);
         }
     }
 

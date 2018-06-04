@@ -128,17 +128,29 @@ namespace Microsoft.Web.LibraryManager
         {
             foreach (LibraryInstallationState state in manifest.Libraries.Cast<LibraryInstallationState>())
             {
-                if (state.ProviderId == null)
-                {
-                    state.ProviderId = manifest.DefaultProvider;
-                    state.IsUsingDefaultProvider = true;
-                }
+                UpdateLibraryProviderAndDestination(state, manifest.DefaultProvider, manifest.DefaultDestination);
+            }
+        }
 
-                if (state.DestinationPath == null)
-                {
-                    state.DestinationPath = manifest.DefaultDestination;
-                    state.IsUsingDefaultDestination = true;
-                }
+        private static void UpdateLibraryProviderAndDestination(ILibraryInstallationState state, string defaultProvider, string defaultDestination)
+        {
+            LibraryInstallationState libraryState = state as LibraryInstallationState;
+
+            if (libraryState == null)
+            {
+                return;
+            }
+
+            if (state.ProviderId == null)
+            {
+                libraryState.ProviderId = defaultProvider;
+                libraryState.IsUsingDefaultProvider = true;
+            }
+
+            if (libraryState.DestinationPath == null)
+            {
+                libraryState.DestinationPath = defaultDestination;
+                libraryState.IsUsingDefaultDestination = true;
             }
         }
 
@@ -192,81 +204,35 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="destination"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ILibraryInstallationResult> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ILibraryInstallationResult>> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
         {
-            ILibraryInstallationResult result = null;
-            bool isDefaultProvider = false;
-            bool isDefaultDestination = false;
-            var errors = new List<IError>();
-
-            if (string.IsNullOrEmpty(libraryId))
-            {
-                errors.Add(PredefinedErrors.LibraryIdIsUndefined());
-            }
-
-            if (string.IsNullOrEmpty(destination) && string.IsNullOrEmpty(DefaultDestination))
-            {
-                errors.Add(PredefinedErrors.PathIsUndefined());
-            }
-            else if (string.IsNullOrEmpty(destination))
-            {
-                destination = DefaultDestination;
-                isDefaultDestination = true;
-            }
-
-            IProvider provider = null;
-            if (string.IsNullOrEmpty(providerId) && string.IsNullOrEmpty(DefaultProvider))
-            {
-                errors.Add(PredefinedErrors.ProviderIsUndefined());
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(providerId))
-                {
-                    providerId = DefaultProvider;
-                    isDefaultProvider = true;
-                }
-
-                provider = _dependencies.Providers.FirstOrDefault(p => p.Id == providerId);
-                if (provider == null)
-                {
-                    errors.Add(PredefinedErrors.ProviderUnknown(providerId));
-                }
-            }
-
-            if (errors.Any())
-            {
-                result = new LibraryInstallationResult(errors.ToArray());
-                return result;
-            }
+            ILibraryInstallationResult result;
 
             var desiredState = new LibraryInstallationState()
             {
                 LibraryId = libraryId,
                 Files = files,
                 ProviderId = providerId,
-                DestinationPath = destination,
-                IsUsingDefaultDestination = isDefaultDestination,
-                IsUsingDefaultProvider = isDefaultProvider
+                DestinationPath = destination
             };
 
-            List<FileConflict> conflictingLibraries = await CheckLibraryForConflictsAsync(desiredState, cancellationToken);
-
-            if (conflictingLibraries != null && conflictingLibraries.Any())
+            UpdateLibraryProviderAndDestination(desiredState, DefaultProvider, DefaultDestination);
+            if (!desiredState.IsValid(out IEnumerable<IError> errors))
             {
-                foreach(FileConflict conflict in conflictingLibraries)
-                {
-                    conflict.Libraries.Remove(desiredState);
-                    errors.Add(PredefinedErrors.LibraryCannotBeInstalledDueToConflicts(
-                        conflict.File,
-                        conflict.Libraries.Select(l => l.LibraryId).ToList()));
-                }
+                return new List<ILibraryInstallationResult> { new LibraryInstallationResult(desiredState, errors.ToArray()) };
             }
 
-            if (errors.Any())
+            IProvider provider = _dependencies.GetProvider(desiredState.ProviderId);
+            if (provider == null)
             {
-                result = new LibraryInstallationResult(errors.ToArray());
-                return result;
+                return new List<ILibraryInstallationResult> { new LibraryInstallationResult(desiredState, new IError[] { PredefinedErrors.ProviderUnknown(desiredState.ProviderId) })};
+            }
+
+            IEnumerable<ILibraryInstallationResult> conflictResults = await CheckLibraryForConflictsAsync(desiredState, cancellationToken);
+
+            if (!conflictResults.All(r => r.Success))
+            {
+                return conflictResults;
             }
 
             result = await provider.InstallAsync(desiredState, cancellationToken);
@@ -276,40 +242,18 @@ namespace Microsoft.Web.LibraryManager
                 _libraries.Add(desiredState);
             }
 
-            return result;
+            return new List<ILibraryInstallationResult> { result };
         }
 
-        private async Task<List<FileConflict>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        private async Task<IEnumerable<ILibraryInstallationResult>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             var libraries = new List<ILibraryInstallationState>(Libraries);
             libraries.Add(desiredState);
             var conflictDetector = new LibraryConflictDetector(_dependencies, DefaultDestination, DefaultProvider);
 
-            IEnumerable<FileConflict> fileConflicts = await conflictDetector.DetectConflictsAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryInstallationResult> fileConflicts = await conflictDetector.DetectConflictsAsync(libraries, cancellationToken);
 
-            var conflictsOfInterest = new List<FileConflict>();
-
-            if (fileConflicts.Any())
-            {
-                foreach(FileConflict conflictingGroup in fileConflicts)
-                {
-                    if (conflictingGroup.Libraries.Contains(desiredState))
-                    {
-                        conflictsOfInterest.Add(conflictingGroup);
-                    }
-                }
-            }
-
-            return conflictsOfInterest;
-        }
-
-        private bool CheckAlreadyInstalled(LibraryInstallationState desiredState)
-        {
-            // compare id, provider and destination
-            return Libraries.Any(l => l.LibraryId == desiredState.LibraryId
-                        && (l.DestinationPath == desiredState.DestinationPath)
-                        && (l.ProviderId == desiredState.ProviderId 
-                            || (l.ProviderId == null && desiredState.ProviderId == DefaultProvider)));
+            return fileConflicts;
         }
 
         /// <summary>
@@ -342,6 +286,7 @@ namespace Microsoft.Web.LibraryManager
         public async Task<IEnumerable<ILibraryInstallationResult>> RestoreAsync(CancellationToken cancellationToken)
         {
             //TODO: This should have an "undo scope"
+            var tasks = new List<Task<ILibraryInstallationResult>>();
             var results = new List<ILibraryInstallationResult>();
 
             if (!IsValidManifestVersion(Version))
@@ -349,62 +294,28 @@ namespace Microsoft.Web.LibraryManager
                 return new ILibraryInstallationResult[] { LibraryInstallationResult.FromError(PredefinedErrors.VersionIsNotSupported(Version)) };
             }
 
-            IEnumerable<FileConflict> fileConflicts = null;
-            LibraryInstallationResult fileConflictErrors = null;
-            try
+            IEnumerable<ILibraryInstallationResult> conflictsResult = await GetLibraryConflictsAsync(cancellationToken);
+            if (!conflictsResult.All(r => r.Success))
             {
-                var conflictDetector = new LibraryConflictDetector(_dependencies, DefaultDestination, DefaultProvider);
-
-                fileConflicts = await conflictDetector.DetectConflictsAsync(Libraries, cancellationToken);
-
-                if (fileConflicts.Any())
-                {
-                    var errors = new List<IError>();
-                    foreach (FileConflict conflictingLibraryGroup in fileConflicts)
-                    {
-                        errors.Add(PredefinedErrors.ConflictingLibrariesInManifest(conflictingLibraryGroup.File, conflictingLibraryGroup.Libraries.Select(l=> l.LibraryId).ToList()));
-                    }
-
-                    // This error is added to the bottom of the error list.
-                    fileConflictErrors = new LibraryInstallationResult(errors.ToArray());
-                }
+                return conflictsResult;
             }
-            catch (OperationCanceledException)
-            {
-                //results.Add(LibraryInstallationResult.FromCancelled(Libraries.FirstOrDefault()));
-                //_hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
-                //return results;
-            }
-
-            HashSet<ILibraryInstallationState> conflictingLibraryIds = fileConflicts != null
-                ? new HashSet<ILibraryInstallationState>(fileConflicts.SelectMany(c => c.Libraries))
-                : new HashSet<ILibraryInstallationState>();
 
             foreach (ILibraryInstallationState state in Libraries)
             {
-                if (conflictingLibraryIds.Contains(state))
-                {
-                    // The error for this library is already added to results.
-                    continue;
-                }
-
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    results.Add(LibraryInstallationResult.FromCancelled(state));
-                    _hostInteraction.Logger.Log(Resources.Text.RestoreCancelled, LogLevel.Task);
-                    continue;
-                }
-
-                results.Add(await RestoreLibraryAsync(state, cancellationToken));
+                tasks.Add(RestoreLibraryAsync(state, cancellationToken));
             }
 
-            if (fileConflictErrors != null){
-                results.Add(fileConflictErrors);
-            }
+            await Task.WhenAll(tasks).ConfigureAwait(false);
 
-            return results;
+            return tasks.Select(t => t.Result);
         }
 
+        private async Task<IEnumerable<ILibraryInstallationResult>> GetLibraryConflictsAsync(CancellationToken cancellationToken)
+        {
+            var conflictDetector = new LibraryConflictDetector(_dependencies, DefaultDestination, DefaultProvider);
+
+            return await conflictDetector.DetectConflictsAsync(Libraries, cancellationToken);
+        }
 
         private async Task<ILibraryInstallationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
         {

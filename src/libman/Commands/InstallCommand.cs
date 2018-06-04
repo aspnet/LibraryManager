@@ -100,24 +100,27 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             (string libraryId, ILibrary library) = await ValidateLibraryExistsInCatalogAsync(CancellationToken.None);
 
-            ILibraryInstallationResult result = await _manifest.InstallLibraryAsync(libraryId, Provider.Value(), files, Destination.Value(), CancellationToken.None);
+            IEnumerable<ILibraryInstallationResult> results = await _manifest.InstallLibraryAsync(libraryId, Provider.Value(), files, Destination.Value(), CancellationToken.None);
 
-            if (result.Success)
+            if (results.All(r => r.Success))
             {
                 await _manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
                 string installDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
                 Logger.Log(string.Format(Resources.InstalledLibrary, libraryId, installDestination), LogLevel.Operation);
             }
-            else if (result.Errors != null)
+            else
             {
                 bool isFileConflicts = false;
                 Logger.Log(string.Format(Resources.InstallLibraryFailed, libraryId), LogLevel.Error);
-                foreach (IError error in result.Errors)
+                foreach (ILibraryInstallationResult result in results)
                 {
-                    Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
-                    if(error.Code == PredefinedErrors.LibraryCannotBeInstalledDueToConflicts("", new List<string>()).Code)
+                    foreach (IError error in result.Errors)
                     {
-                        isFileConflicts = true;
+                        Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
+                        if (error.Code == PredefinedErrors.LibraryCannotBeInstalledDueToConflicts("", new List<string>()).Code)
+                        {
+                            isFileConflicts = true;
+                        }
                     }
                 }
 
@@ -125,10 +128,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 {
                     Logger.Log(Resources.SpecifyDifferentDestination, LogLevel.Error);
                 }
-            }
-            else
-            {
-                // Just output failed.
             }
 
             return 0;
