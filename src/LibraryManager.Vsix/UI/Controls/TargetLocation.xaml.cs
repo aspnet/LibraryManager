@@ -221,7 +221,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             int expect = Interlocked.Increment(ref _version);
 
             string text = Text;
-            int caretIndex = CaretIndex;
+            int caretIndex = text.Length;
             Func<string, int, Task<CompletionSet>> searchService = SearchService;
             Task.Delay(250).ContinueWith(d =>
             {
@@ -254,7 +254,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                                 Items.Add(new Completion(entry, span.Start, span.Length));
                             }
 
-                            PositionCompletions(span.Start);
+                            PositionCompletions(span.Length);
                             OnPropertyChanged(nameof(HasItems));
 
                             if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
