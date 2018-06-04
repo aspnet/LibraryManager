@@ -31,16 +31,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
 
             string directoryPath = Path.GetDirectoryName(fileName);
 
-            if (directoryPath != null && !string.IsNullOrEmpty(directoryPath))
+            if (!string.IsNullOrEmpty(directoryPath))
             {
                 DirectoryInfo dir = Directory.CreateDirectory(directoryPath);
                 using (FileStream destination = File.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     await sourceStream.CopyToAsync(destination);
                 }
-
-                FileInfo fileInfo = new FileInfo(fileName);
-                Debug.Assert(fileInfo.Length != 0, string.Format("File {0} is empty", fileName));
 
                 return true;
             }
