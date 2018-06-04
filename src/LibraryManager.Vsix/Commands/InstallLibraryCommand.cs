@@ -53,16 +53,24 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Telemetry.TrackUserTask("installdialogopened");
 
             ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
-            string target = item.FileNames[1];
 
-            Project project = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.ContainingProject;
-            string rootFolder = project.GetRootFolder();
+            if (item != null)
+            {
+                string target = item.FileNames[1];
 
-            string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-            IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+                Project project = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.ContainingProject;
 
-            UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target, rootFolder);
-            dialog.ShowDialog();
+                if (project != null)
+                {
+                    string rootFolder = project.GetRootFolder();
+
+                    string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
+                    IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+
+                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target, rootFolder);
+                    dialog.ShowDialog();
+                }
+            }          
         }
     }
 }
