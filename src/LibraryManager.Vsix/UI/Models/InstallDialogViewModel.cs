@@ -120,10 +120,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 {
                     if (Set(ref _packageId, value))
                     {
-                        SelectedProvider.GetCatalog().GetLibraryAsync(_packageId, CancellationToken.None).ContinueWith(x =>
-                        {
-                            SelectedPackage = null;
-                        });
+                        SelectedPackage = null;
                     }
 
                     NoFilesSelected = true;
