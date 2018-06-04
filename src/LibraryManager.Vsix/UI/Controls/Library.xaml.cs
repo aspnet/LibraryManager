@@ -10,23 +10,23 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
-    public partial class TheBox : INotifyPropertyChanged
+    public partial class Library : INotifyPropertyChanged
     {
         public static readonly DependencyProperty CaretIndexProperty = DependencyProperty.Register(
-            nameof(CaretIndex), typeof(int), typeof(TheBox), new PropertyMetadata(default(int), SearchCriteriaChanged));
+            nameof(CaretIndex), typeof(int), typeof(Library), new PropertyMetadata(default(int), SearchCriteriaChanged));
 
         public static readonly DependencyProperty SearchServiceProperty = DependencyProperty.Register(
-            nameof(SearchService), typeof(Func<string, int, Task<CompletionSet>>), typeof(TheBox), new PropertyMetadata(default(Func<string, int, Task<CompletionSet>>), SearchCriteriaChanged));
+            nameof(SearchService), typeof(Func<string, int, Task<CompletionSet>>), typeof(Library), new PropertyMetadata(default(Func<string, int, Task<CompletionSet>>), SearchCriteriaChanged));
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            nameof(SelectedItem), typeof(Completion), typeof(TheBox), new PropertyMetadata(default(Completion)));
+            nameof(SelectedItem), typeof(Completion), typeof(Library), new PropertyMetadata(default(Completion)));
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            nameof(Text), typeof(string), typeof(TheBox), new PropertyMetadata(default(string), SearchCriteriaChanged));
+            nameof(Text), typeof(string), typeof(Library), new PropertyMetadata(default(string), SearchCriteriaChanged));
 
         private int _version;
 
-        public TheBox()
+        public Library()
         {
             InitializeComponent();
         }
@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private static void SearchCriteriaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            TheBox search = d as TheBox;
+            Library search = d as Library;
             search?.RefreshSearch();
             search?.PropertyChanged?.Invoke(search, new PropertyChangedEventArgs(nameof(IsTextEntryEmpty)));
         }
@@ -85,7 +85,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
 
             Text = completion.CompletionItem.InsertionText;
-            SearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
+            LibrarySearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
         }
 
         private void HandleKeyPress(object sender, KeyEventArgs e)
@@ -98,7 +98,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     break;
                 case Key.Escape:
                     e.Handled = true;
-                    SearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                     break;
                 case Key.Down:
                     if (Options.Items.Count > 0)
@@ -115,13 +115,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void HandleKeyUp(object sender, KeyEventArgs e)
         {
-            CaretIndex = SearchBox.CaretIndex;
+            CaretIndex = LibrarySearchBox.CaretIndex;
             RefreshSearch();
         }
 
         private void HandleListBoxKeyPress(object sender, KeyEventArgs e)
         {
-            int index = SearchBox.CaretIndex;
+            int index = LibrarySearchBox.CaretIndex;
 
             switch (e.Key)
             {
@@ -129,21 +129,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 case Key.Enter:
                     Commit(SelectedItem);
                     e.Handled = true;
-                    SearchBox.Focus();
+                    LibrarySearchBox.Focus();
                     break;
                 case Key.Up:
                     if (Options.SelectedIndex == 0)
                     {
                         SelectedItem = Items[0];
                         LostFocus -= OnLostFocus;
-                        SearchBox.Focus();
-                        SearchBox.CaretIndex = index;
+                        LibrarySearchBox.Focus();
+                        LibrarySearchBox.CaretIndex = index;
                         LostFocus += OnLostFocus;
                     }
                     break;
                 case Key.Escape:
                     e.Handled = true;
-                    SearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                     break;
                 case Key.Down:
                 case Key.PageDown:
@@ -153,8 +153,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     break;
                 default:
                     LostFocus -= OnLostFocus;
-                    SearchBox.Focus();
-                    SearchBox.CaretIndex = index;
+                    LibrarySearchBox.Focus();
+                    LibrarySearchBox.CaretIndex = index;
                     LostFocus += OnLostFocus;
                     break;
             }
@@ -163,7 +163,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         private void OnItemCommitGesture(object sender, MouseButtonEventArgs e)
         {
             Commit(SelectedItem);
-            SearchBox.Focus();
+            LibrarySearchBox.Focus();
         }
 
         private void OnLostFocus(object sender, RoutedEventArgs e)
@@ -176,16 +176,16 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void OnMousePositionCaret(object sender, MouseButtonEventArgs e)
         {
-            if (CaretIndex != SearchBox.CaretIndex)
+            if (CaretIndex != LibrarySearchBox.CaretIndex)
             {
-                CaretIndex = SearchBox.CaretIndex;
+                CaretIndex = LibrarySearchBox.CaretIndex;
                 RefreshSearch();
             }
         }
 
         private void PositionCompletions(int index)
         {
-            Rect r = SearchBox.GetRectFromCharacterIndex(index);
+            Rect r = LibrarySearchBox.GetRectFromCharacterIndex(index);
             Flyout.HorizontalOffset = r.Left - 7;
             Options.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             Flyout.Width = Options.DesiredSize.Width;
@@ -251,9 +251,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void ThisControl_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (!Options.IsKeyboardFocusWithin && !SearchBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
+            if (!Options.IsKeyboardFocusWithin && !LibrarySearchBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
             {
-                SearchBox.Focus();
+                LibrarySearchBox.Focus();
             }
         }
     }

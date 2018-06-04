@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Resources;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
-    internal class InstallDialogViewModel : BindableBase
+    internal class InstallDialogViewModel : BindableBase, INotifyPropertyChanged
     {
         private readonly Action<bool> _closeDialog;
         private readonly string _configFileName;
         private readonly IDependencies _deps;
         private readonly Dispatcher _dispatcher;
-        private readonly string _targetPath;
+        private string _targetPath;
         private IProvider _activeProvider;
         private IReadOnlyList<ILibraryGroup> _availablePackages;
         private ILibraryCatalog _catalog;
@@ -24,6 +27,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private bool _isInstalling;
         private string _packageId;
         private ILibrary _selectedPackage;
+        private FileSelectionType _fileSelectionType;
+        private bool _noFilesSelected;
+        private bool _isTreeViewEmpty;
 
         public InstallDialogViewModel(Dispatcher dispatcher, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
         {
@@ -32,6 +38,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             _deps = deps;
             _dispatcher = dispatcher;
             _closeDialog = closeDialog;
+            _noFilesSelected = true;
+            _isTreeViewEmpty = true;
 
             List<IProvider> providers = new List<IProvider>();
             foreach (IProvider provider in deps.Providers.OrderBy(x => x.Id))
@@ -65,31 +73,67 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public IReadOnlyList<PackageItem> DisplayRoots
         {
-            get { return _displayRoots; }
-            set { Set(ref _displayRoots, value); }
+            get
+            {
+                IReadOnlyList<PackageItem> displayRoots = _displayRoots;
+
+                if (displayRoots != null && displayRoots.Any())
+                {
+                    displayRoots.ElementAt(0).Name = Text.Files;
+                }
+
+                return _displayRoots;
+            }
+
+            set
+            {
+                if (String.IsNullOrEmpty(PackageId))
+                {
+                    Set(ref _displayRoots, null);
+                }
+                else
+                {
+                    Set(ref _displayRoots, value);
+                }
+            }
         }
 
         public ICommand InstallPackageCommand { get; }
 
-        public bool IsTreeViewEmpty => SelectedPackage == null;
+        public bool IsTreeViewEmpty
+        {
+            get { return _isTreeViewEmpty; }
+            set
+            {
+                if (Set(ref _isTreeViewEmpty, value))
+                {
+                    RefreshFileSelections();
+                }
+            }
+        }
 
         public string PackageId
         {
             get { return _packageId; }
             set
             {
-                if (Set(ref _packageId, value))
+                // If libraryId is null, then we need to clear the tree view for files and show warning message.
+                if (String.IsNullOrEmpty(value))
                 {
-                    SelectedProvider.GetCatalog().GetLibraryAsync(_packageId, CancellationToken.None).ContinueWith(x =>
+                    if (Set(ref _packageId, value))
                     {
-                        if (x.IsFaulted || x.IsCanceled)
+                        SelectedProvider.GetCatalog().GetLibraryAsync(_packageId, CancellationToken.None).ContinueWith(x =>
                         {
                             SelectedPackage = null;
-                            return;
-                        }
+                        });
+                    }
 
-                        SelectedPackage = x.Result;
-                    });
+                    NoFilesSelected = true;
+                    DisplayRoots = null;
+                }
+                else if (Set(ref _packageId, value))
+                {
+                    RefreshFileSelections();
                 }
             }
         }
@@ -103,9 +147,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             get { return _selectedPackage; }
             set
             {
+                if (value == null)
+                {
+                    IsTreeViewEmpty = true;
+                }
+
                 if (Set(ref _selectedPackage, value) && value != null)
                 {
-                    OnPropertyChanged(nameof(IsTreeViewEmpty));
+                    IsTreeViewEmpty = false;
                     bool canUpdateInstallStatusValue = false;
                     HashSet<string> selectedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     Func<bool> canUpdateInstallStatus = () => canUpdateInstallStatusValue;
@@ -210,6 +259,35 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
         }
 
+        private void RefreshFileSelections()
+        {
+            SelectedProvider.GetCatalog().GetLibraryAsync(_packageId, CancellationToken.None).ContinueWith(x =>
+            {
+                if (x.IsFaulted || x.IsCanceled)
+                {
+                    SelectedPackage = null;
+                    return;
+                }
+
+                SelectedPackage = x.Result;
+            });
+        }
+
+        public FileSelectionType LibraryFilesToInstall
+        {
+            get
+            {
+                return _fileSelectionType;
+            }
+            set
+            {
+                _fileSelectionType = value;
+                FileSelection.InstallationType = value;
+
+                RefreshFileSelections();
+            }
+        }
+
         public IProvider SelectedProvider
         {
             get { return _activeProvider; }
@@ -236,9 +314,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             item.IsExpanded = shouldBeOpen;
         }
 
+        public bool NoFilesSelected
+        {
+            get { return _noFilesSelected; }
+            set { Set(ref _noFilesSelected, value); }
+        }
+
         private bool CanInstallPackage()
         {
-            return !_isInstalling && SelectedPackage != null;
+            if (DisplayRoots != null)
+            {
+                foreach (PackageItem packageItem in DisplayRoots)
+                {
+                    IReadOnlyList<PackageItem> children = packageItem.Children;
+
+                    foreach (PackageItem child in children)
+                    {
+                        if (child.IsChecked.HasValue && child.IsChecked.Value)
+                        {
+                            NoFilesSelected = false;
+                            break;
+                        }
+                        else
+                        {
+                            NoFilesSelected = true;
+                        }
+                    }
+                }
+            }
+
+            return !_isInstalling &&
+                !NoFilesSelected &&
+                !(String.IsNullOrEmpty(InstallationFolder.DestinationFolder));
         }
 
         private async void InstallPackageAsync()
@@ -258,17 +365,22 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     targetPath = configContainerUri.MakeRelativeUri(targetUri).ToString();
                 }
 
+                if (String.IsNullOrEmpty(manifest.Version))
+                {
+                    manifest.Version = Manifest.SupportedVersions.Max().ToString();
+                }
+
                 manifest.AddLibrary(new LibraryInstallationState
                 {
                     LibraryId = PackageId,
                     ProviderId = selectedPackage.ProviderId,
-                    DestinationPath = targetPath,
+                    DestinationPath = InstallationFolder.DestinationFolder,
                     Files = SelectedFiles.ToList()
                 });
 
                 await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
 
-                EnvDTE.Project project = VsHelpers.GetSelectedItemProject();
+                EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
                 project?.AddFileToProject(_configFileName);
 
                 await LibraryHelpers.RestoreAsync(_configFileName).ConfigureAwait(false);

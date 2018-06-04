@@ -11,13 +11,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
     {
         public PackageContentsTreeView()
         {
-            InitializeComponent();
-            SetBinding(ImageThemingUtilities.ImageBackgroundColorProperty, new Binding
-            {
-                Source = Content,
-                Path = new PropertyPath("Background"),
-                Converter = new BrushToColorConverter()
-            });
+            InitializeComponent();         
         }
     }
 }

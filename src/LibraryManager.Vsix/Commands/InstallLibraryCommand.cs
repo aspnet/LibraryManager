@@ -34,14 +34,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             OleMenuCommand button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = VsHelpers.GetSelectedItem();
+            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem;
 
-            if (item?.ContainingProject == null || !item.ContainingProject.IsSupported())
+            if (item?.ContainingProject == null)
             {
                 return;
             }
 
-            if (item.Kind.Equals(VSConstants.ItemTypeGuid.PhysicalFolder_string, StringComparison.OrdinalIgnoreCase))
+            if (VSConstants.ItemTypeGuid.PhysicalFolder_string.Equals(item.Kind, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -52,25 +52,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             Telemetry.TrackUserTask("installdialogopened");
 
-            ProjectItem item = VsHelpers.GetSelectedItem();
+            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+            string target = item.FileNames[1];
 
-            if (item != null)
-            {
-                string target = item.FileNames[1];
+            Project project = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.ContainingProject;
+            string rootFolder = project.GetRootFolder();
 
-                Project project = VsHelpers.GetSelectedItemProject();
+            string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
+            IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
 
-                if (project != null)
-                {
-                    string rootFolder = project.GetRootFolder();
-
-                    string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-                    IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
-
-                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target);
-                    dialog.ShowDialog();
-                }
-            }
+            UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target, rootFolder);
+            dialog.ShowDialog();
         }
     }
 }
