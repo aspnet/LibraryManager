@@ -10,6 +10,7 @@
     <Buttons>
       <!-- Folder -->
       <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
+        <Parent guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" />
         <Icon guid="ImageCatalogGuid" id="JSWebScript" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
