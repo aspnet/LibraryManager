@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             OleMenuCommand button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem;
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
             if (item?.ContainingProject == null)
             {
@@ -52,13 +52,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             Telemetry.TrackUserTask("installdialogopened");
 
-            ProjectItem item = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem;
+            ProjectItem item = VsHelpers.GetSelectedItem();
 
             if (item != null)
             {
                 string target = item.FileNames[1];
 
-                Project project = VsHelpers.DTE.SelectedItems.Item(1).ProjectItem.ContainingProject;
+                Project project = VsHelpers.GetProjectOfSelectedItem();
 
                 if (project != null)
                 {
