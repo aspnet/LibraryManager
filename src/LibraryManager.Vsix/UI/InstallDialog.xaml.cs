@@ -8,7 +8,7 @@ using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
-    public partial class InstallDialog
+    internal partial class InstallDialog
     {
         private readonly IDependencies _deps;
         private readonly string _folder;
@@ -35,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             }
         }
 
-        public InstallDialogViewModel ViewModel
+        internal InstallDialogViewModel ViewModel
         {
             get { return DataContext as InstallDialogViewModel; }
             set { DataContext = value; }

@@ -36,12 +36,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             ProjectItem item = VsHelpers.GetSelectedItem();
 
-            if (item?.ContainingProject == null || !item.ContainingProject.IsSupported())
+            if (item == null || item.ContainingProject == null)
             {
                 return;
             }
 
-            if (item.Kind.Equals(VSConstants.ItemTypeGuid.PhysicalFolder_string, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(item.Kind) && item.Kind.Equals(VSConstants.ItemTypeGuid.PhysicalFolder_string, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -58,7 +58,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 string target = item.FileNames[1];
 
-                Project project = VsHelpers.GetSelectedItemProject();
+                Project project = VsHelpers.GetProjectOfSelectedItem();
 
                 if (project != null)
                 {
