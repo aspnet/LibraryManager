@@ -181,6 +181,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 ViewModel.PackageId = null;
                 ViewModel.NoFilesSelected = true;
             }
+            else
+            {
+                LibrarySearchBox.RefreshSearch();
+            }
         }
     }
 }

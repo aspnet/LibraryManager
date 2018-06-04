@@ -191,7 +191,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             Flyout.Width = Options.DesiredSize.Width;
         }
 
-        private void RefreshSearch()
+        internal void RefreshSearch()
         {
             if (Text == null)
             {
