@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             {
                 try
                 {
-                    IVisualStudioCompletionListTestExtension completionList = editor.Intellisense.InvokeCompletionList();
+                    IVisualStudioCompletionListTestExtension completionList = editor.Intellisense.GetActiveCompletionList();
                     if (completionList == null)
                     {
                         errorMessage = "Completion list not present.";
@@ -58,7 +58,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                             if (!comparisonSet.Contains(curEntry))
                             {
                                 errorMessage = String.Concat(errorMessage, "\r\nTimed out waiting for completion entry: ", curEntry, ".");
-                                completionList.Dismiss();
                             }
                         }
                     }
