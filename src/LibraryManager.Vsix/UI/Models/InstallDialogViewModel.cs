@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -283,7 +282,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             {
                 _fileSelectionType = value;
                 FileSelection.InstallationType = value;
-
                 RefreshFileSelections();
             }
         }
@@ -343,9 +341,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 }
             }
 
-            return !_isInstalling &&
-                !NoFilesSelected &&
-                !(String.IsNullOrEmpty(InstallationFolder.DestinationFolder));
+            return !_isInstalling && !NoFilesSelected;
         }
 
         private async void InstallPackageAsync()

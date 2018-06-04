@@ -61,6 +61,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         public Task<CompletionSet> TargetLocationSearch(string searchText, int caretPosition)
         {
+            // Target location text box is pre populated with name of the folder from where the - Add Client-Side Library command was invoked.
+            // If the user clears the field at any point, we should make sure the Install button is disabled till valid folder name is provided.
             if (String.IsNullOrEmpty(searchText))
             {
                 InstallButton.IsEnabled = false;
@@ -70,39 +72,39 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 InstallButton.IsEnabled = true;
             }
         
-            var dependencies = Dependencies.FromConfigFile(_configFileName);
+            Dependencies dependencies = Dependencies.FromConfigFile(_configFileName);
             string cwd = dependencies?.GetHostInteractions().WorkingDirectory;
 
             IEnumerable<Tuple<string, string>> completions = GetCompletions(cwd, searchText, caretPosition, out Span textSpan);
 
-            var span = new CompletionSet
+            CompletionSet completionSet = new CompletionSet
             {
                 Start = 0,
                 Length = searchText.Length
             };
 
-            var completionItems = new List<CompletionItem>();
+            List<CompletionItem> completionItems = new List<CompletionItem>();
 
             foreach (Tuple<string, string> completion in completions)
             {
-                var completionItem = new CompletionItem
+                CompletionItem completionItem = new CompletionItem
                 {
                     DisplayText = completion.Item1,
-                    InsertionText =completion.Item2,
+                    InsertionText = completion.Item2,
                 };
 
                 completionItems.Add(completionItem);
             }
 
-            span.Completions = completionItems;
+            completionSet.Completions = completionItems;
 
-            return Task.FromResult(span);
+            return Task.FromResult(completionSet);
         }
 
         private IEnumerable<Tuple<string, string>> GetCompletions(string cwd, string value, int caretPosition, out Span span)
         {
             span = new Span(0, value.Length);
-            var list = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> completions = new List<Tuple<string, string>>();
             int index = 0;
 
             if (value.Contains("/"))
@@ -119,17 +121,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 span = new Span(index + 1, value.Length - index - 1);
             }
 
-            var dir = new DirectoryInfo(cwd);
+            DirectoryInfo directoryInfo = new DirectoryInfo(cwd);
 
-            if (dir.Exists)
+            if (directoryInfo.Exists)
             {
-                foreach (FileSystemInfo item in dir.EnumerateDirectories())
+                foreach (FileSystemInfo item in directoryInfo.EnumerateDirectories())
                 {
-                    list.Add(Tuple.Create(item.Name + "/", prefix + item.Name + "/"));
+                    completions.Add(Tuple.Create(item.Name + "/", prefix + item.Name + "/"));
                 }
             }
 
-            return list;
+            return completions;
         }
 
         private void CloseDialog(bool res)

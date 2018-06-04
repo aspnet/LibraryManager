@@ -7,11 +7,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value.ToString().Equals(parameter);
+            if (value != null)
+            {
+                return value.ToString().Equals(parameter);
+            }
+
+            return false;         
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            if (value == null)
+            {
+                return Binding.DoNothing;
+            }
+
             return value.Equals(true) ? parameter : Binding.DoNothing;
         }
     }

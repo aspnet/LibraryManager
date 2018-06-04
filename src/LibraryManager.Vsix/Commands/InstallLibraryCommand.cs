@@ -70,7 +70,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target, rootFolder);
                     dialog.ShowDialog();
                 }
-            }          
+            }   
         }
     }
 }

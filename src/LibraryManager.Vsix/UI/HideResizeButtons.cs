@@ -4,6 +4,7 @@ using System.Windows;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
+    // Extension class for <seealso cref="System.Windows.Window"> to hide minimize and maximize buttons.
     internal static class HideResizeButtons
     {
         public const int WS_MINIMIZEBOX = 0x00020000;
