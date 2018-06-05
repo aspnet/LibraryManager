@@ -49,62 +49,30 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
             bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
             bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
 
-            Logger.LogEvent(Resources.Text.RestoreLibrariesCompleted, LogLevel.Status);
+            Logger.LogEvent(LibraryManager.Resources.Text.Restore_OperationCompleted, LogLevel.Status);
 
             if (allUpToDate)
             {
-                Logger.LogEvent(LibraryManager.Resources.Text.LibraryRestoredNoChange + Environment.NewLine, LogLevel.Operation);
+                Logger.LogEvent(LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine, LogLevel.Operation);
             }
             else if (allSuccess)
             {
-                string successText = string.Format(LibraryManager.Resources.Text.LibrariesRestored, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
+                string successText = string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
                 Logger.LogEvent(successText + Environment.NewLine, LogLevel.Operation);
             }
             else if (allCancelled)
             {
-                string canceledText = string.Format(LibraryManager.Resources.Text.LibraryRestorationCancelled, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
+                string canceledText = string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
                 Logger.LogEvent(canceledText + Environment.NewLine, LogLevel.Operation);
             }
             else if (allFailed)
             {
-                string failedText = string.Format(LibraryManager.Resources.Text.LibraryRestorationFailed, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
+                string failedText = string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
                 Logger.LogEvent(failedText + Environment.NewLine, LogLevel.Operation);
             }
-            else
-            {
-                var summarySuccessText = string.Format(Resources.Text.LibrariesRestoredSuccessfullySummary, successfulRestores.Count());
-                Logger.LogEvent(summarySuccessText + Environment.NewLine, LogLevel.Operation);
-                foreach (var result in successfulRestores)
-                {
-                    var successText = string.Format(Resources.Text.LibraryRestoredSuccessMessage, result.InstallationState.LibraryId);
-                    Logger.LogEvent(successText, LogLevel.Operation);
-                }
 
-                if (failedRestores.Any())
-                {
-                    var summaryErrorText = string.Format(Resources.Text.LibrariesRestoreFailedSummary, failedRestores.Count());
-                    Logger.LogEvent(Environment.NewLine + summaryErrorText + Environment.NewLine, LogLevel.Operation);
-                    foreach (var result in failedRestores)
-                    {
-                        var errorText = string.Format(Resources.Text.LibraryRestoreFailedMessage, result.InstallationState.LibraryId);
-                        Logger.LogEvent(errorText, LogLevel.Operation);
-                    }
-                }
-
-                if (cancelledRestores.Any())
-                {
-                    var summaryCancellationText = string.Format(Resources.Text.LibrariesRestoreCancelledSummary, cancelledRestores.Count());
-                    Logger.LogEvent(Environment.NewLine + summaryCancellationText + Environment.NewLine, LogLevel.Operation);
-                    foreach (var result in cancelledRestores)
-                    {
-                        var cancellationText = string.Format(Resources.Text.LibraryRestoreCancelledMessage, result.InstallationState.LibraryId);
-                        Logger.LogEvent(cancellationText, LogLevel.Operation);
-                    }
-                }
-            }
-
-            Logger.LogEvent(string.Format(Resources.Text.ElapsedTimeMessage, elapsedTime), LogLevel.Operation);
-            Logger.LogEvent(Resources.Text.OperationFinishedMessage + Environment.NewLine, LogLevel.Operation);
+            Logger.LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
+            Logger.LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
         }
     }
 }

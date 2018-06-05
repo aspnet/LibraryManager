@@ -121,57 +121,57 @@ namespace Microsoft.Web.LibraryManager.Vsix
             LogEvent(GetSummaryHeaderString(operation) + Environment.NewLine, LogLevel.Task); 
             if (allUpToDate)
             {
-                LogEvent(LibraryManager.Resources.Text.LibraryRestoredNoChange + Environment.NewLine, LogLevel.Operation);
+                LogEvent(LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine, LogLevel.Operation);
             }
             else if (allSuccess)
             {
                 string successText = operation == OperationType.Clean ?
-                                     string.Format(LibraryManager.Resources.Text.CleanLibrariesSucceeded, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2)) :
-                                     string.Format(LibraryManager.Resources.Text.LibrariesRestored, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
+                                     string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesSucceeded, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2)) :
+                                     string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, totalResultsCounts, Math.Round(elapsedTime.TotalSeconds, 2));
 
                 LogEvent(successText + Environment.NewLine, LogLevel.Operation);
             }
             else if (allCancelled)
             {
                 string canceledText = operation == OperationType.Clean ?
-                                    string.Format(LibraryManager.Resources.Text.CleanLibrariesCancelled, totalResultsCounts):
-                                    string.Format(LibraryManager.Resources.Text.RestoreLibrariesCancelled, totalResultsCounts);
+                                    string.Format(LibraryManager.Resources.Text.Clean_OperationCancelled, totalResultsCounts):
+                                    string.Format(LibraryManager.Resources.Text.Restore_OperationCancelled, totalResultsCounts);
 
                 LogEvent(canceledText + Environment.NewLine, LogLevel.Operation);
             }
             else if (allFailed)
             {
                 string failedText = operation == OperationType.Clean ?
-                                    string.Format(LibraryManager.Resources.Text.CleanLibrariesFailed, totalResultsCounts):
-                                    string.Format(LibraryManager.Resources.Text.LibraryRestorationFailed, totalResultsCounts);
+                                    string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesFailed, totalResultsCounts):
+                                    string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, totalResultsCounts);
 
                 LogEvent(failedText + Environment.NewLine, LogLevel.Operation);
             }
             else
             {
                 var summarySuccessText = operation == OperationType.Clean ?
-                                                      string.Format(LibraryManager.Resources.Text.CleanLibrariesSucceeded, successfulRestores.Count()):
-                                                      string.Format(LibraryManager.Resources.Text.RestoreLibrariesSucceeded, successfulRestores.Count());
+                                                      string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesSucceeded, successfulRestores.Count()):
+                                                      string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, successfulRestores.Count());
                 LogEvent(summarySuccessText + Environment.NewLine, LogLevel.Operation);
 
                 foreach (var result in successfulRestores)
                 {
-                    var successText = string.Format(LibraryManager.Resources.Text.InstallLibrarySucceeded, result.InstallationState.LibraryId);
+                    var successText = string.Format(LibraryManager.Resources.Text.Restore_LibraryRestoreSucceeded, result.InstallationState.LibraryId);
                     LogEvent(successText, LogLevel.Operation);
                 }
 
                 if (failedRestores.Any())
                 {
                     var summaryErrorText = operation == OperationType.Clean ?
-                                           string.Format(LibraryManager.Resources.Text.CleanLibrariesFailed, failedRestores.Count()):
-                                           string.Format(LibraryManager.Resources.Text.LibraryRestorationFailed, failedRestores.Count());
+                                           string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesFailed, failedRestores.Count()):
+                                           string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, failedRestores.Count());
                     LogEvent(Environment.NewLine + summaryErrorText + Environment.NewLine, LogLevel.Operation);
 
                     foreach (var result in failedRestores)
                     {
                         var errorText = operation == OperationType.Clean ?
-                                        string.Format(LibraryManager.Resources.Text.CleanLibraryFailed, result.InstallationState.LibraryId):
-                                        string.Format(LibraryManager.Resources.Text.RestoreLibraryFailed, result.InstallationState.LibraryId);
+                                        string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesFailed, result.InstallationState.LibraryId):
+                                        string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, result.InstallationState.LibraryId);
                         LogEvent(errorText, LogLevel.Operation);
                     }
                 }
@@ -179,15 +179,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 if (cancelledRestores.Any())
                 {
                     var summaryCancellationText = operation == OperationType.Clean ?
-                                                    string.Format(LibraryManager.Resources.Text.CleanLibrariesCancelled, cancelledRestores.Count()):
-                                                    string.Format(LibraryManager.Resources.Text.RestoreLibrariesCancelled, cancelledRestores.Count());
+                                                    string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesCancelled, cancelledRestores.Count()):
+                                                    string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, cancelledRestores.Count());
                     LogEvent(Environment.NewLine + summaryCancellationText + Environment.NewLine, LogLevel.Operation);
 
                     foreach (var result in cancelledRestores)
                     {
                         var cancellationText = operation == OperationType.Clean ?
-                            string.Format(LibraryManager.Resources.Text.CleanLibraryCancelled, result.InstallationState.LibraryId):
-                            string.Format(LibraryManager.Resources.Text.RestoreLibraryCancelled, result.InstallationState.LibraryId);
+                            string.Format(LibraryManager.Resources.Text.Clean_OperationCancelled, result.InstallationState.LibraryId):
+                            string.Format(LibraryManager.Resources.Text.Restore_OperationCancelled, result.InstallationState.LibraryId);
                         LogEvent(cancellationText, LogLevel.Operation);
                     }
                 }
@@ -200,11 +200,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 case OperationType.Restore:
                 {
-                    return LibraryManager.Resources.Text.RestoreLibrariesStarted;
+                    return LibraryManager.Resources.Text.Restore_OperationStarted;
                 }
                 case OperationType.Clean:
                 {
-                    return LibraryManager.Resources.Text.CleanLibrariesStarted;
+                    return LibraryManager.Resources.Text.Clean_OperationStarted;
                 }
             }
 
@@ -217,11 +217,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 case OperationType.Restore:
                 {
-                    return LibraryManager.Resources.Text.RestoreOperationCompleted;
+                    return LibraryManager.Resources.Text.Restore_OperationCompleted;
                 }
                 case OperationType.Clean:
                 {
-                    return LibraryManager.Resources.Text.CleanOperationCompleted;
+                    return LibraryManager.Resources.Text.Clean_OperationCompleted;
                 }
             }
 

@@ -235,4 +235,7 @@
   <data name="Update_LibraryCancelled" xml:space="preserve">
     <value>Update of library {0} has been cancelled</value>
   </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>Restoring libraries for project {0}</value>
+  </data>
 </root>

@@ -95,7 +95,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                             }
                             else
                             {
-                                string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.RestoreHasErrors, Environment.NewLine);
+                                string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
                                 Logger.LogEvent(textMessage, LogLevel.Task);
                             }
                         }
@@ -111,7 +111,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         // TO DO: Restore to previous state
                         // and add a warning to the Error List
 
-                        string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.RestoreHasErrors, Environment.NewLine);
+                        string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
 
                         Logger.LogEvent(textMessage, LogLevel.Task);
                         Logger.LogEvent(ex.ToString(), LogLevel.Error);

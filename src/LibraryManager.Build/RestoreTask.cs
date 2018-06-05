@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Build
 
             CancellationToken token = CancellationToken.None;
 
-            Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.RestoreLibrariesStarted);
+            Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.Restore_OperationStarted);
 
             var dependencies = Dependencies.FromTask(ProjectDirectory, ProviderAssemblies.Select(pa => new FileInfo(pa.ItemSpec).FullName));
             Manifest manifest = Manifest.FromFileAsync(configFilePath.FullName, dependencies, token).Result;
@@ -92,7 +92,7 @@ namespace Microsoft.Web.LibraryManager.Build
                     Log.LogWarning(null, error.Code, null, FileName, 0, 0, 0, 0, error.Message);
                 }
 
-                string text = Resources.Text.RestoreHasErrors;
+                string text = Resources.Text.Restore_OperationHasErrors;
                 Log.LogMessage(MessageImportance.High, Environment.NewLine + text + Environment.NewLine);
             }
             else
@@ -100,7 +100,7 @@ namespace Microsoft.Web.LibraryManager.Build
                 int fileCount = results.Where(r => r.Success).Sum(r => r.InstallationState.Files.Count);
                 if (fileCount > 0)
                 {
-                    string text = string.Format(Resources.Text.LibrariesRestored, results.Count(), Math.Round(sw.Elapsed.TotalSeconds, 2));
+                    string text = string.Format(Resources.Text.Restore_NumberOfLibrariesSucceeded, results.Count(), Math.Round(sw.Elapsed.TotalSeconds, 2));
                     Log.LogMessage(MessageImportance.High, Environment.NewLine + text + Environment.NewLine);
                 }
                 else

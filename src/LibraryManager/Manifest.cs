@@ -323,7 +323,7 @@ namespace Microsoft.Web.LibraryManager
 
         private async Task<ILibraryInstallationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
         {
-            _hostInteraction.Logger.Log(string.Format(Resources.Text.RestoringLibrary, libraryState.LibraryId, libraryState.DestinationPath), LogLevel.Operation);
+            _hostInteraction.Logger.Log(string.Format(Resources.Text.Restore_RestoreOfLibraryStarted, libraryState.LibraryId, libraryState.DestinationPath), LogLevel.Operation);
 
             if (cancellationToken.IsCancellationRequested)
             {

@@ -188,6 +188,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restoring libraries for project {0}.
+        /// </summary>
+        public static string Restore_LibrariesForProject {
+            get {
+                return ResourceManager.GetString("Restore_LibrariesForProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
         /// </summary>
         public static string Restore_LibrariesUptodate {
