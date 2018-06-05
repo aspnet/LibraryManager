@@ -330,11 +330,6 @@ namespace Microsoft.Web.LibraryManager
                 return LibraryInstallationResult.FromCancelled(libraryState);
             }
 
-            if (!libraryState.IsValid(out IEnumerable<IError> errors))
-            {
-                return new LibraryInstallationResult(libraryState, errors.ToArray());
-            }
-
             IProvider provider = _dependencies.GetProvider(libraryState.ProviderId);
             if (provider == null)
             {

@@ -92,27 +92,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             desiredState = updateResult.InstallationState;
 
-            ILibraryCatalog catalog = GetCatalog();
-            ILibrary libraryMetadata = null;
-            try
-            {
-                libraryMetadata = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken);
-            }
-            catch (InvalidLibraryException)
-            {
-                return new LibraryInstallationResult(desiredState, new IError[] { PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId) });
-            }
-
-            if (libraryMetadata != null && desiredState.Files != null)
-            {
-                IReadOnlyList<string> invalidFiles = libraryMetadata.GetInvalidFiles(desiredState.Files);
-                if (invalidFiles.Any())
-                {
-                    var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, libraryMetadata.Files.Keys);
-                    return new LibraryInstallationResult(desiredState, invalidFilesError);
-                }
-            }
-
             // Refresh cache if needed
             ILibraryInstallationResult cacheUpdateResult = await RefreshCacheAsync(desiredState, cancellationToken);
             if (!cacheUpdateResult.Success)
@@ -188,7 +167,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-
                 ILibraryCatalog catalog = GetCatalog();
                 ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
 
@@ -199,7 +177,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
-                    return LibraryInstallationResult.FromSuccess(desiredState);
+                    IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
+                    if (invalidFiles.Any())
+                    {
+                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
+                        return new LibraryInstallationResult(desiredState, invalidFilesError);
+                    }
+                    else
+                    {
+                        return LibraryInstallationResult.FromSuccess(desiredState);
+                    }
                 }
 
                 desiredState = new LibraryInstallationState
@@ -237,21 +224,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             if (File.Exists(absolute))
             {
                 return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
-            }
-
-            return null;
-        }
-
-        private string GetCacheFileAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
-        {
-            string name = GetLibraryName(state);
-            string version = GetLibraryVersion(state);
-
-            string absolutePath = Path.Combine(CacheFolder, name, version, sourceFile);
-
-            if (File.Exists(absolutePath))
-            {
-                return absolutePath;
             }
 
             return null;
