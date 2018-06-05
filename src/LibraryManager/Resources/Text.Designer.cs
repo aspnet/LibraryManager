@@ -62,83 +62,65 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean libraries operation was cancelled.
+        ///   Looks up a localized string similar to {0} libraries had deletion cancelled.
         /// </summary>
-        public static string CleanLibrariesCancelled {
+        public static string Clean_NumberOfLibrariesCancelled {
             get {
-                return ResourceManager.GetString("CleanLibrariesCancelled", resourceCulture);
+                return ResourceManager.GetString("Clean_NumberOfLibrariesCancelled", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to {0} libraries failed to be deleted.
         /// </summary>
-        public static string CleanLibrariesFailed {
+        public static string Clean_NumberOfLibrariesFailed {
             get {
-                return ResourceManager.GetString("CleanLibrariesFailed", resourceCulture);
+                return ResourceManager.GetString("Clean_NumberOfLibrariesFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean libraries started....
+        ///   Looks up a localized string similar to {0} libraries were successfuly deleted in {1} secs.
         /// </summary>
-        public static string CleanLibrariesStarted {
+        public static string Clean_NumberOfLibrariesSucceeded {
             get {
-                return ResourceManager.GetString("CleanLibrariesStarted", resourceCulture);
+                return ResourceManager.GetString("Clean_NumberOfLibrariesSucceeded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} libraries were successfuly deleted .
+        ///   Looks up a localized string similar to Clean libraries operation was cancelled.
         /// </summary>
-        public static string CleanLibrariesSucceeded {
+        public static string Clean_OperationCancelled {
             get {
-                return ResourceManager.GetString("CleanLibrariesSucceeded", resourceCulture);
+                return ResourceManager.GetString("Clean_OperationCancelled", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean library {0} cancelled.
+        ///   Looks up a localized string similar to Clean libraries operation completed.
         /// </summary>
-        public static string CleanLibraryCancelled {
+        public static string Clean_OperationCompleted {
             get {
-                return ResourceManager.GetString("CleanLibraryCancelled", resourceCulture);
+                return ResourceManager.GetString("Clean_OperationCompleted", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean library {0} failed.
+        ///   Looks up a localized string similar to Clean operation failed for {0} libraries.
         /// </summary>
-        public static string CleanLibraryFailed {
+        public static string Clean_OperationFailed {
             get {
-                return ResourceManager.GetString("CleanLibraryFailed", resourceCulture);
+                return ResourceManager.GetString("Clean_OperationFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean library {0} started....
+        ///   Looks up a localized string similar to Clean libraries operation started....
         /// </summary>
-        public static string CleanLibraryStarted {
+        public static string Clean_OperationStarted {
             get {
-                return ResourceManager.GetString("CleanLibraryStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Clean library {0} succeeded.
-        /// </summary>
-        public static string CleanLibrarySucceeded {
-            get {
-                return ResourceManager.GetString("CleanLibrarySucceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Clean operation completed.
-        /// </summary>
-        public static string CleanOperationCompleted {
-            get {
-                return ResourceManager.GetString("CleanOperationCompleted", resourceCulture);
+                return ResourceManager.GetString("Clean_OperationStarted", resourceCulture);
             }
         }
         
@@ -181,36 +163,18 @@ namespace Microsoft.Web.LibraryManager.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Install library {0} failed.
         /// </summary>
-        public static string InstallLibraryFailed {
+        public static string Install_LibraryFailed {
             get {
-                return ResourceManager.GetString("InstallLibraryFailed", resourceCulture);
+                return ResourceManager.GetString("Install_LibraryFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Install library {0} started....
         /// </summary>
-        public static string InstallLibraryStarted {
+        public static string Install_LibraryStarted {
             get {
-                return ResourceManager.GetString("InstallLibraryStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Library {0}  was successfuly restored.
-        /// </summary>
-        public static string InstallLibrarySucceeded {
-            get {
-                return ResourceManager.GetString("InstallLibrarySucceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} libraries restored in {1} seconds.
-        /// </summary>
-        public static string LibrariesRestored {
-            get {
-                return ResourceManager.GetString("LibrariesRestored", resourceCulture);
+                return ResourceManager.GetString("Install_LibraryStarted", resourceCulture);
             }
         }
         
@@ -224,119 +188,119 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore was cancelled for library {0}.
-        /// </summary>
-        public static string LibraryRestorationCancelled {
-            get {
-                return ResourceManager.GetString("LibraryRestorationCancelled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} libraries failed to restore.
-        /// </summary>
-        public static string LibraryRestorationFailed {
-            get {
-                return ResourceManager.GetString("LibraryRestorationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
         /// </summary>
-        public static string LibraryRestoredNoChange {
+        public static string Restore_LibrariesUptodate {
             get {
-                return ResourceManager.GetString("LibraryRestoredNoChange", resourceCulture);
+                return ResourceManager.GetString("Restore_LibrariesUptodate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Libraries restore has been cancelled.
+        ///   Looks up a localized string similar to Restore was cancelled for library {0}.
         /// </summary>
-        public static string RestoreCancelled {
+        public static string Restore_LibraryRestoreCancelled {
             get {
-                return ResourceManager.GetString("RestoreCancelled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to One or more libraries failed to restore.
-        /// </summary>
-        public static string RestoreHasErrors {
-            get {
-                return ResourceManager.GetString("RestoreHasErrors", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} libraries had restore cancelled.
-        /// </summary>
-        public static string RestoreLibrariesCancelled {
-            get {
-                return ResourceManager.GetString("RestoreLibrariesCancelled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restore libraries failed.
-        /// </summary>
-        public static string RestoreLibrariesFailed {
-            get {
-                return ResourceManager.GetString("RestoreLibrariesFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restore libraries started....
-        /// </summary>
-        public static string RestoreLibrariesStarted {
-            get {
-                return ResourceManager.GetString("RestoreLibrariesStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} libraries restored successfuly.
-        /// </summary>
-        public static string RestoreLibrariesSucceeded {
-            get {
-                return ResourceManager.GetString("RestoreLibrariesSucceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cancelled restore of library: {0}.
-        /// </summary>
-        public static string RestoreLibraryCancelled {
-            get {
-                return ResourceManager.GetString("RestoreLibraryCancelled", resourceCulture);
+                return ResourceManager.GetString("Restore_LibraryRestoreCancelled", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Failed to restore library: {0}.
         /// </summary>
-        public static string RestoreLibraryFailed {
+        public static string Restore_LibraryRestoreFailed {
             get {
-                return ResourceManager.GetString("RestoreLibraryFailed", resourceCulture);
+                return ResourceManager.GetString("Restore_LibraryRestoreFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore operation completed.
+        ///   Looks up a localized string similar to Library {0}  was successfuly restored.
         /// </summary>
-        public static string RestoreOperationCompleted {
+        public static string Restore_LibraryRestoreSucceeded {
             get {
-                return ResourceManager.GetString("RestoreOperationCompleted", resourceCulture);
+                return ResourceManager.GetString("Restore_LibraryRestoreSucceeded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restoring {0} -&gt; {1}..
+        ///   Looks up a localized string similar to {0} libraries had restore cancelled.
         /// </summary>
-        public static string RestoringLibrary {
+        public static string Restore_NumberOfLibrariesCancelled {
             get {
-                return ResourceManager.GetString("RestoringLibrary", resourceCulture);
+                return ResourceManager.GetString("Restore_NumberOfLibrariesCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} libraries failed to restore.
+        /// </summary>
+        public static string Restore_NumberOfLibrariesFailed {
+            get {
+                return ResourceManager.GetString("Restore_NumberOfLibrariesFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} libraries restored in {1} seconds.
+        /// </summary>
+        public static string Restore_NumberOfLibrariesSucceeded {
+            get {
+                return ResourceManager.GetString("Restore_NumberOfLibrariesSucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Libraries restore operation has been cancelled.
+        /// </summary>
+        public static string Restore_OperationCancelled {
+            get {
+                return ResourceManager.GetString("Restore_OperationCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore libraries operation completed.
+        /// </summary>
+        public static string Restore_OperationCompleted {
+            get {
+                return ResourceManager.GetString("Restore_OperationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore operation failed for {0} libraries.
+        /// </summary>
+        public static string Restore_OperationFailed {
+            get {
+                return ResourceManager.GetString("Restore_OperationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more libraries failed to restore.
+        /// </summary>
+        public static string Restore_OperationHasErrors {
+            get {
+                return ResourceManager.GetString("Restore_OperationHasErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore libraries operation started....
+        /// </summary>
+        public static string Restore_OperationStarted {
+            get {
+                return ResourceManager.GetString("Restore_OperationStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restoring library {0}....
+        /// </summary>
+        public static string Restore_RestoreOfLibraryStarted {
+            get {
+                return ResourceManager.GetString("Restore_RestoreOfLibraryStarted", resourceCulture);
             }
         }
         
@@ -359,47 +323,74 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstall {0}.
+        ///   Looks up a localized string similar to Uninstall of library {0} has been cancelled.
         /// </summary>
-        public static string UninstallLibrary {
+        public static string Uninstall_LibraryCancelled {
             get {
-                return ResourceManager.GetString("UninstallLibrary", resourceCulture);
+                return ResourceManager.GetString("Uninstall_LibraryCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstall of library {0} failed.
+        /// </summary>
+        public static string Uninstall_LibraryFailed {
+            get {
+                return ResourceManager.GetString("Uninstall_LibraryFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstall of library {0} started....
+        /// </summary>
+        public static string Uninstall_LibraryStarted {
+            get {
+                return ResourceManager.GetString("Uninstall_LibraryStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstall of library {0} succeeded.
+        /// </summary>
+        public static string Uninstall_LibrarySucceeded {
+            get {
+                return ResourceManager.GetString("Uninstall_LibrarySucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update of library {0} has been cancelled.
+        /// </summary>
+        public static string Update_LibraryCancelled {
+            get {
+                return ResourceManager.GetString("Update_LibraryCancelled", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Update library {0} failed.
         /// </summary>
-        public static string UpdateLibraryFailed {
+        public static string Update_LibraryFailed {
             get {
-                return ResourceManager.GetString("UpdateLibraryFailed", resourceCulture);
+                return ResourceManager.GetString("Update_LibraryFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update library {0} started... .
+        ///   Looks up a localized string similar to Update of library {0} started... .
         /// </summary>
-        public static string UpdateLibraryStarted {
+        public static string Update_LibraryStarted {
             get {
-                return ResourceManager.GetString("UpdateLibraryStarted", resourceCulture);
+                return ResourceManager.GetString("Update_LibraryStarted", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update library {0} succeeded.
+        ///   Looks up a localized string similar to Update of library {0} succeeded.
         /// </summary>
-        public static string UpdateLibrarySucceeded {
+        public static string Update_LibrarySucceeded {
             get {
-                return ResourceManager.GetString("UpdateLibrarySucceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Upadate operation completed.
-        /// </summary>
-        public static string UpdateOperationCompleted {
-            get {
-                return ResourceManager.GetString("UpdateOperationCompleted", resourceCulture);
+                return ResourceManager.GetString("Update_LibrarySucceeded", resourceCulture);
             }
         }
     }

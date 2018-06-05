@@ -186,34 +186,10 @@ Do you want to continue?</value>
   <data name="LibraryAddedToProject" xml:space="preserve">
     <value>Library {0} was successfuly added to project</value>
   </data>
-  <data name="ElapsedTimeMessage" xml:space="preserve">
-    <value>Time Elapsed: {0}</value>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>Library Manager</value>
   </data>
-  <data name="LibrariesRestoreCancelledSummary" xml:space="preserve">
-    <value>{0} libraries had restore cancelled</value>
-  </data>
-  <data name="LibrariesRestoredSuccessfullySummary" xml:space="preserve">
-    <value>{0} libraries restored successfully</value>
-  </data>
-  <data name="LibrariesRestoreFailedSummary" xml:space="preserve">
-    <value>{0} libraries failed to restore</value>
-  </data>
-  <data name="LibraryRestoreCancelledMessage" xml:space="preserve">
-    <value>Cancelled restore of library: {0}</value>
-  </data>
-  <data name="LibraryRestoredSuccessMessage" xml:space="preserve">
-    <value>Successfuly restored library: {0}</value>
-  </data>
-  <data name="LibraryRestoreFailedMessage" xml:space="preserve">
-    <value>Failed to restore library: {0}</value>
-  </data>
-  <data name="OperationFinishedMessage" xml:space="preserve">
-    <value>========== Finished ==========</value>
-  </data>
-  <data name="RestoreLibrariesCompleted" xml:space="preserve">
-    <value>Restoring libraries completed</value>
-  </data>
-  <data name="RestoringLibrariesForProjectMessage" xml:space="preserve">
-    <value>Restoring libraries for {0}...</value>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>Library Manager operation already ion progress.</value>
   </data>
 </root>
