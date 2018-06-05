@@ -50,7 +50,4 @@
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;請鍵入以搜尋&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;請選擇套件以選取要安裝的檔案&gt;</value>
-  </data>
 </root>

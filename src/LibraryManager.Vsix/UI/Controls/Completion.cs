@@ -2,7 +2,7 @@
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
-    internal class Completion
+    public class Completion
     {
         public Completion(CompletionItem completionItem, int start, int length)
         {

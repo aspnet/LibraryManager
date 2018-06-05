@@ -1,12 +1,16 @@
 image: Visual Studio 2017
 
 install:
-- ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
-- powershell -NoProfile -ExecutionPolicy unrestricted -Command "&{iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/dotnet/cli/rel/1.0.1/scripts/obtain/dotnet-install.ps1'))}"
+- ps: .\Install-dotnet.ps1
 
 build_script:
-  - msbuild /t:restore /v:m
-  - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+  - msbuild /t:restore /v:m LibraryManager.sln
+  - msbuild /t:BuildAll LibraryManager.msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+  - vstest.console /logger:Appveyor test\libman.Test\bin\Release\netcoreapp2.1\libman.Test.dll
+  - vstest.console /logger:Appveyor test\Microsoft.Web.LibraryManager.Build.Test\bin\Release\netcoreapp2.1\Microsoft.Web.LibraryManager.Build.Test.dll
+  - vstest.console /logger:Appveyor test\Microsoft.Web.LibraryManager.Build.Test\bin\Release\net461\Microsoft.Web.LibraryManager.Build.Test.dll
+  - vstest.console /logger:Appveyor test\LibraryManager.Test\bin\Release\net461\Microsoft.Web.LibraryManager.Test.dll
+  - vstest.console /logger:Appveyor test\LibraryManager.Test\bin\Release\netcoreapp2.1\Microsoft.Web.LibraryManager.Test.dll
 
 artifacts:
   - path: artifacts\**\*.nupkg

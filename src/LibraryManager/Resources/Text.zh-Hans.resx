@@ -24,22 +24,4 @@
     <value>{0} 写入磁盘</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>已取消库还原</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>正在还原 {0}...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>正在还原库...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>在 {1} 秒内还原了 {0} 个库</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>库还原操作失败</value>
-    <comment>Status message</comment>
-  </data>
 </root>

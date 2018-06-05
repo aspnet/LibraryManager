@@ -34,9 +34,22 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public bool? IsChecked
         {
-            get { return _isChecked; }
+            get
+            {
+                if (FileSelection.InstallationType == FileSelectionType.InstallAllLibraryFiles)
+                {
+                    _isChecked = true;
+                }
+
+                return _isChecked;
+            }
             set
             {
+                if (FileSelection.InstallationType == FileSelectionType.InstallAllLibraryFiles)
+                {
+                    value = true;
+                }
+
                 if (Set(ref _isChecked, value))
                 {
                     if (value.HasValue && !_isUpdatingParentCheckedStates)

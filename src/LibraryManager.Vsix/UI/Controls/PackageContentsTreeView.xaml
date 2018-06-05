@@ -12,14 +12,25 @@
         <converters:PackageItemIconConverter x:Key="IconConverter" />
         <converters:VisibleIfNonNullConverter x:Key="VisibleIfNonNullConverter" />
     </UserControl.Resources>
-    <TreeView ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}" VirtualizingPanel.IsVirtualizing="True">
+    <TreeView ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}" VirtualizingPanel.IsVirtualizing="True" KeyboardNavigation.TabNavigation="Continue">
         <TreeView.ItemContainerStyle>
             <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                 <Setter Property="Focusable" Value="False" />
+                <Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
+            <Style TargetType="TreeView">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsTreeViewEmpty}" Value="True">
+                        <Setter Property="Visibility" Value="Hidden" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsTreeViewEmpty}" Value="False">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}" DataType="{x:Type models:PackageItem}">
                 <CheckBox IsChecked="{Binding Path=IsChecked}" VerticalAlignment="Center">
                     <Grid>

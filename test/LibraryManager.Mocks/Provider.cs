@@ -36,6 +36,14 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public string NuGetPackageId { get; set; }
 
         /// <summary>
+        /// Hint text for library id.
+        /// </summary>
+        /// <remarks>
+        /// If the provider doesn't have a hint text, then return empty string.
+        /// </remarks>
+        public string LibraryIdHintText { get; set; }
+
+        /// <summary>
         /// An object specified by the host to interact with the file system etc.
         /// </summary>
         public virtual IHostInteraction HostInteraction { get; set; }

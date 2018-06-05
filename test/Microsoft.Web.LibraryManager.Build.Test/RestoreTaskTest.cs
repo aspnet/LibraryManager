@@ -58,10 +58,10 @@ namespace Microsoft.Web.LibraryManager.Build.Test
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, _buildEngine.Warnings.Count);
-            Assert.AreEqual(6, _buildEngine.Messages.Count);
+            Assert.AreEqual(2, _buildEngine.Messages.Count);
             Assert.AreEqual(0, _buildEngine.Errors.Count);
             Assert.AreEqual("LIB002", _buildEngine.Warnings.First().Code);
-            Assert.AreEqual(2, _task.FilesWritten.Length);
+            Assert.AreEqual(0, _task.FilesWritten.Length);
         }
 
         [TestMethod]

@@ -25,6 +25,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         string NuGetPackageId { get; }
 
         /// <summary>
+        /// Hint text for the library id.
+        /// </summary>
+        string LibraryIdHintText { get; }
+
+        /// <summary>
         /// An object specified by the host to interact with the file system etc.
         /// </summary>
         IHostInteraction HostInteraction { get; }

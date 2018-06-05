@@ -61,6 +61,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Client-Side Library.
+        /// </summary>
+        public static string AddClientSideLibrary {
+            get {
+                return ResourceManager.GetString("AddClientSideLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for updates.
         /// </summary>
         public static string CheckForUpdates {
@@ -70,34 +79,16 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose specific files:.
+        /// </summary>
+        public static string ChooseSpecificFiles {
+            get {
+                return ResourceManager.GetString("ChooseSpecificFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clean libraries failed.
-        /// </summary>
-        public static string CleanLibrariesFailed {
-            get {
-                return ResourceManager.GetString("CleanLibrariesFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Clean libraries started....
-        /// </summary>
-        public static string CleanLibrariesStarted {
-            get {
-                return ResourceManager.GetString("CleanLibrariesStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Clean libraries succeeded.
-        /// </summary>
-        public static string CleanLibrariesSucceeded {
-            get {
-                return ResourceManager.GetString("CleanLibrariesSucceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Disable Restore on Build.
         /// </summary>
         public static string DisableRestoreOnBuild {
             get {
@@ -115,11 +106,65 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not add libraries to project.
+        /// </summary>
+        public static string FailToAddLibrariesToProject {
+            get {
+                return ResourceManager.GetString("FailToAddLibrariesToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not delete libraries from project.
+        /// </summary>
+        public static string FailToDeleteLibrariesFromProject {
+            get {
+                return ResourceManager.GetString("FailToDeleteLibrariesFromProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Restore Client-Side Libraries on Build.
+        /// </summary>
+        public static string LibraryAddedToProject {
+            get {
+                return ResourceManager.GetString("LibraryAddedToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files:.
+        /// </summary>
+        public static string Files {
+            get {
+                return ResourceManager.GetString("Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include all library files.
+        /// </summary>
+        public static string IncludeAllLibraryFiles {
+            get {
+                return ResourceManager.GetString("IncludeAllLibraryFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library:.
+        /// </summary>
+        public static string Library {
+            get {
+                return ResourceManager.GetString("Library", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
         /// </summary>
-        public static string LibraryRestoredNoChange {
+        public static string LibraryDeletedFromProject {
             get {
-                return ResourceManager.GetString("LibraryRestoredNoChange", resourceCulture);
+                return ResourceManager.GetString("LibraryDeletedFromProject", resourceCulture);
             }
         }
         
@@ -129,6 +174,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         public static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No files have been selected.
+        /// </summary>
+        public static string NoFilesSelected {
+            get {
+                return ResourceManager.GetString("NoFilesSelected", resourceCulture);
             }
         }
         
@@ -209,6 +263,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Library Manager operation already in progress..
+        /// </summary>
+        public static string OperationInProgress {
+            get {
+                return ResourceManager.GetString("OperationInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library Manager.
+        /// </summary>
+        public static string OutputWindowTitle {
+            get {
+                return ResourceManager.GetString("OutputWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Packages could not be loaded.
         /// </summary>
         public static string PackagesCouldNotBeLoaded {
@@ -218,11 +290,29 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;Choose a package to select files to install&gt;.
+        ///   Looks up a localized string similar to Provider: .
         /// </summary>
-        public static string SelectPackageToSelectFilesToInstall {
+        public static string Provider {
             get {
-                return ResourceManager.GetString("SelectPackageToSelectFilesToInstall", resourceCulture);
+                return ResourceManager.GetString("Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Choose a library to select files to install&gt;.
+        /// </summary>
+        public static string SelectLibraryToSelectFilesToInstall {
+            get {
+                return ResourceManager.GetString("SelectLibraryToSelectFilesToInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target Location:.
+        /// </summary>
+        public static string TargetLocation {
+            get {
+                return ResourceManager.GetString("TargetLocation", resourceCulture);
             }
         }
         

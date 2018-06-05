@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts;
 
@@ -26,15 +27,24 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>Internal use only</summary>
-        public LibraryInstallationResult(IEnumerable<IError> errors)
+        public LibraryInstallationResult(params IError[] error)
         {
-            Errors = new List<IError>(errors);
+            Errors = new List<IError>();
+            foreach (IError e in error)
+            {
+                Errors.Add(e);
+            }
         }
 
         /// <summary>
         /// <code>True</code> if the installation was cancelled; otherwise false;
         /// </summary>
         public bool Cancelled { get; set; }
+
+        /// <summary>
+        /// <code>True</code> if the library is up to date; otherwise false;
+        /// </summary>
+        public bool UpToDate { get; set; }
 
         /// <summary>
         /// <code>True</code> if the install was successfull; otherwise <code>False</code>.
@@ -74,9 +84,18 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>Internal use only</summary>
-        public static LibraryInstallationResult FromErrors(IEnumerable<IError> errors)
+        public static LibraryInstallationResult FromError(IError error)
         {
-            return new LibraryInstallationResult(errors);
+            return new LibraryInstallationResult(error);
+        }
+
+        /// <summary>Internal use only</summary>
+        public static ILibraryInstallationResult FromUpToDate(ILibraryInstallationState installationState)
+        {
+            return new LibraryInstallationResult(installationState)
+            {
+                UpToDate = true
+            };
         }
     }
 }

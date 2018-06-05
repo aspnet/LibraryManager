@@ -123,7 +123,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             var doc = JSONEditorDocument.FromTextBuffer(_textView.TextDataModel.DocumentBuffer);
-            JSONParseItem parseItem = doc?.JSONDocument.ItemBeforePosition(_textView.Caret.Position.BufferPosition);
+
+            if (doc == null)
+            {
+                return;
+            }
+
+            JSONParseItem parseItem = GetItemBeforePosition(_textView.Caret.Position.BufferPosition, doc);
 
             if (parseItem == null)
             {
@@ -143,6 +149,59 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 VsHelpers.DTE.ExecuteCommand("Edit.ListMembers");
             }
+        }
+
+        private JSONParseItem GetItemBeforePosition(int pos, JSONEditorDocument document)
+        {
+            JSONParseItem item = null;
+            JSONParseItemList children = document.JSONDocument.Children;
+            int start = 0;
+
+            if (children.Any())
+            {
+                start = children[0].Start;
+            }
+
+            if (start < pos)
+            {
+                int i = FindInsertIndex(children, pos, beforeExisting: true) - 1;
+
+                if (i >= 0)
+                {
+                    item = children[i];
+
+                    if (item is JSONComplexItem)
+                    {
+                        // Recurse to find the deepest item
+                        item = GetItemBeforePosition(item.Start, document);
+                    }
+                }
+            }
+
+            return item;
+        }
+
+        private int FindInsertIndex(JSONParseItemList jsonParseItems, int rangeStart, bool beforeExisting)
+        {
+            int min = 0;
+            int max = jsonParseItems.Count - 1;
+
+            while (min <= max)
+            {
+                int mid = (min + max) / 2;
+                int start = jsonParseItems[mid].Start;
+
+                if (rangeStart < start || (beforeExisting && rangeStart == start))
+                {
+                    max = mid - 1;
+                }
+                else
+                {
+                    min = mid + 1;
+                }
+            }
+
+            return max + 1;
         }
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)

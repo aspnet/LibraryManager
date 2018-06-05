@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Build
             foreach (string path in _assemblyPaths)
             {
                 Assembly assembly;
-#if NET46
+#if NET461
                 assembly = Assembly.LoadFrom(path);
 #else
                 assembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(path);

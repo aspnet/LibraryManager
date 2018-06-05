@@ -24,22 +24,4 @@
     <value>{0} scritto su disco</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>Il ripristino della libreria è stato annullato</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>Ripristino di {0}...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Ripristino delle librerie...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} librerie ripristinate in {1} secondi</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Il ripristino della libreria non è riuscito</value>
-    <comment>Status message</comment>
-  </data>
 </root>

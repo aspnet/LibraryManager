@@ -1,29 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
-        <TargetFrameworks>netstandard1.5;net46</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <PackageTags>library, package, client-side, build</PackageTags>
-        <Authors>Microsoft</Authors>
-        <Company>Microsoft Corp.</Company>
         <Description>MSBuild target for the Visual Studio Library Manager</Description>
-        <Copyright>Copyright © Microsoft</Copyright>
         <PackageId>Microsoft.Web.LibraryManager.Build</PackageId>
         <Title>$(PackageId)</Title>
-        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
-        <PackageProjectUrl>https://github.com/aspnet/LibraryManager</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/aspnet/LibraryManager/blob/master/LICENSE.txt</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
-        <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
         <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Build.Framework" Version="15.1.1012" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.1012" PrivateAssets="All" />
-        <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" PrivateAssets="All" />
-        <PackageReference Include="System.Runtime.Loader" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard1.5'" />
+        <PackageReference Include="Microsoft.Build.Framework" Version="$(MSBuildPackageVersion)" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.Build.Tasks.Core" Version="$(MSBuildPackageVersion)" PrivateAssets="All" />
+        <PackageReference Include="System.Runtime.Loader" Version="$(SystemRuntimeLoaderPackageVersion)" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
     </ItemGroup>
 
     <ItemGroup>

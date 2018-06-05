@@ -12,7 +12,6 @@ namespace Microsoft.Web.LibraryManager.Build
         }
 
         public static Logger Instance { get; } = new Logger();
-
         public ICollection<string> Messages { get; } = new List<string>();
         public ICollection<string> Errors { get; } = new List<string>();
 

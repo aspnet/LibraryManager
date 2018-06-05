@@ -1,5 +1,11 @@
-﻿using Microsoft.Web.LibraryManager.Contracts;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -35,6 +41,10 @@ namespace Microsoft.Web.LibraryManager
             {
                 list.Add(PredefinedErrors.PathIsUndefined());
             }
+            else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            {
+                list.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
+            }
 
             if (string.IsNullOrEmpty(state.LibraryId))
             {
@@ -44,6 +54,37 @@ namespace Microsoft.Web.LibraryManager
             errors = list;
 
             return list.Count == 0;
+        }
+
+        /// <summary>
+        /// Returns files from <paramref name="files"/> that are not part of the <paramref name="library"/>
+        /// </summary>
+        /// <param name="library"></param>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        public static IReadOnlyList<string> GetInvalidFiles(this ILibrary library, IReadOnlyList<string> files)
+        {
+            if (library == null)
+            {
+                throw new ArgumentNullException(nameof(library));
+            }
+
+            var invalidFiles = new List<string>();
+
+            if (files == null || !files.Any())
+            {
+                return invalidFiles;
+            }
+
+            foreach(string file in files)
+            {
+                if (!library.Files.ContainsKey(file))
+                {
+                    invalidFiles.Add(file);
+                }
+            }
+
+            return invalidFiles;
         }
     }
 }

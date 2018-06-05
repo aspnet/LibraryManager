@@ -8,25 +8,17 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
         <PackageTags>library, package, client-side</PackageTags>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.Contracts.xml</DocumentationFile>
-        <Authors>Microsoft</Authors>
-        <Company>Microsof Corp.</Company>
         <Description>The contracts assembly for authoring Library Manager extensions</Description>
-        <Copyright>Copyright © Microsoft</Copyright>
         <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
-        <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
-        <PackageProjectUrl>https://github.com/aspnet/LibraryManager</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/aspnet/LibraryManager/blob/master/LICENSE.txt</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
-        <PackageOutputPath>..\..\artifacts\$(Configuration)</PackageOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NerdBank.GitVersioning" Version="2.1.23" PrivateAssets="all" />
+        <PackageReference Include="System.Net.Http" Version="$(SystemNetHttpPackageVersion)" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
     </ItemGroup>
 
   <!-- Warning if Multilingual App Toolkit isn't installed -->
@@ -45,7 +37,6 @@
     <ItemGroup>
       <XliffResource Include="MultilingualResources\*.xlf" />
     </ItemGroup>
-
     <ItemGroup>
       <Compile Update="Resources\Text.Designer.cs">
         <DesignTime>True</DesignTime>

@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public void Cleanup()
         {
             File.Delete(Path.Combine(_dependencies.GetHostInteractions().CacheDirectory, "cdnjs", "cache.json"));
-            Directory.Delete(_projectFolder, true);
+            TestUtils.DeleteDirectoryWithRetries(_projectFolder);
         }
 
         [TestMethod]
@@ -169,7 +169,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             // Install library
             ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB003", result.Errors[0].Code);
+            Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
 
         [TestMethod]

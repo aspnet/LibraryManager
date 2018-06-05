@@ -1,21 +1,21 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 {
     internal class CdnjsCatalog : ILibraryCatalog
     {
-        private const int _days = 3;
+        // TO DO: These should become Provider properties to be passed to CacheService
         private const string _fileName = "cache.json";
         private const string _remoteApiUrl = "https://aka.ms/g8irvu";
         private const string _metaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}"; // https://aka.ms/goycwu/{0}
@@ -23,10 +23,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         private readonly string _cacheFile;
         private readonly CdnjsProvider _provider;
         private IEnumerable<CdnjsLibraryGroup> _libraryGroups;
+        private CacheService _cacheService;
 
         public CdnjsCatalog(CdnjsProvider provider)
         {
             _provider = provider;
+            _cacheService = new CacheService(WebRequestHandler.Instance);
             _cacheFile = Path.Combine(provider.CacheFolder, _fileName);
         }
 
@@ -129,9 +131,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             {
                 string[] args = libraryId.Split('@');
                 string name = args[0];
-                string version = args[1];
+                string version = (args.Count() > 1) ? args[1] :null;
 
                 IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
+
                 Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
                 if (asset == null)
@@ -225,6 +228,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return cleanName;
         }
 
+        // TO DO: Remove this!
         private static string AliasedName(string groupName)
         {
 
@@ -246,7 +250,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await FileHelpers.GetFileTextAsync(_remoteApiUrl, _cacheFile, _days, cancellationToken).ConfigureAwait(false);
+                string json = await _cacheService.GetCatalogAsync(_remoteApiUrl, _cacheFile, cancellationToken).ConfigureAwait(false);
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
@@ -257,6 +261,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 _libraryGroups = JsonConvert.DeserializeObject<IEnumerable<CdnjsLibraryGroup>>(obj).ToArray();
                 return true;
+            }
+            catch (ResourceDownloadException)
+            {
+                _provider.HostInteraction.Logger.Log(string.Format(Resources.Text.FailedToDownloadCatalog, _provider.Id), LogLevel.Operation);
+                return false;
             }
             catch (Exception ex)
             {
@@ -274,26 +283,33 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)
         {
-            string localFile = Path.Combine(_provider.CacheFolder, groupName, "metadata.json");
             var list = new List<Asset>();
+            string localFile = Path.Combine(_provider.CacheFolder, groupName, "metadata.json");
+            string url = string.Format(_metaPackageUrlFormat, groupName);
 
             try
             {
-                string url = string.Format(_metaPackageUrlFormat, groupName);
-                string json = await FileHelpers.GetFileTextAsync(url, localFile, _days, cancellationToken).ConfigureAwait(false);
+                string json = await _cacheService.GetMetadataAsync(url, localFile, cancellationToken).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(json))
                 {
                     var root = JObject.Parse(json);
-                    IEnumerable<Asset> assets = JsonConvert.DeserializeObject<IEnumerable<Asset>>(root["assets"].ToString());
-                    string defaultFileName = root["filename"]?.Value<string>();
-
-                    foreach (Asset asset in assets)
+                    if (root["assets"] != null)
                     {
-                        asset.DefaultFile = defaultFileName;
-                        list.Add(asset);
+                        IEnumerable<Asset> assets = JsonConvert.DeserializeObject<IEnumerable<Asset>>(root["assets"].ToString());
+                        string defaultFileName = root["filename"]?.Value<string>();
+
+                        foreach (Asset asset in assets)
+                        {
+                            asset.DefaultFile = defaultFileName;
+                            list.Add(asset);
+                        }
                     }
                 }
+            }
+            catch (ResourceDownloadException)
+            {
+                throw;
             }
             catch (Exception)
             {

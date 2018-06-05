@@ -24,22 +24,4 @@
     <value>Plik {0} został zapisany na dysku</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>Przywracanie biblioteki zostało anulowane</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>Trwa przywracanie pliku {0}...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Trwa przywracanie bibliotek...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>Przywrócone biblioteki: {0}, czas: {1} sek.</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Przywracanie biblioteki nie powiodło się</value>
-    <comment>Status message</comment>
-  </data>
 </root>

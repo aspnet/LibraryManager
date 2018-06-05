@@ -47,7 +47,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         {
             File.Delete(_file1);
             File.Delete(_file2);
-            Directory.Delete(_projectFolder, true);
+            TestUtils.DeleteDirectoryWithRetries(_projectFolder);
         }
 
         [TestMethod]

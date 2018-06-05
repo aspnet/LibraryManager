@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>Add Client-Side Library</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
   <data name="CleanLibrariesStarted" xml:space="preserve">
     <value>Clean libraries started...</value>
     <comment>When the "Clean" command is being executed</comment>
@@ -145,10 +149,6 @@
     <value>No updates found at this time</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
-  <data name="UninstallLibrary" xml:space="preserve">
-    <value>Uninstall {0}</value>
-    <comment>Used in JSON editor light bulb</comment>
-  </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>A NuGet package will be installed to augment the MSBuild process, but no files will be added to the project.
 
@@ -159,17 +159,14 @@ Do you want to continue?</value>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Type to search&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Choose a package to select files to install&gt;</value>
-  </data>
-  <data name="CleanLibrariesFailed" xml:space="preserve">
-    <value>Clean libraries failed</value>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;Choose a library to select files to install&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
     <value>Disable Restore on Build</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Enable Restore on Build</value>
+    <value>Enable Restore Client-Side Libraries on Build</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Installing NuGet package containing MSBuild target...</value>
@@ -188,5 +185,48 @@ Do you want to continue?</value>
   </data>
   <data name="Nuget_UninstallingPackage" xml:space="preserve">
     <value>Uninstalling NuGet package...</value>
+  </data>
+  <data name="UninstallLibrary" xml:space="preserve">
+    <value>Uninstall {0}</value>
+    <comment>Used in JSON editor light bulb</comment>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>Could not delete libraries from project</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>Library {0} was successfuly deleted from project</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>Could not add libraries to project</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>Library {0} was successfuly added to project</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>Library Manager</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>Library Manager operation already in progress.</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Files:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Library:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Provider: </value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>Target Location:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>Choose specific files:</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>Include all library files</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>No files have been selected</value>
   </data>
 </root>
