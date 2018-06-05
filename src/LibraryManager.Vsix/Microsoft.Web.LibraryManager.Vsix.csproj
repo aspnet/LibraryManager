@@ -115,6 +115,9 @@
     </Compile>
     <Compile Include="UI\Converters\EnumToBoolConverter.cs" />
     <Compile Include="UI\Converters\HintTextConverter.cs" />
+    <Compile Include="Shared\ILibraryCommandService.cs" />
+    <Compile Include="Shared\ITaskStatusCenterService.cs" />
+    <Compile Include="Shared\TaskStatusCenterService.cs" />
     <Compile Include="Shared\Telemetry.cs" />
     <Compile Include="Json\Completion\BaseCompletionProvider.cs" />
     <Compile Include="Json\Completion\FilesCompletionProvider.cs" />
@@ -124,7 +127,7 @@
     <Compile Include="UI\Controls\EditorTooltip.xaml.cs">
       <DependentUpon>EditorTooltip.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shared\LibraryHelpers.cs" />
+    <Compile Include="Shared\LibraryCommandService.cs" />
     <Compile Include="Shared\VsHelpers.cs" />
     <Compile Include="Json\TextviewCreationListener.cs" />
     <Compile Include="LibraryManagerPackage.cs" />

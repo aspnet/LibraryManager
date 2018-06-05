@@ -8,20 +8,20 @@ using Microsoft.Web.LibraryManager.Contracts;
 namespace Microsoft.Web.LibraryManager.Test
 {
     [TestClass]
-    public class LibraryInstallationResultTest
+    public class LibraryOperationResultTest
     {
         [TestMethod]
         public void Constructor()
         {
             Mocks.LibraryInstallationState state = GetState();
 
-            var ctor1 = new LibraryInstallationResult(state);
+            var ctor1 = new LibraryOperationResult(state);
             Assert.AreEqual(state, ctor1.InstallationState);
             Assert.AreEqual(0, ctor1.Errors.Count);
             Assert.IsTrue(ctor1.Success);
             Assert.IsFalse(ctor1.Cancelled);
 
-            var ctor2 = new LibraryInstallationResult(state, PredefinedErrors.ManifestMalformed());
+            var ctor2 = new LibraryOperationResult(state, PredefinedErrors.ManifestMalformed());
             Assert.AreEqual(state, ctor2.InstallationState);
             Assert.AreEqual(1, ctor2.Errors.Count);
             Assert.IsFalse(ctor2.Success);
@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public void FromSuccess()
         {
             Mocks.LibraryInstallationState state = GetState();
-            var result = LibraryInstallationResult.FromSuccess(state);
+            var result = LibraryOperationResult.FromSuccess(state);
 
             Assert.AreEqual(state, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);
@@ -44,7 +44,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public void FromCancelled()
         {
             Mocks.LibraryInstallationState state = GetState();
-            var result = LibraryInstallationResult.FromCancelled(state);
+            var result = LibraryOperationResult.FromCancelled(state);
 
             Assert.AreEqual(state, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);

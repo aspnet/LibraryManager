@@ -56,7 +56,7 @@ namespace Microsoft.Web.LibraryManager.Build
                 return false;
             }
 
-            IEnumerable<ILibraryInstallationResult> results = manifest.RestoreAsync(token).Result;
+            IEnumerable<ILibraryOperationResult> results = manifest.RestoreAsync(token).Result;
 
             sw.Stop();
 
@@ -81,7 +81,7 @@ namespace Microsoft.Web.LibraryManager.Build
             }
         }
 
-        private void LogResults(Stopwatch sw, IEnumerable<ILibraryInstallationResult> results)
+        private void LogResults(Stopwatch sw, IEnumerable<ILibraryOperationResult> results)
         {
             bool hasErrors = results.Any(r => !r.Success);
 
@@ -110,7 +110,7 @@ namespace Microsoft.Web.LibraryManager.Build
             }
         }
 
-        private void PopulateFilesWritten(IEnumerable<ILibraryInstallationResult> results, IHostInteraction hostInteraction)
+        private void PopulateFilesWritten(IEnumerable<ILibraryOperationResult> results, IHostInteraction hostInteraction)
         {
             IEnumerable<ILibraryInstallationState> states = results.Where(r => r.Success).Select(r => r.InstallationState);
             var list = new List<ITaskItem>();

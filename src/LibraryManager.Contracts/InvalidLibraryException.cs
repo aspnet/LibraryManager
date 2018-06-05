@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
     /// For instance, if a <see cref="ILibraryInstallationState"/> with an id that isn't
     /// recognized by the <see cref="IProvider"/> is being passed to <see cref="Contracts.IProvider.InstallAsync"/>,
     /// this exception could be thrown so it can be handled inside <see cref="Contracts.IProvider.InstallAsync"/>
-    /// and an <see cref="IError"/> added to the <see cref="ILibraryInstallationResult.Errors"/> collection.
+    /// and an <see cref="IError"/> added to the <see cref="ILibraryOperationResult.Errors"/> collection.
     /// </remarks>
     public class InvalidLibraryException : Exception
     {

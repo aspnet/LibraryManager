@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
 
             foreach (string file in desiredState.Files)
             {
@@ -99,7 +99,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
         }
 
@@ -114,7 +114,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
 
             foreach (string file in new[] { "jquery.js", "jquery.min.js" })
@@ -134,7 +134,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB005", result.Errors.First().Code);
         }
@@ -149,7 +149,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
             Assert.AreEqual(1, result.Errors.Count);
             Assert.AreEqual("LIB007", result.Errors.First().Code);
@@ -167,7 +167,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             };
 
             // Install library
-            ILibraryInstallationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB018", result.Errors[0].Code);
         }

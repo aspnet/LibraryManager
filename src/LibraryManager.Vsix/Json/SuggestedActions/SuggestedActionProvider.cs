@@ -27,12 +27,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
         [Import]
         public ITextDocumentFactoryService DocumentService { get; set; }
 
+        [Import]
+        public ILibraryCommandService LibraryCommandService { get; set; }
+
         public IEnumerable<ISuggestedAction> GetSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, JSONParseItem parseItem)
         {
             TextView = textView;
             TextBuffer = textBuffer;
 
-            yield return new UninstallSuggestedAction(this);
+            yield return new UninstallSuggestedAction(this, LibraryCommandService);
 
             var update = new UpdateSuggestedActionSet(this);
 
