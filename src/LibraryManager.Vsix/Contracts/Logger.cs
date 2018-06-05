@@ -142,12 +142,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             else
             {
-                var partialSuccessText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count());
+                string partialSuccessText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count());
                 LogEvent(partialSuccessText + Environment.NewLine, LogLevel.Operation);
             }
         }
 
-        private static object GetPartialSuccessString(OperationType operation, int successfulRestores, int failedRestores, int cancelledRestores, int upToDateRestores)
+        private static string GetPartialSuccessString(OperationType operation, int successfulRestores, int failedRestores, int cancelledRestores, int upToDateRestores)
         {
             string message = string.Empty;
             message = successfulRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, successfulRestores) : message;

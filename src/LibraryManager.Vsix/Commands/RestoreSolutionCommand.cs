@@ -16,6 +16,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         private readonly Package _package;
         private readonly ILibraryCommandService _libraryCommandService;
+
         private RestoreSolutionCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
             _package = package;
