@@ -62,13 +62,98 @@ Chcete pokračovat?</target>
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
           <target state="translated">&lt;Začněte psát, co chcete najít.&gt;</target>
         </trans-unit>
-        <trans-unit id="SelectPackageToSelectFilesToInstall" translate="yes" xml:space="preserve">
-          <source><it id="1" pos="open">&lt;Choose a package to select files to install&gt;</it></source>
-          <target state="translated">&lt;Zvolte balíček pro výběr souborů k instalaci.&gt;</target>
+        <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
+          <source>Add Client-Side Library</source>
+          <target state="new">Add Client-Side Library</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Add Client-Side Library</note>
         </trans-unit>
-        <trans-unit id="CleanLibrariesFailed" translate="yes" xml:space="preserve">
-          <source>Clean libraries failed</source>
-          <target state="new">Clean libraries failed</target>
+        <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
+          <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
+          <target state="new"><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></target>
+        </trans-unit>
+        <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
+          <source>Disable Restore on Build</source>
+          <target state="new">Disable Restore on Build</target>
+        </trans-unit>
+        <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
+          <source>Enable Restore Client-Side Libraries on Build</source>
+          <target state="new">Enable Restore Client-Side Libraries on Build</target>
+        </trans-unit>
+        <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
+          <source>Installing NuGet package containing MSBuild target...</source>
+          <target state="new">Installing NuGet package containing MSBuild target...</target>
+        </trans-unit>
+        <trans-unit id="Nuget_PackageFailedToInstall" translate="yes" xml:space="preserve">
+          <source>NuGet package failed to install</source>
+          <target state="new">NuGet package failed to install</target>
+        </trans-unit>
+        <trans-unit id="Nuget_PackageFailedToUninstall" translate="yes" xml:space="preserve">
+          <source>NuGet package failed to uninstall</source>
+          <target state="new">NuGet package failed to uninstall</target>
+        </trans-unit>
+        <trans-unit id="Nuget_PackageInstalled" translate="yes" xml:space="preserve">
+          <source>NuGet package installed</source>
+          <target state="new">NuGet package installed</target>
+        </trans-unit>
+        <trans-unit id="Nuget_PackageUninstalled" translate="yes" xml:space="preserve">
+          <source>NuGet package uninstalled</source>
+          <target state="new">NuGet package uninstalled</target>
+        </trans-unit>
+        <trans-unit id="Nuget_UninstallingPackage" translate="yes" xml:space="preserve">
+          <source>Uninstalling NuGet package...</source>
+          <target state="new">Uninstalling NuGet package...</target>
+        </trans-unit>
+        <trans-unit id="FailToDeleteLibrariesFromProject" translate="yes" xml:space="preserve">
+          <source>Could not delete libraries from project</source>
+          <target state="new">Could not delete libraries from project</target>
+        </trans-unit>
+        <trans-unit id="LibraryDeletedFromProject" translate="yes" xml:space="preserve">
+          <source>Library {0} was successfuly deleted from project</source>
+          <target state="new">Library {0} was successfuly deleted from project</target>
+        </trans-unit>
+        <trans-unit id="FailToAddLibrariesToProject" translate="yes" xml:space="preserve">
+          <source>Could not add libraries to project</source>
+          <target state="new">Could not add libraries to project</target>
+        </trans-unit>
+        <trans-unit id="LibraryAddedToProject" translate="yes" xml:space="preserve">
+          <source>Library {0} was successfuly added to project</source>
+          <target state="new">Library {0} was successfuly added to project</target>
+        </trans-unit>
+        <trans-unit id="OutputWindowTitle" translate="yes" xml:space="preserve">
+          <source>Library Manager</source>
+          <target state="new">Library Manager</target>
+        </trans-unit>
+        <trans-unit id="OperationInProgress" translate="yes" xml:space="preserve">
+          <source>Library Manager operation already in progress.</source>
+          <target state="new">Library Manager operation already in progress.</target>
+        </trans-unit>
+        <trans-unit id="Files" translate="yes" xml:space="preserve">
+          <source>Files:</source>
+          <target state="new">Files:</target>
+        </trans-unit>
+        <trans-unit id="Library" translate="yes" xml:space="preserve">
+          <source>Library:</source>
+          <target state="new">Library:</target>
+        </trans-unit>
+        <trans-unit id="Provider" translate="yes" xml:space="preserve">
+          <source>Provider: </source>
+          <target state="new">Provider: </target>
+        </trans-unit>
+        <trans-unit id="TargetLocation" translate="yes" xml:space="preserve">
+          <source>Target Location:</source>
+          <target state="new">Target Location:</target>
+        </trans-unit>
+        <trans-unit id="ChooseSpecificFiles" translate="yes" xml:space="preserve">
+          <source>Choose specific files:</source>
+          <target state="new">Choose specific files:</target>
+        </trans-unit>
+        <trans-unit id="IncludeAllLibraryFiles" translate="yes" xml:space="preserve">
+          <source>Include all library files</source>
+          <target state="new">Include all library files</target>
+        </trans-unit>
+        <trans-unit id="NoFilesSelected" translate="yes" xml:space="preserve">
+          <source>No files have been selected</source>
+          <target state="new">No files have been selected</target>
         </trans-unit>
       </group>
     </body>

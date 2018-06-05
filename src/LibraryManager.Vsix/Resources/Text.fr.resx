@@ -50,7 +50,4 @@
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Tapez le texte à rechercher&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Choisissez un package pour sélectionner les fichiers à installer&gt;</value>
-  </data>
 </root>

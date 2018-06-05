@@ -24,22 +24,4 @@
     <value>Soubor {0} byl uložen na disk.</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>Obnovení knihovny bylo zrušeno</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>Probíhá obnovování knihovny {0}...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Probíhá obnovování knihoven...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} knihoven obnoveno za {1} sekund</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Obnovení knihovny se nezdařilo</value>
-    <comment>Status message</comment>
-  </data>
 </root>

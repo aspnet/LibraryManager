@@ -50,7 +50,4 @@
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Введите текст для поиска&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Выберите пакет с файлами для установки&gt;</value>
-  </data>
 </root>

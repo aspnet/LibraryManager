@@ -54,7 +54,4 @@ Chcete pokračovat?</value>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Začněte psát, co chcete najít.&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Zvolte balíček pro výběr souborů k instalaci.&gt;</value>
-  </data>
 </root>

@@ -50,7 +50,4 @@
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Digitare per eseguire la ricerca&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Scegliere un pacchetto per selezionare i file da installare&gt;</value>
-  </data>
 </root>

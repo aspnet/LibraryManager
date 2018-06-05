@@ -50,7 +50,4 @@
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;入力して検索&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;インストールするファイルを選択するためのパッケージを選択します&gt;</value>
-  </data>
 </root>
