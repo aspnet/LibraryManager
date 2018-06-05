@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             base.DoHostTestInitialize();
 
             Solution.Open(_solutionPath);
-            Solution.WaitForFullyLoaded();
+            Solution.WaitForFullyLoaded(); // This will get modified after bug 627108 get fixed
         }
 
         protected override void DoHostTestCleanup()
