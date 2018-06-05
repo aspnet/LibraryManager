@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 if (commandService != null && libraryCommandService != null)
                 {
-                    InstallLibraryCommand.Initialize(this, commandService);
+                    InstallLibraryCommand.Initialize(this, commandService, libraryCommandService);
                     CleanCommand.Initialize(this, commandService, libraryCommandService);
                     RestoreCommand.Initialize(this, commandService, libraryCommandService);
                     RestoreSolutionCommand.Initialize(this, commandService, libraryCommandService);

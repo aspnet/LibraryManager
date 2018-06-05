@@ -15,23 +15,41 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal interface ILibraryCommandService
     {
         /// <summary>
-        /// Clean the libraries on a manifest associated with a ProjectItem
+        /// Clean the libraries defined in manifest 
         /// </summary>
-        /// <param name="configProjectItem"></param>
+        /// <param name="configProjectItem">ProjectItem for the manifest file (libman.json)</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Restore libraries from multiple manifests
+        /// Restore libraries from multiple manifest files (libman.json)
         /// </summary>
-        /// <param name="configFilePaths">manifest files paths</param>
+        /// <param name="configFilePaths">Paths to libman.json files</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        /// <remarks>Used on the Solution Context Menu option to restore all libraries</remarks>
         Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Unsintall a library from a manifest 
+        /// Restore libraries from a single manifest file (libman.json)
+        /// </summary>
+        /// <param name="configFilePaths">Paths to libman.json files</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task RestoreAsync(string configFilePaths, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// This overload is needed for when Manifest in memory so we don't need to read from file in disk
+        /// </summary>
+        /// <param name="configFilePath">Path to libman.json</param>
+        /// <param name="manifest">In memory Manifest</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Unsintalls a library from a manifest 
         /// </summary>
         /// <param name="configFilePath">libman.json file path</param>
         /// <param name="libraryId">library ID</param>
@@ -45,7 +63,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         bool IsOperationInProgress { get; }
 
         /// <summary>
-        /// Cancels operation in progress
+        /// Cancels library manager operation in progress
         /// </summary>
         void CancelOperation();
     }

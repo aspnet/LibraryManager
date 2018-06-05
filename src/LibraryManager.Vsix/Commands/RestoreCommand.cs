@@ -1,11 +1,11 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using System;
-using System.ComponentModel.Design;
-using Microsoft.VisualStudio.Telemetry;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (!_libraryCommandService.IsOperationInProgress && configProjectItem != null)
             {
-                await _libraryCommandService.RestoreAsync(configProjectItem.FileNames[1]);
+                await _libraryCommandService.RestoreAsync(configProjectItem.FileNames[1] );
             }
         }
     }

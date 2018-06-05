@@ -13,6 +13,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
     internal class InstallDialogViewModel : BindableBase
     {
+        private readonly ILibraryCommandService _libraryCommandService;
+
         private readonly Action<bool> _closeDialog;
         private readonly string _configFileName;
         private readonly IDependencies _deps;
@@ -29,8 +31,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private bool _noFilesSelected;
         private bool _isTreeViewEmpty;
 
-        public InstallDialogViewModel(Dispatcher dispatcher, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
+        public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
         {
+            _libraryCommandService = libraryCommandService;
             _configFileName = configFileName;
             _targetPath = targetPath;
             _deps = deps;
@@ -375,7 +378,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
                 project?.AddFileToProject(_configFileName);
 
-                await LibraryHelpers.RestoreAsync(_configFileName).ConfigureAwait(false);
+                await _libraryCommandService.RestoreAsync(_configFileName).ConfigureAwait(false);
 
                 _dispatcher.Invoke(() =>
                 {
