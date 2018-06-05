@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace Microsoft.Web.LibraryManager.Build
 {
-    internal class RestoreTask : Task
+    public class RestoreTask : Task
     {
         [Required]
         public string FileName { get; set; }

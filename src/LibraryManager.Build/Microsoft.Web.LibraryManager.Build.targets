@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
-        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">..\tools\netstandard1.3\Microsoft.Web.LibraryManager.Build.dll</_LibraryTaskAssembly>
+        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">..\tools\netstandard1.5\Microsoft.Web.LibraryManager.Build.dll</_LibraryTaskAssembly>
         <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net46\Microsoft.Web.LibraryManager.Build.dll</_LibraryTaskAssembly>
     </PropertyGroup>
 
