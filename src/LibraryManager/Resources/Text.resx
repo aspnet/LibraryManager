@@ -244,4 +244,7 @@
   <data name="FileSystemLibraryIdHintText" xml:space="preserve">
     <value>Must be a valid filesystem path.</value>
   </data>
+  <data name="UnpkgProviderHintText" xml:space="preserve">
+    <value>Example: &lt;library&gt;@&lt;version&gt;</value>
+  </data>
 </root>
