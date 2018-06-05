@@ -61,15 +61,6 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available files are : {0}.
-        /// </summary>
-        internal static string AvailableFilesForLibrary {
-            get {
-                return ResourceManager.GetString("AvailableFilesForLibrary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Delete all files from the local machine&apos;s LibMan cache..
         /// </summary>
         internal static string CacheCleanCommandDesc {

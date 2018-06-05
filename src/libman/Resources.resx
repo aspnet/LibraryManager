@@ -357,9 +357,6 @@
   <data name="UninstalledLibrary" xml:space="preserve">
     <value>Uninstalled library "{0}"</value>
   </data>
-  <data name="AvailableFilesForLibrary" xml:space="preserve">
-    <value>Available files are : {0}</value>
-  </data>
   <data name="InvalidFilesForLibrary" xml:space="preserve">
     <value>Library "{0}" does not contain the following files: {1}</value>
   </data>
