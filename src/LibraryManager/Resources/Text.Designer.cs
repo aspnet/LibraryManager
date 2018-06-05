@@ -386,6 +386,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Example: &lt;library&gt;@&lt;version&gt;.
+        /// </summary>
+        public static string UnpkgProviderHintText {
+            get {
+                return ResourceManager.GetString("UnpkgProviderHintText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update of library {0} has been cancelled.
         /// </summary>
         public static string Update_LibraryCancelled {
