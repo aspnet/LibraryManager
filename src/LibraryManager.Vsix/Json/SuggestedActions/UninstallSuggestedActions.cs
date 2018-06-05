@@ -8,6 +8,7 @@ using Microsoft.Web.Editor.SuggestedActions;
 using System;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.JSON.Core.Parser;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -46,8 +47,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 using (ITextEdit edit = TextBuffer.CreateEdit())
                 {
                     var arrayElement = _provider.LibraryObject.Parent as JSONArrayElement;
-                    var prev = arrayElement.PreviousSibling as JSONArrayElement;
-                    var next = arrayElement.NextSibling as JSONArrayElement;
+                    var prev = GetPreviousSibling(arrayElement) as JSONArrayElement;
+                    var next = GetNextSibling(arrayElement) as JSONArrayElement;
 
                     int start = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.Start).Start;
                     int end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.AfterEnd).EndIncludingLineBreak;
@@ -66,6 +67,42 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 Logger.LogEvent(ex.ToString(), Microsoft.Web.LibraryManager.Contracts.LogLevel.Error);
             }
+        }
+
+        private JSONParseItem GetPreviousSibling(JSONArrayElement arrayElement)
+        {
+            JSONComplexItem parent = arrayElement.Parent;
+            return parent != null ? GetPreviousChild(arrayElement, parent.Children) : null;
+        }
+
+        private JSONParseItem GetNextSibling(JSONArrayElement arrayElement)
+        {
+            JSONComplexItem parent = arrayElement.Parent;
+            return parent != null ? GetNextChild(arrayElement, parent.Children) : null;
+        }
+
+        private JSONParseItem GetPreviousChild(JSONParseItem child, JSONParseItemList children)
+        {
+            int index = (child != null) ? children.IndexOf(child) : -1;
+
+            if (index > 0)
+            {
+                return children[index - 1];
+            }
+
+            return null;
+        }
+
+        private JSONParseItem GetNextChild(JSONParseItem child, JSONParseItemList children)
+        {
+            int index = (child != null) ? children.IndexOf(child) : -1;
+
+            if (index != -1 && index + 1 < children.Count)
+            {
+                return children[index + 1];
+            }
+
+            return null;
         }
     }
 }

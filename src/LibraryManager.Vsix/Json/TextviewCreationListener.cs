@@ -1,7 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using EnvDTE;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -9,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EnvDTE;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
@@ -72,70 +72,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             textView.Closed += OnViewClosed;
         }
 
-        private async Task RemoveFilesAsync(Manifest newManifest)
-        {
-            IEnumerable<FileIdentifier> prevFiles = await GetAllManifestFilesWithVersionsAsync(_manifest).ConfigureAwait(false);
-            IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest).ConfigureAwait(false);
-            IEnumerable<string> filesToRemove = prevFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Path);
-
-            if (filesToRemove.Any())
-            {
-                var hostInteraction = _dependencies.GetHostInteractions() as HostInteraction;
-                hostInteraction.DeleteFiles(filesToRemove.ToArray());
-            }
-        }
-
-        private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(Manifest manifest)
-        {
-            var files = new List<FileIdentifier>();
-
-            if (manifest != null)
-            {
-                foreach (ILibraryInstallationState state in manifest.Libraries.Where(l => l.IsValid(out IEnumerable<IError> errors)))
-                {
-                    IProvider provider = _dependencies.GetProvider(state.ProviderId);
-
-                    if (provider != null)
-                    {
-                        ILibraryInstallationResult updatedStateResult = provider.UpdateStateAsync(state, CancellationToken.None).Result;
-
-                        if (updatedStateResult.Success)
-                        {
-                            IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
-
-                            foreach (FileIdentifier fileIdentifier in stateFiles)
-                            {
-                                if (!files.Contains(fileIdentifier))
-                                {
-                                    files.Add(fileIdentifier);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return files;
-        }
-
-        private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
-        {
-            ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
-            ILibrary library = await catalog?.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-            IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
-
-            if (library != null && library.Files != null)
-            {
-                IEnumerable<string> desiredStateFiles = state?.Files?.Where(f => library.Files.Keys.Contains(f));
-                if (desiredStateFiles != null && desiredStateFiles.Any())
-                {
-                    filesWithVersions = desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
-                }
-            }
-
-            return filesWithVersions;
-        }
-
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
         {
             var textDocument = sender as ITextDocument;
@@ -150,21 +86,32 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
                         if (newManifest != null)
                         {
-                            await RemoveFilesAsync(newManifest).ConfigureAwait(false);
+                            if (await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
+                            {
+                                _manifest = newManifest;
 
-                            _manifest = newManifest;
-
-                            await LibraryHelpers.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
-                            Telemetry.TrackOperation("restoresave");
+                                await LibraryHelpers.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                Telemetry.TrackOperation("restoresave");
+                            }
+                            else
+                            {
+                                string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
+                                Logger.LogEvent(textMessage, LogLevel.Task);
+                            }
                         }
                         else
                         {
+                            // TO DO: Restore to previous state
+                            // and add a warning to the Error List
                             AddErrorToList(PredefinedErrors.ManifestMalformed());
                         }
                     }
                     catch (Exception ex)
                     {
-                        string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.RestoreHasErrors, Environment.NewLine);
+                        // TO DO: Restore to previous state
+                        // and add a warning to the Error List
+
+                        string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
 
                         Logger.LogEvent(textMessage, LogLevel.Task);
                         Logger.LogEvent(ex.ToString(), LogLevel.Error);

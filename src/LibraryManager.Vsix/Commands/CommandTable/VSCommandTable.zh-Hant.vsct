@@ -9,9 +9,8 @@
     </Groups>
     <Buttons>
       <!-- Folder -->
-      <!-- Package Manager UI disabled.-->
-      <!-- To enable remove Condition="Defined(UI_ENABLED)" or define UI_ENABLED -->
-      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button" Condition="Defined(UI_ENABLED)">
+      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
+        <Parent guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" />
         <Icon guid="ImageCatalogGuid" id="JSWebScript" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
@@ -77,8 +76,8 @@
   </Commands>
   <CommandPlacements>
     <!-- Folder menu -->
-    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0500">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_FOLDER_ADD" />
+    <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CSCD_PROJECT_ADD"/>
     </CommandPlacement>
     <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0500">
       <Parent guid="guidVenusCmdId" id="IDG_CTX_REFERENCE" />
