@@ -209,7 +209,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library Manager operation already ion progress..
+        ///   Looks up a localized string similar to Library Manager operation already in progress..
         /// </summary>
         public static string OperationInProgress {
             get {

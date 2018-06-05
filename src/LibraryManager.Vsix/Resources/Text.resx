@@ -190,6 +190,6 @@ Do you want to continue?</value>
     <value>Library Manager</value>
   </data>
   <data name="OperationInProgress" xml:space="preserve">
-    <value>Library Manager operation already ion progress.</value>
+    <value>Library Manager operation already in progress.</value>
   </data>
 </root>

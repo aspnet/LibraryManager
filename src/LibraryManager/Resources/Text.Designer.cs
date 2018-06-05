@@ -80,7 +80,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} libraries were successfuly deleted in {1} secs.
+        ///   Looks up a localized string similar to {0} libraries were successfully deleted in {1} secs.
         /// </summary>
         public static string Clean_NumberOfLibrariesSucceeded {
             get {
@@ -224,7 +224,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library {0}  was successfuly restored.
+        ///   Looks up a localized string similar to Library {0}  was successfuly restored restored.
         /// </summary>
         public static string Restore_LibraryRestoreSucceeded {
             get {
@@ -260,7 +260,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Libraries restore operation has been cancelled.
+        ///   Looks up a localized string similar to Restore operation has been cancelled.
         /// </summary>
         public static string Restore_OperationCancelled {
             get {
@@ -269,7 +269,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore libraries operation completed.
+        ///   Looks up a localized string similar to Restore operation completed.
         /// </summary>
         public static string Restore_OperationCompleted {
             get {
@@ -296,7 +296,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore libraries operation started....
+        ///   Looks up a localized string similar to Restore operation started....
         /// </summary>
         public static string Restore_OperationStarted {
             get {

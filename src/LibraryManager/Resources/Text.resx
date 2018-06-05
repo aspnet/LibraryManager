@@ -162,7 +162,7 @@
     <value>Clean libraries operation started...</value>
   </data>
   <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
-    <value>{0} libraries were successfuly deleted in {1} secs</value>
+    <value>{0} libraries were successfully deleted in {1} secs</value>
     <comment>Status message</comment>
   </data>
   <data name="Clean_OperationFailed" xml:space="preserve">
@@ -178,7 +178,7 @@
     <value>Install library {0} started...</value>
   </data>
   <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
-    <value>Library {0}  was successfuly restored</value>
+    <value>Library {0}  was successfuly restored restored</value>
   </data>
   <data name="Restore_LibrariesUptodate" xml:space="preserve">
     <value>Restore completed. Files already up-to-date</value>
@@ -188,7 +188,7 @@
     <value>{0} libraries had restore cancelled</value>
   </data>
   <data name="Restore_OperationCompleted" xml:space="preserve">
-    <value>Restore libraries operation completed</value>
+    <value>Restore operation completed</value>
   </data>
   <data name="SummaryEndLine" xml:space="preserve">
     <value>========== Finished ==========</value>
@@ -221,13 +221,13 @@
     <value>Failed to restore library: {0}</value>
   </data>
   <data name="Restore_OperationCancelled" xml:space="preserve">
-    <value>Libraries restore operation has been cancelled</value>
+    <value>Restore operation has been cancelled</value>
   </data>
   <data name="Restore_OperationFailed" xml:space="preserve">
     <value>Restore operation failed for {0} libraries</value>
   </data>
   <data name="Restore_OperationStarted" xml:space="preserve">
-    <value>Restore libraries operation started...</value>
+    <value>Restore operation started...</value>
   </data>
   <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
     <value>Uninstall of library {0} succeeded</value>
