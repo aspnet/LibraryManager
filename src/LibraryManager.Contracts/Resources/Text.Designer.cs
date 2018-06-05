@@ -62,11 +62,84 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conflicting file &quot;{0}&quot; found in more than one library: {1}.
+        /// </summary>
+        internal static string ErrorConflictingLibraries {
+            get {
+                return ResourceManager.GetString("ErrorConflictingLibraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete one or more files in the library {0}.
+        /// </summary>
+        internal static string ErrorCouldNotDeleteLibrary {
+            get {
+                return ResourceManager.GetString("ErrorCouldNotDeleteLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} could not be written to disk. Make sure the file name is correct.
         /// </summary>
         internal static string ErrorCouldNotWriteFile {
             get {
                 return ResourceManager.GetString("ErrorCouldNotWriteFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; destination file path has invalid characters.
+        /// </summary>
+        internal static string ErrorDestinationPathHasInvalidCharacter {
+            get {
+                return ResourceManager.GetString("ErrorDestinationPathHasInvalidCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; library is already installed by the &quot;{1}&quot; provider.
+        /// </summary>
+        internal static string ErrorLibraryAlreadyInstalled {
+            get {
+                return ResourceManager.GetString("ErrorLibraryAlreadyInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file &quot;{0}&quot; is already installed by {1}..
+        /// </summary>
+        internal static string ErrorLibraryCannotInstallDueToConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotInstallDueToConflicts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; could not be updated to &quot;{1}&quot;. Another library &quot;{1}&quot; is already installed.
+        /// </summary>
+        internal static string ErrorLibraryCannotUpdateDueToConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotUpdateDueToConflicts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; could not be updated to &quot;{1}&quot;. The following files are not valid for the &quot;{1}&quot;: {2}.
+        /// </summary>
+        internal static string ErrorLibraryCannotUpdateDueToFileConflicts {
+            get {
+                return ResourceManager.GetString("ErrorLibraryCannotUpdateDueToFileConflicts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;{0}&quot; does not contain the following: {1}
+        ///Valid files are {2}.
+        /// </summary>
+        internal static string ErrorLibraryHasInvalidFiles {
+            get {
+                return ResourceManager.GetString("ErrorLibraryHasInvalidFiles", resourceCulture);
             }
         }
         
@@ -130,6 +203,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static string ErrorProviderUnknown {
             get {
                 return ResourceManager.GetString("ErrorProviderUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to download resource from &quot;{0}&quot;.
+        /// </summary>
+        internal static string ErrorUnableToDownloadResource {
+            get {
+                return ResourceManager.GetString("ErrorUnableToDownloadResource", resourceCulture);
             }
         }
         

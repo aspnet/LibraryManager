@@ -24,6 +24,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
         bool Success { get; }
 
         /// <summary>
+        /// <code>True</code> if the library is up to date; otherwise <code>False</code>.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        bool UpToDate { get; }
+
+        /// <summary>
         /// A list of errors that occured during library installation.
         /// </summary>
         IList<IError> Errors { get; }

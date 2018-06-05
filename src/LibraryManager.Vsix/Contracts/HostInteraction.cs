@@ -2,94 +2,121 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.Web.LibraryManager.Contracts;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class HostInteraction : IHostInteraction
     {
+        private string _configFilePath;
         public HostInteraction(string configFilePath, ILogger logger)
         {
             string cwd = Path.GetDirectoryName(configFilePath);
             WorkingDirectory = cwd;
             Logger = logger;
+            _configFilePath = configFilePath;
         }
 
         public string WorkingDirectory { get; }
         public string CacheDirectory => Constants.CacheFolder;
-        public ILogger Logger { get; internal set; } 
+        public ILogger Logger { get; internal set; }
 
-        public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
+
+        public async Task<bool> WriteFileAsync(string relativePath, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, path));
+            FileInfo absolutePath = new FileInfo(Path.Combine(WorkingDirectory, relativePath));
 
             if (absolutePath.Exists)
+            {
                 return true;
+            }
 
             if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+            {
                 throw new UnauthorizedAccessException();
+            }
 
             absolutePath.Directory.Create();
 
             using (Stream stream = content.Invoke())
             {
                 if (stream == null)
+                {
                     return false;
+                }
 
                 VsHelpers.CheckFileOutOfSourceControl(absolutePath.FullName);
-
-                using (FileStream writer = File.Create(absolutePath.FullName, 4096, FileOptions.Asynchronous))
-                {
-                    if (stream.CanSeek)
-                    {
-                        stream.Seek(0, SeekOrigin.Begin);
-                    }
-
-                    await stream.CopyToAsync(writer, 8192, cancellationToken).ConfigureAwait(false);
-                }
+                await FileHelpers.WriteToFileAsync(absolutePath.FullName, stream, cancellationToken);
             }
 
-            Logger.Log(string.Format(LibraryManager.Resources.Text.FileWrittenToDisk, path.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
+            Logger.Log(string.Format(LibraryManager.Resources.Text.FileWrittenToDisk, relativePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
 
             return true;
         }
 
-        public void DeleteFiles(params string[] relativeFilePaths)
+        public async Task<bool> DeleteFilesAsync (IEnumerable<string> relativeFilePaths, CancellationToken cancellationToken)
         {
-            foreach (string relativeFilePath in relativeFilePaths)
+            cancellationToken.ThrowIfCancellationRequested();
+
+            List<string> absolutePaths = new List<string>();
+
+            foreach (string filePath in relativeFilePaths)
             {
-                string absoluteFile = new FileInfo(Path.Combine(WorkingDirectory, relativeFilePath)).FullName;
+                string absoluteFilePath = Path.Combine(WorkingDirectory, filePath);
+                FileInfo file = new FileInfo(absoluteFilePath);
 
-                try
+                if (file.Exists)
                 {
-                    ProjectItem item = VsHelpers.DTE.Solution.FindProjectItem(absoluteFile);
-                    Project project = item?.ContainingProject;
-
-                    if (project != null)
-                    {
-                        item.Delete();
-                    }
-                    else
-                    {
-                        if (File.Exists(absoluteFile))
-                        {
-                            VsHelpers.CheckFileOutOfSourceControl(absoluteFile);
-                            File.Delete(absoluteFile);
-                        }
-                    }
-
-                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleted, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log(string.Format(LibraryManager.Resources.Text.FileDeleteFail, relativeFilePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
-                    Telemetry.TrackException("deletefilefailed", ex);
+                    absolutePaths.Add(absoluteFilePath);
                 }
             }
+
+            //Delete from project 
+            var logAction = new Action<string, LogLevel>((message, level) => { Logger.Log(message, level); });
+            Project project = VsHelpers.GetDTEProjectFromConfig(_configFilePath);
+            bool deleteFromProject = await VsHelpers.DeleteFilesFromProjectAsync(project, absolutePaths, logAction, cancellationToken);
+            if (deleteFromProject)
+            {
+                return true;
+            }
+
+            // Delete from file system 
+
+            return await DeleteFilesFromDisk(absolutePaths, cancellationToken);
+
+        }
+
+        public Task<Stream> ReadFileAsync(string filePath, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return FileHelpers.ReadFileAsStreamAsync(filePath, cancellationToken);
+        }
+
+        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        {
+            return System.Threading.Tasks.Task.Run(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return FileHelpers.CopyFile(sourcePath, destinationPath);
+            }, cancellationToken);
+        }
+
+        private Task<bool> DeleteFilesFromDisk(IEnumerable<string> filePaths, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return FileHelpers.DeleteFiles(filePaths);
+            }, cancellationToken);
         }
     }
 }

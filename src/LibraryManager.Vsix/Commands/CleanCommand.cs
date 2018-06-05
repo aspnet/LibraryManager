@@ -1,11 +1,11 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using EnvDTE;
-using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel.Design;
-using Microsoft.VisualStudio.Telemetry;
+using System.Threading;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -59,7 +59,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             ProjectItem configProjectItem = VsHelpers.GetSelectedItem();
 
             if (configProjectItem != null)
-                await LibraryHelpers.CleanAsync(configProjectItem);
+            {
+                await LibraryHelpers.CleanAsync(configProjectItem, new CancellationToken());
+            }
         }
 
         private void OnBuildBegin(vsBuildScope Scope, vsBuildAction Action)

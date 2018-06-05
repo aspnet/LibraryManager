@@ -3,13 +3,16 @@
         <TargetFrameworks>netcoreapp1.0;net46</TargetFrameworks>
     </PropertyGroup>
     <ItemGroup>
+      <Compile Remove="FileHelperTest.cs" />
+    </ItemGroup>
+    <ItemGroup>
       <None Remove=".editorconfig" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-        <PackageReference Include="MSTest.TestAdapter" Version="1.1.17" />
-        <PackageReference Include="MSTest.TestFramework" Version="1.1.17" />
-        <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSDKPackageVersion)" />
+        <PackageReference Include="MSTest.TestAdapter" Version="$(MSTestAdapterPackageVersion)" />
+        <PackageReference Include="MSTest.TestFramework" Version="$(MSTestFrameworkPackageVersion)" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\src\LibraryManager\Microsoft.Web.LibraryManager.csproj" />

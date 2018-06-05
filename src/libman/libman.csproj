@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>Microsoft.Web.LibraryManager.Tools</RootNamespace>
+    <NuspecFile>libman.nuspec</NuspecFile>
+    <PackageType>DotNetTool</PackageType>
+    <Description>Command line tool for Library Manager</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.CommandLineUtils.Sources" PrivateAssets="All" Version="$(MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+
+  <!--
+  **********************************************************
+    For packing global tools we need to use the nuspec file
+    as the required directory structure is not created by
+    `dotnet pack`
+  **********************************************************
+   -->
+
+  <Target Name="SetGlobalToolProperties" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>
+        publishDir=$(PublishDir);
+        version=$(PackageVersion);
+        licenseUrl=$(PackageLicenseUrl);
+        projectUrl=$(PackageProjectUrl);
+        serviceable=$(Serviceable);
+        copyright=$(Copyright);
+        description=$(Description);
+        repositoryUrl=$(RepositoryUrl);
+        targetframework=$(TargetFramework);
+        repositoryCommit=$(RepositoryCommit); 
+      </NuspecProperties>
+        <!-- 
+        packageIconUrl=$(PackageIconUrl);
+        -->
+    </PropertyGroup>
+  </Target>
+</Project>

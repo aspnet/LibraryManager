@@ -5,8 +5,9 @@ root = true
 
 # Don't use tabs for indentation.
 [*]
-indent_style = space
-end_of_line  = crlf
+indent_style         = space
+end_of_line          = crlf
+insert_final_newline = true
 # (Please don't specify an indent_size here; that has too many unintended consequences.)
 
 # Code files
@@ -14,7 +15,7 @@ end_of_line  = crlf
 indent_size = 4
 
 # Xml project files
-[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,msbuild}]
 indent_size = 2
 
 # Xml config files
