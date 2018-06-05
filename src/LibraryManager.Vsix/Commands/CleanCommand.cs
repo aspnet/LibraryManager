@@ -14,7 +14,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private readonly Package _package;
         private readonly BuildEvents _buildEvents;
         private readonly SolutionEvents _solutionEvents;
-        private ILibraryCommandService _libraryCommandService;
+        private readonly ILibraryCommandService _libraryCommandService;
 
         private CleanCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
