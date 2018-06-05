@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
         <PackageTags>mocks, unit test, library, client-side, package</PackageTags>
@@ -20,11 +19,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="CacheService.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\src\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.23" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" />
     </ItemGroup>
 
 </Project>

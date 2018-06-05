@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryManager.Mocks
 {
@@ -85,11 +86,55 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <summary>
         /// Deletes a file from disk.
         /// </summary>
-        /// <param name="relativeFilePath">The absolute path to the file.</param>
-        public virtual void DeleteFile(string relativeFilePath)
+        /// <param name="relativeFilePaths">The absolute path to the file.</param>
+        /// <param name="cancellationToken"></param>
+        public Task<bool> DeleteFilesAsync(IEnumerable<string> relativeFilePaths, CancellationToken cancellationToken)
         {
-            string absoluteFile = Path.Combine(WorkingDirectory, relativeFilePath);
-            File.Delete(absoluteFile);
+            foreach (var path in relativeFilePaths)
+            {
+                string absoluteFile = Path.Combine(WorkingDirectory, path);
+                if (File.Exists(absoluteFile))
+                {
+                    File.Delete(absoluteFile);
+                }
+            }
+
+            return Task.FromResult<bool>(true);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<Stream> ReadFileAsync(string filePath, CancellationToken cancellationToken)
+        {
+            return await FileHelpers.ReadFileAsStreamAsync(filePath, cancellationToken);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="sourcePath"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<bool> CopyFileAsync(string path, Func<string> sourcePath, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourcePath"></param>
+        /// <param name="destinationPath"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

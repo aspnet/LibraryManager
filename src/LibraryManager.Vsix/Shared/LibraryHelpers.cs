@@ -1,8 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using EnvDTE;
-using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,13 +8,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EnvDTE;
 using Microsoft.VisualStudio.Telemetry;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class LibraryHelpers
     {
-
         public static async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
@@ -47,85 +46,87 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static async Task RestoreAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Logger.LogEvent(LibraryManager.Resources.Text.RestoringLibraries, LogLevel.Status);
+            Logger.LogEventsHeader(OperationType.Restore);
 
-            var sw = new Stopwatch();
+            Stopwatch sw = new Stopwatch();
+            List<ILibraryInstallationResult> totalResults = new List<ILibraryInstallationResult>();
+
             sw.Start();
-            int resultCount = 0;
-            bool hasErrors = false;
-            var telResult = new Dictionary<string, double>();
 
             foreach (KeyValuePair<string, Manifest> manifest in manifests)
             {
+                Project project = VsHelpers.GetDTEProjectFromConfig(manifest.Key);
+                Logger.LogEvent(string.Format(LibraryManager.Resources.Text.Restore_LibrariesForProject, project.FullName), LogLevel.Operation);
+
                 IEnumerable<ILibraryInstallationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 
-                Project project = VsHelpers.DTE.Solution?.FindProjectItem(manifest.Key)?.ContainingProject;
-                AddFilesToProject(manifest.Key, project, results);
+                await AddFilesToProjectAsync(manifest.Key, project, results, cancellationToken);
+                AddErrorsToErrorList(project?.Name, manifest.Key, results);
 
-                var errorList = new ErrorList(project?.Name, manifest.Key);
-                hasErrors |= errorList.HandleErrors(results);
-
-                resultCount += results.Count();
-
-                foreach (ILibraryInstallationResult result in results.Where(r => r.Success))
-                {
-                    if (result.InstallationState.ProviderId != null)
-                    {
-                        telResult.TryGetValue(result.InstallationState.ProviderId, out double count);
-                        telResult[result.InstallationState.ProviderId] = count + 1;
-                    }
-                }
+                totalResults.AddRange(results);
             }
 
             sw.Stop();
 
-            telResult.Add("time", sw.Elapsed.TotalMilliseconds);
+            Logger.LogEventsSummary(totalResults, OperationType.Restore, sw.Elapsed);
+            PostRestoreTelemetryData(totalResults, sw.Elapsed);
+        }
+
+        private static void PostRestoreTelemetryData(IEnumerable<ILibraryInstallationResult> results, TimeSpan elapsedTime)
+        {
+            var telResult = new Dictionary<string, double>();
+            foreach (ILibraryInstallationResult result in results.Where(r => r.Success))
+            {
+                if (result.InstallationState.ProviderId != null)
+                {
+                    telResult.TryGetValue(result.InstallationState.ProviderId, out double count);
+                    telResult[result.InstallationState.ProviderId] = count + 1;
+                }
+            }
+            telResult.Add("time", elapsedTime.TotalMilliseconds);
             Telemetry.TrackUserTask("restore", TelemetryResult.None, telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
+        }
 
-            if (resultCount > 0)
-            {
-                string text = hasErrors ?
-                    LibraryManager.Resources.Text.RestoreHasErrors :
-                    string.Format(LibraryManager.Resources.Text.LibrariesRestored, resultCount, Math.Round(sw.Elapsed.TotalSeconds, 2));
-
-                Logger.LogEvent(Environment.NewLine + text + Environment.NewLine, LogLevel.Task);
-            }
-            else
-            {
-                Logger.LogEvent(Environment.NewLine + Resources.Text.LibraryRestoredNoChange + Environment.NewLine, LogLevel.Task);
-            }
+        private static void AddErrorsToErrorList(string projectName, string configFile, IEnumerable<ILibraryInstallationResult> results)
+        {
+            var errorList = new ErrorList(projectName, configFile);
+            errorList.HandleErrors(results);
         }
 
         public static async Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken)
         {
+            Logger.LogEventsHeader(OperationType.Uninstall);
+
+            Stopwatch sw = new Stopwatch();
             var dependencies = Dependencies.FromConfigFile(configFilePath);
             Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-            var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
-            manifest.Uninstall(libraryId, (file) => hostInteraction.DeleteFiles(file));
+            IHostInteraction hostInteraction = dependencies.GetHostInteractions();
 
+            sw.Start();
+            ILibraryInstallationResult result = await manifest.UninstallAsync(libraryId, async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+            sw.Stop();
+
+            Logger.LogEventsSummary(new List<ILibraryInstallationResult> { result }, OperationType.Uninstall, sw.Elapsed);
             Telemetry.TrackUserTask("libraryuninstall");
         }
 
-        public static async Task CleanAsync(ProjectItem configProjectItem)
+        public static async Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken)
         {
-            Logger.LogEvent(Resources.Text.CleanLibrariesStarted, LogLevel.Task);
+            Logger.LogEventsHeader(OperationType.Clean);
 
+            Stopwatch sw = new Stopwatch();
             string configFileName = configProjectItem.FileNames[1];
             var dependencies = Dependencies.FromConfigFile(configFileName);
             Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
-            var hostInteraction = dependencies.GetHostInteractions() as HostInteraction;
+            IHostInteraction hostInteraction = dependencies.GetHostInteractions();
 
-            IEnumerable<ILibraryInstallationResult> results = manifest?.Clean((file) => hostInteraction.DeleteFiles(file));
+            if (manifest != null)
+            {
+                sw.Start();
+                IEnumerable<ILibraryInstallationResult> results = await manifest.CleanAsync(async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+                sw.Stop();
 
-            if (results != null && results.All(r => r.Success))
-            {
-                Logger.LogEvent(Resources.Text.CleanLibrariesSucceeded + Environment.NewLine, LogLevel.Task);
-                Telemetry.TrackUserTask("clean", TelemetryResult.Success, new KeyValuePair<string, object>("librariesdeleted", results.Count()));
-            }
-            else
-            {
-                Logger.LogEvent(Resources.Text.CleanLibrariesFailed + Environment.NewLine, LogLevel.Task);
-                Telemetry.TrackUserTask("clean", TelemetryResult.Failure, new KeyValuePair<string, object>("librariesfailedtodelete", results.Where(r => !r.Success).Count()));
+                Logger.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
             }
         }
 
@@ -134,7 +135,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return await manifest.RestoreAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private static void AddFilesToProject(string configFilePath, Project project, IEnumerable<ILibraryInstallationResult> results)
+        private static async Task AddFilesToProjectAsync(string configFilePath, Project project, IEnumerable<ILibraryInstallationResult> results, CancellationToken cancellationToken)
         {
             string cwd = Path.GetDirectoryName(configFilePath);
             var files = new List<string>();
@@ -150,7 +151,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
-            project?.AddFilesToProject(files);
+            if (project != null)
+            {
+                var logAction = new Action<string, LogLevel>((message, level) => { Logger.LogEvent(message, level); });
+                await VsHelpers.AddFilesToProjectAsync(project, files, logAction, cancellationToken);
+            }
         }
     }
 }

@@ -1,14 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 {
@@ -105,6 +105,10 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
             }
+            catch (ResourceDownloadException ex)
+            {
+                return new LibraryInstallationResult(desiredState, PredefinedErrors.FailedToDownloadResource(ex.Url));
+            }
             catch (Exception ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
@@ -188,23 +192,40 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 {
                     if (Directory.Exists(url.OriginalString))
                     {
-                        return await FileHelpers.OpenFileAsync(Path.Combine(url.OriginalString, file), cancellationToken).ConfigureAwait(false);
+                        return await FileHelpers.ReadFileAsStreamAsync(Path.Combine(url.OriginalString, file), cancellationToken).ConfigureAwait(false);
                     }
                     else
                     {
-                        return await FileHelpers.OpenFileAsync(sourceFile, cancellationToken).ConfigureAwait(false);
+                        return await FileHelpers.ReadFileAsStreamAsync(sourceFile, cancellationToken).ConfigureAwait(false);
                     }
                 }
                 // Url
                 else
                 {
-                    var client = new HttpClient();
-                    return await client.GetStreamAsync(sourceFile).ConfigureAwait(false);
+                    return await GetRemoteResourceAsync(sourceFile);
                 }
+            }
+            catch (ResourceDownloadException)
+            {
+                throw;
             }
             catch (Exception)
             {
                 throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
+            }
+        }
+
+        private static async Task<Stream> GetRemoteResourceAsync(string sourceUrl)
+        {
+            try
+            {
+                var client = new HttpClient();
+                return await client.GetStreamAsync(sourceUrl).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                // Add telemetry here for failures
+                throw new ResourceDownloadException(sourceUrl);
             }
         }
     }

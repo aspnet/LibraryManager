@@ -1,0 +1,388 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CacheCommandDesc" xml:space="preserve">
+    <value>List or clean libman cache contents</value>
+  </data>
+  <data name="CleanCommandDesc" xml:space="preserve">
+    <value>Deletes all library files defined in libman.json from the project</value>
+  </data>
+  <data name="CleanCommandRemarks" xml:space="preserve">
+    <value>    Deletes any folders that become empty after this operation. </value>
+  </data>
+  <data name="DefaultDestinationOptionDesc" xml:space="preserve">
+    <value>The path, relative to the current directory, where library files should be installed if no destination is defined for a given library.</value>
+  </data>
+  <data name="DefaultProviderOptionDesc" xml:space="preserve">
+    <value>The provider to use if no provider is defined for a given library. (eg. “cdnjs”, “filesystem”)</value>
+  </data>
+  <data name="DestinationOptionDesc" xml:space="preserve">
+    <value>Location to install the library (if not specified, the default destination location will be used)</value>
+  </data>
+  <data name="ExamplesHeader" xml:space="preserve">
+    <value>Examples:</value>
+  </data>
+  <data name="FilesOptionDesc" xml:space="preserve">
+    <value>The files from the specified library to install (if not specified, all files from the library will be installed)</value>
+  </data>
+  <data name="InitCommandDesc" xml:space="preserve">
+    <value>Create a new libman.json</value>
+  </data>
+  <data name="InstallCommandDesc" xml:space="preserve">
+    <value>Add a library definition to the LibMan.json file, and download the library to the specified location</value>
+  </data>
+  <data name="InstallCommandExamples" xml:space="preserve">
+    <value>    libman install jquery@3.2.1 
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
+    libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</value>
+  </data>
+  <data name="InstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>Library to install</value>
+  </data>
+  <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>    CDNJS libraries have a library ID format of “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+    For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</value>
+  </data>
+  <data name="InstallCommandRemarks" xml:space="preserve">
+    <value>    Initializes a libman.json if one does not exist
+    If no default provider exists, --provider option is required
+    If no default destination exists, --destination option is required
+    If no files are specified, the entire library is included</value>
+  </data>
+  <data name="InvalidArgumentsMessage" xml:space="preserve">
+    <value>Invalid arguments for command: {0}</value>
+  </data>
+  <data name="LibmanCommandDesc" xml:space="preserve">
+    <value>Library Manager</value>
+  </data>
+  <data name="ProviderOptionDesc" xml:space="preserve">
+    <value>Provider to use (if not specified, the default provider will be used)</value>
+  </data>
+  <data name="ProviderSpecificLogicHeader" xml:space="preserve">
+    <value>Provider-specific logic:</value>
+  </data>
+  <data name="RemarksHeader" xml:space="preserve">
+    <value>Remarks:</value>
+  </data>
+  <data name="RestoreCommandDesc" xml:space="preserve">
+    <value>Downloads all files from provider and saves them to specified destination</value>
+  </data>
+  <data name="RestoreCommandRemarks" xml:space="preserve">
+    <value>    Error if no libman.json in current folder
+    If a library specifies a provider, it will override the defaultProvider
+    If a library specifies a destination, it will override the defaultDestination</value>
+  </data>
+  <data name="UnInstallCommandDesc" xml:space="preserve">
+    <value>Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</value>
+  </data>
+  <data name="UnInstallCommandExamples" xml:space="preserve">
+    <value>    libman uninstall jquery
+    libman uninstall jquery@3.3.1</value>
+  </data>
+  <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>Library to uninstall</value>
+  </data>
+  <data name="UninstallCommandProviderOptionDesc" xml:space="preserve">
+    <value>The provider of the library to be uninstalled</value>
+  </data>
+  <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>    CDNJS libraries have a library ID format of “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+    If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</value>
+  </data>
+  <data name="UnInstallCommandRemarks" xml:space="preserve">
+    <value>    Error if no libman.json in current folder
+    Error if specified library doesn't exist
+    If there's more than one library with the same libraryId, you'll be prompted to choose.</value>
+  </data>
+  <data name="VerbosityOptionDesc" xml:space="preserve">
+    <value>Set the verbosity of output (eg. "normal", "detailed", "quiet")</value>
+  </data>
+  <data name="ProjectPathOptionDesc" xml:space="preserve">
+    <value>Path to the project (Current directory is used as default)</value>
+  </data>
+  <data name="DirectoryNotFoundMessage" xml:space="preserve">
+    <value>Directory not found {0}</value>
+  </data>
+  <data name="FailedToRestoreLibraryMessage" xml:space="preserve">
+    <value>Failed to restore "{0}"</value>
+  </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>{0} deleted</value>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>Failed to delete {0}</value>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>{0} written to disk</value>
+  </data>
+  <data name="InitFailedLibmanJsonFileExists" xml:space="preserve">
+    <value>Failed to init: A 'libman.json' already exists</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>Failed to clean some files.</value>
+  </data>
+  <data name="LibmanJsonNotFound" xml:space="preserve">
+    <value>libman.json was not found:{0}</value>
+  </data>
+  <data name="DestinationRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>Default destination is not set. Please provide a destination using '--destination'</value>
+  </data>
+  <data name="LibraryIdRequiredForInstall" xml:space="preserve">
+    <value>LibraryId is required to install</value>
+  </data>
+  <data name="LibraryIdRequiredForUnInstall" xml:space="preserve">
+    <value>LibraryId is required to uninstall</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
+    <value>More than one library found with id "{0}"</value>
+  </data>
+  <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>Default Provider is not set. Please provide a provider using '--provider'</value>
+  </data>
+  <data name="UseProviderToDisambiguateMessage" xml:space="preserve">
+    <value>Use --provider to disambiguate libraries of same name from different providers in the project</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstallForProvider" xml:space="preserve">
+    <value>More than one library found with id "{0}" for provider "{1}". Please remove the manually from the libman.json file</value>
+  </data>
+  <data name="NoLibraryToUninstall" xml:space="preserve">
+    <value>Library "{0}" is not installed. Nothing to uninstall</value>
+  </data>
+  <data name="CacheCleanCommandDesc" xml:space="preserve">
+    <value>Delete all files from the local machine's LibMan cache.</value>
+  </data>
+  <data name="CacheListCommandDesc" xml:space="preserve">
+    <value>Display a list of all libraries that are stored in the local machine’s LibMan cache.</value>
+  </data>
+  <data name="CacheCleanProviderArgumentDesc" xml:space="preserve">
+    <value>Provider for which the cache files should be cleaned.</value>
+  </data>
+  <data name="UpdateCommandDesc" xml:space="preserve">
+    <value>Updates the specified library</value>
+  </data>
+  <data name="UpdateCommandExamples" xml:space="preserve">
+    <value>    libman update jquery 
+    libman update jquery --to jquery@3.3.1
+    libman update jquery@2.2.0
+    libman update jquery -pre 
+</value>
+  </data>
+  <data name="UpdateCommandRemarks" xml:space="preserve">
+    <value>    Error if no libman.json in current folder
+    Error if specified library doesn't exist
+    If there's more than one library with the same libraryId, you'll be prompted to choose.</value>
+  </data>
+  <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
+    <value>Library to update</value>
+  </data>
+  <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
+    <value>If specified, the latest pre-release version of the library will be downloaded (where applicable)</value>
+  </data>
+  <data name="UpdateCommandProviderOptionDesc" xml:space="preserve">
+    <value>If specified, only libraries from the specified provider will be updated</value>
+  </data>
+  <data name="CacheCleanedMessage" xml:space="preserve">
+    <value>Cache cleaned.</value>
+  </data>
+  <data name="CacheCleanFailed" xml:space="preserve">
+    <value>Failed to clean cache: {0}</value>
+  </data>
+  <data name="CacheContentMessage" xml:space="preserve">
+    <value>Cache contents:</value>
+  </data>
+  <data name="CacheEmptyMessage" xml:space="preserve">
+    <value>(empty)</value>
+  </data>
+  <data name="CacheForProviderCleanedMessage" xml:space="preserve">
+    <value>{0} cache cleaned.</value>
+  </data>
+  <data name="CacheListFilesOptionDesc" xml:space="preserve">
+    <value>List files that are cached for each library</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUpdate" xml:space="preserve">
+    <value>More than one library found with id "{0}"</value>
+  </data>
+  <data name="NoLibrariesToUpdate" xml:space="preserve">
+    <value>No libraries to update. Please use install command to install libraries</value>
+  </data>
+  <data name="NoLibraryFoundToUpdate" xml:space="preserve">
+    <value>No library found with id "{0}" to update</value>
+  </data>
+  <data name="InstallLibraryFailed" xml:space="preserve">
+    <value>Failed to install library "{0}"</value>
+  </data>
+  <data name="CacheListLibrariesOptionDesc" xml:space="preserve">
+    <value>Lists the libraries cached for each provider.</value>
+  </data>
+  <data name="ProviderNotInstalled" xml:space="preserve">
+    <value>Provider "{0}" is not installed</value>
+  </data>
+  <data name="SuggestedIdsMessage" xml:space="preserve">
+    <value>Similar libraries: </value>
+  </data>
+  <data name="FixManifestFile" xml:space="preserve">
+    <value>Please fix the libman.json file and try again</value>
+  </data>
+  <data name="ChooseAnOption" xml:space="preserve">
+    <value>Select an option:</value>
+  </data>
+  <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
+    <value>The library "{0}" is already up to date</value>
+  </data>
+  <data name="InvalidToVersion" xml:space="preserve">
+    <value>"{0}" is not a valid value for --to-version</value>
+  </data>
+  <data name="UpdateCommandToVersionOptionDesc" xml:space="preserve">
+    <value>The version to update the library to (needs complete libraryid for the provider)</value>
+  </data>
+  <data name="InstalledLibrary" xml:space="preserve">
+    <value>Installed library "{0}" to "{1}"</value>
+  </data>
+  <data name="UninstalledLibrary" xml:space="preserve">
+    <value>Uninstalled library "{0}"</value>
+  </data>
+  <data name="InvalidFilesForLibrary" xml:space="preserve">
+    <value>Library "{0}" does not contain the following files: {1}</value>
+  </data>
+  <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
+    <value>Library "{0}" cannot be installed. "{1}" is already installed at "{2}".
+Please specify a different destination.</value>
+  </data>
+  <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
+    <value>LibraryId is required for update</value>
+  </data>
+  <data name="SpecifyDifferentDestination" xml:space="preserve">
+    <value>Please specify a different destination.</value>
+  </data>
+  <data name="UninstallFailed" xml:space="preserve">
+    <value>Failed to uninstall "{0}"</value>
+  </data>
+  <data name="UpdateLibraryFailed" xml:space="preserve">
+    <value>Failed to update "{0}" to "{1}"</value>
+  </data>
+  <data name="UpdateLibraryToLatestFailed" xml:space="preserve">
+    <value>Failed to update "{0}" to latest</value>
+  </data>
+  <data name="LibraryUpdated" xml:space="preserve">
+    <value>Updated "{0}" to "{1}"</value>
+  </data>
+  <data name="UnableToFindLatestVersionForLibrary" xml:space="preserve">
+    <value>Could not determine the latest version for "{0}"</value>
+  </data>
+</root>

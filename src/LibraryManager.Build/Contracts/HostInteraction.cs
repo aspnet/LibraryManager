@@ -1,11 +1,12 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Build
 {
@@ -25,31 +26,23 @@ namespace Microsoft.Web.LibraryManager.Build
             var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, path));
 
             if (absolutePath.Exists)
-                return true;
-
-            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
-                throw new UnauthorizedAccessException();
-
-            if (absolutePath.Exists && (absolutePath.Attributes & FileAttributes.ReadOnly) != 0)
             {
                 return true;
             }
 
+            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
             absolutePath.Directory.Create();
 
             using (Stream stream = content.Invoke())
             {
-                if (stream == null)
-                    return false;
-
-                using (FileStream writer = File.Create(absolutePath.FullName, 4096, FileOptions.Asynchronous))
+                if (stream == null || !await FileHelpers.WriteToFileAsync(absolutePath.FullName, stream, cancellationToken).ConfigureAwait(false))
                 {
-                    if (stream.CanSeek)
-                    {
-                        stream.Seek(0, SeekOrigin.Begin);
-                    }
-
-                    await stream.CopyToAsync(writer, 8192, cancellationToken).ConfigureAwait(false);
+                    return false;
                 }
             }
 
@@ -58,25 +51,31 @@ namespace Microsoft.Web.LibraryManager.Build
             return true;
         }
 
-        public void DeleteFiles(params string[] relativeFilePaths)
+        public Task<bool> DeleteFilesAsync(IEnumerable<string> filePaths, CancellationToken cancellationToken)
         {
-            foreach (string relativeFilePath in relativeFilePaths)
+            return Task.Run(() => 
             {
-                string absoluteFile = Path.Combine(WorkingDirectory, relativeFilePath);
+                cancellationToken.ThrowIfCancellationRequested();
 
-                try
-                {
-                    if (File.Exists(absoluteFile))
-                    {
-                        File.Delete(absoluteFile);
-                        Logger.Log(string.Format(Resources.Text.FileDeleted, relativeFilePath), LogLevel.Operation);
-                    }
-                }
-                catch (Exception)
-                {
-                    Logger.Log(string.Format(Resources.Text.FileDeleteFail, relativeFilePath), LogLevel.Operation);
-                }
-            }
+                return FileHelpers.DeleteFiles(filePaths);
+            }, cancellationToken);
+        }
+
+        public Task<Stream> ReadFileAsync(string relativeFilePath, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return FileHelpers.ReadFileAsStreamAsync(relativeFilePath, cancellationToken);
+        }
+
+        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return FileHelpers.CopyFile(sourcePath, destinationPath);
+            }, cancellationToken);
         }
     }
 }

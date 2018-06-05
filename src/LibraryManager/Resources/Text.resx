@@ -126,28 +126,116 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} written to disk</value>
+    <value>{0} written to destination</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>Library restore has been cancelled</value>
+  <data name="Restore_RestoreOfLibraryStarted" xml:space="preserve">
+    <value>Restoring library {0}...</value>
   </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>Restoring {0}...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Restoring libraries...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
+  <data name="Restore_NumberOfLibrariesSucceeded" xml:space="preserve">
     <value>{0} libraries restored in {1} seconds</value>
     <comment>Status message</comment>
   </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Library restore was unsuccessful</value>
+  <data name="Restore_OperationHasErrors" xml:space="preserve">
+    <value>One or more libraries failed to restore</value>
     <comment>Status message</comment>
   </data>
   <data name="LibraryInfoUpdateFailed" xml:space="preserve">
     <value>Failed to update library information for {0}</value>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>Failed to download catalog from provider "{0}"</value>
+  </data>
+  <data name="Restore_LibraryRestoreCancelled" xml:space="preserve">
+    <value>Restore was cancelled for library {0}</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} libraries failed to restore</value>
+  </data>
+  <data name="Clean_OperationCancelled" xml:space="preserve">
+    <value>Clean libraries operation was cancelled</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} libraries failed to be deleted</value>
+  </data>
+  <data name="Clean_OperationStarted" xml:space="preserve">
+    <value>Clean libraries operation started...</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} libraries were successfully deleted in {1} secs</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Clean_OperationFailed" xml:space="preserve">
+    <value>Clean operation failed for {0} libraries</value>
+  </data>
+  <data name="Clean_OperationCompleted" xml:space="preserve">
+    <value>Clean libraries operation completed</value>
+  </data>
+  <data name="Install_LibraryFailed" xml:space="preserve">
+    <value>Install library {0} failed</value>
+  </data>
+  <data name="Install_LibraryStarted" xml:space="preserve">
+    <value>Install library {0} started...</value>
+  </data>
+  <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
+    <value>Library {0}  was successfuly restored restored</value>
+  </data>
+  <data name="Restore_LibrariesUptodate" xml:space="preserve">
+    <value>Restore completed. Files already up-to-date</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>{0} libraries had restore cancelled</value>
+  </data>
+  <data name="Restore_OperationCompleted" xml:space="preserve">
+    <value>Restore operation completed</value>
+  </data>
+  <data name="SummaryEndLine" xml:space="preserve">
+    <value>========== Finished ==========</value>
+  </data>
+  <data name="TimeElapsed" xml:space="preserve">
+    <value>Time Elapsed: {0}</value>
+  </data>
+  <data name="Uninstall_LibraryStarted" xml:space="preserve">
+    <value>Uninstall of library {0} started...</value>
+  </data>
+  <data name="Update_LibraryFailed" xml:space="preserve">
+    <value>Update library {0} failed</value>
+  </data>
+  <data name="Update_LibraryStarted" xml:space="preserve">
+    <value>Update of library {0} started... </value>
+  </data>
+  <data name="Update_LibrarySucceeded" xml:space="preserve">
+    <value>Update of library {0} succeeded</value>
+  </data>
+  <data name="Uninstall_LibraryCancelled" xml:space="preserve">
+    <value>Uninstall of library {0} has been cancelled</value>
+  </data>
+  <data name="Uninstall_LibraryFailed" xml:space="preserve">
+    <value>Uninstall of library {0} failed</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>{0} libraries had deletion cancelled</value>
+  </data>
+  <data name="Restore_LibraryRestoreFailed" xml:space="preserve">
+    <value>Failed to restore library: {0}</value>
+  </data>
+  <data name="Restore_OperationCancelled" xml:space="preserve">
+    <value>Restore operation has been cancelled</value>
+  </data>
+  <data name="Restore_OperationFailed" xml:space="preserve">
+    <value>Restore operation failed for {0} libraries</value>
+  </data>
+  <data name="Restore_OperationStarted" xml:space="preserve">
+    <value>Restore operation started...</value>
+  </data>
+  <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
+    <value>Uninstall of library {0} succeeded</value>
+  </data>
+  <data name="Update_LibraryCancelled" xml:space="preserve">
+    <value>Update of library {0} has been cancelled</value>
+  </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>Restoring libraries for project {0}</value>
   </data>
 </root>

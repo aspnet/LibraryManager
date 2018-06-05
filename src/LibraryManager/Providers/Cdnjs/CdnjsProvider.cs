@@ -1,21 +1,24 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 {
     /// <summary>Internal use only</summary>
     internal class CdnjsProvider : IProvider
     {
+        // TO DO: This should become Provider properties to be passed to CacheService
         private const string _downloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
+
         private CdnjsCatalog _catalog;
+        private CacheService _cacheService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdnjsProvider"/> class.
@@ -24,6 +27,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         public CdnjsProvider(IHostInteraction hostInteraction)
         {
             HostInteraction = hostInteraction;
+            _cacheService = new CacheService(WebRequestHandler.Instance);
         }
 
         /// <summary>
@@ -79,50 +83,73 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return new LibraryInstallationResult(desiredState, errors.ToArray());
             }
 
-            try
+            //Expand the files property if needed
+            ILibraryInstallationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
+            if (!updateResult.Success)
             {
-                ILibraryInstallationResult result = await UpdateStateAsync(desiredState, cancellationToken);
+                return updateResult;
+            }
 
-                if (!result.Success)
+            desiredState = updateResult.InstallationState;
+
+            // Refresh cache if needed
+            ILibraryInstallationResult cacheUpdateResult = await RefreshCacheAsync(desiredState, cancellationToken);
+            if (!cacheUpdateResult.Success)
+            {
+                return cacheUpdateResult;
+            }
+
+            // Check if Library is already up tp date
+            if (IsLibraryUpToDateAsync(desiredState, cancellationToken))
+            {
+                return LibraryInstallationResult.FromUpToDate(desiredState);
+            }
+
+            // Write files to destination
+            return await WriteToFilesAsync(desiredState, cancellationToken);
+
+        }
+
+        private async Task<ILibraryInstallationResult> WriteToFilesAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
+        {
+            if (state.Files != null)
+            {
+                try
                 {
-                    return result;
+                    foreach (string file in state.Files)
+                    {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return LibraryInstallationResult.FromCancelled(state);
+                        }
+
+                        if (string.IsNullOrEmpty(file))
+                        {
+                            return new LibraryInstallationResult(state, PredefinedErrors.CouldNotWriteFile(file));
+                        }
+
+                        string destinationPath = Path.Combine(state.DestinationPath, file);
+                        var sourceStream = new Func<Stream>(() => GetStreamAsync(state, file, cancellationToken).Result);
+                        bool writeOk = await HostInteraction.WriteFileAsync(destinationPath, sourceStream, state, cancellationToken).ConfigureAwait(false);
+
+                        if (!writeOk)
+                        {
+                            return new LibraryInstallationResult(state, PredefinedErrors.CouldNotWriteFile(file));
+                        }
+                    }
                 }
-
-                desiredState = result.InstallationState;
-
-                foreach (string file in desiredState.Files)
+                catch (UnauthorizedAccessException)
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return LibraryInstallationResult.FromCancelled(desiredState);
-                    }
-
-                    if (string.IsNullOrEmpty(file))
-                    {
-                        return new LibraryInstallationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
-                    }
-
-                    string path = Path.Combine(desiredState.DestinationPath, file);
-                    var sourceStream = new Func<Stream>(() => GetStreamAsync(desiredState, file, cancellationToken).Result);
-                    bool writeOk = await HostInteraction.WriteFileAsync(path, sourceStream, desiredState, cancellationToken).ConfigureAwait(false);
-
-                    if (!writeOk)
-                    {
-                        return new LibraryInstallationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
-                    }
+                    return new LibraryInstallationResult(state, PredefinedErrors.PathOutsideWorkingDirectory());
+                }
+                catch (Exception ex)
+                {
+                    HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                    return new LibraryInstallationResult(state, PredefinedErrors.UnknownException());
                 }
             }
-            catch (UnauthorizedAccessException)
-            {
-                return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
-            }
-            catch (Exception ex)
-            {
-                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
-                return new LibraryInstallationResult(desiredState, PredefinedErrors.UnknownException());
-            }
 
-            return LibraryInstallationResult.FromSuccess(desiredState);
+            return LibraryInstallationResult.FromSuccess(state);
         }
 
         /// <summary>
@@ -140,7 +167,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-
                 ILibraryCatalog catalog = GetCatalog();
                 ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
 
@@ -149,11 +175,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     throw new InvalidLibraryException(desiredState.LibraryId, Id);
                 }
 
-                await HydrateCacheAsync(library, cancellationToken).ConfigureAwait(false);
-
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
-                    return LibraryInstallationResult.FromSuccess(desiredState);
+                    IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
+                    if (invalidFiles.Any())
+                    {
+                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
+                        return new LibraryInstallationResult(desiredState, invalidFilesError);
+                    }
+                    else
+                    {
+                        return LibraryInstallationResult.FromSuccess(desiredState);
+                    }
                 }
 
                 desiredState = new LibraryInstallationState
@@ -183,42 +216,119 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
+            string name = GetLibraryName(state);
+            string version = GetLibraryVersion(state);
+
             string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
 
             if (File.Exists(absolute))
             {
-                return await FileHelpers.OpenFileAsync(absolute, cancellationToken).ConfigureAwait(false);
+                return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
             }
 
             return null;
         }
 
-        private async Task HydrateCacheAsync(ILibrary library, CancellationToken cancellationToken)
+        private string GetLibraryName(ILibraryInstallationState state)
+        {
+            string[] args = state.LibraryId.Split('@');
+            string name = args[0];
+
+            return name;
+        }
+
+        private string GetLibraryVersion(ILibraryInstallationState state)
+        {
+            string[] args = state.LibraryId.Split('@');
+            string version = args[1];
+
+            return version;
+        }
+
+        /// <summary>
+        /// Copies ILibraryInstallationState files to cache
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        private async Task<LibraryInstallationResult> RefreshCacheAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return;
+                return LibraryInstallationResult.FromCancelled(state);
             }
 
-            string libraryDir = Path.Combine(CacheFolder, library.Name);
             var tasks = new List<Task>();
+            string[] args = state.LibraryId.Split('@');
+            string name = args[0];
+            string version = args[1];
 
-            foreach (string file in library.Files.Keys)
+            string libraryDir = Path.Combine(CacheFolder, name);
+
+            try
             {
-                string localFile = Path.Combine(libraryDir, library.Version, file);
-
-                if (!File.Exists(localFile))
+                List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                foreach (string sourceFile in state.Files)
                 {
-                    string url = string.Format(_downloadUrlFormat, library.Name, library.Version, file);
-                    Task<string> task = FileHelpers.GetFileTextAsync(url, localFile, 0, cancellationToken);
-                    tasks.Add(task);
+                    string cacheFile = Path.Combine(libraryDir, version, sourceFile);
+                    string url = string.Format(_downloadUrlFormat, name, version, sourceFile);
+
+                    CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                    if (!librariesMetadata.Contains(newEntry))
+                    {
+                        librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
+                    }
+                }
+                await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
+            }
+            catch (ResourceDownloadException ex)
+            {
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                return new LibraryInstallationResult(state, PredefinedErrors.FailedToDownloadResource(ex.Url));
+            }
+            catch(OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                HostInteraction.Logger.Log(ex.InnerException.ToString(), LogLevel.Error);
+                return new LibraryInstallationResult(state, PredefinedErrors.UnknownException());
+            }
+
+            return LibraryInstallationResult.FromSuccess(state);
+        }
+
+        private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
+        {
+            string[] args = state.LibraryId.Split('@');
+            string name = args[0];
+            string version = args[1];
+
+            string cacheDir = Path.Combine(CacheFolder, name, version);
+            string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
+
+            try
+            {
+                foreach (string sourceFile in state.Files)
+                {
+                    var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
+                    var cacheFile = new FileInfo(Path.Combine(cacheDir, sourceFile).Replace('\\', '/'));
+
+                    if (!destinationFile.Exists || !cacheFile.Exists || !FileHelpers.AreFilesUpToDate(destinationFile, cacheFile))
+                    {
+                        return false;
+                    }
                 }
             }
+            catch (Exception)
+            {
+                // Log failure here 
+                return false;
+            }
 
-            await Task.WhenAll(tasks).ConfigureAwait(false);
+            return true;
         }
+
     }
 }

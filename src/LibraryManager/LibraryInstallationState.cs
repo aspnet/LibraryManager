@@ -8,9 +8,7 @@ using System.Collections.Generic;
 namespace Microsoft.Web.LibraryManager
 {
 
-    /// <summary>
-    /// For internal use only.
-    /// </summary>
+    /// <inheritdoc />
     /// <seealso cref="Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" />
     internal class LibraryInstallationState : ILibraryInstallationState
     {
@@ -37,6 +35,18 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         [JsonProperty(ManifestConstants.Files)]
         public IReadOnlyList<string> Files { get; set; }
+
+        /// <summary>
+        /// Tells whether the library was installed/ restored using default provider.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsUsingDefaultProvider { get; set; }
+
+        /// <summary>
+        /// Tells whether the library was installed/ restored to default destination.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsUsingDefaultDestination { get; set; }
 
         /// <summary>Internal use only</summary>
         public static LibraryInstallationState FromInterface(ILibraryInstallationState state, 
