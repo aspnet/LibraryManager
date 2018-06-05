@@ -24,22 +24,4 @@
     <value>{0} はディスクに書き込まれました</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>ライブラリの復元は取り消されました</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>{0} を復元しています...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>ライブラリを復元しています...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} ライブラリが {1} 秒で復元されました</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>ライブラリを復元できませんでした</value>
-    <comment>Status message</comment>
-  </data>
 </root>

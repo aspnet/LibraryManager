@@ -54,7 +54,4 @@ Esto puede requerir una conexión a internet.
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Escriba para buscar&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Elija un paquete para seleccionar los archivos para instalar&gt;</value>
-  </data>
 </root>

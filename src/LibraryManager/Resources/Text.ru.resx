@@ -24,22 +24,4 @@
     <value>{0} записан на диск</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>Восстановление библиотеки было отменено</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>Восстановление {0}...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Восстановление библиотек...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>Библиотеки ({0}) восстановлены за {1} с</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Не удалось восстановить библиотеку</value>
-    <comment>Status message</comment>
-  </data>
 </root>
