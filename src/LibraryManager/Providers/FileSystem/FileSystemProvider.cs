@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Resources;
 
 namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 {
@@ -38,6 +39,11 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// An object specified by the host to interact with the file system etc.
         /// </summary>
         public IHostInteraction HostInteraction { get; }
+
+        /// <summary>
+        /// Hint text for the library id.
+        /// </summary>
+        public string LibraryIdHintText { get; } = Text.FileSystemLibraryIdHintText;
 
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.

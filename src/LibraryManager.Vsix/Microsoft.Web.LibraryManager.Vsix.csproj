@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;UI_ENABLED</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -57,7 +57,7 @@
     <TranslationReport Condition="'$(Configuration)' == 'Release'">true</TranslationReport>
     <SuppressPseudoWarning Condition="'$(Configuration)' == 'Debug'">true</SuppressPseudoWarning>
   </PropertyGroup>
-  <ItemGroup Condition="$(DefineConstants.Contains(UI_ENABLED))">
+  <ItemGroup>
     <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
     <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
@@ -67,8 +67,8 @@
     <Compile Include="UI\Controls\Search\LogicalAndConverter.cs" />
     <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
     <Compile Include="UI\Controls\Search\Wrapper.cs" />
-    <Compile Include="UI\Controls\TheBox.xaml.cs">
-      <DependentUpon>TheBox.xaml</DependentUpon>
+    <Compile Include="UI\Controls\Library.xaml.cs">
+      <DependentUpon>Library.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\ThemedWindow.cs" />
     <Compile Include="UI\Converters\BoldingConverter.cs" />
@@ -94,7 +94,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Contracts\Dependencies.cs" />
     <Compile Include="Contracts\HostInteraction.cs" />
-    <Compile Include="Contracts\LibraryInstallationState.cs" />
     <Compile Include="Contracts\Logger.cs" />
     <Compile Include="Contracts\PerProjectLogger.cs" />
     <Compile Include="ErrorList\DisplayError.cs" />
@@ -111,6 +110,11 @@
     <Compile Include="Json\SuggestedActions\UpdateSuggestedActionSet.cs" />
     <Compile Include="Json\SuggestedActions\UninstallSuggestedActions.cs" />
     <Compile Include="Json\SuggestedActions\SuggestedActionProvider.cs" />
+    <Compile Include="UI\Controls\TargetLocation.xaml.cs">
+      <DependentUpon>TargetLocation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Converters\EnumToBoolConverter.cs" />
+    <Compile Include="UI\Converters\HintTextConverter.cs" />
     <Compile Include="Shared\Telemetry.cs" />
     <Compile Include="Json\Completion\BaseCompletionProvider.cs" />
     <Compile Include="Json\Completion\FilesCompletionProvider.cs" />
@@ -139,6 +143,10 @@
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
     <Compile Include="Shared\WpfUtil.cs" />
+    <Compile Include="UI\HideResizeButtons.cs" />
+    <Compile Include="UI\Models\FileSelection.cs" />
+    <Compile Include="UI\Models\FileSelectionType.cs" />
+    <Compile Include="UI\Models\InstallationFolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -262,6 +270,9 @@
     <Content Include="source.extension.ico">
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Content>
+    <Resource Include="Resources\StatusInfoTip.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <EmbeddedResource Include="Resources\Text.cs.resx" />
     <EmbeddedResource Include="Resources\Text.de.resx" />
     <EmbeddedResource Include="Resources\Text.es.resx" />
@@ -371,8 +382,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\Controls\TargetLocation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
-  <ItemGroup Condition="$(DefineConstants.Contains(UI_ENABLED))">
+  <ItemGroup>
     <Page Include="UI\Controls\PackageContentsTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -381,7 +396,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Controls\TheBox.xaml">
+    <Page Include="UI\Controls\Library.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,45 +1,204 @@
-﻿<controls:ThemedWindow x:Class="Microsoft.Web.LibraryManager.Vsix.UI.InstallDialog"
+﻿<Window x:Class="Microsoft.Web.LibraryManager.Vsix.UI.InstallDialog"
+        x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
-                       xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
-                       xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
-                       mc:Ignorable="d" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}"
-        Title="Install Client-Side Library" Height="300.2" Width="498.674" PreviewMouseDown="ThemedWindow_PreviewMouseDown">
-    <controls:ThemedWindow.Resources>
+        xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
+        xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
+        xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
+        xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
+        xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
+        xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}"
+        Title="{x:Static resources:Text.AddClientSideLibrary}"
+        Height="350" Width="500"
+        PreviewMouseDown="ThemedWindow_PreviewMouseDown"
+        ResizeMode="CanResizeWithGrip">
+    <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-    </controls:ThemedWindow.Resources>
-    <Grid>
+        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+        <converters:HintTextConverter x:Key="HintTextConverter"/>
+    </Window.Resources>
+    <Grid Margin="12 12 12 12">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="150" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+            <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="32" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition />
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        
-        <ComboBox Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="10 0" SelectedIndex="0" DisplayMemberPath="Id" SelectedItem="{Binding SelectedProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Providers}"/>
 
-        <controls:TheBox x:Name="cbName" Grid.Row="0" Grid.Column="1" Margin="10 0" VerticalAlignment="Center" SearchService="PerformSearch" Text="{Binding Path=PackageId, Mode=OneWayToSource}" />
-
-        <controls:PackageContentsTreeView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10 0" FocusVisualStyle="{x:Null}" />
-        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity=".5" Visibility="{Binding Path=IsTreeViewEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-            <AccessText Text="{x:Static resources:Text.SelectPackageToSelectFilesToInstall}" />
-        </Label>
-
-        <Grid Grid.Row="2" Grid.Column="0" Margin="0 10" Grid.ColumnSpan="2">
+        <Grid Grid.Row="0" Grid.ColumnSpan="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="76*" />
+                <ColumnDefinition Width="391*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Content="Install" HorizontalAlignment="Right" Margin="10 0" VerticalAlignment="Center" Width="75" IsDefault="True" Command="{Binding InstallPackageCommand}" />
-            <Button Grid.Column="2" Content="Cancel" HorizontalAlignment="Right" Margin="0 0 10 0" VerticalAlignment="Center" Width="75" IsCancel="True" />
+            <Label Name="Provider" 
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   Content="{x:Static resources:Text.Provider}" />
+            <Label Name="LibraryId" 
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   Content="{x:Static resources:Text.Library}" />
+            <ComboBox x:Name="ProviderComboBox" 
+                      Grid.Row="0"
+                      Grid.Column="1"
+                      Margin="0 0 0 9"
+                      SelectedIndex="0" 
+                      DisplayMemberPath="Id" 
+                      SelectedItem="{Binding SelectedProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                      SelectionChanged="ProviderComboBox_SelectionChanged"
+                      ItemsSource="{Binding Providers}" 
+                      HorizontalAlignment="Left" 
+                      VerticalAlignment="Center"
+                      KeyboardNavigation.TabIndex="1"
+                      Width="auto" />
+            <DockPanel Grid.Row="1" 
+                       Grid.Column="1" 
+                       LastChildFill="True" 
+                       Margin="0 0 0 9">
+                <imaging:CrispImage Width="13" 
+                                    Height="13" 
+                                    Margin="6 0 0 0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    DockPanel.Dock="Right"
+                                    DataContext="{Binding ElementName=ProviderComboBox, Path=SelectedItem}">
+                    <imaging:CrispImage.Style>
+                        <Style TargetType="{x:Type imaging:CrispImage}">
+                            <Setter Property="Source" Value="../Resources/StatusInfoTip.png" />
+                        </Style>
+                    </imaging:CrispImage.Style>
+                    <imaging:CrispImage.ToolTip>
+                        <Label Content="{Binding Converter={StaticResource HintTextConverter}}"/>
+                    </imaging:CrispImage.ToolTip>
+                </imaging:CrispImage>
+                <controls:Library x:Name="LibrarySearchBox" 
+                                  DockPanel.Dock="Left"
+                                  SearchService="PerformSearch" 
+                                  KeyboardNavigation.TabIndex="2"
+                                  Text="{Binding Path=PackageId, Mode=OneWayToSource}" />
+            </DockPanel>
         </Grid>
 
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="1"                                   
+                    Grid.ColumnSpan="4" 
+                    Margin="0 0 0 9">
+            <RadioButton x:Name="IncludeAllLibraryFilesRb"
+                         Margin="0 0 0 9"
+                         GroupName="FilesToInstall" 
+                         Content="{x:Static resources:Text.IncludeAllLibraryFiles}"
+                         Checked="IncludeAllLibraryFilesRb_Checked"
+                         IsChecked="{Binding LibraryFilesToInstall,
+                                             Mode=TwoWay,
+                                             Converter={StaticResource EnumToBoolConverter}, 
+                                             ConverterParameter=InstallAllLibraryFiles}" />
+            <RadioButton Content="{x:Static resources:Text.ChooseSpecificFiles}"
+                         GroupName="FilesToInstall"  
+                         Checked="ChooseSpecificFilesRb_Checked"
+                         IsChecked="{Binding LibraryFilesToInstall,
+                                             Mode=TwoWay,
+                                             Converter={StaticResource EnumToBoolConverter}, 
+                                             ConverterParameter=ChooseSpecificFilesToInstall}" />
+        </StackPanel>
+
+        <controls:PackageContentsTreeView Grid.Row="2"   
+                                          Grid.ColumnSpan="4" 
+                                          BorderBrush="Black"
+                                          BorderThickness="0.5"
+                                          Margin="0 0 0 9"
+                                          x:Name="LibraryFilesToInstallTreeView" />
+
+        <Label Grid.Row="2" 
+               Grid.ColumnSpan="4" 
+               Margin="0 0 0 9"
+               Opacity=".5" 
+               VerticalAlignment="Center"
+               Name="ChooseLibraryFilesToInstallLabel"
+               HorizontalAlignment="Center">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsTreeViewEmpty}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=IsTreeViewEmpty}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+            <AccessText Text="{x:Static resources:Text.SelectLibraryToSelectFilesToInstall}" />
+        </Label>
+
+        <DockPanel Grid.Row="3" 
+                   Grid.ColumnSpan="4" 
+                   Margin="0 0 0 9">
+            <Label Name="TargetLocation" 
+                   Content="{x:Static resources:Text.TargetLocation}"
+                   Width="Auto"/>
+            <controls:TargetLocation x:Name="DestinationFolder" 
+                                     VerticalAlignment="Center" 
+                                     SearchService="TargetLocationSearch" 
+                                     KeyboardNavigation.TabIndex="4"/>
+        </DockPanel>
+
+        <DockPanel Grid.Row="4" 
+                   Grid.ColumnSpan="4" 
+                   LastChildFill="False">
+            <StackPanel VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        DockPanel.Dock="Left"
+                        Orientation="Horizontal">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=NoFilesSelected}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=NoFilesSelected}" Value="False">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <imaging:CrispImage Width="16" 
+                                    Height="16" 
+                                    DockPanel.Dock="Top" 
+                                    HorizontalAlignment="Right">
+                    <imaging:CrispImage.Style>
+                        <Style TargetType="{x:Type imaging:CrispImage}">
+                            <Setter Property="Moniker" Value="{x:Static catalog:KnownMonikers.StatusWarning}" />
+                        </Style>
+                    </imaging:CrispImage.Style>
+                </imaging:CrispImage>
+                <Label Content="{x:Static resources:Text.NoFilesSelected}">
+                </Label>
+            </StackPanel>
+            <Button Content="Cancel" 
+                    Width="65" 
+                    DockPanel.Dock="Right"
+                    IsCancel="True" />
+            <Button Content="Install"
+                    Name="InstallButton"
+                    Width="65" 
+                    DockPanel.Dock="Right"
+                    Margin="0 0 6 0" IsDefault="True" 
+                    Command="{Binding InstallPackageCommand}">
+            </Button>
+        </DockPanel>
     </Grid>
-</controls:ThemedWindow>
+</Window>

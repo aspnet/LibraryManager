@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Resources;
 
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 {
@@ -34,6 +35,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// The unique identifier of the provider.
         /// </summary>
         public string Id { get; } = "cdnjs";
+
+        /// <summary>
+        /// Hint text for the library id.
+        /// </summary>
+        public string LibraryIdHintText { get; } = Text.CdnjsLibraryIdHintText;
 
         /// <summary>
         /// The NuGet Package id for the package including the provider for use by MSBuild.

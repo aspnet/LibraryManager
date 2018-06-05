@@ -131,9 +131,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             {
                 string[] args = libraryId.Split('@');
                 string name = args[0];
-                string version = args[1];
+                string version = (args.Count() > 1) ? args[1] :null;
 
                 IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
+
                 Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
                 if (asset == null)
@@ -293,13 +294,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 if (!string.IsNullOrEmpty(json))
                 {
                     var root = JObject.Parse(json);
-                    IEnumerable<Asset> assets = JsonConvert.DeserializeObject<IEnumerable<Asset>>(root["assets"].ToString());
-                    string defaultFileName = root["filename"]?.Value<string>();
-
-                    foreach (Asset asset in assets)
+                    if (root["assets"] != null)
                     {
-                        asset.DefaultFile = defaultFileName;
-                        list.Add(asset);
+                        IEnumerable<Asset> assets = JsonConvert.DeserializeObject<IEnumerable<Asset>>(root["assets"].ToString());
+                        string defaultFileName = root["filename"]?.Value<string>();
+
+                        foreach (Asset asset in assets)
+                        {
+                            asset.DefaultFile = defaultFileName;
+                            list.Add(asset);
+                        }
                     }
                 }
             }

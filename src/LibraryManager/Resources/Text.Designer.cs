@@ -62,6 +62,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Example: &lt;library&gt;@&lt;version&gt;.
+        /// </summary>
+        public static string CdnjsLibraryIdHintText {
+            get {
+                return ResourceManager.GetString("CdnjsLibraryIdHintText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} libraries had deletion cancelled.
         /// </summary>
         public static string Clean_NumberOfLibrariesCancelled {
@@ -148,6 +157,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static string FileDeleteFail {
             get {
                 return ResourceManager.GetString("FileDeleteFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be a valid filesystem path..
+        /// </summary>
+        public static string FileSystemLibraryIdHintText {
+            get {
+                return ResourceManager.GetString("FileSystemLibraryIdHintText", resourceCulture);
             }
         }
         

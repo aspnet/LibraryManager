@@ -238,4 +238,10 @@
   <data name="Restore_LibrariesForProject" xml:space="preserve">
     <value>Restoring libraries for project {0}</value>
   </data>
+  <data name="CdnjsLibraryIdHintText" xml:space="preserve">
+    <value>Example: &lt;library&gt;@&lt;version&gt;</value>
+  </data>
+  <data name="FileSystemLibraryIdHintText" xml:space="preserve">
+    <value>Must be a valid filesystem path.</value>
+  </data>
 </root>

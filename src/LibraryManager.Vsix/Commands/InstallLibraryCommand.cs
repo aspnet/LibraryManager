@@ -36,12 +36,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             ProjectItem item = VsHelpers.GetSelectedItem();
 
-            if (item?.ContainingProject == null || !item.ContainingProject.IsSupported())
+            if (item?.ContainingProject == null)
             {
                 return;
             }
 
-            if (item.Kind.Equals(VSConstants.ItemTypeGuid.PhysicalFolder_string, StringComparison.OrdinalIgnoreCase))
+            if (VSConstants.ItemTypeGuid.PhysicalFolder_string.Equals(item.Kind, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -58,7 +58,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 string target = item.FileNames[1];
 
-                Project project = VsHelpers.GetSelectedItemProject();
+                Project project = VsHelpers.GetProjectOfSelectedItem();
 
                 if (project != null)
                 {
@@ -67,7 +67,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
                     IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
 
-                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target);
+                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target, rootFolder);
                     dialog.ShowDialog();
                 }
             }
