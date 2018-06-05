@@ -57,7 +57,7 @@
     <TranslationReport Condition="'$(Configuration)' == 'Release'">true</TranslationReport>
     <SuppressPseudoWarning Condition="'$(Configuration)' == 'Debug'">true</SuppressPseudoWarning>
   </PropertyGroup>
-  <ItemGroup Condition="$(DefineConstants.Contains(UI_ENABLED))">
+  <ItemGroup>
     <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
     <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
