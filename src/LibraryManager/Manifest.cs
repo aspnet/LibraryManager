@@ -249,9 +249,9 @@ namespace Microsoft.Web.LibraryManager
         {
             var libraries = new List<ILibraryInstallationState>(Libraries);
             libraries.Add(desiredState);
-            var conflictDetector = new LibraryConflictDetector(_dependencies, DefaultDestination, DefaultProvider);
+            var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
-            IEnumerable<ILibraryInstallationResult> fileConflicts = await conflictDetector.DetectConflictsAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryInstallationResult> fileConflicts = await conflictDetector.GetLibrariesErrorsAsync(libraries, cancellationToken);
 
             return fileConflicts;
         }
@@ -287,17 +287,16 @@ namespace Microsoft.Web.LibraryManager
         {
             //TODO: This should have an "undo scope"
             var tasks = new List<Task<ILibraryInstallationResult>>();
-            var results = new List<ILibraryInstallationResult>();
 
             if (!IsValidManifestVersion(Version))
             {
                 return new ILibraryInstallationResult[] { LibraryInstallationResult.FromError(PredefinedErrors.VersionIsNotSupported(Version)) };
             }
 
-            IEnumerable<ILibraryInstallationResult> conflictsResult = await GetLibraryConflictsAsync(cancellationToken);
-            if (!conflictsResult.All(r => r.Success))
+            IEnumerable<ILibraryInstallationResult> validationResults = await ValidateLibrariesAsync(cancellationToken);
+            if (!validationResults.All(r => r.Success))
             {
-                return conflictsResult;
+                return validationResults;
             }
 
             foreach (ILibraryInstallationState state in Libraries)
@@ -310,11 +309,16 @@ namespace Microsoft.Web.LibraryManager
             return tasks.Select(t => t.Result);
         }
 
-        private async Task<IEnumerable<ILibraryInstallationResult>> GetLibraryConflictsAsync(CancellationToken cancellationToken)
+        /// <summary>
+        /// // Validates each individual library and check for invalid properties and libraries conflicts
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<ILibraryInstallationResult>> ValidateLibrariesAsync(CancellationToken cancellationToken)
         {
-            var conflictDetector = new LibraryConflictDetector(_dependencies, DefaultDestination, DefaultProvider);
+            var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
-            return await conflictDetector.DetectConflictsAsync(Libraries, cancellationToken);
+            return await conflictDetector.GetLibrariesErrorsAsync(Libraries, cancellationToken);
         }
 
         private async Task<ILibraryInstallationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)

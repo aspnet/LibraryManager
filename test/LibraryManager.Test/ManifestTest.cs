@@ -155,8 +155,8 @@ namespace Microsoft.Web.LibraryManager.Test
             var manifest = Manifest.FromJson(_doc, _dependencies);
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
-            Assert.AreEqual(2, result.Count());
-            Assert.AreEqual(1, result.Count(v => v.Success));
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(0, result.Count(v => v.Success));
             Assert.AreEqual(1, result.Count(v => !v.Success));
             Assert.AreEqual("LIB002", result.Last().Errors.First().Code);
         }
@@ -168,7 +168,7 @@ namespace Microsoft.Web.LibraryManager.Test
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(2, result.Count());
-            Assert.AreEqual(1, result.Count(v => v.Success));
+            Assert.AreEqual(2, result.Count(v => v.Success));
             Assert.AreEqual(manifest.DefaultProvider, result.First().InstallationState.ProviderId);
         }
 
@@ -190,8 +190,8 @@ namespace Microsoft.Web.LibraryManager.Test
             var manifest = Manifest.FromJson(_doc, dependencies);
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
-            Assert.AreEqual(2, result.Count());
-            Assert.AreEqual(2, result.Count(v => !v.Success));
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(1, result.Count(v => !v.Success));
         }
 
         [DataTestMethod]
@@ -219,16 +219,13 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(OperationCanceledException))]
         public async Task RestoreAsync_AllRestoreOperationsCancelled()
         {
             var manifest = Manifest.FromJson(_doc, _dependencies);
             var source = new CancellationTokenSource();
             source.Cancel();
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(source.Token);
-
-            Assert.AreEqual(2, result.Count());
-            Assert.IsTrue(result.ElementAt(0).Cancelled);
-            Assert.IsTrue(result.ElementAt(1).Cancelled);
         }
 
         [TestMethod]
@@ -238,7 +235,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
-            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(1, result.Count());
             Assert.IsTrue(result.Last().Errors.Any(e => e.Code == "LIB016"), "LIB016 error code expected.");
         }
 
@@ -379,29 +376,6 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual("LIB009", result.First().Errors.First().Code);
         }
 
-        [TestMethod]
-        [Ignore]
-        public async Task RestoreAsync_DestinationPathHasAltDirectorySeparatorChar()
-        {
-            var manifest = Manifest.FromJson("{}", _dependencies);
-
-            var state = new LibraryInstallationState
-            {
-                ProviderId = "cdnjs",
-                LibraryId = "jquery@3.2.1",
-                DestinationPath = "lib/js",
-                Files = new[] { "core/core.js" }
-            };
-
-            manifest.AddVersion("1.0");
-            manifest.AddLibrary(state);
-
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
-
-            Assert.AreEqual(1, result.Count());
-            Assert.IsTrue(result.First().Success);
-        }
-
         private string _doc = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
@@ -431,10 +405,10 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
     }},
     {{
-      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
+      ""{ManifestConstants.Library}"": ""http://glyphlist.azurewebsites.net/img/images/Flag.png"",
       ""{ManifestConstants.Provider}"": ""filesystem"",
       ""{ManifestConstants.Destination}"": ""lib"",
-      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
+      ""{ManifestConstants.Files}"": [ ""Flag.png"" ]
     }}
   ]
 }}
@@ -471,12 +445,6 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Destination}"": ""lib"",
       ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
-    }},
-    {{
-      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
-      ""{ManifestConstants.Provider}"": ""filesystem"",
-      ""{ManifestConstants.Destination}"": ""lib"",
-      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
     }},
     {{
       ""{ManifestConstants.Library}"": ""jquery@2.2.1"",

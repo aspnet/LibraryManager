@@ -15,7 +15,7 @@ using Microsoft.Web.LibraryManager.Providers.FileSystem;
 namespace Microsoft.Web.LibraryManager.Test
 {
     [TestClass]
-    public class LibraryConflictDetectorTest
+    public class LibrariesValidatorTest
     {
         private string _cacheFolder;
         private string _projectFolder;
@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             _manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
 
-            var conflictDetector = new LibraryConflictDetector(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
+            var conflictDetector = new LibrariesValidator(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
 
             IEnumerable<FileConflict> conflicts = conflictDetector.GetFilesConflicts(_manifest.Libraries, CancellationToken.None);
 
@@ -53,7 +53,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             _manifest = Manifest.FromJson(_docNoConflictingLibraries, _dependencies);
 
-            var conflictDetector = new LibraryConflictDetector(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
+            var conflictDetector = new LibrariesValidator(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
 
             IEnumerable<FileConflict> conflicts = conflictDetector.GetFilesConflicts(_manifest.Libraries, CancellationToken.None);
 
@@ -65,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             _manifest = Manifest.FromJson(_docDifferentDestination, _dependencies);
 
-            var conflictDetector = new LibraryConflictDetector(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
+            var conflictDetector = new LibrariesValidator(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
 
             IEnumerable<FileConflict> conflicts = conflictDetector.GetFilesConflicts(_manifest.Libraries, CancellationToken.None);
 

@@ -37,7 +37,6 @@ namespace Microsoft.Web.LibraryManager.Test
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory());
-            //_cacheService = new CacheService(WebRequestHandler.Instance);
             _cacheService = new CacheService(new Mocks.WebRequestHandler());
 
             Directory.CreateDirectory(_projectFolder);
@@ -50,7 +49,7 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(System.IO.FileNotFoundException))]
+        [ExpectedException(typeof(FileNotFoundException))]
         public async Task GetCatalogAsync_ThrowsForInvalidCacheFilePath()
         {
             string validUrl = "Valid Url";
@@ -94,30 +93,6 @@ namespace Microsoft.Web.LibraryManager.Test
             // verify
             Assert.IsTrue(beforeCacheFileDT.Equals(afterCacheFileDT));
             Assert.IsTrue(File.Exists(_catalogCacheFile));
-        }
-
-        [TestMethod]
-        [Ignore]
-        public async Task GetCatalogAsync_DownloadsFromSource_IfExpired()
-        {
-            string validUrl = "Valid Url";
-
-            // setup
-            await _cacheService.GetCatalogAsync(validUrl, _catalogCacheFile, CancellationToken.None);
-            DateTime beforeCacheFileDT = File.GetLastWriteTime(_catalogCacheFile);
-            long beforeSize = new FileInfo(_catalogCacheFile).Length;
-            File.SetLastWriteTime(_catalogCacheFile, beforeCacheFileDT.AddDays(-3));
-            beforeCacheFileDT = File.GetLastWriteTime(_catalogCacheFile);
-
-            // act
-            await _cacheService.GetCatalogAsync(validUrl, _catalogCacheFile, CancellationToken.None);
-            DateTime afterCacheFileDT = File.GetLastWriteTime(_catalogCacheFile);
-            long afterSize = new FileInfo(_catalogCacheFile).Length;
-
-            // verify
-            Assert.IsTrue(File.Exists(_catalogCacheFile), "Cache file does not exist");
-            Assert.IsTrue(afterCacheFileDT > beforeCacheFileDT, "Cache file was not updated");
-            Assert.IsTrue(beforeSize == afterSize, "Cache file was appended and not created");
         }
 
         [TestMethod]
