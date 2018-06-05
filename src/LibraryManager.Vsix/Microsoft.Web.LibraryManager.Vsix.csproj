@@ -22,7 +22,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Web.LibraryManager.Vsix</RootNamespace>
     <AssemblyName>Microsoft.Web.LibraryManager.Vsix</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <TargetVsixContainerName>Microsoft.Web.LibraryManager.vsix</TargetVsixContainerName>
     <ExtensionInstallationRoot>Extensions</ExtensionInstallationRoot>
