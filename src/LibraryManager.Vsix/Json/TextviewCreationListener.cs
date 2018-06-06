@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                                 _manifest = newManifest;
 
                                await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
-                                Telemetry.TrackOperation("restoresave");
+                               Telemetry.TrackOperation("RestoreOnSave");
                             }
                             else
                             {
@@ -112,14 +112,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                             AddErrorToList(PredefinedErrors.ManifestMalformed());
                         }
                     }
-                    catch (OperationCanceledException ex)
+                    catch (OperationCanceledException)
                     {
                         string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationCancelled, Environment.NewLine);
-
-                        Logger.LogEvent(textMessage, LogLevel.Task);
-                        Logger.LogEvent(ex.ToString(), LogLevel.Error);
-
-                        Telemetry.TrackException("restoresavecancelled", ex);
+                        Telemetry.TrackException("RestoreOnSaveCancelled");
                     }
                     catch (Exception ex)
                     {
@@ -130,7 +126,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
                         Logger.LogEvent(textMessage, LogLevel.Task);
                         Logger.LogEvent(ex.ToString(), LogLevel.Error);
-                        Telemetry.TrackException("restoresavefailed", ex);
+                        Telemetry.TrackException("RestoreOnSaveException", ex);
                     }
                 });
             }

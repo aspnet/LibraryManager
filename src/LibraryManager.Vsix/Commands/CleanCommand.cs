@@ -59,6 +59,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
+            Telemetry.TrackUserTask("cleancommand");
+
             ProjectItem configProjectItem = VsHelpers.GetSelectedItem();
 
             if (configProjectItem != null)

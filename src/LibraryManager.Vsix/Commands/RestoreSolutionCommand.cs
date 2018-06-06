@@ -56,6 +56,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
+            Telemetry.TrackUserTask("RestoreSolutionCommand");
+
             var solution = (IVsSolution)ServiceProvider.GetService(typeof(SVsSolution));
             IEnumerable<IVsHierarchy> hierarchies = VsHelpers.GetProjectsInSolution(solution, __VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION);
             var configFiles = new List<string>();

@@ -224,7 +224,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task RestoreAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken)
         {
-            Logger.LogEventsHeader(OperationType.Restore, null);
+
+            Logger.LogEventsHeader(OperationType.Restore, string.Empty);
 
             Stopwatch sw = new Stopwatch();
             List<ILibraryOperationResult> totalResults = new List<ILibraryOperationResult>();
@@ -254,6 +255,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (OperationCanceledException)
             {
+                Telemetry.TrackException("RestoreCancelled");
                 Logger.LogEvent(LibraryManager.Resources.Text.Restore_OperationCancelled, LogLevel.Task);
             }
         }

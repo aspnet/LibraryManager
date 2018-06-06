@@ -53,6 +53,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
+            Telemetry.TrackUserTask("RestoreCommand");
+
             ProjectItem configProjectItem = VsHelpers.GetSelectedItem();
 
             if (!_libraryCommandService.IsOperationInProgress && configProjectItem != null)

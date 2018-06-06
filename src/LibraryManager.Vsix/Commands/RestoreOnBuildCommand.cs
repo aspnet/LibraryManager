@@ -76,6 +76,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private void Execute(object sender, EventArgs e)
         {
+            Telemetry.TrackUserTask("RestoreOnBuildCommand");
+
             ProjectItem item = VsHelpers.GetSelectedItem();
             Project project = VsHelpers.GetProjectOfSelectedItem();
 

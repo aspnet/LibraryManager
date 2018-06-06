@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private void Execute(object sender, EventArgs e)
         {
-            Telemetry.TrackUserTask("ManageLibraries");
+            Telemetry.TrackUserTask("ManageLibrariesCommand");
 
             Project project = VsHelpers.GetProjectOfSelectedItem();
 

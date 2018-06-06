@@ -54,7 +54,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private void ExecuteAsync(object sender, EventArgs e)
         {
-            Telemetry.TrackUserTask("installdialogopened");
+            Telemetry.TrackUserTask("installLibraryCommand");
 
             ProjectItem item = VsHelpers.GetSelectedItem();
 
