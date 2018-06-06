@@ -24,22 +24,4 @@
     <value>{0} diske yazıldı</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>Kitaplık geri yüklemesi iptal edildi</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>{0} geri yükleniyor...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Kitaplıklar geri yükleniyor...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} kitaplık {1} saniye içinde geri yüklendi</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Kitaplık geri yüklemesi başarısız oldu</value>
-    <comment>Status message</comment>
-  </data>
 </root>

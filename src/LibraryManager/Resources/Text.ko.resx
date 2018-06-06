@@ -24,22 +24,4 @@
     <value>{0}이(가) 디스크에 기록되었습니다.</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>라이브러리 복원이 취소되었습니다.</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>{0}을(를) 복원하는 중...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>라이브러리를 복원하는 중...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} 라이브러리를 {1}초 후에 복원합니다.</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>라이브러리 복원에 실패했습니다.</value>
-    <comment>Status message</comment>
-  </data>
 </root>

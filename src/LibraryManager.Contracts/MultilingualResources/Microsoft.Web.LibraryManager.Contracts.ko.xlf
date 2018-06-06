@@ -44,6 +44,52 @@
           <source>An unknown exception occurred</source>
           <target state="translated">알 수 없는 예외가 발생했습니다.</target>
         </trans-unit>
+        <trans-unit id="ErrorCouldNotDeleteLibrary" translate="yes" xml:space="preserve">
+          <source>Failed to delete one or more files in the library {0}</source>
+          <target state="new">Failed to delete one or more files in the library {0}</target>
+        </trans-unit>
+        <trans-unit id="ErrorDestinationPathHasInvalidCharacter" translate="yes" xml:space="preserve">
+          <source>The "{0}" destination file path has invalid characters</source>
+          <target state="new">The "{0}" destination file path has invalid characters</target>
+        </trans-unit>
+        <trans-unit id="ErrorNotSupportedVersion" translate="yes" xml:space="preserve">
+          <source>Version "{0}" is not supported by this version of Library Manager</source>
+          <target state="new">Version "{0}" is not supported by this version of Library Manager</target>
+        </trans-unit>
+        <trans-unit id="ErrorUnableToDownloadResource" translate="yes" xml:space="preserve">
+          <source>Failed to download resource from "{0}"</source>
+          <target state="new">Failed to download resource from "{0}"</target>
+        </trans-unit>
+        <trans-unit id="ErrorUnableToResolveFilePath" translate="yes" xml:space="preserve">
+          <source>The "{0}" file path could not be resolved by the "{1}" provider</source>
+          <target state="new">The "{0}" file path could not be resolved by the "{1}" provider</target>
+        </trans-unit>
+        <trans-unit id="ErrorConflictingLibraries" translate="yes" xml:space="preserve">
+          <source>Conflicting file "{0}" found in more than one library: {1}</source>
+          <target state="new">Conflicting file "{0}" found in more than one library: {1}</target>
+        </trans-unit>
+        <trans-unit id="ErrorLibraryAlreadyInstalled" translate="yes" xml:space="preserve">
+          <source>The "{0}" library is already installed by the "{1}" provider</source>
+          <target state="new">The "{0}" library is already installed by the "{1}" provider</target>
+        </trans-unit>
+        <trans-unit id="ErrorLibraryCannotInstallDueToConflicts" translate="yes" xml:space="preserve">
+          <source>The file "{0}" is already installed by {1}.</source>
+          <target state="new">The file "{0}" is already installed by {1}.</target>
+        </trans-unit>
+        <trans-unit id="ErrorLibraryCannotUpdateDueToConflicts" translate="yes" xml:space="preserve">
+          <source>The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</source>
+          <target state="new">The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</target>
+        </trans-unit>
+        <trans-unit id="ErrorLibraryCannotUpdateDueToFileConflicts" translate="yes" xml:space="preserve">
+          <source>The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</source>
+          <target state="new">The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</target>
+        </trans-unit>
+        <trans-unit id="ErrorLibraryHasInvalidFiles" translate="yes" xml:space="preserve">
+          <source>"{0}" does not contain the following: {1}
+Valid files are {2}</source>
+          <target state="new">"{0}" does not contain the following: {1}
+Valid files are {2}</target>
+        </trans-unit>
       </group>
     </body>
   </file>

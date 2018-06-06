@@ -54,7 +54,4 @@ Czy chcesz kontynuować?</value>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Wpisz, aby wyszukać&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Wybierz pakiet w celu wybrania plików do zainstalowania&gt;</value>
-  </data>
 </root>

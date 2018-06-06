@@ -50,7 +50,4 @@
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Aramak için yazın&gt;</value>
   </data>
-  <data name="SelectPackageToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Yüklenecek dosyaları belirlemek için bir paket seçin&gt;</value>
-  </data>
 </root>

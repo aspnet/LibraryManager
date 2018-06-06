@@ -24,22 +24,4 @@
     <value>{0} gravado em disco</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
   </data>
-  <data name="RestoreCancelled" xml:space="preserve">
-    <value>A restauração da biblioteca foi cancelada</value>
-  </data>
-  <data name="RestoringLibrary" xml:space="preserve">
-    <value>Restaurando {0}...</value>
-  </data>
-  <data name="RestoringLibraries" xml:space="preserve">
-    <value>Restaurando bibliotecas...</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="LibrariesRestored" xml:space="preserve">
-    <value>{0} bibliotecas restauradas em {1} segundos</value>
-    <comment>Status message</comment>
-  </data>
-  <data name="RestoreHasErrors" xml:space="preserve">
-    <value>Falha ao restaurar a biblioteca</value>
-    <comment>Status message</comment>
-  </data>
 </root>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>netstandard1.5;net46</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <PackageTags>library, package, client-side, build</PackageTags>
@@ -13,7 +13,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Build.Framework" Version="$(MSBuildPackageVersion)" PrivateAssets="All" />
         <PackageReference Include="Microsoft.Build.Tasks.Core" Version="$(MSBuildPackageVersion)" PrivateAssets="All" />
-        <PackageReference Include="System.Runtime.Loader" Version="$(SystemRuntimeLoaderPackageVersion)" Condition="'$(TargetFramework)' == 'netstandard1.5'" />
+        <PackageReference Include="System.Runtime.Loader" Version="$(SystemRuntimeLoaderPackageVersion)" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
     </ItemGroup>
 
     <ItemGroup>
