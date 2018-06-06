@@ -5,14 +5,14 @@ using System;
 using System.IO;
 using Microsoft.Web.LibraryManager.Contracts;
 
-#if NET45
+#if NET461
 using System.ComponentModel.Composition;
 #endif
 
 namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 {
     /// <summary>Internal use only</summary>
-#if NET45
+#if NET461
     [Export(typeof(IProviderFactory))]
 #endif
 
