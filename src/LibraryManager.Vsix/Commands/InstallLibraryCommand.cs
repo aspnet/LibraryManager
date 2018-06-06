@@ -10,7 +10,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class InstallLibraryCommand
     {
-        private ILibraryCommandService _libraryCommandService;
+        private readonly ILibraryCommandService _libraryCommandService;
 
         private InstallLibraryCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {

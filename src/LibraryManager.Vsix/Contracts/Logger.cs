@@ -107,8 +107,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private static void LogOperationSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation, TimeSpan elapsedTime)
         {
             int totalResultsCounts = totalResults.Count();
-            IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success);
-            IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => !r.Success);
+            IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success && !r.Cancelled && !r.UpToDate);
+            IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => !r.Success && r.Errors.Any());
             IEnumerable<ILibraryOperationResult> cancelledRestores = totalResults.Where(r => r.Cancelled);
             IEnumerable<ILibraryOperationResult> upToDateRestores = totalResults.Where(r => r.UpToDate);
 
@@ -118,41 +118,54 @@ namespace Microsoft.Web.LibraryManager.Vsix
             bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
             bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
 
+            string messageText = string.Empty;
+
             if (allUpToDate)
             {
-                LogEvent(LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine, LogLevel.Operation);
+                messageText = LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine;
             }
             else if (allSuccess)
             {
-                string libraryId = totalResultsCounts == 1 && (operation == OperationType.Uninstall || operation == OperationType.Upgrade) ? totalResults.First().InstallationState.LibraryId : string.Empty;
-                string successText = GetAllSuccessString(operation, totalResultsCounts, elapsedTime, libraryId);
-                LogEvent(successText + Environment.NewLine, LogLevel.Operation);
+                string libraryId = GetLibraryId(totalResults, operation);
+                messageText = GetAllSuccessString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
             }
             else if (allCancelled)
             {
-                string libraryId = totalResultsCounts == 1 && (operation == OperationType.Uninstall || operation == OperationType.Upgrade) ? totalResults.First().InstallationState.LibraryId : string.Empty;
-                string canceledText = GetAllCancelledString(operation, totalResultsCounts, elapsedTime, libraryId);
-                LogEvent(canceledText + Environment.NewLine, LogLevel.Operation);
+                string libraryId = GetLibraryId(totalResults, operation);
+                messageText = GetAllCancelledString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
             }
             else if (allFailed)
             {
-                string libraryId = totalResultsCounts == 1 && (operation == OperationType.Uninstall || operation == OperationType.Upgrade) ? totalResults.First().InstallationState.LibraryId : string.Empty;
-                string failedText = GetAllFailuresString(operation, totalResultsCounts, libraryId);
-                LogEvent(failedText + Environment.NewLine, LogLevel.Operation);
+                string libraryId = GetLibraryId(totalResults, operation);
+                messageText = GetAllFailuresString(operation, totalResultsCounts, libraryId) + Environment.NewLine;
             }
             else
             {
-                string partialSuccessText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count());
-                LogEvent(partialSuccessText + Environment.NewLine, LogLevel.Operation);
+                string partialSuccessText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
             }
+
+            LogEvent(messageText + Environment.NewLine, LogLevel.Operation);
         }
 
-        private static string GetPartialSuccessString(OperationType operation, int successfulRestores, int failedRestores, int cancelledRestores, int upToDateRestores)
+        private static string GetLibraryId(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation)
+        {
+            if (operation == OperationType.Uninstall || operation == OperationType.Upgrade)
+            {
+                if (totalResults != null && totalResults.Count() == 1)
+                {
+                    return totalResults.First().InstallationState.LibraryId;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private static string GetPartialSuccessString(OperationType operation, int successfulRestores, int failedRestores, int cancelledRestores, int upToDateRestores, TimeSpan timeSpan)
         {
             string message = string.Empty;
-            message = successfulRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, successfulRestores) : message;
-            message = failedRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, failedRestores) : message;
-            message = cancelledRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, cancelledRestores) : message;
+            message = successfulRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, successfulRestores, Math.Round(timeSpan.TotalSeconds, 2)) : message;
+            message = failedRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, failedRestores, Math.Round(timeSpan.TotalSeconds, 2)) : message;
+            message = cancelledRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, cancelledRestores, Math.Round(timeSpan.TotalSeconds, 2)) : message;
 
             return message;
         }
@@ -162,25 +175,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
             switch (operation)
             {
                 case OperationType.Restore:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, totalCount, Math.Round(timeSpan.TotalSeconds, 2));
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, totalCount, Math.Round(timeSpan.TotalSeconds, 2));
+
                 case OperationType.Clean:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesSucceeded, totalCount, Math.Round(timeSpan.TotalSeconds, 2));
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesSucceeded, totalCount, Math.Round(timeSpan.TotalSeconds, 2));
+
                 case OperationType.Uninstall:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Uninstall_LibrarySucceeded, libraryId ?? string.Empty);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibrarySucceeded, libraryId ?? string.Empty);
+
                 case OperationType.Upgrade:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Update_LibrarySucceeded, libraryId ?? string.Empty);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Update_LibrarySucceeded, libraryId ?? string.Empty);
+
                 default:
-                    {
-                        return string.Empty;
-                    }
+                    return string.Empty;
             }
         }
 
@@ -189,25 +196,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
             switch (operation)
             {
                 case OperationType.Restore:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, totalCount);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, totalCount);
+
                 case OperationType.Clean:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesFailed, totalCount);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesFailed, totalCount);
+
                 case OperationType.Uninstall:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryFailed, libraryId ?? string.Empty);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryFailed, libraryId ?? string.Empty);
+
                 case OperationType.Upgrade:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Update_LibraryFailed, libraryId ?? string.Empty);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Update_LibraryFailed, libraryId ?? string.Empty);
+
                 default:
-                    {
-                        return string.Empty;
-                    }
+                    return string.Empty;
             }
         }
 
@@ -216,25 +217,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
             switch (operation)
             {
                 case OperationType.Restore:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, totalCount, Math.Round(timeSpan.TotalSeconds, 2));
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, totalCount, Math.Round(timeSpan.TotalSeconds, 2));
+
                 case OperationType.Clean:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesCancelled, totalCount, Math.Round(timeSpan.TotalSeconds, 2));
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Clean_NumberOfLibrariesCancelled, totalCount, Math.Round(timeSpan.TotalSeconds, 2));
+
                 case OperationType.Uninstall:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryCancelled, libraryId ?? string.Empty);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryCancelled, libraryId ?? string.Empty);
+
                 case OperationType.Upgrade:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Update_LibraryCancelled, libraryId ?? string.Empty);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Update_LibraryCancelled, libraryId ?? string.Empty);
+
                 default:
-                    {
-                        return string.Empty;
-                    }
+                    return string.Empty;
             }
         }
 
@@ -243,24 +238,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
             switch (operationType)
             {
                 case OperationType.Restore:
-                {
                     return LibraryManager.Resources.Text.Restore_OperationStarted;
-                }
-                case OperationType.Clean:
-                {
-                    return LibraryManager.Resources.Text.Clean_OperationStarted;
-                }
-                case OperationType.Uninstall:
-                {
-                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryStarted, libraryId ?? string.Empty);
-                }
-                case OperationType.Upgrade:
-                {
-                    return string.Format(LibraryManager.Resources.Text.Update_LibraryStarted, libraryId ?? string.Empty);
-                }
-            }
 
-            return string.Empty;
+                case OperationType.Clean:
+                    return LibraryManager.Resources.Text.Clean_OperationStarted;
+
+                case OperationType.Uninstall:
+                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryStarted, libraryId ?? string.Empty);
+
+                case OperationType.Upgrade:
+                    return string.Format(LibraryManager.Resources.Text.Update_LibraryStarted, libraryId ?? string.Empty);
+
+                default:
+                    return string.Empty;
+            }
         }
 
         private static string GetSummaryHeaderString(OperationType operationType, string libraryId)
@@ -268,24 +259,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
             switch (operationType)
             {
                 case OperationType.Restore:
-                {
                     return LibraryManager.Resources.Text.Restore_OperationCompleted;
-                }
-                case OperationType.Clean:
-                {
-                    return LibraryManager.Resources.Text.Clean_OperationCompleted;
-                }
-                case OperationType.Uninstall:
-                {
-                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibrarySucceeded, libraryId ?? string.Empty);
-                }
-                case OperationType.Upgrade:
-                {
-                    return string.Format(LibraryManager.Resources.Text.Update_LibrarySucceeded, libraryId ?? string.Empty);
-                }
-            }
 
-            return string.Empty;
+                case OperationType.Clean:
+                    return LibraryManager.Resources.Text.Clean_OperationCompleted;
+
+                case OperationType.Uninstall:
+                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibrarySucceeded, libraryId ?? string.Empty);
+
+                case OperationType.Upgrade:
+                    return string.Format(LibraryManager.Resources.Text.Update_LibrarySucceeded, libraryId ?? string.Empty);
+
+                default:
+                    return string.Empty;
+            }
         }
     }
 }
