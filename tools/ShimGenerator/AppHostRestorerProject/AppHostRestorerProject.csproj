@@ -5,6 +5,6 @@
     <RuntimeFrameworkVersion>$(MicrosoftNETCoreDotNetAppHostPackageVersion)</RuntimeFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.DotnetAppHost" Version="$(MicrosoftNETCoreDotNetAppHostPackageVersion)" />
+    <PackageReference Include="Microsoft.NETCore.DotnetAppHost" />
   </ItemGroup>
 </Project>
