@@ -18,7 +18,7 @@
     <PackageReference Update="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" Version="15.0.25726-Preview5" />
     <PackageReference Update="Microsoft.VisualStudio.Language.Intellisense" Version="15.0.26201" />
     <PackageReference Update="Microsoft.VisualStudio.Shell.15.0" Version="15.0.26201" />
-    <PackageReference Update="Microsoft.VisualStudio.Shell.Framework" Version="15.0.26201" />
+    <PackageReference Update="Microsoft.VisualStudio.Shell.Framework" Version="15.6.27413" />
     <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.10.0" Version="10.0.30319" />
     <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.11.0" Version="11.0.61030" />
     <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" Version="15.0.25726-Preview5" />
@@ -33,10 +33,13 @@
 
     <!-- Test references -->
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Update="MSTest.TestAdapter" Version="1.1.14" />
-    <PackageReference Update="MSTest.TestFramework" Version="1.1.14" />
+    <PackageReference Update="Microsoft.Test.Apex.VisualStudio" Version="15.8.27703" />
+    <PackageReference Update="MSTest.TestAdapter" Version="1.2.1" />
+    <PackageReference Update="MSTest.TestFramework" Version="1.2.1" />
+
 
     <!-- CommandLine utils -->
+    <!-- This version should be kept in sync with the value of RuntimeFrameworkVersion where this package is consumed -->
     <PackageReference Update="Microsoft.Extensions.CommandLineUtils.Sources" Version="2.1.0" PrivateAssets="All" />
     <PackageReference Update="Microsoft.NETCore.DotnetAppHost" Version="2.1.0" />
 
