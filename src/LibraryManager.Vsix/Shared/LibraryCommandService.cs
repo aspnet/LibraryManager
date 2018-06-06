@@ -113,7 +113,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                ITaskHandler handler = TaskStatusCenterServiceInstance.CreateTaskHandler(taskTitle);
+                ITaskHandler handler = await TaskStatusCenterServiceInstance.CreateTaskHandlerAsync(taskTitle);
                 CancellationToken internalToken = RegisterCancellationToken(handler.UserCancellation);
 
                 lock (_lockObject)

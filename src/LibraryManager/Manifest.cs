@@ -228,14 +228,14 @@ namespace Microsoft.Web.LibraryManager
                 return new List<ILibraryOperationResult> { new LibraryOperationResult(desiredState, new IError[] { PredefinedErrors.ProviderUnknown(desiredState.ProviderId) })};
             }
 
-            IEnumerable<ILibraryOperationResult> conflictResults = await CheckLibraryForConflictsAsync(desiredState, cancellationToken);
+            IEnumerable<ILibraryOperationResult> conflictResults = await CheckLibraryForConflictsAsync(desiredState, cancellationToken).ConfigureAwait(false);
 
             if (!conflictResults.All(r => r.Success))
             {
                 return conflictResults;
             }
 
-            result = await provider.InstallAsync(desiredState, cancellationToken);
+            result = await provider.InstallAsync(desiredState, cancellationToken).ConfigureAwait(false);
 
             if (result.Success)
             {
@@ -251,7 +251,7 @@ namespace Microsoft.Web.LibraryManager
             libraries.Add(desiredState);
             var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
-            IEnumerable<ILibraryOperationResult> fileConflicts = await conflictDetector.GetLibrariesErrorsAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryOperationResult> fileConflicts = await conflictDetector.GetLibrariesErrorsAsync(libraries, cancellationToken).ConfigureAwait(false);
 
             return fileConflicts;
         }
@@ -293,14 +293,14 @@ namespace Microsoft.Web.LibraryManager
                 return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.VersionIsNotSupported(Version)) };
             }
 
-            IEnumerable<ILibraryOperationResult> validationResults = await ValidateLibrariesAsync(cancellationToken);
+            IEnumerable<ILibraryOperationResult> validationResults = await ValidateLibrariesAsync(cancellationToken).ConfigureAwait(false);
             if (!validationResults.All(r => r.Success))
             {
                 return validationResults;
             }
             foreach (ILibraryInstallationState state in Libraries)
             {
-                results.Add(await RestoreLibraryAsync(state, cancellationToken));
+                results.Add(await RestoreLibraryAsync(state, cancellationToken).ConfigureAwait(false));
             }
 
             return results;
@@ -316,7 +316,7 @@ namespace Microsoft.Web.LibraryManager
         {
             var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
-            return await conflictDetector.GetLibrariesErrorsAsync(Libraries, cancellationToken);
+            return await conflictDetector.GetLibrariesErrorsAsync(Libraries, cancellationToken).ConfigureAwait(false);
         }
 
         private async Task<ILibraryOperationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
@@ -364,7 +364,7 @@ namespace Microsoft.Web.LibraryManager
             {
                 try
                 {
-                    ILibraryOperationResult result = await DeleteLibraryFilesAsync(library, deleteFilesFunction, cancellationToken);
+                    ILibraryOperationResult result = await DeleteLibraryFilesAsync(library, deleteFilesFunction, cancellationToken).ConfigureAwait(false);
 
                     if (result.Success)
                     {
@@ -439,7 +439,7 @@ namespace Microsoft.Web.LibraryManager
 
             foreach (ILibraryInstallationState state in Libraries)
             {
-                results.Add(await DeleteLibraryFilesAsync(state, deleteFileAction, cancellationToken));
+                results.Add(await DeleteLibraryFilesAsync(state, deleteFileAction, cancellationToken).ConfigureAwait(false));
             }
 
             return results;
@@ -464,7 +464,7 @@ namespace Microsoft.Web.LibraryManager
                 if (filesToRemove.Any())
                 {
                     IHostInteraction hostInteraction = _dependencies.GetHostInteractions();
-                    return await hostInteraction.DeleteFilesAsync(filesToRemove, cancellationToken);
+                    return await hostInteraction.DeleteFilesAsync(filesToRemove, cancellationToken).ConfigureAwait(false);
                 }
             }
 
@@ -483,7 +483,7 @@ namespace Microsoft.Web.LibraryManager
 
                     if (provider != null)
                     {
-                        ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None);
+                        ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
 
                         if (updatedStateResult.Success)
                         {
@@ -514,7 +514,7 @@ namespace Microsoft.Web.LibraryManager
                 return filesWithVersions;
             }
 
-            ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+            ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None).ConfigureAwait(false);
 
             if (library != null && library.Files != null)
             {
@@ -538,7 +538,7 @@ namespace Microsoft.Web.LibraryManager
             try
             {
                 IProvider provider = _dependencies.GetProvider(state.ProviderId);
-                ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None);
+                ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
 
                 if (updatedStateResult.Success)
                 {
@@ -559,7 +559,7 @@ namespace Microsoft.Web.LibraryManager
                     bool success = true;
                     if (deleteFilesFunction != null)
                     {
-                        success = await deleteFilesFunction.Invoke(filesToDelete);
+                        success = await deleteFilesFunction.Invoke(filesToDelete).ConfigureAwait(false);
                     }
 
                     if (success)
