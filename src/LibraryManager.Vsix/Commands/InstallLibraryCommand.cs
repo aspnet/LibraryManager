@@ -33,12 +33,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new InstallLibraryCommand(commandService, libraryCommandService);
         }
 
-        private void BeforeQueryStatus(object sender, EventArgs e)
+        private async void BeforeQueryStatus(object sender, EventArgs e)
         {
             OleMenuCommand button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = VsHelpers.GetSelectedItem();
+            ProjectItem item = await VsHelpers.GetSelectedItemAsync();
 
             if (item?.ContainingProject == null)
             {
@@ -52,21 +52,21 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private void ExecuteAsync(object sender, EventArgs e)
+        private async void ExecuteAsync(object sender, EventArgs e)
         {
             Telemetry.TrackUserTask("installdialogopened");
 
-            ProjectItem item = VsHelpers.GetSelectedItem();
+            ProjectItem item = await VsHelpers.GetSelectedItemAsync();
 
             if (item != null)
             {
                 string target = item.FileNames[1];
 
-                Project project = VsHelpers.GetProjectOfSelectedItem();
+                Project project = await VsHelpers.GetProjectOfSelectedItemAsync();
 
                 if (project != null)
                 {
-                    string rootFolder = project.GetRootFolder();
+                    string rootFolder = await project.GetRootFolderAsync();
 
                     string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
                     IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);

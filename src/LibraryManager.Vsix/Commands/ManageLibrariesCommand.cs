@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _package = package;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.ManageLibraries);
-            var cmd = new OleMenuCommand(Execute, cmdId);
+            var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
             commandService.AddCommand(cmd);
         }
 
@@ -41,45 +41,37 @@ namespace Microsoft.Web.LibraryManager.Vsix
             button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
         }
 
-        private void Execute(object sender, EventArgs e)
+        private async void ExecuteAsync(object sender, EventArgs e)
         {
             Telemetry.TrackUserTask("ManageLibraries");
 
-            Project project = VsHelpers.GetProjectOfSelectedItem();
+            Project project = await VsHelpers.GetProjectOfSelectedItemAsync();
 
             if (project != null)
             {
-                string rootFolder = project.GetRootFolder();
+                string rootFolder = await project.GetRootFolderAsync();
 
                 string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
 
                 if (File.Exists(configFilePath))
                 {
-                    VsHelpers.DTE.ItemOperations.OpenFile(configFilePath);
+                    await VsHelpers.OpenFileAsync(configFilePath);
                 }
                 else
                 {
-                    System.Threading.Tasks.Task.Run(async () =>
-                    {
-                        CancellationToken token = CancellationToken.None;
+                    var dependencies = Dependencies.FromConfigFile(configFilePath);
+                    Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, default(CancellationToken));
+                    manifest.DefaultProvider = "cdnjs";
+                    manifest.Version = Manifest.SupportedVersions.Max().ToString();
 
-                    if (!File.Exists(configFilePath))
-                    {
-                        var dependencies = Dependencies.FromConfigFile(configFilePath);
-                        Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, token);
-                        manifest.DefaultProvider = "cdnjs";
-                        manifest.Version = Manifest.SupportedVersions.Max().ToString();
+                        await manifest.SaveAsync(configFilePath, default(CancellationToken));
+                        await project.AddFileToProjectAsync(configFilePath);
 
-                            await manifest.SaveAsync(configFilePath, token);
-                            project.AddFileToProject(configFilePath);
+                        Telemetry.TrackUserTask("ConfigFileCreated");
+                    }
 
-                            Telemetry.TrackUserTask("ConfigFileCreated");
-                        }
-
-                        VsHelpers.DTE.ItemOperations.OpenFile(configFilePath);
-                    });
+                    await VsHelpers.OpenFileAsync(configFilePath);
                 }
             }
         }
-    }
 }

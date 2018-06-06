@@ -42,12 +42,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new CleanCommand(package, commandService, libraryCommandService);
         }
 
-        private void BeforeQueryStatus(object sender, EventArgs e)
+        private async void BeforeQueryStatus(object sender, EventArgs e)
         {
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = VsHelpers.GetSelectedItem();
+            ProjectItem item = await VsHelpers.GetSelectedItemAsync();
 
             if (!_libraryCommandService.IsOperationInProgress && 
                 item != null && 
@@ -60,7 +60,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
-            ProjectItem configProjectItem = VsHelpers.GetSelectedItem();
+            ProjectItem configProjectItem = await VsHelpers.GetSelectedItemAsync();
 
             if (configProjectItem != null)
             {

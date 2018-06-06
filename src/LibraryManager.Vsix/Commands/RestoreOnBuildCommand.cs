@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _componentModel = VsHelpers.GetService<SComponentModel, IComponentModel>();
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.RestoreOnBuild);
-            var cmd = new OleMenuCommand(Execute, cmdId);
+            var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);
         }
@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new RestoreOnBuildCommand(package, commandService);
         }
 
-        private void BeforeQueryStatus(object sender, EventArgs e)
+        private async void BeforeQueryStatus(object sender, EventArgs e)
         {
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
@@ -53,7 +53,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
             }
 
-            ProjectItem item = VsHelpers.GetSelectedItem();
+            ProjectItem item = await VsHelpers.GetSelectedItemAsync();
 
             if (item != null && item.IsConfigFile() && (item.ContainingProject.IsKind(Constants.WAP) || 
                 VsHelpers.IsCapabilityMatch(item.ContainingProject, Constants.DotNetCoreWebCapability)))
@@ -74,14 +74,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private void Execute(object sender, EventArgs e)
+        private async void ExecuteAsync(object sender, EventArgs e)
         {
-            ProjectItem item = VsHelpers.GetSelectedItem();
-            Project project = VsHelpers.GetProjectOfSelectedItem();
+            ProjectItem projectItem = await VsHelpers.GetSelectedItemAsync();
+            Project project = await VsHelpers.GetProjectOfSelectedItemAsync();
 
             try
             {
-                var dependencies = Dependencies.FromConfigFile(item.FileNames[1]);
+                var dependencies = Dependencies.FromConfigFile(projectItem.FileNames[1]);
                 IEnumerable<string> packageIds = dependencies.Providers.Select(p => p.NuGetPackageId).Distinct();
 
                 if (!_isPackageInstalled)
@@ -89,7 +89,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     if (!UserWantsToInstall())
                         return;
 
-                    System.Threading.Tasks.Task.Run(() =>
+                    await System.Threading.Tasks.Task.Run(() =>
                     {
                         Logger.LogEvent(Resources.Text.Nuget_InstallingPackage, LogLevel.Status);
 
@@ -113,7 +113,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
                 else
                 {
-                    System.Threading.Tasks.Task.Run(() =>
+                    await System.Threading.Tasks.Task.Run(() =>
                     {
                         Logger.LogEvent(Resources.Text.Nuget_UninstallingPackage, LogLevel.Status);
 

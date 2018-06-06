@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             commandService.AddCommand(cmd);
         }
 
-        private void BeforeQueryStatus(object sender, EventArgs e)
+        private async void BeforeQueryStatus(object sender, EventArgs e)
         {
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             var solution = (IVsSolution)ServiceProvider.GetService(typeof(SVsSolution));
 
-            if (!_libraryCommandService.IsOperationInProgress && VsHelpers.SolutionContainsManifestFile(solution))
+            if (!_libraryCommandService.IsOperationInProgress && await VsHelpers.SolutionContainsManifestFileAsync(solution))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -64,9 +64,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 Project project = VsHelpers.GetDTEProject(hierarchy);
 
-                if (VsHelpers.ProjectContainsManifestFile(project))
+                if (await VsHelpers.ProjectContainsManifestFileAsync(project))
                 {
-                    string configFilePath = Path.Combine(project.GetRootFolder(), Constants.ConfigFileName);
+                    string rootPath = await project.GetRootFolderAsync();
+                    string configFilePath = Path.Combine(rootPath, Constants.ConfigFileName);
                     configFiles.Add(configFilePath);
                 }
             }

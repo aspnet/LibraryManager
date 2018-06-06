@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     return false;
                 }
 
-                VsHelpers.CheckFileOutOfSourceControl(absolutePath.FullName);
+                await VsHelpers.CheckFileOutOfSourceControlAsync(absolutePath.FullName);
                 await FileHelpers.WriteToFileAsync(absolutePath.FullName, stream, cancellationToken);
             }
 
