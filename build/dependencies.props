@@ -40,6 +40,7 @@
     <MicrosoftNETTestSDKPackageVersion>15.0.0</MicrosoftNETTestSDKPackageVersion>
     <MSTestAdapterPackageVersion>1.2.1</MSTestAdapterPackageVersion>
     <MSTestFrameworkPackageVersion>1.2.1</MSTestFrameworkPackageVersion>
+    <MicrosoftTestApexVisualStudioPackageVersion>15.8.27703</MicrosoftTestApexVisualStudioPackageVersion>
   </PropertyGroup>
 
   <!-- Global tool specific package version-->
