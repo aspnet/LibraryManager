@@ -10,9 +10,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TaskStatusCenter;
 using Microsoft.VisualStudio.Telemetry;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -21,7 +18,8 @@ using Task = System.Threading.Tasks.Task;
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     [Export(typeof(ILibraryCommandService))]
-    internal class LibraryCommandService : ILibraryCommandService    {
+    internal class LibraryCommandService : ILibraryCommandService
+    {
         [Import(typeof(ITaskStatusCenterService))]
         internal ITaskStatusCenterService TaskStatusCenterServiceInstance;
 
@@ -93,7 +91,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public async Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken = default(CancellationToken))
         {
-
             string taskTitle = GetTaskTitle(OperationType.Clean, string.Empty);
 
             await RunTaskAsync((internalToken) => CleanLibrariesAsync(configProjectItem, internalToken), taskTitle, LibraryManager.Resources.Text.Clean_OperationFailed);
@@ -107,7 +104,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             await RunTaskAsync((internalToken) => RestoreInternalAsync(manifests, internalToken), taskTitle, errorMessage);
         }
 
-        private async Task RunTaskAsync(Func<CancellationToken, Task> toRun, string taskTitle, string errorMessage)
+        private async Task RunTaskAsync(Func<CancellationToken, Task> getTaskToRun, string taskTitle, string errorMessage)
         {
             if (IsOperationInProgress)
             {
@@ -121,7 +118,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 lock (_lockObject)
                 {
-                    _currentOperationTask = toRun(internalToken);
+                    _currentOperationTask = getTaskToRun(internalToken);
                     handler.RegisterTask(_currentOperationTask);
                 }
 
@@ -161,13 +158,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             try
             {
                 Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 string configFileName = configProjectItem.FileNames[1];
                 var dependencies = Dependencies.FromConfigFile(configFileName);
                 Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
                 IHostInteraction hostInteraction = dependencies.GetHostInteractions();
-
-                sw.Start();
                 IEnumerable<ILibraryOperationResult> results = await manifest.CleanAsync(async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+
                 sw.Stop();
 
                 Logger.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
@@ -182,11 +180,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             Logger.LogEventsHeader(OperationType.Restore, string.Empty);
 
-            Stopwatch sw = new Stopwatch();
             List<ILibraryOperationResult> totalResults = new List<ILibraryOperationResult>();
 
             try
             {
+                Stopwatch sw = new Stopwatch();
                 sw.Start();
 
                 foreach (KeyValuePair<string, Manifest> manifest in manifests)
@@ -199,7 +197,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     IEnumerable<ILibraryOperationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 
-                    await AddFilesToProjectAsync(manifest.Key, project, results, cancellationToken);
+                    await AddFilesToProjectAsync(manifest.Key, project, results, cancellationToken).ConfigureAwait(false);
+
                     AddErrorsToErrorList(project?.Name, manifest.Key, results);
                     totalResults.AddRange(results);
                 }
@@ -227,12 +226,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             try
             {
                 Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 var dependencies = Dependencies.FromConfigFile(configFilePath);
                 Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
                 IHostInteraction hostInteraction = dependencies.GetHostInteractions();
-
-                sw.Start();
                 ILibraryOperationResult result = await manifest.UninstallAsync(libraryId, async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken).ConfigureAwait(false);
+
                 sw.Stop();
 
                 Logger.LogEventsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall, sw.Elapsed);
@@ -249,21 +249,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
             switch (operation)
             {
                 case OperationType.Restore:
-                    {
-                        return LibraryManager.Resources.Text.Restore_OperationStarted;
-                    }
+                    return LibraryManager.Resources.Text.Restore_OperationStarted;
+
                 case OperationType.Clean:
-                    {
-                        return LibraryManager.Resources.Text.Clean_OperationStarted;
-                    }
+                    return LibraryManager.Resources.Text.Clean_OperationStarted;
+
                 case OperationType.Uninstall:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryStarted, libraryId ?? string.Empty);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryStarted, libraryId ?? string.Empty);
+
                 case OperationType.Upgrade:
-                    {
-                        return string.Format(LibraryManager.Resources.Text.Update_LibraryStarted, libraryId ?? string.Empty);
-                    }
+                    return string.Format(LibraryManager.Resources.Text.Update_LibraryStarted, libraryId ?? string.Empty);
             }
 
             return string.Empty;
@@ -292,22 +287,22 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task AddFilesToProjectAsync(string configFilePath, Project project, IEnumerable<ILibraryOperationResult> results, CancellationToken cancellationToken)
         {
-            string cwd = Path.GetDirectoryName(configFilePath);
+            string workingDirectory = Path.GetDirectoryName(configFilePath);
             var files = new List<string>();
-
-            foreach (ILibraryOperationResult state in results)
-            {
-                if (state.Success)
-                {
-                    IEnumerable<string> absoluteFiles = state.InstallationState.Files
-                        .Select(file => Path.Combine(cwd, state.InstallationState.DestinationPath, file)
-                        .Replace('/', Path.DirectorySeparatorChar));
-                    files.AddRange(absoluteFiles.Where(file => !files.Contains(file)));
-                }
-            }
 
             if (project != null)
             {
+                foreach (ILibraryOperationResult state in results)
+                {
+                    if (state.Success)
+                    {
+                        IEnumerable<string> absoluteFiles = state.InstallationState.Files
+                            .Select(file => Path.Combine(workingDirectory, state.InstallationState.DestinationPath, file)
+                            .Replace('/', Path.DirectorySeparatorChar));
+                        files.AddRange(absoluteFiles);
+                    }
+                }
+
                 var logAction = new Action<string, LogLevel>((message, level) => { Logger.LogEvent(message, level); });
                 await VsHelpers.AddFilesToProjectAsync(project, files, logAction, cancellationToken);
             }

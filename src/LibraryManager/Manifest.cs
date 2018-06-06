@@ -459,7 +459,7 @@ namespace Microsoft.Web.LibraryManager
             {
                 IEnumerable<FileIdentifier> existingFiles = await GetAllManifestFilesWithVersionsAsync(Libraries).ConfigureAwait(false);
                 IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest.Libraries).ConfigureAwait(false);
-                IEnumerable<string> filesToRemove = existingFiles.Where(f => !newFiles.Contains(f)).Select(f => f.Path);
+                IEnumerable<string> filesToRemove = existingFiles.Except(newFiles, new FileIdentifierComparer()).Select(f => f.Path);
 
                 if (filesToRemove.Any())
                 {
@@ -491,7 +491,7 @@ namespace Microsoft.Web.LibraryManager
 
                             foreach (FileIdentifier fileIdentifier in stateFiles)
                             {
-                                if (!files.Contains(fileIdentifier))
+                                if (!files.Contains(fileIdentifier, new FileIdentifierComparer()))
                                 {
                                     files.Add(fileIdentifier);
                                 }
