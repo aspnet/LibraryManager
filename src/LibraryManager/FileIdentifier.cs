@@ -19,25 +19,24 @@ namespace Microsoft.Web.LibraryManager
             Path = path;
             Version = version;
         }
-    }
 
-    internal class FileIdentifierComparer : IEqualityComparer<FileIdentifier>
-    {
-        public bool Equals(FileIdentifier file1, FileIdentifier file2)
+        public override bool Equals(object obj)
         {
-            if (file1 == null || file2 == null)
+            FileIdentifier other = obj as FileIdentifier;
+
+            if (other == null)
             {
                 return false;
             }
 
-            return string.Compare(file1.Path.Replace('\\', '/'), file2.Path.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase) == 0 &&
-                   string.Compare(file1.Version, file2.Version, StringComparison.OrdinalIgnoreCase) == 0;
+            return string.Compare(Path.Replace('\\', '/'), other.Path.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase) == 0 &&
+                   string.Compare(Version, other.Version, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
-        public int GetHashCode(FileIdentifier obj)
+        public override int GetHashCode()
         {
-            int hashPath = obj.Path == null ? 0 : obj.Path.GetHashCode();
-            int hashVersion = obj.Version == null ? 0 : obj.Version.GetHashCode();
+            int hashPath = Path == null ? 0 : Path.GetHashCode();
+            int hashVersion = Version == null ? 0 : Version.GetHashCode();
 
             return hashPath ^ hashVersion;
         }
