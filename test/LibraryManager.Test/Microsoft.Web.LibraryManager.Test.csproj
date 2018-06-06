@@ -12,7 +12,6 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSDKPackageVersion)" />
         <PackageReference Include="MSTest.TestAdapter" Version="$(MSTestAdapterPackageVersion)" />
         <PackageReference Include="MSTest.TestFramework" Version="$(MSTestFrameworkPackageVersion)" />
-        <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\src\LibraryManager\Microsoft.Web.LibraryManager.csproj" />
