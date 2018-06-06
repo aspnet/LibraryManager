@@ -144,7 +144,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 string partialSuccessText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
             }
 
-            LogEvent(messageText + Environment.NewLine, LogLevel.Operation);
+            LogEvent(messageText, LogLevel.Operation);
         }
 
         private static string GetLibraryId(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation)
