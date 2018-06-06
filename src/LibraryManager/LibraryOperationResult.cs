@@ -54,7 +54,7 @@ namespace Microsoft.Web.LibraryManager
         /// </remarks>
         public bool Success
         {
-            get { return !Cancelled && Errors.Count == 0; }
+            get { return !Cancelled && Errors.Count == 0 && !UpToDate; }
         }
 
         /// <summary>

@@ -53,63 +53,47 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (IsOperationInProgress)
-            {
-                return;
-            }
-
-            try
-            {
-                Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
-                Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-
-                string taskTitle = GetTaskTitle(OperationType.Restore, null);
-                ITaskHandler handler = TaskStatusCenterServiceInstance.CreateTaskHandler(taskTitle);
-                CancellationToken internalToken = RegisterCancellationToken(handler.UserCancellation);
-
-                lock (_lockObject)
-                {
-                    _currentOperationTask = RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest }, internalToken);
-                     handler.RegisterTask(_currentOperationTask);
-                }
-
-                await _currentOperationTask.ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogEvent(LibraryManager.Resources.Text.Restore_OperationFailed + Environment.NewLine + ex.Message, LogLevel.Operation);
-            }
-        }
-
-        public async Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (IsOperationInProgress)
-            {
-                return;
-            }
-
-            try
-            {
-                string taskTitle = GetTaskTitle(OperationType.Restore, null);
-                ITaskHandler handler = TaskStatusCenterServiceInstance.CreateTaskHandler(taskTitle);
-                CancellationToken internalToken = RegisterCancellationToken(handler.UserCancellation);
-
-                lock (_lockObject)
-                {
-                    _currentOperationTask = RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest }, cancellationToken);
-                    handler.RegisterTask(_currentOperationTask);
-                }
-
-                await _currentOperationTask.ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogEvent(LibraryManager.Resources.Text.Restore_OperationFailed + Environment.NewLine + ex.Message, LogLevel.Operation);
-            }
+            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(new[] { configFilePath }, cancellationToken);
+            await RestoreAsync(manifests, cancellationToken);
         }
 
         public async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken))
         {
+            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(configFilePaths, cancellationToken);
+            await RestoreAsync(manifests, cancellationToken);
+        }
+
+        public async Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest }, cancellationToken);
+        }
+
+        public async Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            string taskTitle = GetTaskTitle(OperationType.Uninstall, libraryId);
+            string errorMessage = string.Format(LibraryManager.Resources.Text.Uninstall_LibraryFailed, libraryId);
+
+            await RunTaskAsync((internalToken) => UninstallLibraryAsync(configFilePath, libraryId, internalToken), taskTitle, errorMessage);
+        }
+
+        public async Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken = default(CancellationToken))
+        {
+
+            string taskTitle = GetTaskTitle(OperationType.Clean, string.Empty);
+
+            await RunTaskAsync((internalToken) => CleanLibrariesAsync(configProjectItem, internalToken), taskTitle, LibraryManager.Resources.Text.Clean_OperationFailed);
+        }
+
+        private async Task RestoreAsync(Dictionary<string, Manifest> manifests, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            string taskTitle = GetTaskTitle(OperationType.Restore, string.Empty);
+            string errorMessage = LibraryManager.Resources.Text.Restore_OperationFailed;
+
+            await RunTaskAsync((internalToken) => RestoreInternalAsync(manifests, internalToken), taskTitle, errorMessage);
+        }
+
+        private async Task RunTaskAsync(Func<CancellationToken, Task> toRun, string taskTitle, string errorMessage)
+        {
             if (IsOperationInProgress)
             {
                 return;
@@ -117,90 +101,47 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                Dictionary<string, Manifest> manifests = new Dictionary<string, Manifest>();
-                foreach (string configFilePath in configFilePaths)
-                {
-                    Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
-                    Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-
-                    manifests.Add(configFilePath, manifest);
-                }
-
-                string taskTitle = GetTaskTitle(OperationType.Restore, null);
                 ITaskHandler handler = TaskStatusCenterServiceInstance.CreateTaskHandler(taskTitle);
                 CancellationToken internalToken = RegisterCancellationToken(handler.UserCancellation);
 
                 lock (_lockObject)
                 {
-                    _currentOperationTask = RestoreAsync(manifests, cancellationToken);
+                    _currentOperationTask = toRun(internalToken);
                     handler.RegisterTask(_currentOperationTask);
                 }
 
                 await _currentOperationTask.ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent(errorMessage + Environment.NewLine + ex.Message, LogLevel.Operation);
+            }
+        }
+
+        private async Task<Dictionary<string, Manifest>> GetManifestFromConfigAsync(IEnumerable<string> configFiles, CancellationToken cancellationToken)
+        {
+            Dictionary<string, Manifest> manifests = new Dictionary<string, Manifest>();
+
+            try
+            {
+                foreach (string configFilePath in configFiles)
+                {
+                    Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+                    Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
+                    manifests.Add(configFilePath, manifest);
+                }
             }
             catch (Exception ex)
             {
                 Logger.LogEvent(LibraryManager.Resources.Text.Restore_OperationFailed + Environment.NewLine + ex.Message, LogLevel.Operation);
             }
-        }
 
-        public async Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (IsOperationInProgress)
-            {
-                return;
-            }
-
-            try
-            {
-                string taskTitle = GetTaskTitle(OperationType.Uninstall, libraryId);
-                ITaskHandler handler = TaskStatusCenterServiceInstance.CreateTaskHandler(taskTitle);
-                CancellationToken internalToken = RegisterCancellationToken(handler.UserCancellation);
-
-                lock (_lockObject)
-                {
-                    _currentOperationTask = UninstallLibraryAsync(configFilePath, libraryId, internalToken);
-                    handler.RegisterTask(_currentOperationTask);
-                }
-
-                await _currentOperationTask.ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogEvent(string.Format(LibraryManager.Resources.Text.Uninstall_LibraryFailed, libraryId) + Environment.NewLine + ex.Message, LogLevel.Operation);
-            }
-        }
-
-        public async Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (IsOperationInProgress)
-            {
-                return;
-            }
-
-            try
-            {
-                string taskTitle = GetTaskTitle(OperationType.Clean, null);
-                ITaskHandler handler = TaskStatusCenterServiceInstance.CreateTaskHandler(taskTitle);
-                CancellationToken internalToken = RegisterCancellationToken(handler.UserCancellation);
-
-                lock (_lockObject)
-                {
-                    _currentOperationTask = CleanLibrariesAsync(configProjectItem, internalToken);
-                    handler.RegisterTask(_currentOperationTask);
-                }
-
-                await _currentOperationTask.ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogEvent(LibraryManager.Resources.Text.Clean_OperationFailed + Environment.NewLine + ex.Message, LogLevel.Operation);
-            }
+            return manifests;
         }
 
         private async Task CleanLibrariesAsync(ProjectItem configProjectItem, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Logger.LogEventsHeader(OperationType.Clean, null);
+            Logger.LogEventsHeader(OperationType.Clean, string.Empty);
 
             try
             {
@@ -222,9 +163,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private async Task RestoreAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken)
+        private async Task RestoreInternalAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken)
         {
-
             Logger.LogEventsHeader(OperationType.Restore, string.Empty);
 
             Stopwatch sw = new Stopwatch();
@@ -453,6 +393,5 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             return VSConstants.S_OK;
         }
-
     }
 }

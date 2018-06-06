@@ -49,7 +49,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// </remarks>
         public virtual bool Success
         {
-            get { return !Errors.Any(); }
+            get { return !Errors.Any() && !Cancelled && !UpToDate; }
         }
 
         /// <summary>
