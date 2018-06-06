@@ -89,7 +89,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             string taskTitle = GetTaskTitle(OperationType.Restore, string.Empty);
             string errorMessage = LibraryManager.Resources.Text.Restore_OperationFailed;
 
-            await RunTaskAsync((internalToken) => RestoreAsync(manifests, internalToken), taskTitle, errorMessage);
+            await RunTaskAsync((internalToken) => RestoreInternalAsync(manifests, internalToken), taskTitle, errorMessage);
         }
 
         private async Task RunTaskAsync(Func<CancellationToken, Task> toRun, string taskTitle, string errorMessage)
@@ -163,7 +163,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private async Task RestoreAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken)
+        private async Task RestoreInternalAsync(IDictionary<string, Manifest> manifests, CancellationToken cancellationToken)
         {
             Logger.LogEventsHeader(OperationType.Restore, string.Empty);
 

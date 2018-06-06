@@ -49,7 +49,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             ProjectItem item = VsHelpers.GetSelectedItem();
 
-            if (!_libraryCommandService.IsOperationInProgress && item != null && 
+            if (!_libraryCommandService.IsOperationInProgress && 
+                item != null && 
                 item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
