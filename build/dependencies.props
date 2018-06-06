@@ -37,8 +37,8 @@
   <!-- Test specific dependencies. -->
   <PropertyGroup>
     <MicrosoftNETTestSDKPackageVersion>15.0.0</MicrosoftNETTestSDKPackageVersion>
-    <MSTestAdapterPackageVersion>1.1.14</MSTestAdapterPackageVersion>
-    <MSTestFrameworkPackageVersion>1.1.14</MSTestFrameworkPackageVersion>
+    <MSTestAdapterPackageVersion>1.2.1</MSTestAdapterPackageVersion>
+    <MSTestFrameworkPackageVersion>1.2.1</MSTestFrameworkPackageVersion>
   </PropertyGroup>
 
   <!-- Global tool specific package version-->
