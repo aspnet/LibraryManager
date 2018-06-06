@@ -10,7 +10,6 @@
 
 namespace Microsoft.Web.LibraryManager.Resources {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryManager.Resources.Text", typeof(Text).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryManager.Resources.Text", typeof(Text).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -193,6 +192,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static string Install_LibraryStarted {
             get {
                 return ResourceManager.GetString("Install_LibraryStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unavailable.
+        /// </summary>
+        public static string LibraryDetail_Unavailable {
+            get {
+                return ResourceManager.GetString("LibraryDetail_Unavailable", resourceCulture);
             }
         }
         
