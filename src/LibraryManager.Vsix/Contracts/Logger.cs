@@ -107,8 +107,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private static void LogOperationSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation, TimeSpan elapsedTime)
         {
             int totalResultsCounts = totalResults.Count();
-            IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success && !r.Cancelled && !r.UpToDate);
-            IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => !r.Success && r.Errors.Any());
+            IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success && !r.UpToDate);
+            IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => r.Errors.Any());
             IEnumerable<ILibraryOperationResult> cancelledRestores = totalResults.Where(r => r.Cancelled);
             IEnumerable<ILibraryOperationResult> upToDateRestores = totalResults.Where(r => r.UpToDate);
 
