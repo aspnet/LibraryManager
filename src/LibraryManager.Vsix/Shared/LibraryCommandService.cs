@@ -21,23 +21,38 @@ using Task = System.Threading.Tasks.Task;
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     [Export(typeof(ILibraryCommandService))]
-    internal class LibraryCommandService : ILibraryCommandService, IVsSolutionEvents, IDisposable
-    {
+    internal class LibraryCommandService : ILibraryCommandService    {
         [Import(typeof(ITaskStatusCenterService))]
         internal ITaskStatusCenterService TaskStatusCenterServiceInstance;
 
-        private readonly IVsSolution _solution;
-        private readonly uint _solutionCookie;
         private CancellationTokenSource _linkedCancellationTokenSource;
         private CancellationTokenSource _internalCancellationTokenSource;
         private Task _currentOperationTask;
+        private DefaultSolutionEvents _solutionEvents;
         private object _lockObject = new object(); 
 
         [ImportingConstructor]
-        public LibraryCommandService([Import(typeof(SVsServiceProvider))] IServiceProvider serviceProvider)
+        public LibraryCommandService()
         {
-            _solution = (IVsSolution)serviceProvider.GetService(typeof(SVsSolution));
-            _solution.AdviseSolutionEvents(this, out _solutionCookie);
+            _solutionEvents = new DefaultSolutionEvents();
+            _solutionEvents.BeforeCloseSolution += OnBeforeCloseSolution;
+            _solutionEvents.BeforeCloseProject += OnBeforeCloseProject;
+            _solutionEvents.BeforeUnloadProject += OnBeforeUnloadProject;
+        }
+
+        private void OnBeforeUnloadProject(object sender, ParamEventArgs e)
+        {
+            CancelOperation();
+        }
+
+        private void OnBeforeCloseProject(object sender, ParamEventArgs e)
+        {
+            CancelOperation();
+        }
+
+        private void OnBeforeCloseSolution(object sender, ParamEventArgs e)
+        {
+            CancelOperation();
         }
 
         public bool IsOperationInProgress
@@ -179,7 +194,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     cancellationToken.ThrowIfCancellationRequested();
 
                     Project project = VsHelpers.GetDTEProjectFromConfig(manifest.Key);
-                    Logger.LogEvent(string.Format("Restoring packages for project {0}...", project.Name), LogLevel.Operation);
+
+                    Logger.LogEvent(string.Format(LibraryManager.Resources.Text.Restore_LibrariesForProject, project?.Name), LogLevel.Operation);
 
                     IEnumerable<ILibraryOperationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 
@@ -330,67 +346,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             _currentOperationTask = null;
-        }
-
-        public void Dispose()
-        {
-            _solution.UnadviseSolutionEvents(_solutionCookie);
-        }
-
-        public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
-        {
-            CancelOperation();
-
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
-        {
-            CancelOperation();
-
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeCloseSolution(object pUnkReserved)
-        {
-            CancelOperation();
-
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterCloseSolution(object pUnkReserved)
-        {
-            return VSConstants.S_OK;
+            _solutionEvents.Dispose();
         }
     }
 }
