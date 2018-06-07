@@ -56,7 +56,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <summary>
         /// Gets or sets the result to return from the <see cref="InstallAsync"/> method.
         /// </summary>
-        public virtual ILibraryInstallationResult Result { get; set; }
+        public virtual ILibraryOperationResult Result { get; set; }
 
         /// <summary>
         /// Gets the <see cref="T:LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
@@ -73,9 +73,9 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <param name="desiredState">The details about the library to install.</param>
         /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
         /// <returns>
-        /// The <see cref="T:LibraryManager.Contracts.ILibraryInstallationResult" /> from the installation process.
+        /// The <see cref="T:LibraryManager.Contracts.ILibraryOperationResult" /> from the installation process.
         /// </returns>
-        public virtual Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        public virtual Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             return Task.FromResult(Result);
         }
@@ -86,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <param name="desiredState"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        public virtual Task<ILibraryOperationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             return Task.FromResult(Result);
         }

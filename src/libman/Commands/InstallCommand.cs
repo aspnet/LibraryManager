@@ -100,7 +100,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             (string libraryId, ILibrary library) = await ValidateLibraryExistsInCatalogAsync(CancellationToken.None);
 
-            IEnumerable<ILibraryInstallationResult> results = await _manifest.InstallLibraryAsync(libraryId, Provider.Value(), files, Destination.Value(), CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await _manifest.InstallLibraryAsync(libraryId, Provider.Value(), files, Destination.Value(), CancellationToken.None);
 
             if (results.All(r => r.Success))
             {
@@ -112,7 +112,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 bool isFileConflicts = false;
                 Logger.Log(string.Format(Resources.InstallLibraryFailed, libraryId), LogLevel.Error);
-                foreach (ILibraryInstallationResult result in results)
+                foreach (ILibraryOperationResult result in results)
                 {
                     foreach (IError error in result.Errors)
                     {

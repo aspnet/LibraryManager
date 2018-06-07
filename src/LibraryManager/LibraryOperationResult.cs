@@ -8,17 +8,17 @@ using Microsoft.Web.LibraryManager.Contracts;
 namespace Microsoft.Web.LibraryManager
 {
     /// <summary>Internal use only</summary>
-    internal class LibraryInstallationResult : ILibraryInstallationResult
+    internal class LibraryOperationResult : ILibraryOperationResult
     {
         /// <summary>Internal use only</summary>
-        public LibraryInstallationResult(ILibraryInstallationState installationState)
+        public LibraryOperationResult(ILibraryInstallationState installationState)
         {
             Errors = new List<IError>();
             InstallationState = installationState;
         }
 
         /// <summary>Internal use only</summary>
-        public LibraryInstallationResult(ILibraryInstallationState installationState, params IError[] error)
+        public LibraryOperationResult(ILibraryInstallationState installationState, params IError[] error)
         {
             var list = new List<IError>();
             list.AddRange(error);
@@ -27,7 +27,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>Internal use only</summary>
-        public LibraryInstallationResult(params IError[] error)
+        public LibraryOperationResult(params IError[] error)
         {
             Errors = new List<IError>();
             foreach (IError e in error)
@@ -50,7 +50,7 @@ namespace Microsoft.Web.LibraryManager
         /// <code>True</code> if the install was successfull; otherwise <code>False</code>.
         /// </summary>
         /// <remarks>
-        /// The value is usually <code>True</code> if the <see cref="P:Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationResult.Errors" /> list is empty.
+        /// The value is usually <code>True</code> if the <see cref="P:Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult.Errors" /> list is empty.
         /// </remarks>
         public bool Success
         {
@@ -69,30 +69,30 @@ namespace Microsoft.Web.LibraryManager
         public ILibraryInstallationState InstallationState { get; set; }
 
         /// <summary>Internal use only</summary>
-        public static LibraryInstallationResult FromSuccess(ILibraryInstallationState installationState)
+        public static LibraryOperationResult FromSuccess(ILibraryInstallationState installationState)
         {
-            return new LibraryInstallationResult(installationState);
+            return new LibraryOperationResult(installationState);
         }
 
         /// <summary>Internal use only</summary>
-        public static LibraryInstallationResult FromCancelled(ILibraryInstallationState installationState)
+        public static LibraryOperationResult FromCancelled(ILibraryInstallationState installationState)
         {
-            return new LibraryInstallationResult(installationState)
+            return new LibraryOperationResult(installationState)
             {
                 Cancelled = true
             };
         }
 
         /// <summary>Internal use only</summary>
-        public static LibraryInstallationResult FromError(IError error)
+        public static LibraryOperationResult FromError(IError error)
         {
-            return new LibraryInstallationResult(error);
+            return new LibraryOperationResult(error);
         }
 
         /// <summary>Internal use only</summary>
-        public static ILibraryInstallationResult FromUpToDate(ILibraryInstallationState installationState)
+        public static ILibraryOperationResult FromUpToDate(ILibraryInstallationState installationState)
         {
-            return new LibraryInstallationResult(installationState)
+            return new LibraryOperationResult(installationState)
             {
                 UpToDate = true
             };

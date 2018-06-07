@@ -2,10 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -38,6 +36,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         [Import]
         ICompletionBroker CompletionBroker { get; set; }
+
+        [Import]
+        ILibraryCommandService libraryCommandService { get; set; }
 
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
@@ -74,6 +75,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
         {
+            if (libraryCommandService.IsOperationInProgress)
+            {
+                Logger.LogEvent(Resources.Text.OperationInProgress, LogLevel.Operation);
+            }
+
             var textDocument = sender as ITextDocument;
 
             if (e.FileActionType == FileActionTypes.ContentSavedToDisk && textDocument != null)
@@ -90,7 +96,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                             {
                                 _manifest = newManifest;
 
-                                await LibraryHelpers.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                               await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                                 Telemetry.TrackOperation("restoresave");
                             }
                             else
@@ -105,6 +111,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                             // and add a warning to the Error List
                             AddErrorToList(PredefinedErrors.ManifestMalformed());
                         }
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationCancelled, Environment.NewLine);
+
+                        Logger.LogEvent(textMessage, LogLevel.Task);
+                        Logger.LogEvent(ex.ToString(), LogLevel.Error);
+
+                        Telemetry.TrackException("restoresavecancelled", ex);
                     }
                     catch (Exception ex)
                     {

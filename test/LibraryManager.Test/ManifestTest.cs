@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new[] { "jquery.min.js" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
 
             manifest.AddVersion("1.0");
@@ -88,7 +88,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             manifest.AddVersion("1.0");
             manifest.AddLibrary(desiredState);
-            IEnumerable<ILibraryInstallationResult> results = await manifest.RestoreAsync(token);
+            IEnumerable<ILibraryOperationResult> results = await manifest.RestoreAsync(token);
 
             string file1 = Path.Combine(_projectFolder, "lib", "jquery.js");
             string file2 = Path.Combine(_projectFolder, "lib", "jquery.min.js");
@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsTrue(results.Count() == 1);
             Assert.IsTrue(results.First().Success);
 
-            ILibraryInstallationResult uninstallResult = await manifest.UninstallAsync(desiredState.LibraryId, (file) => _hostInteraction.DeleteFilesAsync(file, token), token);
+            ILibraryOperationResult uninstallResult = await manifest.UninstallAsync(desiredState.LibraryId, (file) => _hostInteraction.DeleteFilesAsync(file, token), token);
 
             Assert.IsFalse(File.Exists(file1));
             Assert.IsFalse(File.Exists(file2));
@@ -140,7 +140,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsTrue(File.Exists(file2));
             Assert.IsTrue(File.Exists(file3));
 
-            IEnumerable<ILibraryInstallationResult> results = await manifest.CleanAsync((file) => _hostInteraction.DeleteFilesAsync(file, token), token);
+            IEnumerable<ILibraryOperationResult> results = await manifest.CleanAsync((file) => _hostInteraction.DeleteFilesAsync(file, token), token);
 
             Assert.IsFalse(File.Exists(file1));
             Assert.IsFalse(File.Exists(file2));
@@ -153,7 +153,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task RestoreAsync_PartialSuccess()
         {
             var manifest = Manifest.FromJson(_doc, _dependencies);
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual(0, result.Count(v => v.Success));
@@ -165,7 +165,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task RestoreAsync_UsingDefaultProvider()
         {
             var manifest = Manifest.FromJson(_docDefaultProvider, _dependencies);
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(2, result.Count());
             Assert.AreEqual(2, result.Count(v => v.Success));
@@ -176,7 +176,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task RestoreAsync_UsingDefaultDestination()
         {
             var manifest = Manifest.FromJson(_docDefaultDestination, _dependencies);
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual(1, result.Count(v => v.Success));
@@ -188,7 +188,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             var dependencies = new Dependencies(_dependencies.GetHostInteractions());
             var manifest = Manifest.FromJson(_doc, dependencies);
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual(1, result.Count(v => !v.Success));
@@ -212,20 +212,19 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddVersion("1.0");
             manifest.AddLibrary(state);
 
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual("LIB008", result.First().Errors.First().Code);
         }
 
-        [TestMethod]
         [ExpectedException(typeof(OperationCanceledException))]
         public async Task RestoreAsync_AllRestoreOperationsCancelled()
         {
             var manifest = Manifest.FromJson(_doc, _dependencies);
             var source = new CancellationTokenSource();
             source.Cancel();
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(source.Token);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(source.Token);
         }
 
         [TestMethod]
@@ -233,7 +232,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
 
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
             Assert.IsTrue(result.Last().Errors.Any(e => e.Code == "LIB016"), "LIB016 error code expected.");
@@ -269,7 +268,7 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddVersion("1.0");
             manifest.AddLibrary(state);
 
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
             Assert.IsFalse(result.First().Success);
@@ -292,7 +291,7 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddVersion("1.0");
             manifest.AddLibrary(state);
 
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
             Assert.IsFalse(result.First().Success);
@@ -305,7 +304,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var manifest = Manifest.FromJson("{}", _dependencies);
 
             // Null LibraryId
-            IEnumerable<ILibraryInstallationResult> results = await manifest.InstallLibraryAsync(null, "cdnjs", null, "wwwroot", CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(null, "cdnjs", null, "wwwroot", CancellationToken.None);
             Assert.IsFalse(results.First().Success);
             Assert.AreEqual(1, results.First().Errors.Count);
             Assert.AreEqual("LIB006", results.First().Errors[0].Code);
@@ -370,7 +369,7 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddVersion(version);
             manifest.AddLibrary(state);
 
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual("LIB009", result.First().Errors.First().Code);

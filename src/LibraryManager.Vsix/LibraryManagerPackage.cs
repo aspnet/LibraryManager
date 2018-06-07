@@ -1,17 +1,19 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.VisualStudio.Shell;
 using System;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Shell;
 using Tasks = System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     [Guid(PackageGuids.guidPackageString)]
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideUIContextRule(PackageGuids.guidUiContextConfigFileString,
@@ -43,16 +45,24 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
     internal sealed class LibraryManagerPackage : AsyncPackage
     {
+        [Import]
+        ILibraryCommandService LibraryCommandService { get; set; }
+
         protected override async Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            if (await GetServiceAsync(typeof(IMenuCommandService)).ConfigureAwait(false) is OleMenuCommandService commandService)
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            IComponentModel componentModel = GetService(typeof(SComponentModel)) as IComponentModel;
+            componentModel.DefaultCompositionService.SatisfyImportsOnce(this);
+
+            OleMenuCommandService commandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+
+            if (commandService != null && LibraryCommandService != null)
             {
-#if UI_ENABLED
-                InstallLibraryCommand.Initialize(this, commandService);
-#endif
-                CleanCommand.Initialize(this, commandService);
-                RestoreCommand.Initialize(this, commandService);
-                RestoreSolutionCommand.Initialize(this, commandService);
+                InstallLibraryCommand.Initialize(this, commandService, LibraryCommandService);
+                CleanCommand.Initialize(this, commandService, LibraryCommandService);
+                RestoreCommand.Initialize(this, commandService, LibraryCommandService);
+                RestoreSolutionCommand.Initialize(this, commandService, LibraryCommandService);
                 RestoreOnBuildCommand.Initialize(this, commandService);
                 ManageLibrariesCommand.Initialize(this, commandService);
             }

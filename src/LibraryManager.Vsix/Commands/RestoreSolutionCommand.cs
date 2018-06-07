@@ -15,9 +15,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal sealed class RestoreSolutionCommand
     {
         private readonly Package _package;
-        private RestoreSolutionCommand(Package package, OleMenuCommandService commandService)
+        private readonly ILibraryCommandService _libraryCommandService;
+
+        private RestoreSolutionCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
             _package = package;
+            _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.RestoreSolution);
             var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
@@ -35,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             var solution = (IVsSolution)ServiceProvider.GetService(typeof(SVsSolution));
 
-            if (VsHelpers.SolutionContainsManifestFile(solution))
+            if (!_libraryCommandService.IsOperationInProgress && VsHelpers.SolutionContainsManifestFile(solution))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -46,9 +49,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private IServiceProvider ServiceProvider => _package;
 
-        public static void Initialize(Package package, OleMenuCommandService commandService)
+        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            Instance = new RestoreSolutionCommand(package, commandService);
+            Instance = new RestoreSolutionCommand(package, commandService, libraryCommandService);
         }
 
         private async void ExecuteAsync(object sender, EventArgs e)
@@ -68,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
-            await LibraryHelpers.RestoreAsync(configFiles);
+            await _libraryCommandService.RestoreAsync(configFiles);
 
             Telemetry.TrackUserTask("restoresolution");
         }

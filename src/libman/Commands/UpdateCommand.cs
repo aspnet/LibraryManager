@@ -106,11 +106,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             // Delete files from old version of the library.
             await backup.RemoveUnwantedFilesAsync(manifest, CancellationToken.None);
 
-            IEnumerable<ILibraryInstallationResult> results = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await manifest.RestoreAsync(CancellationToken.None);
 
-            ILibraryInstallationResult result = null;
+            ILibraryOperationResult result = null;
 
-            foreach (ILibraryInstallationResult r in results)
+            foreach (ILibraryOperationResult r in results)
             {
                 if (!r.Success && r.Errors.Any(e => e.Message.Contains(libraryToUpdate.LibraryId)))
                 {

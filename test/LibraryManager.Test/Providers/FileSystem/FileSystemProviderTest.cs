@@ -63,7 +63,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "file1.txt" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
             string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
@@ -90,7 +90,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "relative.txt" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
             string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
@@ -126,7 +126,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "file1.js", "file2.js" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
             string file1 = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
@@ -162,7 +162,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "file1.js", "file2.js" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
             string file1 = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
@@ -188,7 +188,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "event.js" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
             string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
@@ -215,7 +215,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "Flag.png" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsTrue(result.Success, "Didn't install");
 
             string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
@@ -235,7 +235,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "file.js" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB002", result.Errors[0].Code);
         }
@@ -252,7 +252,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "file.js" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB005", result.Errors[0].Code);
         }
@@ -269,7 +269,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "file.js" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB006", result.Errors[0].Code);
         }
@@ -287,7 +287,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
                 Files = new[] { "file.js" }
             };
 
-            ILibraryInstallationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
             Assert.AreEqual(1, result.Errors.Count);
             Assert.AreEqual("LIB007", result.Errors[0].Code);
@@ -299,7 +299,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             IProvider provider = _dependencies.GetProvider("filesystem");
             string config = GetConfig();
             var manifest = Manifest.FromJson(config, _dependencies);
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
             Assert.IsTrue(result.Count() == 2, "Didn't install");
 

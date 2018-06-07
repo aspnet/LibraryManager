@@ -1,21 +1,23 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using System;
-using System.ComponentModel.Design;
-using Microsoft.VisualStudio.Telemetry;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class RestoreCommand
     {
         private readonly Package _package;
+        private readonly ILibraryCommandService _libraryCommandService;
 
-        private RestoreCommand(Package package, OleMenuCommandService commandService)
+        private RestoreCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
             _package = package;
+            _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.Restore);
             var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
@@ -27,9 +29,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private IServiceProvider ServiceProvider => _package;
 
-        public static void Initialize(Package package, OleMenuCommandService commandService)
+        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            Instance = new RestoreCommand(package, commandService);
+            Instance = new RestoreCommand(package, commandService, libraryCommandService);
         }
 
         private void BeforeQueryStatus(object sender, EventArgs e)
@@ -51,10 +53,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async void ExecuteAsync(object sender, EventArgs e)
         {
-            ProjectItem configProjectItem = VsHelpers.GetSelectedItem(); ;
+            ProjectItem configProjectItem = VsHelpers.GetSelectedItem();
 
-            if (configProjectItem != null)
-                await LibraryHelpers.RestoreAsync(configProjectItem.FileNames[1]);
+            if (!_libraryCommandService.IsOperationInProgress && configProjectItem != null)
+            {
+                await _libraryCommandService.RestoreAsync(configProjectItem.FileNames[1] );
+            }
         }
     }
 }

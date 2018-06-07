@@ -8,7 +8,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
     /// <summary>
     /// Represents the result of <see cref="IProvider.InstallAsync"/>.
     /// </summary>
-    public interface ILibraryInstallationResult
+    public interface ILibraryOperationResult
     {
         /// <summary>
         /// <code>True</code> if the installation was cancelled; otherwise false;

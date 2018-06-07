@@ -16,13 +16,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         private readonly IDependencies _deps;
         private readonly string _fullPath;
         private readonly string _configFileName;
+        private readonly ILibraryCommandService _libraryCommandService;
 
-        public InstallDialog(IDependencies dependencies, string configFileName, string fullPath, string rootFolder)
+        public InstallDialog(IDependencies dependencies, ILibraryCommandService libraryCommandService, string configFileName, string fullPath, string rootFolder)
         {
             InstallationFolder.DestinationFolder = fullPath.Replace(rootFolder, "").Replace('\\', '/');
 
             InitializeComponent();
 
+            _libraryCommandService = libraryCommandService;
             _deps = dependencies;
             _fullPath = fullPath;
             _configFileName = configFileName;
@@ -146,7 +148,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {           
-            ViewModel = new InstallDialogViewModel(Dispatcher, _configFileName, _deps, _fullPath, CloseDialog);
+            ViewModel = new InstallDialogViewModel(Dispatcher, _libraryCommandService, _configFileName, _deps, _fullPath, CloseDialog);
 
             FocusManager.SetFocusedElement(LibrarySearchBox, LibrarySearchBox);
         }
