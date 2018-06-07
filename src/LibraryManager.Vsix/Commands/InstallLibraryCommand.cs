@@ -10,12 +10,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class InstallLibraryCommand
     {
-        private InstallLibraryCommand(OleMenuCommandService commandService)
+        private readonly ILibraryCommandService _libraryCommandService;
+
+        private InstallLibraryCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
             CommandID cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.InstallPackage);
             OleMenuCommand cmd = new OleMenuCommand(ExecuteAsync, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);
+
+            _libraryCommandService = libraryCommandService;
         }
 
         public static InstallLibraryCommand Instance
@@ -24,9 +28,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             private set;
         }
 
-        public static void Initialize(Package package, OleMenuCommandService commandService)
+        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            Instance = new InstallLibraryCommand(commandService);
+            Instance = new InstallLibraryCommand(commandService, libraryCommandService);
         }
 
         private void BeforeQueryStatus(object sender, EventArgs e)
@@ -41,7 +45,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
             }
 
-            if (VSConstants.ItemTypeGuid.PhysicalFolder_string.Equals(item.Kind, StringComparison.OrdinalIgnoreCase))
+            if (!_libraryCommandService.IsOperationInProgress && VSConstants.ItemTypeGuid.PhysicalFolder_string.Equals(item.Kind, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -67,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
                     IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
 
-                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, configFilePath, target, rootFolder);
+                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder);
                     dialog.ShowDialog();
                 }
             }

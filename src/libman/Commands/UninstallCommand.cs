@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
-            ILibraryInstallationResult result = await manifest.UninstallAsync(libraryToUninstall, deleteFileAction, CancellationToken.None);
+            ILibraryOperationResult result = await manifest.UninstallAsync(libraryToUninstall.LibraryId, deleteFileAction, CancellationToken.None);
 
             if (result.Success)
             {

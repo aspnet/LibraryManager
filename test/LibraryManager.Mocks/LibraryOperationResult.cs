@@ -8,24 +8,24 @@ using System.Linq;
 namespace Microsoft.Web.LibraryManager.Mocks
 {
     /// <summary>
-    /// A mock <see cref="ILibraryInstallationResult"/> class.
+    /// A mock <see cref="ILibraryOperationResult"/> class.
     /// </summary>
-    /// <seealso cref="LibraryManager.Contracts.ILibraryInstallationResult" />
-    public class LibraryInstallationResult : ILibraryInstallationResult
+    /// <seealso cref="LibraryManager.Contracts.ILibraryOperationResult" />
+    public class LibraryOperationResult : ILibraryOperationResult
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LibraryInstallationResult"/> class.
+        /// Initializes a new instance of the <see cref="LibraryOperationResult"/> class.
         /// </summary>
-        public LibraryInstallationResult()
+        public LibraryOperationResult()
         {
             Errors = new List<IError>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LibraryInstallationResult"/> class.
+        /// Initializes a new instance of the <see cref="LibraryOperationResult"/> class.
         /// </summary>
         /// <param name="errors">The errors.</param>
-        public LibraryInstallationResult(params IError[] errors)
+        public LibraryOperationResult(params IError[] errors)
         {
             var list = new List<IError>();
             list.AddRange(errors);
@@ -45,11 +45,11 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <code>True</code> if the install was successfull; otherwise <code>False</code>.
         /// </summary>
         /// <remarks>
-        /// The value is usually <code>True</code> if the <see cref="P:LibraryManager.Contracts.ILibraryInstallationResult.Errors" /> list is empty.
+        /// The value is usually <code>True</code> if the <see cref="P:LibraryManager.Contracts.ILibraryOperationResult.Errors" /> list is empty.
         /// </remarks>
         public virtual bool Success
         {
-            get { return !Errors.Any(); }
+            get { return !Errors.Any() && !Cancelled && !UpToDate; }
         }
 
         /// <summary>
@@ -80,19 +80,19 @@ namespace Microsoft.Web.LibraryManager.Mocks
         }
 
         /// <summary>
-        /// Creates a new <see cref="LibraryInstallationResult"/> that is in a successfull state.
+        /// Creates a new <see cref="LibraryOperationResult"/> that is in a successfull state.
         /// </summary>
-        public static LibraryInstallationResult FromSuccess()
+        public static LibraryOperationResult FromSuccess()
         {
-            return new LibraryInstallationResult();
+            return new LibraryOperationResult();
         }
 
         /// <summary>
-        /// Creates a new <see cref="LibraryInstallationResult"/> that is in a cancelled state.
+        /// Creates a new <see cref="LibraryOperationResult"/> that is in a cancelled state.
         /// </summary>
-        public static LibraryInstallationResult FromCancelled()
+        public static LibraryOperationResult FromCancelled()
         {
-            return new LibraryInstallationResult
+            return new LibraryOperationResult
             {
                 Cancelled = true
             };

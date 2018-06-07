@@ -34,26 +34,26 @@ namespace Microsoft.Web.LibraryManager
         private IDependencies _dependencies;
 
         /// <summary>
-        /// Returns a collection of ILibraryInstallationResult that represents the status for validation of each 
+        /// Returns a collection of ILibraryOperationResult that represents the status for validation of each 
         ///  library 
         /// </summary>
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ILibraryInstallationResult>> GetLibrariesErrorsAsync(
+        public async Task<IEnumerable<ILibraryOperationResult>> GetLibrariesErrorsAsync(
             IEnumerable<ILibraryInstallationState> libraries,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            IEnumerable<ILibraryInstallationResult> validateLibraries = ValidatePropertiesAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryOperationResult> validateLibraries = ValidatePropertiesAsync(libraries, cancellationToken);
 
             if (!validateLibraries.All(t => t.Success))
             {
                 return validateLibraries;
             }
 
-            IEnumerable<ILibraryInstallationResult> expandLibraries= await ExpandLibrariesAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryOperationResult> expandLibraries= await ExpandLibrariesAsync(libraries, cancellationToken);
             if (!expandLibraries.All(t => t.Success))
             {
                 return expandLibraries;
@@ -62,19 +62,19 @@ namespace Microsoft.Web.LibraryManager
             libraries = expandLibraries.Select(l => l.InstallationState);
 
 
-            return new List<ILibraryInstallationResult> { GetConflictErrors(GetFilesConflicts(libraries, cancellationToken)) };
+            return new List<ILibraryOperationResult> { GetConflictErrors(GetFilesConflicts(libraries, cancellationToken)) };
 
         }
 
         /// <summary>
-        /// Validates the values of each Library property and returns a collection of ILibraryInstallationResult for each of them 
+        /// Validates the values of each Library property and returns a collection of ILibraryOperationResult for each of them 
         /// </summary>
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public IEnumerable<ILibraryInstallationResult> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        public IEnumerable<ILibraryOperationResult> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
-            List<ILibraryInstallationResult> validationStatus = new List<ILibraryInstallationResult>();
+            List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
 
             foreach (ILibraryInstallationState library in libraries)
             {
@@ -82,11 +82,11 @@ namespace Microsoft.Web.LibraryManager
 
                 if (!library.IsValid(out IEnumerable<IError> errors))
                 {
-                   return new List<ILibraryInstallationResult> { new LibraryInstallationResult(library, errors.ToArray())};
+                   return new List<ILibraryOperationResult> { new LibraryOperationResult(library, errors.ToArray())};
                 }
                 else
                 {
-                    validationStatus.Add(LibraryInstallationResult.FromSuccess(library));
+                    validationStatus.Add(LibraryOperationResult.FromSuccess(library));
                 }
             }
 
@@ -99,9 +99,9 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<IEnumerable<ILibraryInstallationResult>> ExpandLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private async Task<IEnumerable<ILibraryOperationResult>> ExpandLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
-            List<ILibraryInstallationResult> expandedLibraries = new List<ILibraryInstallationResult>();
+            List<ILibraryOperationResult> expandedLibraries = new List<ILibraryOperationResult>();
 
             foreach (ILibraryInstallationState library in libraries)
             {
@@ -109,15 +109,17 @@ namespace Microsoft.Web.LibraryManager
 
                 string installDestination = string.IsNullOrEmpty(library.DestinationPath) ? _defaultDestination : library.DestinationPath;
                 string providerId = string.IsNullOrEmpty(library.ProviderId) ? _defaultProvider : library.ProviderId;
+
                 IProvider provider = _dependencies.GetProvider(providerId);
                 if (provider == null)
                 {
-                    return new List<ILibraryInstallationResult> { LibraryInstallationResult.FromError(PredefinedErrors.ProviderIsUndefined())};
+                    return new List<ILibraryOperationResult> { LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined())};
                 }
-                ILibraryInstallationResult desiredState = await provider.UpdateStateAsync(library, cancellationToken);
+
+                ILibraryOperationResult desiredState = await provider.UpdateStateAsync(library, cancellationToken);
                 if (!desiredState.Success)
                 {
-                    return new List<ILibraryInstallationResult> { desiredState };
+                    return new List<ILibraryOperationResult> { desiredState };
                 }
 
                 expandedLibraries.Add(desiredState);
@@ -160,11 +162,11 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Generates a single ILibraryInstallationResult with a collection of IErros based on the collection of FileConflict
+        /// Generates a single ILibraryOperationResult with a collection of IErros based on the collection of FileConflict
         /// </summary>
         /// <param name="fileConflicts"></param>
         /// <returns></returns>
-        public ILibraryInstallationResult GetConflictErrors(IEnumerable<FileConflict> fileConflicts)
+        public ILibraryOperationResult GetConflictErrors(IEnumerable<FileConflict> fileConflicts)
         {
             if (fileConflicts.Any())
             {
@@ -174,10 +176,10 @@ namespace Microsoft.Web.LibraryManager
                     errors.Add(PredefinedErrors.ConflictingLibrariesInManifest(conflictingLibraryGroup.File, conflictingLibraryGroup.Libraries.Select(l => l.LibraryId).ToList()));
                 }
 
-                return new LibraryInstallationResult(errors.ToArray());
+                return new LibraryOperationResult(errors.ToArray());
             }
 
-            return LibraryInstallationResult.FromSuccess(null);
+            return LibraryOperationResult.FromSuccess(null);
         }
     }
 

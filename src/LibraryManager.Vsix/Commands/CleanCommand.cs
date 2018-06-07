@@ -14,10 +14,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private readonly Package _package;
         private readonly BuildEvents _buildEvents;
         private readonly SolutionEvents _solutionEvents;
+        private readonly ILibraryCommandService _libraryCommandService;
 
-        private CleanCommand(Package package, OleMenuCommandService commandService)
+        private CleanCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
             _package = package;
+            _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.Clean);
             var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
@@ -35,9 +37,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private IServiceProvider ServiceProvider => _package;
 
-        public static void Initialize(Package package, OleMenuCommandService commandService)
+        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            Instance = new CleanCommand(package, commandService);
+            Instance = new CleanCommand(package, commandService, libraryCommandService);
         }
 
         private void BeforeQueryStatus(object sender, EventArgs e)
@@ -47,7 +49,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             ProjectItem item = VsHelpers.GetSelectedItem();
 
-            if (item != null && item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
+            if (!_libraryCommandService.IsOperationInProgress && 
+                item != null && 
+                item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
@@ -60,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (configProjectItem != null)
             {
-                await LibraryHelpers.CleanAsync(configProjectItem, new CancellationToken());
+                await _libraryCommandService.CleanAsync(configProjectItem);
             }
         }
 

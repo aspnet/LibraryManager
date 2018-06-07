@@ -424,12 +424,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     logAction.Invoke(string.Format(Resources.Text.LibraryAddedToProject, filePath.Replace('\\', '/')), LogLevel.Operation);
                 }
             }
-            catch (Exception)
-            {
-                logAction.Invoke(string.Format(Resources.Text.FailToAddLibrariesToProject), LogLevel.Operation);
-
-                return false;
-            }
             finally
             {
                 if (bldSystem != null)
@@ -472,12 +466,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
 
                 DeleteEmptyFolders(folders);
-            }
-            catch (Exception)
-            {
-                logAction.Invoke(string.Format(Resources.Text.FailToDeleteLibrariesFromProject), LogLevel.Operation);
-
-                return false;
             }
             finally
             {

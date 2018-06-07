@@ -24,14 +24,14 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// <returns></returns>
         public static async Task RestoreManifestAsync(Manifest manifest, ILogger logger, CancellationToken cancelToken)
         {
-            IEnumerable<ILibraryInstallationResult> result = await manifest.RestoreAsync(cancelToken);
+            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(cancelToken);
 
-            IEnumerable<ILibraryInstallationResult> failures = result.Where(r => !r.Success);
+            IEnumerable<ILibraryOperationResult> failures = result.Where(r => !r.Success);
             if (failures.Any())
             {
                 var librarySpecificErrors = new StringBuilder();
                 var otherErrors = new StringBuilder();
-                foreach (ILibraryInstallationResult f in failures)
+                foreach (ILibraryOperationResult f in failures)
                 {
                     if (f.InstallationState != null)
                     {

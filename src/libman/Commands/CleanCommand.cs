@@ -27,9 +27,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
-            IEnumerable<ILibraryInstallationResult> result = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
 
-            IEnumerable<ILibraryInstallationResult> failures = result.Where(r => !r.Success);
+            IEnumerable<ILibraryOperationResult> failures = result.Where(r => !r.Success);
 
             if (failures.Any())
             {

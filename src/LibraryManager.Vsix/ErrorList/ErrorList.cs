@@ -23,11 +23,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public string ConfigFileName { get; set; }
         public List<DisplayError> Errors { get; }
 
-        public bool HandleErrors(IEnumerable<ILibraryInstallationResult> results)
+        public bool HandleErrors(IEnumerable<ILibraryOperationResult> results)
         {
             IEnumerable<string> json = File.Exists(ConfigFileName) ? File.ReadLines(ConfigFileName) : new string[0];
 
-            foreach (ILibraryInstallationResult result in results)
+            foreach (ILibraryOperationResult result in results)
             {
                 if (!result.Success)
                 {
