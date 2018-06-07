@@ -27,9 +27,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="$(NET45NewtonSoftJsonPackageVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Net.Http" Version="$(SystemNetHttpPackageVersion)" />
     <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
     <Reference Include="System.ComponentModel.Composition" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
+    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Text.Designer.cs">
