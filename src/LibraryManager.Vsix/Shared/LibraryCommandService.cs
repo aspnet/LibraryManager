@@ -294,7 +294,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 foreach (ILibraryOperationResult state in results)
                 {
-                    if (state.Success)
+                    if (state.Success && !state.UpToDate)
                     {
                         IEnumerable<string> absoluteFiles = state.InstallationState.Files
                             .Select(file => Path.Combine(workingDirectory, state.InstallationState.DestinationPath, file)
