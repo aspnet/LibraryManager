@@ -241,36 +241,52 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return false;
         }
 
-        public static async Task<bool> DeleteFilesFromProjectAsync (Project project, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        public static async Task<bool> IsDotNetCoreWebProjectAsync(Project project)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
             {
                 return true;
             }
 
+            return false;
+        }
+
+        public static async Task<bool> DeleteFilesFromProjectAsync(Project project, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             int batchSize = 10;
 
-            IVsHierarchy hierarchy = GetHierarchy(project);
-            IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
-            List<string> filesToRemove = filePaths.ToList();
-
-            while (filesToRemove.Any())
+            try
             {
-                List<string> nextBatch = filesToRemove.Take(batchSize).ToList();
-                bool success = await DeleteProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
+                IVsHierarchy hierarchy = GetHierarchy(project);
+                IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
+                List<string> filesToRemove = filePaths.ToList();
 
-                if(!success)
+                while (filesToRemove.Any())
                 {
-                    return false;
+                    List<string> nextBatch = filesToRemove.Take(batchSize).ToList();
+                    bool success = await DeleteProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
+
+                    if (!success)
+                    {
+                        return false;
+                    }
+
+                    await System.Threading.Tasks.Task.Yield();
+
+                    int countToDelete = Math.Min(filesToRemove.Count(), batchSize);
+                    filesToRemove.RemoveRange(0, countToDelete);
                 }
 
-                await System.Threading.Tasks.Task.Yield();
-
-                int countToDelete = Math.Min(filesToRemove.Count(), batchSize);
-                filesToRemove.RemoveRange(0, countToDelete);
+                return true;
             }
-
-            return true;
+            catch
+            {
+                return false;
+            }
         }
 
         public static void SatisfyImportsOnce(this object o)

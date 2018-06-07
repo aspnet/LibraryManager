@@ -77,17 +77,21 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
-            //Delete from project 
-            var logAction = new Action<string, LogLevel>((message, level) => { Logger.Log(message, level); });
+            //Delete from project
             Project project = VsHelpers.GetDTEProjectFromConfig(_configFilePath);
-            bool deleteFromProject = await VsHelpers.DeleteFilesFromProjectAsync(project, absolutePaths, logAction, cancellationToken);
-            if (deleteFromProject)
+            bool isCoreProject = await VsHelpers.IsDotNetCoreWebProjectAsync(project);
+
+            if (!isCoreProject)
             {
-                return true;
+                var logAction = new Action<string, LogLevel>((message, level) => { Logger.Log(message, level); });
+                bool deleteFromProject = await VsHelpers.DeleteFilesFromProjectAsync(project, absolutePaths, logAction, cancellationToken);
+                if (deleteFromProject)
+                {
+                    return true;
+                }
             }
 
             // Delete from file system 
-
             return await DeleteFilesFromDisk(absolutePaths, cancellationToken);
 
         }
