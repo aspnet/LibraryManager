@@ -5,6 +5,7 @@ using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Web.LibraryManager.Contracts;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -15,8 +16,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private InstallLibraryCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
             CommandID cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.InstallPackage);
-            OleMenuCommand cmd = new OleMenuCommand(ExecuteAsync, cmdId);
-            cmd.BeforeQueryStatus += BeforeQueryStatus;
+            OleMenuCommand cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
+            cmd.BeforeQueryStatus += BeforeQueryStatusHandlerAsync;
             commandService.AddCommand(cmd);
 
             _libraryCommandService = libraryCommandService;
@@ -33,7 +34,25 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new InstallLibraryCommand(commandService, libraryCommandService);
         }
 
-        private async void BeforeQueryStatus(object sender, EventArgs e)
+        private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await BeforeQueryStatusAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async void ExecuteHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await ExecuteAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async Task BeforeQueryStatusAsync(object sender, EventArgs e)
         {
             OleMenuCommand button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
@@ -52,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private async void ExecuteAsync(object sender, EventArgs e)
+        private async Task ExecuteAsync(object sender, EventArgs e)
         {
             Telemetry.TrackUserTask("installdialogopened");
 

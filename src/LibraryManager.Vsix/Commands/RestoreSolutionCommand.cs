@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
-using System.Linq;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -23,12 +23,30 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.RestoreSolution);
-            var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
-            cmd.BeforeQueryStatus += BeforeQueryStatus;
+            var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
+            cmd.BeforeQueryStatus += BeforeQueryStatusHandlerAsync;
             commandService.AddCommand(cmd);
         }
 
-        private async void BeforeQueryStatus(object sender, EventArgs e)
+        private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await BeforeQueryStatusAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async void ExecuteHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await ExecuteAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async Task BeforeQueryStatusAsync(object sender, EventArgs e)
         {
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
@@ -54,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new RestoreSolutionCommand(package, commandService, libraryCommandService);
         }
 
-        private async void ExecuteAsync(object sender, EventArgs e)
+        private async Task ExecuteAsync(object sender, EventArgs e)
         {
             var solution = (IVsSolution)ServiceProvider.GetService(typeof(SVsSolution));
             IEnumerable<IVsHierarchy> hierarchies = VsHelpers.GetProjectsInSolution(solution, __VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION);

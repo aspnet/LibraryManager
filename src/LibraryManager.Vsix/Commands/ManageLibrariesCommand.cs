@@ -8,6 +8,7 @@ using System.ComponentModel.Design;
 using System.Threading;
 using System.IO;
 using System.Linq;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -20,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _package = package;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.ManageLibraries);
-            var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
+            var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
             commandService.AddCommand(cmd);
         }
 
@@ -41,7 +42,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
             button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
         }
 
-        private async void ExecuteAsync(object sender, EventArgs e)
+        private async Task ExecuteHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await ExecuteAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async Task ExecuteAsync(object sender, EventArgs e)
         {
             Telemetry.TrackUserTask("ManageLibraries");
 

@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -20,8 +20,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.Restore);
-            var cmd = new OleMenuCommand(ExecuteAsync, cmdId);
-            cmd.BeforeQueryStatus += BeforeQueryStatus;
+            var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
+            cmd.BeforeQueryStatus += BeforeQueryStatusHandlerAsync;
             commandService.AddCommand(cmd);
         }
 
@@ -34,7 +34,25 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new RestoreCommand(package, commandService, libraryCommandService);
         }
 
-        private async void BeforeQueryStatus(object sender, EventArgs e)
+        private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await BeforeQueryStatusAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async void ExecuteHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await ExecuteAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async Task BeforeQueryStatusAsync(object sender, EventArgs e)
         {
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
@@ -51,7 +69,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private async void ExecuteAsync(object sender, EventArgs e)
+        private async Task ExecuteAsync(object sender, EventArgs e)
         {
             ProjectItem configProjectItem = await VsHelpers.GetSelectedItemAsync();
 
