@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -17,9 +18,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public string Description { get; }
 
-        public Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(DisplayName, CancellationToken.None);
+
+            if (npmPackageInfo != null)
+            {
+                return npmPackageInfo.Versions.Select(semanticVersion => semanticVersion.ToString()).ToArray();
+            }
+
+            return Enumerable.Empty<string>();
         }
     }
 }

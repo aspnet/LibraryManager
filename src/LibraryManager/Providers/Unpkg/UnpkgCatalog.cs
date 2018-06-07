@@ -156,17 +156,42 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             List<CompletionItem> completions = new List<CompletionItem>();
 
-            IEnumerable<string> packageNames =  await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+            UnpkgLibraryId unpkgLibraryId = new UnpkgLibraryId(libraryNameStart);
 
-            foreach (string packageName in packageNames)
+            // library name completion
+            if (caretPosition < unpkgLibraryId.Name.Length + 1)
             {
-                CompletionItem completionItem = new CompletionItem
-                {
-                    DisplayText = packageName,
-                    InsertionText = packageName
-                };
+                IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
-                completions.Add(completionItem);
+                foreach (string packageName in packageNames)
+                {
+                    CompletionItem completionItem = new CompletionItem
+                    {
+                        DisplayText = packageName,
+                        InsertionText = packageName
+                    };
+
+                    completions.Add(completionItem);
+                }
+            }
+
+            // library version completion
+            else
+            {
+                completionSet.Start = unpkgLibraryId.Name.Length + 1;
+                completionSet.Length = unpkgLibraryId.Version.Length;
+
+                NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(unpkgLibraryId.Name, CancellationToken.None);
+                foreach (SemanticVersion version in npmPackageInfo.Versions)
+                {
+                    CompletionItem completionItem = new CompletionItem
+                    {
+                        DisplayText = unpkgLibraryId.Name + "@" + version.ToString(),
+                        InsertionText = unpkgLibraryId.Name + "@" + version.ToString()
+                    };
+
+                    completions.Add(completionItem);
+                }
             }
 
             completionSet.Completions = completions;

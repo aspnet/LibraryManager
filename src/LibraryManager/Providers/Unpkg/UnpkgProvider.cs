@@ -42,20 +42,20 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public string LibraryIdHintText => Resources.Text.UnpkgProviderHintText;
 
-        public async Task<ILibraryInstallationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        public async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return LibraryInstallationResult.FromCancelled(desiredState);
+                return LibraryOperationResult.FromCancelled(desiredState);
             }
 
             if (!desiredState.IsValid(out IEnumerable<IError> errors))
             {
-                return new LibraryInstallationResult(desiredState, errors.ToArray());
+                return new LibraryOperationResult(desiredState, errors.ToArray());
             }
 
             //Expand the files property if needed
-            ILibraryInstallationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
+            ILibraryOperationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
             if (!updateResult.Success)
             {
                 return updateResult;
@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             desiredState = updateResult.InstallationState;
 
             // Refresh cache if needed
-            ILibraryInstallationResult cacheUpdateResult = await RefreshCacheAsync(desiredState, cancellationToken);
+            ILibraryOperationResult cacheUpdateResult = await RefreshCacheAsync(desiredState, cancellationToken);
             if (!cacheUpdateResult.Success)
             {
                 return cacheUpdateResult;
@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             // Check if Library is already up tp date
             if (IsLibraryUpToDateAsync(desiredState, cancellationToken))
             {
-                return LibraryInstallationResult.FromUpToDate(desiredState);
+                return LibraryOperationResult.FromUpToDate(desiredState);
             }
 
             // Write files to destination
@@ -86,11 +86,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         /// <param name="state"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<LibraryInstallationResult> RefreshCacheAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
+        private async Task<LibraryOperationResult> RefreshCacheAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return LibraryInstallationResult.FromCancelled(state);
+                return LibraryOperationResult.FromCancelled(state);
             }
 
             var tasks = new List<Task>();
@@ -119,7 +119,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             catch (ResourceDownloadException ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
-                return new LibraryInstallationResult(state, PredefinedErrors.FailedToDownloadResource(ex.Url));
+                return new LibraryOperationResult(state, PredefinedErrors.FailedToDownloadResource(ex.Url));
             }
             catch (OperationCanceledException)
             {
@@ -128,10 +128,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             catch (Exception ex)
             {
                 HostInteraction.Logger.Log(ex.InnerException.ToString(), LogLevel.Error);
-                return new LibraryInstallationResult(state, PredefinedErrors.UnknownException());
+                return new LibraryOperationResult(state, PredefinedErrors.UnknownException());
             }
 
-            return LibraryInstallationResult.FromSuccess(state);
+            return LibraryOperationResult.FromSuccess(state);
         }
 
         private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
@@ -165,7 +165,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return true;
         }
 
-        private async Task<ILibraryInstallationResult> WriteToFilesAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
+        private async Task<ILibraryOperationResult> WriteToFilesAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             if (state.Files != null)
             {
@@ -175,12 +175,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
-                            return LibraryInstallationResult.FromCancelled(state);
+                            return LibraryOperationResult.FromCancelled(state);
                         }
 
                         if (string.IsNullOrEmpty(file))
                         {
-                            return new LibraryInstallationResult(state, PredefinedErrors.CouldNotWriteFile(file));
+                            return new LibraryOperationResult(state, PredefinedErrors.CouldNotWriteFile(file));
                         }
 
                         string destinationPath = Path.Combine(state.DestinationPath, file);
@@ -189,22 +189,22 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                         if (!writeOk)
                         {
-                            return new LibraryInstallationResult(state, PredefinedErrors.CouldNotWriteFile(file));
+                            return new LibraryOperationResult(state, PredefinedErrors.CouldNotWriteFile(file));
                         }
                     }
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    return new LibraryInstallationResult(state, PredefinedErrors.PathOutsideWorkingDirectory());
+                    return new LibraryOperationResult(state, PredefinedErrors.PathOutsideWorkingDirectory());
                 }
                 catch (Exception ex)
                 {
                     HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
-                    return new LibraryInstallationResult(state, PredefinedErrors.UnknownException());
+                    return new LibraryOperationResult(state, PredefinedErrors.UnknownException());
                 }
             }
 
-            return LibraryInstallationResult.FromSuccess(state);
+            return LibraryOperationResult.FromSuccess(state);
         }
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
@@ -238,11 +238,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return version;
         }
 
-        public async Task<ILibraryInstallationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        public async Task<ILibraryOperationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return LibraryInstallationResult.FromCancelled(desiredState);
+                return LibraryOperationResult.FromCancelled(desiredState);
             }
 
             try
@@ -261,11 +261,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     if (invalidFiles.Any())
                     {
                         var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
-                        return new LibraryInstallationResult(desiredState, invalidFilesError);
+                        return new LibraryOperationResult(desiredState, invalidFilesError);
                     }
                     else
                     {
-                        return LibraryInstallationResult.FromSuccess(desiredState);
+                        return LibraryOperationResult.FromSuccess(desiredState);
                     }
                 }
 
@@ -279,19 +279,19 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
             catch (Exception ex) when (ex is InvalidLibraryException || ex.InnerException is InvalidLibraryException)
             {
-                return new LibraryInstallationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
+                return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
             }
             catch (UnauthorizedAccessException)
             {
-                return new LibraryInstallationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
+                return new LibraryOperationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
             }
             catch (Exception ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
-                return new LibraryInstallationResult(desiredState, PredefinedErrors.UnknownException());
+                return new LibraryOperationResult(desiredState, PredefinedErrors.UnknownException());
             }
 
-            return LibraryInstallationResult.FromSuccess(desiredState);
+            return LibraryOperationResult.FromSuccess(desiredState);
         }
     }
 }

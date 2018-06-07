@@ -1,13 +1,13 @@
 ﻿using System;
 using Microsoft.Web.LibraryManager.Contracts;
 
-#if NET45
+#if NET461
 using System.ComponentModel.Composition;
 #endif
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-#if NET45
+#if NET461
     [Export(typeof(IProviderFactory))]
 #endif
     internal class UnpkgProviderFactory : IProviderFactory
