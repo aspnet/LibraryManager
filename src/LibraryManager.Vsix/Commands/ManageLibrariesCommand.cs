@@ -70,11 +70,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 else
                 {
                     var dependencies = Dependencies.FromConfigFile(configFilePath);
-                    Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, default(CancellationToken));
+                    Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None);
                     manifest.DefaultProvider = "cdnjs";
                     manifest.Version = Manifest.SupportedVersions.Max().ToString();
 
-                        await manifest.SaveAsync(configFilePath, default(CancellationToken));
+                        await manifest.SaveAsync(configFilePath, CancellationToken.None);
                         await project.AddFileToProjectAsync(configFilePath);
 
                         Telemetry.TrackUserTask("ConfigFileCreated");
