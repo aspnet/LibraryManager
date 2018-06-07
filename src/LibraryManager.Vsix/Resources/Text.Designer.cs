@@ -88,7 +88,25 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean libraries failed.
+        ///   Looks up a localized string similar to Clean libraries started....
+        /// </summary>
+        public static string CleanLibrariesStarted {
+            get {
+                return ResourceManager.GetString("CleanLibrariesStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clean libraries succeeded.
+        /// </summary>
+        public static string CleanLibrariesSucceeded {
+            get {
+                return ResourceManager.GetString("CleanLibrariesSucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable Restore on Build.
         /// </summary>
         public static string DisableRestoreOnBuild {
             get {
@@ -97,7 +115,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Restore on Build.
+        ///   Looks up a localized string similar to Enable Restore Client-Side Libraries on Build.
         /// </summary>
         public static string EnableRestoreOnBuild {
             get {
@@ -120,15 +138,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         public static string FailToDeleteLibrariesFromProject {
             get {
                 return ResourceManager.GetString("FailToDeleteLibrariesFromProject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enable Restore Client-Side Libraries on Build.
-        /// </summary>
-        public static string LibraryAddedToProject {
-            get {
-                return ResourceManager.GetString("LibraryAddedToProject", resourceCulture);
             }
         }
         
@@ -160,11 +169,29 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
+        ///   Looks up a localized string similar to Library {0} was successfuly added to project.
+        /// </summary>
+        public static string LibraryAddedToProject {
+            get {
+                return ResourceManager.GetString("LibraryAddedToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library {0} was successfuly deleted from project.
         /// </summary>
         public static string LibraryDeletedFromProject {
             get {
                 return ResourceManager.GetString("LibraryDeletedFromProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore completed. Files already up-to-date.
+        /// </summary>
+        public static string LibraryRestoredNoChange {
+            get {
+                return ResourceManager.GetString("LibraryRestoredNoChange", resourceCulture);
             }
         }
         
