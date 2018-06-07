@@ -11,6 +11,7 @@ using System;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Collections.Generic;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -26,8 +27,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _componentModel = VsHelpers.GetService<SComponentModel, IComponentModel>();
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.RestoreOnBuild);
-            var cmd = new OleMenuCommand(Execute, cmdId);
-            cmd.BeforeQueryStatus += BeforeQueryStatus;
+            var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
+            cmd.BeforeQueryStatus += BeforeQueryStatusHandlerAsync;
             commandService.AddCommand(cmd);
         }
 
@@ -43,7 +44,25 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Instance = new RestoreOnBuildCommand(package, commandService);
         }
 
-        private void BeforeQueryStatus(object sender, EventArgs e)
+        private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await BeforeQueryStatusAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async void ExecuteHandlerAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await ExecuteAsync(sender, e);
+            }
+            catch { }
+        }
+
+        private async Task BeforeQueryStatusAsync(object sender, EventArgs e)
         {
             var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
@@ -53,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
             }
 
-            ProjectItem item = VsHelpers.GetSelectedItem();
+            ProjectItem item = await VsHelpers.GetSelectedItemAsync();
 
             if (item != null && item.IsConfigFile() && (item.ContainingProject.IsKind(Constants.WAP) || 
                 VsHelpers.IsCapabilityMatch(item.ContainingProject, Constants.DotNetCoreWebCapability)))
@@ -74,14 +93,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private void Execute(object sender, EventArgs e)
+        private async Task ExecuteAsync(object sender, EventArgs e)
         {
-            ProjectItem item = VsHelpers.GetSelectedItem();
-            Project project = VsHelpers.GetProjectOfSelectedItem();
+            ProjectItem projectItem = await VsHelpers.GetSelectedItemAsync();
+            Project project = await VsHelpers.GetProjectOfSelectedItemAsync();
 
             try
             {
-                var dependencies = Dependencies.FromConfigFile(item.FileNames[1]);
+                var dependencies = Dependencies.FromConfigFile(projectItem.FileNames[1]);
                 IEnumerable<string> packageIds = dependencies.Providers.Select(p => p.NuGetPackageId).Distinct();
 
                 if (!_isPackageInstalled)
@@ -89,7 +108,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     if (!UserWantsToInstall())
                         return;
 
-                    System.Threading.Tasks.Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         Logger.LogEvent(Resources.Text.Nuget_InstallingPackage, LogLevel.Status);
 
@@ -113,7 +132,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
                 else
                 {
-                    System.Threading.Tasks.Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         Logger.LogEvent(Resources.Text.Nuget_UninstallingPackage, LogLevel.Status);
 

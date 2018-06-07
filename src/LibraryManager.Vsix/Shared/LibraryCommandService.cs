@@ -64,24 +64,24 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        public async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken)
         {
             Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(new[] { configFilePath }, cancellationToken);
             await RestoreAsync(manifests, cancellationToken);
         }
 
-        public async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken)
         {
             Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(configFilePaths, cancellationToken);
             await RestoreAsync(manifests, cancellationToken);
         }
 
-        public async Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken)
         {
             await RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest }, cancellationToken);
         }
 
-        public async Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken)
         {
             string taskTitle = GetTaskTitle(OperationType.Uninstall, libraryId);
             string errorMessage = string.Format(LibraryManager.Resources.Text.Uninstall_LibraryFailed, libraryId);
@@ -89,14 +89,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             await RunTaskAsync((internalToken) => UninstallLibraryAsync(configFilePath, libraryId, internalToken), taskTitle, errorMessage);
         }
 
-        public async Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken)
         {
             string taskTitle = GetTaskTitle(OperationType.Clean, string.Empty);
 
             await RunTaskAsync((internalToken) => CleanLibrariesAsync(configProjectItem, internalToken), taskTitle, LibraryManager.Resources.Text.Clean_OperationFailed);
         }
 
-        private async Task RestoreAsync(Dictionary<string, Manifest> manifests, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task RestoreAsync(Dictionary<string, Manifest> manifests, CancellationToken cancellationToken)
         {
             string taskTitle = GetTaskTitle(OperationType.Restore, string.Empty);
             string errorMessage = LibraryManager.Resources.Text.Restore_OperationFailed;
@@ -151,7 +151,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return manifests;
         }
 
-        private async Task CleanLibrariesAsync(ProjectItem configProjectItem, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task CleanLibrariesAsync(ProjectItem configProjectItem, CancellationToken cancellationToken)
         {
             Logger.LogEventsHeader(OperationType.Clean, string.Empty);
 
@@ -294,7 +294,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 foreach (ILibraryOperationResult state in results)
                 {
-                    if (state.Success)
+                    if (state.Success && !state.UpToDate)
                     {
                         IEnumerable<string> absoluteFiles = state.InstallationState.Files
                             .Select(file => Path.Combine(workingDirectory, state.InstallationState.DestinationPath, file)

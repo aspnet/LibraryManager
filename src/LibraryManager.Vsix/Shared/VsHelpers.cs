@@ -43,8 +43,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static void CheckFileOutOfSourceControl(string file)
+        public static async Task CheckFileOutOfSourceControlAsync(string file)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             if (!File.Exists(file) || DTE.Solution.FindProjectItem(file) == null)
             {
                 return;
@@ -61,8 +63,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
             };
         }
 
-        internal static ProjectItem GetSelectedItem()
+        internal static async Task OpenFileAsync(string configFilePath)
         {
+            if (!string.IsNullOrEmpty(configFilePath))
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                DTE?.ItemOperations?.OpenFile(configFilePath);
+            }
+        }
+
+        internal static async Task<ProjectItem> GetSelectedItemAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             ProjectItem projectItem = null;
 
             if (DTE?.SelectedItems.Count == 1)
@@ -74,21 +88,25 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return projectItem;
         }
 
-        public static Project GetProjectOfSelectedItem()
+        public static async Task<Project> GetProjectOfSelectedItemAsync()
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             Project project = null;
 
             if (DTE?.SelectedItems.Count == 1)
             {
-                SelectedItem selectedItem = VsHelpers.DTE.SelectedItems.Item(1);
+                SelectedItem selectedItem = DTE.SelectedItems.Item(1);
                 project = selectedItem.Project ?? selectedItem.ProjectItem?.ContainingProject;
             }
 
             return project;
         }
 
-        public static void AddFileToProject(this Project project, string file, string itemType = null)
+        public static async Task AddFileToProjectAsync(this Project project, string file, string itemType = null)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
             {
                 return;
@@ -153,8 +171,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         }
 
-        public static string GetRootFolder(this Project project)
+        public static async Task<string> GetRootFolderAsync(this Project project)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             if (project == null)
             {
                 return null;
@@ -263,9 +283,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        public static bool ProjectContainsManifestFile(Project project)
+        public static async Task<bool> ProjectContainsManifestFileAsync(Project project)
         {
-            string configFilePath = Path.Combine(GetRootFolder(project), Constants.ConfigFileName);
+            string rootPath = await GetRootFolderAsync(project);
+            string configFilePath = Path.Combine(rootPath, Constants.ConfigFileName);
 
             if (File.Exists(configFilePath))
             {
@@ -275,7 +296,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return false;
         }
 
-        public static bool SolutionContainsManifestFile(IVsSolution solution)
+        public static async Task<bool> SolutionContainsManifestFileAsync(IVsSolution solution)
         {
             IEnumerable<IVsHierarchy> hierarchies = GetProjectsInSolution(solution, __VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION);
 
@@ -283,7 +304,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 Project project = GetDTEProject(hierarchy);
 
-                if (project != null && ProjectContainsManifestFile(project))
+                if (project != null && await ProjectContainsManifestFileAsync(project))
                 {
                     return true;
                 }

@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         /// <param name="configProjectItem">ProjectItem for the manifest file (libman.json)</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken = default(CancellationToken));
+        Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken);
 
         /// <summary>
         /// Restore libraries from multiple manifest files (libman.json)
@@ -29,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <remarks>Used on the Solution Context Menu option to restore all libraries</remarks>
-        Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken = default(CancellationToken));
+        Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken);
 
         /// <summary>
         /// Restore libraries from a single manifest file (libman.json)
@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         /// <param name="configFilePaths">Paths to libman.json files</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task RestoreAsync(string configFilePaths, CancellationToken cancellationToken = default(CancellationToken));
+        Task RestoreAsync(string configFilePaths, CancellationToken cancellationToken);
 
         /// <summary>
         /// This overload is needed for when Manifest in memory so we don't need to read from file in disk
@@ -46,7 +46,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         /// <param name="manifest">In memory Manifest</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken = default(CancellationToken));
+        Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken);
 
         /// <summary>
         /// Unsintalls a library from a manifest 
@@ -55,7 +55,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         /// <param name="libraryId">library ID</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken = default(CancellationToken));
+        Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Returns true if there is already one operation in progress
