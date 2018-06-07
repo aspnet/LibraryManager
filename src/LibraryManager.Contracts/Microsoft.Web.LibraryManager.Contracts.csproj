@@ -17,10 +17,6 @@
         <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="System.Net.Http" Version="$(SystemNetHttpPackageVersion)" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
-    </ItemGroup>
-
   <!-- Warning if Multilingual App Toolkit isn't installed -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
     <Target Name="MATPrerequisite" BeforeTargets="PrepareForBuild" Condition="!Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets')" Label="MultilingualAppToolkit">
