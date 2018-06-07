@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Test.Apex.Editor;
 using Microsoft.Test.Apex.VisualStudio.Editor;
 using Omni.Common;
@@ -26,6 +25,26 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                     errorMessage = String.Concat(errorMessage, "\r\n*Didn't* fail when forcing completion with double timeout");
                 }
 
+                throw new TimeoutException(errorMessage);
+            }
+        }
+
+        public static void WaitForCompletionEntry(IVisualStudioTextEditorTestExtension editor, string expectedEntry, bool caseInsensitive, int timeout = 1000)
+        {
+            WaitForCompletionEntries(editor, new[] { expectedEntry }, caseInsensitive, timeout);
+        }
+
+        public static void WaitForCompletionEntryNotPresent(IVisualStudioTextEditorTestExtension editor, string entryText, bool caseInsensitive, int timeout = 1000)
+        {
+            string errorMessage = WaitForCompletionEntriesHelper(editor, new[] { entryText }, caseInsensitive, timeout);
+
+            if (errorMessage == null)
+            {
+                errorMessage = entryText + " is presented in the completion list.";
+            }
+
+            if (!errorMessage.Contains("Timed out waiting for completion entry: "))
+            {
                 throw new TimeoutException(errorMessage);
             }
         }
