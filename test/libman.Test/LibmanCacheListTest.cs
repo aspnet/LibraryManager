@@ -44,6 +44,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             string expectedString = @"Cache contents:
 ---------------
+unpkg:
+    (empty)
 filesystem:
     (empty)
 cdnjs:
@@ -74,6 +76,8 @@ cdnjs:
 
             var expectedString = @"Cache contents:
 ---------------
+unpkg:
+    (empty)
 filesystem:
     (empty)
 cdnjs:

@@ -178,6 +178,10 @@
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
           <target state="new">Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></target>
         </trans-unit>
+        <trans-unit id="LibraryDetail_Unavailable" translate="yes" xml:space="preserve">
+          <source>Unavailable</source>
+          <target state="new">Unavailable</target>
+        </trans-unit>
       </group>
     </body>
   </file>
