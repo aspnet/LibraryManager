@@ -9,43 +9,4 @@
       https://vside.myget.org/F/vs-impl/api/v3/index.json;
     </RestoreSources>
   </PropertyGroup>
-  <PropertyGroup>
-    <MSBuildPackageVersion>15.1.1012</MSBuildPackageVersion>
-    <NerdbankGitVersioningPackageVersion>2.1.23</NerdbankGitVersioningPackageVersion>
-    <NewtonSoftJsonPackageVersion>9.0.1</NewtonSoftJsonPackageVersion>
-    <NET45NewtonSoftJsonPackageVersion>8.0.3</NET45NewtonSoftJsonPackageVersion>
-    <SystemNetHttpPackageVersion>4.3.1</SystemNetHttpPackageVersion>
-    <SystemRuntimeLoaderPackageVersion>4.3.0</SystemRuntimeLoaderPackageVersion>
-
-    <!-- VSIX project specific dependencies-->
-    <EnvDTEPackageVersion>8.0.2</EnvDTEPackageVersion>
-    <MicrosoftVisualStudioComponentModelHostPackageVersion>15.0.26201</MicrosoftVisualStudioComponentModelHostPackageVersion>
-    <MicrosoftVisualStudioEditorPackageVersion>15.0.26201</MicrosoftVisualStudioEditorPackageVersion>
-    <MicrosoftVisualStudioImageCatalogPackageVersion>15.0.26201</MicrosoftVisualStudioImageCatalogPackageVersion>
-    <MicrosoftVisualStudioImagingPackageVersion>15.0.26201</MicrosoftVisualStudioImagingPackageVersion>
-    <MicrosoftVisualStudioImagingInterop14_0DesignTimePackageVersion>15.0.25726-Preview5</MicrosoftVisualStudioImagingInterop14_0DesignTimePackageVersion>
-    <MicrosoftVisualStudioLanguageIntellisensePackageVersion>15.0.26201</MicrosoftVisualStudioLanguageIntellisensePackageVersion>
-    <MicrosoftVisualStudioShell15_0PackageVersion>15.0.26201</MicrosoftVisualStudioShell15_0PackageVersion>
-    <MicrosoftVisualStudioShellFrameworkPackageVersion>15.6.27413</MicrosoftVisualStudioShellFrameworkPackageVersion>
-    <MicrosoftVisualStudioShellInterop10_0PackageVersion>10.0.30319</MicrosoftVisualStudioShellInterop10_0PackageVersion>
-    <MicrosoftVisualStudioShellInterop11_0PackageVersion>11.0.61030</MicrosoftVisualStudioShellInterop11_0PackageVersion>
-    <MicrosoftVisualStudioShellInterop14_0DesignTimePackageVersion>15.0.25726-Preview5</MicrosoftVisualStudioShellInterop14_0DesignTimePackageVersion>
-    <MicrosoftVisualStudioTelemetryPackageVersion>15.3.789-masterCC863119</MicrosoftVisualStudioTelemetryPackageVersion>
-    <MicrosoftVSSDKBuildToolsPackageVersion>15.0.26201</MicrosoftVSSDKBuildToolsPackageVersion>
-    <NuGetVisualStudioPackageVersion>4.6.1</NuGetVisualStudioPackageVersion>
-  </PropertyGroup>
-
-  <!-- Test specific dependencies. -->
-  <PropertyGroup>
-    <MicrosoftNETTestSDKPackageVersion>15.0.0</MicrosoftNETTestSDKPackageVersion>
-    <MSTestAdapterPackageVersion>1.2.1</MSTestAdapterPackageVersion>
-    <MSTestFrameworkPackageVersion>1.2.1</MSTestFrameworkPackageVersion>
-    <MicrosoftTestApexVisualStudioPackageVersion>15.8.27703</MicrosoftTestApexVisualStudioPackageVersion>
-  </PropertyGroup>
-
-  <!-- Global tool specific package version-->
-  <PropertyGroup>
-    <MicrosoftNETCoreDotNetAppHostPackageVersion>2.1.0-rtm-26508-02</MicrosoftNETCoreDotNetAppHostPackageVersion>
-    <MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>2.1.0-rtm-30700</MicrosoftExtensionsCommandLineUtilsSourcesPackageVersion>
-  </PropertyGroup>
 </Project>

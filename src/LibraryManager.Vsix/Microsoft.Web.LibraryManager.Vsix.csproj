@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsDefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
   <Import Project="..\..\LibraryManager.Settings.targets" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
@@ -200,23 +199,23 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EnvDTE" Version="$(EnvDTEPackageVersion)" />
-    <PackageReference Include="EnvDTE80" Version="$(EnvDTEPackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="$(MicrosoftVisualStudioComponentModelHostPackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Editor" Version="$(MicrosoftVisualStudioEditorPackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.ImageCatalog" version="$(MicrosoftVisualStudioImageCatalogPackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Imaging" Version="$(MicrosoftVisualStudioImagingPackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" Version="$(MicrosoftVisualStudioImagingInterop14_0DesignTimePackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Language.Intellisense" Version="$(MicrosoftVisualStudioLanguageIntellisensePackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" version="$(MicrosoftVisualStudioShell15_0PackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.Framework" version="$(MicrosoftVisualStudioShellFrameworkPackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.10.0" version="$(MicrosoftVisualStudioShellInterop10_0PackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Version="$(MicrosoftVisualStudioShellInterop11_0PackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" version="$(MicrosoftVisualStudioShellInterop14_0DesignTimePackageVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Telemetry" version="$(MicrosoftVisualStudioTelemetryPackageVersion)" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" version="$(MicrosoftVSSDKBuildToolsPackageVersion)" PrivateAssets="all" />
-    <PackageReference Include="Newtonsoft.Json" Version="$(NET45NewtonSoftJsonPackageVersion)" />
-    <PackageReference Include="Nuget.VisualStudio" Version="$(NuGetVisualStudioPackageVersion)" />
+    <PackageReference Include="EnvDTE" />
+    <PackageReference Include="EnvDTE80" />
+    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" />
+    <PackageReference Include="Microsoft.VisualStudio.Editor" />
+    <PackageReference Include="Microsoft.VisualStudio.ImageCatalog" />
+    <PackageReference Include="Microsoft.VisualStudio.Imaging" />
+    <PackageReference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" />
+    <PackageReference Include="Microsoft.VisualStudio.Language.Intellisense" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Framework" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.10.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.11.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" />
+    <PackageReference Include="Microsoft.VisualStudio.Telemetry" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Nuget.VisualStudio" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="Commands\CommandTable\VSCommandTable.en.vsct">

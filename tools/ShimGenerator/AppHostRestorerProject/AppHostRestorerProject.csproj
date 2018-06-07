@@ -2,9 +2,10 @@
   <!-- <Import Project="$(MSBuildThisFileDirectory)\..\..\..\build\dependencies.props" /> -->
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RuntimeFrameworkVersion>$(MicrosoftNETCoreDotNetAppHostPackageVersion)</RuntimeFrameworkVersion>
+    <!-- This needs to be kept in sync with the package version specified in /build/PackageVersions.targets -->
+    <RuntimeFrameworkVersion>2.1.0</RuntimeFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.DotnetAppHost" Version="$(MicrosoftNETCoreDotNetAppHostPackageVersion)" />
+    <PackageReference Include="Microsoft.NETCore.DotnetAppHost" />
   </ItemGroup>
 </Project>
