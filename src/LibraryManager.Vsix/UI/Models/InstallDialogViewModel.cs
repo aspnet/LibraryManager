@@ -378,7 +378,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
                 project?.AddFileToProjectAsync(_configFileName);
 
-                await _libraryCommandService.RestoreAsync(_configFileName).ConfigureAwait(false);
+                await _libraryCommandService.RestoreAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
 
                 _dispatcher.Invoke(() =>
                 {

@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
         }
 
-        private async Task ExecuteHandlerAsync(object sender, EventArgs e)
+        private async void ExecuteHandlerAsync(object sender, EventArgs e)
         {
             try
             {
@@ -74,10 +74,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     manifest.DefaultProvider = "cdnjs";
                     manifest.Version = Manifest.SupportedVersions.Max().ToString();
 
-                        await manifest.SaveAsync(configFilePath, CancellationToken.None);
-                        await project.AddFileToProjectAsync(configFilePath);
+                    await manifest.SaveAsync(configFilePath, CancellationToken.None);
+                    await project.AddFileToProjectAsync(configFilePath);
 
-                        Telemetry.TrackUserTask("ConfigFileCreated");
+                    Telemetry.TrackUserTask("ConfigFileCreated");
                     }
 
                     await VsHelpers.OpenFileAsync(configFilePath);

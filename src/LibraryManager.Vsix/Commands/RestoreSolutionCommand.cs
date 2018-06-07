@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -90,7 +91,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
-            await _libraryCommandService.RestoreAsync(configFiles);
+            await _libraryCommandService.RestoreAsync(configFiles, CancellationToken.None);
 
             Telemetry.TrackUserTask("restoresolution");
         }

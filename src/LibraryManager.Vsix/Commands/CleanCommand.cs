@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel.Design;
+using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
@@ -22,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.Clean);
-            var cmd = new OleMenuCommand(ExecuteCommandHandlerAsync, cmdId);
+            var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatusHandlerAsync;
             commandService.AddCommand(cmd);
 
@@ -82,7 +83,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (configProjectItem != null)
             {
-                await _libraryCommandService.CleanAsync(configProjectItem);
+                await _libraryCommandService.CleanAsync(configProjectItem, CancellationToken.None);
             }
         }
 

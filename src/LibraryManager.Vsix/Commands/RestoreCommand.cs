@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel.Design;
+using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
@@ -75,7 +76,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (!_libraryCommandService.IsOperationInProgress && configProjectItem != null)
             {
-                await _libraryCommandService.RestoreAsync(configProjectItem.FileNames[1] );
+                await _libraryCommandService.RestoreAsync(configProjectItem.FileNames[1], CancellationToken.None);
             }
         }
     }
