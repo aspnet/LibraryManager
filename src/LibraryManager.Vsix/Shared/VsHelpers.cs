@@ -253,7 +253,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return false;
         }
 
-        public static async Task<bool> DeleteFilesFromProjectAsync (Project project, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
+        public static async Task<bool> DeleteFilesFromProjectAsync(Project project, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
