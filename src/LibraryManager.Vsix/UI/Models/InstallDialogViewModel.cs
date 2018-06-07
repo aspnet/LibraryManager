@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
@@ -45,6 +46,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             List<IProvider> providers = new List<IProvider>();
             foreach (IProvider provider in deps.Providers.OrderBy(x => x.Id))
             {
+                if (provider.Id == UnpkgProvider.IdText)
+                {
+                    continue;
+                }
+
                 ILibraryCatalog catalog = provider.GetCatalog();
 
                 if (catalog == null)
