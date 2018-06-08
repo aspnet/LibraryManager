@@ -22,11 +22,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         }
 
         [TestMethod]
-        public void FileSaveRestore_Cdnjs_AddNewLibrariesWithoutSpecifingFiles()
+        public void FileSaveRestore_Cdnjs_AddNewLibraryWithoutSpecifingFiles()
         {
             _libManConfig.Open();
             string[] expectedFilesAndFolders = new[] {
                 "jquery.js",
+                "jquery.min.js",
             };
 
             Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
@@ -53,12 +54,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         }
 
         [TestMethod]
-        public void FileSaveRestore_Unpkg_AddNewLibrariesWithoutSpecifingFiles()
+        public void FileSaveRestore_Unpkg_AddNewLibraryWithoutSpecifingFiles()
         {
             _libManConfig.Open();
             string[] expectedFilesAndFolders = new[] {
                 "LICENSE.txt",
-                "dist"
+                "dist",
             };
 
             Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
@@ -81,6 +82,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             _libManConfig.Save();
             string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
             LibmanTestsUtility.WaitForRestoredFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
+        }
+
+        [TestMethod]
+        public void FileSaveRestore_Cdnjs_AddNewLibraryWithSpecifingFiles()
+        {
+
         }
     }
 }

@@ -50,6 +50,25 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
+        public static void WaitForRestoredFile(string cwd, string expectedFileOrFolder, bool caseInsensitive, int timeout = 10000)
+        {
+            WaitForRestoredFiles(cwd, new[] { expectedFileOrFolder }, caseInsensitive, timeout);
+        }
+
+        public static void WaitForRestoredFileNotPresent(string cwd, string expectedFileOrFolder, bool caseInsensitive, int timeout = 10000)
+        {
+            string errorMessage = WaitForRestoredFilesHelper(cwd, new[] { expectedFileOrFolder }, caseInsensitive, timeout);
+
+            if (errorMessage == null)
+            {
+                errorMessage = expectedFileOrFolder + " should not be restored.";
+            }
+            if (!errorMessage.Contains("Timed out waiting for: "))
+            {
+                throw new TimeoutException(errorMessage);
+            }
+        }
+
         private static string WaitForRestoredFilesHelper(string cwd, IEnumerable<string> expectedFilesAndFolders, bool caseInsensitive, int timeout)
         {
             string errorMessage = null;
