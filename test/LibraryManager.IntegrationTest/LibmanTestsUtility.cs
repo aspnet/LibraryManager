@@ -149,11 +149,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
-        public static void WaitForCompletionEntry(IVisualStudioTextEditorTestExtension editor, string expectedEntry, bool caseInsensitive, int timeout = 1000)
-        {
-            WaitForCompletionEntries(editor, new[] { expectedEntry }, caseInsensitive, timeout);
-        }
-
         private static string WaitForCompletionEntriesHelper(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout)
         {
             string errorMessage = null;
