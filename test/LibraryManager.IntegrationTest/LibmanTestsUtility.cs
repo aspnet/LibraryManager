@@ -134,6 +134,26 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             WaitForCompletionEntries(editor, new[] { expectedEntry }, caseInsensitive, timeout);
         }
 
+        public static void WaitForCompletionEntryNotPresent(IVisualStudioTextEditorTestExtension editor, string entryText, bool caseInsensitive, int timeout = 1000)
+        {
+            string errorMessage = WaitForCompletionEntriesHelper(editor, new[] { entryText }, caseInsensitive, timeout);
+
+            if (errorMessage == null)
+            {
+                errorMessage = entryText + " is presented in the completion list.";
+            }
+
+            if (!errorMessage.Contains("Timed out waiting for completion entry: "))
+            {
+                throw new TimeoutException(errorMessage);
+            }
+        }
+
+        public static void WaitForCompletionEntry(IVisualStudioTextEditorTestExtension editor, string expectedEntry, bool caseInsensitive, int timeout = 1000)
+        {
+            WaitForCompletionEntries(editor, new[] { expectedEntry }, caseInsensitive, timeout);
+        }
+
         private static string WaitForCompletionEntriesHelper(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout)
         {
             string errorMessage = null;
@@ -142,6 +162,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 try
                 {
                     IVisualStudioCompletionListTestExtension completionList = editor.Intellisense.GetActiveCompletionList();
+
                     if (completionList == null)
                     {
                         errorMessage = "Completion list not present.";
@@ -154,6 +175,13 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                         comparisonSet.Add(item.Text);
                     }
 
+                    // Make another call if it's still loading.
+                    if (comparisonSet.Count == 1 && comparisonSet.Contains(Vsix.Resources.Text.Loading))
+                    {
+                        errorMessage = "Completion list not present.";
+                        return false;
+                    }
+
                     errorMessage = null;
                     if (expectedCompletionEntries != null)
                     {
@@ -164,6 +192,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                                 errorMessage = String.Concat(errorMessage, "\r\nTimed out waiting for completion entry: ", curEntry, ".");
                             }
                         }
+
+                        // Do not force another call if we already got the whole completion list.
+                        return true;
                     }
                 }
                 catch (EditorException exc)
