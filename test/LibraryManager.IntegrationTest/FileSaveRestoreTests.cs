@@ -29,13 +29,51 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 "jquery.js",
             };
 
-            Editor.Caret.MoveDown();
+            Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
             Editor.Caret.MoveToEndOfLine();
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"defaultProvider\": \"cdnjs\",");
+            Editor.KeyboardCommands.Type("\"defaultProvider\":");
+            LibmanTestsUtility.WaitForCompletionEntry(Editor, "cdnjs", caseInsensitive: true);
+            Editor.KeyboardCommands.Type("cdnjs");
 
-            Editor.Caret.MoveDown(3);
-            Editor.KeyboardCommands.Type("\"library\": \"jquery@3.3.1\",");
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
+            Editor.KeyboardCommands.Type("\"library\":");
+            LibmanTestsUtility.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true, timeout: 5000);
+            Editor.KeyboardCommands.Type("jquery@3.3.1");
+            Editor.KeyboardCommands.Right();
+            Editor.KeyboardCommands.Type(",");
+            Editor.KeyboardCommands.Enter();
+            Editor.KeyboardCommands.Type("\"destination\":");
+            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
+
+            _libManConfig.Save();
+            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
+            LibmanTestsUtility.WaitForRestoredFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
+        }
+
+        [TestMethod]
+        public void FileSaveRestore_Unpkg_AddNewLibrariesWithoutSpecifingFiles()
+        {
+            _libManConfig.Open();
+            string[] expectedFilesAndFolders = new[] {
+                "LICENSE.txt",
+                "dist"
+            };
+
+            Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
+            Editor.Caret.MoveToEndOfLine();
+            Editor.KeyboardCommands.Enter();
+            Editor.KeyboardCommands.Type("\"defaultProvider\":");
+            LibmanTestsUtility.WaitForCompletionEntry(Editor, "unpkg", caseInsensitive: true);
+            Editor.KeyboardCommands.Type("unpkg");
+
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
+            Editor.KeyboardCommands.Type("\"library\":");
+            Editor.KeyboardCommands.Type("jquery@3.3.1");
+            Editor.KeyboardCommands.Right();
+            Editor.KeyboardCommands.Type(",");
             Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"destination\":");
             Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
