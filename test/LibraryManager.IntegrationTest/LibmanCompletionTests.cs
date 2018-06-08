@@ -26,8 +26,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 "wwwroot/",
             };
 
-            Editor.Caret.MoveToBeginningOfFile();
-            Editor.Caret.MoveDown(4);
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
             Editor.KeyboardCommands.Type("\"destination\":");
 
             LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
@@ -44,8 +44,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 "unpkg",
             };
 
-            Editor.Caret.MoveToBeginningOfFile();
-            Editor.Caret.MoveDown(4);
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
             Editor.KeyboardCommands.Type("\"provider\":");
 
             LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
@@ -62,8 +62,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 "unpkg",
             };
 
-            Editor.Caret.MoveToBeginningOfFile();
-            Editor.Caret.MoveDown();
+            Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
             Editor.Caret.MoveToEndOfLine();
             Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"defaultProvider\":");
@@ -80,8 +79,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 "wwwroot/",
             };
 
-            Editor.Caret.MoveToBeginningOfFile();
-            Editor.Caret.MoveDown();
+            Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
             Editor.Caret.MoveToEndOfLine();
             Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"defaultDestination\":");
@@ -98,19 +96,13 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 "jquery",
             };
 
-            Editor.Caret.MoveToBeginningOfFile();
-            Editor.Caret.MoveDown(4);
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
             Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
             LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
-
-            Editor.KeyboardCommands.Type("j");
-            LibmanTestsUtility.WaitForCompletionEntryNotPresent(Editor, "bootstrap", caseInsensitive: true);
-
-            Editor.KeyboardCommands.Type("q");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true);
         }
 
         [TestMethod]
@@ -119,8 +111,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             _libManConfig.Open();
 
-            Editor.Caret.MoveToBeginningOfFile();
-            Editor.Caret.MoveDown(4);
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
             Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
             Editor.KeyboardCommands.Enter();
 
@@ -140,19 +132,13 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 "wwwroot/",
             };
 
-            Editor.Caret.MoveToBeginningOfFile();
-            Editor.Caret.MoveDown(4);
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
             Editor.KeyboardCommands.Type("\"provider\": \"filesystem\",");
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
             LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
-
-            Editor.KeyboardCommands.Type("w");
-            LibmanTestsUtility.WaitForCompletionEntryNotPresent(Editor, "Properties/", caseInsensitive: true);
-
-            Editor.KeyboardCommands.Type("w");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "wwwroot/", caseInsensitive: true);
         }
 
         [TestMethod]
@@ -165,19 +151,13 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 "jquery",
             };
 
-            Editor.Caret.MoveToBeginningOfFile();
-            Editor.Caret.MoveDown(4);
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
             Editor.KeyboardCommands.Type("\"provider\": \"unpkg\",");
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
             LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
-
-            Editor.KeyboardCommands.Type("j");
-            LibmanTestsUtility.WaitForCompletionEntryNotPresent(Editor, "bootstrap", caseInsensitive: true);
-
-            Editor.KeyboardCommands.Type("q");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true);
         }
     }
 }
