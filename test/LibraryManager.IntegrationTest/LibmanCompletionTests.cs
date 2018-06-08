@@ -92,7 +92,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             _libManConfig.Open();
             string[] expectedCompletionEntries = new[] {
-                "bootstrap",
                 "jquery",
             };
 

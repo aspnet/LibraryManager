@@ -71,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                     }
 
                     // Make another call if it's still loading.
-                    if (comparisonSet.Count == 1 && comparisonSet.Contains("Loading..."))
+                    if (comparisonSet.Count == 1 && comparisonSet.Contains(Vsix.Resources.Text.Loading))
                     {
                         errorMessage = "Completion list not present.";
                         return false;
