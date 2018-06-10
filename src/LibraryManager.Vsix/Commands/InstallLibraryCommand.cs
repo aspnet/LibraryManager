@@ -98,7 +98,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     int hwnd = dte.MainWindow.HWnd;
                     WindowInteropHelper windowInteropHelper = new WindowInteropHelper(dialog);
 
-                    // Set the Visual Studio window's handle as the owner of the dialog
+                    // Set visual studio window's handle as the owner of the dialog.
+                    // This will remove the dialog from alt-tab list and will not allow the user to switch the dialog box to the background 
                     windowInteropHelper.Owner = new IntPtr(hwnd);
 
                     dialog.ShowDialog();
