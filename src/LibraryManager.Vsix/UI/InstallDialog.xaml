@@ -15,9 +15,9 @@
                  Title="{x:Static resources:Text.AddClientSideLibrary}"
                  Height="350" Width="500"
                  PreviewMouseDown="ThemedWindow_PreviewMouseDown"
-                 WindowStartupLocation="CenterOwner"
                  ShowInTaskbar="False"
-                 ResizeMode="CanResizeWithGrip">
+                 ResizeMode="CanResizeWithGrip"
+                 WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>

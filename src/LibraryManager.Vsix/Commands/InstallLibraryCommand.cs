@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Windows.Interop;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
 using Task = System.Threading.Tasks.Task;
 
@@ -91,6 +93,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
 
                     UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder);
+
+                    var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+                    int hwnd = dte.MainWindow.HWnd;
+                    WindowInteropHelper windowInteropHelper = new WindowInteropHelper(dialog);
+
+                    // Set the Visual Studio window's handle as the owner of the dialog
+                    windowInteropHelper.Owner = new IntPtr(hwnd);
+
                     dialog.ShowDialog();
                 }
             }
