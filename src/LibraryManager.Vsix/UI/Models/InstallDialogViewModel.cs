@@ -319,12 +319,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private bool CanInstallPackage()
         {
-            if (!_isInstalling)
+            if (_isInstalling)
             {
-                AnyFileSelected = IsAnyFileSelected(DisplayRoots);
+                return false;
             }
 
-            return !_isInstalling && AnyFileSelected;
+            AnyFileSelected = IsAnyFileSelected(DisplayRoots);
+            return AnyFileSelected;
         }
 
         private static bool IsAnyFileSelected(IReadOnlyList<PackageItem> children)
@@ -333,15 +334,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             {
                 foreach (PackageItem child in children)
                 {
-                    if (child.Children.Count != 0)
+                    if (child.IsChecked.HasValue && child.IsChecked.Value)
                     {
-                        if (IsAnyFileSelected(child.Children))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
 
-                    if (child.IsChecked.HasValue && child.IsChecked.Value)
+                    if (IsAnyFileSelected(child.Children))
                     {
                         return true;
                     }
