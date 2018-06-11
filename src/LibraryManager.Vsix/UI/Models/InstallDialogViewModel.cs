@@ -319,38 +319,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private bool CanInstallPackage()
         {
-            if (DisplayRoots != null)
-            {
-                CheckIfFilesAreSelected(DisplayRoots);
-            }
-
-            return !_isInstalling && !NoFilesSelected;
+            return !_isInstalling && IsAtleastOneFileSelected(DisplayRoots);
         }
 
-        private void CheckIfFilesAreSelected(IReadOnlyList<PackageItem> children)
+        private bool IsAtleastOneFileSelected(IReadOnlyList<PackageItem> children)
         {
-            foreach (PackageItem child in children)
+            if (children != null)
             {
-                if (child.Children.Any())
+                foreach (PackageItem child in children)
                 {
-                    CheckIfFilesAreSelected(child.Children);
-
-                    if (!NoFilesSelected)
+                    if (child.Children.Count != 0)
                     {
-                        return;
+                        IsAtleastOneFileSelected(child.Children);
+
+                        if (!NoFilesSelected)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (child.IsChecked.HasValue && child.IsChecked.Value)
+                    {
+                        NoFilesSelected = false;
+                        return true;
+                    }
+                    else
+                    {
+                        NoFilesSelected = true;
                     }
                 }
-
-                if (child.IsChecked.HasValue && child.IsChecked.Value)
-                {
-                    NoFilesSelected = false;
-                    return;
-                }
-                else
-                {
-                    NoFilesSelected = true;
-                }
             }
+
+            return false;
         }
 
         private async void InstallPackageAsync()
