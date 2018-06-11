@@ -146,7 +146,6 @@
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
     <Compile Include="Shared\WpfUtil.cs" />
-    <Compile Include="UI\HideResizeButtons.cs" />
     <Compile Include="UI\Models\FileSelection.cs" />
     <Compile Include="UI\Models\FileSelectionType.cs" />
     <Compile Include="UI\Models\InstallationFolder.cs" />

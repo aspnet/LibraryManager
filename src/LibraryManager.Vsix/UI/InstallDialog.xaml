@@ -1,20 +1,23 @@
-﻿<Window x:Class="Microsoft.Web.LibraryManager.Vsix.UI.InstallDialog"
-        x:ClassModifier="internal"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
-        xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
-        xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
-        xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
-        xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
-        xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
-        mc:Ignorable="d" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}"
-        Title="{x:Static resources:Text.AddClientSideLibrary}"
-        Height="350" Width="500"
-        PreviewMouseDown="ThemedWindow_PreviewMouseDown"
-        ResizeMode="CanResizeWithGrip">
+﻿<ui:DialogWindow x:Class="Microsoft.Web.LibraryManager.Vsix.UI.InstallDialog"
+                 x:ClassModifier="internal"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
+                 xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
+                 xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
+                 xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
+                 xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
+                 xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
+                 mc:Ignorable="d" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}"
+                 xmlns:ui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+                 Title="{x:Static resources:Text.AddClientSideLibrary}"
+                 Height="350" Width="500"
+                 PreviewMouseDown="ThemedWindow_PreviewMouseDown"
+                 ShowInTaskbar="False"
+                 ResizeMode="CanResizeWithGrip"
+                 WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
@@ -115,12 +118,13 @@
                                              ConverterParameter=ChooseSpecificFilesToInstall}" />
         </StackPanel>
 
-        <controls:PackageContentsTreeView Grid.Row="2"   
-                                          Grid.ColumnSpan="4" 
-                                          BorderBrush="Black"
-                                          BorderThickness="0.5"
-                                          Margin="0 0 0 9"
-                                          x:Name="LibraryFilesToInstallTreeView" />
+        <Border Grid.Row="2"   
+                Grid.ColumnSpan="4" 
+                Margin="0 0 0 9"
+                BorderBrush="Black"
+                BorderThickness="1">
+            <controls:PackageContentsTreeView x:Name="LibraryFilesToInstallTreeView" />
+        </Border>
 
         <Label Grid.Row="2" 
                Grid.ColumnSpan="4" 
@@ -201,4 +205,4 @@
             </Button>
         </DockPanel>
     </Grid>
-</Window>
+</ui:DialogWindow>

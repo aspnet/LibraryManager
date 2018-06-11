@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
-    internal partial class InstallDialog
+    internal partial class InstallDialog : DialogWindow
     {
         private readonly IDependencies _deps;
         private readonly string _fullPath;
@@ -31,14 +32,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
             LostKeyboardFocus += InstallDialog_LostKeyboardFocus;
             Loaded += OnLoaded;
-        }
-
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-            // Hide minimize and maximize buttons. 
-            // ShowDialog() call will block until the user closes the window. So we shouldn't be providing any resizing options.
-            this.HideMinimizeAndMaximizeButtons();
         }
 
         private void InstallDialog_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
