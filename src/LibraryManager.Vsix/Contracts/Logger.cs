@@ -141,7 +141,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             else
             {
-                string partialSuccessText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
+                messageText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
             }
 
             LogEvent(messageText, LogLevel.Operation);
