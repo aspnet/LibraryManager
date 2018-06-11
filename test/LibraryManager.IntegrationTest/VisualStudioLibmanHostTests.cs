@@ -67,6 +67,14 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
+        public string SolutionRootPath
+        {
+            get
+            {
+                return _solutionRootPath;
+            }
+        }
+
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
         {

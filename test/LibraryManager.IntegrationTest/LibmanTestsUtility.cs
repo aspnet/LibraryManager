@@ -108,6 +108,65 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             return errorMessage;
         }
 
+        public static void WaitForDeletedFiles(string cwd, IEnumerable<string> deletedFilesAndFolders, bool caseInsensitive, int timeout = 10000)
+        {
+            string errorMessage = WaitForDeletedFilesHelper(cwd, deletedFilesAndFolders, caseInsensitive, timeout);
+
+            if (errorMessage != null)
+            {
+                string newErrorMessage = WaitForDeletedFilesHelper(cwd, deletedFilesAndFolders, caseInsensitive, timeout);
+
+                if (newErrorMessage != null)
+                {
+                    errorMessage = String.Concat(errorMessage, "\r\nFailed even when forcing completion with double timeout");
+                }
+                else
+                {
+                    errorMessage = String.Concat(errorMessage, "\r\n*Didn't* fail when forcing completion with double timeout");
+                }
+
+                throw new TimeoutException(errorMessage);
+            }
+        }
+
+        public static void WaitForDeletedFile(string cwd, string deletedFileOrFolder, bool caseInsensitive, int timeout = 10000)
+        {
+            WaitForDeletedFiles(cwd, new[] { deletedFileOrFolder }, caseInsensitive, timeout);
+        }
+
+        private static string WaitForDeletedFilesHelper(string cwd, IEnumerable<string> deletedFilesAndFolders, bool caseInsensitive, int timeout)
+        {
+            string errorMessage = null;
+
+            WaitFor.TryIsTrue(() =>
+            {
+                try
+                {
+                    HashSet<string> topLevelItems = GetTopLevelDirectoriesAndFiles(cwd, caseInsensitive);
+
+                    errorMessage = null;
+                    if (deletedFilesAndFolders != null)
+                    {
+                        foreach (string item in deletedFilesAndFolders)
+                        {
+                            if (topLevelItems.Contains(item))
+                            {
+                                errorMessage = string.Concat(errorMessage, "\r\nTimed out waiting for: ", item, " to be deleted.");
+                            }
+                        }
+                    }
+                }
+                catch (Exception exc)
+                {
+                    errorMessage = exc.ToString();
+                }
+
+                return errorMessage == null;
+            }, TimeSpan.FromMilliseconds(timeout), TimeSpan.FromMilliseconds(500));
+
+            return errorMessage;
+        }
+
         public static void WaitForCompletionEntries(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout = 1000)
         {
             string errorMessage = WaitForCompletionEntriesHelper(editor, expectedCompletionEntries, caseInsensitive, timeout);
