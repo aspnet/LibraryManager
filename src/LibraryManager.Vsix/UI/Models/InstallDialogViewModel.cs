@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private string _packageId;
         private ILibrary _selectedPackage;
         private FileSelectionType _fileSelectionType;
-        private bool _noFilesSelected;
+        private bool _anyFileSelected;
         private bool _isTreeViewEmpty;
 
         public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
@@ -39,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             _deps = deps;
             _dispatcher = dispatcher;
             _closeDialog = closeDialog;
-            _noFilesSelected = true;
+            _anyFileSelected = false;
             _isTreeViewEmpty = true;
 
             List<IProvider> providers = new List<IProvider>();
@@ -126,7 +126,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         SelectedPackage = null;
                     }
 
-                    NoFilesSelected = true;
+                    AnyFileSelected = false;
                     DisplayRoots = null;
                 }
                 else if (Set(ref _packageId, value))
@@ -311,18 +311,23 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             item.IsExpanded = shouldBeOpen;
         }
 
-        public bool NoFilesSelected
+        public bool AnyFileSelected
         {
-            get { return _noFilesSelected; }
-            set { Set(ref _noFilesSelected, value); }
+            get { return _anyFileSelected; }
+            set { Set(ref _anyFileSelected, value); }
         }
 
         private bool CanInstallPackage()
         {
-            return !_isInstalling && IsAtleastOneFileSelected(DisplayRoots);
+            if (!_isInstalling)
+            {
+                AnyFileSelected = IsAnyFileSelected(DisplayRoots);
+            }
+
+            return !_isInstalling && AnyFileSelected;
         }
 
-        private bool IsAtleastOneFileSelected(IReadOnlyList<PackageItem> children)
+        private static bool IsAnyFileSelected(IReadOnlyList<PackageItem> children)
         {
             if (children != null)
             {
@@ -330,9 +335,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 {
                     if (child.Children.Count != 0)
                     {
-                        IsAtleastOneFileSelected(child.Children);
-
-                        if (!NoFilesSelected)
+                        if (IsAnyFileSelected(child.Children))
                         {
                             return true;
                         }
@@ -340,12 +343,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                     if (child.IsChecked.HasValue && child.IsChecked.Value)
                     {
-                        NoFilesSelected = false;
                         return true;
-                    }
-                    else
-                    {
-                        NoFilesSelected = true;
                     }
                 }
             }
