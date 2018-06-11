@@ -74,7 +74,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             {
                 InstallButton.IsEnabled = true;
             }
-        
+
             Dependencies dependencies = Dependencies.FromConfigFile(_configFileName);
             string cwd = dependencies?.GetHostInteractions().WorkingDirectory;
 
@@ -93,15 +93,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 bool addItem = false;
                 string insertionText = completion.Item2;
 
-                if (searchText.Equals(insertionText, StringComparison.OrdinalIgnoreCase))
-                {
-                    addItem = true;
-                }
-                else if (insertionText.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
-                {
-                   addItem = true;
-                }
-                else if (insertionText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) > -1)
+                if (insertionText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) > -1)
                 {
                     addItem = true;
                 }
@@ -118,10 +110,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 }
             }
 
-           completionItems = completionItems.Where(t => t.InsertionText.ToLower()
-                                            .Contains(searchText.ToLower()))
-                                            .OrderBy(m => m.InsertionText.ToLower().IndexOf(searchText.ToLower()))
-                                            .ToList();
+            completionItems = completionItems.OrderBy(m => m.InsertionText.ToLower().IndexOf(searchText.ToLower())).ToList();
 
             completionSet.Completions = completionItems;
 
@@ -138,7 +127,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             {
                 index = value.Length >= caretPosition - 1 ? value.LastIndexOf('/', Math.Max(caretPosition - 1, 0)) : value.Length;
             }
-       
+
             string prefix = "";
 
             if (index > 0)
@@ -172,7 +161,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
-        {           
+        {
             ViewModel = new InstallDialogViewModel(Dispatcher, _libraryCommandService, _configFileName, _deps, _fullPath, CloseDialog);
 
             FocusManager.SetFocusedElement(LibrarySearchBox, LibrarySearchBox);
