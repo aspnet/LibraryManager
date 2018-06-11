@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,14 +90,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
             foreach (Tuple<string, string> completion in completions)
             {
-                CompletionItem completionItem = new CompletionItem
-                {
-                    DisplayText = completion.Item1,
-                    InsertionText = completion.Item2,
-                };
+                bool addItem = false;
+                string insertionText = completion.Item2;
 
-                completionItems.Add(completionItem);
+                if (searchText.Equals(insertionText, StringComparison.OrdinalIgnoreCase))
+                {
+                    addItem = true;
+                }
+                else if (insertionText.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
+                {
+                   addItem = true;
+                }
+                else if (insertionText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) > -1)
+                {
+                    addItem = true;
+                }
+
+                if (addItem)
+                {
+                    CompletionItem completionItem = new CompletionItem
+                    {
+                        DisplayText = completion.Item1,
+                        InsertionText = completion.Item2,
+                    };
+
+                    completionItems.Add(completionItem);
+                }
             }
+
+           completionItems = completionItems.Where(t => t.InsertionText.ToLower()
+                                            .Contains(searchText.ToLower()))
+                                            .OrderBy(m => m.InsertionText.ToLower().IndexOf(searchText.ToLower()))
+                                            .ToList();
 
             completionSet.Completions = completionItems;
 
