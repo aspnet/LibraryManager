@@ -90,29 +90,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
             foreach (Tuple<string, string> completion in completions)
             {
-                bool addItem = false;
                 string insertionText = completion.Item2;
 
                 if (insertionText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) > -1)
                 {
-                    addItem = true;
-                }
-
-                if (addItem)
-                {
                     CompletionItem completionItem = new CompletionItem
                     {
                         DisplayText = completion.Item1,
-                        InsertionText = completion.Item2,
+                        InsertionText = insertionText,
                     };
 
                     completionItems.Add(completionItem);
                 }
             }
 
-            completionItems = completionItems.OrderBy(m => m.InsertionText.ToLower().IndexOf(searchText.ToLower())).ToList();
-
-            completionSet.Completions = completionItems;
+            completionSet.Completions = completionItems.OrderBy(m => m.InsertionText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase));
 
             return Task.FromResult(completionSet);
         }
