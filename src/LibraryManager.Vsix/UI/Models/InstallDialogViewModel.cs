@@ -321,26 +321,36 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         {
             if (DisplayRoots != null)
             {
-                foreach (PackageItem packageItem in DisplayRoots)
-                {
-                    IReadOnlyList<PackageItem> children = packageItem.Children;
-
-                    foreach (PackageItem child in children)
-                    {
-                        if (child.IsChecked.HasValue && child.IsChecked.Value)
-                        {
-                            NoFilesSelected = false;
-                            break;
-                        }
-                        else
-                        {
-                            NoFilesSelected = true;
-                        }
-                    }
-                }
+                CheckIfFilesAreSelected(DisplayRoots);
             }
 
             return !_isInstalling && !NoFilesSelected;
+        }
+
+        private void CheckIfFilesAreSelected(IReadOnlyList<PackageItem> children)
+        {
+            foreach (PackageItem child in children)
+            {
+                if (child.Children.Any())
+                {
+                    CheckIfFilesAreSelected(child.Children);
+
+                    if (!NoFilesSelected)
+                    {
+                        return;
+                    }
+                }
+
+                if (child.IsChecked.HasValue && child.IsChecked.Value)
+                {
+                    NoFilesSelected = false;
+                    return;
+                }
+                else
+                {
+                    NoFilesSelected = true;
+                }
+            }
         }
 
         private async void InstallPackageAsync()
