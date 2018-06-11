@@ -129,12 +129,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             try
             {
-                string[] args = libraryId.Split('@');
-                string name = args[0];
-                string version = (args.Count() > 1) ? args[1] :null;
+                string name = _provider.GetLibraryName(libraryId);
+                string version = _provider.GetLibraryVersion(libraryId);
 
                 IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
-
                 Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
                 if (asset == null)
