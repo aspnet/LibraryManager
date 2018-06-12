@@ -101,7 +101,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             try
             {
                 var dependencies = Dependencies.FromConfigFile(projectItem.FileNames[1]);
-                IEnumerable<string> packageIds = dependencies.Providers.Select(p => p.NuGetPackageId).Distinct();
+                IEnumerable<string> packageIds = dependencies.Providers
+                                                             .Where(p => p.NuGetPackageId != null)
+                                                             .Select(p => p.NuGetPackageId)
+                                                             .Distinct();
 
                 if (!_isPackageInstalled)
                 {
