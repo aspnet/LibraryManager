@@ -237,18 +237,16 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             }
         }
 
-        public IDictionary<string, string> GetLibraryIdParts(string libraryId)
+        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
         {
             Dictionary<string, string> libraryIdParts = new Dictionary<string, string>();
-            if(string.IsNullOrEmpty(libraryId) ||
+            if (string.IsNullOrEmpty(libraryId) ||
                libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
             {
-                throw new InvalidLibraryException(libraryId, Id);
+                throw new InvalidLibraryException(libraryId, Id, "Invalid file path");
             }
 
-            libraryIdParts.Add(_nameIdPart, libraryId);
-
-            return libraryIdParts;
+            return new LibraryIdentifier(libraryId, null);
         }
     }
 }

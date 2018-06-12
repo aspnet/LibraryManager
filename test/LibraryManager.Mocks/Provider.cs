@@ -1,10 +1,9 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Mocks
 {
@@ -68,9 +67,23 @@ namespace Microsoft.Web.LibraryManager.Mocks
             return Catalog;
         }
 
-        public IDictionary<string, string> GetLibraryIdParts(string libraryId)
+        /// <summary>
+        /// Returns a LibraryIdentifier based on the the libraryId
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <returns></returns>
+        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                string[] parts = libraryId.Split('@');
+
+                return new LibraryIdentifier(parts[0], parts[1]);
+            }
+            catch
+            {
+                throw new InvalidLibraryException(libraryId, Id);
+            }
         }
 
         /// <summary>

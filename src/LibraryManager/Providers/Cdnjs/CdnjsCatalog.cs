@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Providers.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -153,9 +152,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             try
             {
-                IDictionary<string, string> libraryIdParts = _provider.GetLibraryIdParts(libraryId);
-                string name = libraryIdParts[ProvidersCommon.NameIdPart];
-                string version = libraryIdParts[ProvidersCommon.VersionIdPart];
+                LibraryIdentifier libraryIdentifier = _provider.GetLibraryIdentifier(libraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
 
                 if (!await EnsureCatalogAsync(cancellationToken).ConfigureAwait(false))
                 {
