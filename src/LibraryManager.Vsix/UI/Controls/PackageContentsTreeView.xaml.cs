@@ -1,8 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Data;
-using Microsoft.VisualStudio.PlatformUI;
-
-namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
+﻿namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
     /// <summary>
     /// Interaction logic for PackageContentsTreeView.xaml

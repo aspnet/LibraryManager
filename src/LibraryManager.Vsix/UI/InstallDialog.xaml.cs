@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
-    internal partial class InstallDialog
+    internal partial class InstallDialog : DialogWindow
     {
         private readonly IDependencies _deps;
         private readonly string _fullPath;
@@ -33,14 +34,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             Loaded += OnLoaded;
         }
 
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-            // Hide minimize and maximize buttons. 
-            // ShowDialog() call will block until the user closes the window. So we shouldn't be providing any resizing options.
-            this.HideMinimizeAndMaximizeButtons();
-        }
-
         private void InstallDialog_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (!IsKeyboardFocusWithin && !(e.NewFocus is ListBoxItem))
@@ -58,7 +51,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         public Task<CompletionSet> PerformSearch(string searchText, int caretPosition)
         {
-            return ViewModel.SelectedProvider.GetCatalog().GetLibraryCompletionSetAsync(searchText, caretPosition);
+            try
+            {
+                return ViewModel.SelectedProvider.GetCatalog().GetLibraryCompletionSetAsync(searchText, caretPosition);
+            }
+            catch (InvalidLibraryException ex)
+            {
+                // Make the warning visible with ex.Message
+                return Task.FromResult<CompletionSet>(default(CompletionSet));
+            }
         }
 
         public Task<CompletionSet> TargetLocationSearch(string searchText, int caretPosition)
@@ -181,7 +182,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 LibrarySearchBox.Text = String.Empty;
                 ViewModel.IsTreeViewEmpty = true;
                 ViewModel.PackageId = null;
-                ViewModel.NoFilesSelected = true;
+                ViewModel.AnyFileSelected = false;
             }
             else
             {

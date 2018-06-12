@@ -183,7 +183,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 if (library == null)
                 {
-                    throw new InvalidLibraryException(desiredState.LibraryId, Id);
+                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
                 }
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
@@ -191,7 +191,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
                     if (invalidFiles.Any())
                     {
-                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
+                        IError invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
                         return new LibraryOperationResult(desiredState, invalidFilesError);
                     }
                     else
@@ -208,7 +208,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     Files = library.Files.Keys.ToList(),
                 };
             }
-            catch (Exception ex) when (ex is InvalidLibraryException || ex.InnerException is InvalidLibraryException)
+            catch (InvalidLibraryException)
             {
                 return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
             }

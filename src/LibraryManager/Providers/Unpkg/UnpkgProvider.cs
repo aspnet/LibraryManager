@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public string Id => IdText;
 
-        public string NuGetPackageId => null;
+        public string NuGetPackageId { get; } = "Microsoft.Web.LibraryManager.Build";
 
         public IHostInteraction HostInteraction { get; }
 
@@ -258,7 +258,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                 if (library == null)
                 {
-                    throw new InvalidLibraryException(desiredState.LibraryId, Id);
+                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
                 }
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
@@ -283,7 +283,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     Files = library.Files.Keys.ToList(),
                 };
             }
-            catch (Exception ex) when (ex is InvalidLibraryException || ex.InnerException is InvalidLibraryException)
+            catch (InvalidLibraryException)
             {
                 return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
             }
