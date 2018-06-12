@@ -36,6 +36,29 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fieldName"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public string GetUserInputWithDefault(string fieldName, string defaultValue)
+        {
+            lock (_syncObject)
+            {
+                string message = $"{fieldName} [{defaultValue}]: <enter>";
+                Console.Out.WriteLine(message);
+                string value = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(value?.Trim()))
+                {
+                    value = defaultValue;
+                }
+
+                return value;
+            }
+        }
+
+        /// <summary>
         /// Logs the <paramref name="message"/> to the console.
         /// </summary>
         /// <param name="message"></param>

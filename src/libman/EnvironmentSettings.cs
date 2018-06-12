@@ -39,6 +39,13 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// </summary>
         public string ManifestFileName => Path.Combine(CurrentWorkingDirectory, _libmanJsonFileName);
 
+        public string DefaultProvider { get; set; }
+
+        public string DefaultDestinationRoot => 
+            Directory.Exists(Path.Combine(CurrentWorkingDirectory, "wwwroot"))
+                ? Path.Combine("wwwroot", "lib")
+                : "lib";
+
         /// <summary>
         /// The default environment settings for libman.
         /// </summary>
@@ -51,7 +58,8 @@ namespace Microsoft.Web.LibraryManager.Tools
                 Logger = ConsoleLogger.Instance,
                 InputReader = ConsoleLogger.Instance,
                 CurrentWorkingDirectory = Directory.GetCurrentDirectory(),
-                CacheDirectory = Constants.CacheFolder
+                CacheDirectory = Constants.CacheFolder,
+                DefaultProvider = "unpkg",
             };
         }
     }
