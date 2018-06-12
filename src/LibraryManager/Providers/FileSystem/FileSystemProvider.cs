@@ -16,6 +16,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
     /// <summary>Internal use only</summary>
     internal class FileSystemProvider : IProvider
     {
+        private const string _nameIdPart = "Name";
+        
         /// <summary>Internal use only</summary>
         public FileSystemProvider(IHostInteraction hostInteraction)
         {
@@ -69,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
-            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            if (!desiredState.IsValid(this, out IEnumerable<IError> errors))
             {
                 return new LibraryOperationResult(desiredState, errors.ToArray());
             }
@@ -233,6 +235,20 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 // Add telemetry here for failures
                 throw new ResourceDownloadException(sourceUrl);
             }
+        }
+
+        public IDictionary<string, string> GetLibraryIdParts(string libraryId)
+        {
+            Dictionary<string, string> libraryIdParts = new Dictionary<string, string>();
+            if(string.IsNullOrEmpty(libraryId) ||
+               libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            {
+                throw new InvalidLibraryException(libraryId, Id);
+            }
+
+            libraryIdParts.Add(_nameIdPart, libraryId);
+
+            return libraryIdParts;
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 using Microsoft.Web.LibraryManager.Resources;
 
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
@@ -144,6 +145,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         }
                     }
                 }
+                catch (InvalidLibraryException)
+                {
+                    return new LibraryOperationResult(state, PredefinedErrors.UnableToResolveSource(state.LibraryId, Id));
+                }
                 catch (UnauthorizedAccessException)
                 {
                     return new LibraryOperationResult(state, PredefinedErrors.PathOutsideWorkingDirectory());
@@ -222,8 +227,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            string name = GetLibraryName(state);
-            string version = GetLibraryVersion(state);
+            IDictionary<string, string> libraryIdParts = GetLibraryIdParts(state.LibraryId);
+            string name = libraryIdParts[_nameIdPart];
+            string version = libraryIdParts[_versionIdPart];
 
             string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
 
@@ -233,22 +239,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             return null;
-        }
-
-        private string GetLibraryName(ILibraryInstallationState state)
-        {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-
-            return name;
-        }
-
-        private string GetLibraryVersion(ILibraryInstallationState state)
-        {
-            string[] args = state.LibraryId.Split('@');
-            string version = args[1];
-
-            return version;
         }
 
         /// <summary>
@@ -265,14 +255,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             var tasks = new List<Task>();
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
-
-            string libraryDir = Path.Combine(CacheFolder, name);
 
             try
             {
+                IDictionary<string, string> libraryIdParts = GetLibraryIdParts(state.LibraryId);
+                string name = libraryIdParts[ProvidersCommon.NameIdPart];
+                string version = libraryIdParts[ProvidersCommon.VersionIdPart];
+
+                string libraryDir = Path.Combine(CacheFolder, name);
                 List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
                 foreach (string sourceFile in state.Files)
                 {
@@ -287,14 +277,19 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 }
                 await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
             }
+            catch (InvalidLibraryException ex)
+            {
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                return new LibraryOperationResult(state, PredefinedErrors.UnableToResolveSource(state.LibraryId, Id));
+            }
             catch (ResourceDownloadException ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
                 return new LibraryOperationResult(state, PredefinedErrors.FailedToDownloadResource(ex.Url));
             }
-            catch(OperationCanceledException)
+            catch (OperationCanceledException)
             {
-                throw;
+                return LibraryOperationResult.FromCancelled(state);
             }
             catch (Exception ex)
             {
@@ -307,15 +302,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
-
-            string cacheDir = Path.Combine(CacheFolder, name, version);
-            string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
 
             try
             {
+                IDictionary<string, string> libraryIdParts = GetLibraryIdParts(state.LibraryId);
+                string name = libraryIdParts[ProvidersCommon.NameIdPart];
+                string version = libraryIdParts[ProvidersCommon.VersionIdPart];
+
+                string cacheDir = Path.Combine(CacheFolder, name, version);
+                string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
+
                 foreach (string sourceFile in state.Files)
                 {
                     var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
@@ -327,14 +323,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log failure here 
+                HostInteraction.Logger.Log(ex.InnerException.ToString(), LogLevel.Error);
                 return false;
             }
 
             return true;
         }
 
+        public IDictionary<string, string> GetLibraryIdParts(string libraryId)
+        {
+            return ProvidersCommon.GetLibraryIdParts(this, libraryId);
+        }
     }
 }

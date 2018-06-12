@@ -22,11 +22,14 @@ namespace Microsoft.Web.LibraryManager
         /// Returns true if the <see cref="ILibraryInstallationState"/> is valid.
         /// </summary>
         /// <param name="state">The state to test.</param>
+        /// <param name="provider">Provider to validate this state against</param>
         /// <param name="errors">The errors contained in the <see cref="ILibraryInstallationState"/> if any.</param>
         /// <returns>
         ///   <c>true</c> if the specified state is valid; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsValid(this ILibraryInstallationState state, out IEnumerable<IError> errors)
+        public static bool IsValid(this ILibraryInstallationState state,
+                                   IProvider provider,
+                                   out IEnumerable<IError> errors)
         {
             errors = null;
             var list = new List<IError>();
@@ -35,6 +38,22 @@ namespace Microsoft.Web.LibraryManager
             {
                 return false;
             }
+
+            if (string.IsNullOrEmpty(state.LibraryId))
+            {
+                list.Add(PredefinedErrors.LibraryIdIsUndefined());
+            }
+            else
+            {
+                try
+                {
+                    provider.GetLibraryIdParts(state.LibraryId);
+                }
+                catch(InvalidLibraryException)
+                {
+                    list.Add(PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id));
+                }
+            }            
 
             if (string.IsNullOrEmpty(state.ProviderId))
             {
@@ -50,10 +69,6 @@ namespace Microsoft.Web.LibraryManager
                 list.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
             }
 
-            if (string.IsNullOrEmpty(state.LibraryId))
-            {
-                list.Add(PredefinedErrors.LibraryIdIsUndefined());
-            }
 
             errors = list;
 

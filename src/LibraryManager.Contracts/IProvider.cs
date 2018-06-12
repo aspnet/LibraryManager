@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -55,5 +56,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         /// <returns></returns>
         ILibraryCatalog GetCatalog();
+
+        /// <summary>
+        /// Returns a dictionary with the name, value for parts that composes the libraryID for this provider
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <returns></returns>
+        /// <remarks>Throws <see cref="InvalidLibraryException"/> for invalid library id format</remarks>
+        IDictionary<string, string> GetLibraryIdParts(string libraryId);
     }
 }
