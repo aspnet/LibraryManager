@@ -51,7 +51,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         public Task<CompletionSet> PerformSearch(string searchText, int caretPosition)
         {
-            return ViewModel.SelectedProvider.GetCatalog().GetLibraryCompletionSetAsync(searchText, caretPosition);
+            try
+            {
+                return ViewModel.SelectedProvider.GetCatalog().GetLibraryCompletionSetAsync(searchText, caretPosition);
+            }
+            catch (InvalidLibraryException ex)
+            {
+                // Make the warning visible with ex.Message
+                return Task.FromResult<CompletionSet>(default(CompletionSet));
+            }
         }
 
         public Task<CompletionSet> TargetLocationSearch(string searchText, int caretPosition)

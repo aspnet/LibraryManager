@@ -44,55 +44,62 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 return Task.FromResult(default(CompletionSet));
             }
 
-            char separator = value.Contains('\\') ? '\\' : '/';
-            int index = value.Length >= caretPosition - 1 ? value.LastIndexOf(separator, Math.Max(caretPosition - 1, 0)) : value.Length;
-            string path = _provider.HostInteraction.WorkingDirectory;
-            string prefix = "";
-
-            if (index > 0)
+            try
             {
-                prefix = value.Substring(0, index + 1);
-                path = Path.Combine(path, prefix);
-            }
+                char separator = value.Contains('\\') ? '\\' : '/';
+                int index = value.Length >= caretPosition - 1 ? value.LastIndexOf(separator, Math.Max(caretPosition - 1, 0)) : value.Length;
+                string path = _provider.HostInteraction.WorkingDirectory;
+                string prefix = "";
 
-            var set = new CompletionSet
-            {
-                Start = 0,
-                Length = value.Length
-            };
-
-            var dir = new DirectoryInfo(path);
-
-            if (dir.Exists)
-            {
-                var list = new List<CompletionItem>();
-
-                foreach (FileSystemInfo item in dir.EnumerateDirectories())
+                if (index > 0)
                 {
-                    var completion = new CompletionItem
-                    {
-                        DisplayText = item.Name + separator,
-                        InsertionText = prefix + item.Name + separator,
-                    };
-
-                    list.Add(completion);
+                    prefix = value.Substring(0, index + 1);
+                    path = Path.Combine(path, prefix);
                 }
 
-                foreach (FileSystemInfo item in dir.EnumerateFiles())
+                var set = new CompletionSet
                 {
-                    var completion = new CompletionItem
-                    {
-                        DisplayText = item.Name,
-                        InsertionText = prefix + item.Name,
-                    };
+                    Start = 0,
+                    Length = value.Length
+                };
 
-                    list.Add(completion);
+                var dir = new DirectoryInfo(path);
+
+                if (dir.Exists)
+                {
+                    var list = new List<CompletionItem>();
+
+                    foreach (FileSystemInfo item in dir.EnumerateDirectories())
+                    {
+                        var completion = new CompletionItem
+                        {
+                            DisplayText = item.Name + separator,
+                            InsertionText = prefix + item.Name + separator,
+                        };
+
+                        list.Add(completion);
+                    }
+
+                    foreach (FileSystemInfo item in dir.EnumerateFiles())
+                    {
+                        var completion = new CompletionItem
+                        {
+                            DisplayText = item.Name,
+                            InsertionText = prefix + item.Name,
+                        };
+
+                        list.Add(completion);
+                    }
+
+                    set.Completions = list;
                 }
 
-                set.Completions = list;
+                return Task.FromResult(set);
             }
-
-            return Task.FromResult(set);
+            catch
+            {
+                throw new InvalidLibraryException(value, _provider.Id);
+            }
         }
 
         /// <summary>
@@ -107,31 +114,38 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         {
             ILibrary library;
 
-            if (libraryId.Contains("://"))
+            try
             {
+                if (libraryId.Contains("://"))
+                {
+                    library = new FileSystemLibrary
+                    {
+                        Name = libraryId,
+                        ProviderId = _provider.Id,
+                        Files = await GetFilesAsync(libraryId).ConfigureAwait(false)
+                    };
+
+                    return library;
+                }
+
+                string path = Path.Combine(_provider.HostInteraction.WorkingDirectory, libraryId);
+
+                if (!_underTest && !File.Exists(path) && !Directory.Exists(path))
+                {
+                    return null;
+                }
+
                 library = new FileSystemLibrary
                 {
                     Name = libraryId,
                     ProviderId = _provider.Id,
-                    Files = await GetFilesAsync(libraryId).ConfigureAwait(false)
+                    Files = await GetFilesAsync(path).ConfigureAwait(false)
                 };
-
-                return library;
             }
-
-            string path = Path.Combine(_provider.HostInteraction.WorkingDirectory, libraryId);
-
-            if (!_underTest && !File.Exists(path) && !Directory.Exists(path))
+            catch (Exception)
             {
-                return null;
+                throw new InvalidLibraryException(libraryId, _provider.Id);
             }
-
-            library = new FileSystemLibrary
-            {
-                Name = libraryId,
-                ProviderId = _provider.Id,
-                Files = await GetFilesAsync(path).ConfigureAwait(false)
-            };
 
             return library;
         }
