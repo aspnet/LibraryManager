@@ -178,7 +178,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 if (library == null)
                 {
-                    throw new InvalidLibraryException(desiredState.LibraryId, Id);
+                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
                 }
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
@@ -186,7 +186,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
                     if (invalidFiles.Any())
                     {
-                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
+                        IError invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
                         return new LibraryOperationResult(desiredState, invalidFilesError);
                     }
                     else
@@ -203,7 +203,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     Files = library.Files.Keys.ToList(),
                 };
             }
-            catch (Exception ex) when (ex is InvalidLibraryException || ex.InnerException is InvalidLibraryException)
+            catch (InvalidLibraryException)
             {
                 return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
             }
@@ -222,8 +222,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            string name = GetLibraryName(state);
-            string version = GetLibraryVersion(state);
+            string name = GetLibraryName(state.LibraryId);
+            string version = GetLibraryVersion(state.LibraryId);
 
             string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
 
@@ -235,17 +235,17 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return null;
         }
 
-        private string GetLibraryName(ILibraryInstallationState state)
+        public string GetLibraryName(string libraryId)
         {
-            string[] args = state.LibraryId.Split('@');
+            string[] args = libraryId.Split('@');
             string name = args[0];
 
             return name;
         }
 
-        private string GetLibraryVersion(ILibraryInstallationState state)
+        public string GetLibraryVersion(string libraryId)
         {
-            string[] args = state.LibraryId.Split('@');
+            string[] args = libraryId.Split('@');
             string version = args[1];
 
             return version;
@@ -265,9 +265,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             var tasks = new List<Task>();
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
+            string name = GetLibraryName(state.LibraryId);
+            string version = GetLibraryVersion(state.LibraryId);
 
             string libraryDir = Path.Combine(CacheFolder, name);
 
@@ -307,9 +306,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
+            string name = GetLibraryName(state.LibraryId);
+            string version = GetLibraryVersion(state.LibraryId);
 
             string cacheDir = Path.Combine(CacheFolder, name, version);
             string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
