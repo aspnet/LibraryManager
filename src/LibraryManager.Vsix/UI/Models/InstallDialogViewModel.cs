@@ -320,31 +320,32 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private bool CanInstallPackage()
         {
             if (_isInstalling)
-            {
-                return false;
-            }
+{
+    return false;
+}
 
-            AnyFileSelected = IsAnyFileSelected(DisplayRoots);
-            return AnyFileSelected;
+AnyFileSelected = IsAnyFileSelected(DisplayRoots);
+return AnyFileSelected;
         }
 
         private static bool IsAnyFileSelected(IReadOnlyList<PackageItem> children)
         {
             if (children != null)
             {
-                foreach (PackageItem child in children)
+                List<PackageItem> toProcess = children.ToList();
+
+                for (int i = 0; i < toProcess.Count; i++)
                 {
+                    PackageItem child = toProcess[i];
+
                     if (child.IsChecked.HasValue && child.IsChecked.Value)
                     {
                         return true;
                     }
 
-                    if (IsAnyFileSelected(child.Children))
-                    {
-                        return true;
-                    }
+                    toProcess.AddRange(child.Children);
                 }
-            }
+            }        
 
             return false;
         }
