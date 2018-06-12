@@ -150,6 +150,25 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             return library;
         }
 
+        public string GetSuggestedDestination(ILibrary library)
+        {
+            if (library != null && library is FileSystemLibrary fileSystemLibrary)
+            {
+
+                char[] invalidPathChars = Path.GetInvalidFileNameChars();
+                string name = fileSystemLibrary.Name.TrimEnd(invalidPathChars);
+                int invalidCharIndex = name.LastIndexOfAny(invalidPathChars);
+                if (invalidCharIndex > 0)
+                {
+                    name = name.Substring(invalidCharIndex + 1);
+                }
+
+                return Path.GetFileNameWithoutExtension(name);
+            }
+
+            return string.Empty;
+        }
+
         private Task<IReadOnlyDictionary<string, bool>> GetFilesAsync(string libraryId)
         {
             return Task.Run<IReadOnlyDictionary<string, bool>>(() =>

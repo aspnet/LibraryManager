@@ -112,7 +112,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             InstallDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
             if (string.IsNullOrWhiteSpace(InstallDestination))
             {
-                string destinationHint = GetDestinationHint(libraryId);
+                string destinationHint = Path.Combine(Settings.DefaultDestinationRoot, ProviderCatalog.GetSuggestedDestination(library));
                 InstallDestination = HostEnvironment.InputReader.GetUserInputWithDefault(nameof(Destination), destinationHint);
             }
 
@@ -152,24 +152,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
             return 0;
-        }
-
-        private string GetDestinationHint(string libraryId)
-        {
-            int lastIndex = libraryId.LastIndexOfAny(Path.GetInvalidFileNameChars());
-            
-            if (lastIndex == libraryId.Length-1)
-            {
-                return Settings.DefaultDestinationRoot;
-            }
-            
-            if (lastIndex > 0)
-            {
-                libraryId = libraryId.Substring(lastIndex+1);
-                libraryId = Path.GetFileNameWithoutExtension(libraryId);
-            }
-
-            return Path.Combine(Settings.DefaultDestinationRoot, libraryId);
         }
 
         private async Task<(string libraryId, ILibrary library)> ValidateLibraryExistsInCatalogAsync(CancellationToken cancellationToken)

@@ -74,6 +74,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
         }
 
+        public string GetSuggestedDestination(ILibrary library)
+        {
+            if (library != null && library is UnpkgLibrary unpkgLibrary)
+            {
+                return unpkgLibrary.Name;
+            }
+
+            return string.Empty;
+        }
+
         private async Task<IEnumerable<string>> GetLibraryFilesAsync(string libraryId, CancellationToken cancellationToken)
         {
             List<string> result = new List<string>();
