@@ -43,5 +43,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>The library identifier of the latest released version.</returns>
         Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the suggested destination path for the library.
+        /// </summary>
+        /// <param name="library"></param>
+        string GetSuggestedDestination(ILibrary library);
     }
 }
