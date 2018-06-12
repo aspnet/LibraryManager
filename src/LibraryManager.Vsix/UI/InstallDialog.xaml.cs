@@ -174,7 +174,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 LibrarySearchBox.Text = String.Empty;
                 ViewModel.IsTreeViewEmpty = true;
                 ViewModel.PackageId = null;
-                ViewModel.NoFilesSelected = true;
+                ViewModel.AnyFileSelected = false;
             }
             else
             {
