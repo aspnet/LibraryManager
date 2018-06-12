@@ -161,5 +161,21 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             Assert.AreEqual(existing[0], latest[0]);
             Assert.IsTrue(latest[0].Any(c => char.IsLetter(c)));
         }
+
+        [TestMethod]
+        public void GetSuggestedDestination()
+        {
+
+            Assert.AreEqual(string.Empty, _catalog.GetSuggestedDestination(null));
+
+            ILibrary library = new CdnjsLibrary()
+            {
+                Name = "jquery",
+                Version = "3.3.1",
+                Files = null
+            };
+
+            Assert.AreEqual(library.Name, _catalog.GetSuggestedDestination(library));
+        }
     }
 }
