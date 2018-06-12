@@ -22,7 +22,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public string Id => IdText;
 
-        public string NuGetPackageId => null;
+        public string NuGetPackageId { get; } = "Microsoft.Web.LibraryManager.Build";
 
         public IHostInteraction HostInteraction { get; }
 
