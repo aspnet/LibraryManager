@@ -14,5 +14,14 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// <param name="fieldName"></param>
         /// <returns></returns>
         string GetUserInput(string fieldName);
+
+        /// <summary>
+        /// Prompts the user for an input for the <paramref name="fieldName"/>
+        /// with a suggested default <paramref name="defaultValue"/>
+        /// </summary>
+        /// <param name="fieldName"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        string GetUserInputWithDefault(string fieldName, string defaultValue);
     }
 }

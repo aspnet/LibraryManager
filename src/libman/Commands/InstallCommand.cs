@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -50,7 +51,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         private IProvider _provider;
         private ILibraryCatalog _catalog;
 
-        private string ProviderId => Provider.HasValue() ? Provider.Value() : _manifest.DefaultProvider;
+        private string InstallDestination { get; set; }
+        private string ProviderId { get; set; }
 
         private IProvider ProviderToUse
         {
@@ -100,13 +102,32 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             (string libraryId, ILibrary library) = await ValidateLibraryExistsInCatalogAsync(CancellationToken.None);
 
-            IEnumerable<ILibraryOperationResult> results = await _manifest.InstallLibraryAsync(libraryId, Provider.Value(), files, Destination.Value(), CancellationToken.None);
+            string providerIdToUse = Provider.Value();
+            if (string.IsNullOrWhiteSpace(_manifest.DefaultProvider) && string.IsNullOrWhiteSpace(providerIdToUse))
+            {
+                // This is from the user prompt
+                providerIdToUse = ProviderId;
+            }
+
+            InstallDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
+            if (string.IsNullOrWhiteSpace(InstallDestination))
+            {
+                string destinationHint = GetDestinationHint(libraryId);
+                InstallDestination = HostEnvironment.InputReader.GetUserInputWithDefault(nameof(Destination), destinationHint);
+            }
+
+            string destinationToUse = Destination.Value();
+            if (string.IsNullOrWhiteSpace(_manifest.DefaultDestination) && string.IsNullOrWhiteSpace(destinationToUse))
+            {
+                destinationToUse = InstallDestination;
+            }
+
+            IEnumerable<ILibraryOperationResult> results = await _manifest.InstallLibraryAsync(libraryId, providerIdToUse, files, destinationToUse, CancellationToken.None);
 
             if (results.All(r => r.Success))
             {
                 await _manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
-                string installDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
-                Logger.Log(string.Format(Resources.InstalledLibrary, libraryId, installDestination), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.InstalledLibrary, libraryId, InstallDestination), LogLevel.Operation);
             }
             else
             {
@@ -131,6 +152,24 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
             return 0;
+        }
+
+        private string GetDestinationHint(string libraryId)
+        {
+            int lastIndex = libraryId.LastIndexOfAny(Path.GetInvalidFileNameChars());
+            
+            if (lastIndex == libraryId.Length-1)
+            {
+                return Settings.DefaultDestinationRoot;
+            }
+            
+            if (lastIndex > 0)
+            {
+                libraryId = libraryId.Substring(lastIndex+1);
+                libraryId = Path.GetFileNameWithoutExtension(libraryId);
+            }
+
+            return Path.Combine(Settings.DefaultDestinationRoot, libraryId);
         }
 
         private async Task<(string libraryId, ILibrary library)> ValidateLibraryExistsInCatalogAsync(CancellationToken cancellationToken)
@@ -192,21 +231,16 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 errors.Add(Resources.LibraryIdRequiredForInstall);
             }
 
-            if (string.IsNullOrWhiteSpace(manifest.DefaultDestination) && !Destination.HasValue())
+            ProviderId = Provider.HasValue() ? Provider.Value() : manifest.DefaultProvider;
+
+            if (string.IsNullOrWhiteSpace(ProviderId))
             {
-                errors.Add(Resources.DestinationRequiredWhenNoDefaultIsPresent);
+                ProviderId = HostEnvironment.InputReader.GetUserInputWithDefault(nameof(ProviderId), Settings.DefaultProvider);
             }
 
-            if (string.IsNullOrWhiteSpace(manifest.DefaultProvider) && !Provider.HasValue())
+            if (!ManifestDependencies.Providers.Any(p => p.Id == ProviderId))
             {
-                errors.Add(Resources.ProviderRequiredWhenNoDefaultIsPresent);
-            }
-
-            string providerId = Provider.HasValue() ? Provider.Value() : manifest.DefaultProvider;
-
-            if (!ManifestDependencies.Providers.Any(p => p.Id == providerId))
-            {
-                errors.Add(string.Format(Resources.ProviderNotInstalled, providerId));
+                errors.Add(string.Format(Resources.ProviderNotInstalled, ProviderId));
             }
 
             if (errors.Any())

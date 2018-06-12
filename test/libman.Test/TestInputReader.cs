@@ -15,5 +15,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         {
             return Inputs[fieldName];
         }
+
+        public string GetUserInputWithDefault(string fieldName, string defaultValue)
+        {
+            if (Inputs.ContainsKey(fieldName))
+            {
+                return Inputs[fieldName];
+            }
+
+            return defaultValue;
+        }
     }
 }
