@@ -98,9 +98,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                IDictionary<string, string> libraryIdParts = GetLibraryIdParts(state.LibraryId);
-                string name = libraryIdParts[ProvidersCommon.NameIdPart];
-                string version = libraryIdParts[ProvidersCommon.VersionIdPart];
+                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
                 string libraryDir = Path.Combine(CacheFolder, name);
 
                 List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
@@ -115,6 +115,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                         librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
                     }
                 }
+
                 await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
             }
             catch (InvalidLibraryException ex)
@@ -144,9 +145,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             try
             {
-                IDictionary<string, string> libraryIdParts = GetLibraryIdParts(state.LibraryId);
-                string name = libraryIdParts[ProvidersCommon.NameIdPart];
-                string version = libraryIdParts[ProvidersCommon.VersionIdPart];
+                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
 
                 string cacheDir = Path.Combine(CacheFolder, name, version);
                 string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
@@ -215,33 +216,25 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            string name = GetLibraryName(state);
-            string version = GetLibraryVersion(state);
-
-            string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
-
-            if (File.Exists(absolute))
+            try
             {
-                return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
+                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
+
+                string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
+
+                if (File.Exists(absolute))
+                {
+                    return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
+                }
+            }
+            catch
+            {
+                return null;
             }
 
             return null;
-        }
-
-        private string GetLibraryName(ILibraryInstallationState state)
-        {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-
-            return name;
-        }
-
-        private string GetLibraryVersion(ILibraryInstallationState state)
-        {
-            string[] args = state.LibraryId.Split('@');
-            string version = args[1];
-
-            return version;
         }
 
         public async Task<ILibraryOperationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
@@ -300,9 +293,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return LibraryOperationResult.FromSuccess(desiredState);
         }
 
-        public IDictionary<string, string> GetLibraryIdParts(string libraryId)
+        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
         {
-            return ProvidersCommon.GetLibraryIdParts(this, libraryId);
+            return ProvidersCommon.GetLibraryIdentifier(this, libraryId);
         }
     }
 }

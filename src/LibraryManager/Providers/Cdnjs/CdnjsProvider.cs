@@ -85,7 +85,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
-            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            if (!desiredState.IsValid(this, out IEnumerable<IError> errors))
             {
                 return new LibraryOperationResult(desiredState, errors.ToArray());
             }
@@ -227,9 +227,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            IDictionary<string, string> libraryIdParts = GetLibraryIdParts(state.LibraryId);
-            string name = libraryIdParts[_nameIdPart];
-            string version = libraryIdParts[_versionIdPart];
+            LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+            string name = libraryIdentifier.Name;
+            string version = libraryIdentifier.Version;
 
             string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
 
@@ -258,9 +258,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                IDictionary<string, string> libraryIdParts = GetLibraryIdParts(state.LibraryId);
-                string name = libraryIdParts[ProvidersCommon.NameIdPart];
-                string version = libraryIdParts[ProvidersCommon.VersionIdPart];
+                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
 
                 string libraryDir = Path.Combine(CacheFolder, name);
                 List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
@@ -305,9 +305,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                IDictionary<string, string> libraryIdParts = GetLibraryIdParts(state.LibraryId);
-                string name = libraryIdParts[ProvidersCommon.NameIdPart];
-                string version = libraryIdParts[ProvidersCommon.VersionIdPart];
+                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
 
                 string cacheDir = Path.Combine(CacheFolder, name, version);
                 string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
@@ -332,9 +332,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return true;
         }
 
-        public IDictionary<string, string> GetLibraryIdParts(string libraryId)
+        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
         {
-            return ProvidersCommon.GetLibraryIdParts(this, libraryId);
+            return ProvidersCommon.GetLibraryIdentifier(this, libraryId);
         }
     }
 }

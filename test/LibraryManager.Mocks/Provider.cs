@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Microsoft.Web.LibraryManager.Contracts;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -65,6 +66,11 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public virtual ILibraryCatalog GetCatalog()
         {
             return Catalog;
+        }
+
+        public IDictionary<string, string> GetLibraryIdParts(string libraryId)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>

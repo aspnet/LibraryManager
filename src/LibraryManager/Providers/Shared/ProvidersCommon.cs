@@ -8,38 +8,41 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
 {
     internal static class ProvidersCommon
     {
-        internal const string VersionIdPart = "Version";
-        internal const string NameIdPart = "Name";
         private const char _idPartsSeparator = '@';
 
-        public static IDictionary<string, string> GetLibraryIdParts(IProvider provider, string libraryId)
+        public static LibraryIdentifier GetLibraryIdentifier(IProvider provider, string libraryId)
         {
-            Dictionary<string, string> libraryIdParts = new Dictionary<string, string>();
+            // A valid libraryId will have
+            // - can not be null or empty string
+            // - has at least one _idPartsSeparator
+            // - can not end with a _idPartsSeparator
+            // - can start with a _idPartsSeparator
+            // - can not start or end with space
+            // - each part (Name, Version) can not start or end with space 
 
             if (string.IsNullOrEmpty(libraryId) ||
                 !libraryId.Contains(_idPartsSeparator.ToString()) ||
-                libraryId.StartsWith(_idPartsSeparator.ToString()) ||
-                libraryId.EndsWith(_idPartsSeparator.ToString()))
+                libraryId.EndsWith(_idPartsSeparator.ToString()) ||
+                char.IsWhiteSpace(libraryId[0]) ||
+                char.IsWhiteSpace(libraryId[libraryId.Length - 1]))
             {
-                throw new InvalidLibraryException(libraryId, provider.Id);
+                throw new InvalidLibraryException(libraryId, provider.Id, "Name and version of a library are required");
             }
 
-            string[] args = libraryId.Split(_idPartsSeparator);
+            int separatorIndex = libraryId.LastIndexOf(_idPartsSeparator);
+            string[] parts = { libraryId.Substring(0, separatorIndex), libraryId.Substring(separatorIndex + 1) };
 
-            foreach (string arg in args)
+            foreach (string part in parts)
             {
-                if (string.IsNullOrEmpty(arg) ||
-                   arg.StartsWith(string.Empty) ||
-                   arg.EndsWith(string.Empty))
+                if (string.IsNullOrEmpty(part) ||
+                    char.IsWhiteSpace(part[0]) ||
+                    char.IsWhiteSpace(part[part.Length - 1]))
                 {
-                    throw new InvalidLibraryException(libraryId, provider.Id);
+                    throw new InvalidLibraryException(libraryId, provider.Id, "Name and version of a library are required");
                 }
             }
 
-            libraryIdParts.Add("_nameIdPart", args[0]);
-            libraryIdParts.Add("_versionIdPart", args[1]);
-
-            return libraryIdParts;
+            return new LibraryIdentifier(parts[0], parts[1]);
         }
     }
 }

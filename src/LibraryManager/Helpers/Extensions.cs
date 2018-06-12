@@ -39,6 +39,11 @@ namespace Microsoft.Web.LibraryManager
                 return false;
             }
 
+            if (provider == null)
+            {
+                list.Add(PredefinedErrors.ProviderIsUndefined());
+            }
+
             if (string.IsNullOrEmpty(state.LibraryId))
             {
                 list.Add(PredefinedErrors.LibraryIdIsUndefined());
@@ -47,7 +52,7 @@ namespace Microsoft.Web.LibraryManager
             {
                 try
                 {
-                    provider.GetLibraryIdParts(state.LibraryId);
+                    provider.GetLibraryIdentifier(state.LibraryId);
                 }
                 catch(InvalidLibraryException)
                 {
@@ -55,10 +60,6 @@ namespace Microsoft.Web.LibraryManager
                 }
             }            
 
-            if (string.IsNullOrEmpty(state.ProviderId))
-            {
-                list.Add(PredefinedErrors.ProviderIsUndefined());
-            }
 
             if (string.IsNullOrEmpty(state.DestinationPath))
             {

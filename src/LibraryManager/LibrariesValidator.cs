@@ -78,9 +78,10 @@ namespace Microsoft.Web.LibraryManager
 
             foreach (ILibraryInstallationState library in libraries)
             {
+                IProvider provider = _dependencies.GetProvider(library.ProviderId);
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (!library.IsValid(out IEnumerable<IError> errors))
+                if (!library.IsValid(provider, out IEnumerable <IError> errors))
                 {
                    return new List<ILibraryOperationResult> { new LibraryOperationResult(library, errors.ToArray())};
                 }

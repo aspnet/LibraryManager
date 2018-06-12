@@ -217,15 +217,11 @@ namespace Microsoft.Web.LibraryManager
             };
 
             UpdateLibraryProviderAndDestination(desiredState, DefaultProvider, DefaultDestination);
-            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            IProvider provider = _dependencies.GetProvider(desiredState.ProviderId);
+
+            if (!desiredState.IsValid(provider, out IEnumerable <IError> errors))
             {
                 return new List<ILibraryOperationResult> { new LibraryOperationResult(desiredState, errors.ToArray()) };
-            }
-
-            IProvider provider = _dependencies.GetProvider(desiredState.ProviderId);
-            if (provider == null)
-            {
-                return new List<ILibraryOperationResult> { new LibraryOperationResult(desiredState, new IError[] { PredefinedErrors.ProviderUnknown(desiredState.ProviderId) })};
             }
 
             IEnumerable<ILibraryOperationResult> conflictResults = await CheckLibraryForConflictsAsync(desiredState, cancellationToken).ConfigureAwait(false);
@@ -477,23 +473,25 @@ namespace Microsoft.Web.LibraryManager
 
             if (libraries != null)
             {
-                foreach (ILibraryInstallationState state in libraries.Where(l => l.IsValid(out IEnumerable<IError> errors)))
+                foreach (ILibraryInstallationState state in libraries)
                 {
                     IProvider provider = _dependencies.GetProvider(state.ProviderId);
-
                     if (provider != null)
                     {
-                        ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
-
-                        if (updatedStateResult.Success)
+                        if (state.IsValid(provider, out IEnumerable<IError> errors))
                         {
-                            IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
+                            ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
 
-                            foreach (FileIdentifier fileIdentifier in stateFiles)
+                            if (updatedStateResult.Success)
                             {
-                                if (!files.Contains(fileIdentifier))
+                                IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
+
+                                foreach (FileIdentifier fileIdentifier in stateFiles)
                                 {
-                                    files.Add(fileIdentifier);
+                                    if (!files.Contains(fileIdentifier))
+                                    {
+                                        files.Add(fileIdentifier);
+                                    }
                                 }
                             }
                         }

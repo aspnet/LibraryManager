@@ -58,11 +58,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         ILibraryCatalog GetCatalog();
 
         /// <summary>
-        /// Returns a dictionary with the name, value for parts that composes the libraryID for this provider
+        /// Returns LibraryIdentifier for a given library id 
         /// </summary>
         /// <param name="libraryId"></param>
         /// <returns></returns>
         /// <remarks>Throws <see cref="InvalidLibraryException"/> for invalid library id format</remarks>
-        IDictionary<string, string> GetLibraryIdParts(string libraryId);
+        LibraryIdentifier GetLibraryIdentifier(string libraryId);
     }
 }

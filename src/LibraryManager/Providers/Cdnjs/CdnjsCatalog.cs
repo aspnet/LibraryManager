@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -127,68 +128,61 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            try
-            {
-                string name = _provider.GetLibraryName(libraryId);
-                string version = _provider.GetLibraryVersion(libraryId);
+            LibraryIdentifier libraryIdentifier = _provider.GetLibraryIdentifier(libraryId);
+            string name = libraryIdentifier.Name;
+            string version = libraryIdentifier.Version;
 
-                IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
-                Asset asset = assets.FirstOrDefault(a => a.Version == version);
+            IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
+            Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
-                if (asset == null)
-                {
-                    throw new InvalidLibraryException(libraryId, _provider.Id);
-                }
-
-                return new CdnjsLibrary
-                {
-                    Version = asset.Version,
-                    Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
-                    Name = name,
-                    ProviderId = _provider.Id,
-                };
-            }
-            catch (Exception)
+            if (asset == null)
             {
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
+
+            return new CdnjsLibrary
+            {
+                Version = asset.Version,
+                Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
+                Name = name,
+                ProviderId = _provider.Id,
+            };        
         }
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
         {
-            string[] args = libraryId.Split('@');
-
-            if (args.Length < 2)
+            try
             {
-                return null;
+                IDictionary<string, string> libraryIdParts = _provider.GetLibraryIdParts(libraryId);
+                string name = libraryIdParts[ProvidersCommon.NameIdPart];
+                string version = libraryIdParts[ProvidersCommon.VersionIdPart];
+
+                if (!await EnsureCatalogAsync(cancellationToken).ConfigureAwait(false))
+                {
+                    return null;
+                }
+
+                CdnjsLibraryGroup group = _libraryGroups.FirstOrDefault(l => l.DisplayName == name);
+
+                if (group == null)
+                {
+                    return null;
+                }
+
+                var ids = (await GetLibraryIdsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false)).ToList();
+                string first = ids[0];
+
+                if (!includePreReleases)
+                {
+                    first = ids.First(id => id.Substring(name.Length).Any(c => !char.IsLetter(c)));
+                }
+
+                if (!string.IsNullOrEmpty(first) && ids.IndexOf(first) < ids.IndexOf(libraryId))
+                {
+                    return first;
+                }
             }
-
-            if (!await EnsureCatalogAsync(cancellationToken).ConfigureAwait(false))
-            {
-                return null;
-            }
-
-            string name = args[0];
-
-            CdnjsLibraryGroup group = _libraryGroups.FirstOrDefault(l => l.DisplayName == name);
-
-            if (group == null)
-            {
-                return null;
-            }
-
-            var ids = (await GetLibraryIdsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false)).ToList();
-            string first = ids[0];
-
-            if (!includePreReleases)
-            {
-                first = ids.First(id => id.Substring(name.Length).Any(c => !char.IsLetter(c)));
-            }
-
-            if (!string.IsNullOrEmpty(first) && ids.IndexOf(first) < ids.IndexOf(libraryId))
-            {
-                return first;
-            }
+            catch { }
 
             return null;
         }
