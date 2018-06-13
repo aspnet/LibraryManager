@@ -59,7 +59,7 @@ namespace Microsoft.Web.LibraryManager.Tools
                 InputReader = ConsoleLogger.Instance,
                 CurrentWorkingDirectory = Directory.GetCurrentDirectory(),
                 CacheDirectory = Constants.CacheFolder,
-                DefaultProvider = "unpkg",
+                DefaultProvider = "cdnjs",
             };
         }
     }
