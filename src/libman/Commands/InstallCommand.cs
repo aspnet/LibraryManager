@@ -112,7 +112,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             InstallDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
             if (string.IsNullOrWhiteSpace(InstallDestination))
             {
-                string destinationHint = Path.Combine(Settings.DefaultDestinationRoot, ProviderCatalog.GetSuggestedDestination(library));
+                string destinationHint = Path.Combine(Settings.DefaultDestinationRoot, ProviderToUse.GetSuggestedDestination(library));
                 InstallDestination = HostEnvironment.InputReader.GetUserInputWithDefault(nameof(Destination), destinationHint);
             }
 

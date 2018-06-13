@@ -55,5 +55,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         /// <returns></returns>
         ILibraryCatalog GetCatalog();
+
+        /// <summary>
+        /// Gets the suggested destination path for the library.
+        /// </summary>
+        /// <param name="library"></param>
+        string GetSuggestedDestination(ILibrary library);
     }
 }

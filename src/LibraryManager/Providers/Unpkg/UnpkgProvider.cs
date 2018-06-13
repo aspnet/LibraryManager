@@ -81,6 +81,21 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         }
 
         /// <summary>
+        /// Returns the UnpkgLibrary's name.
+        /// </summary>
+        /// <param name="library"></param>
+        /// <returns></returns>
+        public string GetSuggestedDestination(ILibrary library)
+        {
+            if (library != null && library is UnpkgLibrary unpkgLibrary)
+            {
+                return unpkgLibrary.Name;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Copies ILibraryInstallationState files to cache
         /// </summary>
         /// <param name="state"></param>

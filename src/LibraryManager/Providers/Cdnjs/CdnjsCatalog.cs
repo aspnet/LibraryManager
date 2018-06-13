@@ -193,16 +193,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return null;
         }
 
-        public string GetSuggestedDestination(ILibrary library)
-        {
-            if (library != null && library is CdnjsLibrary cdnjsLibrary)
-            {
-                return cdnjsLibrary.Name;
-            }
-
-            return string.Empty;
-        }
-
         private IEnumerable<CdnjsLibraryGroup> GetSortedSearchResult(string term)
         {
             var list = new List<Tuple<int, CdnjsLibraryGroup>>();

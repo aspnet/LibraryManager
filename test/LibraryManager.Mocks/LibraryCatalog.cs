@@ -75,15 +75,5 @@ namespace Microsoft.Web.LibraryManager.Mocks
         {
             return Task.FromResult<IReadOnlyList<ILibraryGroup>>(null);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="library"></param>
-        /// <returns></returns>
-        public string GetSuggestedDestination(ILibrary library)
-        {
-            return library?.Name;
-        }
     }
 }

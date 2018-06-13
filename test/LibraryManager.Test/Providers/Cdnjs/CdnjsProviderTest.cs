@@ -173,6 +173,21 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         }
 
         [TestMethod]
+        public void GetSuggestedDestination()
+        {
+            Assert.AreEqual(string.Empty, _provider.GetSuggestedDestination(null));
+
+            ILibrary library = new CdnjsLibrary()
+            {
+                Name = "jquery",
+                Version = "3.3.1",
+                Files = null
+            };
+
+            Assert.AreEqual(library.Name, _provider.GetSuggestedDestination(library));
+        }
+
+        [TestMethod]
         private void GetCatalog()
         {
             ILibraryCatalog catalog = _provider.GetCatalog();

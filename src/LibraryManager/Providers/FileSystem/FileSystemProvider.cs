@@ -177,6 +177,29 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             return LibraryOperationResult.FromSuccess(desiredState);
         }
 
+        /// <summary>
+        /// Returns the last valid filename part of the path which identifies the library.
+        /// </summary>
+        /// <param name="library"></param>
+        /// <returns></returns>
+        public string GetSuggestedDestination(ILibrary library)
+        {
+            if (library != null && library is FileSystemLibrary fileSystemLibrary)
+            {
+                char[] invalidPathChars = Path.GetInvalidFileNameChars();
+                string name = fileSystemLibrary.Name.TrimEnd(invalidPathChars);
+                int invalidCharIndex = name.LastIndexOfAny(invalidPathChars);
+                if (invalidCharIndex > 0)
+                {
+                    name = name.Substring(invalidCharIndex + 1);
+                }
+
+                return Path.GetFileNameWithoutExtension(name);
+            }
+
+            return string.Empty;
+        }
+
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string file, CancellationToken cancellationToken)
         {
             string sourceFile = state.LibraryId;

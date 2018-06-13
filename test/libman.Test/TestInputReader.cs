@@ -18,9 +18,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
         public string GetUserInputWithDefault(string fieldName, string defaultValue)
         {
-            if (Inputs.ContainsKey(fieldName))
+            if (Inputs.TryGetValue(fieldName, out string value))
             {
-                return Inputs[fieldName];
+                return value;
             }
 
             return defaultValue;
