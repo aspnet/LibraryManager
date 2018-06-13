@@ -60,6 +60,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             get { return Path.Combine(HostInteraction.CacheDirectory, Id); }
         }
 
+        public bool SupportsRemaming => false;
+
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
@@ -84,15 +86,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             {
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
-            
-            //Expand the files property if needed
-            ILibraryOperationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
-            if (!updateResult.Success)
-            {
-                return updateResult;
-            }
-
-            desiredState = updateResult.InstallationState;
 
             // Refresh cache if needed
             ILibraryOperationResult cacheUpdateResult = await RefreshCacheAsync(desiredState, cancellationToken);
@@ -183,16 +176,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
-                    IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
-                    if (invalidFiles.Any())
-                    {
-                        IError invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
-                        return new LibraryOperationResult(desiredState, invalidFilesError);
-                    }
-                    else
-                    {
-                        return LibraryOperationResult.FromSuccess(desiredState);
-                    }
+                    return LibraryOperationResult.FromSuccess(desiredState);
                 }
 
                 desiredState = new LibraryInstallationState
@@ -297,7 +281,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-
             try
             {
                 LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);

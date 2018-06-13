@@ -254,42 +254,41 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 
             ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB005", result.Errors[0].Code);
+            Assert.AreEqual("LIB002", result.Errors[0].Code);
         }
 
         [TestMethod]
         public async Task InstallAsync_IdNotDefined()
         {
+            string providerId = "filesystem";
+            string destinationPath = "lib";
+            string[] files = new[] { "file.js" };
+
             IProvider provider = _dependencies.GetProvider("filesystem");
+            var manifest = Manifest.FromJson("{}", _dependencies);
+            manifest.AddLibraryValidator(new LibrariesValidator(_dependencies, manifest.DefaultDestination, manifest.DefaultProvider));
 
-            var desiredState = new LibraryInstallationState
-            {
-                ProviderId = "filesystem",
-                DestinationPath = "lib",
-                Files = new[] { "file.js" }
-            };
-
-            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
-            Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB006", result.Errors[0].Code);
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(null, providerId, files, destinationPath, CancellationToken.None);
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsFalse(results.First().Success);
+            Assert.AreEqual("LIB006", results.First().Errors[0].Code);
         }
 
         [TestMethod]
         public async Task InstallAsync_ProviderNotDefined()
         {
-            IProvider provider = _dependencies.GetProvider("filesystem");
+            string libraryId = _file1;
+            string destinationPath = "lib";
+            string[] files = new[] { "file1.txt" };
 
-            var desiredState = new LibraryInstallationState
-            {
-                ProviderId = "filesystem",
-                LibraryId = _file1,
-                DestinationPath = "lib",
-                Files = new[] { "file1.txt" }
-            };
+            var manifest = Manifest.FromJson("{}", _dependencies);
+            manifest.AddLibraryValidator(new LibrariesValidator(_dependencies, manifest.DefaultDestination, manifest.DefaultProvider));
 
-            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
-            Assert.IsTrue(result.Success);
-        }
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(libraryId, null, files, destinationPath, CancellationToken.None);
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsFalse(results.First().Success);
+            Assert.AreEqual("LIB007", results.First().Errors[0].Code);
+    }
 
         [TestMethod]
         public async Task RestoreAsync_Manifest()

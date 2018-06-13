@@ -43,6 +43,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public string LibraryIdHintText => Resources.Text.UnpkgProviderHintText;
 
+        public bool SupportsRemaming => false;
+
         public async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -251,16 +253,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
-                    IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
-                    if (invalidFiles.Any())
-                    {
-                        IError invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
-                        return new LibraryOperationResult(desiredState, invalidFilesError);
-                    }
-                    else
-                    {
-                        return LibraryOperationResult.FromSuccess(desiredState);
-                    }
+                    return LibraryOperationResult.FromSuccess(desiredState);
                 }
 
                 desiredState = new LibraryInstallationState

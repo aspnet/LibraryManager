@@ -59,6 +59,11 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public virtual ILibraryOperationResult Result { get; set; }
 
         /// <summary>
+        /// True if provider supports renamming
+        /// </summary>
+        public bool SupportsRemaming => false;
+
+        /// <summary>
         /// Gets the <see cref="T:LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>

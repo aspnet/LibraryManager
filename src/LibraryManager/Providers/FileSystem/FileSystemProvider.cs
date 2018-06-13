@@ -47,6 +47,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// </summary>
         public string LibraryIdHintText { get; } = Text.FileSystemLibraryIdHintText;
 
+        public bool SupportsRemaming => true;
+
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
@@ -70,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
-            
+
             try
             {
                 ILibraryOperationResult result = await UpdateStateAsync(desiredState, cancellationToken);
@@ -235,10 +237,14 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         public LibraryIdentifier GetLibraryIdentifier(string libraryId)
         {
             Dictionary<string, string> libraryIdParts = new Dictionary<string, string>();
-            if (string.IsNullOrEmpty(libraryId) ||
-               libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            if (string.IsNullOrEmpty(libraryId))
             {
-                throw new InvalidLibraryException(libraryId, Id, "Invalid file path");
+                throw new InvalidLibraryException(libraryId, Id, PredefinedErrors.LibraryIdIsUndefined().Message);
+            }
+
+            if (libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            {
+                throw new InvalidLibraryException(libraryId, Id, "Invalid characters in path");
             }
 
             return new LibraryIdentifier(libraryId, null);
