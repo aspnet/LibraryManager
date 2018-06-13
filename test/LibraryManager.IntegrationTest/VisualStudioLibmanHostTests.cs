@@ -24,6 +24,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         private static string _solutionRootPath;
         private static string _solutionPath;
 
+        public static string SolutionRootPath { get; private set; }
+
         protected override void DoHostTestInitialize()
         {
             _instance = this;
@@ -67,20 +69,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
-        public string SolutionRootPath
-        {
-            get
-            {
-                return _solutionRootPath;
-            }
-        }
-
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
         {
             _resultPath = context.DeploymentDirectory;
-            _solutionRootPath = Path.Combine(_resultPath, _rootDirectoryName);
-            _solutionPath = Path.Combine(_solutionRootPath, _testSolutionName);
+            SolutionRootPath = Path.Combine(_resultPath, _rootDirectoryName);
+            _solutionPath = Path.Combine(SolutionRootPath, _testSolutionName);
         }
 
         [AssemblyCleanup()]

@@ -13,25 +13,38 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         ProjectTestExtension _webProject;
         ProjectItemTestExtension _libManConfig;
         const string _projectName = @"TestProjectCore20";
+        private string _fileContent;
+        private string _pathToLibmanFile;
+        private string _pathToLibmanLibraryFile;
+        private string _pathToJquery;
 
         [TestInitialize()]
         public void initialize()
         {
-            _webProject = Solution.ProjectsRecursive[_projectName];
-            _libManConfig = _webProject.Find(SolutionItemFind.FileName, "libman.json");
+            _webProject = Solution[_projectName];
+            _libManConfig = _webProject["libman.json"];
         }
 
-        [TestCleanup]
-        public void Cleanup()
+        protected override void DoHostTestInitialize()
         {
-            int count = Editor.Edit.UndoStack.Count;
-            Editor.Edit.Undo(count);
-
-            _libManConfig.Save();
+            if (string.IsNullOrEmpty(_fileContent))
+            {
+                _pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, "libman.json");
+                _pathToLibmanLibraryFile = Path.Combine(SolutionRootPath, _projectName, "libman-library.json");
+                _fileContent = File.ReadAllText(_pathToLibmanLibraryFile);
+                _pathToJquery = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "lib", "jquery");
+            }
 
             // Delete restored libraries
-            string deletePath = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "lib");
-            Directory.Delete(deletePath, true);
+            if (Directory.Exists(_pathToJquery))
+            {
+                Directory.Delete(_pathToJquery, true);
+            }
+
+            // Reverting the libman.json file
+            File.WriteAllText(_pathToLibmanFile, _fileContent);
+
+            base.DoHostTestInitialize();
         }
 
         [TestMethod]
@@ -39,8 +52,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             _libManConfig.Open();
             string[] expectedFilesAndFolders = new[] {
-                "jquery.js",
-                "jquery.min.js",
+                Path.Combine(_pathToJquery, "jquery.js"),
+                Path.Combine(_pathToJquery, "jquery.min.js"),
             };
 
             Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
@@ -49,21 +62,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Type("\"defaultProvider\":");
             LibmanTestsUtility.WaitForCompletionEntry(Editor, "cdnjs", caseInsensitive: true);
             Editor.KeyboardCommands.Type("cdnjs");
-
-            Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
-            Editor.KeyboardCommands.Type("\"library\":");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true, timeout: 5000);
-            Editor.KeyboardCommands.Type("jquery@3.3.1");
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"destination\":");
-            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
             
             _libManConfig.Save();
-            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
-            LibmanTestsUtility.WaitForRestoredFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFiles(_pathToJquery, expectedFilesAndFolders, caseInsensitive: true);
         }
 
         [TestMethod]
@@ -71,8 +72,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             _libManConfig.Open();
             string[] expectedFilesAndFolders = new[] {
-                "LICENSE.txt",
-                "dist",
+                Path.Combine(_pathToJquery, "LICENSE.txt"),
+                Path.Combine(_pathToJquery, "dist", "jquery.js"),
             };
 
             Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
@@ -82,19 +83,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             LibmanTestsUtility.WaitForCompletionEntry(Editor, "unpkg", caseInsensitive: true);
             Editor.KeyboardCommands.Type("unpkg");
 
-            Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
-            Editor.KeyboardCommands.Type("\"library\":");
-            Editor.KeyboardCommands.Type("jquery@3.3.1");
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"destination\":");
-            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
-
             _libManConfig.Save();
-            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
-            LibmanTestsUtility.WaitForRestoredFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFiles(_pathToJquery, expectedFilesAndFolders, caseInsensitive: true);
         }
 
         [TestMethod]
@@ -109,34 +99,23 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             LibmanTestsUtility.WaitForCompletionEntry(Editor, "cdnjs", caseInsensitive: true);
             Editor.KeyboardCommands.Type("cdnjs");
 
-            Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
-            Editor.KeyboardCommands.Type("\"library\":");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true, timeout: 5000);
-            Editor.KeyboardCommands.Type("jquery@3.3.1");
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"destination\":");
-            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
-
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"files\": [");
-            Editor.KeyboardCommands.Enter();
+            Editor.Caret.MoveToExpression("\"files\"");
+            Editor.Caret.MoveDown();
             Editor.KeyboardCommands.Type("\"jquery.js\"");
 
             _libManConfig.Save();
-            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
-            LibmanTestsUtility.WaitForRestoredFile(cwd, "jquery.js", caseInsensitive: true);
-            LibmanTestsUtility.WaitForRestoredFileNotPresent(cwd, "jquery.min.js", caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFile(_pathToJquery, Path.Combine(_pathToJquery, "jquery.js"), caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFileNotPresent(_pathToJquery, Path.Combine(_pathToJquery, "jquery.min.js"), caseInsensitive: true);
         }
 
         [TestMethod]
         public void FileSaveRestore_Unpkg_AddNewLibraryWithSpecifingFiles()
         {
             _libManConfig.Open();
+            string[] expectedFilesAndFolders = new[] {
+                Path.Combine(_pathToJquery, "dist", "jquery.js"),
+                Path.Combine(_pathToJquery, "dist", "jquery.min.js"),
+            };
 
             Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
             Editor.Caret.MoveToEndOfLine();
@@ -145,27 +124,15 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             LibmanTestsUtility.WaitForCompletionEntry(Editor, "unpkg", caseInsensitive: true);
             Editor.KeyboardCommands.Type("unpkg");
 
-            Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
-            Editor.KeyboardCommands.Type("\"library\":");
-            Editor.KeyboardCommands.Type("jquery@3.3.1");
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
+            Editor.Caret.MoveToExpression("\"files\"");
+            Editor.Caret.MoveDown();
+            Editor.KeyboardCommands.Type("\"dist/jquery.js\",");
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"destination\":");
-            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
-
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"files\": [");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"LICENSE.txt\"");
+            Editor.KeyboardCommands.Type("\"dist/jquery.min.js\"");
 
             _libManConfig.Save();
-            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
-            LibmanTestsUtility.WaitForRestoredFile(cwd, "LICENSE.txt", caseInsensitive: true);
-            LibmanTestsUtility.WaitForRestoredFileNotPresent(cwd, "dist", caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFiles(_pathToJquery, expectedFilesAndFolders, caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFileNotPresent(_pathToJquery, Path.Combine(_pathToJquery, "dist", "jquery.min.map"), caseInsensitive: true);
         }
 
         [TestMethod]
@@ -173,8 +140,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             _libManConfig.Open();
             string[] expectedFilesAndFolders = new[] {
-                "jquery.js",
-                "jquery.min.js",
+                Path.Combine(_pathToJquery, "jquery.js"),
+                Path.Combine(_pathToJquery, "jquery.min.js"),
             };
 
             Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
@@ -184,76 +151,19 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             LibmanTestsUtility.WaitForCompletionEntry(Editor, "cdnjs", caseInsensitive: true);
             Editor.KeyboardCommands.Type("cdnjs");
 
-            Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
-            Editor.KeyboardCommands.Type("\"library\":");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true, timeout: 5000);
-            Editor.KeyboardCommands.Type("jquery@3.3.1");
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"destination\":");
-            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
-
             _libManConfig.Save();
-            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
-            LibmanTestsUtility.WaitForRestoredFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFiles(_pathToJquery, expectedFilesAndFolders, caseInsensitive: true);
 
             Editor.Caret.MoveToExpression("{", 0, 2);
 
-            for (int i = 0; i < 4; ++i)
+            for (int i = 0; i < 6; ++i)
             {
                 Editor.Edit.DeleteLine();
             }
 
             _libManConfig.Save();
-            cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib");
-            LibmanTestsUtility.WaitForDeletedFile(cwd, "jquery", caseInsensitive: true);
-        }
-
-        [TestMethod]
-        public void FileSaveRestore_Cdnjs_DeleteFile()
-        {
-            _libManConfig.Open();
-            string[] expectedFilesAndFolders = new[] {
-                "jquery.js",
-                "jquery.min.js",
-            };
-
-            Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
-            Editor.Caret.MoveToEndOfLine();
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"defaultProvider\":");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "cdnjs", caseInsensitive: true);
-            Editor.KeyboardCommands.Type("cdnjs");
-
-            Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
-            Editor.KeyboardCommands.Type("\"library\":");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true, timeout: 5000);
-            Editor.KeyboardCommands.Type("jquery@3.3.1");
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"destination\":");
-            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
-
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"files\": [");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"jquery.js\",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"jquery.min.js\"");
-
-            _libManConfig.Save();
-            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
-            LibmanTestsUtility.WaitForRestoredFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
-
-            Editor.Edit.DeleteToBeginningOfLine();
-            _libManConfig.Save();
-            LibmanTestsUtility.WaitForDeletedFile(cwd, "jquery.min.js", caseInsensitive: true);
+            string pathToLibFolder = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib");
+            LibmanTestsUtility.WaitForDeletedFile(pathToLibFolder, Path.Combine(_pathToJquery, "jquery.js"), caseInsensitive: true);
         }
 
         [TestMethod]
@@ -261,8 +171,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             _libManConfig.Open();
             string[] expectedFilesAndFolders = new[] {
-                "LICENSE.txt",
-                "AUTHORS.txt",
+                Path.Combine(_pathToJquery, "LICENSE.txt"),
+                Path.Combine(_pathToJquery, "dist", "jquery.js"),
             };
 
             Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
@@ -272,29 +182,49 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             LibmanTestsUtility.WaitForCompletionEntry(Editor, "unpkg", caseInsensitive: true);
             Editor.KeyboardCommands.Type("unpkg");
 
-            Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
-            Editor.KeyboardCommands.Type("\"library\":");
-            Editor.KeyboardCommands.Type("jquery@3.3.1");
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"destination\":");
-            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
-
             _libManConfig.Save();
-            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
-            LibmanTestsUtility.WaitForRestoredFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFiles(_pathToJquery, expectedFilesAndFolders, caseInsensitive: true);
 
             Editor.Caret.MoveToExpression("{", 0, 2);
 
-            for (int i = 0; i < 4; ++i)
+            for (int i = 0; i < 6; ++i)
             {
                 Editor.Edit.DeleteLine();
             }
 
             _libManConfig.Save();
-            LibmanTestsUtility.WaitForDeletedFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
+            LibmanTestsUtility.WaitForDeletedFiles(_pathToJquery, expectedFilesAndFolders, caseInsensitive: true);
+        }
+
+        [TestMethod]
+        public void FileSaveRestore_Cdnjs_DeleteFile()
+        {
+            _libManConfig.Open();
+            string[] expectedFilesAndFolders = new[] {
+                Path.Combine(_pathToJquery, "jquery.js"),
+                Path.Combine(_pathToJquery, "jquery.min.js"),
+            };
+
+            Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
+            Editor.Caret.MoveToEndOfLine();
+            Editor.KeyboardCommands.Enter();
+            Editor.KeyboardCommands.Type("\"defaultProvider\":");
+            LibmanTestsUtility.WaitForCompletionEntry(Editor, "cdnjs", caseInsensitive: true);
+            Editor.KeyboardCommands.Type("cdnjs");
+
+            Editor.Caret.MoveToExpression("\"files\"");
+            Editor.Caret.MoveDown();
+            Editor.KeyboardCommands.Type("\"jquery.js\",");
+            Editor.KeyboardCommands.Enter();
+            Editor.KeyboardCommands.Type("\"jquery.min.js\"");
+
+            _libManConfig.Save();
+            LibmanTestsUtility.WaitForRestoredFiles(_pathToJquery, expectedFilesAndFolders, caseInsensitive: true);
+
+            Editor.Caret.MoveToExpression("jquery.js");
+            Editor.Edit.DeleteLine();
+            _libManConfig.Save();
+            LibmanTestsUtility.WaitForDeletedFile(_pathToJquery, Path.Combine(_pathToJquery, "jquery.js"), caseInsensitive: true);
         }
 
         [TestMethod]
@@ -302,8 +232,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             _libManConfig.Open();
             string[] expectedFilesAndFolders = new[] {
-                "LICENSE.txt",
-                "AUTHORS.txt",
+                Path.Combine(_pathToJquery, "dist", "jquery.js"),
+                Path.Combine(_pathToJquery, "dist", "jquery.min.js"),
             };
 
             Editor.Caret.MoveToExpression("\"version\": \"1.0\"");
@@ -313,32 +243,19 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             LibmanTestsUtility.WaitForCompletionEntry(Editor, "unpkg", caseInsensitive: true);
             Editor.KeyboardCommands.Type("unpkg");
 
-            Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
-            Editor.KeyboardCommands.Type("\"library\":");
-            Editor.KeyboardCommands.Type("jquery@3.3.1");
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
+            Editor.Caret.MoveToExpression("\"files\"");
+            Editor.Caret.MoveDown();
+            Editor.KeyboardCommands.Type("\"dist/jquery.js\",");
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"destination\":");
-            Editor.KeyboardCommands.Type("wwwroot/lib/jquery");
-
-            Editor.KeyboardCommands.Right();
-            Editor.KeyboardCommands.Type(",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"files\": [");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"LICENSE.txt\",");
-            Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"AUTHORS.txt\"");
+            Editor.KeyboardCommands.Type("\"dist/jquery.min.js\"");
 
             _libManConfig.Save();
-            string cwd = Path.Combine(Path.GetDirectoryName(_webProject.FullPath), "wwwroot", "lib", "jquery");
-            LibmanTestsUtility.WaitForRestoredFiles(cwd, expectedFilesAndFolders, caseInsensitive: true);
+            LibmanTestsUtility.WaitForRestoredFiles(_pathToJquery, expectedFilesAndFolders, caseInsensitive: true);
 
-            Editor.Edit.DeleteToBeginningOfLine();
+            Editor.Caret.MoveToExpression("dist/jquery.js");
+            Editor.Edit.DeleteLine();
             _libManConfig.Save();
-            LibmanTestsUtility.WaitForDeletedFile(cwd, "AUTHORS.txt", caseInsensitive: true);
+            LibmanTestsUtility.WaitForDeletedFile(_pathToJquery, Path.Combine(_pathToJquery, "dist/jquery.js"), caseInsensitive: true);
         }
     }
 }
