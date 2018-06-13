@@ -42,23 +42,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected async override Task<int> ExecuteInternalAsync()
         {
-            FailIfLibmanJsonExists();
-            string defaultProvider = string.Empty;
-            string defaultDestination = string.Empty;
-
-            defaultProvider = DefaultProvider.HasValue() 
-                ? DefaultProvider.Value() 
-                : HostEnvironment.InputReader.GetUserInput($"{nameof(DefaultProvider)}:");
-
-            defaultDestination = DefaultDestination.HasValue()
-                ? DefaultDestination.Value()
-                : HostEnvironment.InputReader.GetUserInput($"{nameof(DefaultDestination)}:");
-
-            Manifest manifest = await GetManifestAsync(createIfNotExists: true);
-            manifest.DefaultDestination = defaultDestination;
-            manifest.DefaultProvider = defaultProvider;
-
-            await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
+            await CreateManifestAsync(DefaultProvider.Value(), DefaultDestination.Value(), CancellationToken.None);
 
             return 0;
         }

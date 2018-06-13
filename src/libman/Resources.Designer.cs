@@ -322,6 +322,15 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to initialize libman.json. [{0}]: {1}.
+        /// </summary>
+        internal static string InitFailedUnknownProvider {
+            get {
+                return ResourceManager.GetString("InitFailedUnknownProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a library definition to the LibMan.json file, and download the library to the specified location.
         /// </summary>
         internal static string InstallCommandDesc {

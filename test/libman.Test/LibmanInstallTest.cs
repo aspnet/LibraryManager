@@ -37,9 +37,73 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             string text = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
             string expectedText = @"{
   ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
   ""libraries"": [
     {
       ""provider"": ""cdnjs"",
+      ""library"": ""jquery@3.2.1"",
+      ""destination"": ""wwwroot""
+    }
+  ]
+}";
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(text));
+        }
+
+        [TestMethod]
+        public void TestInstall_CleanDirectory_WithPromptForProvider()
+        {
+            var testInputReader = HostEnvironment.InputReader as TestInputReader;
+
+            testInputReader.Inputs.Add("defaultProvider:", "cdnjs");
+
+            var command = new InstallCommand(HostEnvironment);
+            command.Configure(null);
+
+            int result = command.Execute("jquery@3.2.1", "--destination", "wwwroot");
+
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
+
+            string text = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
+            string expectedText = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""libraries"": [
+    {
+      ""library"": ""jquery@3.2.1"",
+      ""destination"": ""wwwroot""
+    }
+  ]
+}";
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(text));
+        }
+
+        [TestMethod]
+        public void TestInstall_ExistingLibman_WithPromptForProvider()
+        {
+            var testInputReader = HostEnvironment.InputReader as TestInputReader;
+
+            testInputReader.Inputs.Add("ProviderId", "cdnjs");
+
+            string initialContent = @"{
+  ""version"": ""1.0"",
+  ""libraries"": [
+  ]
+}";
+
+            File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
+            var command = new InstallCommand(HostEnvironment);
+            command.Configure(null);
+
+            int result = command.Execute("jquery@3.2.1", "--destination", "wwwroot");
+
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
+
+            string text = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
+            string expectedText = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""libraries"": [
+    {
       ""library"": ""jquery@3.2.1"",
       ""destination"": ""wwwroot""
     }

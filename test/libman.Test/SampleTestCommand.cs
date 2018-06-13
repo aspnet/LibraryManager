@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Tools.Commands;
 
@@ -12,6 +13,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
     internal class SampleTestCommand : BaseCommand
     {
         public bool CreateNewManifest { get; set; }
+        public string DefaultProvider { get; set; }
+        public string DefaultDestination { get; set; }
 
         public SampleTestCommand(IHostEnvironment environment) 
             : base(false, "Sample", "", environment)
@@ -22,7 +25,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
         protected override async Task<int> ExecuteInternalAsync()
         {
-            Manifest = await GetManifestAsync(CreateNewManifest);
+            if (CreateNewManifest)
+            {
+                Manifest = await CreateManifestAsync(DefaultProvider, DefaultDestination, CancellationToken.None);
+            }
+            else
+            {
+                Manifest = await GetManifestAsync();
+            }
 
             return 0;
         }

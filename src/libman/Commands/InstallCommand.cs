@@ -94,7 +94,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected override async Task<int> ExecuteInternalAsync()
         {
-            _manifest = await GetManifestAsync(createIfNotExists: true);
+            if (File.Exists(Settings.ManifestFileName))
+            {
+                _manifest = await GetManifestAsync();
+            }
+            else
+            {
+                _manifest = await CreateManifestAsync(Provider.Value(), null, CancellationToken.None);
+            }
 
             ValidateParameters(_manifest);
 
@@ -105,8 +112,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             string providerIdToUse = Provider.Value();
             if (string.IsNullOrWhiteSpace(_manifest.DefaultProvider) && string.IsNullOrWhiteSpace(providerIdToUse))
             {
-                // This is from the user prompt
-                providerIdToUse = ProviderId;
+                // If there was previously no default provider and the user did not specify on commandline,
+                // we get this value by prompting to the user and set it as the default for the manifest.
+                _manifest.DefaultProvider = ProviderId;
             }
 
             InstallDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
