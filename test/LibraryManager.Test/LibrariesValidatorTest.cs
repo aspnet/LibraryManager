@@ -33,13 +33,13 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        public void DetectConlictsAsync_ConflictingFiles()
+        public async void DetectConlictsAsync_ConflictingFiles()
         {
             _manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
 
             var conflictDetector = new LibrariesValidator(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
 
-            IEnumerable<FileConflict> conflicts = conflictDetector.GetFilesConflicts(_manifest.Libraries, CancellationToken.None);
+            IEnumerable<FileConflict> conflicts = await conflictDetector.GetFilesConflictsAsync(_manifest.Libraries, CancellationToken.None);
 
             Assert.AreEqual(1, conflicts.Count());
 
@@ -49,25 +49,25 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        public void DetectConflictsAsync_SameLibraryDifferentFiles()
+        public async void DetectConflictsAsync_SameLibraryDifferentFiles()
         {
             _manifest = Manifest.FromJson(_docNoConflictingLibraries, _dependencies);
 
             var conflictDetector = new LibrariesValidator(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
 
-            IEnumerable<FileConflict> conflicts = conflictDetector.GetFilesConflicts(_manifest.Libraries, CancellationToken.None);
+            IEnumerable<FileConflict> conflicts = await conflictDetector.GetFilesConflictsAsync(_manifest.Libraries, CancellationToken.None);
 
             Assert.AreEqual(0, conflicts.Count());
         }
 
         [TestMethod]
-        public void DetectConflictsAsync_SameLibrary_SameFiles_DifferentDestination()
+        public async void DetectConflictsAsync_SameLibrary_SameFiles_DifferentDestination()
         {
             _manifest = Manifest.FromJson(_docDifferentDestination, _dependencies);
 
             var conflictDetector = new LibrariesValidator(_dependencies, _manifest.DefaultDestination, _manifest.DefaultProvider);
 
-            IEnumerable<FileConflict> conflicts = conflictDetector.GetFilesConflicts(_manifest.Libraries, CancellationToken.None);
+            IEnumerable<FileConflict> conflicts = await conflictDetector.GetFilesConflictsAsync(_manifest.Libraries, CancellationToken.None);
 
             Assert.AreEqual(0, conflicts.Count());
         }

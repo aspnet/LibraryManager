@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Microsoft.Web.LibraryManager.Contracts.Resources;
 
 namespace Microsoft.Web.LibraryManager.Contracts
@@ -24,11 +25,25 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         /// <param name="libraryId">The ID of the invalid library.</param>
         /// <param name="providerId">The ID of the <see cref="IProvider"/> failing to install the library.</param>
-        public InvalidLibraryException(string libraryId, string providerId)
-            : base(string.Format(Text.ErrorUnableToResolveSource, libraryId, providerId))
+        /// <param name="details">Additional information about the exception</param>
+        public InvalidLibraryException(string libraryId, string providerId, string details = null)
+            : base(GenerateMessage(libraryId, providerId, details))
         {
             LibraryId = libraryId;
             ProviderId = providerId;
+            Details = details;
+        }
+
+        private static string GenerateMessage(string libraryId, string providerId, string details = null)
+        {
+            string message = string.Format(Text.ErrorUnableToResolveSource, libraryId, providerId);
+
+            if(details != null)
+            {
+                message += Environment.NewLine + details;
+            }
+
+            return message;
         }
 
         /// <summary>
@@ -40,5 +55,10 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// The ID of the <see cref="IProvider"/> failing to install the library.
         /// </summary>
         public string ProviderId { get; }
+
+        /// <summary>
+        /// Details of the exception.
+        /// </summary>
+        public string Details { get; }
     }
 }

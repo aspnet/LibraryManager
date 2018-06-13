@@ -19,63 +19,6 @@ namespace Microsoft.Web.LibraryManager
     public static class Extensions
     {
         /// <summary>
-        /// Returns true if the <see cref="ILibraryInstallationState"/> is valid.
-        /// </summary>
-        /// <param name="state">The state to test.</param>
-        /// <param name="provider">Provider to validate this state against</param>
-        /// <param name="errors">The errors contained in the <see cref="ILibraryInstallationState"/> if any.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified state is valid; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsValid(this ILibraryInstallationState state,
-                                   IProvider provider,
-                                   out IEnumerable<IError> errors)
-        {
-            errors = null;
-            var list = new List<IError>();
-
-            if (state == null)
-            {
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(state.LibraryId))
-            {
-                list.Add(PredefinedErrors.LibraryIdIsUndefined());
-            }
-            else
-            {
-                try
-                {
-                    provider.GetLibraryIdParts(state.LibraryId);
-                }
-                catch(InvalidLibraryException)
-                {
-                    list.Add(PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id));
-                }
-            }            
-
-            if (string.IsNullOrEmpty(state.ProviderId))
-            {
-                list.Add(PredefinedErrors.ProviderIsUndefined());
-            }
-
-            if (string.IsNullOrEmpty(state.DestinationPath))
-            {
-                list.Add(PredefinedErrors.PathIsUndefined());
-            }
-            else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
-            {
-                list.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
-            }
-
-
-            errors = list;
-
-            return list.Count == 0;
-        }
-
-        /// <summary>
         /// Returns files from <paramref name="files"/> that are not part of the <paramref name="library"/>
         /// </summary>
         /// <param name="library"></param>
