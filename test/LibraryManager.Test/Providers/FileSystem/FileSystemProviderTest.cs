@@ -276,21 +276,19 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 
         [TestMethod]
         public async Task InstallAsync_ProviderNotDefined()
-
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
 
             var desiredState = new LibraryInstallationState
             {
-                LibraryId = "filesystem",
+                ProviderId = "filesystem",
+                LibraryId = _file1,
                 DestinationPath = "lib",
-                Files = new[] { "file.js" }
+                Files = new[] { "file1.txt" }
             };
 
             ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
-            Assert.IsFalse(result.Success);
-            Assert.AreEqual(1, result.Errors.Count);
-            Assert.AreEqual("LIB007", result.Errors[0].Code);
+            Assert.IsTrue(result.Success);
         }
 
         [TestMethod]
