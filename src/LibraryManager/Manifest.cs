@@ -26,6 +26,7 @@ namespace Microsoft.Web.LibraryManager
         private IHostInteraction _hostInteraction;
         private readonly List<ILibraryInstallationState> _libraries;
         private IDependencies _dependencies;
+        private LibrariesValidator _librariesValidator;
 
         /// <summary>
         /// Creates a new instance of <see cref="Manifest"/>.
@@ -36,6 +37,7 @@ namespace Microsoft.Web.LibraryManager
             _libraries = new List<ILibraryInstallationState>();
             _dependencies = dependencies;
             _hostInteraction = dependencies?.GetHostInteractions();
+            _librariesValidator = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider)
         }
 
         /// <summary>
@@ -247,7 +249,7 @@ namespace Microsoft.Web.LibraryManager
             libraries.Add(desiredState);
             var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
-            IEnumerable<ILibraryOperationResult> fileConflicts = await conflictDetector.GetLibrariesErrorsAsync(libraries, cancellationToken).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> fileConflicts = await conflictDetector.ValidateLibrariesAsync(libraries, cancellationToken).ConfigureAwait(false);
 
             return fileConflicts;
         }
@@ -312,7 +314,7 @@ namespace Microsoft.Web.LibraryManager
         {
             var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
-            return await conflictDetector.GetLibrariesErrorsAsync(Libraries, cancellationToken).ConfigureAwait(false);
+            return await conflictDetector.ValidateLibrariesAsync(Libraries, cancellationToken).ConfigureAwait(false);
         }
 
         private async Task<ILibraryOperationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
