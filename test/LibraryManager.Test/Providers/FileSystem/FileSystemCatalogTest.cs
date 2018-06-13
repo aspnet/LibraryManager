@@ -190,24 +190,5 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             Assert.AreEqual(libraryId, result.Result);
 
         }
-
-        [TestMethod]
-        public void GetSuggestedDestination()
-        {
-
-            Assert.AreEqual(string.Empty, _catalog.GetSuggestedDestination(null));
-
-            var library = new FileSystemLibrary()
-            {
-                Name = "D:\\jquery\\",
-                Files = null
-            };
-
-            Assert.AreEqual("jquery", _catalog.GetSuggestedDestination(library));
-
-            library.Name = @"D:\jquery\jquery.min.js";
-
-            Assert.AreEqual("jquery.min", _catalog.GetSuggestedDestination(library));
-        }
     }
 }

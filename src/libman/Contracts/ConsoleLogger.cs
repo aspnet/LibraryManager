@@ -45,7 +45,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         {
             lock (_syncObject)
             {
-                string message = $"{fieldName} [{defaultValue}]: <enter>";
+                string message = $"{fieldName} [{defaultValue}]:";
                 Console.Out.WriteLine(message);
                 string value = Console.ReadLine();
 

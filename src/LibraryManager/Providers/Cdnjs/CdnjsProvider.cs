@@ -116,6 +116,21 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         }
 
+        /// <summary>
+        /// Returns the CdnjsLibrary's Name
+        /// </summary>
+        /// <param name="library"></param>
+        /// <returns></returns>
+        public string GetSuggestedDestination(ILibrary library)
+        {
+            if (library != null && library is CdnjsLibrary cdnjsLibrary)
+            {
+                return cdnjsLibrary.Name;
+            }
+
+            return string.Empty;
+        }
+
         private async Task<ILibraryOperationResult> WriteToFilesAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             if (state.Files != null)

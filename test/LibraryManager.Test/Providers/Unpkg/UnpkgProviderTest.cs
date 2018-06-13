@@ -10,7 +10,7 @@ using Microsoft.Web.LibraryManager.Providers.Unpkg;
 namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 {
     [TestClass]
-    public class UnpkgCatalogTest
+    public class UnpkgProviderTest
     {
         private string _projectFolder;
         private IProvider _provider;
@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         public void GetSuggestedDestination()
         {
 
-            Assert.AreEqual(string.Empty, _catalog.GetSuggestedDestination(null));
+            Assert.AreEqual(string.Empty, _provider.GetSuggestedDestination(null));
 
             var library = new UnpkgLibrary()
             {
@@ -41,11 +41,11 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
                 Files = null
             };
 
-            Assert.AreEqual(library.Name, _catalog.GetSuggestedDestination(library));
+            Assert.AreEqual(library.Name, _provider.GetSuggestedDestination(library));
 
             library.Name = @"@angular/cli";
 
-            Assert.AreEqual("@angular/cli", _catalog.GetSuggestedDestination(library));
+            Assert.AreEqual("@angular/cli", _provider.GetSuggestedDestination(library));
         }
     }
 }

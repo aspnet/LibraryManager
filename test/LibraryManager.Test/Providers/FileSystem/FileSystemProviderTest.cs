@@ -312,6 +312,25 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         }
 
         [TestMethod]
+        public void GetSuggestedDestination()
+        {
+            IProvider provider = _dependencies.GetProvider("filesystem");
+            Assert.AreEqual(string.Empty, provider.GetSuggestedDestination(null));
+
+            var library = new FileSystemLibrary()
+            {
+                Name = "D:\\jquery\\",
+                Files = null
+            };
+
+            Assert.AreEqual("jquery", provider.GetSuggestedDestination(library));
+
+            library.Name = @"D:\jquery\jquery.min.js";
+
+            Assert.AreEqual("jquery.min", provider.GetSuggestedDestination(library));
+        }
+
+        [TestMethod]
         private void GetCatalog()
         {
             IProvider provider = _dependencies.GetProvider("cdnjs");
