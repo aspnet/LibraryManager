@@ -182,7 +182,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         private void OnItemCommitGesture(object sender, MouseButtonEventArgs e)
         {
             Commit(SelectedItem);
-            TargetLocationSearchTextBox.Focus();
+            e.Handled = true;
+            TargetLocationSearchTextBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
         private void OnLostFocus(object sender, RoutedEventArgs e)
