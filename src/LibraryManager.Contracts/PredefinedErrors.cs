@@ -169,5 +169,14 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static IError InvalidFilesInLibrary(string libraryId, IEnumerable<string> invalidFile, IEnumerable<string> validFiles)
             => new Error("LIB018", string.Format(Text.ErrorLibraryHasInvalidFiles, libraryId, string.Join(", ", invalidFile), string.Join(", ", validFiles)));
+
+        /// <summary>
+        /// File is not valid for the library.
+        /// </summary>
+        /// <param name="duplicateLibraries"></param>
+        /// <returns></returns>
+        public static IError DuplicateLibrariesInManifest(IEnumerable<string> duplicateLibraries)
+            => new Error("LIB019", string.Format(Text.ErrorDuplicateLibraries, string.Join(", ", duplicateLibraries)));
+
     }
 }

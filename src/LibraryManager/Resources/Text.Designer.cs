@@ -214,6 +214,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name and Version of a library are required.
+        /// </summary>
+        public static string NameAndVersionRequired {
+            get {
+                return ResourceManager.GetString("NameAndVersionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restoring libraries for project {0}.
         /// </summary>
         public static string Restore_LibrariesForProject {

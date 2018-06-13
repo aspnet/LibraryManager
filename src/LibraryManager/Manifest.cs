@@ -26,6 +26,7 @@ namespace Microsoft.Web.LibraryManager
         private IHostInteraction _hostInteraction;
         private readonly List<ILibraryInstallationState> _libraries;
         private IDependencies _dependencies;
+        private LibrariesValidator _librariesValidator;
 
         /// <summary>
         /// Creates a new instance of <see cref="Manifest"/>.
@@ -36,6 +37,7 @@ namespace Microsoft.Web.LibraryManager
             _libraries = new List<ILibraryInstallationState>();
             _dependencies = dependencies;
             _hostInteraction = dependencies?.GetHostInteractions();
+            _librariesValidator = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
         }
 
         /// <summary>
@@ -62,6 +64,17 @@ namespace Microsoft.Web.LibraryManager
         [JsonProperty(ManifestConstants.Libraries)]
         [JsonConverter(typeof(LibraryStateTypeConverter))]
         public IEnumerable<ILibraryInstallationState> Libraries => _libraries;
+
+        /// <summary>
+        /// Validates libraries in this manifest
+        /// </summary>
+        /// <param name="libraries"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ILibraryOperationResult>> ValidateLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        {
+            return await _librariesValidator.ValidateLibrariesAsync(libraries, cancellationToken).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Creates a new instance of a <see cref="Manifest"/> class from a file on disk.
@@ -100,7 +113,7 @@ namespace Microsoft.Web.LibraryManager
                 manifest._dependencies = dependencies;
                 manifest._hostInteraction = dependencies.GetHostInteractions();
 
-                UpdateLibraryProviderAndDestination(manifest);
+                //UpdateLibraryProviderAndDestination(manifest);
 
                 return manifest;
             }
@@ -196,7 +209,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Installs a library with the given libraryId
+        /// Validates a single library 
         /// </summary>
         /// <param name="libraryId"></param>
         /// <param name="providerId"></param>
@@ -204,9 +217,8 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="destination"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ILibraryOperationResult>> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
+        public async Task<ILibraryOperationResult> ValidateLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
         {
-            ILibraryOperationResult result;
 
             var desiredState = new LibraryInstallationState()
             {
@@ -216,40 +228,38 @@ namespace Microsoft.Web.LibraryManager
                 DestinationPath = destination
             };
 
-            UpdateLibraryProviderAndDestination(desiredState, DefaultProvider, DefaultDestination);
-            IProvider provider = _dependencies.GetProvider(desiredState.ProviderId);
-
-            if (!desiredState.IsValid(provider, out IEnumerable <IError> errors))
-            {
-                return new List<ILibraryOperationResult> { new LibraryOperationResult(desiredState, errors.ToArray()) };
-            }
-
-            IEnumerable<ILibraryOperationResult> conflictResults = await CheckLibraryForConflictsAsync(desiredState, cancellationToken).ConfigureAwait(false);
-
-            if (!conflictResults.All(r => r.Success))
-            {
-                return conflictResults;
-            }
-
-            result = await provider.InstallAsync(desiredState, cancellationToken).ConfigureAwait(false);
-
-            if (result.Success)
-            {
-                _libraries.Add(desiredState);
-            }
-
-            return new List<ILibraryOperationResult> { result };
+            return await _librariesValidator.ValidateLibraryAsync(desiredState, cancellationToken).ConfigureAwait(false);   
         }
 
-        private async Task<IEnumerable<ILibraryOperationResult>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <param name="providerId"></param>
+        /// <param name="files"></param>
+        /// <param name="destination"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ILibraryOperationResult>> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
         {
-            var libraries = new List<ILibraryInstallationState>(Libraries);
-            libraries.Add(desiredState);
-            var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
+            var desiredState = new LibraryInstallationState()
+            {
+                LibraryId = libraryId,
+                Files = files,
+                ProviderId = providerId,
+                DestinationPath = destination
+            };
 
-            IEnumerable<ILibraryOperationResult> fileConflicts = await conflictDetector.GetLibrariesErrorsAsync(libraries, cancellationToken).ConfigureAwait(false);
+            List<ILibraryInstallationState> librariesToValidate = new List<ILibraryInstallationState>(_libraries);
+            librariesToValidate.Add(desiredState);
 
-            return fileConflicts;
+            IEnumerable<ILibraryOperationResult> validationResults = await _librariesValidator.ValidateLibrariesAsync(librariesToValidate, cancellationToken).ConfigureAwait(false);
+            if (!validationResults.All(r => r.Success))
+            {
+                return validationResults;
+            }
+
+            return new[] { LibraryOperationResult.FromSuccess(desiredState) };
         }
 
         /// <summary>
@@ -312,7 +322,7 @@ namespace Microsoft.Web.LibraryManager
         {
             var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
-            return await conflictDetector.GetLibrariesErrorsAsync(Libraries, cancellationToken).ConfigureAwait(false);
+            return await conflictDetector.ValidateLibrariesAsync(Libraries, cancellationToken).ConfigureAwait(false);
         }
 
         private async Task<ILibraryOperationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
@@ -469,7 +479,7 @@ namespace Microsoft.Web.LibraryManager
 
         private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(IEnumerable<ILibraryInstallationState> libraries)
         {
-            var files = new List<FileIdentifier>();
+            var files = new HashSet<FileIdentifier>();
 
             if (libraries != null)
             {
@@ -478,21 +488,15 @@ namespace Microsoft.Web.LibraryManager
                     IProvider provider = _dependencies.GetProvider(state.ProviderId);
                     if (provider != null)
                     {
-                        if (state.IsValid(provider, out IEnumerable<IError> errors))
+                        ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
+
+                        if (updatedStateResult.Success)
                         {
-                            ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
+                            HashSet<FileIdentifier> stateFiles = await GetLibraryFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
 
-                            if (updatedStateResult.Success)
+                            foreach (FileIdentifier fileIdentifier in stateFiles)
                             {
-                                IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
-
-                                foreach (FileIdentifier fileIdentifier in stateFiles)
-                                {
-                                    if (!files.Contains(fileIdentifier))
-                                    {
-                                        files.Add(fileIdentifier);
-                                    }
-                                }
+                                files.Add(fileIdentifier);
                             }
                         }
                     }
@@ -502,12 +506,12 @@ namespace Microsoft.Web.LibraryManager
             return files;
         }
 
-        private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
+        private async Task<HashSet<FileIdentifier>> GetLibraryFilesWithVersionsAsync(ILibraryInstallationState state)
         {
             ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
-            IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
+            var filesWithVersions = new HashSet<FileIdentifier>();
 
-            if (catalog == null)
+            if (catalog == null || !state.Files.Any())
             {
                 return filesWithVersions;
             }
@@ -516,11 +520,7 @@ namespace Microsoft.Web.LibraryManager
 
             if (library != null && library.Files != null)
             {
-                IEnumerable<string> desiredStateFiles = state?.Files?.Where(f => library.Files.Keys.Contains(f));
-                if (desiredStateFiles != null && desiredStateFiles.Any())
-                {
-                    filesWithVersions = desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
-                }
+                filesWithVersions = new HashSet<FileIdentifier>(library.Files.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f.Key), library.Version)));
             }
 
             return filesWithVersions;

@@ -10,7 +10,6 @@
 
 namespace Microsoft.Web.LibraryManager.Contracts.Resources {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryManager.Contracts.Resources.Text", typeof(Text).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryManager.Contracts.Resources.Text", typeof(Text).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -94,6 +93,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static string ErrorDestinationPathHasInvalidCharacter {
             get {
                 return ResourceManager.GetString("ErrorDestinationPathHasInvalidCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conflicting libraries found: {0}.
+        /// </summary>
+        internal static string ErrorDuplicateLibraries {
+            get {
+                return ResourceManager.GetString("ErrorDuplicateLibraries", resourceCulture);
             }
         }
         
