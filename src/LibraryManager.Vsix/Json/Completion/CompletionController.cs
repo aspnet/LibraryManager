@@ -151,10 +151,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private JSONParseItem GetItemBeforePosition(int pos, JSONComplexItem document)
+        private JSONParseItem GetItemBeforePosition(int pos, JSONComplexItem parentItem)
         {
             JSONParseItem item = null;
-            JSONParseItemList children = document.Children;
+            JSONParseItemList children = parentItem.Children;
             int start = 0;
 
             if (children.Any())
@@ -170,10 +170,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 {
                     item = children[i];
 
-                    if (item is JSONComplexItem)
+                    if (item is JSONComplexItem complexItem)
                     {
                         // Recurse to find the deepest item
-                        item = GetItemBeforePosition(pos, (JSONComplexItem)item);
+                        item = GetItemBeforePosition(pos, complexItem);
                     }
                 }
             }
