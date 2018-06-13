@@ -47,7 +47,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected async override Task<int> ExecuteInternalAsync()
         {
-            Manifest manifest = await GetManifestAsync(createIfNotExists: false);
+            Manifest manifest = await GetManifestAsync();
 
             IEnumerable<ILibraryInstallationState> installedLibraries = await ValidateParametersAndGetLibrariesToUninstallAsync(manifest, CancellationToken.None);
 

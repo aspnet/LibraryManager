@@ -53,8 +53,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         {
             TestInputReader reader = HostEnvironment.InputReader as TestInputReader;
 
-            reader.Inputs.Add("DefaultProvider:", "cdnjs");
-            reader.Inputs.Add("DefaultDestination:", "wwwroot");
+            reader.Inputs.Add("defaultProvider:", "cdnjs");
+            reader.Inputs.Add("defaultDestination:", "wwwroot");
 
             InitCommand command = new InitCommand(HostEnvironment);
             command.Configure(null);
@@ -71,7 +71,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             string expectedContents = @"{
   ""version"": ""1.0"",
   ""defaultProvider"": ""cdnjs"",
-  ""defaultDestination"": ""wwwroot"",
   ""libraries"": []
 }";
 
