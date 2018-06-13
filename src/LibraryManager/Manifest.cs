@@ -484,7 +484,7 @@ namespace Microsoft.Web.LibraryManager
 
                             if (updatedStateResult.Success)
                             {
-                                IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
+                                HashSet<FileIdentifier> stateFiles = await GetLibraryFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
 
                                 foreach (FileIdentifier fileIdentifier in stateFiles)
                                 {
@@ -502,12 +502,12 @@ namespace Microsoft.Web.LibraryManager
             return files;
         }
 
-        private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
+        private async Task<HashSet<FileIdentifier>> GetLibraryFilesWithVersionsAsync(ILibraryInstallationState state)
         {
             ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
-            IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
+            var filesWithVersions = new HashSet<FileIdentifier>();
 
-            if (catalog == null)
+            if (catalog == null || !state.Files.Any())
             {
                 return filesWithVersions;
             }
@@ -516,11 +516,21 @@ namespace Microsoft.Web.LibraryManager
 
             if (library != null && library.Files != null)
             {
-                IEnumerable<string> desiredStateFiles = state?.Files?.Where(f => library.Files.Keys.Contains(f));
-                if (desiredStateFiles != null && desiredStateFiles.Any())
+                var desiredStateFiles = new HashSet<string>(state.Files);
+
+                if (desiredStateFiles.Count() != state.Files.Count())
                 {
-                    filesWithVersions = desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
+                    // Duplicates within the library 
                 }
+
+                var actualStateFiles = new HashSet<string>(library.Files.Keys);
+
+                if (desiredStateFiles.Except(actualStateFiles).Any())
+                {
+                    // invalid files 
+                }
+
+                filesWithVersions = new HashSet<FileIdentifier>(desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version)));
             }
 
             return filesWithVersions;
