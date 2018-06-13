@@ -129,7 +129,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
             }
 
-            JSONParseItem parseItem = GetItemBeforePosition(_textView.Caret.Position.BufferPosition, doc);
+            JSONParseItem parseItem = GetItemBeforePosition(_textView.Caret.Position.BufferPosition, doc.JSONDocument);
 
             if (parseItem == null)
             {
@@ -151,10 +151,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private JSONParseItem GetItemBeforePosition(int pos, JSONEditorDocument document)
+        private JSONParseItem GetItemBeforePosition(int pos, JSONComplexItem document)
         {
             JSONParseItem item = null;
-            JSONParseItemList children = document.JSONDocument.Children;
+            JSONParseItemList children = document.Children;
             int start = 0;
 
             if (children.Any())
@@ -173,7 +173,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     if (item is JSONComplexItem)
                     {
                         // Recurse to find the deepest item
-                        item = GetItemBeforePosition(item.Start, document);
+                        item = GetItemBeforePosition(pos, (JSONComplexItem)item);
                     }
                 }
             }

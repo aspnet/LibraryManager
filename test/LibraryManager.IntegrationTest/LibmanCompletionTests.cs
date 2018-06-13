@@ -105,8 +105,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         }
 
         [TestMethod]
-        [Ignore("Ignored for bug 628945")]
-        public void LibmanCompletion_LibraryVersionForCsnjs()
+        public void LibmanCompletion_LibraryVersionForCdnjs()
         {
             _libManConfig.Open();
 
