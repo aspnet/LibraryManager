@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -40,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         [Import]
         ILibraryCommandService libraryCommandService { get; set; }
 
-        public void VsTextViewCreated(IVsTextView textViewAdapter)
+        public async void VsTextViewCreated(IVsTextView textViewAdapter)
         {
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
@@ -68,6 +70,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             {
                 AddErrorToList(PredefinedErrors.ManifestMalformed());
             }
+            else
+            {
+                IEnumerable<ILibraryOperationResult> validationResults  = await _manifest.ValidateLibrariesAsync(_manifest.Libraries, CancellationToken.None);
+                if (!validationResults.All(r => r.Success))
+                {
+                    AddErrorToList(validationResults.Where(r => r.Errors != null).First().Errors.First());
+                }
+            }
 
             doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
@@ -92,17 +102,25 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
                         if (newManifest != null)
                         {
-                            if (await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
+                            IEnumerable<ILibraryOperationResult> validationResults = await _manifest.ValidateLibrariesAsync(_manifest.Libraries, CancellationToken.None);
+                            if (!validationResults.All(r => r.Success))
                             {
-                                _manifest = newManifest;
-
-                               await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
-                                Telemetry.TrackOperation("restoresave");
+                                AddErrorToList(validationResults.Where(r => r.Errors != null).First().Errors.First());
                             }
                             else
                             {
-                                string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
-                                Logger.LogEvent(textMessage, LogLevel.Task);
+                                if (await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
+                                {
+                                    _manifest = newManifest;
+
+                                   await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                    Telemetry.TrackOperation("restoresave");
+                                }
+                                else
+                                {
+                                    string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
+                                    Logger.LogEvent(textMessage, LogLevel.Task);
+                                }
                             }
                         }
                         else

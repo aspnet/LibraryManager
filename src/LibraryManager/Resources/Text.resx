@@ -250,4 +250,7 @@
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>Unavailable</value>
   </data>
+  <data name="NameAndVersionRequired" xml:space="preserve">
+    <value>Name and Version of a library are required</value>
+  </data>
 </root>

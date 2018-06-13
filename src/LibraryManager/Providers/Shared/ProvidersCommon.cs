@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
                 char.IsWhiteSpace(libraryId[0]) ||
                 char.IsWhiteSpace(libraryId[libraryId.Length - 1]))
             {
-                throw new InvalidLibraryException(libraryId, provider.Id, "Name and version of a library are required");
+                throw new InvalidLibraryException(libraryId, provider.Id, Resources.Text.NameAndVersionRequired);
             }
 
             int separatorIndex = libraryId.LastIndexOf(_idPartsSeparator);
@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
                     char.IsWhiteSpace(part[0]) ||
                     char.IsWhiteSpace(part[part.Length - 1]))
                 {
-                    throw new InvalidLibraryException(libraryId, provider.Id, "Name and version of a library are required");
+                    throw new InvalidLibraryException(libraryId, provider.Id, Resources.Text.NameAndVersionRequired);
                 }
             }
 

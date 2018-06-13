@@ -70,12 +70,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
-
-            if (!desiredState.IsValid(this, out IEnumerable<IError> errors))
-            {
-                return new LibraryOperationResult(desiredState, errors.ToArray());
-            }
-
+            
             try
             {
                 ILibraryOperationResult result = await UpdateStateAsync(desiredState, cancellationToken);
