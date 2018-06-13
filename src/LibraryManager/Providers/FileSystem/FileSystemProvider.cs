@@ -47,6 +47,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// </summary>
         public string LibraryIdHintText { get; } = Text.FileSystemLibraryIdHintText;
 
+        public bool SupportsRemaming => true;
+
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
@@ -69,11 +71,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             if (cancellationToken.IsCancellationRequested)
             {
                 return LibraryOperationResult.FromCancelled(desiredState);
-            }
-
-            if (!desiredState.IsValid(this, out IEnumerable<IError> errors))
-            {
-                return new LibraryOperationResult(desiredState, errors.ToArray());
             }
 
             try
@@ -237,18 +234,20 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             }
         }
 
-        public IDictionary<string, string> GetLibraryIdParts(string libraryId)
+        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
         {
             Dictionary<string, string> libraryIdParts = new Dictionary<string, string>();
-            if(string.IsNullOrEmpty(libraryId) ||
-               libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            if (string.IsNullOrEmpty(libraryId))
             {
-                throw new InvalidLibraryException(libraryId, Id);
+                throw new InvalidLibraryException(libraryId, Id, PredefinedErrors.LibraryIdIsUndefined().Message);
             }
 
-            libraryIdParts.Add(_nameIdPart, libraryId);
+            if (libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            {
+                throw new InvalidLibraryException(libraryId, Id, "Invalid characters in path");
+            }
 
-            return libraryIdParts;
+            return new LibraryIdentifier(libraryId, null);
         }
     }
 }

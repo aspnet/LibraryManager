@@ -36,6 +36,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         IHostInteraction HostInteraction { get; }
 
         /// <summary>
+        /// True if provider supports renamining of source file at the destinationPath
+        /// </summary>
+        bool SupportsRemaming { get; }
+
+        /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.
         /// </summary>
         /// <param name="desiredState">The details about the library to install.</param>
@@ -58,11 +63,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         ILibraryCatalog GetCatalog();
 
         /// <summary>
-        /// Returns a dictionary with the name, value for parts that composes the libraryID for this provider
+        /// Returns LibraryIdentifier for a given library id 
         /// </summary>
         /// <param name="libraryId"></param>
         /// <returns></returns>
         /// <remarks>Throws <see cref="InvalidLibraryException"/> for invalid library id format</remarks>
-        IDictionary<string, string> GetLibraryIdParts(string libraryId);
+        LibraryIdentifier GetLibraryIdentifier(string libraryId);
     }
 }
