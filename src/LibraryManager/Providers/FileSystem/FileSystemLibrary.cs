@@ -9,7 +9,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 {
     internal class FileSystemLibrary : Library
     {
-        public new string Version => "1.0";
+        public override string Version => "1.0";
 
     }
 }
