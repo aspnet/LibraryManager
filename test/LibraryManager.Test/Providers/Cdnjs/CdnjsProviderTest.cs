@@ -186,6 +186,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
                 Files = null
             };
 
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(libraryId, providerId, files, destinationPath, CancellationToken.None);
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsFalse(results.First().Success);
+            Assert.AreEqual("LIB018", results.First().Errors[0].Code);
             Assert.AreEqual(library.Name, _provider.GetSuggestedDestination(library));
         }
 
