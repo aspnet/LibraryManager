@@ -140,35 +140,6 @@ namespace Microsoft.Web.LibraryManager
             }
         }
 
-        //private static void UpdateLibraryProviderAndDestination(Manifest manifest)
-        //{
-        //    foreach (LibraryInstallationState state in manifest.Libraries.Cast<LibraryInstallationState>())
-        //    {
-        //        UpdateLibraryProviderAndDestination(state, manifest.DefaultProvider, manifest.DefaultDestination);
-        //    }
-        //}
-
-        //private static void UpdateLibraryProviderAndDestination(ILibraryInstallationState state, string defaultProvider, string defaultDestination)
-        //{
-        //    LibraryInstallationState libraryState = state as LibraryInstallationState;
-
-        //    if (libraryState == null)
-        //    {
-        //        return;
-        //    }
-
-        //    if (state.ProviderId == null)
-        //    {
- 
-        //    }
-
-        //    if (libraryState.DestinationPath == null)
-        //    {
-        //        libraryState.DestinationPath = defaultDestination;
-        //        libraryState.IsUsingDefaultDestination = true;
-        //    }
-        //}
-
         private static bool IsValidManifestVersion(string version)
         {
             try
@@ -202,8 +173,6 @@ namespace Microsoft.Web.LibraryManager
                     DestinationPath = lib.DestinationPath,
                     Files = lib.Files == null ? null : new List<string>(lib.Files),
                     ProviderId = lib.ProviderId,
-                    //IsUsingDefaultDestination = lib.IsUsingDefaultDestination,
-                    //IsUsingDefaultProvider = lib.IsUsingDefaultProvider
                 };
 
                 manifest._libraries.Add(newState);
@@ -386,7 +355,6 @@ namespace Microsoft.Web.LibraryManager
                 return LibraryOperationResult.FromCancelled(library);
             }
 
-
             if (library != null)
             {
                 try
@@ -423,25 +391,7 @@ namespace Microsoft.Web.LibraryManager
                 NullValueHandling = NullValueHandling.Ignore,
             };
 
-            //foreach (ILibraryInstallationState library in _libraries)
-            //{
-            //    if (library is LibraryInstallationState state)
-            //    {
-            //        if (state.IsUsingDefaultDestination)
-            //        {
-            //            state.DestinationPath = null;
-            //        }
-            //        if (state.IsUsingDefaultProvider)
-            //        {
-            //            state.ProviderId = null;
-            //        }
-            //    }
-            //}
-
             string json = JsonConvert.SerializeObject(this, settings);
-
-            //UpdateLibraryProviderAndDestination(this);
-
             byte[] buffer = Encoding.UTF8.GetBytes(json);
 
             using (FileStream writer = File.Create(fileName, 4096, FileOptions.Asynchronous))
