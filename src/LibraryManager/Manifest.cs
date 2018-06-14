@@ -189,7 +189,9 @@ namespace Microsoft.Web.LibraryManager
         {
             var manifest = new Manifest(_dependencies)
             {
-                Version = Version
+                Version = Version,
+                DefaultDestination = DefaultDestination,
+                DefaultProvider = DefaultProvider
             };
 
             foreach (LibraryInstallationState lib in _libraries.Cast<LibraryInstallationState>())
@@ -206,6 +208,8 @@ namespace Microsoft.Web.LibraryManager
 
                 manifest._libraries.Add(newState);
             }
+
+            manifest._librariesValidator = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
             return manifest;
         }

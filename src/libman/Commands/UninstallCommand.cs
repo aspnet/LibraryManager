@@ -63,7 +63,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUninstall, LibraryId.Value), LogLevel.Operation);
 
-                libraryToUninstall = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment);
+                libraryToUninstall = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment, manifest.DefaultProvider, manifest.DefaultDestination);
             }
             else
             {

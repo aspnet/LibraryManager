@@ -120,7 +120,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             inputReader.Inputs[outputStr] = "1";
 
-            ILibraryInstallationState result = LibraryResolver.ResolveLibraryByUserChoice(manifest.Libraries, HostEnvironment);
+            ILibraryInstallationState result = LibraryResolver.ResolveLibraryByUserChoice(manifest.Libraries, HostEnvironment, manifest.DefaultProvider, manifest.DefaultDestination);
 
             Assert.AreEqual("jquery@3.3.1", result.LibraryId);
         }

@@ -109,7 +109,10 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// <param name="installedLibraries"></param>
         /// <param name="hostEnvironment"></param>
         /// <returns></returns>
-        public static ILibraryInstallationState ResolveLibraryByUserChoice(IEnumerable<ILibraryInstallationState> installedLibraries, IHostEnvironment hostEnvironment)
+        public static ILibraryInstallationState ResolveLibraryByUserChoice(IEnumerable<ILibraryInstallationState> installedLibraries,
+            IHostEnvironment hostEnvironment,
+            string defaultProvider, 
+            string defaultDestination)
         {
             var sb = new StringBuilder(Resources.ChooseAnOption);
             sb.AppendLine();
@@ -118,7 +121,7 @@ namespace Microsoft.Web.LibraryManager.Tools
             int index = 1;
             foreach (ILibraryInstallationState library in installedLibraries)
             {
-                sb.Append($"{Environment.NewLine}{index}. {library.ToConsoleDisplayString()}");
+                sb.Append($"{Environment.NewLine}{index}. {library.ToConsoleDisplayString(defaultProvider, defaultDestination)}");
                 index++;
             }
 
