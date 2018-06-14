@@ -206,10 +206,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                         ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(libraryId, cancellationToken);
                         return (libraryId, libraryToInstall);
                     }
-                    catch
-                    {
-                        // TO DO: Follow up with Prafull on what to o here
-                    }
+                    catch { }
                 }
 
                 sb.AppendLine("  " + libIds.First());

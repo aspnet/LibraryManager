@@ -21,8 +21,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
             // - each part (Name, Version) can not start or end with space 
 
             if (string.IsNullOrEmpty(libraryId) ||
-                !libraryId.Contains(_idPartsSeparator.ToString()) ||
-                libraryId.EndsWith(_idPartsSeparator.ToString()) ||
+                libraryId.IndexOf(_idPartsSeparator) < 0 ||
+                libraryId[libraryId.Length - 1] == _idPartsSeparator ||
                 char.IsWhiteSpace(libraryId[0]) ||
                 char.IsWhiteSpace(libraryId[libraryId.Length - 1]))
             {

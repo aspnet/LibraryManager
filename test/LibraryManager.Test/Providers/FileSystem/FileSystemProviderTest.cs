@@ -202,6 +202,22 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             Assert.IsTrue(File.ReadAllText(copiedFile).Length > 1000);
         }
 
+        public async Task InstallAsync_PathNotDefined()
+        {
+            IProvider provider = _dependencies.GetProvider("filesystem");
+
+            var desiredState = new LibraryInstallationState
+            {
+                ProviderId = "filesystem",
+                LibraryId = "https://raw.githubusercontent.com/jquery/jquery/master/src/event.js",
+                Files = new[] { "event.js" }
+            };
+
+            ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual("LIB005", result.Errors[0].Code);
+        }
+
         [TestMethod]
         public async Task InstallAsync_UriImage()
         {
@@ -241,7 +257,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        public async Task InstallAsync_PathNotDefined()
+        public async Task InstallAsync_UnableToResolveSource()
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
 

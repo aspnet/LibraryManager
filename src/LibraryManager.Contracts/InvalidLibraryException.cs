@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         {
             string message = string.Format(Text.ErrorUnableToResolveSource, libraryId ?? string.Empty, providerId ?? string.Empty);
 
-            if(details != null)
+            if(details != null && !string.IsNullOrWhiteSpace(details))
             {
                 message += Environment.NewLine + details;
             }

@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conflicting libraries found: {0}.
+        ///   Looks up a localized string similar to Cannot restore. Multiple definitions for library: {0}.
         /// </summary>
         internal static string ErrorDuplicateLibraries {
             get {

@@ -200,10 +200,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
                     foreach (SemanticVersion semVersion in npmPackageInfo.Versions)
                     {
+                        string itemText = name + "@" + semVersion.ToString();
                         CompletionItem completionItem = new CompletionItem
                         {
-                            DisplayText = name + "@" + semVersion.ToString(),
-                            InsertionText = name + "@" + semVersion.ToString()
+                            DisplayText = itemText,
+                            InsertionText = itemText
                         };
 
                         completions.Add(completionItem);
