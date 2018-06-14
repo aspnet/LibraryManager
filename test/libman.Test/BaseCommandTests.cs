@@ -32,6 +32,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var command = new SampleTestCommand(HostEnvironment);
             command.Configure(null);
             command.CreateNewManifest = true;
+            command.DefaultDestination = "wwwroot/lib";
+            command.DefaultProvider = "cdnjs";
             command.Execute();
 
             Assert.AreEqual("1.0", command.Manifest.Version);

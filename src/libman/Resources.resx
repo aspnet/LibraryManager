@@ -385,4 +385,7 @@ Please specify a different destination.</value>
   <data name="UnableToFindLatestVersionForLibrary" xml:space="preserve">
     <value>Could not determine the latest version for "{0}"</value>
   </data>
+  <data name="InitFailedUnknownProvider" xml:space="preserve">
+    <value>Failed to initialize libman.json. [{0}]: {1}</value>
+  </data>
 </root>

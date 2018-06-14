@@ -69,5 +69,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         /// <remarks>Throws <see cref="InvalidLibraryException"/> for invalid library id format</remarks>
         LibraryIdentifier GetLibraryIdentifier(string libraryId);
+
+        /// <summary>
+        /// Gets the suggested destination path for the library.
+        /// </summary>
+        /// <param name="library"></param>
+        string GetSuggestedDestination(ILibrary library);
     }
 }

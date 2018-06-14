@@ -148,25 +148,48 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return help.ToString();
         }
 
-        protected async Task<Manifest> GetManifestAsync(bool createIfNotExists = false)
+        protected async Task<Manifest> GetManifestAsync()
         {
-            if (!File.Exists(Settings.ManifestFileName) && !createIfNotExists)
+            if (!File.Exists(Settings.ManifestFileName))
             {
                 throw new InvalidOperationException(string.Format(Resources.LibmanJsonNotFound, Settings.ManifestFileName));
             }
 
-            IDependencies dependencies = ManifestDependencies;
-            Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, dependencies, CancellationToken.None);
+            Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, ManifestDependencies, CancellationToken.None);
 
             if (manifest == null)
             {
                 throw new InvalidOperationException(Resources.FixManifestFile);
             }
 
-            if (!File.Exists(Settings.ManifestFileName))
+            return manifest;
+        }
+
+        protected async Task<Manifest> CreateManifestAsync(string defaultProvider, string defaultDestination, CancellationToken cancellationToken)
+        {
+            if (File.Exists(Settings.ManifestFileName))
             {
-                manifest.AddVersion(Manifest.SupportedVersions.Last().ToString());
+                throw new InvalidOperationException(Resources.InitFailedLibmanJsonFileExists);
             }
+
+            Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, ManifestDependencies, cancellationToken);
+            manifest.AddVersion(Manifest.SupportedVersions.Last().ToString());
+            manifest.DefaultDestination = string.IsNullOrEmpty(defaultDestination) ? null : defaultDestination;
+
+            defaultProvider = string.IsNullOrEmpty(defaultProvider)
+                ? HostEnvironment.InputReader.GetUserInput($"{nameof(defaultProvider)}:")
+                : defaultProvider;
+
+            if (ManifestDependencies.GetProvider(defaultProvider) == null)
+            {
+                IError unknownProviderError = PredefinedErrors.ProviderUnknown(defaultProvider);
+                string message = string.Format(Resources.InitFailedUnknownProvider, unknownProviderError.Code, unknownProviderError.Message);
+                throw new InvalidOperationException(message);
+            }
+
+            manifest.DefaultProvider = defaultProvider;
+
+            await manifest.SaveAsync(Settings.ManifestFileName, cancellationToken);
 
             return manifest;
         }

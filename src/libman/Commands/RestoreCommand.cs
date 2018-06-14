@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected override async Task<int> ExecuteInternalAsync()
         {
-            Manifest manifest = await GetManifestAsync(createIfNotExists: false);
+            Manifest manifest = await GetManifestAsync();
             await ManifestRestorer.RestoreManifestAsync(manifest, Logger, CancellationToken.None);
 
             return 0;
