@@ -257,7 +257,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             }
         }
 
-        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
+        public ILibrary GetLibraryFromIdentifier(string libraryId)
         {
             if (string.IsNullOrEmpty(libraryId))
             {
@@ -269,7 +269,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 throw new InvalidLibraryException(libraryId, Id, Text.InvalidCharsInPath);
             }
 
-            return new LibraryIdentifier(libraryId, null);
+            return new FileSystemLibrary { Name = libraryId, ProviderId = Id };
         }
     }
 }

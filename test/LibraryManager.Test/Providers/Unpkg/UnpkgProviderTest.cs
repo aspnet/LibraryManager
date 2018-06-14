@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Mocks;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
@@ -34,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             Assert.AreEqual(string.Empty, _provider.GetSuggestedDestination(null));
 
-            var library = new UnpkgLibrary()
+            var library = new LibraryManager.Providers.Shared.Library()
             {
                 Name = "jquery",
                 Version = "3.3.1",

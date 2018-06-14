@@ -130,7 +130,7 @@ namespace Microsoft.Web.LibraryManager
             {
                 try
                 {
-                    provider.GetLibraryIdentifier(library.LibraryId);
+                    provider.GetLibraryFromIdentifier(library.LibraryId);
                 }
                 catch (InvalidLibraryException)
                 {
@@ -262,9 +262,9 @@ namespace Microsoft.Web.LibraryManager
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            LibraryIdentifier libraryIdentifier = provider.GetLibraryIdentifier(libraryId);
+            ILibrary library = provider.GetLibraryFromIdentifier(libraryId);
 
-            return libraryIdentifier.Name;
+            return library.Name;
         }
 
         private IEnumerable<IProvider> GetProviders(IEnumerable<ILibraryInstallationState> libraries)

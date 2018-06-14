@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -134,9 +135,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <remarks>Throws <see cref="InvalidLibraryException"/> for invalid libraryId format</remarks>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            LibraryIdentifier libraryIdentifier = _provider.GetLibraryIdentifier(libraryId);
-            string name = libraryIdentifier.Name;
-            string version = libraryIdentifier.Version;
+            ILibrary library = _provider.GetLibraryFromIdentifier(libraryId);
+            string name = library.Name;
+            string version = library.Version;
 
             IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
             Asset asset = assets.FirstOrDefault(a => a.Version == version);
@@ -146,7 +147,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
 
-            return new CdnjsLibrary
+            return new Library
             {
                 Version = asset.Version,
                 Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
@@ -159,7 +160,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             try
             {
-                LibraryIdentifier libraryIdentifier = _provider.GetLibraryIdentifier(libraryId);
+                ILibrary libraryIdentifier = _provider.GetLibraryFromIdentifier(libraryId);
                 string name = libraryIdentifier.Name;
                 string version = libraryIdentifier.Version;
 

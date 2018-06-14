@@ -524,11 +524,11 @@ namespace Microsoft.Web.LibraryManager
             try
             {
                 IProvider provider = _dependencies.GetProvider(expandedLibrary.ProviderId);
-                LibraryIdentifier libraryIdentifier = provider.GetLibraryIdentifier(expandedLibrary.LibraryId);
+                ILibrary library = provider.GetLibraryFromIdentifier(expandedLibrary.LibraryId);
 
                 if (expandedLibrary.Files != null)
                 {
-                    filesWithVersions = new HashSet<FileIdentifier>(expandedLibrary.Files.Select(f => new FileIdentifier(Path.Combine(expandedLibrary.DestinationPath, f), libraryIdentifier.Version)));
+                    filesWithVersions = new HashSet<FileIdentifier>(expandedLibrary.Files.Select(f => new FileIdentifier(Path.Combine(expandedLibrary.DestinationPath, f), library.Version)));
                 }
             }
             catch { }

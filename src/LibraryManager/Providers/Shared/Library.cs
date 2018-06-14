@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryManager.Providers.Unpkg
+namespace Microsoft.Web.LibraryManager.Providers.Shared
 {
-    internal class UnpkgLibrary : ILibrary
+    internal class Library : ILibrary
     {
         public string Name { get; set; }
         public string ProviderId { get; set; }

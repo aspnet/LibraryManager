@@ -77,13 +77,13 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// </summary>
         /// <param name="libraryId"></param>
         /// <returns></returns>
-        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
+        public ILibrary GetLibraryFromIdentifier(string libraryId)
         {
             try
             {
                 string[] parts = libraryId.Split('@');
 
-                return new LibraryIdentifier(parts[0], parts[1]);
+                return new Mocks.Library { Name = parts[0], Version = parts[1], ProviderId = Id};
             }
             catch
             {

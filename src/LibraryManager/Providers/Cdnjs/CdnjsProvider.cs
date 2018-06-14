@@ -112,7 +112,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public string GetSuggestedDestination(ILibrary library)
         {
-            if (library != null && library is CdnjsLibrary cdnjsLibrary)
+            if (library != null && library is Library cdnjsLibrary)
             {
                 return cdnjsLibrary.Name;
             }
@@ -221,7 +221,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+            ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
             string name = libraryIdentifier.Name;
             string version = libraryIdentifier.Version;
 
@@ -252,7 +252,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
                 string name = libraryIdentifier.Name;
                 string version = libraryIdentifier.Version;
 
@@ -298,7 +298,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             try
             {
-                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
                 string name = libraryIdentifier.Name;
                 string version = libraryIdentifier.Version;
 
@@ -325,9 +325,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return true;
         }
 
-        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
+        public ILibrary GetLibraryFromIdentifier(string libraryId)
         {
-            return ProvidersCommon.GetLibraryIdentifier(Id, libraryId);
+            return ProvidersCommonUtils.GetLibraryIdentifier(Id, libraryId);
         }
     }
 }

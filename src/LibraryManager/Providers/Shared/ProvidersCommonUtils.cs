@@ -6,11 +6,11 @@ using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Providers.Shared
 {
-    internal static class ProvidersCommon
+    internal static class ProvidersCommonUtils
     {
         private const char _idPartsSeparator = '@';
 
-        public static LibraryIdentifier GetLibraryIdentifier(string providerId, string libraryId)
+        public static ILibrary GetLibraryIdentifier(string providerId, string libraryId)
         {
             // A valid libraryId:
             // - can not be null or empty string
@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
                 }
             }
 
-            return new LibraryIdentifier(parts[0], parts[1]);
+            return new Library { Name = parts[0], Version = parts[1], ProviderId = providerId };
         }
     }
 }

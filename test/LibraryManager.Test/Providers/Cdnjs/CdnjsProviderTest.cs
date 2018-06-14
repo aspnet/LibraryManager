@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 {
@@ -179,7 +180,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             Assert.AreEqual(string.Empty, _provider.GetSuggestedDestination(null));
 
-            ILibrary library = new CdnjsLibrary()
+            ILibrary library = new LibraryManager.Providers.Shared.Library()
             {
                 Name = "jquery",
                 Version = "3.3.1",

@@ -85,7 +85,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         /// <returns></returns>
         public string GetSuggestedDestination(ILibrary library)
         {
-            if (library != null && library is UnpkgLibrary unpkgLibrary)
+            if (library != null && library is Library unpkgLibrary)
             {
                 return unpkgLibrary.Name;
             }
@@ -110,7 +110,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
                 string name = libraryIdentifier.Name;
                 string version = libraryIdentifier.Version;
                 string libraryDir = Path.Combine(CacheFolder, name);
@@ -157,7 +157,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             try
             {
-                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
                 string name = libraryIdentifier.Name;
                 string version = libraryIdentifier.Version;
 
@@ -230,7 +230,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             try
             {
-                LibraryIdentifier libraryIdentifier = GetLibraryIdentifier(state.LibraryId);
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
                 string name = libraryIdentifier.Name;
                 string version = libraryIdentifier.Version;
 
@@ -296,9 +296,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return LibraryOperationResult.FromSuccess(desiredState);
         }
 
-        public LibraryIdentifier GetLibraryIdentifier(string libraryId)
+        public ILibrary GetLibraryFromIdentifier(string libraryId)
         {
-            return ProvidersCommon.GetLibraryIdentifier(Id, libraryId);
+            return ProvidersCommonUtils.GetLibraryIdentifier(Id, libraryId);
         }
     }
 }

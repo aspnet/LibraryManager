@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
@@ -33,9 +34,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                LibraryIdentifier libraryIdentifier = _provider.GetLibraryIdentifier(libraryId);
-                string name = libraryIdentifier.Name;
-                string version = libraryIdentifier.Version;
+                ILibrary library = _provider.GetLibraryFromIdentifier(libraryId);
+                string name = library.Name;
+                string version = library.Version;
                 string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, name);
 
                 JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
@@ -56,13 +57,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            LibraryIdentifier libraryIdentifier = _provider.GetLibraryIdentifier(libraryId);
-            string name = libraryIdentifier.Name;
-            string version = libraryIdentifier.Version;
+            ILibrary library = _provider.GetLibraryFromIdentifier(libraryId);
+            string name = library.Name;
+            string version = library.Version;
 
             IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken);
 
-            return new UnpkgLibrary
+            return new Library
             {
                 Version = version,
                 Files = libraryFiles.ToDictionary(k => k, b => false),
@@ -169,7 +170,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             
             try
             {
-                LibraryIdentifier libraryIdentifier = _provider.GetLibraryIdentifier(libraryNameStart);
+                ILibrary libraryIdentifier = _provider.GetLibraryFromIdentifier(libraryNameStart);
                 string name = libraryIdentifier.Name;
                 string version = libraryIdentifier.Version;
 

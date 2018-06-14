@@ -62,12 +62,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
         ILibraryCatalog GetCatalog();
 
         /// <summary>
-        /// Returns LibraryIdentifier for a given library id 
+        /// Returns ILibrary for a given libraryId 
         /// </summary>
         /// <param name="libraryId"></param>
         /// <returns></returns>
         /// <remarks>Throws <see cref="InvalidLibraryException"/> for invalid library id format</remarks>
-        LibraryIdentifier GetLibraryIdentifier(string libraryId);
+        ILibrary GetLibraryFromIdentifier(string libraryId);
 
         /// <summary>
         /// Gets the suggested destination path for the library.
