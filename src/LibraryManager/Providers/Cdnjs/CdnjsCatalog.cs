@@ -59,7 +59,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 {
                     var completion = new CompletionItem
                     {
-                        DisplayText = AliasedName(group.DisplayName),
+                        DisplayText = group.DisplayName,
                         InsertionText = group.DisplayName + "@" + group.Version,
                         Description = group.Description,
                     };
@@ -214,7 +214,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private static string NormalizedGroupName(string groupName)
         {
-            string cleanName = AliasedName(groupName);
+            string cleanName = groupName;
 
             if (cleanName.EndsWith("js"))
             {
@@ -224,19 +224,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             return cleanName;
-        }
-
-        // TO DO: Remove this!
-        private static string AliasedName(string groupName)
-        {
-
-            switch (groupName)
-            {
-                case "twitter-bootstrap":
-                    return "bootstrap";
-            }
-
-            return groupName;
         }
 
         private async Task<bool> EnsureCatalogAsync(CancellationToken cancellationToken)
