@@ -21,13 +21,13 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             return subItems;
         }
 
-        public static void WaitForRestoredFiles(string currentWorkingDirectory, IEnumerable<string> expectedFilesAndFolders, bool caseInsensitive, int timeout = 10000)
+        public static void WaitForRestoredFiles(string currentWorkingDirectory, IEnumerable<string> expectedFiles, bool caseInsensitive, int timeout = 10000)
         {
-            string errorMessage = WaitForRestoredFilesHelper(currentWorkingDirectory, expectedFilesAndFolders, caseInsensitive, timeout);
+            string errorMessage = WaitForRestoredFilesHelper(currentWorkingDirectory, expectedFiles, caseInsensitive, timeout);
 
             if (errorMessage != null)
             {
-                string newErrorMessage = WaitForRestoredFilesHelper(currentWorkingDirectory, expectedFilesAndFolders, caseInsensitive, timeout);
+                string newErrorMessage = WaitForRestoredFilesHelper(currentWorkingDirectory, expectedFiles, caseInsensitive, timeout);
 
                 if (newErrorMessage != null)
                 {
@@ -42,26 +42,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
-        public static void WaitForRestoredFile(string currentWorkingDirectory, string expectedFileOrFolder, bool caseInsensitive, int timeout = 10000)
+        public static void WaitForRestoredFile(string currentWorkingDirectory, string expectedFile, bool caseInsensitive, int timeout = 10000)
         {
-            WaitForRestoredFiles(currentWorkingDirectory, new[] { expectedFileOrFolder }, caseInsensitive, timeout);
+            WaitForRestoredFiles(currentWorkingDirectory, new[] { expectedFile }, caseInsensitive, timeout);
         }
 
-        public static void WaitForRestoredFileNotPresent(string currentWorkingDirectory, string expectedFileOrFolder, bool caseInsensitive, int timeout = 10000)
-        {
-            string errorMessage = WaitForRestoredFilesHelper(currentWorkingDirectory, new[] { expectedFileOrFolder }, caseInsensitive, timeout);
-
-            if (errorMessage == null)
-            {
-                errorMessage = expectedFileOrFolder + " should not be restored.";
-            }
-            if (!errorMessage.Contains("Timed out waiting for: "))
-            {
-                throw new TimeoutException(errorMessage);
-            }
-        }
-
-        private static string WaitForRestoredFilesHelper(string currentWorkingDirectory, IEnumerable<string> expectedFilesAndFolders, bool caseInsensitive, int timeout)
+        private static string WaitForRestoredFilesHelper(string currentWorkingDirectory, IEnumerable<string> expectedFiles, bool caseInsensitive, int timeout)
         {
             string errorMessage = null;
 
@@ -78,9 +64,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                     }
 
                     errorMessage = null;
-                    if (expectedFilesAndFolders != null)
+                    if (expectedFiles != null)
                     {
-                        foreach(string item in expectedFilesAndFolders)
+                        foreach(string item in expectedFiles)
                         {
                             if (!subItems.Contains(item))
                             {
@@ -100,13 +86,13 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             return errorMessage;
         }
 
-        public static void WaitForDeletedFiles(string currentWorkingDirectory, IEnumerable<string> deletedFilesAndFolders, bool caseInsensitive, int timeout = 10000)
+        public static void WaitForDeletedFiles(string currentWorkingDirectory, IEnumerable<string> deletedFiles, bool caseInsensitive, int timeout = 10000)
         {
-            string errorMessage = WaitForDeletedFilesHelper(currentWorkingDirectory, deletedFilesAndFolders, caseInsensitive, timeout);
+            string errorMessage = WaitForDeletedFilesHelper(currentWorkingDirectory, deletedFiles, caseInsensitive, timeout);
 
             if (errorMessage != null)
             {
-                string newErrorMessage = WaitForDeletedFilesHelper(currentWorkingDirectory, deletedFilesAndFolders, caseInsensitive, timeout);
+                string newErrorMessage = WaitForDeletedFilesHelper(currentWorkingDirectory, deletedFiles, caseInsensitive, timeout);
 
                 if (newErrorMessage != null)
                 {
@@ -121,12 +107,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
-        public static void WaitForDeletedFile(string currentWorkingDirectory, string deletedFileOrFolder, bool caseInsensitive, int timeout = 10000)
+        public static void WaitForDeletedFile(string currentWorkingDirectory, string deletedFile, bool caseInsensitive, int timeout = 10000)
         {
-            WaitForDeletedFiles(currentWorkingDirectory, new[] { deletedFileOrFolder }, caseInsensitive, timeout);
+            WaitForDeletedFiles(currentWorkingDirectory, new[] { deletedFile }, caseInsensitive, timeout);
         }
 
-        private static string WaitForDeletedFilesHelper(string currentWorkingDirectory, IEnumerable<string> deletedFilesAndFolders, bool caseInsensitive, int timeout)
+        private static string WaitForDeletedFilesHelper(string currentWorkingDirectory, IEnumerable<string> deletedFiles, bool caseInsensitive, int timeout)
         {
             string errorMessage = null;
 
@@ -137,9 +123,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                     HashSet<string> subItems = GetSubDirectoriesAndFiles(currentWorkingDirectory, caseInsensitive);
 
                     errorMessage = null;
-                    if (deletedFilesAndFolders != null)
+                    if (deletedFiles != null)
                     {
-                        foreach (string item in deletedFilesAndFolders)
+                        foreach (string item in deletedFiles)
                         {
                             if (subItems.Contains(item))
                             {
