@@ -22,8 +22,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             {
                 return new string[0];
             }
-
-            if (searchTerm.StartsWith("@"))
+            else if (searchTerm.StartsWith("@"))
             {
                 return await GetPackageNamesWithScopeAsync(searchTerm, cancellationToken).ConfigureAwait(false);
             }
