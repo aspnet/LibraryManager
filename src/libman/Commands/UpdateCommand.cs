@@ -79,7 +79,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUpdate, LibraryId.Value), LogLevel.Operation);
 
-                libraryToUpdate = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment);
+                libraryToUpdate = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment, manifest.DefaultProvider, manifest.DefaultDestination);
             }
             else
             {
@@ -90,7 +90,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (newLibraryId == null)
             {
-                newLibraryId = await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
+                newLibraryId = await GetLatestVersionAsync(libraryToUpdate, manifest, CancellationToken.None);
             }
 
             if (newLibraryId == null || newLibraryId == libraryToUpdate.LibraryId)
@@ -110,6 +110,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             ILibraryOperationResult result = null;
 
+            string providerId = libraryToUpdate.ProviderId ?? manifest.DefaultProvider;
+            string destination = libraryToUpdate.DestinationPath ?? manifest.DefaultDestination;
+
             foreach (ILibraryOperationResult r in results)
             {
                 if (!r.Success && r.Errors.Any(e => e.Message.Contains(libraryToUpdate.LibraryId)))
@@ -119,8 +122,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 }
                 else if (r.Success
                     && r.InstallationState.LibraryId == libraryToUpdate.LibraryId
-                    && r.InstallationState.ProviderId == libraryToUpdate.ProviderId
-                    && r.InstallationState.DestinationPath == libraryToUpdate.DestinationPath)
+                    && r.InstallationState.ProviderId == providerId
+                    && r.InstallationState.DestinationPath == destination)
                 {
                     result = r;
                     break;
@@ -151,9 +154,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return 0;
         }
 
-        private async Task<string> GetLatestVersionAsync(ILibraryInstallationState libraryToUpdate, CancellationToken cancellationToken)
+        private async Task<string> GetLatestVersionAsync(ILibraryInstallationState libraryToUpdate, Manifest manifest, CancellationToken cancellationToken)
         {
-            ILibraryCatalog catalog = ManifestDependencies.GetProvider(libraryToUpdate.ProviderId)?.GetCatalog();
+            string providerId = libraryToUpdate.ProviderId ?? manifest.DefaultProvider;
+            ILibraryCatalog catalog = ManifestDependencies.GetProvider(providerId)?.GetCatalog();
             if (catalog == null)
             {
                 throw new InvalidOperationException(PredefinedErrors.LibraryIdIsUndefined().Message);

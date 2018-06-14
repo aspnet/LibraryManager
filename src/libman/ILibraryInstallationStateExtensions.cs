@@ -17,7 +17,7 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// </summary>
         /// <param name="libraryInstallationState"></param>
         /// <returns></returns>
-        public static string ToConsoleDisplayString(this ILibraryInstallationState libraryInstallationState)
+        public static string ToConsoleDisplayString(this ILibraryInstallationState libraryInstallationState, string defaultProvider, string defaultDestination)
         {
             if (libraryInstallationState == null)
             {
@@ -26,14 +26,18 @@ namespace Microsoft.Web.LibraryManager.Tools
 
             var sb = new StringBuilder("{"+libraryInstallationState.LibraryId);
 
-            if (!string.IsNullOrEmpty(libraryInstallationState.ProviderId))
+            string providerId = libraryInstallationState.ProviderId ?? defaultProvider;
+
+            if (!string.IsNullOrEmpty(providerId))
             {
-                sb.Append(", " + libraryInstallationState.ProviderId);
+                sb.Append(", " + providerId);
             }
 
-            if (!string.IsNullOrEmpty(libraryInstallationState.DestinationPath))
+            string destination = libraryInstallationState.DestinationPath ?? defaultDestination;
+
+            if (!string.IsNullOrEmpty(destination))
             {
-                sb.Append(", " + libraryInstallationState.DestinationPath);
+                sb.Append(", " + destination);
             }
 
             sb.Append("}");
