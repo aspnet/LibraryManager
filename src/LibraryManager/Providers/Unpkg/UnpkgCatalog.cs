@@ -173,10 +173,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 string name = libraryIdentifier.Name;
                 string version = libraryIdentifier.Version;
 
-            try
-            {
                 // library name completion
-                if (caretPosition < unpkgLibraryId.Name.Length + 1)
+                if (caretPosition < name.Length + 1)
                 {
                     IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
