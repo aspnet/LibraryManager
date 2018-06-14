@@ -352,6 +352,48 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             Assert.IsNotNull(catalog);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(InvalidLibraryException))]
+        public void GetLibraryFromIdentifier_ThrowsForInvalidLibraryId()
+        {
+            IProvider provider = _dependencies.GetProvider("filesystem");
+
+            var desiredState = new LibraryInstallationState
+            {
+                ProviderId = "filesystem",
+                LibraryId = "",
+                Files = new[] { "event.js" }
+            };
+
+            ILibrary result = provider.GetLibraryFromIdentifier(desiredState.LibraryId);
+       }
+
+        [TestMethod]
+        public void GetLibraryFromIdentifier_VerifyExceptionMessage()
+        {
+            string expectedMessage = "The \"InvalidChars|InPath\" library could not be resolved by the \"filesystem\" provider\r\nInvalid characters in path";
+            string actualMessage = "";
+            IProvider provider = _dependencies.GetProvider("filesystem");
+
+            var desiredState = new LibraryInstallationState
+            {
+                ProviderId = "filesystem",
+                LibraryId = "InvalidChars|InPath",
+                Files = new[] { "event.js" }
+            };
+
+            try
+            {
+                ILibrary result = provider.GetLibraryFromIdentifier(desiredState.LibraryId);
+            }
+            catch (InvalidLibraryException ex)
+            {
+                actualMessage = ex.Message;
+            }
+
+            Assert.AreEqual(actualMessage, expectedMessage);
+        }
+
         private string GetConfig()
         {
             string config = $@"{{
