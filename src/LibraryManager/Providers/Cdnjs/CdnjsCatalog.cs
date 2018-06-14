@@ -162,7 +162,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             {
                 ILibrary libraryIdentifier = _provider.GetLibraryFromIdentifier(libraryId);
                 string name = libraryIdentifier.Name;
-                string version = libraryIdentifier.Version;
 
                 if (!await EnsureCatalogAsync(cancellationToken).ConfigureAwait(false))
                 {
