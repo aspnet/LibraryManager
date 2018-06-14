@@ -196,6 +196,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid characters in path.
+        /// </summary>
+        public static string InvalidCharsInPath {
+            get {
+                return ResourceManager.GetString("InvalidCharsInPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unavailable.
         /// </summary>
         public static string LibraryDetail_Unavailable {

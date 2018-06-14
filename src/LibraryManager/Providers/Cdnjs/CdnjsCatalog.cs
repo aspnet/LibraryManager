@@ -125,6 +125,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return results.ToList();
         }
 
+        /// <summary>
+        /// Returns a library from this catalog based on th libraryId
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>Throws <see cref="InvalidLibraryException"/> for invalid libraryId format</remarks>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
             LibraryIdentifier libraryIdentifier = _provider.GetLibraryIdentifier(libraryId);
@@ -145,7 +152,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
                 Name = name,
                 ProviderId = _provider.Id,
-            };        
+            };
         }
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)

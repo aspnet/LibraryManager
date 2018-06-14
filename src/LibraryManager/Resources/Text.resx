@@ -253,4 +253,7 @@
   <data name="NameAndVersionRequired" xml:space="preserve">
     <value>Name and Version of a library are required</value>
   </data>
+  <data name="InvalidCharsInPath" xml:space="preserve">
+    <value>Invalid characters in path</value>
+  </data>
 </root>

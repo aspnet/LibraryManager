@@ -1,7 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,9 +35,9 @@ namespace Microsoft.Web.LibraryManager.Contracts
         IHostInteraction HostInteraction { get; }
 
         /// <summary>
-        /// True if provider supports renamining of source file at the destinationPath
+        /// True if provider supports renamming of source file at the destinationPath
         /// </summary>
-        bool SupportsRemaming { get; }
+        bool SupportsRenamming { get; }
 
         /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.

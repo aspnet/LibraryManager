@@ -12,7 +12,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
 
         public static LibraryIdentifier GetLibraryIdentifier(IProvider provider, string libraryId)
         {
-            // A valid libraryId will have
+            // A valid libraryId:
             // - can not be null or empty string
             // - has at least one _idPartsSeparator
             // - can not end with a _idPartsSeparator

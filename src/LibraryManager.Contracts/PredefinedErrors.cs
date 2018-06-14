@@ -171,7 +171,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
             => new Error("LIB018", string.Format(Text.ErrorLibraryHasInvalidFiles, libraryId, string.Join(", ", invalidFile), string.Join(", ", validFiles)));
 
         /// <summary>
-        /// File is not valid for the library.
+        /// Duplicate libraries in the same manifest file
         /// </summary>
         /// <param name="duplicateLibraries"></param>
         /// <returns></returns>

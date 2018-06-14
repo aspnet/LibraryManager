@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Microsoft.Web.LibraryManager.Contracts.Resources;
 
 namespace Microsoft.Web.LibraryManager.Contracts

@@ -480,8 +480,8 @@ namespace Microsoft.Web.LibraryManager
 
             if (newManifest != null)
             {
-                IEnumerable<FileIdentifier> existingFiles = await GetAllManifestFilesWithVersionsAsync(Libraries).ConfigureAwait(false);
-                IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest.Libraries).ConfigureAwait(false);
+                IEnumerable<FileIdentifier> existingFiles = await GetAllManifestFilesWithVersionsAsync(Libraries, cancellationToken).ConfigureAwait(false);
+                IEnumerable<FileIdentifier> newFiles = await GetAllManifestFilesWithVersionsAsync(newManifest.Libraries, cancellationToken).ConfigureAwait(false);
                 IEnumerable<string> filesToRemove = existingFiles.Except(newFiles).Select(f => f.Path);
 
                 if (filesToRemove.Any())
@@ -494,28 +494,22 @@ namespace Microsoft.Web.LibraryManager
             return true;
         }
 
-        private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(IEnumerable<ILibraryInstallationState> libraries)
+        private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
             var files = new HashSet<FileIdentifier>();
 
-            if (libraries != null)
+            IEnumerable<ILibraryOperationResult> results = await _librariesValidator.GetExpandedLibrariesAsync(libraries, cancellationToken);
+            if (results.All(r => r.Success))
             {
-                foreach (ILibraryInstallationState state in libraries)
+                IEnumerable<ILibraryInstallationState> expandedLibraries = results.Select(r => r.InstallationState);
+                foreach (ILibraryInstallationState expandedLibrary in expandedLibraries)
                 {
-                    IProvider provider = _dependencies.GetProvider(state.ProviderId);
-                    if (provider != null)
+                    IProvider provider = _dependencies.GetProvider(expandedLibrary.ProviderId);
+                    HashSet<FileIdentifier> libraryFiles = GetLibraryFilesWithVersions(expandedLibrary);
+
+                    foreach (FileIdentifier fileIdentifier in libraryFiles)
                     {
-                        ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
-
-                        if (updatedStateResult.Success)
-                        {
-                            HashSet<FileIdentifier> stateFiles = await GetLibraryFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
-
-                            foreach (FileIdentifier fileIdentifier in stateFiles)
-                            {
-                                files.Add(fileIdentifier);
-                            }
-                        }
+                        files.Add(fileIdentifier);
                     }
                 }
             }
@@ -523,22 +517,21 @@ namespace Microsoft.Web.LibraryManager
             return files;
         }
 
-        private async Task<HashSet<FileIdentifier>> GetLibraryFilesWithVersionsAsync(ILibraryInstallationState state)
+        private HashSet<FileIdentifier> GetLibraryFilesWithVersions(ILibraryInstallationState expandedLibrary)
         {
-            ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
             var filesWithVersions = new HashSet<FileIdentifier>();
 
-            if (catalog == null || !state.Files.Any())
+            try
             {
-                return filesWithVersions;
-            }
+                IProvider provider = _dependencies.GetProvider(expandedLibrary.ProviderId);
+                LibraryIdentifier libraryIdentifier = provider.GetLibraryIdentifier(expandedLibrary.LibraryId);
 
-            ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None).ConfigureAwait(false);
-
-            if (library != null && library.Files != null)
-            {
-                filesWithVersions = new HashSet<FileIdentifier>(library.Files.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f.Key), library.Version)));
+                if (expandedLibrary.Files != null)
+                {
+                    filesWithVersions = new HashSet<FileIdentifier>(expandedLibrary.Files.Select(f => new FileIdentifier(Path.Combine(expandedLibrary.DestinationPath, f), libraryIdentifier.Version)));
+                }
             }
+            catch { }
 
             return filesWithVersions;
         }

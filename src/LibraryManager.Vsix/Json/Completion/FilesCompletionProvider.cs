@@ -29,69 +29,76 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
         {
-            JSONMember member = context.ContextItem.FindType<JSONMember>();
-
-            if (member == null || member.UnquotedNameText != "files")
-                yield break;
-
-            var parent = member.Parent as JSONObject;
-
-            if (!JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
-                yield break;
-
-            if (string.IsNullOrEmpty(state.LibraryId))
-                yield break;
-
-            var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
-            IProvider provider = dependencies.GetProvider(state.ProviderId);
-            ILibraryCatalog catalog = provider?.GetCatalog();
-
-            if (catalog == null)
-                yield break;
-
-            Task<ILibrary> task = catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-            FrameworkElement presenter = GetPresenter(context);
-            IEnumerable<string> usedFiles = GetUsedFiles(context);
-
-            if (task.IsCompleted)
+            try
             {
-                if (!(task.Result is ILibrary library))
+                JSONMember member = context.ContextItem.FindType<JSONMember>();
+
+                if (member == null || member.UnquotedNameText != "files")
                     yield break;
 
-                foreach (string file in library.Files.Keys)
-                {
-                    if (!usedFiles.Contains(file))
-                    {
-                        ImageSource glyph = WpfUtil.GetIconForFile(presenter, file, out bool isThemeIcon);
-                        yield return new SimpleCompletionEntry(file, glyph, context.Session);
-                    }
-                }
-            }
-            else
-            {
-                yield return new SimpleCompletionEntry(Resources.Text.Loading, KnownMonikers.Loading, context.Session);
+                var parent = member.Parent as JSONObject;
 
-                task.ContinueWith((a) =>
+                if (!JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
+                    yield break;
+
+                if (string.IsNullOrEmpty(state.LibraryId))
+                    yield break;
+
+                var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
+                IProvider provider = dependencies.GetProvider(state.ProviderId);
+                ILibraryCatalog catalog = provider?.GetCatalog();
+
+                if (catalog == null)
+                    yield break;
+
+                Task<ILibrary> task = catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+                FrameworkElement presenter = GetPresenter(context);
+                IEnumerable<string> usedFiles = GetUsedFiles(context);
+
+                if (task.IsCompleted)
                 {
                     if (!(task.Result is ILibrary library))
-                        return;
+                        yield break;
 
-                    if (!context.Session.IsDismissed)
+                    foreach (string file in library.Files.Keys)
                     {
-                        var results = new List<JSONCompletionEntry>();
-
-                        foreach (string file in library.Files.Keys)
+                        if (!usedFiles.Contains(file))
                         {
-                            if (!usedFiles.Contains(file))
-                            {
-                                ImageSource glyph = WpfUtil.GetIconForFile(presenter, file, out bool isThemeIcon);
-                                results.Add(new SimpleCompletionEntry(file, glyph, context.Session));
-                            }
+                            ImageSource glyph = WpfUtil.GetIconForFile(presenter, file, out bool isThemeIcon);
+                            yield return new SimpleCompletionEntry(file, glyph, context.Session);
                         }
-
-                        UpdateListEntriesSync(context, results);
                     }
-                });
+                }
+                else
+                {
+                    yield return new SimpleCompletionEntry(Resources.Text.Loading, KnownMonikers.Loading, context.Session);
+
+                    task.ContinueWith((a) =>
+                    {
+                        if (!(task.Result is ILibrary library))
+                            return;
+
+                        if (!context.Session.IsDismissed)
+                        {
+                            var results = new List<JSONCompletionEntry>();
+
+                            foreach (string file in library.Files.Keys)
+                            {
+                                if (!usedFiles.Contains(file))
+                                {
+                                    ImageSource glyph = WpfUtil.GetIconForFile(presenter, file, out bool isThemeIcon);
+                                    results.Add(new SimpleCompletionEntry(file, glyph, context.Session));
+                                }
+                            }
+
+                            UpdateListEntriesSync(context, results);
+                        }
+                    });
+                }
+            }
+            catch
+            {
+                // TO DO: what needs to be done here?
             }
         }
 
