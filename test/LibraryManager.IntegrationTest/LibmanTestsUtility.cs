@@ -11,14 +11,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     {
         private static HashSet<string> GetSubDirectoriesAndFiles(string currentWorkingDirectory, bool caseInsensitive)
         {
-            HashSet<string> subItems = caseInsensitive ? new HashSet<string>(StringComparer.OrdinalIgnoreCase) : new HashSet<string>();
+            StringComparer comparer = caseInsensitive ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
 
-            foreach (string item in Directory.EnumerateFileSystemEntries(currentWorkingDirectory, "*", SearchOption.AllDirectories))
-            {
-                subItems.Add(item);
-            }
+            IEnumerable<string> subItems = Directory.EnumerateFileSystemEntries(currentWorkingDirectory, "*", SearchOption.AllDirectories);
 
-            return subItems;
+            return new HashSet<string>(subItems, comparer);
         }
 
         public static void WaitForRestoredFiles(string currentWorkingDirectory, IEnumerable<string> expectedFiles, bool caseInsensitive, int timeout = 10000)
