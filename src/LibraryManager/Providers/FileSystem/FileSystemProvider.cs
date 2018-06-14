@@ -47,7 +47,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// </summary>
         public string LibraryIdHintText { get; } = Text.FileSystemLibraryIdHintText;
 
-        public bool SupportsRenamming => true;
+        public bool SupportsRenaming => true;
 
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.

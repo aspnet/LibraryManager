@@ -67,7 +67,7 @@ namespace Microsoft.Web.LibraryManager
                 }
 
                 // Validates list of files if specified
-                if (!provider.SupportsRenamming)
+                if (!provider.SupportsRenaming)
                 {
                     ILibraryCatalog catalog = provider.GetCatalog();
                     if (catalog != null)

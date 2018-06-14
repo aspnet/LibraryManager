@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public string LibraryIdHintText => Resources.Text.UnpkgProviderHintText;
 
-        public bool SupportsRenamming => false;
+        public bool SupportsRenaming => false;
 
         public async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
@@ -298,7 +298,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public LibraryIdentifier GetLibraryIdentifier(string libraryId)
         {
-            return ProvidersCommon.GetLibraryIdentifier(this, libraryId);
+            return ProvidersCommon.GetLibraryIdentifier(Id, libraryId);
         }
     }
 }

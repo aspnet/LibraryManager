@@ -35,9 +35,9 @@ namespace Microsoft.Web.LibraryManager.Contracts
         IHostInteraction HostInteraction { get; }
 
         /// <summary>
-        /// True if provider supports renamming of source file at the destinationPath
+        /// True if provider supports renaming of source file at the destinationPath
         /// </summary>
-        bool SupportsRenamming { get; }
+        bool SupportsRenaming { get; }
 
         /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.

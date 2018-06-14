@@ -10,7 +10,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
     {
         private const char _idPartsSeparator = '@';
 
-        public static LibraryIdentifier GetLibraryIdentifier(IProvider provider, string libraryId)
+        public static LibraryIdentifier GetLibraryIdentifier(string providerId, string libraryId)
         {
             // A valid libraryId:
             // - can not be null or empty string
@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
                 char.IsWhiteSpace(libraryId[0]) ||
                 char.IsWhiteSpace(libraryId[libraryId.Length - 1]))
             {
-                throw new InvalidLibraryException(libraryId, provider.Id, Resources.Text.NameAndVersionRequired);
+                throw new InvalidLibraryException(libraryId, providerId , Resources.Text.NameAndVersionRequired);
             }
 
             int separatorIndex = libraryId.LastIndexOf(_idPartsSeparator);
@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
                     char.IsWhiteSpace(part[0]) ||
                     char.IsWhiteSpace(part[part.Length - 1]))
                 {
-                    throw new InvalidLibraryException(libraryId, provider.Id, Resources.Text.NameAndVersionRequired);
+                    throw new InvalidLibraryException(libraryId, providerId, Resources.Text.NameAndVersionRequired);
                 }
             }
 

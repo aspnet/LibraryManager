@@ -60,7 +60,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             get { return Path.Combine(HostInteraction.CacheDirectory, Id); }
         }
 
-        public bool SupportsRenamming => false;
+        public bool SupportsRenaming => false;
 
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
@@ -327,7 +327,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         public LibraryIdentifier GetLibraryIdentifier(string libraryId)
         {
-            return ProvidersCommon.GetLibraryIdentifier(this, libraryId);
+            return ProvidersCommon.GetLibraryIdentifier(Id, libraryId);
         }
     }
 }
