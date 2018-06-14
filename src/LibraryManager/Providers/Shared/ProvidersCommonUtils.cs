@@ -18,6 +18,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Shared
             // - can not end with a _idPartsSeparator
             // - can start with a _idPartsSeparator
             // - can not start or end with space
+            // - must have two parts (Name and Version)
             // - each part (Name, Version) can not start or end with space 
 
             if (string.IsNullOrEmpty(libraryId) ||
