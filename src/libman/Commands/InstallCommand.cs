@@ -94,14 +94,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected override async Task<int> ExecuteInternalAsync()
         {
-            if (File.Exists(Settings.ManifestFileName))
+            if (!File.Exists(Settings.ManifestFileName))
             {
-                _manifest = await GetManifestAsync();
+                await CreateManifestAsync(Provider.Value(), null, Settings, CancellationToken.None);
             }
-            else
-            {
-                _manifest = await CreateManifestAsync(Provider.Value(), null, CancellationToken.None);
-            }
+
+            _manifest = await GetManifestAsync();
 
             ValidateParameters(_manifest);
 
