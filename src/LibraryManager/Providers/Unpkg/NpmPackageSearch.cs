@@ -18,16 +18,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public static async Task<IEnumerable<string>> GetPackageNamesAsync(string searchTerm, CancellationToken cancellationToken)
         {
-            if (searchTerm.StartsWith("@"))
+            if (searchTerm == null)
+            {
+                return new string[0];
+            }
+            else if (searchTerm.StartsWith("@"))
             {
                 return await GetPackageNamesWithScopeAsync(searchTerm, cancellationToken).ConfigureAwait(false);
             }
-            else if (!string.IsNullOrEmpty(searchTerm))
+            else
             {
                 return await GetPackageNamesFromSimpleQueryAsync(searchTerm, cancellationToken).ConfigureAwait(false);
             }
-
-            return new string[0];
         }
 
         private static async Task<IEnumerable<string>> GetPackageNamesWithScopeAsync(string searchTerm, CancellationToken cancellationToken)
