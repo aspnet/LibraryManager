@@ -214,16 +214,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private static string NormalizedGroupName(string groupName)
         {
-            string cleanName = groupName;
-
-            if (cleanName.EndsWith("js"))
+            if (groupName.EndsWith("js"))
             {
-                cleanName = cleanName
-                    .Substring(0, cleanName.Length - 2)
+                groupName = groupName
+                    .Substring(0, groupName.Length - 2)
                     .TrimEnd('-', '.');
             }
 
-            return cleanName;
+            return groupName;
         }
 
         private async Task<bool> EnsureCatalogAsync(CancellationToken cancellationToken)
