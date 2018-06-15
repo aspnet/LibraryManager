@@ -195,5 +195,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 LibrarySearchBox.RefreshSearch();
             }
         }
+
+        private void InstallButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            CloseDialog(true);
+        }
     }
 }

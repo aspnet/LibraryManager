@@ -34,7 +34,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
         [DataTestMethod]
         [DataRow("jquery", "jquery")]
-        [DataRow("bootstrap", "twitter-bootstrap")]
         [DataRow("knockout", "knockout")]
         [DataRow("backbone", "backbone.js")]
         public async Task SearchAsync_Success(string searchTerm, string expectedId)
