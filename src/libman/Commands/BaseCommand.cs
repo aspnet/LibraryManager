@@ -165,7 +165,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return manifest;
         }
 
-        protected async Task<Manifest> CreateManifestAsync(string defaultProvider, string defaultDestination, CancellationToken cancellationToken)
+        protected async Task<Manifest> CreateManifestAsync(string defaultProvider,
+            string defaultDestination,
+            EnvironmentSettings settings,
+            CancellationToken cancellationToken)
         {
             if (File.Exists(Settings.ManifestFileName))
             {
@@ -177,7 +180,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             manifest.DefaultDestination = string.IsNullOrEmpty(defaultDestination) ? null : defaultDestination;
 
             defaultProvider = string.IsNullOrEmpty(defaultProvider)
-                ? HostEnvironment.InputReader.GetUserInput($"{nameof(defaultProvider)}:")
+                ? HostEnvironment.InputReader.GetUserInputWithDefault(nameof(settings.DefaultProvider), settings.DefaultProvider)
                 : defaultProvider;
 
             if (ManifestDependencies.GetProvider(defaultProvider) == null)

@@ -30,13 +30,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         {
             lock(_syncObject)
             {
-                Console.Out.WriteLine(fieldName);
+                Console.Out.Write($"{fieldName}: ");
                 return Console.ReadLine();
             }
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="fieldName"></param>
         /// <param name="defaultValue"></param>
@@ -45,11 +45,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         {
             lock (_syncObject)
             {
-                string message = $"{fieldName} [{defaultValue}]:";
-                Console.Out.WriteLine(message);
+                string message = $"{fieldName} [{defaultValue}]: ";
+                Console.Out.Write(message);
                 string value = Console.ReadLine();
 
-                if (string.IsNullOrEmpty(value?.Trim()))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     value = defaultValue;
                 }
@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-                    
+
                     Console.Error.WriteLine(message);
 
                     Console.ResetColor();

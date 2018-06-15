@@ -53,8 +53,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         {
             TestInputReader reader = HostEnvironment.InputReader as TestInputReader;
 
-            reader.Inputs.Add("defaultProvider:", "cdnjs");
-            reader.Inputs.Add("defaultDestination:", "wwwroot");
+            reader.Inputs.Add("DefaultProvider", "cdnjs");
+            reader.Inputs.Add("DefaultDestination:", "wwwroot");
 
             InitCommand command = new InitCommand(HostEnvironment);
             command.Configure(null);

@@ -54,7 +54,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         {
             var testInputReader = HostEnvironment.InputReader as TestInputReader;
 
-            testInputReader.Inputs.Add("defaultProvider:", "cdnjs");
+            testInputReader.Inputs.Add("DefaultProvider", "cdnjs");
 
             var command = new InstallCommand(HostEnvironment);
             command.Configure(null);
