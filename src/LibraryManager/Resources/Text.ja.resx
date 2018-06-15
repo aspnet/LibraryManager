@@ -21,7 +21,125 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} はディスクに書き込まれました</value>
+    <value>{0} が宛先に書き込まれました</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="LibraryInfoUpdateFailed" xml:space="preserve">
+    <value>{0} のライブラリ情報を更新できませんでした</value>
+  </data>
+  <data name="Restore_RestoreOfLibraryStarted" xml:space="preserve">
+    <value>ライブラリ {0} を復元しています...</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} ライブラリが {1} 秒で復元されました</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_OperationHasErrors" xml:space="preserve">
+    <value>1 つまたは複数のライブラリを復元できませんでした</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>カタログをプロバイダー "{0}" からダウンロードできませんでした</value>
+  </data>
+  <data name="Restore_LibraryRestoreCancelled" xml:space="preserve">
+    <value>ライブラリ {0} の復元が取り消されました</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} 個のライブラリを復元できませんでした</value>
+  </data>
+  <data name="Clean_OperationCancelled" xml:space="preserve">
+    <value>ライブラリのクリーン操作が取り消されました</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} 個のライブラリを削除できませんでした</value>
+  </data>
+  <data name="Clean_OperationStarted" xml:space="preserve">
+    <value>ライブラリのクリーン操作が開始されました...</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} 個のライブラリは {1} 秒で正常に削除されました</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Clean_OperationFailed" xml:space="preserve">
+    <value>クリーン操作が {0} 個のライブラリで失敗しました</value>
+  </data>
+  <data name="Clean_OperationCompleted" xml:space="preserve">
+    <value>ライブラリのクリーン操作が完了しました</value>
+  </data>
+  <data name="Install_LibraryFailed" xml:space="preserve">
+    <value>ライブラリ {0} をインストールできませんでした</value>
+  </data>
+  <data name="Install_LibraryStarted" xml:space="preserve">
+    <value>ライブラリ {0} のインストールが開始されました...</value>
+  </data>
+  <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
+    <value>ライブラリ {0} は正常に復元されました</value>
+  </data>
+  <data name="Restore_LibrariesUptodate" xml:space="preserve">
+    <value>復元が完了しました。ファイルはすでに最新です。</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>{0} 個のライブラリの復元が取り消されました</value>
+  </data>
+  <data name="Restore_OperationCompleted" xml:space="preserve">
+    <value>復元操作が完了しました</value>
+  </data>
+  <data name="SummaryEndLine" xml:space="preserve">
+    <value>========== 完了 ==========</value>
+  </data>
+  <data name="TimeElapsed" xml:space="preserve">
+    <value>経過時間: {0}</value>
+  </data>
+  <data name="Uninstall_LibraryStarted" xml:space="preserve">
+    <value>ライブラリ {0} のアンインストールが開始されました...</value>
+  </data>
+  <data name="Update_LibraryFailed" xml:space="preserve">
+    <value>ライブラリ {0} を更新できませんでした</value>
+  </data>
+  <data name="Update_LibraryStarted" xml:space="preserve">
+    <value>ライブラリ {0} の更新が開始されました...</value>
+  </data>
+  <data name="Update_LibrarySucceeded" xml:space="preserve">
+    <value>ライブラリ {0} が正常に更新されました</value>
+  </data>
+  <data name="Uninstall_LibraryCancelled" xml:space="preserve">
+    <value>ライブラリ {0} のアンインストールが取り消されました</value>
+  </data>
+  <data name="Uninstall_LibraryFailed" xml:space="preserve">
+    <value>ライブラリ {0} をアンインストールできませんでした</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>{0} 個のライブラリで削除が取り消されました</value>
+  </data>
+  <data name="Restore_LibraryRestoreFailed" xml:space="preserve">
+    <value>ライブラリを復元できませんでした: {0}</value>
+  </data>
+  <data name="Restore_OperationCancelled" xml:space="preserve">
+    <value>復元操作が取り消されました</value>
+  </data>
+  <data name="Restore_OperationFailed" xml:space="preserve">
+    <value>{0} 個のライブラリの復元操作に失敗しました</value>
+  </data>
+  <data name="Restore_OperationStarted" xml:space="preserve">
+    <value>復元操作が開始されました...</value>
+  </data>
+  <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
+    <value>ライブラリ {0} が正常にアンインストールされました</value>
+  </data>
+  <data name="Update_LibraryCancelled" xml:space="preserve">
+    <value>ライブラリ {0} の更新が取り消されました</value>
+  </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>プロジェクト {0} のライブラリを復元しています</value>
+  </data>
+  <data name="CdnjsLibraryIdHintText" xml:space="preserve">
+    <value>例: &lt;library&gt;@&lt;version&gt;</value>
+  </data>
+  <data name="FileSystemLibraryIdHintText" xml:space="preserve">
+    <value>有効なファイル システムのパスを指定する必要があります。</value>
+  </data>
+  <data name="UnpkgProviderHintText" xml:space="preserve">
+    <value>例: &lt;library&gt;@&lt;version&gt;</value>
   </data>
 </root>

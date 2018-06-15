@@ -22,10 +22,10 @@
     <value>資訊清單檔案包含語法錯誤</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>"路徑" 未定義。</value>
+    <value>"destination" 未定義。</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>"路徑" 必須在工作目錄中</value>
+    <value>"destination" 必須在工作目錄內</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>未定義提供者</value>
@@ -38,5 +38,38 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>發生未知的例外狀況</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>無法刪除程式庫 {0} 中的一或多個檔案</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>"{0}" 目的地檔案路徑包含無效字元</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>此版本的程式庫管理員不支援版本 "{0}"</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>無法從 "{0}" 下載資源</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>"{1}" 提供者無法解析 "{0}" 檔案路徑</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>在多個程式庫中找到衝突的檔案 "{0}": {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>"{1}" 提供者已經安裝 "{0}" 程式庫</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>{1} 已經安裝了檔案 "{0}"。</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>程式庫 "{0}" 無法更新為 "{1}"。已經安裝另一個程式庫 "{1}"</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>程式庫 "{0}" 無法更新為 "{1}"。下列檔案對 "{1}" 無效: {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>"{0}" 未包含以下項目: {1} 有效的檔案為 {2}</value>
   </data>
 </root>

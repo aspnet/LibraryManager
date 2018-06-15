@@ -46,12 +46,80 @@
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>Se instalará un paquete NuGet para aumentar el proceso de MSBuild, pero ningún archivo se agregará al proyecto.
-
 Esto puede requerir una conexión a internet.
-
 ¿Desea continuar?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Escriba para buscar&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>Agregar biblioteca de lado del cliente</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;Elegir una biblioteca para seleccionar archivos para instalar&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>Desactivar la restauración al compilar</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>Habilitar la restauración de bibliotecas del lado cliente en la compilación</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>Instalando paquete de NuGet que contiene el destino de MSBuild...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>Error al instalar el paquete de NuGet</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>No se pudo desinstalar el paquete de NuGet</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>Paquete de NuGet instalado</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>Paquete de NuGet desinstalado</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>Desinstalando el paquete de NuGet...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>No se pudieron eliminar bibliotecas del proyecto</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>La biblioteca {0} se eliminó correctamente del proyecto</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>No se pudieron agregar bibliotecas al proyecto</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>La biblioteca {0} se ha agregado correctamente al proyecto</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>Administrador de bibliotecas</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>La operación del Administrador de bibliotecas ya está en curso.</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Archivos:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Biblioteca:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Proveedor: </value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>Ubicación de destino:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>Elegir archivos específicos:</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>Incluir todos los archivos de biblioteca</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>No se han seleccionado archivos</value>
   </data>
 </root>

@@ -22,10 +22,10 @@
     <value>清单文件包含语法错误</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>"路径" 未定义。</value>
+    <value>未定义“目标”。</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>"路径" 必须在工作目录中</value>
+    <value>“目标”必须在工作目录内</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>提供程序未定义</value>
@@ -38,5 +38,38 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>发生未知异常</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>未能删除库 {0} 中的一个或多个文件</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>"{0}" 目标文件路径具有无效字符</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>此版本的库管理器不支持版本 "{0}"</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>无法从 "{0}" 下载资源</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>"{1}" 提供程序无法解析 "{0}" 文件路径</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>在多个库中找到冲突的文件 "{0}": {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>"{0}" 库已由 "{1}" 提供程序安装</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>文件 "{0}" 已由 {1} 安装。</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>无法将库 "{0}" 更新为 "{1}"。已安装了另一个库 "{1}"</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>无法将库 "{0}" 更新为 "{1}"。以下文件对 "{1}" 无效: {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>"{0}" 不包含以下内容: {1} 有效文件为 {2}</value>
   </data>
 </root>

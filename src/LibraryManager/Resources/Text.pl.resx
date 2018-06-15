@@ -21,7 +21,125 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>Plik {0} został zapisany na dysku</value>
+    <value>Plik {0} został zapisany w lokalizacji docelowej</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="LibraryInfoUpdateFailed" xml:space="preserve">
+    <value>Nie udało się zaktualizować informacji o bibliotece dla: {0}</value>
+  </data>
+  <data name="Restore_RestoreOfLibraryStarted" xml:space="preserve">
+    <value>Trwa przywracanie biblioteki {0}...</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>Przywrócone biblioteki: {0}, czas: {1} sek.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_OperationHasErrors" xml:space="preserve">
+    <value>Nie można przywrócić co najmniej jednej biblioteki</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>Nie można pobrać wykazu od dostawcy „{0}”</value>
+  </data>
+  <data name="Restore_LibraryRestoreCancelled" xml:space="preserve">
+    <value>Przywracanie zostało anulowane dla biblioteki {0}</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>Nie można przywrócić {0} bibliotek</value>
+  </data>
+  <data name="Clean_OperationCancelled" xml:space="preserve">
+    <value>Operacja czyszczenia bibliotek została anulowana</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>Nie udało się usunąć {0} bibliotek</value>
+  </data>
+  <data name="Clean_OperationStarted" xml:space="preserve">
+    <value>Rozpoczęto operację czyszczenia bibliotek...</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>Biblioteki ({0}) zostały pomyślnie usunięte w {1} sek.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Clean_OperationFailed" xml:space="preserve">
+    <value>Operacja czyszczenia nie powiodła się dla {0} bibliotek</value>
+  </data>
+  <data name="Clean_OperationCompleted" xml:space="preserve">
+    <value>Operacja czyszczenia bibliotek została zakończona</value>
+  </data>
+  <data name="Install_LibraryFailed" xml:space="preserve">
+    <value>Instalacja biblioteki {0} nie powiodła się</value>
+  </data>
+  <data name="Install_LibraryStarted" xml:space="preserve">
+    <value>Instalowanie biblioteki {0} zostało rozpoczęte...</value>
+  </data>
+  <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
+    <value>Biblioteka {0} została pomyślnie przywrócona</value>
+  </data>
+  <data name="Restore_LibrariesUptodate" xml:space="preserve">
+    <value>Przywracanie zostało zakończone. Pliki są już aktualne</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>Anulowano przywracanie {0} bibliotek</value>
+  </data>
+  <data name="Restore_OperationCompleted" xml:space="preserve">
+    <value>Operacja przywracania została ukończona</value>
+  </data>
+  <data name="SummaryEndLine" xml:space="preserve">
+    <value>========== Zakończono ==========</value>
+  </data>
+  <data name="TimeElapsed" xml:space="preserve">
+    <value>Czas, który upłynął: {0}</value>
+  </data>
+  <data name="Uninstall_LibraryStarted" xml:space="preserve">
+    <value>Odinstalowywanie biblioteki {0} zostało rozpoczęte...</value>
+  </data>
+  <data name="Update_LibraryFailed" xml:space="preserve">
+    <value>Aktualizacja biblioteki {0} nie powiodła się</value>
+  </data>
+  <data name="Update_LibraryStarted" xml:space="preserve">
+    <value>Rozpoczęto aktualizację biblioteki {0}...</value>
+  </data>
+  <data name="Update_LibrarySucceeded" xml:space="preserve">
+    <value>Aktualizacja biblioteki {0} została zakończona powodzeniem</value>
+  </data>
+  <data name="Uninstall_LibraryCancelled" xml:space="preserve">
+    <value>Odinstalowywanie biblioteki {0} zostało anulowane</value>
+  </data>
+  <data name="Uninstall_LibraryFailed" xml:space="preserve">
+    <value>Odinstalowywanie biblioteki {0} nie powiodło się</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>Anulowano usunięcie {0} bibliotek</value>
+  </data>
+  <data name="Restore_LibraryRestoreFailed" xml:space="preserve">
+    <value>Nie można przywrócić biblioteki: {0}</value>
+  </data>
+  <data name="Restore_OperationCancelled" xml:space="preserve">
+    <value>Operacja przywracania została anulowana</value>
+  </data>
+  <data name="Restore_OperationFailed" xml:space="preserve">
+    <value>Operacja przywracania nie powiodła się dla {0} bibliotek</value>
+  </data>
+  <data name="Restore_OperationStarted" xml:space="preserve">
+    <value>Operacja przywracania została rozpoczęta...</value>
+  </data>
+  <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
+    <value>Odinstalowywanie biblioteki {0} zostało pomyślnie zakończone</value>
+  </data>
+  <data name="Update_LibraryCancelled" xml:space="preserve">
+    <value>Aktualizacja biblioteki {0} została anulowana</value>
+  </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>Przywracanie bibliotek dla projektu {0}</value>
+  </data>
+  <data name="CdnjsLibraryIdHintText" xml:space="preserve">
+    <value>Przykład: &lt;library&gt;@&lt;version&gt;</value>
+  </data>
+  <data name="FileSystemLibraryIdHintText" xml:space="preserve">
+    <value>Musi być prawidłową ścieżką w systemie plików.</value>
+  </data>
+  <data name="UnpkgProviderHintText" xml:space="preserve">
+    <value>Przykład: &lt;library&gt;@&lt;version&gt;</value>
   </data>
 </root>

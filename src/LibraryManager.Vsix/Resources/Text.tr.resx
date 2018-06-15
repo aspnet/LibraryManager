@@ -45,9 +45,79 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>MSBuild işlemini güçlendirmek için bir NuGet paketi yüklenecek ancak projeye herhangi bir dosya eklenmeyecek. Bu işlem İnternet bağlantısı gerektirebilir. Devam etmek istiyor musunuz?</value>
+    <value>MSBuild işlemini artırmak için bir NUGet paketi yüklenecek ancak projeye dosya eklenmeyecek. Bu işlem İnternet bağlantısı gerektirebilir. Devam etmek istiyor musunuz?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Aramak için yazın&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>İstemci Tarafı Kitaplık Ekle</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;Yüklenecek dosyaları belirlemek için bir kitaplık seçin&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>Derleme Sırasında Geri Yüklemeyi Devre Dışı Bırak</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>İstemci Tarafı Kitaplıkların Derleme Sırasında Geri Yüklenmesini Etkinleştir</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>MSBuild hedefini içeren NuGet paketi yükleniyor...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>NuGet paketi yüklenemedi</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>NuGet paketi kaldırılamadı</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>NuGet paketi yüklendi</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>NuGet paketi kaldırıldı</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>NuGet paketi kaldırılıyor...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>Kitaplıklar projeden silinemedi</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>{0} kitaplığı başarıyla projeden silindi</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>Kitaplıklar projeye eklenemedi</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>{0} kitaplığı projeye başarıyla eklendi</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>Kütüphane Yöneticisi</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>Kitaplık Yöneticisi işlemi zaten sürüyor.</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Dosyalar:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Kitaplık:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Sağlayıcı: </value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>Hedef konumu:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>Belirli dosyaları seçin:</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>Tüm kütüphane dosyalarını ekle</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>Dosya seçilmedi</value>
   </data>
 </root>

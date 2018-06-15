@@ -22,10 +22,10 @@
     <value>O arquivo de manifesto contém erros de sintaxe</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>O "caminho" é indefinido.</value>
+    <value>O "destino" é indefinido.</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>O "caminho" deve estar dentro do diretório de trabalho</value>
+    <value>O "destino" deve estar dentro do diretório de trabalho</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>O provedor é indefinido</value>
@@ -38,5 +38,39 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>Ocorreu uma exceção desconhecida</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>Falha ao excluir um ou mais arquivos na biblioteca {0}</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>O caminho do arquivo de destino "{0}" tem caracteres inválidos</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>A versão "{0}" não é compatível com essa versão do Gerenciador de Bibliotecas</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>Falha ao baixar o recurso de "{0}"</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>O caminho do arquivo "{0}" não pôde ser resolvido pelo provedor "{1}"</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>Arquivo conflitante "{0}" encontrado em mais de uma biblioteca: {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>A biblioteca "{0}" já está instalada pelo provedor "{1}"</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>O arquivo "{0}" já foi instalado por {1}.</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>A biblioteca "{0}" não pôde ser atualizada para "{1}". Outra biblioteca "{1}" já está instalada</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>A biblioteca "{0}" não pôde ser atualizada para "{1}". Os seguintes arquivos não são válidos para "{1}": {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>"{0}" não contém: {1}
+Os arquivos válidos são {2}</value>
   </data>
 </root>

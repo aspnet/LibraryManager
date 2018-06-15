@@ -21,7 +21,125 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} diske yazıldı</value>
+    <value>{0} hedefe yazıldı</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="LibraryInfoUpdateFailed" xml:space="preserve">
+    <value>{0} için kitaplık bilgileri güncelleştirilemedi</value>
+  </data>
+  <data name="Restore_RestoreOfLibraryStarted" xml:space="preserve">
+    <value>{0} kitaplığı geri yükleniyor...</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} kitaplık {1} saniye içinde geri yüklendi</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_OperationHasErrors" xml:space="preserve">
+    <value>Bir veya daha fazla kitaplık geri yüklenemedi</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>"{0}" sağlayıcısından katalog indirilemedi</value>
+  </data>
+  <data name="Restore_LibraryRestoreCancelled" xml:space="preserve">
+    <value>{0} kitaplığı için geri yükleme iptal edildi</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} kitaplık geri yüklenemedi</value>
+  </data>
+  <data name="Clean_OperationCancelled" xml:space="preserve">
+    <value>Kitaplıkları temizleme işlemi iptal edildi</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} kitaplık silinemedi</value>
+  </data>
+  <data name="Clean_OperationStarted" xml:space="preserve">
+    <value>Kitaplıkları temizleme işlemi başlatıldı...</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} kitaplık {1} saniye içinde başarıyla silindi</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Clean_OperationFailed" xml:space="preserve">
+    <value>{0} kitaplık için temizleme işlemi başarısız oldu</value>
+  </data>
+  <data name="Clean_OperationCompleted" xml:space="preserve">
+    <value>Kitaplıkları temizleme işlemi tamamlandı</value>
+  </data>
+  <data name="Install_LibraryFailed" xml:space="preserve">
+    <value>{0} kitaplığı yüklenemedi</value>
+  </data>
+  <data name="Install_LibraryStarted" xml:space="preserve">
+    <value>{0} kitaplığının yüklenmesi başlatıldı...</value>
+  </data>
+  <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
+    <value>{0} kitaplığı başarıyla geri yüklendi</value>
+  </data>
+  <data name="Restore_LibrariesUptodate" xml:space="preserve">
+    <value>Geri yükleme tamamlandı. Dosyalar zaten güncel</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>{0} kitaplıkta geri yükleme iptal edildi</value>
+  </data>
+  <data name="Restore_OperationCompleted" xml:space="preserve">
+    <value>Geri yükleme işlemi tamamlandı</value>
+  </data>
+  <data name="SummaryEndLine" xml:space="preserve">
+    <value>========== Bitti ==========</value>
+  </data>
+  <data name="TimeElapsed" xml:space="preserve">
+    <value>Geçen zaman: {0}</value>
+  </data>
+  <data name="Uninstall_LibraryStarted" xml:space="preserve">
+    <value>{0} kitaplığının kaldırılması başlatıldı...</value>
+  </data>
+  <data name="Update_LibraryFailed" xml:space="preserve">
+    <value>{0} kitaplığı güncelleştirilemedi</value>
+  </data>
+  <data name="Update_LibraryStarted" xml:space="preserve">
+    <value>{0} kitaplığının güncelleştirilmesi başladı...</value>
+  </data>
+  <data name="Update_LibrarySucceeded" xml:space="preserve">
+    <value>{0} kitaplığı başarıyla güncelleştirildi</value>
+  </data>
+  <data name="Uninstall_LibraryCancelled" xml:space="preserve">
+    <value>{0} kitaplığını kaldırma işlemi iptal edildi</value>
+  </data>
+  <data name="Uninstall_LibraryFailed" xml:space="preserve">
+    <value>{0} kitaplığı kaldırılamadı</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>{0} kitaplığı silme işlemi iptal edildi</value>
+  </data>
+  <data name="Restore_LibraryRestoreFailed" xml:space="preserve">
+    <value>Kitaplık geri yüklenemedi: {0}</value>
+  </data>
+  <data name="Restore_OperationCancelled" xml:space="preserve">
+    <value>Geri yükleme işlemi iptal edildi</value>
+  </data>
+  <data name="Restore_OperationFailed" xml:space="preserve">
+    <value>Geri yükleme işlemi {0} kitaplık için başarısız oldu</value>
+  </data>
+  <data name="Restore_OperationStarted" xml:space="preserve">
+    <value>Geri yükleme işlemi başlatıldı...</value>
+  </data>
+  <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
+    <value>{0} kitaplığı başarıyla kaldırıldı</value>
+  </data>
+  <data name="Update_LibraryCancelled" xml:space="preserve">
+    <value>{0} kitaplığını güncelleştirme işlemi iptal edildi</value>
+  </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>{0} projesi için kitaplıklar geri yükleniyor</value>
+  </data>
+  <data name="CdnjsLibraryIdHintText" xml:space="preserve">
+    <value>Örnek: &lt;kitaplık&gt;@&lt;sürüm&gt;</value>
+  </data>
+  <data name="FileSystemLibraryIdHintText" xml:space="preserve">
+    <value>Geçerli bir dosya sistemi yolu olmalıdır.</value>
+  </data>
+  <data name="UnpkgProviderHintText" xml:space="preserve">
+    <value>Örnek: &lt;kitaplık&gt;@&lt;sürüm&gt;</value>
   </data>
 </root>

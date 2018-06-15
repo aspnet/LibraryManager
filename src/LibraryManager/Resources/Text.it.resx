@@ -21,7 +21,125 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0} scritto su disco</value>
+    <value>{0} scritto nella destinazione</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="LibraryInfoUpdateFailed" xml:space="preserve">
+    <value>Non è stato possibile aggiornare le informazioni della libreria per {0}</value>
+  </data>
+  <data name="Restore_RestoreOfLibraryStarted" xml:space="preserve">
+    <value>Ripristino della libreria {0}...</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} librerie ripristinate in {1} secondi</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_OperationHasErrors" xml:space="preserve">
+    <value>Non è stato possibile ripristinare una o più librerie</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>Non è stato possibile scaricare il catalogo dal provider "{0}"</value>
+  </data>
+  <data name="Restore_LibraryRestoreCancelled" xml:space="preserve">
+    <value>Il ripristino è stato annullato per la libreria {0}</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>Non è stato possibile ripristinare {0} librarie</value>
+  </data>
+  <data name="Clean_OperationCancelled" xml:space="preserve">
+    <value>L'operazione di pulizia delle librerie è stata annullata</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>Non è stato possibile eliminare {0} librerie</value>
+  </data>
+  <data name="Clean_OperationStarted" xml:space="preserve">
+    <value>L'operazione di pulizia delle librerie è stata avviata...</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} librerie sono state eliminate in {1} secondi</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Clean_OperationFailed" xml:space="preserve">
+    <value>L'operazione di pulizia non è riuscita per {0} librerie</value>
+  </data>
+  <data name="Clean_OperationCompleted" xml:space="preserve">
+    <value>L'operazione di pulizia delle librerie è stata completata</value>
+  </data>
+  <data name="Install_LibraryFailed" xml:space="preserve">
+    <value>L'installazione della libreria {0} non è riuscita</value>
+  </data>
+  <data name="Install_LibraryStarted" xml:space="preserve">
+    <value>L'installazione della libreria {0} è stata avviata...</value>
+  </data>
+  <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
+    <value>Il ripristino della libreria {0} è riuscito</value>
+  </data>
+  <data name="Restore_LibrariesUptodate" xml:space="preserve">
+    <value>Ripristino completato. I file sono già aggiornati</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>Il ripristino di {0} librerie è stato annullato</value>
+  </data>
+  <data name="Restore_OperationCompleted" xml:space="preserve">
+    <value>Operazione di ripristino completata</value>
+  </data>
+  <data name="SummaryEndLine" xml:space="preserve">
+    <value>========== Operazione completata ==========</value>
+  </data>
+  <data name="TimeElapsed" xml:space="preserve">
+    <value>Tempo trascorso: {0}</value>
+  </data>
+  <data name="Uninstall_LibraryStarted" xml:space="preserve">
+    <value>La disinstallazione della libreria {0} è stata avviata...</value>
+  </data>
+  <data name="Update_LibraryFailed" xml:space="preserve">
+    <value>L'aggiornamento della libreria {0} non è riuscito</value>
+  </data>
+  <data name="Update_LibraryStarted" xml:space="preserve">
+    <value>L'aggiornamento della libreria {0} è stato avviato...</value>
+  </data>
+  <data name="Update_LibrarySucceeded" xml:space="preserve">
+    <value>L'aggiornamento della libreria {0} è riuscito</value>
+  </data>
+  <data name="Uninstall_LibraryCancelled" xml:space="preserve">
+    <value>La disinstallazione della libreria {0} è stata annullata</value>
+  </data>
+  <data name="Uninstall_LibraryFailed" xml:space="preserve">
+    <value>La disinstallazione della libreria {0} non è riuscita</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>L'eliminazione di {0} librerie è stata annullata</value>
+  </data>
+  <data name="Restore_LibraryRestoreFailed" xml:space="preserve">
+    <value>Non è stato possibile ripristinare la libreria: {0}</value>
+  </data>
+  <data name="Restore_OperationCancelled" xml:space="preserve">
+    <value>L'operazione di ripristino è stata annullata</value>
+  </data>
+  <data name="Restore_OperationFailed" xml:space="preserve">
+    <value>L'operazione di ripristino non è riuscita per {0} librerie</value>
+  </data>
+  <data name="Restore_OperationStarted" xml:space="preserve">
+    <value>L'operazione di ripristino è stata avviata...</value>
+  </data>
+  <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
+    <value>La disinstallazione della libreria {0} è riuscita</value>
+  </data>
+  <data name="Update_LibraryCancelled" xml:space="preserve">
+    <value>L'aggiornamento della libreria {0} è stato annullato</value>
+  </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>Ripristino delle librerie per il progetto {0}</value>
+  </data>
+  <data name="CdnjsLibraryIdHintText" xml:space="preserve">
+    <value>Esempio: &lt;libreria&gt;@&lt;versione&gt;</value>
+  </data>
+  <data name="FileSystemLibraryIdHintText" xml:space="preserve">
+    <value>Deve essere un percorso di file system valido.</value>
+  </data>
+  <data name="UnpkgProviderHintText" xml:space="preserve">
+    <value>Esempio: &lt;libreria&gt;@&lt;versione&gt;</value>
   </data>
 </root>

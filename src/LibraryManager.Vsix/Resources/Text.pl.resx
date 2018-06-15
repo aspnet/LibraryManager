@@ -45,13 +45,81 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Zostanie zainstalowany pakiet NuGet rozszerzający proces MSBuild, ale żadne pliki nie zostaną dodane do projektu.
-
+    <value>Pakiet NuGet zostanie zainstalowany w celu rozszerzenia procesu programu MSBuild, ale żadne pliki nie zostaną dodane do projektu.
 Może to wymagać połączenia z Internetem.
-
 Czy chcesz kontynuować?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Wpisz, aby wyszukać&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>Dodaj bibliotekę po stronie klienta</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;Wybierz bibliotekę, aby wybrać pliki do zainstalowania&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>Wyłącz przywracanie przy kompilacji</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>Włącz przywracanie bibliotek po stronie klienta przy kompilacji</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>Trwa instalowanie pakietu NuGet zawierającego element docelowy programu MSBuild...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>Nie można zainstalować pakietu NuGet</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>Nie można odinstalować pakietu NuGet</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>Pakiet NuGet został zainstalowany</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>Pakiet NuGet został odinstalowany</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>Trwa odinstalowywanie pakietu NuGet...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>Nie można usunąć bibliotek z projektu</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>Biblioteka {0} została pomyślnie usunięta z projektu</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>Nie można dodać bibliotek do projektu</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>Biblioteka {0} została pomyślnie dodana do projektu</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>Menedżer biblioteki</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>Operacja Menedżera biblioteki jest już w toku.</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Pliki:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Biblioteka:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Dostawca: </value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>Lokalizacja docelowa:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>Wybierz konkretne pliki:</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>Uwzględnij wszystkie pliki biblioteki</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>Nie wybrano żadnych plików</value>
   </data>
 </root>

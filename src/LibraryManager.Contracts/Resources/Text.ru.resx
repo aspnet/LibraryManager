@@ -22,10 +22,10 @@
     <value>Файл манифеста содержит синтаксические ошибки</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>«Путь» является неопределенным.</value>
+    <value>Назначение не определено.</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>«Путь» должен быть внутри рабочего каталога</value>
+    <value>Указанное расположение должно находиться в рабочем каталоге</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>Поставщик не определен</value>
@@ -38,5 +38,39 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>Возникло неизвестное исключение</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>Не удалось удалить один или несколько файлов в библиотеке {0}</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>Путь к файлу назначения "{0}" содержит недопустимые символы</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>Версия "{0}" не поддерживается в этой версии диспетчера библиотек</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>Не удалось скачать ресурс из "{0}"</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>Поставщику "{1}" не удалось разрешить путь к файлу "{0}"</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>Конфликтующий файл "{0}" обнаружен в нескольких библиотеках: {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>Библиотека "{0}" уже установлена поставщиком "{1}"</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>Файл "{0}" уже установлен {1}.</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>Не удалось обновить библиотеку "{0}" до "{1}". Уже установлена другая библиотека "{1}"</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>Не удалось обновить библиотеку "{0}" до "{1}". Следующие файлы являются недопустимыми для "{1}": {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>"{0}" не содержит: {1}
+Допустимые файлы: {2}</value>
   </data>
 </root>

@@ -21,7 +21,125 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>"{0}" wurde auf die Festplatte geschrieben.</value>
+    <value>{0} ins Ziel geschrieben.</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="LibraryInfoUpdateFailed" xml:space="preserve">
+    <value>Fehler beim Aktualisieren der Bibliotheksinformationen für {0}.</value>
+  </data>
+  <data name="Restore_RestoreOfLibraryStarted" xml:space="preserve">
+    <value>Die Bibliothek "{0}" wird wiederhergestellt...</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} Bibliotheken wurden in {1} Sekunden wiederhergestellt.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_OperationHasErrors" xml:space="preserve">
+    <value>Mindestens eine Bibliothek konnte nicht wiederhergestellt werden.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>Fehler beim Herunterladen des Katalogs vom Anbieter "{0}".</value>
+  </data>
+  <data name="Restore_LibraryRestoreCancelled" xml:space="preserve">
+    <value>Für die Bibliothek "{0}" wurde die Wiederherstellung abgebrochen.</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} Bibliotheken konnten nicht wiederhergestellt werden.</value>
+  </data>
+  <data name="Clean_OperationCancelled" xml:space="preserve">
+    <value>Der Vorgang zum Bereinigen von Bibliotheken wurde abgebrochen.</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} Bibliotheken konnten nicht gelöscht werden.</value>
+  </data>
+  <data name="Clean_OperationStarted" xml:space="preserve">
+    <value>Vorgang zum Bereinigen von Bibliotheken gestartet...</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} Bibliotheken wurden in {1} Sekunden erfolgreich gelöscht.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Clean_OperationFailed" xml:space="preserve">
+    <value>Fehler beim Bereinigen von {0} Bibliotheken.</value>
+  </data>
+  <data name="Clean_OperationCompleted" xml:space="preserve">
+    <value>Der Vorgang zum Bereinigen von Bibliotheken wurde abgeschlossen.</value>
+  </data>
+  <data name="Install_LibraryFailed" xml:space="preserve">
+    <value>Fehler beim Installieren der Bibliothek "{0}".</value>
+  </data>
+  <data name="Install_LibraryStarted" xml:space="preserve">
+    <value>Die Installation der Bibliothek "{0}" wurde gestartet...</value>
+  </data>
+  <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
+    <value>Die Bibliothek "{0}" wurde erfolgreich wiederhergestellt.</value>
+  </data>
+  <data name="Restore_LibrariesUptodate" xml:space="preserve">
+    <value>Die Wiederherstellung ist abgeschlossen. Die Dateien sind bereits auf dem neuesten Stand.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>Für {0} Bibliotheken wurde die Wiederherstellung abgebrochen.</value>
+  </data>
+  <data name="Restore_OperationCompleted" xml:space="preserve">
+    <value>Wiederherstellungsvorgang abgeschlossen</value>
+  </data>
+  <data name="SummaryEndLine" xml:space="preserve">
+    <value>========== Beendet ==========</value>
+  </data>
+  <data name="TimeElapsed" xml:space="preserve">
+    <value>Verstrichene Zeit: {0}</value>
+  </data>
+  <data name="Uninstall_LibraryStarted" xml:space="preserve">
+    <value>Deinstallation von Bibliothek "{0}" gestartet...</value>
+  </data>
+  <data name="Update_LibraryFailed" xml:space="preserve">
+    <value>Fehler beim Aktualisieren der Bibliothek "{0}".</value>
+  </data>
+  <data name="Update_LibraryStarted" xml:space="preserve">
+    <value>Update der Bibliothek "{0}" gestartet...</value>
+  </data>
+  <data name="Update_LibrarySucceeded" xml:space="preserve">
+    <value>Die Bibliothek "{0}" wurde erfolgreich aktualisiert.</value>
+  </data>
+  <data name="Uninstall_LibraryCancelled" xml:space="preserve">
+    <value>Die Deinstallation der Bibliothek "{0}" wurde abgebrochen.</value>
+  </data>
+  <data name="Uninstall_LibraryFailed" xml:space="preserve">
+    <value>Fehler beim Deinstallieren der Bibliothek "{0}".</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>Für {0} Bibliotheken wurde der Löschvorgang abgebrochen.</value>
+  </data>
+  <data name="Restore_LibraryRestoreFailed" xml:space="preserve">
+    <value>Fehler beim Wiederherstellen der Bibliothek: {0}</value>
+  </data>
+  <data name="Restore_OperationCancelled" xml:space="preserve">
+    <value>Der Wiederherstellungsvorgang wurde abgebrochen.</value>
+  </data>
+  <data name="Restore_OperationFailed" xml:space="preserve">
+    <value>{0} Bibliotheken konnten nicht wiederhergestellt werden.</value>
+  </data>
+  <data name="Restore_OperationStarted" xml:space="preserve">
+    <value>Wiederherstellungsvorgang gestartet...</value>
+  </data>
+  <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
+    <value>Die Bibliothek "{0}" wurde erfolgreich deinstalliert.</value>
+  </data>
+  <data name="Update_LibraryCancelled" xml:space="preserve">
+    <value>Die Aktualisierung der Bibliothek "{0}" wurde abgebrochen.</value>
+  </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>Für das Projekt "{0}" werden Bibliotheken wiederhergestellt.</value>
+  </data>
+  <data name="CdnjsLibraryIdHintText" xml:space="preserve">
+    <value>Beispiel: &lt;bibliothek&gt;@&lt;version&gt;</value>
+  </data>
+  <data name="FileSystemLibraryIdHintText" xml:space="preserve">
+    <value>Ein gültiger Dateisystempfad ist erforderlich.</value>
+  </data>
+  <data name="UnpkgProviderHintText" xml:space="preserve">
+    <value>Beispiel: &lt;bibliothek&gt;@&lt;version&gt;</value>
   </data>
 </root>

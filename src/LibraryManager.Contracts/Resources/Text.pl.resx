@@ -22,10 +22,10 @@
     <value>Plik manifestu zawiera błędy składni</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>"Ścieżka" jest niezdefiniowana.</value>
+    <value>„Miejsce docelowe” nie jest zdefiniowane.</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>"Ścieżka" musi znajdować się wewnątrz katalogu roboczego</value>
+    <value>„Miejsce docelowe” musi znajdować się wewnątrz katalogu roboczego</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>Dostawca nie został zdefiniowany</value>
@@ -38,5 +38,39 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>Wystąpił nieznany wyjątek</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>Nie można usunąć co najmniej jednego pliku z biblioteki {0}</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>Ścieżka pliku docelowego „{0}” zawiera nieprawidłowe znaki</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>Wersja „{0}” nie jest obsługiwana przez tę wersję Menedżera biblioteki</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>Nie można pobrać zasobu z: „{0}”</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>Ścieżka do pliku „{0}” nie może zostać rozpoznana przez dostawcę „{1}”</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>Znaleziono plik powodujący konflikt „{0}” w więcej niż jednej bibliotece: {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>Biblioteka „{0}” została już zainstalowana przez dostawcę „{1}”</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>Plik „{0}” został już zainstalowany przez: {1}.</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>Nie można zaktualizować biblioteki „{0}” do wersji „{1}”. Jest już zainstalowana inna biblioteka „{1}”</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>Nie można zaktualizować biblioteki „{0}” do wersji „{1}”. Następujące pliki nie są prawidłowe dla wersji „{1}”: {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>Element „{0}” nie zawiera następujących plików: {1}
+Prawidłowe pliki to {2}</value>
   </data>
 </root>

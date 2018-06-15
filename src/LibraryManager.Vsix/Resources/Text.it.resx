@@ -45,9 +45,81 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Verrà installato un pacchetto NuGet per aumentare il processo MSBuild, ma non verrà aggiunto alcun file al progetto. Per questa operazione potrebbe essere necessaria una connessione Internet. Continuare?</value>
+    <value>Verrà installato un pacchetto NuGet per potenziare il processo di MSBuild, ma non verrà aggiunto alcun file al progetto.
+Per questa operazione potrebbe essere necessaria una connessione Internet.
+Continuare?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Digitare per eseguire la ricerca&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>Aggiungi libreria lato client</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;Scegliere una libreria per selezionare i file da installare&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>Disabilita ripristino durante la compilazione</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>Abilita ripristino delle librerie lato client durante la compilazione</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>Installazione del pacchetto NuGet che contiene la destinazione MSBuild...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>Non è stato possibile installare il pacchetto NuGet</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>Non è stato possibile disinstallare il pacchetto NuGet</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>Pacchetto NuGet installato</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>Pacchetto NuGet disinstallato</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>Disinstallazione del pacchetto NuGet...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>Non è stato possibile eliminare le librerie dal progetto</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>La libreria {0} è stata eliminata dal progetto</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>Non è stato possibile aggiungere librerie al progetto</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>La libreria {0} è stata aggiunta al progetto</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>Gestione librerie</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>L'operazione di Gestione librerie è già in corso.</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>File:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Libreria:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Provider: </value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>Percorso di destinazione:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>Scegliere i file specifici:</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>Includi tutti i file di libreria</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>Non è stato selezionato alcun file</value>
   </data>
 </root>

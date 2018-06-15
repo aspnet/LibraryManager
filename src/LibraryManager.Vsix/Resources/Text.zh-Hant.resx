@@ -45,9 +45,79 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>這會安裝 NuGet 套件來增強 MSBuild 處理序，但不會新增任何檔案到專案。這可能需要網際網路連線，您要繼續嗎?</value>
+    <value>這會安裝 NuGet 套件來增強 MSBuild 程序，但不會將任何檔案新增至專案。這需要網際網路連線。要繼續嗎?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;請鍵入以搜尋&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>新增用戶端程式庫</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;請選擇程式庫以選取要安裝的檔案&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>在建置時停用還原</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>在建置時啟用還原用戶端程式庫</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>正在安裝包含 MSBuild 目標的 NuGet 套件...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>無法安裝 NuGet 套件</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>無法將 NuGet 套件解除安裝</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>已安裝 NuGet 套件</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>已將 NuGet 套件解除安裝</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>正在將 NuGet 套件解除安裝...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>無法從專案刪除程式庫</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>已成功將程式庫 {0} 從專案解除安裝</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>無法將程式庫新增至專案</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>已成功將程式庫 {0} 新增至專案</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>程式庫管理員</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>程式庫管理員作業已經在進行。</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>檔案:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>程式庫:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>提供者:</value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>目標位置:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>選擇特定檔案:</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>包含所有程式庫檔案</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>未選取任何檔案</value>
   </data>
 </root>

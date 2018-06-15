@@ -45,9 +45,79 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Un package NuGet va être installé pour élargir le processus MSBuild, mais aucun fichier ne sera ajouté au projet. Cette opération peut nécessiter une connexion internet. Voulez-vous continuer ?</value>
+    <value>Un package NuGet est installé pour augmenter le processus MSBuild, mais aucun fichier n'est ajouté au projet. Une connexion Internet peut être nécessaire. Voulez-vous continuer ?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Tapez le texte à rechercher&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>Ajouter une bibliothèque côté client</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;Choisir une bibliothèque pour sélectionner les fichiers à installer&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>Désactiver la restauration sur la build</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>Activer la restauration des bibliothèques côté client sur la build</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>Installation du package NuGet contenant la cible MSBuild...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>Le package NuGet n'a pas été installé</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>Le package NuGet n'a pas été désinstallé</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>Package NuGet installé</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>Package NuGet désinstallé</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>Désinstallation du package NuGet...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>Impossible de supprimer les bibliothèques du projet</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>La bibliothèque {0} a été supprimée du projet</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>Impossible d'ajouter des bibliothèques au projet</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>La bibliothèque {0} a été ajoutée au projet</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>Gestionnaire de bibliothèques</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>Opération du gestionnaire de bibliothèques déjà en cours.</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Fichiers :</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Bibliothèque :</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Fournisseur : </value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>Emplacement cible :</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>Choisissez des fichiers spécifiques :</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>Inclure tous les fichiers de bibliothèque</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>Aucun fichier sélectionné</value>
   </data>
 </root>

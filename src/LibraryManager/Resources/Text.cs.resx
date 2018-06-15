@@ -21,7 +21,125 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>Soubor {0} byl uložen na disk.</value>
+    <value>Soubor {0} se zapsal do cíle.</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="LibraryInfoUpdateFailed" xml:space="preserve">
+    <value>Nepodařilo se aktualizovat informace o knihovně pro: {0}.</value>
+  </data>
+  <data name="Restore_RestoreOfLibraryStarted" xml:space="preserve">
+    <value>Obnovuje se knihovna {0}...</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} knihoven obnoveno za {1} sekund</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_OperationHasErrors" xml:space="preserve">
+    <value>Nejméně jednu knihovnu se nepovedlo obnovit.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>Nepovedlo se stáhnout katalog od poskytovatele {0}.</value>
+  </data>
+  <data name="Restore_LibraryRestoreCancelled" xml:space="preserve">
+    <value>Obnovení knihovny {0} se zrušilo.</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>Nepovedlo se obnovit tento počet knihoven: {0}.</value>
+  </data>
+  <data name="Clean_OperationCancelled" xml:space="preserve">
+    <value>Operace čištění knihoven se zrušila.</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>Nepovedlo se odstranit tento počet knihoven: {0}.</value>
+  </data>
+  <data name="Clean_OperationStarted" xml:space="preserve">
+    <value>Zahájila se operace čistění knihoven...</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>Knihovny (celkem {0}) se úspěšně odstranily za {1} s.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Clean_OperationFailed" xml:space="preserve">
+    <value>Operace čištění nebyla úspěšná pro tento počet knihoven: {0}.</value>
+  </data>
+  <data name="Clean_OperationCompleted" xml:space="preserve">
+    <value>Operace čištění knihoven se dokončila.</value>
+  </data>
+  <data name="Install_LibraryFailed" xml:space="preserve">
+    <value>Knihovnu {0} se nepovedlo nainstalovat.</value>
+  </data>
+  <data name="Install_LibraryStarted" xml:space="preserve">
+    <value>Zahájila se instalace knihovny {0}...</value>
+  </data>
+  <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
+    <value>Knihovna {0} se úspěšně obnovila.</value>
+  </data>
+  <data name="Restore_LibrariesUptodate" xml:space="preserve">
+    <value>Obnovení bylo dokončeno. Soubory už jsou aktuální.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>Zrušilo se obnovení tohoto počtu knihoven: {0}.</value>
+  </data>
+  <data name="Restore_OperationCompleted" xml:space="preserve">
+    <value>Operace obnovení se dokončila.</value>
+  </data>
+  <data name="SummaryEndLine" xml:space="preserve">
+    <value>========== Dokončeno ==========</value>
+  </data>
+  <data name="TimeElapsed" xml:space="preserve">
+    <value>Uplynulý čas: {0}</value>
+  </data>
+  <data name="Uninstall_LibraryStarted" xml:space="preserve">
+    <value>Zahájila se odinstalace knihovny {0}...</value>
+  </data>
+  <data name="Update_LibraryFailed" xml:space="preserve">
+    <value>Knihovnu {0} se nepovedlo aktualizovat.</value>
+  </data>
+  <data name="Update_LibraryStarted" xml:space="preserve">
+    <value>Zahájila se aktualizace knihovny {0}...</value>
+  </data>
+  <data name="Update_LibrarySucceeded" xml:space="preserve">
+    <value>Knihovna {0} se úspěšně aktualizovala.</value>
+  </data>
+  <data name="Uninstall_LibraryCancelled" xml:space="preserve">
+    <value>Odinstalace knihovny {0} se zrušila.</value>
+  </data>
+  <data name="Uninstall_LibraryFailed" xml:space="preserve">
+    <value>Knihovnu {0} se nepovedlo odinstalovat.</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>Zrušilo se odstranění tohoto počtu knihoven: {0}.</value>
+  </data>
+  <data name="Restore_LibraryRestoreFailed" xml:space="preserve">
+    <value>Nepovedlo se obnovit knihovnu: {0}</value>
+  </data>
+  <data name="Restore_OperationCancelled" xml:space="preserve">
+    <value>Operace obnovení se zrušila.</value>
+  </data>
+  <data name="Restore_OperationFailed" xml:space="preserve">
+    <value>Operace obnovení nebyla úspěšná pro tento počet knihoven: {0}.</value>
+  </data>
+  <data name="Restore_OperationStarted" xml:space="preserve">
+    <value>Zahájila se operace obnovení...</value>
+  </data>
+  <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
+    <value>Knihovna {0} se úspěšně odinstalovala.</value>
+  </data>
+  <data name="Update_LibraryCancelled" xml:space="preserve">
+    <value>Aktualizace knihovny {0} se zrušila.</value>
+  </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>Obnovují se knihovny pro projekt {0}.</value>
+  </data>
+  <data name="CdnjsLibraryIdHintText" xml:space="preserve">
+    <value>Příklad: &lt;knihovna&gt;@&lt;verze&gt;</value>
+  </data>
+  <data name="FileSystemLibraryIdHintText" xml:space="preserve">
+    <value>Musí se jednat o platnou cestu v systému souborů.</value>
+  </data>
+  <data name="UnpkgProviderHintText" xml:space="preserve">
+    <value>Příklad: &lt;knihovna&gt;@&lt;verze&gt;</value>
   </data>
 </root>
