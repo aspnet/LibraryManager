@@ -141,7 +141,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             else
             {
-                string partialSuccessText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
+                messageText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
             }
 
             LogEvent(messageText, LogLevel.Operation);
@@ -163,9 +163,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private static string GetPartialSuccessString(OperationType operation, int successfulRestores, int failedRestores, int cancelledRestores, int upToDateRestores, TimeSpan timeSpan)
         {
             string message = string.Empty;
-            message = successfulRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, successfulRestores, Math.Round(timeSpan.TotalSeconds, 2)) : message;
-            message = failedRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, failedRestores, Math.Round(timeSpan.TotalSeconds, 2)) : message;
-            message = cancelledRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, cancelledRestores, Math.Round(timeSpan.TotalSeconds, 2)) : message;
+            message = successfulRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, successfulRestores, Math.Round(timeSpan.TotalSeconds, 2)) + Environment.NewLine: message;
+            message = failedRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, failedRestores) + Environment.NewLine : message;
+            message = cancelledRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, cancelledRestores) + Environment.NewLine : message;
 
             return message;
         }
