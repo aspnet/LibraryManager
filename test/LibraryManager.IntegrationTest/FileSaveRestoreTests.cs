@@ -28,10 +28,10 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             string projectPath = Path.Combine(SolutionRootPath, _projectName);
 
             _libManConfig.Delete();
-            LibmanTestsUtility.WaitForDeletedFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false, timeout: 1000);
+            LibraryRestoreTestsHelper.WaitForDeletedFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false, timeout: 1000);
 
             VisualStudio.ObjectModel.Commanding.ExecuteCommand("Project.ManageClientSideLibraries");
-            LibmanTestsUtility.WaitForRestoredFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false, timeout: 1000);
+            LibraryRestoreTestsHelper.WaitForRestoredFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false, timeout: 1000);
 
             _libManConfig = _webProject[_libman];
             _libManConfig.Open();
@@ -59,10 +59,10 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 }";
 
             ReplaceFileContent(addingLibraryContent);
-            LibmanTestsUtility.WaitForRestoredFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
+            LibraryRestoreTestsHelper.WaitForRestoredFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
 
             ReplaceFileContent(deletingLibraryContent);
-            LibmanTestsUtility.WaitForDeletedFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
+            LibraryRestoreTestsHelper.WaitForDeletedFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
 
             ReplaceFileContent(_libmanFileContent);
         }
