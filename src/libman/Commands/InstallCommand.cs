@@ -200,9 +200,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 {
                     // Found a group with an exact match.
                     string libraryId = libIds.First();
-                    ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(libraryId, cancellationToken);
 
-                    return (libraryId, libraryToInstall);
+                    try
+                    {
+                        ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(libraryId, cancellationToken);
+                        return (libraryId, libraryToInstall);
+                    }
+                    catch { }
                 }
 
                 sb.AppendLine("  " + libIds.First());

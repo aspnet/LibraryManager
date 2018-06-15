@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 {
@@ -106,20 +107,21 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task InstallAsync_EmptyFilesArray()
         {
-            var desiredState = new LibraryInstallationState
-            {
-                ProviderId = "cdnjs",
-                LibraryId = "jquery@1.2.3",
-                DestinationPath = "lib"
-            };
+            string providerId = "cdnjs";
+            string libraryId = "jquery@1.2.3";
+            string destinationPath = "lib";
+
+            var manifest = Manifest.FromJson("{}", _dependencies);
+            manifest.AddLibraryValidator(new LibrariesValidator(_dependencies, manifest.DefaultDestination, manifest.DefaultProvider));
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
-            Assert.IsTrue(result.Success);
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(libraryId, providerId, null, destinationPath, CancellationToken.None).ConfigureAwait(false);
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsTrue(results.FirstOrDefault().Success);
 
             foreach (string file in new[] { "jquery.js", "jquery.min.js" })
             {
-                string absolute = Path.Combine(_projectFolder, desiredState.DestinationPath, file);
+                string absolute = Path.Combine(_projectFolder, destinationPath, file);
                 Assert.IsTrue(File.Exists(absolute));
             }
         }
@@ -127,49 +129,50 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task InstallAsync_NoPathDefined()
         {
-            var desiredState = new LibraryInstallationState
-            {
-                ProviderId = "cdnjs",
-                LibraryId = "jquery@1.2.3"
-            };
+            string providerId = "cdnjs";
+            string libraryId = "jquery@1.2.3";
+
+            var manifest = Manifest.FromJson("{}", _dependencies);
+            manifest.AddLibraryValidator(new LibrariesValidator(_dependencies, manifest.DefaultDestination, manifest.DefaultProvider));
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
-            Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB005", result.Errors.First().Code);
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(libraryId, providerId, null, null, CancellationToken.None).ConfigureAwait(false);
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsFalse(results.FirstOrDefault().Success);
+            Assert.AreEqual("LIB005", results.FirstOrDefault().Errors.First().Code);
         }
 
         [TestMethod]
         public async Task InstallAsync_NoProviderDefined()
         {
-            var desiredState = new LibraryInstallationState
-            {
-                LibraryId = "jquery@1.2.3",
-                DestinationPath = "lib"
-            };
+            string destinationPath = "lib";
+            string libraryId = "jquery@1.2.3";
+
+            var manifest = Manifest.FromJson("{}", _dependencies);
+            manifest.AddLibraryValidator(new LibrariesValidator(_dependencies, manifest.DefaultDestination, manifest.DefaultProvider));
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
-            Assert.IsFalse(result.Success);
-            Assert.AreEqual(1, result.Errors.Count);
-            Assert.AreEqual("LIB007", result.Errors.First().Code);
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(libraryId, null, null, destinationPath, CancellationToken.None).ConfigureAwait(false);
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsFalse(results.FirstOrDefault().Success);
+            Assert.AreEqual("LIB007", results.FirstOrDefault().Errors.First().Code);
         }
 
         [TestMethod]
         public async Task InstallAsync_InvalidLibraryFiles()
         {
-            var desiredState = new LibraryInstallationState
-            {
-                LibraryId = "jquery@3.1.1",
-                ProviderId = "cdnjs",
-                DestinationPath = "lib",
-                Files = new[] { "file1.txt", "file2.txt" }
-            };
+            string providerId = "cdnjs";
+            string libraryId = "jquery@3.1.1";
+            string destinationPath = "lib";
+            string[] files = new[] { "file1.txt", "file2.txt" };
 
-            // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
-            Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB018", result.Errors[0].Code);
+            var manifest = Manifest.FromJson("{}", _dependencies);
+            manifest.AddLibraryValidator(new LibrariesValidator(_dependencies, manifest.DefaultDestination, manifest.DefaultProvider));
+
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(libraryId, providerId, files, destinationPath, CancellationToken.None);
+            Assert.IsTrue(results.Count() == 1);
+            Assert.IsFalse(results.First().Success);
+            Assert.AreEqual("LIB018", results.First().Errors[0].Code);
         }
 
         [TestMethod]
@@ -177,7 +180,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             Assert.AreEqual(string.Empty, _provider.GetSuggestedDestination(null));
 
-            ILibrary library = new CdnjsLibrary()
+            ILibrary library = new LibraryManager.Providers.Shared.Library()
             {
                 Name = "jquery",
                 Version = "3.3.1",

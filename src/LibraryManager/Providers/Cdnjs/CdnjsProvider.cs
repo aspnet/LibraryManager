@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 using Microsoft.Web.LibraryManager.Resources;
 
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
@@ -59,6 +60,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             get { return Path.Combine(HostInteraction.CacheDirectory, Id); }
         }
 
+        public bool SupportsRenaming => false;
+
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
@@ -83,20 +86,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             {
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
-
-            if (!desiredState.IsValid(out IEnumerable<IError> errors))
-            {
-                return new LibraryOperationResult(desiredState, errors.ToArray());
-            }
-
-            //Expand the files property if needed
-            ILibraryOperationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
-            if (!updateResult.Success)
-            {
-                return updateResult;
-            }
-
-            desiredState = updateResult.InstallationState;
 
             // Refresh cache if needed
             ILibraryOperationResult cacheUpdateResult = await RefreshCacheAsync(desiredState, cancellationToken);
@@ -123,7 +112,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public string GetSuggestedDestination(ILibrary library)
         {
-            if (library != null && library is CdnjsLibrary cdnjsLibrary)
+            if (library != null && library is Library cdnjsLibrary)
             {
                 return cdnjsLibrary.Name;
             }
@@ -158,6 +147,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                             return new LibraryOperationResult(state, PredefinedErrors.CouldNotWriteFile(file));
                         }
                     }
+                }
+                catch (InvalidLibraryException)
+                {
+                    return new LibraryOperationResult(state, PredefinedErrors.UnableToResolveSource(state.LibraryId, Id));
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -198,16 +191,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
-                    IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
-                    if (invalidFiles.Any())
-                    {
-                        IError invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
-                        return new LibraryOperationResult(desiredState, invalidFilesError);
-                    }
-                    else
-                    {
-                        return LibraryOperationResult.FromSuccess(desiredState);
-                    }
+                    return LibraryOperationResult.FromSuccess(desiredState);
                 }
 
                 desiredState = new LibraryInstallationState
@@ -237,8 +221,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            string name = GetLibraryName(state.LibraryId);
-            string version = GetLibraryVersion(state.LibraryId);
+            ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
+            string name = libraryIdentifier.Name;
+            string version = libraryIdentifier.Version;
 
             string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
 
@@ -248,22 +233,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             return null;
-        }
-
-        public string GetLibraryName(string libraryId)
-        {
-            string[] args = libraryId.Split('@');
-            string name = args[0];
-
-            return name;
-        }
-
-        public string GetLibraryVersion(string libraryId)
-        {
-            string[] args = libraryId.Split('@');
-            string version = args[1];
-
-            return version;
         }
 
         /// <summary>
@@ -280,13 +249,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             var tasks = new List<Task>();
-            string name = GetLibraryName(state.LibraryId);
-            string version = GetLibraryVersion(state.LibraryId);
-
-            string libraryDir = Path.Combine(CacheFolder, name);
 
             try
             {
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
+
+                string libraryDir = Path.Combine(CacheFolder, name);
                 List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
                 foreach (string sourceFile in state.Files)
                 {
@@ -301,14 +271,19 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 }
                 await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
             }
+            catch (InvalidLibraryException ex)
+            {
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                return new LibraryOperationResult(state, PredefinedErrors.UnableToResolveSource(state.LibraryId, Id));
+            }
             catch (ResourceDownloadException ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
                 return new LibraryOperationResult(state, PredefinedErrors.FailedToDownloadResource(ex.Url));
             }
-            catch(OperationCanceledException)
+            catch (OperationCanceledException)
             {
-                throw;
+                return LibraryOperationResult.FromCancelled(state);
             }
             catch (Exception ex)
             {
@@ -321,14 +296,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            string name = GetLibraryName(state.LibraryId);
-            string version = GetLibraryVersion(state.LibraryId);
-
-            string cacheDir = Path.Combine(CacheFolder, name, version);
-            string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
-
             try
             {
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
+
+                string cacheDir = Path.Combine(CacheFolder, name, version);
+                string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
+
                 foreach (string sourceFile in state.Files)
                 {
                     var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
@@ -340,14 +316,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log failure here 
+                HostInteraction.Logger.Log(ex.InnerException.ToString(), LogLevel.Error);
                 return false;
             }
 
             return true;
         }
 
+        public ILibrary GetLibraryFromIdentifier(string libraryId)
+        {
+            return ProvidersCommonUtils.GetLibraryIdentifier(Id, libraryId);
+        }
     }
 }

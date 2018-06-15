@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Shared;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
@@ -42,18 +43,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public string LibraryIdHintText => Resources.Text.UnpkgProviderHintText;
 
+        public bool SupportsRenaming => false;
+
         public async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
-
-            if (!desiredState.IsValid(out IEnumerable<IError> errors))
-            {
-                return new LibraryOperationResult(desiredState, errors.ToArray());
-            }
-
+            
             //Expand the files property if needed
             ILibraryOperationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
             if (!updateResult.Success)
@@ -87,7 +85,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         /// <returns></returns>
         public string GetSuggestedDestination(ILibrary library)
         {
-            if (library != null && library is UnpkgLibrary unpkgLibrary)
+            if (library != null && library is Library unpkgLibrary)
             {
                 return unpkgLibrary.Name;
             }
@@ -108,15 +106,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 return LibraryOperationResult.FromCancelled(state);
             }
 
-            var tasks = new List<Task>();
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
-
-            string libraryDir = Path.Combine(CacheFolder, name);
+            var tasks = new List<Task>();            
 
             try
             {
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
+                string libraryDir = Path.Combine(CacheFolder, name);
+
                 List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
                 foreach (string sourceFile in state.Files)
                 {
@@ -129,7 +127,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                         librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
                     }
                 }
+
                 await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
+            }
+            catch (InvalidLibraryException ex)
+            {
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                return new LibraryOperationResult(state, PredefinedErrors.UnableToResolveSource(state.LibraryId, Id));
             }
             catch (ResourceDownloadException ex)
             {
@@ -138,7 +142,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
             catch (OperationCanceledException)
             {
-                throw;
+                return LibraryOperationResult.FromCancelled(state);
             }
             catch (Exception ex)
             {
@@ -151,15 +155,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
-
-            string cacheDir = Path.Combine(CacheFolder, name, version);
-            string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
-
             try
             {
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
+
+                string cacheDir = Path.Combine(CacheFolder, name, version);
+                string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
+
                 foreach (string sourceFile in state.Files)
                 {
                     var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
@@ -171,9 +175,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log failure here 
+                HostInteraction.Logger.Log(ex.InnerException.ToString(), LogLevel.Error);
                 return false;
             }
 
@@ -224,33 +228,25 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            string name = GetLibraryName(state);
-            string version = GetLibraryVersion(state);
-
-            string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
-
-            if (File.Exists(absolute))
+            try
             {
-                return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
+                ILibrary libraryIdentifier = GetLibraryFromIdentifier(state.LibraryId);
+                string name = libraryIdentifier.Name;
+                string version = libraryIdentifier.Version;
+
+                string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
+
+                if (File.Exists(absolute))
+                {
+                    return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
+                }
+            }
+            catch
+            {
+                return null;
             }
 
             return null;
-        }
-
-        private string GetLibraryName(ILibraryInstallationState state)
-        {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-
-            return name;
-        }
-
-        private string GetLibraryVersion(ILibraryInstallationState state)
-        {
-            string[] args = state.LibraryId.Split('@');
-            string version = args[1];
-
-            return version;
         }
 
         public async Task<ILibraryOperationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
@@ -272,16 +268,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
-                    IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
-                    if (invalidFiles.Any())
-                    {
-                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
-                        return new LibraryOperationResult(desiredState, invalidFilesError);
-                    }
-                    else
-                    {
-                        return LibraryOperationResult.FromSuccess(desiredState);
-                    }
+                    return LibraryOperationResult.FromSuccess(desiredState);
                 }
 
                 desiredState = new LibraryInstallationState
@@ -307,6 +294,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             return LibraryOperationResult.FromSuccess(desiredState);
+        }
+
+        public ILibrary GetLibraryFromIdentifier(string libraryId)
+        {
+            return ProvidersCommonUtils.GetLibraryIdentifier(Id, libraryId);
         }
     }
 }

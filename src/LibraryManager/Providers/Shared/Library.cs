@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryManager.Providers.Unpkg
+namespace Microsoft.Web.LibraryManager.Providers.Shared
 {
-    internal class UnpkgLibrary : ILibrary
+    internal class Library : ILibrary
     {
         public string Name { get; set; }
         public string ProviderId { get; set; }
-        public string Version { get; set; }
+        public virtual string Version { get; set; }
         public IReadOnlyDictionary<string, bool> Files { get; set; }
 
         public override string ToString()

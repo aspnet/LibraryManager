@@ -196,6 +196,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid characters in path.
+        /// </summary>
+        public static string InvalidCharsInPath {
+            get {
+                return ResourceManager.GetString("InvalidCharsInPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unavailable.
         /// </summary>
         public static string LibraryDetail_Unavailable {
@@ -210,6 +219,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static string LibraryInfoUpdateFailed {
             get {
                 return ResourceManager.GetString("LibraryInfoUpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name and Version of a library are required.
+        /// </summary>
+        public static string NameAndVersionRequired {
+            get {
+                return ResourceManager.GetString("NameAndVersionRequired", resourceCulture);
             }
         }
         

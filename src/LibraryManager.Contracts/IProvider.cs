@@ -35,6 +35,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         IHostInteraction HostInteraction { get; }
 
         /// <summary>
+        /// True if provider supports renaming of source file at the destinationPath
+        /// </summary>
+        bool SupportsRenaming { get; }
+
+        /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.
         /// </summary>
         /// <param name="desiredState">The details about the library to install.</param>
@@ -55,6 +60,14 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         /// <returns></returns>
         ILibraryCatalog GetCatalog();
+
+        /// <summary>
+        /// Returns ILibrary for a given libraryId 
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <returns></returns>
+        /// <remarks>Throws <see cref="InvalidLibraryException"/> for invalid library id format</remarks>
+        ILibrary GetLibraryFromIdentifier(string libraryId);
 
         /// <summary>
         /// Gets the suggested destination path for the library.

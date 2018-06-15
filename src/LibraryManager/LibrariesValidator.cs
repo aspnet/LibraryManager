@@ -16,6 +16,10 @@ namespace Microsoft.Web.LibraryManager
     /// </summary>
     internal class LibrariesValidator
     {
+        private string _defaultDestination;
+        private string _defaultProvider;
+        private IDependencies _dependencies;
+
         /// <summary>
         /// Validates set of libraries given the dependencies, default destination and default provider
         /// </summary>
@@ -24,14 +28,172 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="defaultProvider"></param>
         public LibrariesValidator(IDependencies dependencies, string defaultDestination, string defaultProvider)
         {
-            _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
+            _dependencies = dependencies;
             _defaultDestination = defaultDestination;
             _defaultProvider = defaultProvider;
         }
+        
+        /// <summary>
+        /// Validates all properties of the library including detection of invalid files
+        /// </summary>
+        /// <param name="library"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ILibraryOperationResult> ValidateLibraryAsync(ILibraryInstallationState library, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
-        private string _defaultDestination;
-        private string _defaultProvider;
-        private IDependencies _dependencies;
+            var list = new List<IError>();
+
+            // Validates provider
+            IError error;
+            IProvider provider = GetProvider(library, out error);
+            if (provider == null)
+            {
+                list.Add(error);
+            }
+            else
+            {
+                // Validates libraryId
+                if (!IsValidLibraryId(library, provider, out error))
+                {
+                    list.Add(error);
+                }
+
+                // Validates destinationPath
+                if (!IsValidDestinationPath(library, out error))
+                {
+                    list.Add(error);
+                }
+
+                // Validates list of files if specified
+                if (!provider.SupportsRenaming)
+                {
+                    ILibraryCatalog catalog = provider.GetCatalog();
+                    if (catalog != null)
+                    {
+                        ILibraryInstallationState stateToValidate = library;
+                        if (library.Files != null)
+                        {
+                            ILibraryOperationResult result = await ValidateLibraryFilesAsync(stateToValidate, catalog, cancellationToken);
+                            if (!result.Success)
+                            {
+                                list.AddRange(result.Errors);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            if (list.Any())
+            {
+                return new LibraryOperationResult(list.ToArray());
+            }
+
+            return LibraryOperationResult.FromSuccess(library);
+        }
+
+        private bool IsValidDestinationPath(ILibraryInstallationState library, out IError error)
+        {
+            if (string.IsNullOrEmpty(library.DestinationPath) && string.IsNullOrEmpty(_defaultDestination))
+            {
+                error = PredefinedErrors.PathIsUndefined();
+
+                return false;
+            }
+            else
+            {
+                string destinationPath = library.DestinationPath ?? _defaultDestination;
+
+                if (destinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+                {
+                    error = PredefinedErrors.DestinationPathHasInvalidCharacters(destinationPath);
+
+                    return false;
+                }
+            }
+
+            error = null;
+
+            return true;
+        }
+
+        private bool IsValidLibraryId(ILibraryInstallationState library, IProvider provider, out IError error)
+        {
+            if (string.IsNullOrEmpty(library.LibraryId))
+            {
+                error = PredefinedErrors.LibraryIdIsUndefined();
+                return false;
+            }
+            else
+            {
+                try
+                {
+                    provider.GetLibraryFromIdentifier(library.LibraryId);
+                }
+                catch (InvalidLibraryException)
+                {
+                    error = PredefinedErrors.UnableToResolveSource(library.LibraryId, provider.Id);
+                    return false;
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private IProvider GetProvider(ILibraryInstallationState library, out IError error)
+        {
+            error = null;
+
+            if (string.IsNullOrEmpty(library.ProviderId) && string.IsNullOrEmpty(_defaultProvider))
+            {
+                error =  PredefinedErrors.ProviderIsUndefined();
+                return null;
+            }
+
+            if (_dependencies != null)
+            {
+                string providerId = library.ProviderId ?? _defaultProvider;
+                IProvider provider = _dependencies.GetProvider(providerId);
+                if (provider == null)
+                {
+                    error = PredefinedErrors.ProviderUnknown(library.ProviderId);
+                    return null;
+                }
+
+                return provider;
+            }
+
+            return null;
+        }
+
+        private async Task<ILibraryOperationResult> ValidateLibraryFilesAsync(ILibraryInstallationState desiredLibraryState, ILibraryCatalog catalog, CancellationToken cancellationToken)
+        {
+            try
+            {
+                ILibrary library = await catalog.GetLibraryAsync(desiredLibraryState.LibraryId, CancellationToken.None).ConfigureAwait(false);
+
+                if (library != null && library.Files != null)
+                {
+                    var desiredLibraryFiles = new HashSet<string>(desiredLibraryState.Files);
+                    var actualStateFiles = new HashSet<string>(library.Files.Keys);
+                    IEnumerable<string> invalidFiles = desiredLibraryFiles.Except(actualStateFiles);
+
+                    if (invalidFiles.Any())
+                    {
+                        return LibraryOperationResult.FromError(PredefinedErrors.InvalidFilesInLibrary(desiredLibraryState.LibraryId, invalidFiles, actualStateFiles));
+                    }
+                }
+            }
+            catch (InvalidLibraryException)
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.UnableToResolveSource(desiredLibraryState.LibraryId, desiredLibraryState.ProviderId));
+            }
+
+            return LibraryOperationResult.FromSuccess(desiredLibraryState);
+        }
 
         /// <summary>
         /// Returns a collection of ILibraryOperationResult that represents the status for validation of each 
@@ -40,125 +202,172 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ILibraryOperationResult>> GetLibrariesErrorsAsync(
-            IEnumerable<ILibraryInstallationState> libraries,
-            CancellationToken cancellationToken)
+        public async Task<IEnumerable<ILibraryOperationResult>> ValidateLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            IEnumerable<ILibraryOperationResult> validateLibraries = ValidatePropertiesAsync(libraries, cancellationToken);
-
-            if (!validateLibraries.All(t => t.Success))
+            // Check for duplicate libraries 
+            IEnumerable<string> duplicates = GetDuplicateLibraries(libraries, cancellationToken);
+            if (duplicates != null && duplicates.Any())
             {
-                return validateLibraries;
+                return new[] { LibraryOperationResult.FromError(PredefinedErrors.DuplicateLibrariesInManifest(duplicates)) };
             }
 
-            IEnumerable<ILibraryOperationResult> expandLibraries= await ExpandLibrariesAsync(libraries, cancellationToken);
-            if (!expandLibraries.All(t => t.Success))
+            // Check for invalid libraries
+            List<Task<ILibraryOperationResult>> validationTasks = new List<Task<ILibraryOperationResult>>();
+            foreach (ILibraryInstallationState library in libraries)
             {
-                return expandLibraries;
+                validationTasks.Add(ValidateLibraryAsync(library, cancellationToken));
             }
 
-            libraries = expandLibraries.Select(l => l.InstallationState);
+            await Task.WhenAll(validationTasks);
 
+            IEnumerable<ILibraryOperationResult> validationResults = validationTasks.Select(t => t.Result);
+            ILibraryOperationResult failedValidation = validationResults.Where(r => !r.Success).FirstOrDefault();
 
-            return new List<ILibraryOperationResult> { GetConflictErrors(GetFilesConflicts(libraries, cancellationToken)) };
+            if (failedValidation != null)
+            {
+                return new[] { failedValidation };
+            }
+
+            // Check for file duplication
+            return new List<ILibraryOperationResult> { GetConflictErrors(await GetFilesConflictsAsync(libraries, cancellationToken)) };
 
         }
 
-        /// <summary>
-        /// Validates the values of each Library property and returns a collection of ILibraryOperationResult for each of them 
-        /// </summary>
-        /// <param name="libraries"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public IEnumerable<ILibraryOperationResult> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private IEnumerable<string> GetDuplicateLibraries(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
-            List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                List<string> duplicateLibraries = new List<string>();
+                IEnumerable<IProvider> providers = GetProviders(libraries);
+
+                foreach (IProvider provider in providers)
+                {
+                    IEnumerable<ILibraryInstallationState> providerLibraries = libraries.Where(l => l.ProviderId == provider.Id);
+                    duplicateLibraries.AddRange(providerLibraries.GroupBy(l => GetLibraryName(provider, l.LibraryId, cancellationToken)).Where(g => g.Count() > 1).Select(g => g.Key));
+                }
+
+                return duplicateLibraries;
+            }
+            catch(InvalidLibraryException)
+            {
+                return null;
+            }
+        }
+
+        private string GetLibraryName(IProvider provider, string libraryId, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            ILibrary library = provider.GetLibraryFromIdentifier(libraryId);
+
+            return library.Name;
+        }
+
+        private IEnumerable<IProvider> GetProviders(IEnumerable<ILibraryInstallationState> libraries)
+        {
+            var providers = new List<IProvider>();
 
             foreach (ILibraryInstallationState library in libraries)
             {
-                cancellationToken.ThrowIfCancellationRequested();
 
-                if (!library.IsValid(out IEnumerable<IError> errors))
+                IProvider provider = GetProvider(library, out _);
+                if (provider != null)
                 {
-                   return new List<ILibraryOperationResult> { new LibraryOperationResult(library, errors.ToArray())};
-                }
-                else
-                {
-                    validationStatus.Add(LibraryOperationResult.FromSuccess(library));
+                    providers.Add(provider);
                 }
             }
 
-            return validationStatus;
+            return providers;
         }
 
-        /// <summary>
-        /// Expands the files properties for each library 
-        /// </summary>
-        /// <param name="libraries"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        private async Task<IEnumerable<ILibraryOperationResult>> ExpandLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
-        {
-            List<ILibraryOperationResult> expandedLibraries = new List<ILibraryOperationResult>();
-
-            foreach (ILibraryInstallationState library in libraries)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                string installDestination = string.IsNullOrEmpty(library.DestinationPath) ? _defaultDestination : library.DestinationPath;
-                string providerId = string.IsNullOrEmpty(library.ProviderId) ? _defaultProvider : library.ProviderId;
-
-                IProvider provider = _dependencies.GetProvider(providerId);
-                if (provider == null)
-                {
-                    return new List<ILibraryOperationResult> { LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined())};
-                }
-
-                ILibraryOperationResult desiredState = await provider.UpdateStateAsync(library, cancellationToken);
-                if (!desiredState.Success)
-                {
-                    return new List<ILibraryOperationResult> { desiredState };
-                }
-
-                expandedLibraries.Add(desiredState);
-            }
-
-            return expandedLibraries;
-        }
-
+        
         /// <summary>
         /// Detects files conflicts in between libraries in the given collection 
         /// </summary>
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>A colletion of FileConflict for each conflict</returns>
-        public IEnumerable<FileConflict> GetFilesConflicts(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        public async Task<IEnumerable<FileConflict>> GetFilesConflictsAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
-            Dictionary<string, List<ILibraryInstallationState>> _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
+            var fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
+            IEnumerable<ILibraryOperationResult> expandedLibrariesResults = await GetExpandedLibrariesAsync(libraries, cancellationToken);
 
-            foreach (ILibraryInstallationState library in libraries)
+            if (expandedLibrariesResults.All(r => r.Success))
             {
-                string destinationPath = library.DestinationPath;
 
-                IEnumerable<string> files = library.Files.Select(f => Path.Combine(destinationPath, f));
+                IEnumerable<ILibraryInstallationState> expandedLibraries = expandedLibrariesResults.Select(r => r.InstallationState);
 
-                foreach (string file in files)
+                foreach (ILibraryInstallationState expandedLibrary in expandedLibraries)
                 {
-                    if (!_fileToLibraryMap.ContainsKey(file))
-                    {
-                        _fileToLibraryMap[file] = new List<ILibraryInstallationState>();
-                    }
+                    IEnumerable<string> files = expandedLibrary.Files.Select(f => Path.Combine(expandedLibrary.DestinationPath, f));
 
-                    _fileToLibraryMap[file].Add(library);
+                    foreach (string file in files)
+                    {
+                        if (!fileToLibraryMap.ContainsKey(file))
+                        {
+                            fileToLibraryMap[file] = new List<ILibraryInstallationState>();
+                        }
+
+                        fileToLibraryMap[file].Add(expandedLibrary);
+                    }
                 }
             }
 
-            return _fileToLibraryMap
+            return fileToLibraryMap
                     .Where(f => f.Value.Count > 1)
                     .Select(f => new FileConflict(f.Key, f.Value));
+        }
 
+        /// <summary>
+        /// Expands the implicit values of ILibraryInstallationState properties  
+        /// </summary>
+        /// <param name="libraries"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>A colletion of ILibraryInstallationState with expanded properties</returns>
+        public async Task<IEnumerable<ILibraryOperationResult>> GetExpandedLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        {
+            var results = new List<ILibraryOperationResult>();
+
+            foreach (ILibraryInstallationState library in libraries)
+            {
+                ILibraryOperationResult result = await GetExpandedLibraryAsync(library, cancellationToken);
+                results.Add(result);
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Expands the implicit values of ILibraryInstallationState properties  
+        /// </summary>
+        /// <param name="library"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ILibraryOperationResult> GetExpandedLibraryAsync(ILibraryInstallationState library, CancellationToken cancellationToken)
+        {
+            string destinationPath = library.DestinationPath ?? _defaultDestination;
+            string providerId = library.ProviderId ?? _defaultProvider;
+            IProvider provider = _dependencies.GetProvider(providerId);
+            ILibraryOperationResult result = await provider.UpdateStateAsync(library, cancellationToken);
+
+            if (result.Success)
+            {
+                ILibraryInstallationState expandedState = new LibraryInstallationState
+                {
+                    LibraryId = library.LibraryId,
+                    DestinationPath = library.DestinationPath ?? _defaultDestination,
+                    ProviderId = library.ProviderId ?? _defaultProvider,
+                    Files = result.InstallationState.Files
+                };
+
+                return LibraryOperationResult.FromSuccess(expandedState);
+            }
+
+            return result;
         }
 
         /// <summary>

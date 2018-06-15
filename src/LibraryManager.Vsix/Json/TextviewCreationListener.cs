@@ -96,7 +96,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                             {
                                 _manifest = newManifest;
 
-                               await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                                 Telemetry.TrackOperation("restoresave");
                             }
                             else

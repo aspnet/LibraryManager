@@ -259,16 +259,23 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private void RefreshFileSelections()
         {
-            SelectedProvider.GetCatalog().GetLibraryAsync(_packageId, CancellationToken.None).ContinueWith(x =>
+            try
             {
-                if (x.IsFaulted || x.IsCanceled)
+                SelectedProvider.GetCatalog().GetLibraryAsync(_packageId, CancellationToken.None).ContinueWith(x =>
                 {
-                    SelectedPackage = null;
-                    return;
-                }
+                    if (x.IsFaulted || x.IsCanceled)
+                    {
+                        SelectedPackage = null;
+                        return;
+                    }
 
-                SelectedPackage = x.Result;
-            });
+                    SelectedPackage = x.Result;
+                });
+            }
+            catch
+            {
+                // TO DO: What needs to be done here
+            }
         }
 
         public FileSelectionType LibraryFilesToInstall

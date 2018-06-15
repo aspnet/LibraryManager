@@ -1,9 +1,9 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Mocks
 {
@@ -59,12 +59,36 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public virtual ILibraryOperationResult Result { get; set; }
 
         /// <summary>
+        /// True if provider supports renaming
+        /// </summary>
+        public bool SupportsRenaming => false;
+
+        /// <summary>
         /// Gets the <see cref="T:LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>
         public virtual ILibraryCatalog GetCatalog()
         {
             return Catalog;
+        }
+
+        /// <summary>
+        /// Returns a LibraryIdentifier based on the the libraryId
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <returns></returns>
+        public ILibrary GetLibraryFromIdentifier(string libraryId)
+        {
+            try
+            {
+                string[] parts = libraryId.Split('@');
+
+                return new Mocks.Library { Name = parts[0], Version = parts[1], ProviderId = Id};
+            }
+            catch
+            {
+                throw new InvalidLibraryException(libraryId, Id);
+            }
         }
 
         /// <summary>
