@@ -20,12 +20,12 @@
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
           <source>The "destination" is undefined.</source>
-          <target state="needs-review-translation">"路徑" 未定義。</target>
+          <target state="translated">"destination" 未定義。</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
           <source>The "destination" must be inside the working directory</source>
-          <target state="needs-review-translation">"路徑" 必須在工作目錄中</target>
+          <target state="translated">"destination" 必須在工作目錄內</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
@@ -46,49 +46,48 @@
         </trans-unit>
         <trans-unit id="ErrorCouldNotDeleteLibrary" translate="yes" xml:space="preserve">
           <source>Failed to delete one or more files in the library {0}</source>
-          <target state="new">Failed to delete one or more files in the library {0}</target>
+          <target state="translated">無法刪除程式庫 {0} 中的一或多個檔案</target>
         </trans-unit>
         <trans-unit id="ErrorDestinationPathHasInvalidCharacter" translate="yes" xml:space="preserve">
           <source>The "{0}" destination file path has invalid characters</source>
-          <target state="new">The "{0}" destination file path has invalid characters</target>
+          <target state="translated">"{0}" 目的地檔案路徑包含無效字元</target>
         </trans-unit>
         <trans-unit id="ErrorNotSupportedVersion" translate="yes" xml:space="preserve">
           <source>Version "{0}" is not supported by this version of Library Manager</source>
-          <target state="new">Version "{0}" is not supported by this version of Library Manager</target>
+          <target state="translated">此版本的程式庫管理員不支援版本 "{0}"</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToDownloadResource" translate="yes" xml:space="preserve">
           <source>Failed to download resource from "{0}"</source>
-          <target state="new">Failed to download resource from "{0}"</target>
+          <target state="translated">無法從 "{0}" 下載資源</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToResolveFilePath" translate="yes" xml:space="preserve">
           <source>The "{0}" file path could not be resolved by the "{1}" provider</source>
-          <target state="new">The "{0}" file path could not be resolved by the "{1}" provider</target>
+          <target state="translated">"{1}" 提供者無法解析 "{0}" 檔案路徑</target>
         </trans-unit>
         <trans-unit id="ErrorConflictingLibraries" translate="yes" xml:space="preserve">
           <source>Conflicting file "{0}" found in more than one library: {1}</source>
-          <target state="new">Conflicting file "{0}" found in more than one library: {1}</target>
+          <target state="translated">在多個程式庫中找到衝突的檔案 "{0}": {1}</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryAlreadyInstalled" translate="yes" xml:space="preserve">
           <source>The "{0}" library is already installed by the "{1}" provider</source>
-          <target state="new">The "{0}" library is already installed by the "{1}" provider</target>
+          <target state="translated">"{1}" 提供者已經安裝 "{0}" 程式庫</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotInstallDueToConflicts" translate="yes" xml:space="preserve">
           <source>The file "{0}" is already installed by {1}.</source>
-          <target state="new">The file "{0}" is already installed by {1}.</target>
+          <target state="translated">{1} 已經安裝了檔案 "{0}"。</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotUpdateDueToConflicts" translate="yes" xml:space="preserve">
           <source>The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</source>
-          <target state="new">The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</target>
+          <target state="translated">程式庫 "{0}" 無法更新為 "{1}"。已經安裝另一個程式庫 "{1}"</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotUpdateDueToFileConflicts" translate="yes" xml:space="preserve">
           <source>The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</source>
-          <target state="new">The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</target>
+          <target state="translated">程式庫 "{0}" 無法更新為 "{1}"。下列檔案對 "{1}" 無效: {2}</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryHasInvalidFiles" translate="yes" xml:space="preserve">
           <source>"{0}" does not contain the following: {1}
 Valid files are {2}</source>
-          <target state="new">"{0}" does not contain the following: {1}
-Valid files are {2}</target>
+          <target state="translated">"{0}" 未包含以下項目: {1} 有效的檔案為 {2}</target>
         </trans-unit>
       </group>
     </body>

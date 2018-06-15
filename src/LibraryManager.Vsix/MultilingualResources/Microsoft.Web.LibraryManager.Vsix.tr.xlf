@@ -52,7 +52,7 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">MSBuild işlemini güçlendirmek için bir NuGet paketi yüklenecek ancak projeye herhangi bir dosya eklenmeyecek. Bu işlem İnternet bağlantısı gerektirebilir. Devam etmek istiyor musunuz?</target>
+          <target state="translated">MSBuild işlemini artırmak için bir NUGet paketi yüklenecek ancak projeye dosya eklenmeyecek. Bu işlem İnternet bağlantısı gerektirebilir. Devam etmek istiyor musunuz?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
@@ -60,96 +60,96 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
-          <target state="new">Add Client-Side Library</target>
+          <target state="translated">İstemci Tarafı Kitaplık Ekle</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Add Client-Side Library</note>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="new"><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></target>
+          <target state="translated">&lt;Yüklenecek dosyaları belirlemek için bir kitaplık seçin&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disable Restore on Build</source>
-          <target state="new">Disable Restore on Build</target>
+          <target state="translated">Derleme Sırasında Geri Yüklemeyi Devre Dışı Bırak</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Enable Restore Client-Side Libraries on Build</source>
-          <target state="new">Enable Restore Client-Side Libraries on Build</target>
+          <target state="translated">İstemci Tarafı Kitaplıkların Derleme Sırasında Geri Yüklenmesini Etkinleştir</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
-          <target state="new">Installing NuGet package containing MSBuild target...</target>
+          <target state="translated">MSBuild hedefini içeren NuGet paketi yükleniyor...</target>
         </trans-unit>
         <trans-unit id="Nuget_PackageFailedToInstall" translate="yes" xml:space="preserve">
           <source>NuGet package failed to install</source>
-          <target state="new">NuGet package failed to install</target>
+          <target state="translated">NuGet paketi yüklenemedi</target>
         </trans-unit>
         <trans-unit id="Nuget_PackageFailedToUninstall" translate="yes" xml:space="preserve">
           <source>NuGet package failed to uninstall</source>
-          <target state="new">NuGet package failed to uninstall</target>
+          <target state="translated">NuGet paketi kaldırılamadı</target>
         </trans-unit>
         <trans-unit id="Nuget_PackageInstalled" translate="yes" xml:space="preserve">
           <source>NuGet package installed</source>
-          <target state="new">NuGet package installed</target>
+          <target state="translated">NuGet paketi yüklendi</target>
         </trans-unit>
         <trans-unit id="Nuget_PackageUninstalled" translate="yes" xml:space="preserve">
           <source>NuGet package uninstalled</source>
-          <target state="new">NuGet package uninstalled</target>
+          <target state="translated">NuGet paketi kaldırıldı</target>
         </trans-unit>
         <trans-unit id="Nuget_UninstallingPackage" translate="yes" xml:space="preserve">
           <source>Uninstalling NuGet package...</source>
-          <target state="new">Uninstalling NuGet package...</target>
+          <target state="translated">NuGet paketi kaldırılıyor...</target>
         </trans-unit>
         <trans-unit id="FailToDeleteLibrariesFromProject" translate="yes" xml:space="preserve">
           <source>Could not delete libraries from project</source>
-          <target state="new">Could not delete libraries from project</target>
+          <target state="translated">Kitaplıklar projeden silinemedi</target>
         </trans-unit>
         <trans-unit id="LibraryDeletedFromProject" translate="yes" xml:space="preserve">
           <source>Library {0} was successfuly deleted from project</source>
-          <target state="new">Library {0} was successfuly deleted from project</target>
+          <target state="translated">{0} kitaplığı başarıyla projeden silindi</target>
         </trans-unit>
         <trans-unit id="FailToAddLibrariesToProject" translate="yes" xml:space="preserve">
           <source>Could not add libraries to project</source>
-          <target state="new">Could not add libraries to project</target>
+          <target state="translated">Kitaplıklar projeye eklenemedi</target>
         </trans-unit>
         <trans-unit id="LibraryAddedToProject" translate="yes" xml:space="preserve">
           <source>Library {0} was successfuly added to project</source>
-          <target state="new">Library {0} was successfuly added to project</target>
+          <target state="translated">{0} kitaplığı projeye başarıyla eklendi</target>
         </trans-unit>
         <trans-unit id="OutputWindowTitle" translate="yes" xml:space="preserve">
           <source>Library Manager</source>
-          <target state="new">Library Manager</target>
+          <target state="translated">Kütüphane Yöneticisi</target>
         </trans-unit>
         <trans-unit id="OperationInProgress" translate="yes" xml:space="preserve">
           <source>Library Manager operation already in progress.</source>
-          <target state="new">Library Manager operation already in progress.</target>
+          <target state="translated">Kitaplık Yöneticisi işlemi zaten sürüyor.</target>
         </trans-unit>
         <trans-unit id="Files" translate="yes" xml:space="preserve">
           <source>Files:</source>
-          <target state="new">Files:</target>
+          <target state="translated">Dosyalar:</target>
         </trans-unit>
         <trans-unit id="Library" translate="yes" xml:space="preserve">
           <source>Library:</source>
-          <target state="new">Library:</target>
+          <target state="translated">Kitaplık:</target>
         </trans-unit>
         <trans-unit id="Provider" translate="yes" xml:space="preserve">
           <source>Provider: </source>
-          <target state="new">Provider: </target>
+          <target state="translated">Sağlayıcı: </target>
         </trans-unit>
         <trans-unit id="TargetLocation" translate="yes" xml:space="preserve">
           <source>Target Location:</source>
-          <target state="new">Target Location:</target>
+          <target state="translated">Hedef konumu:</target>
         </trans-unit>
         <trans-unit id="ChooseSpecificFiles" translate="yes" xml:space="preserve">
           <source>Choose specific files:</source>
-          <target state="new">Choose specific files:</target>
+          <target state="translated">Belirli dosyaları seçin:</target>
         </trans-unit>
         <trans-unit id="IncludeAllLibraryFiles" translate="yes" xml:space="preserve">
           <source>Include all library files</source>
-          <target state="new">Include all library files</target>
+          <target state="translated">Tüm kütüphane dosyalarını ekle</target>
         </trans-unit>
         <trans-unit id="NoFilesSelected" translate="yes" xml:space="preserve">
           <source>No files have been selected</source>
-          <target state="new">No files have been selected</target>
+          <target state="translated">Dosya seçilmedi</target>
         </trans-unit>
       </group>
     </body>
