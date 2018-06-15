@@ -20,12 +20,12 @@
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
           <source>The "destination" is undefined.</source>
-          <target state="needs-review-translation">"路径" 未定义。</target>
+          <target state="translated">未定义“目标”。</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
           <source>The "destination" must be inside the working directory</source>
-          <target state="needs-review-translation">"路径" 必须在工作目录中</target>
+          <target state="translated">“目标”必须在工作目录内</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
@@ -46,49 +46,48 @@
         </trans-unit>
         <trans-unit id="ErrorCouldNotDeleteLibrary" translate="yes" xml:space="preserve">
           <source>Failed to delete one or more files in the library {0}</source>
-          <target state="new">Failed to delete one or more files in the library {0}</target>
+          <target state="translated">未能删除库 {0} 中的一个或多个文件</target>
         </trans-unit>
         <trans-unit id="ErrorDestinationPathHasInvalidCharacter" translate="yes" xml:space="preserve">
           <source>The "{0}" destination file path has invalid characters</source>
-          <target state="new">The "{0}" destination file path has invalid characters</target>
+          <target state="translated">"{0}" 目标文件路径具有无效字符</target>
         </trans-unit>
         <trans-unit id="ErrorNotSupportedVersion" translate="yes" xml:space="preserve">
           <source>Version "{0}" is not supported by this version of Library Manager</source>
-          <target state="new">Version "{0}" is not supported by this version of Library Manager</target>
+          <target state="translated">此版本的库管理器不支持版本 "{0}"</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToDownloadResource" translate="yes" xml:space="preserve">
           <source>Failed to download resource from "{0}"</source>
-          <target state="new">Failed to download resource from "{0}"</target>
+          <target state="translated">无法从 "{0}" 下载资源</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToResolveFilePath" translate="yes" xml:space="preserve">
           <source>The "{0}" file path could not be resolved by the "{1}" provider</source>
-          <target state="new">The "{0}" file path could not be resolved by the "{1}" provider</target>
+          <target state="translated">"{1}" 提供程序无法解析 "{0}" 文件路径</target>
         </trans-unit>
         <trans-unit id="ErrorConflictingLibraries" translate="yes" xml:space="preserve">
           <source>Conflicting file "{0}" found in more than one library: {1}</source>
-          <target state="new">Conflicting file "{0}" found in more than one library: {1}</target>
+          <target state="translated">在多个库中找到冲突的文件 "{0}": {1}</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryAlreadyInstalled" translate="yes" xml:space="preserve">
           <source>The "{0}" library is already installed by the "{1}" provider</source>
-          <target state="new">The "{0}" library is already installed by the "{1}" provider</target>
+          <target state="translated">"{0}" 库已由 "{1}" 提供程序安装</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotInstallDueToConflicts" translate="yes" xml:space="preserve">
           <source>The file "{0}" is already installed by {1}.</source>
-          <target state="new">The file "{0}" is already installed by {1}.</target>
+          <target state="translated">文件 "{0}" 已由 {1} 安装。</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotUpdateDueToConflicts" translate="yes" xml:space="preserve">
           <source>The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</source>
-          <target state="new">The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</target>
+          <target state="translated">无法将库 "{0}" 更新为 "{1}"。已安装了另一个库 "{1}"</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotUpdateDueToFileConflicts" translate="yes" xml:space="preserve">
           <source>The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</source>
-          <target state="new">The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</target>
+          <target state="translated">无法将库 "{0}" 更新为 "{1}"。以下文件对 "{1}" 无效: {2}</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryHasInvalidFiles" translate="yes" xml:space="preserve">
           <source>"{0}" does not contain the following: {1}
 Valid files are {2}</source>
-          <target state="new">"{0}" does not contain the following: {1}
-Valid files are {2}</target>
+          <target state="translated">"{0}" 不包含以下内容: {1} 有效文件为 {2}</target>
         </trans-unit>
       </group>
     </body>

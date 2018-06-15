@@ -52,7 +52,7 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">Un package NuGet va être installé pour élargir le processus MSBuild, mais aucun fichier ne sera ajouté au projet. Cette opération peut nécessiter une connexion internet. Voulez-vous continuer ?</target>
+          <target state="translated">Un package NuGet est installé pour augmenter le processus MSBuild, mais aucun fichier n'est ajouté au projet. Une connexion Internet peut être nécessaire. Voulez-vous continuer ?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
@@ -60,96 +60,96 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
-          <target state="new">Add Client-Side Library</target>
+          <target state="translated">Ajouter une bibliothèque côté client</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Add Client-Side Library</note>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="new"><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></target>
+          <target state="translated">&lt;Choisir une bibliothèque pour sélectionner les fichiers à installer&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disable Restore on Build</source>
-          <target state="new">Disable Restore on Build</target>
+          <target state="translated">Désactiver la restauration sur la build</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Enable Restore Client-Side Libraries on Build</source>
-          <target state="new">Enable Restore Client-Side Libraries on Build</target>
+          <target state="translated">Activer la restauration des bibliothèques côté client sur la build</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
-          <target state="new">Installing NuGet package containing MSBuild target...</target>
+          <target state="translated">Installation du package NuGet contenant la cible MSBuild...</target>
         </trans-unit>
         <trans-unit id="Nuget_PackageFailedToInstall" translate="yes" xml:space="preserve">
           <source>NuGet package failed to install</source>
-          <target state="new">NuGet package failed to install</target>
+          <target state="translated">Le package NuGet n'a pas été installé</target>
         </trans-unit>
         <trans-unit id="Nuget_PackageFailedToUninstall" translate="yes" xml:space="preserve">
           <source>NuGet package failed to uninstall</source>
-          <target state="new">NuGet package failed to uninstall</target>
+          <target state="translated">Le package NuGet n'a pas été désinstallé</target>
         </trans-unit>
         <trans-unit id="Nuget_PackageInstalled" translate="yes" xml:space="preserve">
           <source>NuGet package installed</source>
-          <target state="new">NuGet package installed</target>
+          <target state="translated">Package NuGet installé</target>
         </trans-unit>
         <trans-unit id="Nuget_PackageUninstalled" translate="yes" xml:space="preserve">
           <source>NuGet package uninstalled</source>
-          <target state="new">NuGet package uninstalled</target>
+          <target state="translated">Package NuGet désinstallé</target>
         </trans-unit>
         <trans-unit id="Nuget_UninstallingPackage" translate="yes" xml:space="preserve">
           <source>Uninstalling NuGet package...</source>
-          <target state="new">Uninstalling NuGet package...</target>
+          <target state="translated">Désinstallation du package NuGet...</target>
         </trans-unit>
         <trans-unit id="FailToDeleteLibrariesFromProject" translate="yes" xml:space="preserve">
           <source>Could not delete libraries from project</source>
-          <target state="new">Could not delete libraries from project</target>
+          <target state="translated">Impossible de supprimer les bibliothèques du projet</target>
         </trans-unit>
         <trans-unit id="LibraryDeletedFromProject" translate="yes" xml:space="preserve">
           <source>Library {0} was successfuly deleted from project</source>
-          <target state="new">Library {0} was successfuly deleted from project</target>
+          <target state="translated">La bibliothèque {0} a été supprimée du projet</target>
         </trans-unit>
         <trans-unit id="FailToAddLibrariesToProject" translate="yes" xml:space="preserve">
           <source>Could not add libraries to project</source>
-          <target state="new">Could not add libraries to project</target>
+          <target state="translated">Impossible d'ajouter des bibliothèques au projet</target>
         </trans-unit>
         <trans-unit id="LibraryAddedToProject" translate="yes" xml:space="preserve">
           <source>Library {0} was successfuly added to project</source>
-          <target state="new">Library {0} was successfuly added to project</target>
+          <target state="translated">La bibliothèque {0} a été ajoutée au projet</target>
         </trans-unit>
         <trans-unit id="OutputWindowTitle" translate="yes" xml:space="preserve">
           <source>Library Manager</source>
-          <target state="new">Library Manager</target>
+          <target state="translated">Gestionnaire de bibliothèques</target>
         </trans-unit>
         <trans-unit id="OperationInProgress" translate="yes" xml:space="preserve">
           <source>Library Manager operation already in progress.</source>
-          <target state="new">Library Manager operation already in progress.</target>
+          <target state="translated">Opération du gestionnaire de bibliothèques déjà en cours.</target>
         </trans-unit>
         <trans-unit id="Files" translate="yes" xml:space="preserve">
           <source>Files:</source>
-          <target state="new">Files:</target>
+          <target state="translated">Fichiers :</target>
         </trans-unit>
         <trans-unit id="Library" translate="yes" xml:space="preserve">
           <source>Library:</source>
-          <target state="new">Library:</target>
+          <target state="translated">Bibliothèque :</target>
         </trans-unit>
         <trans-unit id="Provider" translate="yes" xml:space="preserve">
           <source>Provider: </source>
-          <target state="new">Provider: </target>
+          <target state="translated">Fournisseur : </target>
         </trans-unit>
         <trans-unit id="TargetLocation" translate="yes" xml:space="preserve">
           <source>Target Location:</source>
-          <target state="new">Target Location:</target>
+          <target state="translated">Emplacement cible :</target>
         </trans-unit>
         <trans-unit id="ChooseSpecificFiles" translate="yes" xml:space="preserve">
           <source>Choose specific files:</source>
-          <target state="new">Choose specific files:</target>
+          <target state="translated">Choisissez des fichiers spécifiques :</target>
         </trans-unit>
         <trans-unit id="IncludeAllLibraryFiles" translate="yes" xml:space="preserve">
           <source>Include all library files</source>
-          <target state="new">Include all library files</target>
+          <target state="translated">Inclure tous les fichiers de bibliothèque</target>
         </trans-unit>
         <trans-unit id="NoFilesSelected" translate="yes" xml:space="preserve">
           <source>No files have been selected</source>
-          <target state="new">No files have been selected</target>
+          <target state="translated">Aucun fichier sélectionné</target>
         </trans-unit>
       </group>
     </body>

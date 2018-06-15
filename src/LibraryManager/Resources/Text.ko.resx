@@ -21,7 +21,125 @@
     <comment>Shows in Output Window when a file failed to be deleted</comment>
   </data>
   <data name="FileWrittenToDisk" xml:space="preserve">
-    <value>{0}이(가) 디스크에 기록되었습니다.</value>
+    <value>{0}이(가) 대상에 기록됨</value>
     <comment>Shows in Output Window when a file was successfully added to project</comment>
+  </data>
+  <data name="LibraryInfoUpdateFailed" xml:space="preserve">
+    <value>{0}에 대한 라이브러리 정보의 업데이트 실패</value>
+  </data>
+  <data name="Restore_RestoreOfLibraryStarted" xml:space="preserve">
+    <value>{0} 라이브러리를 복원하는 중...</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} 라이브러리를 {1}초 후에 복원합니다.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_OperationHasErrors" xml:space="preserve">
+    <value>하나 이상의 라이브러리를 복원하지 못했습니다.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="FailedToDownloadCatalog" xml:space="preserve">
+    <value>공급자 "{0}"에서 카탈로그를 다운로드하지 못했습니다.</value>
+  </data>
+  <data name="Restore_LibraryRestoreCancelled" xml:space="preserve">
+    <value>{0} 라이브러리에 대한 복원이 취소되었습니다.</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} 라이브러리를 복원하지 못했습니다.</value>
+  </data>
+  <data name="Clean_OperationCancelled" xml:space="preserve">
+    <value>라이브러리 정리 작업이 취소되었습니다.</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesFailed" xml:space="preserve">
+    <value>{0} 라이브러리를 삭제하지 못했습니다.</value>
+  </data>
+  <data name="Clean_OperationStarted" xml:space="preserve">
+    <value>라이브러리 정리 작업이 시작됨...</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
+    <value>{0} 라이브러리가 {1}초 내에 삭제되었습니다.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Clean_OperationFailed" xml:space="preserve">
+    <value>{0} 라이브러리에 대한 정리 작업에 실패했습니다.</value>
+  </data>
+  <data name="Clean_OperationCompleted" xml:space="preserve">
+    <value>라이브러리 정리 작업이 완료됨</value>
+  </data>
+  <data name="Install_LibraryFailed" xml:space="preserve">
+    <value>{0} 라이브러리를 설치하지 못했습니다.</value>
+  </data>
+  <data name="Install_LibraryStarted" xml:space="preserve">
+    <value>{0} 라이브러리 설치가 시작됨...</value>
+  </data>
+  <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
+    <value>{0} 라이브러리가 복원되었습니다.</value>
+  </data>
+  <data name="Restore_LibrariesUptodate" xml:space="preserve">
+    <value>복원을 완료했습니다. 파일은 이미 최신 상태입니다.</value>
+    <comment>Status message</comment>
+  </data>
+  <data name="Restore_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>{0} 라이브러리 복원이 취소되었습니다.</value>
+  </data>
+  <data name="Restore_OperationCompleted" xml:space="preserve">
+    <value>복원 작업이 완료됨</value>
+  </data>
+  <data name="SummaryEndLine" xml:space="preserve">
+    <value>========== 완료 ==========</value>
+  </data>
+  <data name="TimeElapsed" xml:space="preserve">
+    <value>경과 시간: {0}</value>
+  </data>
+  <data name="Uninstall_LibraryStarted" xml:space="preserve">
+    <value>{0} 라이브러리 제거가 시작됨...</value>
+  </data>
+  <data name="Update_LibraryFailed" xml:space="preserve">
+    <value>{0} 라이브러리를 업데이트하지 못했습니다.</value>
+  </data>
+  <data name="Update_LibraryStarted" xml:space="preserve">
+    <value>{0} 라이브러리 업데이트가 시작됨...</value>
+  </data>
+  <data name="Update_LibrarySucceeded" xml:space="preserve">
+    <value>{0} 라이브러리를 업데이트했습니다.</value>
+  </data>
+  <data name="Uninstall_LibraryCancelled" xml:space="preserve">
+    <value>{0} 라이브러리 제거가 취소되었습니다.</value>
+  </data>
+  <data name="Uninstall_LibraryFailed" xml:space="preserve">
+    <value>{0} 라이브러리를 제거하지 못했습니다.</value>
+  </data>
+  <data name="Clean_NumberOfLibrariesCancelled" xml:space="preserve">
+    <value>{0} 라이브러리의 삭제가 취소되었습니다.</value>
+  </data>
+  <data name="Restore_LibraryRestoreFailed" xml:space="preserve">
+    <value>라이브러리 복원 실패: {0}</value>
+  </data>
+  <data name="Restore_OperationCancelled" xml:space="preserve">
+    <value>복원 작업이 취소되었습니다.</value>
+  </data>
+  <data name="Restore_OperationFailed" xml:space="preserve">
+    <value>{0} 라이브러리에 대한 복원 작업에 실패했습니다.</value>
+  </data>
+  <data name="Restore_OperationStarted" xml:space="preserve">
+    <value>복원 작업이 시작됨...</value>
+  </data>
+  <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
+    <value>{0} 라이브러리를 제거했습니다.</value>
+  </data>
+  <data name="Update_LibraryCancelled" xml:space="preserve">
+    <value>{0} 라이브러리 업데이트가 취소되었습니다.</value>
+  </data>
+  <data name="Restore_LibrariesForProject" xml:space="preserve">
+    <value>{0} 프로젝트에 대한 라이브러리를 복원하는 중</value>
+  </data>
+  <data name="CdnjsLibraryIdHintText" xml:space="preserve">
+    <value>예: &lt;library&gt;@&lt;version&gt;</value>
+  </data>
+  <data name="FileSystemLibraryIdHintText" xml:space="preserve">
+    <value>유효한 파일 시스템 경로여야 합니다.</value>
+  </data>
+  <data name="UnpkgProviderHintText" xml:space="preserve">
+    <value>예: &lt;library&gt;@&lt;version&gt;</value>
   </data>
 </root>

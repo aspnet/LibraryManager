@@ -45,13 +45,81 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Nainstaluje se balíček NuGet pro rozšíření procesu MSBuild, ale do projektu nebudou přidány žádné soubory.
-
-Tato operace může vyžadovat připojení k internetu.
-
+    <value>Nainstaluje se balíček NuGet pro podporu procesu MSBuild, ale do projektu se nepřidají žádné soubory.
+Může to vyžadovat připojení k internetu.
 Chcete pokračovat?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Začněte psát, co chcete najít.&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>Přidat knihovnu na straně klienta</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;Zvolte knihovnu, ze které chcete vybrat soubory k instalaci.&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>Zakázat obnovení při sestavení</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>Povolit obnovení knihoven na straně klienta při sestavení</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>Instaluje se balíček NuGet, který obsahujíce cíl nástroje MSBuild...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>Nepovedlo se nainstalovat balíček NuGet.</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>Balíček NuGet se nepovedlo odinstalovat.</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>Nainstaloval se balíček NuGet.</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>Balíček NuGet se odinstaloval.</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>Probíhá odinstalace balíčku NuGet...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>Knihovny nešlo odstranit z projektu.</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>Knihovna {0} se úspěšně odstranila z projektu.</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>Knihovny nešlo přidat do projektu.</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>Knihovna {0} se úspěšně přidala do projektu.</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>Správce knihoven</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>Operace Správce knihoven už probíhá.</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Soubory:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Knihovna:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Poskytovatel: </value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>Cílové umístění:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>Zvolte konkrétní soubory:</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>Zahrnout všechny soubory z knihovny</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>Nejsou vybrané žádné soubory.</value>
   </data>
 </root>

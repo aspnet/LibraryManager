@@ -22,10 +22,10 @@
     <value>マニフェスト ファイルに構文エラーがあります</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>「パス」は定義されません。</value>
+    <value>"宛先" が定義されていません。</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>「パス」が作業ディレクトリ内にある必要があります。</value>
+    <value>”宛先” は作業ディレクトリ内にある必要があります。</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>プロバイダーが定義されていません</value>
@@ -38,5 +38,39 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>不明な例外が発生しました</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>ライブラリ {0} の 1 つまたは複数のファイルを削除できませんでした</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>"{0}" の宛先ファイル パスには無効な文字が含まれています</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>バージョン "{0}" は、このバージョンのライブラリ マネージャーによってサポートされていません</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>リソースを "{0}" からダウンロードできませんでした</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>"{0}" ファイル パスは "{1}" プロバイダーによって解決できませんでした</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>競合するファイル "{0}" が複数のライブラリで見つかりました: {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>"{0}" ライブラリは "{1}" プロバイダーによって既にインストールされています</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>ファイル "{0}" は既に {1} によってインストールされています。</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>ライブラリ "{0}" を "{1}" に更新できませんでした。別のライブラリ "{1}" が既にインストールされています。</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>ライブラリ "{0}" を "{1}" に更新できませんでした。次のファイルは "{1}" に対して無効です: {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>"{0}" には次が含まれていません: {1}
+有効なファイルは {2} です</value>
   </data>
 </root>

@@ -20,12 +20,12 @@
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
           <source>The "destination" is undefined.</source>
-          <target state="needs-review-translation">Der "Weg" ist nicht definiert.</target>
+          <target state="translated">Das "Ziel" ist nicht definiert.</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
           <source>The "destination" must be inside the working directory</source>
-          <target state="needs-review-translation">Der "Pfad" muss in das Arbeitsverzeichnis</target>
+          <target state="translated">Das "Ziel" muss sich im Arbeitsverzeichnis befinden.</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
@@ -46,49 +46,48 @@
         </trans-unit>
         <trans-unit id="ErrorCouldNotDeleteLibrary" translate="yes" xml:space="preserve">
           <source>Failed to delete one or more files in the library {0}</source>
-          <target state="new">Failed to delete one or more files in the library {0}</target>
+          <target state="translated">Mindestens eine Datei in der Bibliothek "{0}" konnte nicht gelöscht werden.</target>
         </trans-unit>
         <trans-unit id="ErrorDestinationPathHasInvalidCharacter" translate="yes" xml:space="preserve">
           <source>The "{0}" destination file path has invalid characters</source>
-          <target state="new">The "{0}" destination file path has invalid characters</target>
+          <target state="translated">Der Zieldateipfad "{0}" enthält unzulässige Zeichen.</target>
         </trans-unit>
         <trans-unit id="ErrorNotSupportedVersion" translate="yes" xml:space="preserve">
           <source>Version "{0}" is not supported by this version of Library Manager</source>
-          <target state="new">Version "{0}" is not supported by this version of Library Manager</target>
+          <target state="translated">Version {0} wird von dieser Version des Bibliotheks-Managers nicht unterstützt.</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToDownloadResource" translate="yes" xml:space="preserve">
           <source>Failed to download resource from "{0}"</source>
-          <target state="new">Failed to download resource from "{0}"</target>
+          <target state="translated">Fehler beim Herunterladen der Ressource von "{0}".</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToResolveFilePath" translate="yes" xml:space="preserve">
           <source>The "{0}" file path could not be resolved by the "{1}" provider</source>
-          <target state="new">The "{0}" file path could not be resolved by the "{1}" provider</target>
+          <target state="translated">Der Pfad der Datei "{0}" konnte vom Anbieter "{1}" nicht aufgelöst werden.</target>
         </trans-unit>
         <trans-unit id="ErrorConflictingLibraries" translate="yes" xml:space="preserve">
           <source>Conflicting file "{0}" found in more than one library: {1}</source>
-          <target state="new">Conflicting file "{0}" found in more than one library: {1}</target>
+          <target state="translated">Die einen Konflikt verursachende Datei "{0}" wurde in mehreren Bibliotheken gefunden: {1}</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryAlreadyInstalled" translate="yes" xml:space="preserve">
           <source>The "{0}" library is already installed by the "{1}" provider</source>
-          <target state="new">The "{0}" library is already installed by the "{1}" provider</target>
+          <target state="translated">Die Bibliothek "{0}" wurde bereits vom Anbieter "{1}" installiert.</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotInstallDueToConflicts" translate="yes" xml:space="preserve">
           <source>The file "{0}" is already installed by {1}.</source>
-          <target state="new">The file "{0}" is already installed by {1}.</target>
+          <target state="translated">Die Datei "{0}" wurde bereits von {1} installiert.</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotUpdateDueToConflicts" translate="yes" xml:space="preserve">
           <source>The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</source>
-          <target state="new">The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</target>
+          <target state="translated">Die Bibliothek "{0}" konnte nicht auf "{1}" aktualisiert werden. Eine andere Bibliothek "{1}" ist bereits installiert.</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotUpdateDueToFileConflicts" translate="yes" xml:space="preserve">
           <source>The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</source>
-          <target state="new">The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</target>
+          <target state="translated">Die Bibliothek "{0}" konnte nicht auf "{1}" aktualisiert werden. Die folgenden Dateien sind für "{1}" nicht gültig: {2}</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryHasInvalidFiles" translate="yes" xml:space="preserve">
           <source>"{0}" does not contain the following: {1}
 Valid files are {2}</source>
-          <target state="new">"{0}" does not contain the following: {1}
-Valid files are {2}</target>
+          <target state="translated">Folgende Elemente sind in "{0}" nicht enthalten: {1}. Gültige Dateien: {2}</target>
         </trans-unit>
       </group>
     </body>

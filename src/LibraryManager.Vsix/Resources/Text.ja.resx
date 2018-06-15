@@ -45,9 +45,81 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>MSBuild プロセスを向上させるために NuGet パッケージがインストールされますが、ファイルがプロジェクトに追加されることはありません。これにはインターネット接続が必要です。続行しますか?</value>
+    <value>NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、ファイルはプロジェクトに追加されません。
+これにはインターネット接続が必要になる可能性があります。
+続行しますか?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;入力して検索&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>クライアント側のライブラリを追加します</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;ライブラリを選択して、インストールするファイルを選択してください&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>ビルドでの復元を無効にします</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>クライアント側ライブラリのビルドでの復元を有効にします</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>MSBuild ターゲットを含む NuGet パッケージをインストールしています...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>NuGet パッケージをインストールできませんでした</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>NuGet パッケージをアンインストールできませんでした</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>NuGet パッケージがインストールされました</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>NuGet パッケージがアンインストールされました</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>NuGet パッケージをアンインストールしています...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>プロジェクトからライブラリを削除できませんでした</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>ライブラリ {0} がプロジェクトから正常に削除されました</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>プロジェクトにライブラリを追加できませんでした</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>ライブラリ {0} はプロジェクトに正常に追加されました</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>ライブラリ マネージャー</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>ライブラリ マネージャー操作が既に進行中です。</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>ファイル:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>ライブラリ:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>プロバイダー:</value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>ターゲットの場所:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>特定のファイルを選択します。</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>ライブラリのすべてのファイルを含める</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>ファイルが選択されていません</value>
   </data>
 </root>

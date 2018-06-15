@@ -22,10 +22,10 @@
     <value>매니페스트 파일에 구문 오류가 있습니다.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>"경로"는 정의 되지 않습니다.</value>
+    <value>"대상"이 정의되어 있지 않습니다.</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>"경로" 작업 디렉토리 내부에 있어야</value>
+    <value>"대상"은 작업 디렉터리 내부에 있어야 합니다.</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>공급자가 정의되어 있지 않습니다.</value>
@@ -38,5 +38,39 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>알 수 없는 예외가 발생했습니다.</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>{0} 라이브러리에서 하나 이상의 파일을 삭제하지 못했습니다.</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>"{0}" 대상 파일 경로에 잘못된 문자가 있습니다.</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>"{0}" 버전은 이 버전의 라이브러리 관리자에서 지원되지 않습니다.</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>"{0}"에서 리소스를 다운로드하지 못했습니다.</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>"{1}" 공급자에서 "{0}" 파일 경로를 확인할 수 없습니다.</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>하나 이상의 라이브러리에서 "{0}" 파일이 충돌합니다. {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>"{1}" 공급자가 "{0}" 라이브러리를 이미 설치했습니다.</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>{1}이(가) "{0}" 파일을 이미 설치했습니다.</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>"{0}" 라이브러리를 "{1}"에 업데이트할 수 없습니다. 다른 라이브러리 "{1}"이(가) 이미 설치되어 있습니다.</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>"{0}" 라이브러리를 "{1}"에 업데이트할 수 없습니다. "{1}"에 대해 다음 파일이 유효하지 않습니다. {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>"{0}"에 {1}이(가) 포함되어 있지 않습니다.
+유효한 파일은 {2}입니다.</value>
   </data>
 </root>

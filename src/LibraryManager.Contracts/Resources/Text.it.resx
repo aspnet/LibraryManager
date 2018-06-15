@@ -22,10 +22,10 @@
     <value>Il file manifesto contiene errori di sintassi</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>Il "percorso" non è definito.</value>
+    <value>Il valore di "destinazione" non è definito.</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>Il "percorso" deve essere all'interno della directory di lavoro</value>
+    <value>La "destinazione" deve essere presente nella directory di lavoro</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>Il provider non è definito</value>
@@ -38,5 +38,39 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>Si è verificata un'eccezione sconosciuta</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>Non è stato possibile eliminare uno o più file nella libreria {0}</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>Il percorso del file di destinazione "{0}" contiene caratteri non validi</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>La versione "{0}" non è supportata da questa versione di Gestione librerie</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>Non è stato possibile scaricare la risorsa da "{0}"</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>Il provider "{1}" non è riuscito a risolvere il percorso file "{0}"</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>Il file in conflitto "{0}" è stato trovato in più di una libreria: {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>La libreria "{0}" è già stata installata dal provider "{1}"</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>Il file "{0}" è già stato installato da {1}.</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>Non è stato possibile aggiornare la libreria "{0}" a "{1}". È già installata un'altra libreria "{1}"</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>Non è stato possibile aggiornare la libreria "{0}" a "{1}". I file seguenti non sono validi per "{1}": {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>"{0}" non contiene quanto segue: {1}
+I file validi sono {2}</value>
   </data>
 </root>

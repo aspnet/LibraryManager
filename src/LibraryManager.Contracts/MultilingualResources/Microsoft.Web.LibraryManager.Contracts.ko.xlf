@@ -20,12 +20,12 @@
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
           <source>The "destination" is undefined.</source>
-          <target state="needs-review-translation">"경로"는 정의 되지 않습니다.</target>
+          <target state="translated">"대상"이 정의되어 있지 않습니다.</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
           <source>The "destination" must be inside the working directory</source>
-          <target state="needs-review-translation">"경로" 작업 디렉토리 내부에 있어야</target>
+          <target state="translated">"대상"은 작업 디렉터리 내부에 있어야 합니다.</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
@@ -46,49 +46,49 @@
         </trans-unit>
         <trans-unit id="ErrorCouldNotDeleteLibrary" translate="yes" xml:space="preserve">
           <source>Failed to delete one or more files in the library {0}</source>
-          <target state="new">Failed to delete one or more files in the library {0}</target>
+          <target state="translated">{0} 라이브러리에서 하나 이상의 파일을 삭제하지 못했습니다.</target>
         </trans-unit>
         <trans-unit id="ErrorDestinationPathHasInvalidCharacter" translate="yes" xml:space="preserve">
           <source>The "{0}" destination file path has invalid characters</source>
-          <target state="new">The "{0}" destination file path has invalid characters</target>
+          <target state="translated">"{0}" 대상 파일 경로에 잘못된 문자가 있습니다.</target>
         </trans-unit>
         <trans-unit id="ErrorNotSupportedVersion" translate="yes" xml:space="preserve">
           <source>Version "{0}" is not supported by this version of Library Manager</source>
-          <target state="new">Version "{0}" is not supported by this version of Library Manager</target>
+          <target state="translated">"{0}" 버전은 이 버전의 라이브러리 관리자에서 지원되지 않습니다.</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToDownloadResource" translate="yes" xml:space="preserve">
           <source>Failed to download resource from "{0}"</source>
-          <target state="new">Failed to download resource from "{0}"</target>
+          <target state="translated">"{0}"에서 리소스를 다운로드하지 못했습니다.</target>
         </trans-unit>
         <trans-unit id="ErrorUnableToResolveFilePath" translate="yes" xml:space="preserve">
           <source>The "{0}" file path could not be resolved by the "{1}" provider</source>
-          <target state="new">The "{0}" file path could not be resolved by the "{1}" provider</target>
+          <target state="translated">"{1}" 공급자에서 "{0}" 파일 경로를 확인할 수 없습니다.</target>
         </trans-unit>
         <trans-unit id="ErrorConflictingLibraries" translate="yes" xml:space="preserve">
           <source>Conflicting file "{0}" found in more than one library: {1}</source>
-          <target state="new">Conflicting file "{0}" found in more than one library: {1}</target>
+          <target state="translated">하나 이상의 라이브러리에서 "{0}" 파일이 충돌합니다. {1}</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryAlreadyInstalled" translate="yes" xml:space="preserve">
           <source>The "{0}" library is already installed by the "{1}" provider</source>
-          <target state="new">The "{0}" library is already installed by the "{1}" provider</target>
+          <target state="translated">"{1}" 공급자가 "{0}" 라이브러리를 이미 설치했습니다.</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotInstallDueToConflicts" translate="yes" xml:space="preserve">
           <source>The file "{0}" is already installed by {1}.</source>
-          <target state="new">The file "{0}" is already installed by {1}.</target>
+          <target state="translated">{1}이(가) "{0}" 파일을 이미 설치했습니다.</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotUpdateDueToConflicts" translate="yes" xml:space="preserve">
           <source>The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</source>
-          <target state="new">The library "{0}" could not be updated to "{1}". Another library "{1}" is already installed</target>
+          <target state="translated">"{0}" 라이브러리를 "{1}"에 업데이트할 수 없습니다. 다른 라이브러리 "{1}"이(가) 이미 설치되어 있습니다.</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryCannotUpdateDueToFileConflicts" translate="yes" xml:space="preserve">
           <source>The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</source>
-          <target state="new">The library "{0}" could not be updated to "{1}". The following files are not valid for the "{1}": {2}</target>
+          <target state="translated">"{0}" 라이브러리를 "{1}"에 업데이트할 수 없습니다. "{1}"에 대해 다음 파일이 유효하지 않습니다. {2}</target>
         </trans-unit>
         <trans-unit id="ErrorLibraryHasInvalidFiles" translate="yes" xml:space="preserve">
           <source>"{0}" does not contain the following: {1}
 Valid files are {2}</source>
-          <target state="new">"{0}" does not contain the following: {1}
-Valid files are {2}</target>
+          <target state="translated">"{0}"에 {1}이(가) 포함되어 있지 않습니다.
+유효한 파일은 {2}입니다.</target>
         </trans-unit>
       </group>
     </body>

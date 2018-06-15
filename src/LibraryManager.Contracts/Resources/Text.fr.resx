@@ -22,10 +22,10 @@
     <value>Le fichier manifeste contient des erreurs de syntaxe</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
-    <value>Le « chemin » n’est pas défini.</value>
+    <value>La "destination" n'est pas définie.</value>
   </data>
   <data name="ErrorPathOutsideWorkingDirectory" xml:space="preserve">
-    <value>Le « chemin » doit se trouver dans le répertoire de travail</value>
+    <value>La "destination" doit se trouver dans le répertoire de travail</value>
   </data>
   <data name="ErrorProviderIsUndefined" xml:space="preserve">
     <value>Le fournisseur n'est pas défini</value>
@@ -38,5 +38,38 @@
   </data>
   <data name="ErrorUnknownException" xml:space="preserve">
     <value>Une exception inconnue s'est produite</value>
+  </data>
+  <data name="ErrorCouldNotDeleteLibrary" xml:space="preserve">
+    <value>La suppression d'un ou plusieurs fichiers dans la bibliothèque {0} a échoué</value>
+  </data>
+  <data name="ErrorDestinationPathHasInvalidCharacter" xml:space="preserve">
+    <value>Le chemin de fichier de destination "{0}" a des caractères non valides</value>
+  </data>
+  <data name="ErrorNotSupportedVersion" xml:space="preserve">
+    <value>La version "{0}" n'est pas prise en charge par cette version du gestionnaire de bibliothèques</value>
+  </data>
+  <data name="ErrorUnableToDownloadResource" xml:space="preserve">
+    <value>Le téléchargement de la ressource à partir de "{0}" a échoué</value>
+  </data>
+  <data name="ErrorUnableToResolveFilePath" xml:space="preserve">
+    <value>Le fournisseur "{1}" n'a pas pu résoudre le chemin de fichier "{0}"</value>
+  </data>
+  <data name="ErrorConflictingLibraries" xml:space="preserve">
+    <value>Fichier en conflit "{0}" dans plusieurs bibliothèques : {1}</value>
+  </data>
+  <data name="ErrorLibraryAlreadyInstalled" xml:space="preserve">
+    <value>La bibliothèque "{0}" est déjà installée par le fournisseur "{1}"</value>
+  </data>
+  <data name="ErrorLibraryCannotInstallDueToConflicts" xml:space="preserve">
+    <value>Le fichier "{0}" est déjà installé par {1}.</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToConflicts" xml:space="preserve">
+    <value>Impossible de mettre à jour la bibliothèque "{0}" vers "{1}". Une autre bibliothèque "{1}" est déjà installée</value>
+  </data>
+  <data name="ErrorLibraryCannotUpdateDueToFileConflicts" xml:space="preserve">
+    <value>Impossible de mettre à jour la bibliothèque "{0}" vers "{1}". Les fichier suivants ne sont pas valides pour "{1}" : {2}</value>
+  </data>
+  <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
+    <value>"{0}" ne contient pas {1}. Les fichiers valides sont {2}</value>
   </data>
 </root>

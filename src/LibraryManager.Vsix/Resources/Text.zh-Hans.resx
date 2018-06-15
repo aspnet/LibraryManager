@@ -45,9 +45,79 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>将安装 NuGet 包以增强 MSBuild 进程, 但不会将任何文件添加到项目中。 这可能需要 Internet 连接。 是否继续?</value>
+    <value>需要安装 NuGet 包才能增强 MSBuild 进程，但不会将任何文件添加到该项目。 这可能需要 Internet 连接。 是否继续?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;搜索类型&gt;</value>
+  </data>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>添加客户端库</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
+  <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
+    <value>&lt;选择库以选择要安装的文件&gt;</value>
+  </data>
+  <data name="DisableRestoreOnBuild" xml:space="preserve">
+    <value>在生成时禁用还原</value>
+  </data>
+  <data name="EnableRestoreOnBuild" xml:space="preserve">
+    <value>在生成时启用还原客户端库</value>
+  </data>
+  <data name="Nuget_InstallingPackage" xml:space="preserve">
+    <value>正在安装包含 MSBuild 目标的 NuGet 包...</value>
+  </data>
+  <data name="Nuget_PackageFailedToInstall" xml:space="preserve">
+    <value>NuGet 包安装失败</value>
+  </data>
+  <data name="Nuget_PackageFailedToUninstall" xml:space="preserve">
+    <value>NuGet 包卸载失败</value>
+  </data>
+  <data name="Nuget_PackageInstalled" xml:space="preserve">
+    <value>已安装 NuGet 包</value>
+  </data>
+  <data name="Nuget_PackageUninstalled" xml:space="preserve">
+    <value>已卸载 NuGet 包</value>
+  </data>
+  <data name="Nuget_UninstallingPackage" xml:space="preserve">
+    <value>正在卸载 NuGet 包...</value>
+  </data>
+  <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
+    <value>无法从项目中删除库</value>
+  </data>
+  <data name="LibraryDeletedFromProject" xml:space="preserve">
+    <value>已成功从项目中删除库 {0}</value>
+  </data>
+  <data name="FailToAddLibrariesToProject" xml:space="preserve">
+    <value>无法将库添加到项目中</value>
+  </data>
+  <data name="LibraryAddedToProject" xml:space="preserve">
+    <value>已成功将库 {0} 添加到项目中</value>
+  </data>
+  <data name="OutputWindowTitle" xml:space="preserve">
+    <value>库管理器</value>
+  </data>
+  <data name="OperationInProgress" xml:space="preserve">
+    <value>已在进行库管理器操作。</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>文件:</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>库:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>提供程序:</value>
+  </data>
+  <data name="TargetLocation" xml:space="preserve">
+    <value>目标位置:</value>
+  </data>
+  <data name="ChooseSpecificFiles" xml:space="preserve">
+    <value>选择特定文件:</value>
+  </data>
+  <data name="IncludeAllLibraryFiles" xml:space="preserve">
+    <value>包括所有库文件</value>
+  </data>
+  <data name="NoFilesSelected" xml:space="preserve">
+    <value>未选择任何文件</value>
   </data>
 </root>
