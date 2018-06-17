@@ -4,7 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Threading;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
 
@@ -13,11 +15,70 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal static class Logger
     {
         private static Guid _outputPaneGuid = new Guid("cce35aef-ace6-4371-b1e1-8efa3cdc8324");
-        private static IVsOutputWindowPane _pane;
-        private static readonly IVsOutputWindow _output = VsHelpers.GetService<SVsOutputWindow, IVsOutputWindow>();
-        private static readonly IVsActivityLog _activityLog = VsHelpers.GetService<SVsActivityLog, IVsActivityLog>();
-        private static readonly IVsStatusbar _statusbar = VsHelpers.GetService<SVsStatusbar, IVsStatusbar>();
+        private static IVsOutputWindowPane _outputWindowPane;
+        private static IVsOutputWindow _outputWindow;
+        private static IVsActivityLog _activityLog;
+        private static IVsStatusbar _statusbar;
 
+        private static IVsOutputWindowPane OutputWindowPane
+        {
+            get
+            {
+                ThreadHelper.ThrowIfNotOnUIThread(nameof(OutputWindowPane));
+
+                if (_outputWindowPane == null)
+                {
+                    EnsurePane();
+                }
+
+                return _outputWindowPane;
+            }
+        }
+
+        private static IVsOutputWindow OutputWindow
+        {
+            get
+            {
+                ThreadHelper.ThrowIfNotOnUIThread(nameof(OutputWindow));
+
+                if (_outputWindow == null)
+                {
+                    _outputWindow = VsHelpers.GetService<SVsOutputWindow, IVsOutputWindow>();
+                }
+
+                return _outputWindow;
+            }
+        }
+
+        private static IVsActivityLog ActivityLog
+        {
+            get
+            {
+                ThreadHelper.ThrowIfNotOnUIThread(nameof(ActivityLog));
+
+                if (_activityLog == null)
+                {
+                    _activityLog = VsHelpers.GetService<SVsActivityLog, IVsActivityLog>();
+                }
+
+                return _activityLog;
+            }
+        }
+
+        private static IVsStatusbar Statusbar
+        {
+            get
+            {
+                ThreadHelper.ThrowIfNotOnUIThread(nameof(Statusbar));
+
+                if (_statusbar == null)
+                {
+                    _statusbar = VsHelpers.GetService<SVsStatusbar, IVsStatusbar>();
+                }
+
+                return _statusbar;
+            }
+        }
 
         public static void LogEvent(string message, LogLevel level)
         {
@@ -48,47 +109,50 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static void ClearOutputWindow()
         {
-            _pane?.Clear();
+            // Don't access _outputWindowPane through the property here so that we don't force creation
+            ThreadHelper.Generic.BeginInvoke(() => _outputWindowPane?.Clear());
         }
 
         private static void LogToActivityLog(string message, __ACTIVITYLOG_ENTRYTYPE type)
         {
-            _activityLog.LogEntry((uint)type, Vsix.Name, message);
+            ThreadHelper.Generic.BeginInvoke(() => ActivityLog.LogEntry((uint)type, Vsix.Name, message));
         }
 
         public static void LogToStatusBar(string message)
         {
-            _statusbar.FreezeOutput(0);
-            _statusbar.SetText(message);
-            _statusbar.FreezeOutput(1);
+            ThreadHelper.Generic.BeginInvoke(() =>
+            {
+                Statusbar.FreezeOutput(0);
+                Statusbar.SetText(message);
+                Statusbar.FreezeOutput(1);
+            });
         }
 
         private static void LogToOutputWindow(object message)
         {
-            if (EnsurePane())
-            {
-                _pane.OutputString(message + Environment.NewLine);
-            }
+            ThreadHelper.Generic.BeginInvoke(() => OutputWindowPane?.OutputString(message + Environment.NewLine));
         }
 
         private static bool EnsurePane()
         {
-            if (_pane == null)
+            ThreadHelper.ThrowIfNotOnUIThread(nameof(EnsurePane));
+
+            if (_outputWindowPane == null)
             {
-                if (_output != null)
+                if (OutputWindow != null)
                 {
-                    if (ErrorHandler.Failed(_output.GetPane(ref _outputPaneGuid, out _pane)) &&
-                        ErrorHandler.Succeeded(_output.CreatePane(ref _outputPaneGuid, Resources.Text.OutputWindowTitle, 0, 0)))
+                    if (ErrorHandler.Failed(OutputWindow.GetPane(ref _outputPaneGuid, out _outputWindowPane)) &&
+                        ErrorHandler.Succeeded(OutputWindow.CreatePane(ref _outputPaneGuid, Resources.Text.OutputWindowTitle, 0, 0)))
                     {
-                        if (ErrorHandler.Succeeded(_output.GetPane(ref _outputPaneGuid, out _pane)))
+                        if (ErrorHandler.Succeeded(OutputWindow.GetPane(ref _outputPaneGuid, out _outputWindowPane)))
                         {
-                            _pane.Activate();
+                            _outputWindowPane.Activate();
                         }
                     }
                 }
             }
 
-            return _pane != null;
+            return _outputWindowPane != null;
         }
 
         internal static void LogEventsHeader(OperationType operationType, string libraryId)
