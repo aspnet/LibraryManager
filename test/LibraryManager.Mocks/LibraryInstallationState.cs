@@ -31,5 +31,15 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// The path relative to the working directory to copy the files to.
         /// </summary>
         public virtual string DestinationPath { get; set; }
+
+        /// <summary>
+        /// Name of the library.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Version of the library.
+        /// </summary>
+        public string Version { get; set; }
     }
 }
