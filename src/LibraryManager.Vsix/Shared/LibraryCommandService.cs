@@ -67,7 +67,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken)
         {
             Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(new[] { configFilePath }, cancellationToken);
-            await RestoreAsync(manifests, cancellationToken);
+
+            if (manifests.Any())
+            {
+                await RestoreAsync(manifests, cancellationToken);
+            }
         }
 
         public async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken)
@@ -140,7 +144,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 {
                     Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
                     Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-                    manifests.Add(configFilePath, manifest);
+                    if (manifest != null)
+                    {
+                        manifests.Add(configFilePath, manifest);
+                    }
                 }
             }
             catch (Exception ex)
@@ -163,8 +170,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 string configFileName = configProjectItem.FileNames[1];
                 var dependencies = Dependencies.FromConfigFile(configFileName);
                 Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
-                IHostInteraction hostInteraction = dependencies.GetHostInteractions();
-                IEnumerable<ILibraryOperationResult> results = await manifest.CleanAsync(async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+                IEnumerable<ILibraryOperationResult> results = new List<ILibraryOperationResult>();
+
+                if (manifest != null)
+                {
+                    IHostInteraction hostInteraction = dependencies.GetHostInteractions();
+                    results = await manifest.CleanAsync(async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+                }
 
                 sw.Stop();
 
@@ -230,8 +242,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 var dependencies = Dependencies.FromConfigFile(configFilePath);
                 Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-                IHostInteraction hostInteraction = dependencies.GetHostInteractions();
-                ILibraryOperationResult result = await manifest.UninstallAsync(libraryId, async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken).ConfigureAwait(false);
+                ILibraryOperationResult result = null;
+
+                if (manifest == null)
+                {
+                    result = LibraryOperationResult.FromError(PredefinedErrors.ManifestMalformed());
+                }
+                else
+                {
+                    IHostInteraction hostInteraction = dependencies.GetHostInteractions();
+                    result = await manifest.UninstallAsync(libraryId, async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken).ConfigureAwait(false);
+                }
 
                 sw.Stop();
 
