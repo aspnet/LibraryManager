@@ -1,9 +1,10 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using Newtonsoft.Json;
 using System.Collections.Generic;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
+using Newtonsoft.Json;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -22,7 +23,21 @@ namespace Microsoft.Web.LibraryManager
         /// The identifyer to uniquely identify the library
         /// </summary>
         [JsonProperty(ManifestConstants.Library)]
-        public string LibraryId { get; set; }
+        public string LibraryId
+        {
+             get
+             {
+                return LibraryNamingScheme.Instance.GetLibraryId(Name, Version);
+             }
+             set
+             {
+                (string Name, string Version) nameAndVersion = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(
+                    value);
+
+                Name = nameAndVersion.Name;
+                Version = nameAndVersion.Version;
+             }
+        }
 
         /// <summary>
         /// The path relative to the working directory to copy the files to.
@@ -48,8 +63,20 @@ namespace Microsoft.Web.LibraryManager
         [JsonIgnore]
         public bool IsUsingDefaultDestination { get; set; }
 
+        /// <summary>
+        /// Name of the library.
+        /// </summary>
+        [JsonIgnore]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Version of the library.
+        /// </summary>
+        [JsonIgnore]
+        public string Version { get; set; }
+
         /// <summary>Internal use only</summary>
-        public static LibraryInstallationState FromInterface(ILibraryInstallationState state, 
+        public static LibraryInstallationState FromInterface(ILibraryInstallationState state,
                                                              string defaultProviderId = null,
                                                              string defaultDestination = null)
         {
