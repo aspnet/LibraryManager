@@ -162,13 +162,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime )
         {
-            if (totalResults != null && totalResults.Any())
-            {
-                LogEvent(GetSummaryHeaderString(operationType, null), LogLevel.Task);
-                LogOperationSummary(totalResults, operationType, elapsedTime);
-                LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
-                LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
-            }
+            LogEvent(GetSummaryHeaderString(operationType, null), LogLevel.Task);
+            LogOperationSummary(totalResults, operationType, elapsedTime);
+            LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
+            LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
         }
 
         private static void LogOperationSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation, TimeSpan elapsedTime)
@@ -189,29 +186,29 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 string messageText = string.Empty;
 
-            if (allUpToDate)
-            {
-                messageText = LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine;
-            }
-            else if (allSuccess)
-            {
-                string libraryId = GetLibraryId(totalResults, operation);
-                messageText = GetAllSuccessString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
-            }
-            else if (allCancelled)
-            {
-                string libraryId = GetLibraryId(totalResults, operation);
-                messageText = GetAllCancelledString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
-            }
-            else if (allFailed)
-            {
-                string libraryId = GetLibraryId(totalResults, operation);
-                messageText = GetAllFailuresString(operation, totalResultsCounts, libraryId) + Environment.NewLine;
-            }
-            else
-            {
-                messageText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
-            }
+                if (allUpToDate)
+                {
+                    messageText = LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine;
+                }
+                else if (allSuccess)
+                {
+                    string libraryId = GetLibraryId(totalResults, operation);
+                    messageText = GetAllSuccessString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
+                }
+                else if (allCancelled)
+                {
+                    string libraryId = GetLibraryId(totalResults, operation);
+                    messageText = GetAllCancelledString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
+                }
+                else if (allFailed)
+                {
+                    string libraryId = GetLibraryId(totalResults, operation);
+                    messageText = GetAllFailuresString(operation, totalResultsCounts, libraryId) + Environment.NewLine;
+                }
+                else
+                {
+                    messageText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
+                }
 
                 LogEvent(messageText, LogLevel.Operation);
             }
