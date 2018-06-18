@@ -162,27 +162,32 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime )
         {
-            LogEvent(GetSummaryHeaderString(operationType, null), LogLevel.Task);
-            LogOperationSummary(totalResults, operationType, elapsedTime);
-            LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
-            LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
+            if (totalResults != null && totalResults.Any())
+            {
+                LogEvent(GetSummaryHeaderString(operationType, null), LogLevel.Task);
+                LogOperationSummary(totalResults, operationType, elapsedTime);
+                LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
+                LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
+            }
         }
 
         private static void LogOperationSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation, TimeSpan elapsedTime)
         {
-            int totalResultsCounts = totalResults.Count();
-            IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success && !r.UpToDate);
-            IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => r.Errors.Any());
-            IEnumerable<ILibraryOperationResult> cancelledRestores = totalResults.Where(r => r.Cancelled);
-            IEnumerable<ILibraryOperationResult> upToDateRestores = totalResults.Where(r => r.UpToDate);
+            if (totalResults != null && totalResults.Any())
+            {
+                int totalResultsCounts = totalResults.Count();
+                IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success && !r.UpToDate);
+                IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => r.Errors.Any());
+                IEnumerable<ILibraryOperationResult> cancelledRestores = totalResults.Where(r => r.Cancelled);
+                IEnumerable<ILibraryOperationResult> upToDateRestores = totalResults.Where(r => r.UpToDate);
 
-            bool allSuccess = successfulRestores.Count() == totalResultsCounts;
-            bool allFailed = failedRestores.Count() == totalResultsCounts;
-            bool allCancelled = cancelledRestores.Count() == totalResultsCounts;
-            bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
-            bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
+                bool allSuccess = successfulRestores.Count() == totalResultsCounts;
+                bool allFailed = failedRestores.Count() == totalResultsCounts;
+                bool allCancelled = cancelledRestores.Count() == totalResultsCounts;
+                bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
+                bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
 
-            string messageText = string.Empty;
+                string messageText = string.Empty;
 
             if (allUpToDate)
             {
@@ -208,16 +213,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 messageText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
             }
 
-            LogEvent(messageText, LogLevel.Operation);
+                LogEvent(messageText, LogLevel.Operation);
+            }
         }
 
         private static string GetLibraryId(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation)
         {
-            if (operation == OperationType.Uninstall || operation == OperationType.Upgrade)
+            if (totalResults != null && totalResults.Any())
             {
-                if (totalResults != null && totalResults.Count() == 1)
+                if (operation == OperationType.Uninstall || operation == OperationType.Upgrade)
                 {
-                    return totalResults.First().InstallationState.LibraryId;
+                    if (totalResults != null && totalResults.Count() == 1)
+                    {
+                        return totalResults.First().InstallationState.LibraryId;
+                    }
                 }
             }
 
