@@ -52,7 +52,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             Errors.Add(new DisplayError(error));
 
-            Logger.LogEvent(error.Message, LogLevel.Operation);
             Telemetry.TrackOperation("error", TelemetryResult.Failure, new KeyValuePair<string, object>("code", error.Code));
 
             PushToErrorList();
