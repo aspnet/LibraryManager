@@ -5,7 +5,7 @@ using Omni.Common;
 
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
-    public class LibraryRestoreTestsHelper
+    public class FileIOHelper
     {
         private delegate string WaiterDelegate(string currentWorkingDirectory, IEnumerable<string> files, bool caseInsensitive, int timeout);
 
@@ -39,12 +39,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
-        public static void WaitForRestoredFiles(string currentWorkingDirectory, IEnumerable<string> expectedFiles, bool caseInsensitive, int timeout = 10000)
+        public void WaitForRestoredFiles(string currentWorkingDirectory, IEnumerable<string> expectedFiles, bool caseInsensitive, int timeout = 10000)
         {
             WaitForFiles(currentWorkingDirectory, expectedFiles, caseInsensitive, timeout, WaitForRestoredFilesHelper);
         }
 
-        public static void WaitForRestoredFile(string currentWorkingDirectory, string expectedFile, bool caseInsensitive, int timeout = 10000)
+        public void WaitForRestoredFile(string currentWorkingDirectory, string expectedFile, bool caseInsensitive, int timeout = 10000)
         {
             WaitForRestoredFiles(currentWorkingDirectory, new[] { expectedFile }, caseInsensitive, timeout);
         }
@@ -88,12 +88,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             return errorMessage;
         }
 
-        public static void WaitForDeletedFiles(string currentWorkingDirectory, IEnumerable<string> deletedFiles, bool caseInsensitive, int timeout = 10000)
+        public void WaitForDeletedFiles(string currentWorkingDirectory, IEnumerable<string> deletedFiles, bool caseInsensitive, int timeout = 10000)
         {
             WaitForFiles(currentWorkingDirectory, deletedFiles, caseInsensitive, timeout, WaitForDeletedFilesHelper);
         }
 
-        public static void WaitForDeletedFile(string currentWorkingDirectory, string deletedFile, bool caseInsensitive, int timeout = 10000)
+        public void WaitForDeletedFile(string currentWorkingDirectory, string deletedFile, bool caseInsensitive, int timeout = 10000)
         {
             WaitForDeletedFiles(currentWorkingDirectory, new[] { deletedFile }, caseInsensitive, timeout);
         }
