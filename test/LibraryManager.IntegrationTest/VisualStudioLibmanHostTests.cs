@@ -8,6 +8,7 @@ using Microsoft.Test.Apex.VisualStudio;
 using Microsoft.Test.Apex.VisualStudio.Editor;
 using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Web.LibraryManager.IntegrationTest.Helpers;
 
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
@@ -26,11 +27,15 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         public static string SolutionRootPath { get; private set; }
 
+        protected HelperWrapper Helpers { get; private set; }
+
         protected override void DoHostTestInitialize()
         {
             _instance = this;
 
             base.DoHostTestInitialize();
+
+            Helpers = new HelperWrapper(VisualStudio);
 
             Solution.Open(_solutionPath);
             Solution.WaitForFullyLoaded(); // This will get modified after bug 627108 get fixed
