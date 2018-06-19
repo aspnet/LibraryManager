@@ -31,11 +31,11 @@ namespace Microsoft.Web.LibraryManager
              }
              set
              {
-                (string Name, string Version) nameAndVersion = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(
+                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(
                     value);
 
-                Name = nameAndVersion.Name;
-                Version = nameAndVersion.Version;
+                Name = name;
+                Version = version;
              }
         }
 
