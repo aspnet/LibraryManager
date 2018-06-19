@@ -157,5 +157,22 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Type("\"library\":");
             LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
         }
+
+        [TestMethod]
+        public void LibmanCompletion_LoadingNotInserted()
+        {
+            _libManConfig.Open();
+            string expectedText = "      \"library\": ";
+
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
+            Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
+            Editor.KeyboardCommands.Enter();
+            Editor.KeyboardCommands.Type("\"library\":");
+            Editor.KeyboardCommands.Type("j\t");
+
+            string actualText = Editor.Caret.GetCurrentLineText();
+            Assert.AreEqual(expectedText, actualText);
+        }
     }
 }

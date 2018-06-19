@@ -24,6 +24,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
         }
 
+        public SimpleCompletionEntry(string text, string insertionText, ImageMoniker moniker, IIntellisenseSession session)
+            : base(text, insertionText, null, null, null, false, session as ICompletionSession)
+        {
+        }
+
         public SimpleCompletionEntry(string text, string insertionText, string description, ImageMoniker moniker, IIntellisenseSession session, int specificVersion = 0)
             : base(text, "\"" + insertionText + "\"", description, null, null, false, session as ICompletionSession)
         {
