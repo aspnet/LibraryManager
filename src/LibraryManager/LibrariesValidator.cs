@@ -14,34 +14,23 @@ namespace Microsoft.Web.LibraryManager
     /// <summary>
     /// Finds conflicts between different libraries, based on files brought in by each library.
     /// </summary>
-    internal class LibrariesValidator
+    internal static class LibrariesValidator 
     {
-        /// <summary>
-        /// Validates set of libraries given the dependencies, default destination and default provider
-        /// </summary>
-        /// <param name="dependencies"></param>
-        /// <param name="defaultDestination"></param>
-        /// <param name="defaultProvider"></param>
-        public LibrariesValidator(IDependencies dependencies, string defaultDestination, string defaultProvider)
-        {
-            _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
-            _defaultDestination = defaultDestination;
-            _defaultProvider = defaultProvider;
-        }
-
-        private string _defaultDestination;
-        private string _defaultProvider;
-        private IDependencies _dependencies;
-
         /// <summary>
         /// Returns a collection of ILibraryOperationResult that represents the status for validation of each 
         ///  library 
         /// </summary>
         /// <param name="libraries"></param>
+        /// <param name="dependencies"></param>
+        /// <param name="defaultDestination"></param>
+        /// <param name="defaultProvider"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ILibraryOperationResult>> GetLibrariesErrorsAsync(
+        public static async Task<IEnumerable<ILibraryOperationResult>> GetLibrariesErrorsAsync(
             IEnumerable<ILibraryInstallationState> libraries,
+            IDependencies dependencies,
+            string defaultDestination,
+            string defaultProvider,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -53,7 +42,7 @@ namespace Microsoft.Web.LibraryManager
                 return validateLibraries;
             }
 
-            IEnumerable<ILibraryOperationResult> expandLibraries= await ExpandLibrariesAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryOperationResult> expandLibraries= await ExpandLibrariesAsync(libraries, dependencies, defaultDestination, defaultProvider, cancellationToken);
             if (!expandLibraries.All(t => t.Success))
             {
                 return expandLibraries;
@@ -63,7 +52,45 @@ namespace Microsoft.Web.LibraryManager
 
 
             return new List<ILibraryOperationResult> { GetConflictErrors(GetFilesConflicts(libraries, cancellationToken)) };
+        }
 
+        /// <summary>
+        /// Returns a collection of ILibraryOperationResult that represents the status for validation of the manifest
+        /// </summary>
+        /// <param name="manifest"></param>
+        /// <param name="dependencies"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<ILibraryOperationResult>> GetManifestErrorsAsync(
+            Manifest manifest,
+            IDependencies dependencies,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (manifest == null)
+            {
+                return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.ManifestMalformed())};
+            }
+
+            if (!IsValidManifestVersion(manifest.Version))
+            {
+                return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.VersionIsNotSupported(manifest.Version)) };
+            }
+
+            return await GetLibrariesErrorsAsync(manifest.Libraries, dependencies, manifest.DefaultDestination, manifest.DefaultProvider ,cancellationToken);
+        }
+
+        private static bool IsValidManifestVersion(string version)
+        {
+            try
+            {
+                return Manifest.SupportedVersions.Contains(new Version(version));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -72,7 +99,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public IEnumerable<ILibraryOperationResult> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private static IEnumerable<ILibraryOperationResult> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
             List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
 
@@ -97,9 +124,16 @@ namespace Microsoft.Web.LibraryManager
         /// Expands the files properties for each library 
         /// </summary>
         /// <param name="libraries"></param>
+        /// <param name="dependencies"></param>
+        /// <param name="defaultDestination"></param>
+        /// <param name="defaultProvider"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<IEnumerable<ILibraryOperationResult>> ExpandLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<ILibraryOperationResult>> ExpandLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries,
+                                                                                             IDependencies dependencies,
+                                                                                             string defaultDestination,
+                                                                                             string defaultProvider,
+                                                                                             CancellationToken cancellationToken)
         {
             List<ILibraryOperationResult> expandedLibraries = new List<ILibraryOperationResult>();
 
@@ -107,10 +141,10 @@ namespace Microsoft.Web.LibraryManager
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                string installDestination = string.IsNullOrEmpty(library.DestinationPath) ? _defaultDestination : library.DestinationPath;
-                string providerId = string.IsNullOrEmpty(library.ProviderId) ? _defaultProvider : library.ProviderId;
+                string installDestination = string.IsNullOrEmpty(library.DestinationPath) ? defaultDestination : library.DestinationPath;
+                string providerId = string.IsNullOrEmpty(library.ProviderId) ? defaultProvider : library.ProviderId;
 
-                IProvider provider = _dependencies.GetProvider(providerId);
+                IProvider provider = dependencies.GetProvider(providerId);
                 if (provider == null)
                 {
                     return new List<ILibraryOperationResult> { LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined())};
@@ -134,7 +168,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>A colletion of FileConflict for each conflict</returns>
-        public IEnumerable<FileConflict> GetFilesConflicts(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private static IEnumerable<FileConflict> GetFilesConflicts(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
             Dictionary<string, List<ILibraryInstallationState>> _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
 
@@ -166,7 +200,7 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         /// <param name="fileConflicts"></param>
         /// <returns></returns>
-        public ILibraryOperationResult GetConflictErrors(IEnumerable<FileConflict> fileConflicts)
+        private static ILibraryOperationResult GetConflictErrors(IEnumerable<FileConflict> fileConflicts)
         {
             if (fileConflicts.Any())
             {

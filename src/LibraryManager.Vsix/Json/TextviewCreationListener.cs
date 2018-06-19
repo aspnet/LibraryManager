@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -89,14 +91,19 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                     try
                     {
                         Manifest newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
+                        IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
 
-                        if (newManifest != null)
+                        if (!results.All(r => r.Success))
+                        {
+                            AddErrorToList(results.SelectMany(r => r.Errors).FirstOrDefault());
+                        }
+                        else
                         {
                             if (await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
                             {
                                 _manifest = newManifest;
 
-                               await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                                 Telemetry.TrackOperation("restoresave");
                             }
                             else
@@ -104,12 +111,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                                 string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
                                 Logger.LogEvent(textMessage, LogLevel.Task);
                             }
-                        }
-                        else
-                        {
-                            // TO DO: Restore to previous state
-                            // and add a warning to the Error List
-                            AddErrorToList(PredefinedErrors.ManifestMalformed());
                         }
                     }
                     catch (OperationCanceledException ex)
