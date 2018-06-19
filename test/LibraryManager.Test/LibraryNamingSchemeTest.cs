@@ -20,10 +20,10 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow("", "", "")]
         public void GetLibraryNameAndVersion(string libraryId, string expectedName, string expectedVersion)
         {
-            (string Name, string Version) nameAndVersion = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
 
-            Assert.AreEqual(expectedName, nameAndVersion.Name);
-            Assert.AreEqual(expectedVersion, nameAndVersion.Version);
+            Assert.AreEqual(expectedName, name);
+            Assert.AreEqual(expectedVersion, version);
         }
 
         [DataTestMethod]
