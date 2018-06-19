@@ -24,17 +24,14 @@ namespace Microsoft.Web.LibraryManager.Helpers
         /// empty.
         /// </summary>
         /// <param name="libraryId"></param>
-        /// <param name="name"></param>
-        /// <param name="version"></param>
         /// <returns></returns>
-        public void GetLibraryNameAndVersion(string libraryId, out string name, out string version)
+        public (string Name, string Version) GetLibraryNameAndVersion(string libraryId)
         {
+            string name = string.Empty;
+            string version = string.Empty;
             if (string.IsNullOrEmpty(libraryId))
             {
-                name = string.Empty; 
-                version = string.Empty;
-
-                return;
+                return (name, version);
             }
 
             int indexOfAt = libraryId.LastIndexOf(_separator);
@@ -47,6 +44,8 @@ namespace Microsoft.Web.LibraryManager.Helpers
                 name = libraryId.Substring(0, indexOfAt);
                 version = libraryId.Substring(indexOfAt+1);
             }
+
+            return (name, version);
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Helpers
             return string.IsNullOrWhiteSpace(version)
                 ? name
                 : $"{name}{_separator}{version}";
-            
+
         }
     }
 }

@@ -31,13 +31,11 @@ namespace Microsoft.Web.LibraryManager
              }
              set
              {
-                LibraryNamingScheme.Instance.GetLibraryNameAndVersion(
-                    value,
-                    out string name,
-                    out string version);
+                (string Name, string Version) nameAndVersion = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(
+                    value);
 
-                Name = name;
-                Version = version;
+                Name = nameAndVersion.Name;
+                Version = nameAndVersion.Version;
              }
         }
 
@@ -78,7 +76,7 @@ namespace Microsoft.Web.LibraryManager
         public string Version { get; set; }
 
         /// <summary>Internal use only</summary>
-        public static LibraryInstallationState FromInterface(ILibraryInstallationState state, 
+        public static LibraryInstallationState FromInterface(ILibraryInstallationState state,
                                                              string defaultProviderId = null,
                                                              string defaultDestination = null)
         {

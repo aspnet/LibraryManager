@@ -15,14 +15,15 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow("My@Random@Library@1.0.0-preview3-final", "My@Random@Library", "1.0.0-preview3-final")]
         [DataRow("@MyLibraryWithoutVersion", "@MyLibraryWithoutVersion", "")]
         [DataRow("Library@Version", "Library", "Version")]
+        [DataRow("Partial@", "Partial@", "")]
         [DataRow(null, "", "")]
         [DataRow("", "", "")]
         public void GetLibraryNameAndVersion(string libraryId, string expectedName, string expectedVersion)
         {
-            LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId, out string name, out string version);
+            (string Name, string Version) nameAndVersion = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
 
-            Assert.AreEqual(expectedName, name);
-            Assert.AreEqual(expectedVersion, version);
+            Assert.AreEqual(expectedName, nameAndVersion.Name);
+            Assert.AreEqual(expectedVersion, nameAndVersion.Version);
         }
 
         [DataTestMethod]
@@ -32,6 +33,9 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow("@MyLibraryWithoutVersion", "", "@MyLibraryWithoutVersion")]
         [DataRow("Library", "Version", "Library@Version")]
         [DataRow("", "", "")]
+        [DataRow(null, null, "")]
+        [DataRow("Partial", "", "Partial")]
+        [DataRow("Partial@", "", "Partial@")]
         public void GetLibraryId(string name, string version, string expectedLibraryId)
         {
             string libraryId = LibraryNamingScheme.Instance.GetLibraryId(name, version);
