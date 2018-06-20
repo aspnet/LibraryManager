@@ -239,11 +239,7 @@ namespace Microsoft.Web.LibraryManager
             var libraries = new List<ILibraryInstallationState>(Libraries);
             libraries.Add(desiredState);
 
-            IEnumerable<ILibraryOperationResult> fileConflicts = await LibrariesValidator.GetLibrariesErrorsAsync(libraries,
-                                                                                                                _dependencies,
-                                                                                                                DefaultDestination,
-                                                                                                                DefaultProvider,
-                                                                                                                cancellationToken).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> fileConflicts = await LibrariesValidator.GetLibrariesErrorsAsync(libraries, _dependencies, DefaultDestination, DefaultProvider, cancellationToken).ConfigureAwait(false);
 
             return fileConflicts;
         }
