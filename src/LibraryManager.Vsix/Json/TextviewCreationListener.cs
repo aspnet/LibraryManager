@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         [Import]
         ILibraryCommandService libraryCommandService { get; set; }
 
-        public async void VsTextViewCreated(IVsTextView textViewAdapter)
+        public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
@@ -64,16 +64,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
             _manifestPath = doc.FilePath;
             _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);
-            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
-
-            if (!results.All(r => r.Success))
-            {
-                AddErrorsToList(results);
-            }
-
 
             doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
+
+            Task.Run(async () =>
+            {
+                IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                if (!results.All(r => r.Success))
+                {
+                    AddErrorsToList(results);
+                }
+            });
         }
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
@@ -142,9 +144,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         {
             var view = (IWpfTextView)sender;
 
-            if (DocumentService.TryGetTextDocument(view.TextBuffer, out var doc))
+            if (DocumentService.TryGetTextDocument(view.TextBuffer, out ITextDocument doc))
             {
                 doc.FileActionOccurred -= OnFileSaved;
+                view.Closed -= OnViewClosed;
             }
 
             _errorList?.ClearErrors();
