@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         [Import]
         ILibraryCommandService libraryCommandService { get; set; }
 
-        public void VsTextViewCreated(IVsTextView textViewAdapter)
+        public async void VsTextViewCreated(IVsTextView textViewAdapter)
         {
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
@@ -60,16 +60,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             new CompletionController(textViewAdapter, textView, CompletionBroker);
 
-
             _dependencies = Dependencies.FromConfigFile(doc.FilePath);
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
             _manifestPath = doc.FilePath;
             _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
 
-            if (_manifest == null)
+            if (!results.All(r => r.Success))
             {
-                AddErrorToList(PredefinedErrors.ManifestMalformed());
+                AddErrorsToList(results);
             }
+
 
             doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
@@ -95,7 +96,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
                         if (!results.All(r => r.Success))
                         {
-                            AddErrorToList(results.SelectMany(r => r.Errors).FirstOrDefault());
+                            AddErrorsToList(results);
                         }
                         else
                         {
@@ -149,14 +150,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             _errorList?.ClearErrors();
         }
 
-        private void AddErrorToList(IError error)
+        private void AddErrorsToList(IEnumerable<ILibraryOperationResult> errors)
         {
             if (_errorList == null)
             {
                 _errorList = new ErrorList(_project?.Name, _manifestPath);
             }
 
-            _errorList.HandleError(error);
+            _errorList.HandleErrors(errors);
         }
     }
 }

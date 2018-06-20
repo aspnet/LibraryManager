@@ -335,7 +335,6 @@ namespace Microsoft.Web.LibraryManager
                 return LibraryOperationResult.FromCancelled(library);
             }
 
-
             if (library != null)
             {
                 try
@@ -412,6 +411,13 @@ namespace Microsoft.Web.LibraryManager
         public async Task<IEnumerable<ILibraryOperationResult>> CleanAsync(Func<IEnumerable<string>, Task<bool>> deleteFileAction, CancellationToken cancellationToken)
         {
             var results = new List<ILibraryOperationResult>();
+
+            IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(this, _dependencies, cancellationToken).ConfigureAwait(false);
+
+            if (!validationResults.All(r => r.Success))
+            {
+                return validationResults;
+            }
 
             foreach (ILibraryInstallationState state in Libraries)
             {

@@ -106,24 +106,27 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public void CleanErrors(params string[] urls)
         {
-            foreach (string url in urls)
+            if (urls != null)
             {
-                if (_snapshots.ContainsKey(url))
+                foreach (string url in urls)
                 {
-                    _snapshots[url].Dispose();
-                    _snapshots.Remove(url);
+                    if (_snapshots.ContainsKey(url))
+                    {
+                        _snapshots[url].Dispose();
+                        _snapshots.Remove(url);
+                    }
                 }
-            }
 
-            lock (_managers)
-            {
-                foreach (SinkManager manager in _managers)
+                lock (_managers)
                 {
-                    manager.RemoveSnapshots(urls);
+                    foreach (SinkManager manager in _managers)
+                    {
+                        manager.RemoveSnapshots(urls);
+                    }
                 }
-            }
 
-            UpdateAllSinks();
+                UpdateAllSinks();
+            }
         }
 
         public void CleanAllErrors()
