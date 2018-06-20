@@ -129,11 +129,12 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="defaultProvider"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private static async Task<IEnumerable<ILibraryOperationResult>> ExpandLibrariesAsync(IEnumerable<ILibraryInstallationState> libraries,
-                                                                                             IDependencies dependencies,
-                                                                                             string defaultDestination,
-                                                                                             string defaultProvider,
-                                                                                             CancellationToken cancellationToken)
+        private static async Task<IEnumerable<ILibraryOperationResult>> ExpandLibrariesAsync(
+            IEnumerable<ILibraryInstallationState> libraries,
+            IDependencies dependencies,
+            string defaultDestination,
+            string defaultProvider,
+            CancellationToken cancellationToken)
         {
             List<ILibraryOperationResult> expandedLibraries = new List<ILibraryOperationResult>();
 
@@ -216,6 +217,4 @@ namespace Microsoft.Web.LibraryManager
             return LibraryOperationResult.FromSuccess(null);
         }
     }
-
-
 }
