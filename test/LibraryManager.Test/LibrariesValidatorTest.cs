@@ -67,6 +67,45 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsTrue(results.All(c => c.Success));
         }
 
+        [TestMethod]
+        public void GetManifestErrors_ManifestIsNull()
+        {
+            string expectedErrorCode = "LIB004";
+            _manifest = null;
+
+            IEnumerable<ILibraryOperationResult> results = LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).Result;
+
+            Assert.AreEqual(1, results.Count());
+            Assert.IsTrue(results.First().Errors.Count() == 1);
+            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+        }
+
+        [TestMethod]
+        public void GetManifestErrors_ManifestHasUnsupportedVersion()
+        {
+            string expectedErrorCode = "LIB009";
+            _manifest = Manifest.FromJson(_docUnsupportedVersion, _dependencies);
+
+            IEnumerable<ILibraryOperationResult> results = LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).Result;
+
+            Assert.AreEqual(1, results.Count());
+            Assert.IsTrue(results.First().Errors.Count() == 1);
+            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+        }
+
+        [TestMethod]
+        public void GetLibrariesErrors_LibrariesNoProvider()
+        {
+            string expectedErrorCode = "LIB007";
+            _manifest = Manifest.FromJson(_docNoProvider, _dependencies);
+
+            IEnumerable<ILibraryOperationResult> results = LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).Result;
+
+            Assert.AreEqual(1, results.Count());
+            Assert.IsTrue(results.First().Errors.Count() == 1);
+            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+        }
+
         private string _docConflictingLibraries = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
@@ -145,6 +184,29 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Destination}"": ""lib2"",
       ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
     }},
+  ]
+}}
+";
+        private string _docUnsupportedVersion = $@"{{
+  ""{ManifestConstants.Version}"": ""2.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
+    }}
+  ]
+}}
+";
+        private string _docNoProvider = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
+    }}
   ]
 }}
 ";
