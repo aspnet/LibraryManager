@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 RestoreCommand.Initialize(this, commandService, LibraryCommandService);
                 RestoreSolutionCommand.Initialize(this, commandService, LibraryCommandService);
                 RestoreOnBuildCommand.Initialize(this, commandService);
-                ManageLibrariesCommand.Initialize(this, commandService);
+                ManageLibrariesCommand.Initialize(this, commandService, LibraryCommandService);
             }
         }
     }

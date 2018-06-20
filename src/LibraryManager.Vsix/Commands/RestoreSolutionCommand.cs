@@ -57,10 +57,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             var solution = (IVsSolution)ServiceProvider.GetService(typeof(SVsSolution));
 
-            if (!_libraryCommandService.IsOperationInProgress && await VsHelpers.SolutionContainsManifestFileAsync(solution))
+            if (await VsHelpers.SolutionContainsManifestFileAsync(solution))
             {
                 button.Visible = true;
-                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
+                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive && !_libraryCommandService.IsOperationInProgress;
             }
         }
 
