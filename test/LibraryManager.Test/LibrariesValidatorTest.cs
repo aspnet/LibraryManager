@@ -148,6 +148,5 @@ namespace Microsoft.Web.LibraryManager.Test
   ]
 }}
 ";
-
     }
 }
