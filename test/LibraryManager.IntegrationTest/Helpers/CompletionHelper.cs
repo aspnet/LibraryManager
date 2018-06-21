@@ -4,11 +4,11 @@ using Microsoft.Test.Apex.Editor;
 using Microsoft.Test.Apex.VisualStudio.Editor;
 using Omni.Common;
 
-namespace Microsoft.Web.LibraryManager.IntegrationTest
+namespace Microsoft.Web.LibraryManager.IntegrationTest.Helpers
 {
-    public class LibmanTestsUtility
+    public class CompletionHelper
     {
-        public static void WaitForCompletionEntries(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout = 1000)
+        public void WaitForCompletionEntries(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout = 1000)
         {
             string errorMessage = WaitForCompletionEntriesHelper(editor, expectedCompletionEntries, caseInsensitive, timeout);
 
@@ -29,12 +29,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
-        public static void WaitForCompletionEntry(IVisualStudioTextEditorTestExtension editor, string expectedEntry, bool caseInsensitive, int timeout = 1000)
+        public void WaitForCompletionEntry(IVisualStudioTextEditorTestExtension editor, string expectedEntry, bool caseInsensitive, int timeout = 1000)
         {
             WaitForCompletionEntries(editor, new[] { expectedEntry }, caseInsensitive, timeout);
         }
 
-        public static void WaitForCompletionEntryNotPresent(IVisualStudioTextEditorTestExtension editor, string entryText, bool caseInsensitive, int timeout = 1000)
+        public void WaitForCompletionEntryNotPresent(IVisualStudioTextEditorTestExtension editor, string entryText, bool caseInsensitive, int timeout = 1000)
         {
             string errorMessage = WaitForCompletionEntriesHelper(editor, new[] { entryText }, caseInsensitive, timeout);
 

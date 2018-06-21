@@ -278,8 +278,7 @@
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
     <value>    libman update jquery 
-    libman update jquery --to jquery@3.3.1
-    libman update jquery@2.2.0
+    libman update jquery --to 3.3.1
     libman update jquery -pre 
 </value>
   </data>
@@ -289,7 +288,7 @@
     If there's more than one library with the same libraryId, you'll be prompted to choose.</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
-    <value>Library to update</value>
+    <value>Name of the library to update (without the version).</value>
   </data>
   <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
     <value>If specified, the latest pre-release version of the library will be downloaded (where applicable)</value>
@@ -316,13 +315,14 @@
     <value>List files that are cached for each library</value>
   </data>
   <data name="MoreThanOneLibraryFoundToUpdate" xml:space="preserve">
-    <value>More than one library found with id "{0}"</value>
+    <value>More than one library found with name "{0}"</value>
   </data>
   <data name="NoLibrariesToUpdate" xml:space="preserve">
     <value>No libraries to update. Please use install command to install libraries</value>
   </data>
   <data name="NoLibraryFoundToUpdate" xml:space="preserve">
-    <value>No library found with id "{0}" to update</value>
+    <value>No library found with name "{0}" to update.
+Please specify a library name without the version information to update.</value>
   </data>
   <data name="InstallLibraryFailed" xml:space="preserve">
     <value>Failed to install library "{0}"</value>

@@ -30,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.Caret.MoveDown(2);
             Editor.KeyboardCommands.Type("\"destination\":");
 
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
+            Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
         }
 
         [TestMethod]
@@ -48,7 +48,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.Caret.MoveDown(2);
             Editor.KeyboardCommands.Type("\"provider\":");
 
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
+            Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"defaultProvider\":");
 
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
+            Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
         }
 
         [TestMethod]
@@ -84,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"defaultDestination\":");
 
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
+            Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
         }
 
         [TestMethod]
@@ -101,7 +101,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
+            Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
         }
 
         [TestMethod]
@@ -115,10 +115,10 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
-            LibmanTestsUtility.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true, timeout: 5000);
+            Helpers.Completion.WaitForCompletionEntry(Editor, "jquery", caseInsensitive: true, timeout: 5000);
 
             Editor.KeyboardCommands.Type("jquery@");
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, new string[] { }, caseInsensitive: true);
+            Helpers.Completion.WaitForCompletionEntries(Editor, new string[] { }, caseInsensitive: true);
         }
 
         [TestMethod]
@@ -136,7 +136,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
+            Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
         }
 
         [TestMethod]
@@ -155,7 +155,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
-            LibmanTestsUtility.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
+            Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
         }
     }
 }

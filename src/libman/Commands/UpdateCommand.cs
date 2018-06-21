@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
@@ -29,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         /// Arugment to specify the library to update.
         /// </summary>
         /// <remarks>Required argument.</remarks>
-        public CommandArgument LibraryId { get; private set; }
+        public CommandArgument LibraryName { get; private set; }
 
         /// <summary>
         /// Option to specify provider to use to filter libraries.
@@ -51,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            LibraryId = Argument("libraryId", Resources.UpdateCommandLibraryArgumentDesc, multipleValues: false);
+            LibraryName = Argument("libraryName", Resources.UpdateCommandLibraryArgumentDesc, multipleValues: false);
             Provider = Option("--provider|-p", Resources.UpdateCommandProviderOptionDesc, CommandOptionType.SingleValue);
             PreRelease = Option("-pre", Resources.UpdateCommandPreReleaseOptionDesc, CommandOptionType.NoValue);
             ToVersion = Option("--to", Resources.UpdateCommandToVersionOptionDesc, CommandOptionType.SingleValue);
@@ -65,11 +66,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         protected override async Task<int> ExecuteInternalAsync()
         {
             Manifest manifest = await GetManifestAsync();
-            IEnumerable<ILibraryInstallationState> installedLibraries = await ValidateParametersAndGetLibrariesToUninstallAsync(manifest, CancellationToken.None);
+            IEnumerable<ILibraryInstallationState> installedLibraries = ValidateParametersAndGetLibrariesToUpdate(manifest);
 
             if (installedLibraries == null || !installedLibraries.Any())
             {
-                Logger.Log(string.Format(Resources.NoLibraryFoundToUpdate, LibraryId.Value), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.NoLibraryFoundToUpdate, LibraryName.Value), LogLevel.Operation);
                 return 0;
             }
 
@@ -77,7 +78,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (installedLibraries.Count() > 1)
             {
-                Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUpdate, LibraryId.Value), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUpdate, LibraryName.Value), LogLevel.Operation);
 
                 libraryToUpdate = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment);
             }
@@ -86,9 +87,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 libraryToUpdate = installedLibraries.First();
             }
 
-            string newLibraryId = ToVersion.HasValue() ? ToVersion.Value() : null;
+            string newLibraryId = null;
 
-            if (newLibraryId == null)
+            if (ToVersion.HasValue())
+            {
+                newLibraryId = LibraryNamingScheme.Instance.GetLibraryId(libraryToUpdate.Name, ToVersion.Value());
+            }
+            else
             {
                 newLibraryId = await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
             }
@@ -100,7 +105,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
             Manifest backup = manifest.Clone();
-            string oldLibraryId = libraryToUpdate.LibraryId;
+            string oldLibraryName = libraryToUpdate.Name;
             manifest.ReplaceLibraryId(libraryToUpdate, newLibraryId);
 
             // Delete files from old version of the library.
@@ -130,17 +135,17 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (result.Success)
             {
                 await manifest.SaveAsync(HostEnvironment.EnvironmentSettings.ManifestFileName, CancellationToken.None);
-                Logger.Log(string.Format(Resources.LibraryUpdated, oldLibraryId, newLibraryId), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.LibraryUpdated, oldLibraryName, newLibraryId), LogLevel.Operation);
             }
             else if (result.Errors != null)
             {
                 if (ToVersion.HasValue())
                 {
-                    Logger.Log(string.Format(Resources.UpdateLibraryFailed, oldLibraryId, ToVersion.Value()), LogLevel.Error);
+                    Logger.Log(string.Format(Resources.UpdateLibraryFailed, oldLibraryName, ToVersion.Value()), LogLevel.Error);
                 }
                 else
                 {
-                    Logger.Log(string.Format(Resources.UpdateLibraryToLatestFailed, oldLibraryId), LogLevel.Error);
+                    Logger.Log(string.Format(Resources.UpdateLibraryToLatestFailed, oldLibraryName), LogLevel.Error);
                 }
                 foreach (IError error in result.Errors)
                 {
@@ -169,12 +174,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
         }
 
-        private async Task<IEnumerable<ILibraryInstallationState>> ValidateParametersAndGetLibrariesToUninstallAsync(
-            Manifest manifest,
-            CancellationToken cancellationToken)
+        private IEnumerable<ILibraryInstallationState> ValidateParametersAndGetLibrariesToUpdate(Manifest manifest)
         {
             var errors = new List<string>();
-            if (string.IsNullOrWhiteSpace(LibraryId.Value))
+            if (string.IsNullOrWhiteSpace(LibraryName.Value))
             {
                 errors.Add(Resources.LibraryIdRequiredForUpdate);
             }
@@ -199,11 +202,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new InvalidOperationException(string.Join(Environment.NewLine, errors));
             }
 
-            return await LibraryResolver.ResolveAsync(LibraryId.Value,
-                manifest,
-                ManifestDependencies,
-                provider,
-                cancellationToken);
+            return manifest.Libraries.Where(l => l.Name.Equals(LibraryName.Value, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
