@@ -87,7 +87,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             else
             {
-                yield return new SimpleCompletionEntry(Resources.Text.Loading, KnownMonikers.Loading, context.Session);
+                yield return new SimpleCompletionEntry(Resources.Text.Loading, string.Empty, KnownMonikers.Loading, context.Session);
 
                 task.ContinueWith((a) =>
                 {
