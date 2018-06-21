@@ -33,15 +33,20 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                UnpkgLibraryId unpkgLibraryId = new UnpkgLibraryId(libraryId);
-                string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, unpkgLibraryId.Name);
+                ILibrary library = await GetLibraryAsync(libraryId, cancellationToken).ConfigureAwait(false);
 
-                JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
-
-                if (packageObject != null)
+                if (library != null)
                 {
-                    JValue versionValue = packageObject["version"] as JValue;
-                    latestVersion = versionValue?.Value as string;
+                    string name = library.Name;
+                    string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, name);
+
+                    JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
+
+                    if (packageObject != null)
+                    {
+                        JValue versionValue = packageObject["version"] as JValue;
+                        latestVersion = versionValue?.Value as string;
+                    }
                 }
             }
             catch(Exception ex)
@@ -54,24 +59,25 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            try
+            ILibrary library = await GetLibraryAsync(libraryId, cancellationToken).ConfigureAwait(false);
+
+            if (library != null)
             {
-                UnpkgLibraryId unpkgLibraryId = new UnpkgLibraryId(libraryId);
+                string name = library.Name;
+                string version = library.Version;
 
                 IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken);
 
                 return new UnpkgLibrary
                 {
-                    Version = unpkgLibraryId.Version,
+                    Version = version,
                     Files = libraryFiles.ToDictionary(k => k, b => false),
-                    Name = unpkgLibraryId.Name,
+                    Name = name,
                     ProviderId = _provider.Id,
                 };
             }
-            catch (Exception)
-            {
-                throw new InvalidLibraryException(libraryId, _provider.Id);
-            }
+
+            return null;
         }
 
         private async Task<IEnumerable<string>> GetLibraryFilesAsync(string libraryId, CancellationToken cancellationToken)
@@ -169,44 +175,51 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             };
 
             List<CompletionItem> completions = new List<CompletionItem>();
-
-            UnpkgLibraryId unpkgLibraryId = new UnpkgLibraryId(libraryNameStart);
-
+            
             try
             {
-                // library name completion
-                if (caretPosition < unpkgLibraryId.Name.Length + 1)
+                ILibrary library = await GetLibraryAsync(libraryNameStart, CancellationToken.None).ConfigureAwait(false);
+
+                if (library != null)
                 {
-                    IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    string name = library.Name;
+                    string version = library.Version;
 
-                    foreach (string packageName in packageNames)
+                    // library name completion
+                    if (caretPosition < name.Length + 1)
                     {
-                        CompletionItem completionItem = new CompletionItem
-                        {
-                            DisplayText = packageName,
-                            InsertionText = packageName
-                        };
+                        IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
-                        completions.Add(completionItem);
+                        foreach (string packageName in packageNames)
+                        {
+                            CompletionItem completionItem = new CompletionItem
+                            {
+                                DisplayText = packageName,
+                                InsertionText = packageName
+                            };
+
+                            completions.Add(completionItem);
+                        }
                     }
-                }
 
-                // library version completion
-                else
-                {
-                    completionSet.Start = unpkgLibraryId.Name.Length + 1;
-                    completionSet.Length = unpkgLibraryId.Version.Length;
-
-                    NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(unpkgLibraryId.Name, CancellationToken.None);
-                    foreach (SemanticVersion version in npmPackageInfo.Versions)
+                    // library version completion
+                    else
                     {
-                        CompletionItem completionItem = new CompletionItem
-                        {
-                            DisplayText = unpkgLibraryId.Name + "@" + version.ToString(),
-                            InsertionText = unpkgLibraryId.Name + "@" + version.ToString()
-                        };
+                        completionSet.Start = name.Length + 1;
+                        completionSet.Length = version.Length;
 
-                        completions.Add(completionItem);
+                        NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
+                        foreach (SemanticVersion semVersion in npmPackageInfo.Versions)
+                        {
+                            string itemText = name + "@" + semVersion.ToString();
+                            CompletionItem completionItem = new CompletionItem
+                            {
+                                DisplayText = itemText,
+                                InsertionText = itemText
+                            };
+
+                            completions.Add(completionItem);
+                        }
                     }
                 }
 

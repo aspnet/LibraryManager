@@ -71,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             // Check if Library is already up tp date
-            if (IsLibraryUpToDateAsync(desiredState, cancellationToken))
+            if (await IsLibraryUpToDateAsync(desiredState, cancellationToken))
             {
                 return LibraryOperationResult.FromUpToDate(desiredState);
             }
@@ -109,27 +109,32 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             var tasks = new List<Task>();
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
-
-            string libraryDir = Path.Combine(CacheFolder, name);
 
             try
             {
-                List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
-                foreach (string sourceFile in state.Files)
-                {
-                    string cacheFile = Path.Combine(libraryDir, version, sourceFile);
-                    string url = string.Format(DownloadUrlFormat, name, version, sourceFile);
+                ILibrary library = await _catalog.GetLibraryAsync(state.LibraryId, cancellationToken).ConfigureAwait(false);
 
-                    CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
-                    if (!librariesMetadata.Contains(newEntry))
+                if (library != null)
+                {
+                    string name = library.Name;
+                    string version = library.Version;
+                    string libraryDir = Path.Combine(CacheFolder, name);
+
+                    List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                    foreach (string sourceFile in state.Files)
                     {
-                        librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
+                        string cacheFile = Path.Combine(libraryDir, version, sourceFile);
+                        string url = string.Format(DownloadUrlFormat, name, version, sourceFile);
+
+                        CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                        if (!librariesMetadata.Contains(newEntry))
+                        {
+                            librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
+                        }
                     }
+
+                    await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
                 }
-                await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
             }
             catch (ResourceDownloadException ex)
             {
@@ -138,7 +143,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
             catch (OperationCanceledException)
             {
-                throw;
+                return LibraryOperationResult.FromCancelled(state);
             }
             catch (Exception ex)
             {
@@ -149,31 +154,38 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return LibraryOperationResult.FromSuccess(state);
         }
 
-        private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
+        private async Task<bool> IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-            string version = args[1];
-
-            string cacheDir = Path.Combine(CacheFolder, name, version);
-            string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
-
             try
             {
-                foreach (string sourceFile in state.Files)
-                {
-                    var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
-                    var cacheFile = new FileInfo(Path.Combine(cacheDir, sourceFile).Replace('\\', '/'));
+                ILibrary library = await _catalog.GetLibraryAsync(state.LibraryId, cancellationToken).ConfigureAwait(false);
 
-                    if (!destinationFile.Exists || !cacheFile.Exists || !FileHelpers.AreFilesUpToDate(destinationFile, cacheFile))
+                if (library != null)
+                {
+                    string name = library.Name;
+                    string version = library.Version;
+
+                    string cacheDir = Path.Combine(CacheFolder, name, version);
+                    string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
+
+                    foreach (string sourceFile in state.Files)
                     {
-                        return false;
+                        var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
+                        var cacheFile = new FileInfo(Path.Combine(cacheDir, sourceFile).Replace('\\', '/'));
+
+                        if (!destinationFile.Exists || !cacheFile.Exists || !FileHelpers.AreFilesUpToDate(destinationFile, cacheFile))
+                        {
+                            return false;
+                        }
                     }
                 }
+                else
+                {
+                    return false;
+                }
             }
-            catch (Exception)
+            catch
             {
-                // Log failure here 
                 return false;
             }
 
@@ -224,33 +236,22 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            string name = GetLibraryName(state);
-            string version = GetLibraryVersion(state);
+            ILibrary library = await _catalog.GetLibraryAsync(state.LibraryId, cancellationToken).ConfigureAwait(false);
 
-            string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
-
-            if (File.Exists(absolute))
+            if (library != null)
             {
-                return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
+                string name = library.Name;
+                string version = library.Version;
+
+                string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
+
+                if (File.Exists(absolute))
+                {
+                    return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
+                }
             }
 
             return null;
-        }
-
-        private string GetLibraryName(ILibraryInstallationState state)
-        {
-            string[] args = state.LibraryId.Split('@');
-            string name = args[0];
-
-            return name;
-        }
-
-        private string GetLibraryVersion(ILibraryInstallationState state)
-        {
-            string[] args = state.LibraryId.Split('@');
-            string version = args[1];
-
-            return version;
         }
 
         public async Task<ILibraryOperationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
@@ -307,6 +308,44 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             return LibraryOperationResult.FromSuccess(desiredState);
+        }
+
+        public ILibrary ParseLibraryIdentifier(string libraryId)
+        {
+            char _idPartsSeparator = '@';
+
+            // A valid libraryId:
+            // - can not be null or empty string
+            // - has at least one _idPartsSeparator
+            // - can not end with a _idPartsSeparator
+            // - can start with a _idPartsSeparator
+            // - can not start or end with space
+            // - must have two parts (Name and Version)
+            // - each part (Name, Version) can not start or end with space 
+
+            if (string.IsNullOrEmpty(libraryId) ||
+                libraryId.IndexOf(_idPartsSeparator) < 0 ||
+                libraryId[libraryId.Length - 1] == _idPartsSeparator ||
+                char.IsWhiteSpace(libraryId[0]) ||
+                char.IsWhiteSpace(libraryId[libraryId.Length - 1]))
+            {
+                return null;
+            }
+
+            int separatorIndex = libraryId.LastIndexOf(_idPartsSeparator);
+            string[] parts = { libraryId.Substring(0, separatorIndex), libraryId.Substring(separatorIndex + 1) };
+
+            foreach (string part in parts)
+            {
+                if (string.IsNullOrEmpty(part) ||
+                    char.IsWhiteSpace(part[0]) ||
+                    char.IsWhiteSpace(part[part.Length - 1]))
+                {
+                    return null;
+                }
+            }
+
+            return new UnpkgLibrary { Name = parts[0], Version = parts[1], ProviderId = Id };
         }
     }
 }
