@@ -35,6 +35,14 @@ namespace Microsoft.Web.LibraryManager
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+            // Check for duplicate libraries 
+            IEnumerable<string> duplicates = GetDuplicateLibraries(libraries, dependencies, defaultProvider, cancellationToken);
+            if (duplicates != null && duplicates.Any())
+            {
+                return new[] { LibraryOperationResult.FromError(PredefinedErrors.DuplicateLibrariesInManifest(duplicates)) };
+            }
+
+            // Check for valid libraries
             IEnumerable<ILibraryOperationResult> validateLibraries = ValidatePropertiesAsync(libraries, cancellationToken);
 
             if (!validateLibraries.All(t => t.Success))
@@ -42,6 +50,7 @@ namespace Microsoft.Web.LibraryManager
                 return validateLibraries;
             }
 
+            // Check for files conflicts
             IEnumerable<ILibraryOperationResult> expandLibraries = await ExpandLibrariesAsync(libraries, dependencies, defaultDestination, defaultProvider, cancellationToken);
             if (!expandLibraries.All(t => t.Success))
             {
@@ -135,7 +144,7 @@ namespace Microsoft.Web.LibraryManager
                 foreach (IProvider provider in providers)
                 {
                     IEnumerable<ILibraryInstallationState> providerLibraries = libraries.Where(l => l.ProviderId == provider.Id);
-                    duplicateLibraries.AddRange(providerLibraries.GroupBy(l => GetLibraryName(provider, l.LibraryId, cancellationToken)).Where(g => g.Count() > 1).Select(g => g.Key));
+                    duplicateLibraries.AddRange(providerLibraries.GroupBy(l => l.Name).Where(g => g.Count() > 1).Select(g => g.Key));
                 }
 
                 return duplicateLibraries;
