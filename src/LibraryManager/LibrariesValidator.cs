@@ -119,6 +119,83 @@ namespace Microsoft.Web.LibraryManager
             return validationStatus;
         }
 
+        private static IEnumerable<string> GetDuplicateLibraries(
+            IEnumerable<ILibraryInstallationState> libraries,
+            IDependencies dependencies,
+            string defaultProvider,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                var duplicateLibraries = new List<string>();
+                IEnumerable<IProvider> providers = GetProviders(libraries, dependencies, defaultProvider);
+
+                foreach (IProvider provider in providers)
+                {
+                    IEnumerable<ILibraryInstallationState> providerLibraries = libraries.Where(l => l.ProviderId == provider.Id);
+                    duplicateLibraries.AddRange(providerLibraries.GroupBy(l => GetLibraryName(provider, l.LibraryId, cancellationToken)).Where(g => g.Count() > 1).Select(g => g.Key));
+                }
+
+                return duplicateLibraries;
+            }
+            catch (InvalidLibraryException)
+            {
+                return null;
+            }
+        }
+
+        private static IEnumerable<IProvider> GetProviders(
+            IEnumerable<ILibraryInstallationState> libraries,
+            IDependencies dependencies,
+            string defaultProvider)
+        {
+            var providers = new List<IProvider>();
+
+            foreach (ILibraryInstallationState library in libraries)
+            {
+
+                IProvider provider = GetProvider(library, dependencies, defaultProvider, out _);
+                if (provider != null)
+                {
+                    providers.Add(provider);
+                }
+            }
+
+            return providers;
+        }
+
+        private static IProvider GetProvider(
+            ILibraryInstallationState library,
+            IDependencies dependencies,
+            string defaultProvider,
+            out IError error)
+        {
+            error = null;
+
+            if (string.IsNullOrEmpty(library.ProviderId) && string.IsNullOrEmpty(defaultProvider))
+            {
+                error = PredefinedErrors.ProviderIsUndefined();
+                return null;
+            }
+
+            if (dependencies != null)
+            {
+                string providerId = library.ProviderId ?? defaultProvider;
+                IProvider provider = dependencies.GetProvider(providerId);
+                if (provider == null)
+                {
+                    error = PredefinedErrors.ProviderUnknown(library.ProviderId);
+                    return null;
+                }
+
+                return provider;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Expands the files property for each library 
         /// </summary>
