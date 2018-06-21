@@ -59,25 +59,20 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            ILibrary library = await GetLibraryAsync(libraryId, cancellationToken).ConfigureAwait(false);
+            ILibrary library = _provider.ParseLibraryIdentifier(libraryId);
 
-            if (library != null)
+            string name = library.Name;
+            string version = library.Version;
+
+            IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken);
+
+            return new UnpkgLibrary
             {
-                string name = library.Name;
-                string version = library.Version;
-
-                IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken);
-
-                return new UnpkgLibrary
-                {
-                    Version = version,
-                    Files = libraryFiles.ToDictionary(k => k, b => false),
-                    Name = name,
-                    ProviderId = _provider.Id,
-                };
-            }
-
-            return null;
+                Version = version,
+                Files = libraryFiles.ToDictionary(k => k, b => false),
+                Name = name,
+                ProviderId = _provider.Id,
+            };
         }
 
         private async Task<IEnumerable<string>> GetLibraryFilesAsync(string libraryId, CancellationToken cancellationToken)

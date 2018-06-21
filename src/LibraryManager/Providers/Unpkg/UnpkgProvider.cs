@@ -329,7 +329,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 char.IsWhiteSpace(libraryId[0]) ||
                 char.IsWhiteSpace(libraryId[libraryId.Length - 1]))
             {
-                return null;
+                throw new InvalidLibraryException(libraryId, Id);
             }
 
             int separatorIndex = libraryId.LastIndexOf(_idPartsSeparator);
@@ -341,7 +341,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     char.IsWhiteSpace(part[0]) ||
                     char.IsWhiteSpace(part[part.Length - 1]))
                 {
-                    return null;
+                    throw new InvalidLibraryException(libraryId, Id);
                 }
             }
 

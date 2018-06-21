@@ -262,7 +262,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         {
             if (string.IsNullOrEmpty(libraryId) || libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
             {
-                return null;
+                throw new InvalidLibraryException(libraryId, Id);
             }
 
             return new FileSystemLibrary { Name = libraryId, ProviderId = Id };

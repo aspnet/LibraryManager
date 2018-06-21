@@ -135,29 +135,25 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             ILibrary library = _provider.ParseLibraryIdentifier(libraryId);
 
-            if (library != null)
+            string name = library.Name;
+            string version = library.Version;
+
+            IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
+            Asset asset = assets.FirstOrDefault(a => a.Version == version);
+
+            if (asset == null)
             {
-                string name = library.Name;
-                string version = library.Version;
-
-                IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
-                Asset asset = assets.FirstOrDefault(a => a.Version == version);
-
-                if (asset == null)
-                {
-                    throw new InvalidLibraryException(libraryId, _provider.Id);
-                }
-
-                return new CdnjsLibrary
-                {
-                    Version = asset.Version,
-                    Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
-                    Name = name,
-                    ProviderId = _provider.Id,
-                };
+                throw new InvalidLibraryException(libraryId, _provider.Id);
             }
 
-            return null;
+            return new CdnjsLibrary
+            {
+                Version = asset.Version,
+                Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
+                Name = name,
+                ProviderId = _provider.Id,
+            };
+
         }
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
