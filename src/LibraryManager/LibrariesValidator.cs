@@ -46,7 +46,7 @@ namespace Microsoft.Web.LibraryManager
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            IEnumerable<ILibraryOperationResult> validateLibraries = ValidatePropertiesAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryOperationResult> validateLibraries = await ValidatePropertiesAsync(libraries, cancellationToken);
 
             if (!validateLibraries.All(t => t.Success))
             {
@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public IEnumerable<ILibraryOperationResult> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ILibraryOperationResult>> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
             List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
 
@@ -80,9 +80,10 @@ namespace Microsoft.Web.LibraryManager
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (!library.IsValid(out IEnumerable<IError> errors))
+                ILibraryOperationResult result = await library.IsValidAsync(_dependencies);
+                if (!result.Success)
                 {
-                   return new List<ILibraryOperationResult> { new LibraryOperationResult(library, errors.ToArray())};
+                    validationStatus.Add(result);
                 }
                 else
                 {

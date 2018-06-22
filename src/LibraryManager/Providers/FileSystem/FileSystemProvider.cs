@@ -69,9 +69,10 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
-            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            ILibraryOperationResult validationResult = await desiredState.IsValidAsync(this);
+            if (!validationResult.Success)
             {
-                return new LibraryOperationResult(desiredState, errors.ToArray());
+                return validationResult;
             }
 
             try
@@ -256,6 +257,16 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 // Add telemetry here for failures
                 throw new ResourceDownloadException(sourceUrl);
             }
+        }
+
+        public ILibrary ParseLibraryIdentifier(string libraryId)
+        {
+            if (string.IsNullOrEmpty(libraryId) || libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            {
+                throw new InvalidLibraryException(libraryId, Id);
+            }
+
+            return new FileSystemLibrary { Name = libraryId, ProviderId = Id };
         }
     }
 }

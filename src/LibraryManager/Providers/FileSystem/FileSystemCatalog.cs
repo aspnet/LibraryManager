@@ -112,7 +112,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// </returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            ILibrary library;
+            ILibrary library = _provider.ParseLibraryIdentifier(libraryId);
 
             try
             {
