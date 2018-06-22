@@ -420,7 +420,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 }
                 else
                 {
-                    // libman.json file is open so we will write to the textBuffer.
+                    // libman.json file is open, so we will write to the textBuffer.
                     _dispatcher.Invoke(() =>
                     {
                         _closeDialog(true);
@@ -428,7 +428,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                     InsertIntoTextBuffer(document, libraryInstallationState);
 
-                    // Save file so we can restore files.
+                    // Save manifest file so we can restore library files.
                     rdt.SaveFileIfDirty(Path.GetFullPath(_configFileName));
                 }
             }
