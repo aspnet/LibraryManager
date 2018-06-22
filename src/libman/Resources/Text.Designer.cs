@@ -656,7 +656,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify &apos;{0}&apos; using the &apos;{1}&apos; option..
+        ///   Looks up a localized string similar to Please specify &apos;{0}&apos; using the &apos;--{1}&apos; option..
         /// </summary>
         internal static string SpecifyFieldUsingOption {
             get {
