@@ -55,10 +55,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
+            {
+                throw new InvalidLibraryException(libraryId, _provider.Id);
+            }
+
             try
             {
-                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
-
                 IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken);
 
                 return new UnpkgLibrary

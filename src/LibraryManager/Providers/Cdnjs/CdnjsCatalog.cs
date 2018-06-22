@@ -134,10 +134,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
+            {
+                throw new InvalidLibraryException(libraryId, _provider.Id);
+            }
+
             try
             {
-                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
-
                 IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
                 Asset asset = assets.FirstOrDefault(a => a.Version == version);
 
