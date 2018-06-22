@@ -108,7 +108,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             // Check if Library is already up tp date
-            if (await IsLibraryUpToDateAsync(desiredState, cancellationToken))
+            if (IsLibraryUpToDate(desiredState))
             {
                 return LibraryOperationResult.FromUpToDate(desiredState);
             }
@@ -311,7 +311,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return LibraryOperationResult.FromSuccess(state);
         }
 
-        private bool IsLibraryUpToDate(ILibraryInstallationState state, CancellationToken cancellationToken)
+        private bool IsLibraryUpToDate(ILibraryInstallationState state)
         {
             try
             {

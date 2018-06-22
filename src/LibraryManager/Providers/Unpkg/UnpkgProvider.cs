@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
@@ -72,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             // Check if Library is already up tp date
-            if (await IsLibraryUpToDateAsync(desiredState, cancellationToken))
+            if (IsLibraryUpToDate(desiredState, cancellationToken))
             {
                 return LibraryOperationResult.FromUpToDate(desiredState);
             }
@@ -110,7 +111,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             var tasks = new List<Task>();
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
 
             string libraryDir = Path.Combine(CacheFolder, name);
 
@@ -148,9 +149,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return LibraryOperationResult.FromSuccess(state);
         }
 
-        private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
+        private bool IsLibraryUpToDate(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
 
             string cacheDir = Path.Combine(CacheFolder, name, version);
             string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
@@ -220,7 +221,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
 
             string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
 

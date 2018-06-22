@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
@@ -36,13 +37,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
                 string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, name);
 
-                    JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
+                JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
 
-                    if (packageObject != null)
-                    {
-                        JValue versionValue = packageObject["version"] as JValue;
-                        latestVersion = versionValue?.Value as string;
-                    }
+                if (packageObject != null)
+                {
+                    JValue versionValue = packageObject["version"] as JValue;
+                    latestVersion = versionValue?.Value as string;
                 }
             }
             catch(Exception ex)
@@ -171,7 +171,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             List<CompletionItem> completions = new List<CompletionItem>();
 
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryNameStart);
 
             try
             {

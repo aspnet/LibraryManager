@@ -145,7 +145,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
                 if (library == null)
                 {
-                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
+                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, Id));
                 }
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
@@ -257,16 +257,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 // Add telemetry here for failures
                 throw new ResourceDownloadException(sourceUrl);
             }
-        }
-
-        public ILibrary ParseLibraryIdentifier(string libraryId)
-        {
-            if (string.IsNullOrEmpty(libraryId) || libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
-            {
-                throw new InvalidLibraryException(libraryId, Id);
-            }
-
-            return new FileSystemLibrary { Name = libraryId, ProviderId = Id };
         }
     }
 }

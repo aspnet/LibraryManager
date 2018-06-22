@@ -57,13 +57,6 @@ namespace Microsoft.Web.LibraryManager.Contracts
         ILibraryCatalog GetCatalog();
 
         /// <summary>
-        /// Returns ILibrary for a given libraryId 
-        /// </summary>
-        /// <param name="libraryId"></param>
-        /// <returns></returns>
-        ILibrary ParseLibraryIdentifier(string libraryId);
-
-        /// <summary>
         /// Gets the suggested destination path for the library.
         /// </summary>
         /// <param name="library"></param>
