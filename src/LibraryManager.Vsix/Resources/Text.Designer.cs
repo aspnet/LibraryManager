@@ -151,6 +151,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FormatUndoAction.
+        /// </summary>
+        public static string FormatUndoAction {
+            get {
+                return ResourceManager.GetString("FormatUndoAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include all library files.
         /// </summary>
         public static string IncludeAllLibraryFiles {

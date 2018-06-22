@@ -4,10 +4,24 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Microsoft.JSON.Core.Parser.TreeItems;
+using Microsoft.JSON.Editor.Document;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.Web.Editor.Undo;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
+using Newtonsoft.Json;
+using IVsTextBuffer = Microsoft.VisualStudio.TextManager.Interop.IVsTextBuffer;
+using RunningDocumentTable = Microsoft.VisualStudio.Shell.RunningDocumentTable;
+using Shell = Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
@@ -30,6 +44,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private FileSelectionType _fileSelectionType;
         private bool _anyFileSelected;
         private bool _isTreeViewEmpty;
+        private const string _commaDelimiter = ",";
 
         public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
         {
@@ -372,27 +387,185 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     manifest.Version = Manifest.SupportedVersions.Max().ToString();
                 }
 
-                manifest.AddLibrary(new LibraryInstallationState
+                LibraryInstallationState libraryInstallationState = new LibraryInstallationState
                 {
                     LibraryId = PackageId,
                     ProviderId = selectedPackage.ProviderId,
                     DestinationPath = InstallationFolder.DestinationFolder,
                     Files = SelectedFiles.ToList()
-                });
-
-                await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+                };
 
                 EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
                 project?.AddFileToProjectAsync(_configFileName);
 
-                await _libraryCommandService.RestoreAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+                await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                _dispatcher.Invoke(() =>
+                RunningDocumentTable rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
+                IVsTextBuffer document = rdt.FindDocument(Path.GetFullPath(_configFileName)) as IVsTextBuffer;
+
+                // The file isn't open. So we'll write to disk directly
+                if (document == null)
                 {
-                    _closeDialog(true);
-                });
+                    manifest.AddLibrary(libraryInstallationState);
+
+                    await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+
+                    await _libraryCommandService.RestoreAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+
+                    _dispatcher.Invoke(() =>
+                    {
+                        _closeDialog(true);
+                    });
+                }
+                else
+                {
+                    _dispatcher.Invoke(() =>
+                    {
+                        _closeDialog(true);
+                    });
+
+                    InsertIntoTextBuffer(document, libraryInstallationState);
+
+                    rdt.SaveFileIfDirty(Path.GetFullPath(_configFileName));
+                }
             }
             catch { }
+        }
+
+        private void InsertIntoTextBuffer(IVsTextBuffer document, LibraryInstallationState libraryInstallationState)
+        {
+            ITextBuffer textBuffer = GetTextBuffer(document);
+
+            if (textBuffer != null)
+            {
+                string newLibrary = GetLibraryToBeInserted(libraryInstallationState);
+                string insertionText;
+
+                JSONMember libraries = GetLibraries(textBuffer);
+
+                if (libraries != null && libraries.Children != null)
+                {
+                    JSONArray jsonArray = libraries.Children.OfType<JSONArray>().First();
+
+                    if (jsonArray != null)
+                    {
+                        bool containsLibrary = jsonArray.BlockItemChildren.Count() > 0;
+
+                        if (containsLibrary)
+                        {
+                            insertionText = _commaDelimiter + Environment.NewLine + newLibrary + Environment.NewLine;
+                        }
+                        else
+                        {
+                            insertionText = newLibrary + Environment.NewLine;
+                        }
+
+                        int insertionIndex = FindInsertionIndex(textBuffer);
+
+                        if (insertionIndex > 0)
+                        {
+                            FormatSelection(textBuffer, insertionIndex, insertionText);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void FormatSelection(ITextBuffer textBuffer, int insertionIndex, string insertionText)
+        {
+            Editor.Controller.TextViewData viewData = Editor.Controller.TextViewConnectionListener.GetTextViewDataForBuffer(textBuffer);
+            ITextView textView = viewData.LastActiveView;
+
+            CompoundUndoAction compoundUndoAction = new CompoundUndoAction(textView, textBuffer, true);
+            compoundUndoAction.Open(Text.FormatUndoAction);
+
+            using (ITextEdit textEdit = textBuffer.CreateEdit())
+            {
+                textEdit.Insert(insertionIndex, insertionText);
+                textEdit.Apply();
+
+                IOleCommandTarget commandTarget = Shell.Package.GetGlobalService(typeof(Shell.Interop.SUIHostCommandDispatcher)) as IOleCommandTarget;
+
+                if (commandTarget != null)
+                {
+                    SendFocusToEditor(textView);
+
+                    SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, insertionIndex, insertionText.Length + 1);
+                    textView.Selection.Select(snapshotSpan, false);
+
+                    Guid guidVSStd2K = VSConstants.VSStd2K;
+
+                    commandTarget.Exec(
+                        ref guidVSStd2K,
+                        (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION,
+                        (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT,
+                        IntPtr.Zero,
+                        IntPtr.Zero);
+
+                    textView.Selection.Clear();
+                }
+            }
+
+            compoundUndoAction.Close(false);
+        }
+
+        private void SendFocusToEditor(ITextView textView)
+        {
+            FrameworkElement editorWindow = (textView as IWpfTextView).VisualElement;
+            Keyboard.Focus(editorWindow);
+        }
+
+        private JSONMember GetLibraries(ITextBuffer textBuffer)
+        {
+            JSONEditorDocument document = JSONEditorDocument.FromTextBuffer(textBuffer);
+
+            if (document != null)
+            {
+                JSONMember member = document.JSONDocument.Children.OfType<JSONMember>().FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Library);
+
+                IEnumerable<JSONMember> jsonMembers = document.JSONDocument.TopLevelValue?.FindType<JSONObject>().Children?.OfType<JSONMember>();
+
+                if (jsonMembers.Any())
+                {
+                    return jsonMembers.FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Libraries);
+                }
+            }
+
+            return null;
+        }
+
+        private int FindInsertionIndex(ITextBuffer textBuffer)
+        {
+            JSONEditorDocument document = JSONEditorDocument.FromTextBuffer(textBuffer);
+            int insertionIndex = -1;
+
+            JSONMember libraries = GetLibraries(textBuffer);
+
+            if (libraries != null)
+            {
+                insertionIndex = libraries.AfterEnd - 1;
+            }
+
+            return insertionIndex;
+        }
+
+        private string GetLibraryToBeInserted(LibraryInstallationState libraryInstallationState)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+
+            return JsonConvert.SerializeObject(libraryInstallationState, settings);
+        }
+
+        private ITextBuffer GetTextBuffer(IVsTextBuffer document)
+        {
+            IComponentModel componentModel = Shell.ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+            IVsEditorAdaptersFactoryService adapterService = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+
+            return adapterService.GetDocumentBuffer(document);
         }
 
         private async Task LoadPackagesAsync()

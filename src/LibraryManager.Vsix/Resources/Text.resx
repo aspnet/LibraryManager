@@ -229,4 +229,7 @@ Do you want to continue?</value>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>No files have been selected</value>
   </data>
+  <data name="FormatUndoAction" xml:space="preserve">
+    <value>FormatUndoAction</value>
+  </data>
 </root>
