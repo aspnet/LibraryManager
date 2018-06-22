@@ -258,5 +258,15 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 throw new ResourceDownloadException(sourceUrl);
             }
         }
+
+        public ILibrary ParseLibraryIdentifier(string libraryId)
+        {
+            if (string.IsNullOrEmpty(libraryId) || libraryId.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+            {
+                throw new InvalidLibraryException(libraryId, Id);
+            }
+
+            return new FileSystemLibrary { Name = libraryId, ProviderId = Id };
+        }
     }
 }
