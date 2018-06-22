@@ -19,6 +19,7 @@ using Microsoft.Web.Editor.Undo;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
 using Newtonsoft.Json;
+using Controller = Microsoft.Web.Editor.Controller;
 using IVsTextBuffer = Microsoft.VisualStudio.TextManager.Interop.IVsTextBuffer;
 using RunningDocumentTable = Microsoft.VisualStudio.Shell.RunningDocumentTable;
 using Shell = Microsoft.VisualStudio.Shell;
@@ -419,6 +420,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 }
                 else
                 {
+                    // libman.json file is open so we will write to the textBuffer.
                     _dispatcher.Invoke(() =>
                     {
                         _closeDialog(true);
@@ -426,6 +428,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                     InsertIntoTextBuffer(document, libraryInstallationState);
 
+                    // Save file so we can restore files.
                     rdt.SaveFileIfDirty(Path.GetFullPath(_configFileName));
                 }
             }
@@ -438,7 +441,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
             if (textBuffer != null)
             {
-                string newLibrary = GetLibraryToBeInserted(libraryInstallationState);
                 string insertionText;
 
                 JSONMember libraries = GetLibraries(textBuffer);
@@ -449,6 +451,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                     if (jsonArray != null)
                     {
+                        string newLibrary = GetLibraryToBeInserted(libraryInstallationState);
                         bool containsLibrary = jsonArray.BlockItemChildren.Count() > 0;
 
                         if (containsLibrary)
@@ -473,7 +476,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private void FormatSelection(ITextBuffer textBuffer, int insertionIndex, string insertionText)
         {
-            Editor.Controller.TextViewData viewData = Editor.Controller.TextViewConnectionListener.GetTextViewDataForBuffer(textBuffer);
+            Controller.TextViewData viewData = Controller.TextViewConnectionListener.GetTextViewDataForBuffer(textBuffer);
             ITextView textView = viewData.LastActiveView;
 
             CompoundUndoAction compoundUndoAction = new CompoundUndoAction(textView, textBuffer, true);
@@ -521,8 +524,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
             if (document != null)
             {
-                JSONMember member = document.JSONDocument.Children.OfType<JSONMember>().FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Library);
-
                 IEnumerable<JSONMember> jsonMembers = document.JSONDocument.TopLevelValue?.FindType<JSONObject>().Children?.OfType<JSONMember>();
 
                 if (jsonMembers.Any())
@@ -536,7 +537,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private int FindInsertionIndex(ITextBuffer textBuffer)
         {
-            JSONEditorDocument document = JSONEditorDocument.FromTextBuffer(textBuffer);
             int insertionIndex = -1;
 
             JSONMember libraries = GetLibraries(textBuffer);
