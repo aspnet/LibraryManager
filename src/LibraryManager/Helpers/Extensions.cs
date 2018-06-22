@@ -22,42 +22,88 @@ namespace Microsoft.Web.LibraryManager
         /// Returns true if the <see cref="ILibraryInstallationState"/> is valid.
         /// </summary>
         /// <param name="state">The state to test.</param>
-        /// <param name="errors">The errors contained in the <see cref="ILibraryInstallationState"/> if any.</param>
+        /// <param name="dependencies"></param>
         /// <returns>
         ///   <c>true</c> if the specified state is valid; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsValid(this ILibraryInstallationState state, out IEnumerable<IError> errors)
+        public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IDependencies dependencies)
         {
-            errors = null;
-            var list = new List<IError>();
+            var errors = new List<IError>();
 
-            if (state == null)
+            if (state != null)
             {
-                return false;
+                if (string.IsNullOrEmpty(state.ProviderId))
+                {
+                    errors.Add(PredefinedErrors.ProviderIsUndefined());
+                }
+                else
+                {
+                    IProvider provider = dependencies.GetProvider(state.ProviderId);
+                    if (provider == null)
+                    {
+                        errors.Add(PredefinedErrors.ProviderUnknown(state.ProviderId));
+                    }
+                    else
+                    {
+                        ILibraryOperationResult result = await IsValidAsync(state, provider);
+                        errors.AddRange(result.Errors);
+                    }
+                }
             }
 
-            if (string.IsNullOrEmpty(state.ProviderId))
+            if (errors.Any())
             {
-                list.Add(PredefinedErrors.ProviderIsUndefined());
+                return new LibraryOperationResult(errors.ToArray());
             }
 
-            if (string.IsNullOrEmpty(state.DestinationPath))
+            return LibraryOperationResult.FromSuccess(state);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IProvider provider)
+        {
+            var errors = new List<IError>();
+
+            if (state != null && provider != null)
             {
-                list.Add(PredefinedErrors.PathIsUndefined());
-            }
-            else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
-            {
-                list.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
+                if (string.IsNullOrEmpty(state.LibraryId))
+                {
+                    errors.Add(PredefinedErrors.LibraryIdIsUndefined());
+                }
+                else
+                {
+                    ILibraryCatalog catalog = provider.GetCatalog();
+                    try
+                    {
+                        await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+                    }
+                    catch
+                    {
+                        errors.Add(PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id));
+                    }
+                }
+
+                if (string.IsNullOrEmpty(state.DestinationPath))
+                {
+                    errors.Add(PredefinedErrors.PathIsUndefined());
+                }
+                else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+                {
+                    errors.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
+                }
             }
 
-            if (string.IsNullOrEmpty(state.LibraryId))
+            if (errors.Any())
             {
-                list.Add(PredefinedErrors.LibraryIdIsUndefined());
+                return new LibraryOperationResult(errors.ToArray());
             }
 
-            errors = list;
-
-            return list.Count == 0;
+            return LibraryOperationResult.FromSuccess(state);
         }
 
         /// <summary>

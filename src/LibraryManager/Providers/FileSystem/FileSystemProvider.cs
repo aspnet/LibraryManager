@@ -69,9 +69,10 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
-            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            ILibraryOperationResult validationResult = await desiredState.IsValidAsync(this);
+            if (!validationResult.Success)
             {
-                return new LibraryOperationResult(desiredState, errors.ToArray());
+                return validationResult;
             }
 
             try

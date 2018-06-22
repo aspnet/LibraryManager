@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -125,12 +126,17 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return results.ToList();
         }
 
+        /// <summary>
+        /// Returns a library from this catalog based on the libraryId
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
             try
             {
-                string name = _provider.GetLibraryName(libraryId);
-                string version = _provider.GetLibraryVersion(libraryId);
+                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
 
                 IEnumerable<Asset> assets = await GetAssetsAsync(name, cancellationToken).ConfigureAwait(false);
                 Asset asset = assets.FirstOrDefault(a => a.Version == version);
@@ -148,17 +154,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     ProviderId = _provider.Id,
                 };
             }
-            catch (Exception)
+            catch
             {
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
+
         }
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
         {
-            string[] args = libraryId.Split('@');
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
 
-            if (args.Length < 2)
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
                 return null;
             }
@@ -167,8 +174,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             {
                 return null;
             }
-
-            string name = args[0];
 
             CdnjsLibraryGroup group = _libraryGroups.FirstOrDefault(l => l.DisplayName == name);
 
