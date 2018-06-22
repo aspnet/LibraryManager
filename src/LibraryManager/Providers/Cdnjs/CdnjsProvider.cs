@@ -118,6 +118,49 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         }
 
         /// <summary>
+        /// Parses a library identifier into an <see cref="ILibrary"/>
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <returns></returns>
+        public ILibrary ParseLibraryIdentifier(string libraryId)
+        {
+            char _idPartsSeparator = '@';
+
+            // A valid libraryId:
+            // - can not be null or empty string
+            // - has at least one _idPartsSeparator
+            // - can not end with a _idPartsSeparator
+            // - can start with a _idPartsSeparator
+            // - can not start or end with space
+            // - must have two parts (Name and Version)
+            // - each part (Name, Version) can not start or end with space 
+
+            if (string.IsNullOrEmpty(libraryId) ||
+                libraryId.IndexOf(_idPartsSeparator) < 0 ||
+                libraryId[libraryId.Length - 1] == _idPartsSeparator ||
+                char.IsWhiteSpace(libraryId[0]) ||
+                char.IsWhiteSpace(libraryId[libraryId.Length - 1]))
+            {
+                throw new InvalidLibraryException(libraryId, Id);
+            }
+
+            int separatorIndex = libraryId.LastIndexOf(_idPartsSeparator);
+            string[] parts = { libraryId.Substring(0, separatorIndex), libraryId.Substring(separatorIndex + 1) };
+
+            foreach (string part in parts)
+            {
+                if (string.IsNullOrEmpty(part) ||
+                    char.IsWhiteSpace(part[0]) ||
+                    char.IsWhiteSpace(part[part.Length - 1]))
+                {
+                    throw new InvalidLibraryException(libraryId, Id);
+                }
+            }
+
+            return new CdnjsLibrary { Name = parts[0], Version = parts[1], ProviderId = Id };
+        }
+
+        /// <summary>
         /// Returns the CdnjsLibrary's Name
         /// </summary>
         /// <param name="library"></param>
