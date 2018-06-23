@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -204,6 +205,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             string text = Text;
             int caretIndex = text.Length;
+            int at = text.IndexOf('@');
             Func<string, int, Task<CompletionSet>> searchService = SearchService;
             Task.Delay(250).ContinueWith(d => 
             {
@@ -231,6 +233,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                             }
 
                             Items.Clear();
+
+                            if (at >= 0)
+                            {
+                                FilterOutUnmatchedItems(ref span.Completions, text.Substring(at + 1));
+                            }
+
                             foreach (CompletionItem entry in span.Completions)
                             {
                                 Items.Add(new Completion(entry, span.Start, span.Length));
@@ -241,7 +249,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
                             if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
                             {
-                                SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
+                                SelectedItem = ((at >= 0) ? Items.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(text.Substring(at + 1))) : Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected)) ?? Items[0];
+
                                 Options.ScrollIntoView(SelectedItem);
                             }
                         }));
@@ -256,6 +265,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             {
                 LibrarySearchBox.Focus();
             }
+        }
+
+        private void FilterOutUnmatchedItems(ref IEnumerable<CompletionItem>items, string versionPrefix)
+        {
+            items = items.Where(x => x.DisplayText.Contains(versionPrefix));
         }
     }
 }
