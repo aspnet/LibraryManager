@@ -37,14 +37,15 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB016";
             string expectedErrorMessage = "Conflicting file \"lib\\jquery.js\" found in more than one library: jquery@3.1.1, jquery@2.2.1";
-            Manifest manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
+            var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
 
             IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            var conflictsList = conflicts.ToList();
 
-            Assert.AreEqual(1, conflicts.Count());
-            Assert.IsTrue(conflicts.First().Errors.Count() == 1);
-            Assert.AreEqual(conflicts.First().Errors.First().Code, expectedErrorCode);
-            Assert.AreEqual(conflicts.First().Errors.First().Message, expectedErrorMessage);
+            Assert.AreEqual(1, conflictsList.Count);
+            Assert.IsTrue(conflictsList[0].Errors.Count == 1);
+            Assert.AreEqual(conflictsList[0].Errors[0].Code, expectedErrorCode);
+            Assert.AreEqual(conflictsList[0].Errors[0].Message, expectedErrorMessage);
         }
 
         [TestMethod]
@@ -60,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task DetectConflictsAsync_SameLibrary_SameFiles_DifferentDestination()
         {
-            Manifest manifest = Manifest.FromJson(_docDifferentDestination, _dependencies);
+            var manifest = Manifest.FromJson(_docDifferentDestination, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
@@ -74,10 +75,11 @@ namespace Microsoft.Web.LibraryManager.Test
             Manifest manifest = null;
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            var resultsList = results.ToList();
 
-            Assert.AreEqual(1, results.Count());
-            Assert.IsTrue(results.First().Errors.Count() == 1);
-            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+            Assert.AreEqual(1, resultsList.Count);
+            Assert.IsTrue(resultsList[0].Errors.Count == 1);
+            Assert.AreEqual(resultsList[0].Errors[0].Code, expectedErrorCode);
         }
 
         [TestMethod]
@@ -87,23 +89,25 @@ namespace Microsoft.Web.LibraryManager.Test
             Manifest manifest = Manifest.FromJson(_docUnsupportedVersion, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            var resultsList = results.ToList();
 
-            Assert.AreEqual(1, results.Count());
-            Assert.IsTrue(results.First().Errors.Count() == 1);
-            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+            Assert.AreEqual(1, resultsList.Count);
+            Assert.IsTrue(resultsList[0].Errors.Count == 1);
+            Assert.AreEqual(resultsList[0].Errors[0].Code, expectedErrorCode);
         }
 
         [TestMethod]
         public async Task GetLibrariesErrors_LibrariesNoProvider()
         {
             string expectedErrorCode = "LIB007";
-            Manifest manifest = Manifest.FromJson(_docNoProvider, _dependencies);
+            var manifest = Manifest.FromJson(_docNoProvider, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            var resultsList = results.ToList();
 
-            Assert.AreEqual(1, results.Count());
-            Assert.IsTrue(results.First().Errors.Count() == 1);
-            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+            Assert.AreEqual(1, resultsList.Count);
+            Assert.IsTrue(resultsList[0].Errors.Count == 1);
+            Assert.AreEqual(resultsList[0].Errors[0].Code, expectedErrorCode);
         }
 
         private string _docConflictingLibraries = $@"{{
