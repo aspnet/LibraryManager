@@ -519,10 +519,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             {
                 IEnumerable<JSONMember> jsonMembers = document.JSONDocument.TopLevelValue?.FindType<JSONObject>().Children?.OfType<JSONMember>();
 
-                if (jsonMembers.Any())
-                {
-                    return jsonMembers.FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Libraries);
-                }
+                return jsonMembers.FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Libraries);
             }
 
             return null;
