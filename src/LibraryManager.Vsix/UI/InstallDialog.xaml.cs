@@ -198,6 +198,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void InstallButton_Clicked(object sender, RoutedEventArgs e)
         {
+            // When "Include all files" option is checked, we don't want to write out the files to libman.json
+            if (IncludeAllLibraryFilesRb.IsChecked.Value)
+            {
+                ViewModel.SelectedFiles.Clear();
+            }
+
             CloseDialog(true);
         }
     }
