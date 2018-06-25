@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -204,6 +205,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             string text = Text;
             int caretIndex = text.Length;
+            int atIndex = text.IndexOf('@');
             Func<string, int, Task<CompletionSet>> searchService = SearchService;
             Task.Delay(250).ContinueWith(d => 
             {
@@ -231,6 +233,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                             }
 
                             Items.Clear();
+
+                            if (atIndex >= 0)
+                            {
+                                span.Completions = FilterOutUnmatchedItems(span.Completions, text.Substring(atIndex + 1));
+                            }
+
                             foreach (CompletionItem entry in span.Completions)
                             {
                                 Items.Add(new Completion(entry, span.Start, span.Length));
@@ -241,7 +249,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
                             if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
                             {
-                                SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
+                                if (atIndex >= 0)
+                                {
+                                    SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(text.Substring(atIndex + 1))) ?? Items[0];
+                                }
+                                else
+                                {
+                                    SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
+                                }
+
                                 Options.ScrollIntoView(SelectedItem);
                             }
                         }));
@@ -256,6 +272,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             {
                 LibrarySearchBox.Focus();
             }
+        }
+
+        private IEnumerable<CompletionItem> FilterOutUnmatchedItems(IEnumerable<CompletionItem>items, string versionSuffix)
+        {
+            return items.Where(x => x.DisplayText.Contains(versionSuffix));
         }
     }
 }
