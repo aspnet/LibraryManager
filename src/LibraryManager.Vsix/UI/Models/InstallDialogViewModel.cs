@@ -15,7 +15,6 @@ using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.Web.Editor.Undo;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
 using Newtonsoft.Json;
@@ -402,7 +401,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
                 RunningDocumentTable rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
-                IVsTextBuffer document = rdt.FindDocument(Path.GetFullPath(_configFileName)) as IVsTextBuffer;
+                string configFilePath = Path.GetFullPath(_configFileName);
+
+                IVsTextBuffer document = rdt.FindDocument(configFilePath) as IVsTextBuffer;
 
                 // The file isn't open. So we'll write to disk directly
                 if (document == null)
@@ -429,7 +430,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     InsertIntoTextBuffer(document, libraryInstallationState);
 
                     // Save manifest file so we can restore library files.
-                    rdt.SaveFileIfDirty(Path.GetFullPath(_configFileName));
+                    rdt.SaveFileIfDirty(configFilePath);
                 }
             }
             catch { }
@@ -479,9 +480,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             Controller.TextViewData viewData = Controller.TextViewConnectionListener.GetTextViewDataForBuffer(textBuffer);
             ITextView textView = viewData.LastActiveView;
 
-            CompoundUndoAction compoundUndoAction = new CompoundUndoAction(textView, textBuffer, true);
-            compoundUndoAction.Open(Text.FormatUndoAction);
-
             using (ITextEdit textEdit = textBuffer.CreateEdit())
             {
                 textEdit.Insert(insertionIndex, insertionText);
@@ -489,27 +487,22 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                 IOleCommandTarget commandTarget = Shell.Package.GetGlobalService(typeof(Shell.Interop.SUIHostCommandDispatcher)) as IOleCommandTarget;
 
-                if (commandTarget != null)
-                {
-                    SendFocusToEditor(textView);
+                SendFocusToEditor(textView);
 
-                    SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, insertionIndex, insertionText.Length + 1);
-                    textView.Selection.Select(snapshotSpan, false);
+                SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, insertionIndex, insertionText.Length + 1);
+                textView.Selection.Select(snapshotSpan, false);
 
-                    Guid guidVSStd2K = VSConstants.VSStd2K;
+                Guid guidVSStd2K = VSConstants.VSStd2K;
 
-                    commandTarget.Exec(
-                        ref guidVSStd2K,
-                        (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION,
-                        (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT,
-                        IntPtr.Zero,
-                        IntPtr.Zero);
+                commandTarget.Exec(
+                    ref guidVSStd2K,
+                    (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION,
+                    (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT,
+                    IntPtr.Zero,
+                    IntPtr.Zero);
 
-                    textView.Selection.Clear();
-                }
+                textView.Selection.Clear();
             }
-
-            compoundUndoAction.Close(false);
         }
 
         private void SendFocusToEditor(ITextView textView)
