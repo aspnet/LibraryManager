@@ -452,7 +452,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     if (jsonArray != null)
                     {
                         string newLibrary = GetLibraryToBeInserted(libraryInstallationState);
-                        bool containsLibrary = jsonArray.BlockItemChildren.Count() > 0;
+                        bool containsLibrary = jsonArray.BlockItemChildren.Any();
 
                         if (containsLibrary)
                         {
