@@ -44,7 +44,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private FileSelectionType _fileSelectionType;
         private bool _anyFileSelected;
         private bool _isTreeViewEmpty;
-        private const string _commaDelimiter = ",";
 
         public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
         {
@@ -403,31 +402,26 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 RunningDocumentTable rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
                 string configFilePath = Path.GetFullPath(_configFileName);
 
-                IVsTextBuffer document = rdt.FindDocument(configFilePath) as IVsTextBuffer;
+                IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
+
+                _dispatcher.Invoke(() =>
+                {
+                    _closeDialog(true);
+                });
 
                 // The file isn't open. So we'll write to disk directly
-                if (document == null)
+                if (textBuffer == null)
                 {
                     manifest.AddLibrary(libraryInstallationState);
 
                     await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
 
                     await _libraryCommandService.RestoreAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
-
-                    _dispatcher.Invoke(() =>
-                    {
-                        _closeDialog(true);
-                    });
                 }
                 else
                 {
                     // libman.json file is open, so we will write to the textBuffer.
-                    _dispatcher.Invoke(() =>
-                    {
-                        _closeDialog(true);
-                    });
-
-                    InsertIntoTextBuffer(document, libraryInstallationState);
+                    InsertIntoTextBuffer(textBuffer, libraryInstallationState);
 
                     // Save manifest file so we can restore library files.
                     rdt.SaveFileIfDirty(configFilePath);
@@ -442,27 +436,28 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
             if (textBuffer != null)
             {
-                string insertionText;
-
                 JSONMember libraries = GetLibraries(textBuffer);
 
-                if (libraries != null && libraries.Children != null)
+                if (libraries?.Children != null)
                 {
+                    string insertionText;
                     JSONArray jsonArray = libraries.Children.OfType<JSONArray>().First();
 
                     string newLibrary = GetLibraryToBeInserted(libraryInstallationState);
                     bool containsLibrary = jsonArray.BlockItemChildren.Any();
 
+                    int insertionIndex = libraries.AfterEnd - 1;
+
+                    string lineBreakText = GetLineBreakTextFromPreviousLine(textBuffer, insertionIndex);
+
                     if (containsLibrary)
                     {
-                        insertionText = _commaDelimiter + Environment.NewLine + newLibrary + Environment.NewLine;
+                        insertionText = "," + lineBreakText + newLibrary + lineBreakText;
                     }
                     else
                     {
-                        insertionText = newLibrary + Environment.NewLine;
+                        insertionText = newLibrary + lineBreakText;
                     }
-
-                    int insertionIndex = libraries.AfterEnd - 1;
 
                     if (insertionIndex > 0)
                     {
@@ -470,6 +465,25 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     }
                 }
             }
+        }
+
+        private string GetLineBreakTextFromPreviousLine(ITextBuffer textBuffer, int pos)
+        {
+            int currentLineNumber = textBuffer.CurrentSnapshot.GetLineNumberFromPosition(pos);
+            string lineBreakText = null;
+
+            if (currentLineNumber > 0)
+            {
+                ITextSnapshotLine previousLine = textBuffer.CurrentSnapshot.GetLineFromLineNumber(currentLineNumber - 1);
+                lineBreakText = previousLine.GetLineBreakText();
+            }
+
+            if (string.IsNullOrEmpty(lineBreakText))
+            {
+                lineBreakText = Environment.NewLine;
+            }
+
+            return lineBreakText;
         }
 
         private void FormatSelection(ITextBuffer textBuffer, int insertionIndex, string insertionText)
@@ -481,25 +495,25 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             {
                 textEdit.Insert(insertionIndex, insertionText);
                 textEdit.Apply();
-
-                IOleCommandTarget commandTarget = Shell.Package.GetGlobalService(typeof(Shell.Interop.SUIHostCommandDispatcher)) as IOleCommandTarget;
-
-                SendFocusToEditor(textView);
-
-                SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, insertionIndex, insertionText.Length + 1);
-                textView.Selection.Select(snapshotSpan, false);
-
-                Guid guidVSStd2K = VSConstants.VSStd2K;
-
-                commandTarget.Exec(
-                    ref guidVSStd2K,
-                    (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION,
-                    (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT,
-                    IntPtr.Zero,
-                    IntPtr.Zero);
-
-                textView.Selection.Clear();
             }
+
+            IOleCommandTarget commandTarget = Shell.Package.GetGlobalService(typeof(Shell.Interop.SUIHostCommandDispatcher)) as IOleCommandTarget;
+
+            SendFocusToEditor(textView);
+
+            SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, insertionIndex, insertionText.Length + 1);
+            textView.Selection.Select(snapshotSpan, false);
+
+            Guid guidVSStd2K = VSConstants.VSStd2K;
+
+            commandTarget.Exec(
+                ref guidVSStd2K,
+                (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION,
+                (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT,
+                IntPtr.Zero,
+                IntPtr.Zero);
+
+            textView.Selection.Clear();
         }
 
         private void SendFocusToEditor(ITextView textView)
