@@ -227,38 +227,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
                         Dispatcher.BeginInvoke((Action)(() =>
                         {
-                        if (Volatile.Read(ref _version) != expect || span.Completions == null)
-                        {
-                            return;
-                        }
+                            if (Volatile.Read(ref _version) != expect || span.Completions == null)
+                            {
+                                return;
+                            }
 
-                        Items.Clear();
+                            Items.Clear();
 
-                        if (atIndex >= 0)
-                        {
-                            span.Completions = FilterOutUnmatchedItems(span.Completions, text.Substring(atIndex + 1));
-                        }
-
-                        foreach (CompletionItem entry in span.Completions)
-                        {
-                            Items.Add(new Completion(entry, span.Start, span.Length));
-                        }
-
-                        PositionCompletions(span.Length);
-                        OnPropertyChanged(nameof(HasItems));
-
-                        if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
-                        {
                             if (atIndex >= 0)
                             {
-                                SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(text.Substring(atIndex + 1))) ?? Items[0];
-                            }
-                            else
-                            {
-                                SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
+                                span.Completions = FilterOutUnmatchedItems(span.Completions, text.Substring(atIndex + 1));
                             }
 
-                            Options.ScrollIntoView(SelectedItem);
+                            foreach (CompletionItem entry in span.Completions)
+                            {
+                                Items.Add(new Completion(entry, span.Start, span.Length));
+                            }
+
+                            PositionCompletions(span.Length);
+                            OnPropertyChanged(nameof(HasItems));
+
+                            if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
+                            {
+                                if (atIndex >= 0)
+                                {
+                                    SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(text.Substring(atIndex + 1))) ?? Items[0];
+                                }
+                                else
+                                {
+                                    SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
+                                }
+
+                                Options.ScrollIntoView(SelectedItem);
                             }
                         }));
                     });
