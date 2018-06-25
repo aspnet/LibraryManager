@@ -395,10 +395,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     Files = SelectedFiles.ToList()
                 };
 
+                await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                 EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
                 project?.AddFileToProjectAsync(_configFileName);
-
-                await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
                 RunningDocumentTable rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
                 string configFilePath = Path.GetFullPath(_configFileName);
