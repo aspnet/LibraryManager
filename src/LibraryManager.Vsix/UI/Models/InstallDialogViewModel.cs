@@ -450,26 +450,23 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 {
                     JSONArray jsonArray = libraries.Children.OfType<JSONArray>().First();
 
-                    if (jsonArray != null)
+                    string newLibrary = GetLibraryToBeInserted(libraryInstallationState);
+                    bool containsLibrary = jsonArray.BlockItemChildren.Any();
+
+                    if (containsLibrary)
                     {
-                        string newLibrary = GetLibraryToBeInserted(libraryInstallationState);
-                        bool containsLibrary = jsonArray.BlockItemChildren.Any();
+                        insertionText = _commaDelimiter + Environment.NewLine + newLibrary + Environment.NewLine;
+                    }
+                    else
+                    {
+                        insertionText = newLibrary + Environment.NewLine;
+                    }
 
-                        if (containsLibrary)
-                        {
-                            insertionText = _commaDelimiter + Environment.NewLine + newLibrary + Environment.NewLine;
-                        }
-                        else
-                        {
-                            insertionText = newLibrary + Environment.NewLine;
-                        }
+                    int insertionIndex = libraries.AfterEnd - 1;
 
-                        int insertionIndex = libraries.AfterEnd - 1;
-
-                        if (insertionIndex > 0)
-                        {
-                            FormatSelection(textBuffer, insertionIndex, insertionText);
-                        }
+                    if (insertionIndex > 0)
+                    {
+                        FormatSelection(textBuffer, insertionIndex, insertionText);
                     }
                 }
             }
