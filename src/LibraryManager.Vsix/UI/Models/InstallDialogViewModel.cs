@@ -528,7 +528,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
             if (document != null)
             {
-                IEnumerable<JSONMember> jsonMembers = document.JSONDocument.TopLevelValue?.FindType<JSONObject>().Children?.OfType<JSONMember>();
+                IEnumerable<JSONMember> jsonMembers = document.JSONDocument.TopLevelValue.FindType<JSONObject>().Children.OfType<JSONMember>();
 
                 return jsonMembers.FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Libraries);
             }
