@@ -155,8 +155,8 @@ namespace Microsoft.Web.LibraryManager.Test
             var manifest = Manifest.FromJson(_doc, _dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual(0, result.Count(v => v.Success));
+            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(1, result.Count(v => v.Success));
             Assert.AreEqual(1, result.Count(v => !v.Success));
             Assert.AreEqual("LIB002", result.Last().Errors.First().Code);
         }

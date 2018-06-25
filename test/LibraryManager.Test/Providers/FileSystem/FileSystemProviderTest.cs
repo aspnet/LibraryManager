@@ -254,7 +254,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 
             ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB005", result.Errors[0].Code);
+            Assert.AreEqual(result.Errors.Count(), 2);
+            Assert.AreEqual("LIB002", result.Errors[0].Code);
+            Assert.AreEqual("LIB005", result.Errors[1].Code);
         }
 
         [TestMethod]
