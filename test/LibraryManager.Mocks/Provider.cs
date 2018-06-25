@@ -100,17 +100,5 @@ namespace Microsoft.Web.LibraryManager.Mocks
         {
             return library?.Name;
         }
-
-        /// <summary>
-        /// Parses a libraryId into a an ILibrary 
-        /// </summary>
-        /// <param name="libraryId"></param>
-        /// <returns></returns>
-        public ILibrary ParseLibraryIdentifier(string libraryId)
-        {
-            string[] parts = libraryId.Split('@');
-
-            return new Library { Name = parts[0], Version = parts[1], ProviderId = Id };
-        }
     }
 }

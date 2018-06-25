@@ -19,13 +19,11 @@ namespace Microsoft.Web.LibraryManager
     public static class Extensions
     {
         /// <summary>
-        /// Returns true if the <see cref="ILibraryInstallationState"/> is valid.
+        /// Validates <see cref="ILibraryInstallationState"/> 
         /// </summary>
-        /// <param name="state">The state to test.</param>
-        /// <param name="dependencies"></param>
-        /// <returns>
-        ///   <c>true</c> if the specified state is valid; otherwise, <c>false</c>.
-        /// </returns>
+        /// <param name="state">The <see cref="ILibraryInstallationState"/> to validate.</param>
+        /// <param name="dependencies">The <see cref="IDependencies"/> used to validate <see cref="ILibraryInstallationState"/></param>
+        /// <returns><see cref="ILibraryOperationResult"/> with the result of the validation</returns>
         public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IDependencies dependencies)
         {
             var errors = new List<IError>();
@@ -64,11 +62,11 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// 
+        ///  Validates <see cref="ILibraryInstallationState"/> 
         /// </summary>
-        /// <param name="state"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
+        /// <param name="state">The <see cref="ILibraryInstallationState"/> to validate.</param>
+        /// <param name="provider">The <see cref="IProvider"/> used to validate <see cref="ILibraryInstallationState"/></param>
+        /// <returns><see cref="ILibraryOperationResult"/> with the result of the validation</returns>
         public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IProvider provider)
         {
             var errors = new List<IError>();
@@ -100,6 +98,10 @@ namespace Microsoft.Web.LibraryManager
                 {
                     errors.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
                 }
+            }
+            else
+            {
+                errors.Add(PredefinedErrors.ManifestMalformed());
             }
 
             if (errors.Any())
