@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryManager.Build
 
             using (Stream stream = content.Invoke())
             {
-                if (stream == null || !await FileHelpers.WriteToFileAsync(absolutePath.FullName, stream, cancellationToken).ConfigureAwait(false))
+                if (stream == null || !await FileHelpers.SafeWriteToFileAsync(absolutePath.FullName, stream, cancellationToken).ConfigureAwait(false))
                 {
                     return false;
                 }

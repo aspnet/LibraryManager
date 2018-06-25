@@ -49,7 +49,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             Manifest manifest = await GetManifestAsync();
 
-            IEnumerable<ILibraryInstallationState> installedLibraries = await ValidateParametersAndGetLibrariesToUninstallAsync(manifest, CancellationToken.None);
+            IEnumerable<ILibraryInstallationState> installedLibraries = ValidateParametersAndGetLibrariesToUninstall(manifest);
 
             if (installedLibraries == null || !installedLibraries.Any())
             {
@@ -91,9 +91,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return 0;
         }
 
-        private async Task<IEnumerable<ILibraryInstallationState>> ValidateParametersAndGetLibrariesToUninstallAsync(
-            Manifest manifest,
-            CancellationToken cancellationToken)
+        private IEnumerable<ILibraryInstallationState> ValidateParametersAndGetLibrariesToUninstall(
+            Manifest manifest)
         {
             var errors = new List<string>();
             if (string.IsNullOrWhiteSpace(LibraryId.Value))
@@ -116,11 +115,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new InvalidOperationException(string.Join(Environment.NewLine, errors));
             }
 
-            return await LibraryResolver.ResolveAsync(LibraryId.Value,
+            return LibraryResolver.Resolve(LibraryId.Value,
                 manifest,
-                ManifestDependencies,
-                provider,
-                cancellationToken);
+                provider);
         }
 
         public override string Remarks => Resources.UnInstallCommandRemarks;
