@@ -380,7 +380,7 @@ namespace Microsoft.Web.LibraryManager
                 }
             }
 
-            return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(library.LibraryId)); ;
+            return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(library.LibraryId));
         }
 
         /// <summary>
