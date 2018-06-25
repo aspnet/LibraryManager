@@ -372,13 +372,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     manifest.Version = Manifest.SupportedVersions.Max().ToString();
                 }
 
-                manifest.AddLibrary(new LibraryInstallationState
+                LibraryInstallationState libraryInstallationState = new LibraryInstallationState
                 {
                     LibraryId = PackageId,
                     ProviderId = selectedPackage.ProviderId,
                     DestinationPath = InstallationFolder.DestinationFolder,
-                    Files = SelectedFiles.ToList()
-                });
+                };
+
+                // When "Include all files" option is checked, we don't want to write out the files to libman.json.
+                // We will only list the files when user chose to install specific files.
+                if (LibraryFilesToInstall == FileSelectionType.ChooseSpecificFilesToInstall)
+                {
+                    libraryInstallationState.Files = SelectedFiles.ToList();
+                }
+
+                manifest.AddLibrary(libraryInstallationState);
 
                 await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
 
