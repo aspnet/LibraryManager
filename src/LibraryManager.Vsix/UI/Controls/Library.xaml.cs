@@ -205,7 +205,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             string text = Text;
             int caretIndex = text.Length;
-            int at = text.IndexOf('@');
+            int atIndex = text.IndexOf('@');
             Func<string, int, Task<CompletionSet>> searchService = SearchService;
             Task.Delay(250).ContinueWith(d => 
             {
@@ -227,31 +227,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
                         Dispatcher.BeginInvoke((Action)(() =>
                         {
-                            if (Volatile.Read(ref _version) != expect || span.Completions == null)
+                        if (Volatile.Read(ref _version) != expect || span.Completions == null)
+                        {
+                            return;
+                        }
+
+                        Items.Clear();
+
+                        if (atIndex >= 0)
+                        {
+                            span.Completions = FilterOutUnmatchedItems(span.Completions, text.Substring(atIndex + 1));
+                        }
+
+                        foreach (CompletionItem entry in span.Completions)
+                        {
+                            Items.Add(new Completion(entry, span.Start, span.Length));
+                        }
+
+                        PositionCompletions(span.Length);
+                        OnPropertyChanged(nameof(HasItems));
+
+                        if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
+                        {
+                            if (atIndex >= 0)
                             {
-                                return;
+                                SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(text.Substring(atIndex + 1))) ?? Items[0];
+                            }
+                            else
+                            {
+                                SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
                             }
 
-                            Items.Clear();
-
-                            if (at >= 0)
-                            {
-                                FilterOutUnmatchedItems(ref span.Completions, text.Substring(at + 1));
-                            }
-
-                            foreach (CompletionItem entry in span.Completions)
-                            {
-                                Items.Add(new Completion(entry, span.Start, span.Length));
-                            }
-
-                            PositionCompletions(span.Length);
-                            OnPropertyChanged(nameof(HasItems));
-
-                            if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
-                            {
-                                SelectedItem = ((at >= 0) ? Items.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(text.Substring(at + 1))) : Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected)) ?? Items[0];
-
-                                Options.ScrollIntoView(SelectedItem);
+                            Options.ScrollIntoView(SelectedItem);
                             }
                         }));
                     });
@@ -267,9 +274,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
         }
 
-        private void FilterOutUnmatchedItems(ref IEnumerable<CompletionItem>items, string versionPrefix)
+        private IEnumerable<CompletionItem> FilterOutUnmatchedItems(IEnumerable<CompletionItem>items, string versionSuffix)
         {
-            items = items.Where(x => x.DisplayText.Contains(versionPrefix));
+            return items.Where(x => x.DisplayText.Contains(versionSuffix));
         }
     }
 }
