@@ -464,7 +464,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                             insertionText = newLibrary + Environment.NewLine;
                         }
 
-                        int insertionIndex = FindInsertionIndex(textBuffer);
+                        int insertionIndex = libraries.AfterEnd - 1;
 
                         if (insertionIndex > 0)
                         {
@@ -526,20 +526,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
 
             return null;
-        }
-
-        private int FindInsertionIndex(ITextBuffer textBuffer)
-        {
-            int insertionIndex = -1;
-
-            JSONMember libraries = GetLibraries(textBuffer);
-
-            if (libraries != null)
-            {
-                insertionIndex = libraries.AfterEnd - 1;
-            }
-
-            return insertionIndex;
         }
 
         private string GetLibraryToBeInserted(LibraryInstallationState libraryInstallationState)
