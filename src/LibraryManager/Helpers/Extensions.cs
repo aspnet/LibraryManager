@@ -50,6 +50,10 @@ namespace Microsoft.Web.LibraryManager
                     }
                 }
             }
+            else
+            {
+                errors.Add(PredefinedErrors.ManifestMalformed());
+            }
 
             if (errors.Any())
             {
@@ -92,7 +96,7 @@ namespace Microsoft.Web.LibraryManager
                 {
                     errors.Add(PredefinedErrors.PathIsUndefined());
                 }
-                else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+                else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
                 {
                     errors.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
                 }
