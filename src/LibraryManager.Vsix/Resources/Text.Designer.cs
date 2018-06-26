@@ -106,7 +106,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Disable Restore on Build.
+        ///   Looks up a localized string similar to Disabl&amp;e Restore on Build.
         /// </summary>
         public static string DisableRestoreOnBuild {
             get {
