@@ -26,6 +26,9 @@
     <Reference Include="Microsoft.JSON.Editor">
       <HintPath>..\..\lib\Microsoft.JSON.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.JSON.Package">
+      <HintPath>..\..\lib\Microsoft.VisualStudio.JSON.Package.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
