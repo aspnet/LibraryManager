@@ -66,7 +66,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (item != null && item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
-                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
+                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive && !_libraryCommandService.IsOperationInProgress;
             }
         }
 
@@ -74,7 +74,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             ProjectItem configProjectItem = await VsHelpers.GetSelectedItemAsync();
 
-            if (!_libraryCommandService.IsOperationInProgress && configProjectItem != null)
+            if (configProjectItem != null)
             {
                 await _libraryCommandService.RestoreAsync(configProjectItem.FileNames[1], CancellationToken.None);
             }

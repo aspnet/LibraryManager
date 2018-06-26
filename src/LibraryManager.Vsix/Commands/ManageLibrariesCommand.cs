@@ -15,13 +15,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal sealed class ManageLibrariesCommand
     {
         private readonly Package _package;
+        private readonly ILibraryCommandService _libraryCommandService;
 
-        private ManageLibrariesCommand(Package package, OleMenuCommandService commandService)
+        private ManageLibrariesCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
             _package = package;
+            _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.ManageLibraries);
             var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
+            cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);
         }
 
@@ -29,9 +32,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private IServiceProvider ServiceProvider => _package;
 
-        public static void Initialize(Package package, OleMenuCommandService commandService)
+        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            Instance = new ManageLibrariesCommand(package, commandService);
+            Instance = new ManageLibrariesCommand(package, commandService, libraryCommandService);
         }
 
         private void BeforeQueryStatus(object sender, EventArgs e)
@@ -39,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             var button = (OleMenuCommand)sender;
 
             button.Visible = true;
-            button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
+            button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive && !_libraryCommandService.IsOperationInProgress;
         }
 
         private async void ExecuteHandlerAsync(object sender, EventArgs e)
