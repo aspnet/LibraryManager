@@ -49,7 +49,6 @@
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <ButtonText>Enable Restore Client-Side Libraries on Build...</ButtonText>
-          <MenuText>&amp;Enable Restore Client-Side Libraries on Build...</MenuText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>
