@@ -46,6 +46,7 @@
         <Parent guid="guidLibraryManagerPackageCmdSet" id="ConfigMenuGruop" />
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <ButtonText>Enable Restore Client-Side Libraries on Build...</ButtonText>
           <MenuText>&amp;Enable Restore Client-Side Libraries on Build...</MenuText>
