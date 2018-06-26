@@ -20,9 +20,6 @@
     <XliffResource Include="MultilingualResources\*.xlf" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Providers\Unpkg\UnpkgLibraryId.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="System.ValueTuple" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
     <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />

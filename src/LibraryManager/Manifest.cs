@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -220,13 +221,13 @@ namespace Microsoft.Web.LibraryManager
             ILibraryOperationResult validationResult = await desiredState.IsValidAsync(_dependencies);
             if (!validationResult.Success)
             {
-                return new List<ILibraryOperationResult> { validationResult };
+                return new [] { validationResult };
             }
 
             IProvider provider = _dependencies.GetProvider(desiredState.ProviderId);
             if (provider == null)
             {
-                return new List<ILibraryOperationResult> { new LibraryOperationResult(desiredState, new IError[] { PredefinedErrors.ProviderUnknown(desiredState.ProviderId) })};
+                return new [] { new LibraryOperationResult(desiredState, new IError[] { PredefinedErrors.ProviderUnknown(desiredState.ProviderId) })};
             }
 
             IEnumerable<ILibraryOperationResult> conflictResults = await CheckLibraryForConflictsAsync(desiredState, cancellationToken).ConfigureAwait(false);
@@ -243,7 +244,7 @@ namespace Microsoft.Web.LibraryManager
                 _libraries.Add(desiredState);
             }
 
-            return new List<ILibraryOperationResult> { result };
+            return new [] { result };
         }
 
         private async Task<IEnumerable<ILibraryOperationResult>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
@@ -475,59 +476,59 @@ namespace Microsoft.Web.LibraryManager
         private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(IEnumerable<ILibraryInstallationState> libraries)
         {
             var files = new List<FileIdentifier>();
+            var tasks = new List<Task<IEnumerable<FileIdentifier>>>();
 
             if (libraries != null)
             {
                 foreach (ILibraryInstallationState state in libraries)
                 {
-                    ILibraryOperationResult validationResult = await state.IsValidAsync(_dependencies);
-                    if (validationResult.Success)
-                    {
-                        IProvider provider = _dependencies.GetProvider(state.ProviderId);
-
-                        if (provider != null)
-                        {
-                            ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
-
-                            if (updatedStateResult.Success)
-                            {
-                                IEnumerable<FileIdentifier> stateFiles = await GetFilesWithVersionsAsync(updatedStateResult.InstallationState).ConfigureAwait(false);
-
-                                foreach (FileIdentifier fileIdentifier in stateFiles)
-                                {
-                                    if (!files.Contains(fileIdentifier))
-                                    {
-                                        files.Add(fileIdentifier);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    tasks.Add(GetFilesWithVersionsAsync(state));
                 }
+
+                IEnumerable<FileIdentifier>[] allFiles = await Task.WhenAll(tasks).ConfigureAwait(false);
+                files = allFiles.SelectMany(f => f).Distinct().ToList();
             }
 
-            return files;
+           return files;
         }
 
         private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
         {
-            ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
             IEnumerable<FileIdentifier> filesWithVersions = new List<FileIdentifier>();
+            ILibraryCatalog catalog = _dependencies.GetProvider(state.ProviderId)?.GetCatalog();
 
             if (catalog == null)
             {
                 return filesWithVersions;
             }
 
-            ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None).ConfigureAwait(false);
-
-            if (library != null && library.Files != null)
+            ILibraryOperationResult validationResult = await state.IsValidAsync(_dependencies).ConfigureAwait(false);
+            if (validationResult.Success)
             {
-                IEnumerable<string> desiredStateFiles = state?.Files?.Where(f => library.Files.Keys.Contains(f));
-                if (desiredStateFiles != null && desiredStateFiles.Any())
+                IProvider provider = _dependencies.GetProvider(state.ProviderId);
+
+                if (provider != null)
                 {
-                    filesWithVersions = desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
+                    ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
+
+                    if (updatedStateResult.Success)
+                    {
+                        ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None).ConfigureAwait(false);
+
+                        if (library != null && library.Files != null)
+                        {
+                            IEnumerable<string> desiredStateFiles = updatedStateResult.InstallationState.Files?.Where(f => library.Files.Keys.Contains(f));
+                            if (desiredStateFiles != null && desiredStateFiles.Any())
+                            {
+                                filesWithVersions = desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
+                            }
+                        }
+                    }
                 }
+            }
+            else
+            {
+                Debug.Assert(validationResult.Success);
             }
 
             return filesWithVersions;

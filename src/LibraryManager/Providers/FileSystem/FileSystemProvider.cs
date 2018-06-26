@@ -69,12 +69,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
-            ILibraryOperationResult validationResult = await desiredState.IsValidAsync(this);
-            if (!validationResult.Success)
-            {
-                return validationResult;
-            }
-
             try
             {
                 ILibraryOperationResult result = await UpdateStateAsync(desiredState, cancellationToken);

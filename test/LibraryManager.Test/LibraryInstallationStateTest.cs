@@ -136,6 +136,23 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
+        public async Task IsValidAsync_State_HasUnknownLibraryFile()
+        {
+            var state = new Mocks.LibraryInstallationState
+            {
+                ProviderId = "unpkg",
+                LibraryId = "jquery@3.3.1",
+                DestinationPath = "_path_",
+                Files = new List<string>() { "a", "b" },
+            };
+
+            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+
+            // No validation for library files!
+            Assert.IsFalse(result.Success);
+        }
+
+        [TestMethod]
         public async Task IsValidAsync_State_FileSystem_LibraryIdHasInvalidPathCharacters()
         {
             var state = new Mocks.LibraryInstallationState
@@ -183,6 +200,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
 
+            // FileSystemProvider supports renaming, therefore validation does not fail
             Assert.IsTrue(result.Success);
         }
 

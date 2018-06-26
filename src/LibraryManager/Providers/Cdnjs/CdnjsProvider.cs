@@ -85,12 +85,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
-            ILibraryOperationResult validationResult = await desiredState.IsValidAsync(this);
-            if (!validationResult.Success)
-            {
-                return validationResult;
-            }
-
             //Expand the files property if needed
             ILibraryOperationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
             if (!updateResult.Success)
@@ -239,11 +233,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
-
-            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(version))
+            if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
             {
-                string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
+                string absolute = Path.Combine(CacheFolder, state.Name, state.Version, sourceFile);
 
                 if (File.Exists(absolute))
                 {
@@ -271,17 +263,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
-
-                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(version))
+                if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
                 {
-                    string libraryDir = Path.Combine(CacheFolder, name);
+                    string libraryDir = Path.Combine(CacheFolder, state.Name);
                     List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
 
                     foreach (string sourceFile in state.Files)
                     {
-                        string cacheFile = Path.Combine(libraryDir, version, sourceFile);
-                        string url = string.Format(_downloadUrlFormat, name, version, sourceFile);
+                        string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
+                        string url = string.Format(_downloadUrlFormat, state.Name, state.Version, sourceFile);
 
                         CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
                         if (!librariesMetadata.Contains(newEntry))
@@ -315,11 +305,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             try
             {
-                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
-
-                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(version))
+                if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
                 {
-                    string cacheDir = Path.Combine(CacheFolder, name, version);
+                    string cacheDir = Path.Combine(CacheFolder, state.Name, state.Version);
                     string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
 
                     foreach (string sourceFile in state.Files)

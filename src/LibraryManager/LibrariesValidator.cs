@@ -46,14 +46,14 @@ namespace Microsoft.Web.LibraryManager
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            IEnumerable<ILibraryOperationResult> validateLibraries = await ValidatePropertiesAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryOperationResult> validateLibraries = await ValidatePropertiesAsync(libraries, cancellationToken).ConfigureAwait(false);
 
             if (!validateLibraries.All(t => t.Success))
             {
                 return validateLibraries;
             }
 
-            IEnumerable<ILibraryOperationResult> expandLibraries= await ExpandLibrariesAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryOperationResult> expandLibraries= await ExpandLibrariesAsync(libraries, cancellationToken).ConfigureAwait(false);
             if (!expandLibraries.All(t => t.Success))
             {
                 return expandLibraries;
@@ -80,7 +80,7 @@ namespace Microsoft.Web.LibraryManager
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ILibraryOperationResult result = await library.IsValidAsync(_dependencies);
+                ILibraryOperationResult result = await library.IsValidAsync(_dependencies).ConfigureAwait(false);
                 if (!result.Success)
                 {
                     validationStatus.Add(result);

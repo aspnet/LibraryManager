@@ -50,12 +50,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
-            ILibraryOperationResult validationResult = await desiredState.IsValidAsync(this);
-            if (!validationResult.Success)
-            {
-                return validationResult;
-            }
-
             //Expand the files property if needed
             ILibraryOperationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
             if (!updateResult.Success)
@@ -111,17 +105,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             var tasks = new List<Task>();
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
-
-            string libraryDir = Path.Combine(CacheFolder, name);
+            string libraryDir = Path.Combine(CacheFolder, state.Name);
 
             try
             {
                     List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
                     foreach (string sourceFile in state.Files)
                     {
-                        string cacheFile = Path.Combine(libraryDir, version, sourceFile);
-                        string url = string.Format(DownloadUrlFormat, name, version, sourceFile);
+                        string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
+                        string url = string.Format(DownloadUrlFormat, state.Name, state.Version, sourceFile);
 
                         CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
                         if (!librariesMetadata.Contains(newEntry))
@@ -151,9 +143,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private bool IsLibraryUpToDate(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
-
-            string cacheDir = Path.Combine(CacheFolder, name, version);
+            string cacheDir = Path.Combine(CacheFolder, state.Name, state.Version);
             string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
 
             try
@@ -221,9 +211,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(state.LibraryId);
-
-            string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
+            string absolute = Path.Combine(CacheFolder, state.Name, state.Version, sourceFile);
 
             if (File.Exists(absolute))
             {

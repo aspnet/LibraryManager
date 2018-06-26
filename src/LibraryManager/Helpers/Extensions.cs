@@ -26,39 +26,23 @@ namespace Microsoft.Web.LibraryManager
         /// <returns><see cref="ILibraryOperationResult"/> with the result of the validation</returns>
         public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IDependencies dependencies)
         {
-            var errors = new List<IError>();
-
-            if (state != null)
+            if (state == null)
             {
-                if (string.IsNullOrEmpty(state.ProviderId))
-                {
-                    errors.Add(PredefinedErrors.ProviderIsUndefined());
-                }
-                else
-                {
-                    IProvider provider = dependencies.GetProvider(state.ProviderId);
-                    if (provider == null)
-                    {
-                        errors.Add(PredefinedErrors.ProviderUnknown(state.ProviderId));
-                    }
-                    else
-                    {
-                        ILibraryOperationResult result = await IsValidAsync(state, provider);
-                        errors.AddRange(result.Errors);
-                    }
-                }
-            }
-            else
-            {
-                errors.Add(PredefinedErrors.ManifestMalformed());
+                return LibraryOperationResult.FromError(PredefinedErrors.UnknownError());
             }
 
-            if (errors.Any())
+            if (string.IsNullOrEmpty(state.ProviderId))
             {
-                return new LibraryOperationResult(errors.ToArray());
+                return LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined());
             }
 
-            return LibraryOperationResult.FromSuccess(state);
+            IProvider provider = dependencies.GetProvider(state.ProviderId);
+            if (provider == null)
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.ProviderUnknown(state.ProviderId));
+            }
+
+            return await IsValidAsync(state, provider).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -69,44 +53,39 @@ namespace Microsoft.Web.LibraryManager
         /// <returns><see cref="ILibraryOperationResult"/> with the result of the validation</returns>
         public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IProvider provider)
         {
-            var errors = new List<IError>();
-
-            if (state != null && provider != null)
+            if (state == null)
             {
-                if (string.IsNullOrEmpty(state.LibraryId))
-                {
-                    errors.Add(PredefinedErrors.LibraryIdIsUndefined());
-                }
-                else
-                {
-                    ILibraryCatalog catalog = provider.GetCatalog();
-                    try
-                    {
-                        await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
-                    }
-                    catch
-                    {
-                        errors.Add(PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id));
-                    }
-                }
-
-                if (string.IsNullOrEmpty(state.DestinationPath))
-                {
-                    errors.Add(PredefinedErrors.PathIsUndefined());
-                }
-                else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-                {
-                    errors.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
-                }
-            }
-            else
-            {
-                errors.Add(PredefinedErrors.ManifestMalformed());
+                return LibraryOperationResult.FromError(PredefinedErrors.UnknownError());
             }
 
-            if (errors.Any())
+            if (provider == null)
             {
-                return new LibraryOperationResult(errors.ToArray());
+                return LibraryOperationResult.FromError(PredefinedErrors.ProviderUnknown(provider.Id));
+            }
+
+            if (string.IsNullOrEmpty(state.LibraryId))
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.LibraryIdIsUndefined());
+            }
+
+            ILibraryCatalog catalog = provider.GetCatalog();
+            try
+            {
+                await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None).ConfigureAwait(false);
+            }
+            catch
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id));
+            }
+
+            if (string.IsNullOrEmpty(state.DestinationPath))
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.PathIsUndefined());
+            }
+
+            if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
             }
 
             return LibraryOperationResult.FromSuccess(state);
