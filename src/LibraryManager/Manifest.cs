@@ -462,8 +462,8 @@ namespace Microsoft.Web.LibraryManager
                     tasks.Add(GetFilesWithVersionsAsync(state));
                 }
 
-                IEnumerable<FileIdentifier>[] allFiles = await Task.WhenAll(tasks).ConfigureAwait(false);
-                files = allFiles.SelectMany(f => f).Distinct().ToList();
+                List<IEnumerable<FileIdentifier>> allFiles = await Task.WhenAll(tasks).ConfigureAwait(false);
+                files = allFiles.SelectMany(f => f).Distinct();
             }
 
            return files;
@@ -494,7 +494,7 @@ namespace Microsoft.Web.LibraryManager
 
                         if (library != null && library.Files != null)
                         {
-                            IEnumerable<string> desiredStateFiles = updatedStateResult.InstallationState.Files?.Where(f => library.Files.Keys.Contains(f));
+                            IEnumerable<string> desiredStateFiles = updatedStateResult.InstallationState.Files;
                             if (desiredStateFiles != null && desiredStateFiles.Any())
                             {
                                 filesWithVersions = desiredStateFiles.Select(f => new FileIdentifier(Path.Combine(state.DestinationPath, f), library.Version));
