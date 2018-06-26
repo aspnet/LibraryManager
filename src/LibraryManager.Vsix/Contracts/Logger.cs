@@ -216,14 +216,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static string GetLibraryId(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation)
         {
-            if (totalResults != null && totalResults.Any())
+            if (operation == OperationType.Uninstall || operation == OperationType.Upgrade)
             {
-                if (operation == OperationType.Uninstall || operation == OperationType.Upgrade)
+                if (totalResults != null && totalResults.Count() == 1)
                 {
-                    if (totalResults != null && totalResults.Count() == 1)
-                    {
-                        return totalResults.First().InstallationState.LibraryId;
-                    }
+                    return totalResults.First().InstallationState.LibraryId;
                 }
             }
 

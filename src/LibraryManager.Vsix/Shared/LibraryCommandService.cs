@@ -68,7 +68,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(new[] { configFilePath }, cancellationToken);
 
-            if (manifests.Any())
+            if (manifests.Count > 0)
             {
                 await RestoreAsync(manifests, cancellationToken);
             }
