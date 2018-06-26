@@ -162,12 +162,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 string configFileName = configProjectItem.FileNames[1];
                 var dependencies = Dependencies.FromConfigFile(configFileName);
+                Project project = VsHelpers.GetDTEProjectFromConfig(configFileName);
+
                 Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
                 IHostInteraction hostInteraction = dependencies.GetHostInteractions();
                 IEnumerable<ILibraryOperationResult> results = await manifest.CleanAsync(async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
 
                 sw.Stop();
 
+                AddErrorsToErrorList(project?.Name, configFileName, results);
                 Logger.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
             }
             catch (OperationCanceledException)
