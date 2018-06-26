@@ -452,7 +452,6 @@ namespace Microsoft.Web.LibraryManager
 
         private async Task<IEnumerable<FileIdentifier>> GetAllManifestFilesWithVersionsAsync(IEnumerable<ILibraryInstallationState> libraries)
         {
-            var files = new List<FileIdentifier>();
             var tasks = new List<Task<IEnumerable<FileIdentifier>>>();
 
             if (libraries != null)
@@ -462,11 +461,12 @@ namespace Microsoft.Web.LibraryManager
                     tasks.Add(GetFilesWithVersionsAsync(state));
                 }
 
-                List<IEnumerable<FileIdentifier>> allFiles = await Task.WhenAll(tasks).ConfigureAwait(false);
-                files = allFiles.SelectMany(f => f).Distinct();
+                IEnumerable<FileIdentifier>[] allFiles = await Task.WhenAll(tasks).ConfigureAwait(false);
+
+                return allFiles.SelectMany(f => f).Distinct();
             }
 
-           return files;
+           return new List<FileIdentifier>();
         }
 
         private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
