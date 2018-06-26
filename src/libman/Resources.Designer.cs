@@ -518,7 +518,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than one library found with id &quot;{0}&quot;.
+        ///   Looks up a localized string similar to More than one library found with name &quot;{0}&quot;.
         /// </summary>
         internal static string MoreThanOneLibraryFoundToUpdate {
             get {
@@ -536,7 +536,8 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No library found with id &quot;{0}&quot; to update.
+        ///   Looks up a localized string similar to No library found with name &quot;{0}&quot; to update.
+        ///Please specify a library name without the version information to update..
         /// </summary>
         internal static string NoLibraryFoundToUpdate {
             get {
@@ -741,8 +742,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         
         /// <summary>
         ///   Looks up a localized string similar to     libman update jquery 
-        ///    libman update jquery --to jquery@3.3.1
-        ///    libman update jquery@2.2.0
+        ///    libman update jquery --to 3.3.1
         ///    libman update jquery -pre 
         ///.
         /// </summary>
@@ -753,7 +753,7 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library to update.
+        ///   Looks up a localized string similar to Name of the library to update (without the version)..
         /// </summary>
         internal static string UpdateCommandLibraryArgumentDesc {
             get {

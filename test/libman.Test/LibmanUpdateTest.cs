@@ -54,7 +54,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
 
-            int result = command.Execute("jquery@2.2.0");
+            int result = command.Execute("jquery");
 
             Assert.AreEqual(0, result);
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
@@ -77,6 +77,54 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ]
 }";
             Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
+        }
+
+        [TestMethod]
+        public void TestUpdateCommand_InvalidLibraryName()
+        {
+            var command = new UpdateCommand(HostEnvironment);
+            command.Configure(null);
+
+            string contents = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""defaultDestination"": ""wwwroot"",
+  ""libraries"": [
+    {
+      ""library"": ""jquery@2.2.0"",
+      ""files"": [
+        ""jquery.min.js"",
+        ""jquery.js""
+      ]
+    }
+  ]
+}";
+
+            string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
+            File.WriteAllText(libmanjsonPath, contents);
+
+            var restoreCommand = new RestoreCommand(HostEnvironment);
+            restoreCommand.Configure(null);
+
+            restoreCommand.Execute();
+
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
+
+            int result = command.Execute("jquery@2.2.0");
+
+            Assert.AreEqual(0, result);
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
+
+            var logger = HostEnvironment.Logger as TestLogger;
+            string message = "No library found with name \"jquery@2.2.0\" to update.\r\nPlease specify a library name without the version information to update.";
+
+            Assert.AreEqual(StringHelper.NormalizeNewLines(message), StringHelper.NormalizeNewLines(logger.Messages.Last().Value));
+
+            string actualText = File.ReadAllText(libmanjsonPath);
+
+            Assert.AreEqual(StringHelper.NormalizeNewLines(contents), StringHelper.NormalizeNewLines(actualText));
         }
 
         [TestMethod]
@@ -156,8 +204,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.AreEqual(StringHelper.NormalizeNewLines(contents), StringHelper.NormalizeNewLines(actualText));
 
             var logger = HostEnvironment.Logger as TestLogger;
+            string message = "No library found with name \"jqu\" to update.\r\nPlease specify a library name without the version information to update.";
 
-            Assert.AreEqual("No library found with id \"jqu\" to update", logger.Messages.Last().Value);
+            Assert.AreEqual(StringHelper.NormalizeNewLines(message), StringHelper.NormalizeNewLines(logger.Messages.Last().Value));
         }
 
         [TestMethod]
@@ -189,7 +238,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
 
-            int result = command.Execute("jquery@2.2.0", "--to", "jquery@2.2.1");
+            int result = command.Execute("jquery", "--to", "2.2.1");
 
             Assert.AreEqual(0, result);
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
@@ -243,7 +292,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
 
-            int result = command.Execute("jquery@2.2.0", "--to", "twitter-bootstrap@4.0.0");
+            int result = command.Execute("jquery", "--to", "twitter-bootstrap@4.0.0");
 
             Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
@@ -256,7 +305,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             Assert.AreEqual(LogLevel.Error, logger.Messages.Last().Key);
 
-            string expectedMessage = "Failed to update \"jquery@2.2.0\" to \"twitter-bootstrap@4.0.0\"";
+            string expectedMessage = "Failed to update \"jquery\" to \"twitter-bootstrap@4.0.0\"";
 
             Assert.IsTrue(logger.Messages.Any(m => m.Value == expectedMessage));
         }

@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -58,19 +60,22 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             new CompletionController(textViewAdapter, textView, CompletionBroker);
 
-
             _dependencies = Dependencies.FromConfigFile(doc.FilePath);
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
             _manifestPath = doc.FilePath;
             _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);
 
-            if (_manifest == null)
-            {
-                AddErrorToList(PredefinedErrors.ManifestMalformed());
-            }
-
             doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
+
+            Task.Run(async () =>
+            {
+                IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                if (!results.All(r => r.Success))
+                {
+                    AddErrorsToList(results);
+                }
+            });
         }
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
@@ -89,14 +94,19 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                     try
                     {
                         Manifest newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
+                        IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
 
-                        if (newManifest != null)
+                        if (!results.All(r => r.Success))
+                        {
+                            AddErrorsToList(results);
+                        }
+                        else
                         {
                             if (await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
                             {
                                 _manifest = newManifest;
 
-                               await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                                 Telemetry.TrackOperation("restoresave");
                             }
                             else
@@ -104,12 +114,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                                 string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
                                 Logger.LogEvent(textMessage, LogLevel.Task);
                             }
-                        }
-                        else
-                        {
-                            // TO DO: Restore to previous state
-                            // and add a warning to the Error List
-                            AddErrorToList(PredefinedErrors.ManifestMalformed());
                         }
                     }
                     catch (OperationCanceledException ex)
@@ -140,22 +144,23 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         {
             var view = (IWpfTextView)sender;
 
-            if (DocumentService.TryGetTextDocument(view.TextBuffer, out var doc))
+            if (DocumentService.TryGetTextDocument(view.TextBuffer, out ITextDocument doc))
             {
                 doc.FileActionOccurred -= OnFileSaved;
+                view.Closed -= OnViewClosed;
             }
 
             _errorList?.ClearErrors();
         }
 
-        private void AddErrorToList(IError error)
+        private void AddErrorsToList(IEnumerable<ILibraryOperationResult> errors)
         {
             if (_errorList == null)
             {
                 _errorList = new ErrorList(_project?.Name, _manifestPath);
             }
 
-            _errorList.HandleError(error);
+            _errorList.HandleErrors(errors);
         }
     }
 }

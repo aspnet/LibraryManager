@@ -92,7 +92,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="json">A string of JSON in the correct format.</param>
         /// <param name="dependencies">The host provided dependencies.</param>
         /// <returns></returns>
-        public static Manifest FromJson(string json, IDependencies dependencies)
+        internal static Manifest FromJson(string json, IDependencies dependencies)
         {
             try
             {
@@ -154,18 +154,6 @@ namespace Microsoft.Web.LibraryManager
             }
         }
 
-        private static bool IsValidManifestVersion(string version)
-        {
-            try
-            {
-                return SupportedVersions.Contains(new Version(version));
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         /// <summary>
         /// Creates a deep copy of the manifest.
         /// </summary>
@@ -217,6 +205,7 @@ namespace Microsoft.Web.LibraryManager
             };
 
             UpdateLibraryProviderAndDestination(desiredState, DefaultProvider, DefaultDestination);
+
             if (!desiredState.IsValid(out IEnumerable<IError> errors))
             {
                 return new List<ILibraryOperationResult> { new LibraryOperationResult(desiredState, errors.ToArray()) };
@@ -249,9 +238,8 @@ namespace Microsoft.Web.LibraryManager
         {
             var libraries = new List<ILibraryInstallationState>(Libraries);
             libraries.Add(desiredState);
-            var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
 
-            IEnumerable<ILibraryOperationResult> fileConflicts = await conflictDetector.GetLibrariesErrorsAsync(libraries, cancellationToken).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> fileConflicts = await LibrariesValidator.GetLibrariesErrorsAsync(libraries, _dependencies, DefaultDestination, DefaultProvider, cancellationToken).ConfigureAwait(false);
 
             return fileConflicts;
         }
@@ -288,35 +276,19 @@ namespace Microsoft.Web.LibraryManager
             //TODO: This should have an "undo scope"
             var results = new List<ILibraryOperationResult>();
 
-            if (!IsValidManifestVersion(Version))
-            {
-                return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.VersionIsNotSupported(Version)) };
-            }
+            IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(this, _dependencies, cancellationToken).ConfigureAwait(false);
 
-            IEnumerable<ILibraryOperationResult> validationResults = await ValidateLibrariesAsync(cancellationToken).ConfigureAwait(false);
             if (!validationResults.All(r => r.Success))
             {
                 return validationResults;
             }
+
             foreach (ILibraryInstallationState state in Libraries)
             {
                 results.Add(await RestoreLibraryAsync(state, cancellationToken).ConfigureAwait(false));
             }
 
             return results;
-        }
-
-
-        /// <summary>
-        /// // Validates each individual library and check for invalid properties and libraries conflicts
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        private async Task<IEnumerable<ILibraryOperationResult>> ValidateLibrariesAsync(CancellationToken cancellationToken)
-        {
-            var conflictDetector = new LibrariesValidator(_dependencies, DefaultDestination, DefaultProvider);
-
-            return await conflictDetector.GetLibrariesErrorsAsync(Libraries, cancellationToken).ConfigureAwait(false);
         }
 
         private async Task<ILibraryOperationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
@@ -358,7 +330,6 @@ namespace Microsoft.Web.LibraryManager
             {
                 return LibraryOperationResult.FromCancelled(library);
             }
-
 
             if (library != null)
             {
@@ -436,6 +407,13 @@ namespace Microsoft.Web.LibraryManager
         public async Task<IEnumerable<ILibraryOperationResult>> CleanAsync(Func<IEnumerable<string>, Task<bool>> deleteFileAction, CancellationToken cancellationToken)
         {
             var results = new List<ILibraryOperationResult>();
+
+            IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(this, _dependencies, cancellationToken).ConfigureAwait(false);
+
+            if (!validationResults.All(r => r.Success))
+            {
+                return validationResults;
+            }
 
             foreach (ILibraryInstallationState state in Libraries)
             {

@@ -169,6 +169,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 string configFileName = configProjectItem.FileNames[1];
                 var dependencies = Dependencies.FromConfigFile(configFileName);
+                Project project = VsHelpers.GetDTEProjectFromConfig(configFileName);
+
                 Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
                 IEnumerable<ILibraryOperationResult> results = new List<ILibraryOperationResult>();
 
@@ -180,6 +182,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 sw.Stop();
 
+                AddErrorsToErrorList(project?.Name, configFileName, results);
                 Logger.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
             }
             catch (OperationCanceledException)

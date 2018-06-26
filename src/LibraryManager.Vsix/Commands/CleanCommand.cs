@@ -68,12 +68,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             ProjectItem item = await VsHelpers.GetSelectedItemAsync();
 
-            if (!_libraryCommandService.IsOperationInProgress &&
-                item != null &&
+            if (item != null &&
                 item.Name.Equals(Constants.ConfigFileName, StringComparison.OrdinalIgnoreCase))
             {
                 button.Visible = true;
-                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
+                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive && !_libraryCommandService.IsOperationInProgress;
             }
         }
 

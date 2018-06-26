@@ -52,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
 
                 await VsHelpers.CheckFileOutOfSourceControlAsync(absolutePath.FullName);
-                await FileHelpers.WriteToFileAsync(absolutePath.FullName, stream, cancellationToken);
+                await FileHelpers.SafeWriteToFileAsync(absolutePath.FullName, stream, cancellationToken);
             }
 
             Logger.Log(string.Format(LibraryManager.Resources.Text.FileWrittenToDisk, relativePath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
