@@ -6,103 +6,53 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.Web.Editor.Completion;
 using Microsoft.VisualStudio.Text;
 using System.Diagnostics;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class LibraryIdCompletionEntry : SimpleCompletionEntry
     {
-        internal int Major { get; private set; }
-
-        internal int Minor { get; private set; }
-
-        internal int Patch { get; private set; }
-
-        internal bool IsValid { get; private set; }
+        internal string NameVersionText { get; private set; }
 
         public LibraryIdCompletionEntry(string displayText, string insertionText, ImageMoniker moniker, IIntellisenseSession session)
             : base(displayText, insertionText, moniker, session)
         {
+            NameVersionText = displayText;
         }
 
-        public LibraryIdCompletionEntry(string displayText, string insertionText, string description, ImageMoniker moniker, ITrackingSpan span, IIntellisenseSession session, bool versionSpecific = false)
+        public LibraryIdCompletionEntry(string displayText, string insertionText, string description, ImageMoniker moniker, ITrackingSpan span, IIntellisenseSession session)
             : base(displayText, insertionText, description, moniker, span, session)
         {
-            if (versionSpecific)
-            {
-                SetVersion(insertionText);
-            }
+            NameVersionText = displayText;
         }
 
         protected override int InternalCompareTo(CompletionEntry other)
         {
-            if (other == null)
+            LibraryIdCompletionEntry otherEntry = other as LibraryIdCompletionEntry;
+
+            if (otherEntry == null)
             {
                 return 1;
             }
 
-            LibraryIdCompletionEntry otherEntry = other as LibraryIdCompletionEntry;
-
-            if (IsValid)
+            if (!string.IsNullOrEmpty(NameVersionText))
             {
-                int result = -Major.CompareTo(otherEntry.Major);
+                int atIndex = NameVersionText.IndexOf('@');
 
-                if (result != 0)
+                if (atIndex >= 0)
                 {
-                    return result;
-                }
+                    Debug.Assert(otherEntry.NameVersionText.IndexOf('@') == atIndex);
 
-                result = -Minor.CompareTo(otherEntry.Minor);
+                    string selfVersionText = NameVersionText.Substring(atIndex + 1);
+                    string otherVersionText = otherEntry.NameVersionText.Substring(atIndex + 1);
+                    SemanticVersion selfSemanticVersion = SemanticVersion.Parse(selfVersionText);
+                    SemanticVersion otherSemanticVersion = SemanticVersion.Parse(otherVersionText);
 
-                if (result != 0)
-                {
-                    return result;
-                }
-
-                result = -Patch.CompareTo(otherEntry.Patch);
-
-                if (result != 0)
-                {
-                    return result;
+                    return -selfSemanticVersion.CompareTo(otherSemanticVersion);
                 }
             }
 
             return base.InternalCompareTo(other);
-        }
-
-        private void SetVersion(string insertionText)
-        {
-            if (!string.IsNullOrEmpty(insertionText))
-            {
-                int atIndex = insertionText.IndexOf('@');
-
-                Debug.Assert(atIndex >= 0);
-
-                string versionText = insertionText.Substring(atIndex + 1);
-                string[] versionParts = versionText.Split('.');
-
-                IsValid = true;
-
-                if (versionParts.Length > 0)
-                {
-                    int major;
-                    int.TryParse(versionParts[0], out major);
-                    Major = major;
-                }
-
-                if (versionParts.Length > 1)
-                {
-                    int minor;
-                    int.TryParse(versionParts[1], out minor);
-                    Minor = minor;
-                }
-
-                if (versionParts.Length > 2)
-                {
-                    int patch;
-                    int.TryParse(versionParts[2], out patch);
-                    Patch = patch;
-                }
-            }
         }
     }
 }
