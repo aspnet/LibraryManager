@@ -120,7 +120,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             Assert.AreEqual(7, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.IsTrue(result.Completions.Count() >= 69);
-            Assert.AreEqual("1.2.3", result.Completions.Last().DisplayText);
+            Assert.AreEqual("jquery@1.2.3", result.Completions.Last().DisplayText);
             Assert.AreEqual("jquery@1.2.3", result.Completions.Last().InsertionText);
         }
 

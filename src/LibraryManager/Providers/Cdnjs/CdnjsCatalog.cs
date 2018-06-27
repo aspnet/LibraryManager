@@ -84,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     {
                         var completion = new CompletionItem
                         {
-                            DisplayText = version,
+                            DisplayText = $"{name}@{version}",
                             InsertionText = $"{name}@{version}",
                         };
 
