@@ -83,7 +83,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     {
                         if (setVersionSpecific)
                         {
-                            versionSpecific = item.InsertionText.Contains("@");
+                            versionSpecific = item.DisplayText.Contains("@");
                             setVersionSpecific = false;
                         }
 
@@ -115,7 +115,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                             {
                                 if (setVersionSpecific)
                                 {
-                                    versionSpecific = item.InsertionText.Contains("@");
+                                    versionSpecific = item.DisplayText.Contains("@");
                                     setVersionSpecific = false;
                                 }
 
