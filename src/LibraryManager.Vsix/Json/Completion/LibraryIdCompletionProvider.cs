@@ -89,13 +89,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                         string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                         ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                        yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, versionSpecific);
+                        yield return new LibraryIdCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, versionSpecific);
                     }
                 }
             }
             else
             {
-                yield return new SimpleCompletionEntry(Resources.Text.Loading, string.Empty, KnownMonikers.Loading, context.Session);
+                yield return new LibraryIdCompletionEntry(Resources.Text.Loading, string.Empty, KnownMonikers.Loading, context.Session);
 
                 task.ContinueWith((a) =>
                 {
@@ -121,7 +121,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                                 string insertionText = item.InsertionText.Replace("\\", "\\\\");
                                 ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                                results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, versionSpecific));
+                                results.Add(new LibraryIdCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, versionSpecific));
                             }
 
                             UpdateListEntriesSync(context, results);

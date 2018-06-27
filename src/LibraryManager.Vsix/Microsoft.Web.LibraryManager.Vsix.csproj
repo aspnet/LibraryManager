@@ -1,4 +1,4 @@
-<Project ToolsDefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+﻿<Project ToolsDefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
   <Import Project="..\..\LibraryManager.Settings.targets" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
@@ -59,6 +59,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\InstallLibraryCommand.cs" />
+    <Compile Include="Json\Completion\LibraryIdCompletionEntry.cs" />
     <Compile Include="Shared\DefaultSolutionEvents.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
     <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
