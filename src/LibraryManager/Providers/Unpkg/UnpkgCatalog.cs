@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
@@ -33,8 +34,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                UnpkgLibraryId unpkgLibraryId = new UnpkgLibraryId(libraryId);
-                string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, unpkgLibraryId.Name);
+                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+                string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, name);
 
                 JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
 
@@ -54,21 +55,26 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
+            {
+                throw new InvalidLibraryException(libraryId, _provider.Id);
+            }
+
             try
             {
-                UnpkgLibraryId unpkgLibraryId = new UnpkgLibraryId(libraryId);
-
                 IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken);
 
                 return new UnpkgLibrary
                 {
-                    Version = unpkgLibraryId.Version,
+                    Version = version,
                     Files = libraryFiles.ToDictionary(k => k, b => false),
-                    Name = unpkgLibraryId.Name,
+                    Name = name,
                     ProviderId = _provider.Id,
                 };
             }
-            catch (Exception)
+            catch
             {
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
@@ -170,45 +176,46 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             List<CompletionItem> completions = new List<CompletionItem>();
 
-            UnpkgLibraryId unpkgLibraryId = new UnpkgLibraryId(libraryNameStart);
+            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryNameStart);
 
             try
             {
-                // library name completion
-                if (caretPosition < unpkgLibraryId.Name.Length + 1)
-                {
-                    IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
-
-                    foreach (string packageName in packageNames)
+                    // library name completion
+                    if (caretPosition < name.Length + 1)
                     {
-                        CompletionItem completionItem = new CompletionItem
+                        IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+
+                        foreach (string packageName in packageNames)
                         {
-                            DisplayText = packageName,
-                            InsertionText = packageName
-                        };
+                            CompletionItem completionItem = new CompletionItem
+                            {
+                                DisplayText = packageName,
+                                InsertionText = packageName
+                            };
 
-                        completions.Add(completionItem);
+                            completions.Add(completionItem);
+                        }
                     }
-                }
 
-                // library version completion
-                else
-                {
-                    completionSet.Start = unpkgLibraryId.Name.Length + 1;
-                    completionSet.Length = unpkgLibraryId.Version.Length;
-
-                    NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(unpkgLibraryId.Name, CancellationToken.None);
-                    foreach (SemanticVersion version in npmPackageInfo.Versions)
+                    // library version completion
+                    else
                     {
-                        CompletionItem completionItem = new CompletionItem
-                        {
-                            DisplayText = unpkgLibraryId.Name + "@" + version.ToString(),
-                            InsertionText = unpkgLibraryId.Name + "@" + version.ToString()
-                        };
+                        completionSet.Start = name.Length + 1;
+                        completionSet.Length = version.Length;
 
-                        completions.Add(completionItem);
+                        NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
+                        foreach (SemanticVersion semVersion in npmPackageInfo.Versions)
+                        {
+                            string itemText = name + "@" + semVersion.ToString();
+                            CompletionItem completionItem = new CompletionItem
+                            {
+                                DisplayText = itemText,
+                                InsertionText = itemText
+                            };
+
+                            completions.Add(completionItem);
+                        }
                     }
-                }
 
                 completionSet.Completions = completions;
             }

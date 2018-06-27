@@ -136,7 +136,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             // Install library
             ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB005", result.Errors.First().Code);
+
+            // Unknown exception. We no longer validate ILibraryState at the provider level
+            Assert.AreEqual("LIB000", result.Errors[0].Code);
         }
 
         [TestMethod]
@@ -150,9 +152,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
             // Install library
             ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
-            Assert.IsFalse(result.Success);
-            Assert.AreEqual(1, result.Errors.Count);
-            Assert.AreEqual("LIB007", result.Errors.First().Code);
+            Assert.IsTrue(result.Success);
         }
 
         [TestMethod]
