@@ -163,10 +163,10 @@ Do you want to continue?</value>
     <value>&lt;Choose a library to select files to install&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Disable Restore on Build</value>
+    <value>Disabl&amp;e Client-Side Libraries on Build</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Enable Restore Client-Side Libraries on Build</value>
+    <value>&amp;Enable Restore Client-Side Libraries on Build...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Installing NuGet package containing MSBuild target...</value>
