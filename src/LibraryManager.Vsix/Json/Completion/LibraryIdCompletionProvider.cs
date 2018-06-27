@@ -62,7 +62,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             Task<CompletionSet> task = catalog.GetLibraryCompletionSetAsync(member.UnquotedValueText, caretPosition);
-            int count = 0;
 
             if (!context.Session.Properties.ContainsProperty(CompletionController.RetriggerCompletion))
             {
@@ -77,11 +76,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (set.Completions != null)
                 {
+                    bool versionSpecific = false;
+                    bool setVersionSpecific = true;
+
                     foreach (CompletionItem item in set.Completions)
                     {
+                        if (setVersionSpecific)
+                        {
+                            versionSpecific = item.InsertionText.Contains("@");
+                            setVersionSpecific = false;
+                        }
+
                         string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                         ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                        yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
+                        yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, versionSpecific);
                     }
                 }
             }
@@ -100,12 +108,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
                         if (set.Completions != null)
                         {
                             var results = new List<JSONCompletionEntry>();
+                            bool versionSpecific = false;
+                            bool setVersionSpecific = true;
 
                             foreach (CompletionItem item in set.Completions)
                             {
+                                if (setVersionSpecific)
+                                {
+                                    versionSpecific = item.InsertionText.Contains("@");
+                                    setVersionSpecific = false;
+                                }
+
                                 string insertionText = item.InsertionText.Replace("\\", "\\\\");
                                 ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                                results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
+                                results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, versionSpecific));
                             }
 
                             UpdateListEntriesSync(context, results);
