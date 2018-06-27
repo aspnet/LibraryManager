@@ -76,20 +76,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (set.Completions != null)
                 {
-                    bool versionSpecific = false;
-                    bool setVersionSpecific = true;
-
                     foreach (CompletionItem item in set.Completions)
                     {
-                        if (setVersionSpecific)
-                        {
-                            versionSpecific = item.DisplayText.Contains("@");
-                            setVersionSpecific = false;
-                        }
-
                         string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                         ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                        yield return new LibraryIdCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, versionSpecific);
+                        yield return new LibraryIdCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session);
                     }
                 }
             }
@@ -108,20 +99,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                         if (set.Completions != null)
                         {
                             var results = new List<JSONCompletionEntry>();
-                            bool versionSpecific = false;
-                            bool setVersionSpecific = true;
 
                             foreach (CompletionItem item in set.Completions)
                             {
-                                if (setVersionSpecific)
-                                {
-                                    versionSpecific = item.DisplayText.Contains("@");
-                                    setVersionSpecific = false;
-                                }
-
                                 string insertionText = item.InsertionText.Replace("\\", "\\\\");
                                 ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                                results.Add(new LibraryIdCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, versionSpecific));
+                                results.Add(new LibraryIdCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session));
                             }
 
                             UpdateListEntriesSync(context, results);
