@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB016";
             string expectedErrorMessage = "Conflicting file \"lib\\jquery.js\" found in more than one library: jquery@3.1.1, jquery@2.2.1";
-            var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
+            var manifest = Manifest.FromJson(_docDifferentLibraries_SameFiles, _dependencies);
 
             IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
             var conflictsList = conflicts.ToList();
@@ -49,23 +49,35 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        public async Task DetectConflictsAsync_SameLibraryDifferentFiles()
+        public async Task DetectConflictsAsync_SameLibrary_DifferentDestinations()
         {
-            Manifest manifest = Manifest.FromJson(_docNoConflictingLibraries, _dependencies);
+            string expectedErrorCode = "LIB019";
+            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery, jquery";
+            var manifest = Manifest.FromJson(_docSameLibrary_DifferentDestination, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
-            Assert.IsTrue(results.All(c => c.Success));
+            var conflictsList = results.ToList();
+            Assert.AreEqual(1, conflictsList.Count);
+            Assert.IsTrue(conflictsList[0].Errors.Count == 1);
+            Assert.AreEqual(conflictsList[0].Errors[0].Code, expectedErrorCode);
+            Assert.AreEqual(conflictsList[0].Errors[0].Message, expectedErrorMessage);
         }
 
         [TestMethod]
-        public async Task DetectConflictsAsync_SameLibrary_SameFiles_DifferentDestination()
+        public async Task DetectConflictsAsync_SameLibrary_DifferentVersions_DifferentFiles()
         {
-            var manifest = Manifest.FromJson(_docDifferentDestination, _dependencies);
+            string expectedErrorCode = "LIB019";
+            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery, jquery";
+            var manifest = Manifest.FromJson(_docSameLibrary_DifferentVersions_DifferentFiles, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
-            Assert.IsTrue(results.All(c => c.Success));
+            var conflictsList = results.ToList();
+            Assert.AreEqual(1, conflictsList.Count);
+            Assert.IsTrue(conflictsList[0].Errors.Count == 1);
+            Assert.AreEqual(conflictsList[0].Errors[0].Code, expectedErrorCode);
+            Assert.AreEqual(conflictsList[0].Errors[0].Message, expectedErrorMessage);
         }
 
         [TestMethod]
@@ -110,26 +122,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual(resultsList[0].Errors[0].Code, expectedErrorCode);
         }
 
-        private string _docConflictingLibraries = $@"{{
-  ""{ManifestConstants.Version}"": ""1.0"",
-  ""{ManifestConstants.Libraries}"": [
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
-      ""{ManifestConstants.Provider}"": ""cdnjs"",
-      ""{ManifestConstants.Destination}"": ""lib"",
-      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
-    }},
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@2.2.1"",
-      ""{ManifestConstants.Provider}"": ""cdnjs"",
-      ""{ManifestConstants.Destination}"": ""lib"",
-      ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
-    }},
-  ]
-}}
-";
-
-        private string _docNoConflictingLibraries = $@"{{
+        private string _docDifferentLibraries_SameFiles = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -148,7 +141,7 @@ namespace Microsoft.Web.LibraryManager.Test
 }}
 ";
 
-        private string _docDifferentDestination = $@"{{
+        private string _docSameLibrary_DifferentVersions_DifferentFiles = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -159,6 +152,25 @@ namespace Microsoft.Web.LibraryManager.Test
     }},
     {{
       ""{ManifestConstants.Library}"": ""jquery@2.2.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
+    }},
+  ]
+}}
+";
+
+        private string _docSameLibrary_DifferentDestination = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
       ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Destination}"": ""lib2"",
       ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]

@@ -181,7 +181,6 @@ Valid files are {2}</value>
   <data name="ErrorUnknownError" xml:space="preserve">
     <value>An unknown error occurred</value>
   </data>
-</root>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Cannot restore. Multiple definitions for libraries: {0}</value>
   </data>

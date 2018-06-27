@@ -35,30 +35,28 @@ namespace Microsoft.Web.LibraryManager
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            // Check for duplicate libraries 
-            IEnumerable<string> duplicates = GetDuplicateLibraries(libraries, dependencies, defaultProvider, cancellationToken);
-            if (duplicates != null && duplicates.Any())
-            {
-                return new[] { LibraryOperationResult.FromError(PredefinedErrors.DuplicateLibrariesInManifest(duplicates)) };
-            }
-
             // Check for valid libraries
-            IEnumerable<ILibraryOperationResult> validateLibraries = await ValidatePropertiesAsync(libraries, cancellationToken);
-
+            IEnumerable<ILibraryOperationResult> validateLibraries = await ValidatePropertiesAsync(libraries, dependencies, cancellationToken).ConfigureAwait(false);
             if (!validateLibraries.All(t => t.Success))
             {
                 return validateLibraries;
             }
 
+            // Check for duplicate libraries 
+            if (GetDuplicateLibraries(libraries, dependencies, defaultProvider, cancellationToken) is List<string> duplicates && duplicates.Count > 0)
+            {
+                return new[] { LibraryOperationResult.FromError(PredefinedErrors.DuplicateLibrariesInManifest(duplicates)) };
+            }
+
             // Check for files conflicts
-            IEnumerable<ILibraryOperationResult> expandLibraries = await ExpandLibrariesAsync(libraries, dependencies, defaultDestination, defaultProvider, cancellationToken);
+            IEnumerable<ILibraryOperationResult> expandLibraries = await ExpandLibrariesAsync(libraries, dependencies, defaultDestination, defaultProvider, cancellationToken).ConfigureAwait(false);
             if (!expandLibraries.All(t => t.Success))
             {
                 return expandLibraries;
             }
 
             libraries = expandLibraries.Select(l => l.InstallationState);
-            IEnumerable<FileConflict> fileConflicts = GetFilesConflicts(libraries, cancellationToken);
+            IEnumerable<FileConflict> fileConflicts = GetFilesConflicts(libraries);
             ILibraryOperationResult conflictErrors = GetConflictErrors(fileConflicts);
 
             return new [] { conflictErrors };
@@ -140,23 +138,16 @@ namespace Microsoft.Web.LibraryManager
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            try
-            {
-                var duplicateLibraries = new List<string>();
-                IEnumerable<IProvider> providers = GetProviders(libraries, dependencies, defaultProvider);
+            var duplicateLibraries = new List<string>();
+            IEnumerable<IProvider> providers = GetProviders(libraries, dependencies, defaultProvider);
 
-                foreach (IProvider provider in providers)
-                {
-                    IEnumerable<ILibraryInstallationState> providerLibraries = libraries.Where(l => l.ProviderId == provider.Id);
-                    duplicateLibraries.AddRange(providerLibraries.GroupBy(l => l.Name).Where(g => g.Count() > 1).Select(g => g.Key));
-                }
-
-                return duplicateLibraries;
-            }
-            catch (InvalidLibraryException)
+            foreach (IProvider provider in providers)
             {
-                return null;
+                IEnumerable<ILibraryInstallationState> providerLibraries = libraries.Where(l => l.ProviderId == provider.Id);
+                duplicateLibraries.AddRange(providerLibraries.GroupBy(l => l.Name).Where(g => g.Count() > 1).Select(g => g.Key));
             }
+
+            return duplicateLibraries;
         }
 
         private static IEnumerable<IProvider> GetProviders(
@@ -168,8 +159,7 @@ namespace Microsoft.Web.LibraryManager
 
             foreach (ILibraryInstallationState library in libraries)
             {
-
-                IProvider provider = GetProvider(library, dependencies, defaultProvider, out _);
+                IProvider provider = GetProvider(library, dependencies, defaultProvider);
                 if (provider != null)
                 {
                     providers.Add(provider);
@@ -182,14 +172,10 @@ namespace Microsoft.Web.LibraryManager
         private static IProvider GetProvider(
             ILibraryInstallationState library,
             IDependencies dependencies,
-            string defaultProvider,
-            out IError error)
+            string defaultProvider)
         {
-            error = null;
-
             if (string.IsNullOrEmpty(library.ProviderId) && string.IsNullOrEmpty(defaultProvider))
             {
-                error = PredefinedErrors.ProviderIsUndefined();
                 return null;
             }
 
@@ -197,11 +183,6 @@ namespace Microsoft.Web.LibraryManager
             {
                 string providerId = library.ProviderId ?? defaultProvider;
                 IProvider provider = dependencies.GetProvider(providerId);
-                if (provider == null)
-                {
-                    error = PredefinedErrors.ProviderUnknown(library.ProviderId);
-                    return null;
-                }
 
                 return provider;
             }
@@ -256,9 +237,8 @@ namespace Microsoft.Web.LibraryManager
         /// Detects files conflicts in between libraries in the given collection 
         /// </summary>
         /// <param name="libraries"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns>A collection of <see cref="FileConflict"/> for each library conflict</returns>
-        private static IEnumerable<FileConflict> GetFilesConflicts(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private static IEnumerable<FileConflict> GetFilesConflicts(IEnumerable<ILibraryInstallationState> libraries)
         {
             Dictionary<string, List<ILibraryInstallationState>> _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
 
