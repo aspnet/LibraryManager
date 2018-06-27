@@ -107,9 +107,10 @@ namespace Microsoft.Web.LibraryManager
         /// Validates the values of each Library property and returns a collection of ILibraryOperationResult for each of them 
         /// </summary>
         /// <param name="libraries"></param>
+        /// <param name="dependencies"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private static async Task<IEnumerable<ILibraryOperationResult>> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<ILibraryOperationResult>> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, IDependencies dependencies, CancellationToken cancellationToken)
         {
             List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
 
@@ -117,9 +118,10 @@ namespace Microsoft.Web.LibraryManager
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (!library.IsValid(out IEnumerable<IError> errors))
+                ILibraryOperationResult result = await library.IsValidAsync(dependencies).ConfigureAwait(false);
+                if (!result.Success)
                 {
-                    return new [] { new LibraryOperationResult(library, errors.ToArray()) };
+                    validationStatus.Add(result);
                 }
                 else
                 {

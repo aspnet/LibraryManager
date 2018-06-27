@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts.Resources;
 
@@ -177,5 +178,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static IError DuplicateLibrariesInManifest(IEnumerable<string> duplicates)
         => new Error("LIB019", string.Format(Text.ErrorDuplicateLibraries, string.Join(", ", duplicates)));
+
+        /// <summary>
+        /// Unknown error occurred
+        /// </summary>
+        /// <returns></returns>
+        public static IError UnknownError()
+            => new Error("LIB020", Text.ErrorUnknownError);
     }
 }

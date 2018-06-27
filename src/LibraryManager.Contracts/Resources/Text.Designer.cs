@@ -242,6 +242,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An unknown error occurred.
+        /// </summary>
+        internal static string ErrorUnknownError {
+            get {
+                return ResourceManager.GetString("ErrorUnknownError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unknown exception occurred.
         /// </summary>
         internal static string ErrorUnknownException {

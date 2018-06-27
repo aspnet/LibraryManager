@@ -155,8 +155,8 @@ namespace Microsoft.Web.LibraryManager.Test
             var manifest = Manifest.FromJson(_doc, _dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual(0, result.Count(v => v.Success));
+            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(1, result.Count(v => v.Success));
             Assert.AreEqual(1, result.Count(v => !v.Success));
             Assert.AreEqual("LIB002", result.Last().Errors.First().Code);
         }
@@ -190,8 +190,8 @@ namespace Microsoft.Web.LibraryManager.Test
             var manifest = Manifest.FromJson(_doc, dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual(1, result.Count(v => !v.Success));
+            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(2, result.Count(v => !v.Success));
         }
 
         [DataTestMethod]
@@ -268,12 +268,11 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddVersion("1.0");
             manifest.AddLibrary(state);
 
-            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            var result = await manifest.RestoreAsync(CancellationToken.None) as List<ILibraryOperationResult>;
 
-            Assert.AreEqual(1, result.Count());
-            Assert.IsFalse(result.First().Success);
-            Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB005"));
-            Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB006"));
+            Assert.AreEqual(1, result.Count);
+            Assert.IsFalse(result[0].Success);
+            Assert.AreEqual(result[0].Errors[0].Code, "LIB006");
         }
 
         [TestMethod]
