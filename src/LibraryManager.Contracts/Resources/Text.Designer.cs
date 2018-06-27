@@ -10,7 +10,6 @@
 
 namespace Microsoft.Web.LibraryManager.Contracts.Resources {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryManager.Contracts.Resources.Text", typeof(Text).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Web.LibraryManager.Contracts.Resources.Text", typeof(Text).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -230,6 +229,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static string ErrorUnableToResolveSource {
             get {
                 return ResourceManager.GetString("ErrorUnableToResolveSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unknown error occurred.
+        /// </summary>
+        internal static string ErrorUnknownError {
+            get {
+                return ResourceManager.GetString("ErrorUnknownError", resourceCulture);
             }
         }
         

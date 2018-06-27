@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts.Resources;
 
@@ -169,5 +170,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static IError InvalidFilesInLibrary(string libraryId, IEnumerable<string> invalidFile, IEnumerable<string> validFiles)
             => new Error("LIB018", string.Format(Text.ErrorLibraryHasInvalidFiles, libraryId, string.Join(", ", invalidFile), string.Join(", ", validFiles)));
+
+        /// <summary>
+        /// Unknown error occurred
+        /// </summary>
+        /// <returns></returns>
+        public static IError UnknownError()
+            => new Error("LIB019", Text.ErrorUnknownError);
     }
 }
