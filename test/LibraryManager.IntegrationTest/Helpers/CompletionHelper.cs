@@ -49,6 +49,35 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Helpers
             }
         }
 
+        public CompletionList WaitForCompletionItems(IVisualStudioTextEditorTestExtension editor, int timeout = 1000)
+        {
+            CompletionList items = null;
+
+            WaitFor.TryIsTrue(() =>
+            {
+                try
+                {
+                    IVisualStudioCompletionListTestExtension completionList = editor.Intellisense.GetActiveCompletionList();
+
+                    // Make another call if completion list is not available or is still loading.
+                    if (completionList == null || completionList.Items.Count == 1 && completionList.Items[0].Text.Equals(Vsix.Resources.Text.Loading))
+                    {
+                        return false;
+                    }
+
+                    items = completionList.Items;
+
+                    return true;
+                }
+                catch (EditorException)
+                {
+                    return false;
+                }
+            }, TimeSpan.FromMilliseconds(timeout), TimeSpan.FromMilliseconds(500));
+
+            return items;
+        }
+
         private static string WaitForCompletionEntriesHelper(IVisualStudioTextEditorTestExtension editor, IEnumerable<string> expectedCompletionEntries, bool caseInsensitive, int timeout)
         {
             string errorMessage = null;
