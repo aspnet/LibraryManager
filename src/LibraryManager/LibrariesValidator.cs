@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager
             }
 
             // Check for valid libraries
-            IEnumerable<ILibraryOperationResult> validateLibraries = ValidatePropertiesAsync(libraries, cancellationToken);
+            IEnumerable<ILibraryOperationResult> validateLibraries = await ValidatePropertiesAsync(libraries, cancellationToken);
 
             if (!validateLibraries.All(t => t.Success))
             {
@@ -89,8 +89,6 @@ namespace Microsoft.Web.LibraryManager
                 return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.VersionIsNotSupported(manifest.Version)) };
             }
 
-        }
-
             return await GetLibrariesErrorsAsync(manifest.Libraries, dependencies, manifest.DefaultDestination, manifest.DefaultProvider, cancellationToken);
         }
 
@@ -111,7 +109,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private static IEnumerable<ILibraryOperationResult> ValidateProperties(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<ILibraryOperationResult>> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
             List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
 
