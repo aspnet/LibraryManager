@@ -58,9 +58,12 @@ namespace Microsoft.Web.LibraryManager
             }
 
             libraries = expandLibraries.Select(l => l.InstallationState);
+            IEnumerable<FileConflict> fileConflicts = GetFilesConflicts(libraries, cancellationToken);
+            ILibraryOperationResult conflictErrors = GetConflictErrors(fileConflicts);
 
-            return new List<ILibraryOperationResult> { GetConflictErrors(GetFilesConflicts(libraries, cancellationToken)) };
+            return new [] { conflictErrors };
         }
+
 
         /// <summary>
         /// Returns a collection of <see cref="ILibraryOperationResult"/> that represents the status for validation of the Manifest and its libraries
@@ -86,19 +89,20 @@ namespace Microsoft.Web.LibraryManager
                 return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.VersionIsNotSupported(manifest.Version)) };
             }
 
+        }
+
             return await GetLibrariesErrorsAsync(manifest.Libraries, dependencies, manifest.DefaultDestination, manifest.DefaultProvider, cancellationToken);
         }
 
         private static bool IsValidManifestVersion(string version)
         {
-            try
+            Version parsedVersion;
+            if (Version.TryParse(version, out parsedVersion))
             {
-                return Manifest.SupportedVersions.Contains(new Version(version));
+                return Manifest.SupportedVersions.Contains(parsedVersion);
             }
-            catch
-            {
-                return false;
-            }
+
+            return false;
         }
 
         /// <summary>
@@ -107,7 +111,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="libraries"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private static IEnumerable<ILibraryOperationResult> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
+        private static IEnumerable<ILibraryOperationResult> ValidateProperties(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
             List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
 
@@ -117,7 +121,7 @@ namespace Microsoft.Web.LibraryManager
 
                 if (!library.IsValid(out IEnumerable<IError> errors))
                 {
-                    return new List<ILibraryOperationResult> { new LibraryOperationResult(library, errors.ToArray()) };
+                    return new [] { new LibraryOperationResult(library, errors.ToArray()) };
                 }
                 else
                 {
@@ -233,13 +237,13 @@ namespace Microsoft.Web.LibraryManager
                 IProvider provider = dependencies.GetProvider(providerId);
                 if (provider == null)
                 {
-                    return new List<ILibraryOperationResult> { LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined()) };
+                    return new [] { LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined()) };
                 }
 
                 ILibraryOperationResult desiredState = await provider.UpdateStateAsync(library, cancellationToken);
                 if (!desiredState.Success)
                 {
-                    return new List<ILibraryOperationResult> { desiredState };
+                    return new [] { desiredState };
                 }
 
                 expandedLibraries.Add(desiredState);

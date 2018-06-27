@@ -170,45 +170,48 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static void LogOperationSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation, TimeSpan elapsedTime)
         {
-            int totalResultsCounts = totalResults.Count();
-            IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success && !r.UpToDate);
-            IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => r.Errors.Any());
-            IEnumerable<ILibraryOperationResult> cancelledRestores = totalResults.Where(r => r.Cancelled);
-            IEnumerable<ILibraryOperationResult> upToDateRestores = totalResults.Where(r => r.UpToDate);
+            if (totalResults != null && totalResults.Any())
+            {
+                int totalResultsCounts = totalResults.Count();
+                IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success && !r.UpToDate);
+                IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => r.Errors.Any());
+                IEnumerable<ILibraryOperationResult> cancelledRestores = totalResults.Where(r => r.Cancelled);
+                IEnumerable<ILibraryOperationResult> upToDateRestores = totalResults.Where(r => r.UpToDate);
 
-            bool allSuccess = successfulRestores.Count() == totalResultsCounts;
-            bool allFailed = failedRestores.Count() == totalResultsCounts;
-            bool allCancelled = cancelledRestores.Count() == totalResultsCounts;
-            bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
-            bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
+                bool allSuccess = successfulRestores.Count() == totalResultsCounts;
+                bool allFailed = failedRestores.Count() == totalResultsCounts;
+                bool allCancelled = cancelledRestores.Count() == totalResultsCounts;
+                bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
+                bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
 
-            string messageText = string.Empty;
+                string messageText = string.Empty;
 
-            if (allUpToDate)
-            {
-                messageText = LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine;
-            }
-            else if (allSuccess)
-            {
-                string libraryId = GetLibraryId(totalResults, operation);
-                messageText = GetAllSuccessString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
-            }
-            else if (allCancelled)
-            {
-                string libraryId = GetLibraryId(totalResults, operation);
-                messageText = GetAllCancelledString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
-            }
-            else if (allFailed)
-            {
-                string libraryId = GetLibraryId(totalResults, operation);
-                messageText = GetAllFailuresString(operation, totalResultsCounts, libraryId) + Environment.NewLine;
-            }
-            else
-            {
-                messageText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
-            }
+                if (allUpToDate)
+                {
+                    messageText = LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine;
+                }
+                else if (allSuccess)
+                {
+                    string libraryId = GetLibraryId(totalResults, operation);
+                    messageText = GetAllSuccessString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
+                }
+                else if (allCancelled)
+                {
+                    string libraryId = GetLibraryId(totalResults, operation);
+                    messageText = GetAllCancelledString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
+                }
+                else if (allFailed)
+                {
+                    string libraryId = GetLibraryId(totalResults, operation);
+                    messageText = GetAllFailuresString(operation, totalResultsCounts, libraryId) + Environment.NewLine;
+                }
+                else
+                {
+                    messageText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
+                }
 
-            LogEvent(messageText, LogLevel.Operation);
+                LogEvent(messageText, LogLevel.Operation);
+            }
         }
 
         private static string GetLibraryId(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation)

@@ -17,6 +17,55 @@ namespace Microsoft.Web.LibraryManager.Contracts
     /// </summary>
     public static class FileHelpers
     {
+        /// <summary>
+        /// Writes the stream to a temporary file first, then moves the temporary file to the destination file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="sourceStream"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<bool> SafeWriteToFileAsync(string fileName, Stream sourceStream, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            string tempFileName = Path.GetTempFileName();
+
+            bool result = true;
+
+            if (string.IsNullOrWhiteSpace(tempFileName))
+            {
+                Debug.Fail($"Unexpected: null or empty {nameof(tempFileName)}");
+
+                // If we are on a platform where Path.GetTempFileName() isn't implemented and returns null or empty string,
+                // fallback to just writing directly to the destination file
+                result = await WriteToFileAsync(fileName, sourceStream, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                result = await WriteToFileAsync(tempFileName, sourceStream, cancellationToken).ConfigureAwait(false);
+
+                if (result)
+                {
+                    result = await MoveFileAsync(tempFileName, fileName);
+                }
+
+                // Clean up temp file if we didn't move it to the desination file successfully
+                if (!result)
+                {
+                    try
+                    {
+                        DeleteFiles(new string[] { tempFileName });
+                    }
+                    catch
+                    {
+                        Debug.Fail($"Could not clean up temporary file {tempFileName}");
+                        // Don't fail the operation if we couldn't clean up temporary file
+                    }
+                }
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Writes a Stream to a destination file
@@ -25,7 +74,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="sourceStream"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static async Task<bool> WriteToFileAsync(string fileName, Stream sourceStream, CancellationToken cancellationToken)
+        private static async Task<bool> WriteToFileAsync(string fileName, Stream sourceStream, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -89,6 +138,49 @@ namespace Microsoft.Web.LibraryManager.Contracts
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Moves source file to destinatino file asynchronously
+        /// </summary>
+        /// <param name="sourceFile"></param>
+        /// <param name="destinationFile"></param>
+        /// <returns></returns>
+        public static async Task<bool> MoveFileAsync(string sourceFile, string destinationFile)
+        {
+            bool result = true;
+
+            if (string.IsNullOrEmpty(sourceFile) || string.IsNullOrEmpty(destinationFile) || !File.Exists(sourceFile))
+            {
+                result = false;
+            }
+
+            if (result)
+            {
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        if (File.Exists(destinationFile))
+                        {
+                            File.Delete(destinationFile);
+                        }
+
+                        string directoryName = Path.GetDirectoryName(destinationFile);
+                        Directory.CreateDirectory(directoryName);
+
+                        File.Move(sourceFile, destinationFile);
+                    }
+                ).ConfigureAwait(false);
+
+                }
+                catch (Exception)
+                {
+                    result = false;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

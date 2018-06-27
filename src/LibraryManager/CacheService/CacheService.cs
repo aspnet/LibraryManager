@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager
         {
             using (Stream libraryStream = await _requestHandler.GetStreamAsync(url, cancellationToken))
             {
-                await FileHelpers.WriteToFileAsync(fileName, libraryStream, cancellationToken);
+                await FileHelpers.SafeWriteToFileAsync(fileName, libraryStream, cancellationToken);
             }
         }
 

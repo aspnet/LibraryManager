@@ -35,12 +35,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
                 CancellationToken.None);
 
             // Matches jquery for all providers.
-            IReadOnlyList<ILibraryInstallationState> result = await LibraryResolver.ResolveAsync(
+            IReadOnlyList<ILibraryInstallationState> result = LibraryResolver.Resolve(
                 "jquery",
                 manifest,
-                _dependencies,
-                null,
-                CancellationToken.None);
+                null);
 
             Assert.AreEqual(3, result.Count);
 
@@ -49,12 +47,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.AreEqual("jquery@2.2.0", result[2].LibraryId);
 
             // Matches jquery for cdnjs provider
-            result = await LibraryResolver.ResolveAsync(
+            result = LibraryResolver.Resolve(
                 "jquery",
                 manifest,
-                _dependencies,
-                _dependencies.GetProvider("cdnjs"),
-                CancellationToken.None);
+                _dependencies.GetProvider("cdnjs"));
 
             Assert.AreEqual(2, result.Count);
 
@@ -62,42 +58,34 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.AreEqual("jquery@2.2.0", result[1].LibraryId);
 
             // Matches only one result.
-            result = await LibraryResolver.ResolveAsync(
+            result = LibraryResolver.Resolve(
                 "jquery@3.3.1",
                 manifest,
-                _dependencies,
-                null,
-                CancellationToken.None);
+                null);
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("jquery@3.3.1", result[0].LibraryId);
 
             // Does not match library for a different provider.
-            result = await LibraryResolver.ResolveAsync(
+            result = LibraryResolver.Resolve(
                 "jquery@3.3.1",
                 manifest,
-                _dependencies,
-                _dependencies.GetProvider("filesystem"),
-                CancellationToken.None);
+                _dependencies.GetProvider("filesystem"));
 
             Assert.AreEqual(0, result.Count);
 
             // Does not return partial matches.
-            result = await LibraryResolver.ResolveAsync(
+            result = LibraryResolver.Resolve(
                 "jquery@3.3",
                 manifest,
-                _dependencies,
-                null,
-                CancellationToken.None);
+                null);
 
             Assert.AreEqual(0, result.Count);
 
-            result = await LibraryResolver.ResolveAsync(
+            result = LibraryResolver.Resolve(
                 "jquer",
                 manifest,
-                _dependencies,
-                null,
-                CancellationToken.None);
+                null);
 
             Assert.AreEqual(0, result.Count);
 

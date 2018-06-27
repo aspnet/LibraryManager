@@ -66,7 +66,6 @@
                       ItemsSource="{Binding Providers}" 
                       HorizontalAlignment="Left" 
                       VerticalAlignment="Center"
-                      KeyboardNavigation.TabIndex="1"
                       Width="auto" />
             <DockPanel Grid.Row="1" 
                        Grid.Column="1" 
@@ -91,7 +90,6 @@
                 <controls:Library x:Name="LibrarySearchBox" 
                                   DockPanel.Dock="Left"
                                   SearchService="PerformSearch" 
-                                  KeyboardNavigation.TabIndex="2"
                                   Text="{Binding Path=PackageId, Mode=OneWayToSource}" />
             </DockPanel>
         </Grid>
@@ -156,8 +154,7 @@
                    Width="Auto"/>
             <controls:TargetLocation x:Name="DestinationFolder" 
                                      VerticalAlignment="Center" 
-                                     SearchService="TargetLocationSearch" 
-                                     KeyboardNavigation.TabIndex="4"/>
+                                     SearchService="TargetLocationSearch" />
         </DockPanel>
 
         <DockPanel Grid.Row="4" 
@@ -195,15 +192,16 @@
             <Button Content="Cancel" 
                     Width="65" 
                     DockPanel.Dock="Right"
-                    IsCancel="True" />
+                    IsCancel="True"
+                    KeyboardNavigation.TabIndex="2" />
             <Button Content="Install"
                     Name="InstallButton"
                     Width="65" 
                     DockPanel.Dock="Right"
                     Margin="0 0 6 0" IsDefault="True" 
                     Command="{Binding InstallPackageCommand}"
-                    Click="InstallButton_Clicked">
-            </Button>
+                    Click="InstallButton_Clicked"
+                    KeyboardNavigation.TabIndex="1" />
         </DockPanel>
     </Grid>
 </ui:DialogWindow>

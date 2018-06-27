@@ -12,7 +12,6 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 using Microsoft.Web.LibraryManager.Providers.FileSystem;
-using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -30,67 +29,43 @@ namespace Microsoft.Web.LibraryManager.Test
             _cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
-            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory());
+            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory());
         }
 
         [TestMethod]
-        public async Task DetectConflictsAsync_ConflictingLibraries_SameVersion()
+        public async Task DetectConflictsAsync_ConflictingFiles()
         {
-            string expectedErrorCode = "LIB019";
-            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery, jquery";
-            Manifest manifest = Manifest.FromJson(_docConflictingLibraries_SameVersion, _dependencies);
+            string expectedErrorCode = "LIB016";
+            string expectedErrorMessage = "Conflicting file \"lib\\jquery.js\" found in more than one library: jquery@3.1.1, jquery@2.2.1";
+            var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
 
             IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            var conflictsList = conflicts.ToList();
 
-            Assert.AreEqual(1, conflicts.Count());
-            Assert.IsTrue(conflicts.First().Errors.Count() == 1);
-            Assert.AreEqual(conflicts.First().Errors.First().Code, expectedErrorCode);
-            Assert.AreEqual(conflicts.First().Errors.First().Message, expectedErrorMessage);
+            Assert.AreEqual(1, conflictsList.Count);
+            Assert.IsTrue(conflictsList[0].Errors.Count == 1);
+            Assert.AreEqual(conflictsList[0].Errors[0].Code, expectedErrorCode);
+            Assert.AreEqual(conflictsList[0].Errors[0].Message, expectedErrorMessage);
         }
 
         [TestMethod]
-        public async Task DetectConflictsAsync_ConflictingLibraries_DifferentVersion()
+        public async Task DetectConflictsAsync_SameLibraryDifferentFiles()
         {
-            string expectedErrorCode = "LIB019";
-            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery, jquery";
-            Manifest manifest = Manifest.FromJson(_docConflictingLibraries_DifferentVersion, _dependencies);
+            Manifest manifest = Manifest.FromJson(_docNoConflictingLibraries, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
-            Assert.AreEqual(1, conflicts.Count());
-            Assert.IsTrue(conflicts.First().Errors.Count() == 1);
-            Assert.AreEqual(conflicts.First().Errors.First().Code, expectedErrorCode);
-            Assert.AreEqual(conflicts.First().Errors.First().Message, expectedErrorMessage);
-        }
-
-        [TestMethod]
-        public async Task DetectConflictsAsync_ConflictingLibraries_DifferentFiles()
-        {
-            string expectedErrorCode = "LIB019";
-            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery, jquery";
-            Manifest manifest = Manifest.FromJson(_docConflictingLibraries_DifferentFiles, _dependencies);
-
-            IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
-
-            Assert.AreEqual(1, conflicts.Count());
-            Assert.IsTrue(conflicts.First().Errors.Count() == 1);
-            Assert.AreEqual(conflicts.First().Errors.First().Code, expectedErrorCode);
-            Assert.AreEqual(conflicts.First().Errors.First().Message, expectedErrorMessage);
+            Assert.IsTrue(results.All(c => c.Success));
         }
 
         [TestMethod]
         public async Task DetectConflictsAsync_SameLibrary_SameFiles_DifferentDestination()
         {
-            string expectedErrorCode = "LIB019";
-            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery, jquery";
-            Manifest manifest = Manifest.FromJson(_docConflictingLibraries_SameFiles_DifferentDestination, _dependencies);
+            var manifest = Manifest.FromJson(_docDifferentDestination, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
-            Assert.AreEqual(1, conflicts.Count());
-            Assert.IsTrue(conflicts.First().Errors.Count() == 1);
-            Assert.AreEqual(conflicts.First().Errors.First().Code, expectedErrorCode);
-            Assert.AreEqual(conflicts.First().Errors.First().Message, expectedErrorMessage);
+            Assert.IsTrue(results.All(c => c.Success));
         }
 
         [TestMethod]
@@ -100,10 +75,11 @@ namespace Microsoft.Web.LibraryManager.Test
             Manifest manifest = null;
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            var resultsList = results.ToList();
 
-            Assert.AreEqual(1, results.Count());
-            Assert.IsTrue(results.First().Errors.Count() == 1);
-            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+            Assert.AreEqual(1, resultsList.Count);
+            Assert.IsTrue(resultsList[0].Errors.Count == 1);
+            Assert.AreEqual(resultsList[0].Errors[0].Code, expectedErrorCode);
         }
 
         [TestMethod]
@@ -113,88 +89,58 @@ namespace Microsoft.Web.LibraryManager.Test
             Manifest manifest = Manifest.FromJson(_docUnsupportedVersion, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            var resultsList = results.ToList();
 
-            Assert.AreEqual(1, results.Count());
-            Assert.IsTrue(results.First().Errors.Count() == 1);
-            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+            Assert.AreEqual(1, resultsList.Count);
+            Assert.IsTrue(resultsList[0].Errors.Count == 1);
+            Assert.AreEqual(resultsList[0].Errors[0].Code, expectedErrorCode);
         }
 
         [TestMethod]
         public async Task GetLibrariesErrors_LibrariesNoProvider()
         {
             string expectedErrorCode = "LIB007";
-            Manifest manifest = Manifest.FromJson(_docNoProvider, _dependencies);
+            var manifest = Manifest.FromJson(_docNoProvider, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            var resultsList = results.ToList();
 
-            Assert.AreEqual(1, results.Count());
-            Assert.IsTrue(results.First().Errors.Count() == 1);
-            Assert.AreEqual(results.First().Errors.First().Code, expectedErrorCode);
+            Assert.AreEqual(1, resultsList.Count);
+            Assert.IsTrue(resultsList[0].Errors.Count == 1);
+            Assert.AreEqual(resultsList[0].Errors[0].Code, expectedErrorCode);
         }
 
-        private string _docConflictingLibraries_SameVersion = $@"{{
+        private string _docConflictingLibraries = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
-      ""{ManifestConstants.Library}"": ""jquery@3.3.1"",
-      ""{ManifestConstants.Provider}"": ""unpkg"",
-      ""{ManifestConstants.Destination}"": ""lib""
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
     }},
     {{
-      ""{ManifestConstants.Library}"": ""jquery@3.3.1"",
-      ""{ManifestConstants.Provider}"": ""unpkg"",
-      ""{ManifestConstants.Destination}"": ""lib""
-    }},
-  ]
-}}
-";
-        private string _docConflictingLibraries_SameFiles_DifferentDestination = $@"{{
-  ""{ManifestConstants.Version}"": ""1.0"",
-  ""{ManifestConstants.Libraries}"": [
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@3.3.1"",
-      ""{ManifestConstants.Provider}"": ""unpkg"",
-      ""{ManifestConstants.Destination}"": ""lib1"",
-      ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
-    }},
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@3.3.1"",
-      ""{ManifestConstants.Provider}"": ""unpkg"",
-      ""{ManifestConstants.Destination}"": ""lib2"",
-      ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
+      ""{ManifestConstants.Library}"": ""jquery@2.2.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
     }},
   ]
 }}
 ";
 
-        private string _docConflictingLibraries_DifferentVersion = $@"{{
+        private string _docNoConflictingLibraries = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
-      ""{ManifestConstants.Library}"": ""jquery@3.3.1"",
-      ""{ManifestConstants.Provider}"": ""unpkg"",
-      ""{ManifestConstants.Destination}"": ""lib""
-    }},
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@3.3.0"",
-      ""{ManifestConstants.Provider}"": ""unpkg"",
-      ""{ManifestConstants.Destination}"": ""lib""
-    }},
-  ]
-}}
-";
-        private string _docConflictingLibraries_DifferentFiles = $@"{{
-  ""{ManifestConstants.Version}"": ""1.0"",
-  ""{ManifestConstants.Libraries}"": [
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@3.3.1"",
-      ""{ManifestConstants.Provider}"": ""unpkg"",
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Destination}"": ""lib"",
       ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
     }},
     {{
-      ""{ManifestConstants.Library}"": ""jquery@3.3.1"",
-      ""{ManifestConstants.Provider}"": ""unpkg"",
+      ""{ManifestConstants.Library}"": ""jquery@2.2.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Destination}"": ""lib"",
       ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
     }},
