@@ -23,7 +23,7 @@
     <GlobalToolProject Include="$(LibmanSrc)libman\libman.csproj" />
   </ItemGroup>
 
-<!-- 
+<!--
 ***********************************************************
 Build the RepoTasks project and publishes the output task
 dll to $(RepoTasksPublishDir)
@@ -32,7 +32,7 @@ dll to $(RepoTasksPublishDir)
   <Target Name="BuildRepoTasks" Condition="Exists('$(RepoTasksDir)RepoTasks.csproj')">
     <MSBuild Projects="$(RepoTasksDir)/RepoTasks.csproj"
              Targets="Restore;Build;Publish"
-             Properties="PublishDir=$(RepoTasksPublishDir)" 
+             Properties="PublishDir=$(RepoTasksPublishDir)"
              BuildInParallel="False" />
   </Target>
 
@@ -42,14 +42,14 @@ dll to $(RepoTasksPublishDir)
   *******************************************************************
    -->
   <Target Name="Restore">
-    <MSBuild Projects="@(SolutionToBuild)" 
-             Targets="Restore" 
+    <MSBuild Projects="@(SolutionToBuild)"
+             Targets="Restore"
              Properties="Configuration=$(Configuration);"/>
   </Target>
   <!-- Build VSIX -->
   <Target Name="BuildVSIX" DependsOnTargets="Restore">
-    <MSBuild Projects="@(VSIXProject)" 
-             Targets="Build" 
+    <MSBuild Projects="@(VSIXProject)"
+             Targets="Build"
              Properties="Configuration=$(Configuration);"/>
   </Target>
   <!-- Build the MsBuild package -->
@@ -59,20 +59,20 @@ dll to $(RepoTasksPublishDir)
              Properties="Configuration=$(Configuration);"/>
   </Target>
 
-<!-- 
+<!--
 ***********************************************************
 Publish the global tool.
 ***********************************************************
 -->
   <Target Name="PublishTool">
     <MSBuild Targets="Restore;Build;Publish"
-             Projects="@(GlobalToolProject)" 
+             Projects="@(GlobalToolProject)"
              Properties="Configuration=$(Configuration);
                          PublishDir=$(ToolPublishDir);"
              BuildInParallel="false" />
   </Target>
 
-<!-- 
+<!--
 ***********************************************************
 Package the global tool along with the Shims.
 ***********************************************************
@@ -88,8 +88,9 @@ Package the global tool along with the Shims.
                          Description=$(Description);
                          RepositoryUrl=$(RepositoryUrl);
                          RepositoryCommit='abc';
-                         Serviceable=true" />
-    <!-- 
+                         Serviceable=true;
+                         PackageOutputPath=$(LibmanArtifactsDir)$(Configuration)\" />
+    <!--
     RepositoryCommit=$(RepositoryCommit);
                          PackageVersion=$(PackageVersion); -->
   </Target>
