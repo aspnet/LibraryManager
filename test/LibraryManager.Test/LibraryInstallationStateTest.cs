@@ -62,7 +62,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
-            Assert.AreEqual(result.Errors.First().Code, "LIB004");
+            Assert.AreEqual(result.Errors.First().Code, "LIB019");
         }
 
         [TestMethod]
@@ -148,8 +148,9 @@ namespace Microsoft.Web.LibraryManager.Test
 
             ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
 
-            // No validation for library files!
-            Assert.IsFalse(result.Success);
+            // IsValidAsync does not validate library files 
+            // Issue https://github.com/aspnet/LibraryManager/issues/254 should fix that 
+            Assert.IsTrue(result.Success);
         }
 
         [TestMethod]

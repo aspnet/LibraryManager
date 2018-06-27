@@ -268,12 +268,11 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddVersion("1.0");
             manifest.AddLibrary(state);
 
-            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            var result = await manifest.RestoreAsync(CancellationToken.None) as List<ILibraryOperationResult>;
 
-            Assert.AreEqual(1, result.Count());
-            Assert.IsFalse(result.First().Success);
-            Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB005"));
-            Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB006"));
+            Assert.AreEqual(1, result.Count);
+            Assert.IsFalse(result[0].Success);
+            Assert.AreEqual(result[0].Errors[0].Code, "LIB006");
         }
 
         [TestMethod]
