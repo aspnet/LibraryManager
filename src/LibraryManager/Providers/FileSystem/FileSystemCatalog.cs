@@ -116,11 +116,6 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
             try
             {
-                if (string.IsNullOrEmpty(libraryId) || libraryId.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-                {
-                    throw new InvalidLibraryException(libraryId, _provider.Id);
-                }
-
                 if (libraryId.Contains("://"))
                 {
                     library = new FileSystemLibrary
@@ -137,7 +132,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
                 if (!_underTest && !File.Exists(path) && !Directory.Exists(path))
                 {
-                    throw new InvalidLibraryException(libraryId, _provider.Id);
+                    return null;
                 }
 
                 library = new FileSystemLibrary

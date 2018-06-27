@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
 using Microsoft.Web.LibraryManager.Resources;
 
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
@@ -85,6 +84,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
+            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            {
+                return new LibraryOperationResult(desiredState, errors.ToArray());
+            }
+
             //Expand the files property if needed
             ILibraryOperationResult updateResult = await UpdateStateAsync(desiredState, cancellationToken);
             if (!updateResult.Success)
@@ -102,7 +106,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             // Check if Library is already up tp date
-            if (IsLibraryUpToDate(desiredState))
+            if (IsLibraryUpToDateAsync(desiredState, cancellationToken))
             {
                 return LibraryOperationResult.FromUpToDate(desiredState);
             }
@@ -233,17 +237,33 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
-            if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
-            {
-                string absolute = Path.Combine(CacheFolder, state.Name, state.Version, sourceFile);
+            string name = GetLibraryName(state.LibraryId);
+            string version = GetLibraryVersion(state.LibraryId);
 
-                if (File.Exists(absolute))
-                {
-                    return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
-                }
+            string absolute = Path.Combine(CacheFolder, name, version, sourceFile);
+
+            if (File.Exists(absolute))
+            {
+                return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
             }
 
             return null;
+        }
+
+        public string GetLibraryName(string libraryId)
+        {
+            string[] args = libraryId.Split('@');
+            string name = args[0];
+
+            return name;
+        }
+
+        public string GetLibraryVersion(string libraryId)
+        {
+            string[] args = libraryId.Split('@');
+            string version = args[1];
+
+            return version;
         }
 
         /// <summary>
@@ -260,37 +280,35 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             var tasks = new List<Task>();
+            string name = GetLibraryName(state.LibraryId);
+            string version = GetLibraryVersion(state.LibraryId);
+
+            string libraryDir = Path.Combine(CacheFolder, name);
 
             try
             {
-                if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
+                List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                foreach (string sourceFile in state.Files)
                 {
-                    string libraryDir = Path.Combine(CacheFolder, state.Name);
-                    List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                    string cacheFile = Path.Combine(libraryDir, version, sourceFile);
+                    string url = string.Format(_downloadUrlFormat, name, version, sourceFile);
 
-                    foreach (string sourceFile in state.Files)
+                    CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                    if (!librariesMetadata.Contains(newEntry))
                     {
-                        string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
-                        string url = string.Format(_downloadUrlFormat, state.Name, state.Version, sourceFile);
-
-                        CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
-                        if (!librariesMetadata.Contains(newEntry))
-                        {
-                            librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
-                        }
+                        librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
                     }
-
-                    await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
                 }
+                await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
             }
             catch (ResourceDownloadException ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
                 return new LibraryOperationResult(state, PredefinedErrors.FailedToDownloadResource(ex.Url));
             }
-            catch (OperationCanceledException)
+            catch(OperationCanceledException)
             {
-                return LibraryOperationResult.FromCancelled(state);
+                throw;
             }
             catch (Exception ex)
             {
@@ -301,33 +319,35 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             return LibraryOperationResult.FromSuccess(state);
         }
 
-        private bool IsLibraryUpToDate(ILibraryInstallationState state)
+        private bool IsLibraryUpToDateAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
+            string name = GetLibraryName(state.LibraryId);
+            string version = GetLibraryVersion(state.LibraryId);
+
+            string cacheDir = Path.Combine(CacheFolder, name, version);
+            string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
+
             try
             {
-                if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
+                foreach (string sourceFile in state.Files)
                 {
-                    string cacheDir = Path.Combine(CacheFolder, state.Name, state.Version);
-                    string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
+                    var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
+                    var cacheFile = new FileInfo(Path.Combine(cacheDir, sourceFile).Replace('\\', '/'));
 
-                    foreach (string sourceFile in state.Files)
+                    if (!destinationFile.Exists || !cacheFile.Exists || !FileHelpers.AreFilesUpToDate(destinationFile, cacheFile))
                     {
-                        var destinationFile = new FileInfo(Path.Combine(destinationDir, sourceFile).Replace('\\', '/'));
-                        var cacheFile = new FileInfo(Path.Combine(cacheDir, sourceFile).Replace('\\', '/'));
-
-                        if (!destinationFile.Exists || !cacheFile.Exists || !FileHelpers.AreFilesUpToDate(destinationFile, cacheFile))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
             }
-            catch
+            catch (Exception)
             {
+                // Log failure here 
                 return false;
             }
 
             return true;
         }
+
     }
 }

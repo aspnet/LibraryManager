@@ -35,14 +35,14 @@ namespace Microsoft.Web.LibraryManager
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            IEnumerable<ILibraryOperationResult> validateLibraries = await ValidatePropertiesAsync(libraries, dependencies, cancellationToken).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> validateLibraries = ValidateProperties(libraries, cancellationToken);
 
             if (!validateLibraries.All(t => t.Success))
             {
                 return validateLibraries;
             }
 
-            IEnumerable<ILibraryOperationResult> expandLibraries= await ExpandLibrariesAsync(libraries, dependencies, defaultDestination, defaultProvider, cancellationToken).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> expandLibraries = await ExpandLibrariesAsync(libraries, dependencies, defaultDestination, defaultProvider, cancellationToken).ConfigureAwait(false);
             if (!expandLibraries.All(t => t.Success))
             {
                 return expandLibraries;
@@ -97,10 +97,9 @@ namespace Microsoft.Web.LibraryManager
         /// Validates the values of each Library property and returns a collection of ILibraryOperationResult for each of them 
         /// </summary>
         /// <param name="libraries"></param>
-        /// <param name="dependencies"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private static async Task<IEnumerable<ILibraryOperationResult>> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, IDependencies dependencies, CancellationToken cancellationToken)
+        private static IEnumerable<ILibraryOperationResult> ValidateProperties(IEnumerable<ILibraryInstallationState> libraries, CancellationToken cancellationToken)
         {
             List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
 
@@ -108,10 +107,9 @@ namespace Microsoft.Web.LibraryManager
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ILibraryOperationResult result = await library.IsValidAsync(dependencies).ConfigureAwait(false);
-                if (!result.Success)
+                if (!library.IsValid(out IEnumerable<IError> errors))
                 {
-                    validationStatus.Add(result);
+                    return new [] { new LibraryOperationResult(library, errors.ToArray()) };
                 }
                 else
                 {

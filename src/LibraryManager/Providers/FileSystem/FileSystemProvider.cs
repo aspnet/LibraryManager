@@ -69,6 +69,11 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
+            if (!desiredState.IsValid(out IEnumerable<IError> errors))
+            {
+                return new LibraryOperationResult(desiredState, errors.ToArray());
+            }
+
             try
             {
                 ILibraryOperationResult result = await UpdateStateAsync(desiredState, cancellationToken);
@@ -139,7 +144,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
                 if (library == null)
                 {
-                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, Id));
+                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
                 }
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)

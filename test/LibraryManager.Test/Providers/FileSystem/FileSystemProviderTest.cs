@@ -254,8 +254,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 
             ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
-            Assert.AreEqual(result.Errors.Count(), 1);
-            Assert.AreEqual("LIB002", result.Errors[0].Code);
+            Assert.AreEqual("LIB005", result.Errors[0].Code);
         }
 
         [TestMethod]
@@ -272,22 +271,26 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 
             ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
             Assert.IsFalse(result.Success);
-            Assert.AreEqual("LIB002", result.Errors[0].Code);
+            Assert.AreEqual("LIB006", result.Errors[0].Code);
         }
 
         [TestMethod]
         public async Task InstallAsync_ProviderNotDefined()
+
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
+
             var desiredState = new LibraryInstallationState
             {
-                LibraryId = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
+                LibraryId = "filesystem",
                 DestinationPath = "lib",
-                Files = new[] { "Flag.png" }
+                Files = new[] { "file.js" }
             };
 
             ILibraryOperationResult result = await provider.InstallAsync(desiredState, CancellationToken.None);
-            Assert.IsTrue(result.Success);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB007", result.Errors[0].Code);
         }
 
         [TestMethod]
