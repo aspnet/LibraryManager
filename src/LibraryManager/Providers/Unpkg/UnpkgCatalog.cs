@@ -184,11 +184,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                         CompletionItem completionItem = new CompletionItem
                         {
                             DisplayText = packageName,
-                            InsertionText = packageName
+                            InsertionText = packageName,
                         };
 
                         completions.Add(completionItem);
                     }
+
+                    completionSet.Type = CompletionType.Name;
                 }
 
                 // library version completion
@@ -202,12 +204,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     {
                         CompletionItem completionItem = new CompletionItem
                         {
-                            DisplayText = unpkgLibraryId.Name + "@" + version.ToString(),
-                            InsertionText = unpkgLibraryId.Name + "@" + version.ToString()
+                            DisplayText = version.ToString(),
+                            InsertionText = unpkgLibraryId.Name + "@" + version.ToString(),
                         };
 
                         completions.Add(completionItem);
                     }
+
+                    completionSet.Type = CompletionType.Version;
                 }
 
                 completionSet.Completions = completions;

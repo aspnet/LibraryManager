@@ -66,6 +66,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                     completions.Add(completion);
                 }
+
+                span.Type = CompletionType.Name;
             }
 
             // Version
@@ -84,13 +86,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     {
                         var completion = new CompletionItem
                         {
-                            DisplayText = $"{name}@{version}",
+                            DisplayText = version,
                             InsertionText = $"{name}@{version}",
                         };
 
                         completions.Add(completion);
                     }
                 }
+
+                span.Type = CompletionType.Version;
             }
 
             span.Completions = completions;
