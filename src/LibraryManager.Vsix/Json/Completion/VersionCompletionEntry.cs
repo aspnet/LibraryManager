@@ -5,19 +5,21 @@ using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.Web.Editor.Completion;
 using Microsoft.VisualStudio.Text;
-using System.Diagnostics;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class VersionCompletionEntry : SimpleCompletionEntry
     {
-        internal string VersionText { get; private set; }
+        internal SemanticVersion SemVersion { get; private set; }
 
         public VersionCompletionEntry(string displayText, string insertionText, string description, ImageMoniker moniker, ITrackingSpan span, IIntellisenseSession session, int specificVersion)
             : base(displayText, insertionText, description, moniker, span, session, specificVersion)
         {
-            VersionText = displayText;
+            if (!string.IsNullOrEmpty(displayText))
+            {
+                SemVersion = SemanticVersion.Parse(displayText);
+            }
         }
 
         protected override int InternalCompareTo(CompletionEntry other)
@@ -29,16 +31,28 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return 1;
             }
 
-            if (!string.IsNullOrEmpty(VersionText))
+            if (SemVersion == null)
             {
-                string otherVersionText = otherEntry.VersionText;
-                SemanticVersion selfSemanticVersion = SemanticVersion.Parse(VersionText);
-                SemanticVersion otherSemanticVersion = SemanticVersion.Parse(otherVersionText);
-
-                return -selfSemanticVersion.CompareTo(otherSemanticVersion);
+                if (otherEntry.SemVersion != null)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return base.InternalCompareTo(other);
+                }
             }
-
-            return base.InternalCompareTo(other);
+            else
+            {
+                if (otherEntry.SemVersion != null)
+                {
+                    return -SemVersion.CompareTo(otherEntry.SemVersion);
+                }
+                else
+                {
+                    return 1;
+                }
+            }
         }
     }
 }
