@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Logging;
 using Microsoft.Web.LibraryManager.Tools.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
@@ -82,7 +84,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 }
 
                 InitializeDependencies();
-
                 return await ExecuteInternalAsync();
             });
             Parent = parent;
@@ -195,6 +196,16 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             await manifest.SaveAsync(Settings.ManifestFileName, cancellationToken);
 
             return manifest;
+        }
+
+        protected void LogResultsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operation, TimeSpan elapsedTime)
+        {
+            string messageText = LogMessageGenerator.GetOperationSummaryString(results, operation, elapsedTime);
+
+            if (!string.IsNullOrEmpty(messageText))
+            {
+                Logger.Log(messageText, LogLevel.Operation);
+            }
         }
     }
 }

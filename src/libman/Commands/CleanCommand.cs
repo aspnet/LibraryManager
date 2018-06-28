@@ -1,7 +1,9 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,19 +25,16 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected override async Task<int> ExecuteInternalAsync()
         {
-            Manifest manifest = await GetManifestAsync();
+            var sw = new Stopwatch();
+            sw.Start();
 
+            Manifest manifest = await GetManifestAsync();
             Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
-            IEnumerable<ILibraryOperationResult> result = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
 
-            IEnumerable<ILibraryOperationResult> failures = result.Where(r => !r.Success);
-
-            if (failures.Any())
-            {
-                Logger.Log(Resources.CleanFailed, LogLevel.Error);
-            }
-
+            sw.Stop();
+            LogResultsSummary(results, OperationType.Clean, sw.Elapsed);
             return 0;
         }
 
