@@ -77,12 +77,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (set.Completions != null)
                 {
+                    bool isVersionCompletion = (set.Type == CompletionType.Version);
+
                     foreach (CompletionItem item in set.Completions)
                     {
                         string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                         ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
 
-                        if (set.Type == CompletionType.Version)
+                        if (isVersionCompletion)
                         {
                             yield return new VersionCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
                         }
