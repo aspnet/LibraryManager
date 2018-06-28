@@ -42,10 +42,11 @@ namespace Microsoft.Web.LibraryManager
                 return validateLibraries;
             }
 
-            // Check for duplicate libraries 
-            if (GetDuplicateLibraries(libraries, dependencies, defaultProvider, cancellationToken) is List<string> duplicates && duplicates.Count > 0)
+            // Check for duplicate libraries
+            IEnumerable<ILibraryOperationResult> duplicateLibraries = GetDuplicateLibrariesErrors(libraries);
+            if (!duplicateLibraries.All(t => t.Success))
             {
-                return new[] { LibraryOperationResult.FromError(PredefinedErrors.DuplicateLibrariesInManifest(duplicates)) };
+                return duplicateLibraries;
             }
 
             // Check for files conflicts
@@ -59,9 +60,8 @@ namespace Microsoft.Web.LibraryManager
             IEnumerable<FileConflict> fileConflicts = GetFilesConflicts(libraries);
             ILibraryOperationResult conflictErrors = GetConflictErrors(fileConflicts);
 
-            return new [] { conflictErrors };
+            return new[] { conflictErrors };
         }
-
 
         /// <summary>
         /// Returns a collection of <see cref="ILibraryOperationResult"/> that represents the status for validation of the Manifest and its libraries
@@ -110,7 +110,7 @@ namespace Microsoft.Web.LibraryManager
         /// <returns></returns>
         private static async Task<IEnumerable<ILibraryOperationResult>> ValidatePropertiesAsync(IEnumerable<ILibraryInstallationState> libraries, IDependencies dependencies, CancellationToken cancellationToken)
         {
-            List<ILibraryOperationResult> validationStatus = new List<ILibraryOperationResult>();
+            var validationStatus = new List<ILibraryOperationResult>();
 
             foreach (ILibraryInstallationState library in libraries)
             {
@@ -130,64 +130,35 @@ namespace Microsoft.Web.LibraryManager
             return validationStatus;
         }
 
-        private static IEnumerable<string> GetDuplicateLibraries(
-            IEnumerable<ILibraryInstallationState> libraries,
-            IDependencies dependencies,
-            string defaultProvider,
-            CancellationToken cancellationToken)
+        private static IEnumerable<ILibraryOperationResult> GetDuplicateLibrariesErrors(IEnumerable<ILibraryInstallationState> libraries)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            var errors = new List<ILibraryOperationResult>();
+            HashSet<string> duplicateLibraries = GetDuplicateLibraries(libraries);
 
-            var duplicateLibraries = new List<string>();
-            IEnumerable<IProvider> providers = GetProviders(libraries, dependencies, defaultProvider);
-
-            foreach (IProvider provider in providers)
+            if (duplicateLibraries.Count > 0)
             {
-                IEnumerable<ILibraryInstallationState> providerLibraries = libraries.Where(l => l.ProviderId == provider.Id);
-                duplicateLibraries.AddRange(providerLibraries.GroupBy(l => l.Name).Where(g => g.Count() > 1).Select(g => g.Key));
-            }
-
-            return duplicateLibraries;
-        }
-
-        private static IEnumerable<IProvider> GetProviders(
-            IEnumerable<ILibraryInstallationState> libraries,
-            IDependencies dependencies,
-            string defaultProvider)
-        {
-            var providers = new List<IProvider>();
-
-            foreach (ILibraryInstallationState library in libraries)
-            {
-                IProvider provider = GetProvider(library, dependencies, defaultProvider);
-                if (provider != null)
+                foreach (string libraryName in duplicateLibraries)
                 {
-                    providers.Add(provider);
+                    errors.Add(LibraryOperationResult.FromError(PredefinedErrors.DuplicateLibrariesInManifest(libraryName)));
                 }
             }
 
-            return providers;
+            return errors;
         }
 
-        private static IProvider GetProvider(
-            ILibraryInstallationState library,
-            IDependencies dependencies,
-            string defaultProvider)
+        private static HashSet<string> GetDuplicateLibraries(IEnumerable<ILibraryInstallationState> libraries)
         {
-            if (string.IsNullOrEmpty(library.ProviderId) && string.IsNullOrEmpty(defaultProvider))
+            var librariesNames = new HashSet<string>();
+            var duplicateNames = new HashSet<string>();
+            foreach (ILibraryInstallationState library in libraries)
             {
-                return null;
+                if (!librariesNames.Add(library.Name))
+                {
+                    duplicateNames.Add(library.Name);
+                }
             }
 
-            if (dependencies != null)
-            {
-                string providerId = library.ProviderId ?? defaultProvider;
-                IProvider provider = dependencies.GetProvider(providerId);
-
-                return provider;
-            }
-
-            return null;
+            return duplicateNames;
         }
 
         /// <summary>
@@ -218,13 +189,13 @@ namespace Microsoft.Web.LibraryManager
                 IProvider provider = dependencies.GetProvider(providerId);
                 if (provider == null)
                 {
-                    return new [] { LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined()) };
+                    return new[] { LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined()) };
                 }
 
                 ILibraryOperationResult desiredState = await provider.UpdateStateAsync(library, cancellationToken);
                 if (!desiredState.Success)
                 {
-                    return new [] { desiredState };
+                    return new[] { desiredState };
                 }
 
                 expandedLibraries.Add(desiredState);
@@ -277,7 +248,7 @@ namespace Microsoft.Web.LibraryManager
                 var errors = new List<IError>();
                 foreach (FileConflict conflictingLibraryGroup in fileConflicts)
                 {
-                    errors.Add(PredefinedErrors.ConflictingLibrariesInManifest(conflictingLibraryGroup.File, conflictingLibraryGroup.Libraries.Select(l => l.LibraryId).ToList()));
+                    errors.Add(PredefinedErrors.ConflictingFilesInManifest(conflictingLibraryGroup.File, conflictingLibraryGroup.Libraries.Select(l => l.LibraryId).ToList()));
                 }
 
                 return new LibraryOperationResult(errors.ToArray());

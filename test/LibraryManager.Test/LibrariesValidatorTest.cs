@@ -63,8 +63,24 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task DetectConflictsAsync_SameLibrary_DifferentDestinations()
         {
             string expectedErrorCode = "LIB019";
-            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery, jquery";
+            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
             var manifest = Manifest.FromJson(_docSameLibrary_DifferentDestination, _dependencies);
+
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+
+            var conflictsList = results.ToList();
+            Assert.AreEqual(1, conflictsList.Count);
+            Assert.IsTrue(conflictsList[0].Errors.Count == 1);
+            Assert.AreEqual(conflictsList[0].Errors[0].Code, expectedErrorCode);
+            Assert.AreEqual(conflictsList[0].Errors[0].Message, expectedErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task DetectConflictsAsync_SameLibrary_DifferentProviders()
+        {
+            string expectedErrorCode = "LIB019";
+            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
+            var manifest = Manifest.FromJson(_docSameLibrary_DifferentProviders, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
@@ -79,7 +95,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task DetectConflictsAsync_SameLibrary_DifferentVersions_DifferentFiles()
         {
             string expectedErrorCode = "LIB019";
-            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery, jquery";
+            string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
             var manifest = Manifest.FromJson(_docSameLibrary_DifferentVersions_DifferentFiles, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
@@ -203,6 +219,24 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Destination}"": ""lib2"",
       ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
+    }},
+  ]
+}}
+";
+        private string _docSameLibrary_DifferentProviders = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""cdnjs"",
+      ""{ManifestConstants.Destination}"": ""lib"",
+      ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
+    }},
+    {{
+      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Provider}"": ""unpkg"",
+      ""{ManifestConstants.Destination}"": ""lib2"",
+      ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
     }},
   ]
 }}
