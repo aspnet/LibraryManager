@@ -185,17 +185,19 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     {
                         IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
-                        foreach (string packageName in packageNames)
+                    foreach (string packageName in packageNames)
+                    {
+                        CompletionItem completionItem = new CompletionItem
                         {
-                            CompletionItem completionItem = new CompletionItem
-                            {
-                                DisplayText = packageName,
-                                InsertionText = packageName
-                            };
+                            DisplayText = packageName,
+                            InsertionText = packageName,
+                        };
 
-                            completions.Add(completionItem);
-                        }
+                        completions.Add(completionItem);
                     }
+
+                    completionSet.Type = CompletionType.Name;
+                }
 
                     // library version completion
                     else
@@ -213,9 +215,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                                 InsertionText = itemText
                             };
 
-                            completions.Add(completionItem);
-                        }
+                        completions.Add(completionItem);
                     }
+
+                    completionSet.Type = CompletionType.Version;
+                }
 
                 completionSet.Completions = completions;
             }

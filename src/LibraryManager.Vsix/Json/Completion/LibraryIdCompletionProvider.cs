@@ -62,6 +62,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             Task<CompletionSet> task = catalog.GetLibraryCompletionSetAsync(member.UnquotedValueText, caretPosition);
+            int count = 0;
 
             if (!context.Session.Properties.ContainsProperty(CompletionController.RetriggerCompletion))
             {
@@ -80,13 +81,21 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     {
                         string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                         ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                        yield return new LibraryIdCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session);
+
+                        if (set.Type == CompletionType.Version)
+                        {
+                            yield return new VersionCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
+                        }
+                        else
+                        {
+                            yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
+                        }
                     }
                 }
             }
             else
             {
-                yield return new LibraryIdCompletionEntry(Resources.Text.Loading, string.Empty, KnownMonikers.Loading, context.Session);
+                yield return new SimpleCompletionEntry(Resources.Text.Loading, string.Empty, KnownMonikers.Loading, context.Session);
 
                 task.ContinueWith((a) =>
                 {
@@ -104,7 +113,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
                             {
                                 string insertionText = item.InsertionText.Replace("\\", "\\\\");
                                 ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                                results.Add(new LibraryIdCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session));
+
+                                if (set.Type == CompletionType.Version)
+                                {
+                                    results.Add(new VersionCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
+                                }
+                                else
+                                {
+                                    results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
+                                }
                             }
 
                             UpdateListEntriesSync(context, results);

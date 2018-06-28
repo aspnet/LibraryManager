@@ -67,6 +67,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                     completions.Add(completion);
                 }
+
+                span.Type = CompletionType.Name;
             }
 
             // Version
@@ -92,6 +94,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         completions.Add(completion);
                     }
                 }
+
+                span.Type = CompletionType.Version;
             }
 
             span.Completions = completions;
