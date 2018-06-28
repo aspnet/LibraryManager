@@ -149,7 +149,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="file"></param>
         /// <param name="conflictingLibraryIds"></param>
         /// <returns></returns>
-        public static IError ConflictingLibrariesInManifest(string file, IReadOnlyList<string> conflictingLibraryIds)
+        public static IError ConflictingFilesInManifest(string file, IReadOnlyList<string> conflictingLibraryIds)
             => new Error("LIB016", string.Format(Text.ErrorConflictingLibraries, file, string.Join(", ", conflictingLibraryIds)));
 
         /// <summary>
@@ -172,10 +172,18 @@ namespace Microsoft.Web.LibraryManager.Contracts
             => new Error("LIB018", string.Format(Text.ErrorLibraryHasInvalidFiles, libraryId, string.Join(", ", invalidFile), string.Join(", ", validFiles)));
 
         /// <summary>
+        /// There are duplicate libraries in the manifest
+        /// </summary>
+        /// <param name="duplicateLibrary"></param>
+        /// <returns></returns>
+        public static IError DuplicateLibrariesInManifest(string duplicateLibrary)
+        => new Error("LIB019", string.Format(Text.ErrorDuplicateLibraries, duplicateLibrary));
+
+        /// <summary>
         /// Unknown error occurred
         /// </summary>
         /// <returns></returns>
         public static IError UnknownError()
-            => new Error("LIB019", Text.ErrorUnknownError);
+            => new Error("LIB999", Text.ErrorUnknownError);
     }
 }

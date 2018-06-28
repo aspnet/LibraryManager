@@ -235,7 +235,7 @@ namespace Microsoft.Web.LibraryManager.Test
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
-            Assert.IsTrue(result.Last().Errors.Any(e => e.Code == "LIB016"), "LIB016 error code expected.");
+            Assert.IsTrue(result.Last().Errors.Any(e => e.Code == "LIB019"), "LIB019 error code expected.");
         }
 
         [TestMethod]
@@ -334,16 +334,13 @@ namespace Microsoft.Web.LibraryManager.Test
             // Valid parameters and files.
             var files = new List<string>() { "jquery.min.js" };
             results = await manifest.InstallLibraryAsync("jquery@2.2.0", "cdnjs", files, "wwwroot2", CancellationToken.None);
-            Assert.IsTrue(results.First().Success);
-            Assert.AreEqual("wwwroot2", results.First().InstallationState.DestinationPath);
-            Assert.AreEqual("jquery@2.2.0", results.First().InstallationState.LibraryId);
-            Assert.AreEqual("cdnjs", results.First().InstallationState.ProviderId);
-            Assert.AreEqual(1, results.First().InstallationState.Files.Count);
-            Assert.AreEqual("jquery.min.js", results.First().InstallationState.Files[0]);
+            Assert.IsFalse(results.First().Success);
+            Assert.AreEqual(1, results.First().Errors.Count);
+            Assert.AreEqual("LIB019", results.First().Errors[0].Code);
 
             // Valid parameters invalid files
             files.Add("abc.js");
-            results = await manifest.InstallLibraryAsync("jquery@3.3.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
+            results = await manifest.InstallLibraryAsync("twitter-bootstrap@4.1.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
             Assert.IsFalse(results.First().Success);
             Assert.AreEqual(1, results.First().Errors.Count);
             Assert.AreEqual("LIB018", results.First().Errors[0].Code);
