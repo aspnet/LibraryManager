@@ -178,4 +178,7 @@
     <value>"{0}" does not contain the following: {1}
 Valid files are {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>An unknown error occurred</value>
+  </data>
 </root>

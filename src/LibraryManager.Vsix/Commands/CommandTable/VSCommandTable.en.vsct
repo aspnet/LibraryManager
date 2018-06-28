@@ -19,7 +19,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Client-Side Library...</ButtonText>
+          <ButtonText>Client-Side &amp;Library...</ButtonText>
         </Strings>
       </Button>
 
@@ -31,7 +31,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Restore Client-Side Libraries</ButtonText>
+          <ButtonText>Restore Client-Side &amp;Libraries</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
@@ -39,7 +39,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Clean Client-Side Libraries</ButtonText>
+          <ButtonText>&amp;Clean Client-Side Libraries</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">
@@ -61,7 +61,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Manage Client-Side Libraries...</ButtonText>
+          <ButtonText>&amp;Manage Client-Side Libraries...</ButtonText>
           <CanonicalName>ManageClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
@@ -74,7 +74,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Restore Client-Side Libraries</ButtonText>
+          <ButtonText>&amp;Restore Client-Side Libraries</ButtonText>
           <CanonicalName>RestoreClientSideLibraries</CanonicalName>
         </Strings>
       </Button>

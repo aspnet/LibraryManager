@@ -19,45 +19,76 @@ namespace Microsoft.Web.LibraryManager
     public static class Extensions
     {
         /// <summary>
-        /// Returns true if the <see cref="ILibraryInstallationState"/> is valid.
+        /// Validates <see cref="ILibraryInstallationState"/> 
         /// </summary>
-        /// <param name="state">The state to test.</param>
-        /// <param name="errors">The errors contained in the <see cref="ILibraryInstallationState"/> if any.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified state is valid; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsValid(this ILibraryInstallationState state, out IEnumerable<IError> errors)
+        /// <param name="state">The <see cref="ILibraryInstallationState"/> to validate.</param>
+        /// <param name="dependencies">The <see cref="IDependencies"/> used to validate <see cref="ILibraryInstallationState"/></param>
+        /// <returns><see cref="ILibraryOperationResult"/> with the result of the validation</returns>
+        public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IDependencies dependencies)
         {
-            errors = null;
-            var list = new List<IError>();
-
             if (state == null)
             {
-                return false;
+                return LibraryOperationResult.FromError(PredefinedErrors.UnknownError());
             }
 
             if (string.IsNullOrEmpty(state.ProviderId))
             {
-                list.Add(PredefinedErrors.ProviderIsUndefined());
+                return LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined());
             }
 
-            if (string.IsNullOrEmpty(state.DestinationPath))
+            IProvider provider = dependencies.GetProvider(state.ProviderId);
+            if (provider == null)
             {
-                list.Add(PredefinedErrors.PathIsUndefined());
+                return LibraryOperationResult.FromError(PredefinedErrors.ProviderUnknown(state.ProviderId));
             }
-            else if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) > 0)
+
+            return await IsValidAsync(state, provider).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///  Validates <see cref="ILibraryInstallationState"/> 
+        /// </summary>
+        /// <param name="state">The <see cref="ILibraryInstallationState"/> to validate.</param>
+        /// <param name="provider">The <see cref="IProvider"/> used to validate <see cref="ILibraryInstallationState"/></param>
+        /// <returns><see cref="ILibraryOperationResult"/> with the result of the validation</returns>
+        public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IProvider provider)
+        {
+            if (state == null)
             {
-                list.Add(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
+                return LibraryOperationResult.FromError(PredefinedErrors.UnknownError());
+            }
+
+            if (provider == null)
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.ProviderUnknown(provider.Id));
             }
 
             if (string.IsNullOrEmpty(state.LibraryId))
             {
-                list.Add(PredefinedErrors.LibraryIdIsUndefined());
+                return LibraryOperationResult.FromError(PredefinedErrors.LibraryIdIsUndefined());
             }
 
-            errors = list;
+            ILibraryCatalog catalog = provider.GetCatalog();
+            try
+            {
+                await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None).ConfigureAwait(false);
+            }
+            catch
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id));
+            }
 
-            return list.Count == 0;
+            if (string.IsNullOrEmpty(state.DestinationPath))
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.PathIsUndefined());
+            }
+
+            if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+            {
+                return LibraryOperationResult.FromError(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
+            }
+
+            return LibraryOperationResult.FromSuccess(state);
         }
 
         /// <summary>
