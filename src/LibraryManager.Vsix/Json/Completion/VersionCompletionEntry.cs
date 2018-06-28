@@ -31,9 +31,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (!string.IsNullOrEmpty(VersionText))
             {
-                string selfVersionText = VersionText;
                 string otherVersionText = otherEntry.VersionText;
-                SemanticVersion selfSemanticVersion = SemanticVersion.Parse(selfVersionText);
+                SemanticVersion selfSemanticVersion = SemanticVersion.Parse(VersionText);
                 SemanticVersion otherSemanticVersion = SemanticVersion.Parse(otherVersionText);
 
                 return -selfSemanticVersion.CompareTo(otherSemanticVersion);
