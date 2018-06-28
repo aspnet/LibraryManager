@@ -302,11 +302,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static async Task<bool> ProjectContainsManifestFileAsync(Project project)
         {
             string rootPath = await GetRootFolderAsync(project);
-            string configFilePath = Path.Combine(rootPath, Constants.ConfigFileName);
 
-            if (File.Exists(configFilePath))
+            if (!string.IsNullOrEmpty(rootPath))
             {
-                return true;
+                string configFilePath = Path.Combine(rootPath, Constants.ConfigFileName);
+
+                if (File.Exists(configFilePath))
+                {
+                    return true;
+                }
             }
 
             return false;
