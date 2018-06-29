@@ -160,15 +160,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             FocusManager.SetFocusedElement(LibrarySearchBox, LibrarySearchBox);
         }
 
-        private void ThemedWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!LibrarySearchBox.IsMouseOver && !LibrarySearchBox.IsMouseOverFlyout)
-            {
-                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
-                MoveFocus(request);
-            }
-        }
-
         private void IncludeAllLibraryFilesRb_Checked(object sender, RoutedEventArgs e)
         {
             LibraryFilesToInstallTreeView.IsEnabled = false;

@@ -14,7 +14,6 @@
                  xmlns:ui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
                  Title="{x:Static resources:Text.AddClientSideLibrary}"
                  Height="350" Width="500"
-                 PreviewMouseDown="ThemedWindow_PreviewMouseDown"
                  ShowInTaskbar="False"
                  ResizeMode="CanResizeWithGrip"
                  WindowStartupLocation="CenterOwner">
