@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -96,8 +97,20 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
                 return Task.FromResult(set);
             }
-            catch
+            catch (Exception ex)
             {
+                // Do not provide completion for invalid forms but allow user to type them.
+                if (ex is ArgumentException)
+                {
+                    var set = new CompletionSet
+                    {
+                        Start = 0,
+                        Length = value.Length
+                    };
+
+                    return Task.FromResult(set);
+                }
+
                 throw new InvalidLibraryException(value, _provider.Id);
             }
         }
