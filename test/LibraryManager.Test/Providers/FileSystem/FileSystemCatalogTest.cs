@@ -187,7 +187,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result.IsCompleted);
-            Assert.AreEqual(libraryId, result.Result);
+            Assert.AreEqual(string.Empty, result.Result);
 
         }
     }

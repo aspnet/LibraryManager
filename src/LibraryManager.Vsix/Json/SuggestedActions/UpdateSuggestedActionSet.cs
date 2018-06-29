@@ -1,13 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.VisualStudio.Language.Intellisense;
-using Microsoft.Web.Editor.SuggestedActions;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.Web.Editor.SuggestedActions;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -75,17 +76,21 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private async Task<List<ISuggestedAction>> GetListOfActionsAsync(ILibraryCatalog catalog, CancellationToken cancellationToken)
         {
             var list = new List<ISuggestedAction>();
+            string latestStableVersion = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, false, cancellationToken).ConfigureAwait(false);
+            string latestStable = LibraryNamingScheme.Instance.GetLibraryId(
+                            _provider.InstallationState.Name,
+                            latestStableVersion);
 
-            string latestStable = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, false, cancellationToken).ConfigureAwait(false);
-
-            if (!string.IsNullOrEmpty(latestStable) && latestStable != _provider.InstallationState.LibraryId)
+            if (!string.IsNullOrEmpty(latestStableVersion) && latestStable != _provider.InstallationState.LibraryId)
             {
                 list.Add(new UpdateSuggestedAction(_provider, latestStable, $"Stable: {latestStable}"));
             }
 
-            string latestPre = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, true, cancellationToken).ConfigureAwait(false);
+            string latestPreVersion = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, true, cancellationToken).ConfigureAwait(false);
+            string latestPre = LibraryNamingScheme.Instance.GetLibraryId(_provider.InstallationState.Name,
+                            latestPreVersion);
 
-            if (!string.IsNullOrEmpty(latestPre) && latestPre != _provider.InstallationState.LibraryId && latestPre != latestStable)
+            if (!string.IsNullOrEmpty(latestPreVersion) && latestPre != _provider.InstallationState.LibraryId && latestPre != latestStable)
             {
                 list.Add(new UpdateSuggestedAction(_provider, latestPre, $"Pre-release: {latestPre}"));
             }
