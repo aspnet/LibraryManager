@@ -27,7 +27,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             {
                 return npmPackageInfo.Versions
                     .OrderByDescending(v => v)
-                    .Select(semanticVersion => LibraryNamingScheme.Instance.GetLibraryId(DisplayName, semanticVersion.ToString()));
+                    .Select(semanticVersion => LibraryNamingScheme.Instance.GetLibraryId(DisplayName, semanticVersion.ToString()))
+                    .ToList();
             }
 
             return Enumerable.Empty<string>();
