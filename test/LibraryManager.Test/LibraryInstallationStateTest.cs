@@ -62,7 +62,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
-            Assert.AreEqual(result.Errors.First().Code, "LIB019");
+            Assert.AreEqual(result.Errors.First().Code, "LIB999");
         }
 
         [TestMethod]

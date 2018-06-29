@@ -97,6 +97,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot restore. Multiple definitions for libraries: {0}.
+        /// </summary>
+        internal static string ErrorDuplicateLibraries {
+            get {
+                return ResourceManager.GetString("ErrorDuplicateLibraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; library is already installed by the &quot;{1}&quot; provider.
         /// </summary>
         internal static string ErrorLibraryAlreadyInstalled {

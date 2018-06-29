@@ -169,10 +169,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             int result = command.Execute("jquery@3.2.1", "--provider", "cdnjs");
 
             var testLogger = HostEnvironment.Logger as TestLogger;
-            Assert.AreEqual("Please specify a different destination.", testLogger.Messages.Last().Value);
-
-            string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
-            Assert.AreEqual(StringHelper.NormalizeNewLines(initialContent), StringHelper.NormalizeNewLines(actualText));
+            Assert.AreEqual("[LIB019]: Cannot restore. Multiple definitions for libraries: jquery", testLogger.Messages.Last().Value);
         }
 
         [TestMethod]

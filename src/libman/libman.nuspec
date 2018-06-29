@@ -21,7 +21,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="$publishdir$" target="tools/$targetframework$/any/" />
+    <file src="$publishdir$" target="tools/$targetframework$/any/" exclude="**/*.pdb" />
     <file src="DotnetToolSettings.xml" target="tools/$targetframework$/any/DotnetToolSettings.xml" />
     <file src="$publishdir$..\shims\" target="tools/$targetframework$/any/shims/" />
   </files>
