@@ -133,13 +133,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
             Assert.IsNotNull(result);
 
-            string[] latest = result.Split('@');
             string[] existing = libraryId.Split('@');
 
-            Assert.AreEqual(2, latest.Length);
-
-            Assert.AreNotEqual(libraryId, result);
-            Assert.AreEqual(existing[0], latest[0]);
+            Assert.AreNotEqual(existing[1], result);
         }
 
         [TestMethod]
@@ -151,14 +147,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
             Assert.IsNotNull(result);
 
-            string[] latest = result.Split('@');
             string[] existing = libraryId.Split('@');
 
-            Assert.AreEqual(2, latest.Length);
-
-            Assert.AreNotEqual(libraryId, result);
-            Assert.AreEqual(existing[0], latest[0]);
-            Assert.IsTrue(latest[0].Any(c => char.IsLetter(c)));
+            Assert.AreNotEqual(existing[1], result);
         }
     }
 }
