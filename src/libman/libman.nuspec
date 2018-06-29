@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>libman</id>
+    <id>Microsoft.Web.LibraryManager.Tools</id>
     <tags>libman</tags>
     <version>$version$</version>
     <authors>Microsoft</authors>
