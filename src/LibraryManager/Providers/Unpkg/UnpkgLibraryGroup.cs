@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
@@ -24,7 +25,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             if (npmPackageInfo != null)
             {
-                return npmPackageInfo.Versions.Select(semanticVersion => semanticVersion.ToString()).ToArray();
+                return npmPackageInfo.Versions
+                    .OrderByDescending(v => v)
+                    .Select(semanticVersion => LibraryNamingScheme.Instance.GetLibraryId(DisplayName, semanticVersion.ToString()));
             }
 
             return Enumerable.Empty<string>();
