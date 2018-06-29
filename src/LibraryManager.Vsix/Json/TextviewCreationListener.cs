@@ -102,26 +102,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         }
                         else
                         {
-                            // Manifest failed to parse when file was opened in the editor, so we use the new manifest state to restore
-                            if (_manifest == null)
+                            if (_manifest == null || await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
                             {
                                 _manifest = newManifest;
+
+                                await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                Telemetry.TrackOperation("restoresave");
                             }
                             else
                             {
-                                if (await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
-                                {
-                                    _manifest = newManifest;
-                                }
-                                else
-                                {
-                                    string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
-                                    Logger.LogEvent(textMessage, LogLevel.Task);
-                                }
+                                string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
+                                Logger.LogEvent(textMessage, LogLevel.Task);
                             }
-
-                            await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
-                            Telemetry.TrackOperation("restoresave");
                         }
                     }
                     catch (OperationCanceledException ex)
