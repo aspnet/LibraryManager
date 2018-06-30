@@ -93,7 +93,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 {
                     try
                     {
-                        Manifest newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
+                        var newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
                         IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
 
                         if (!results.All(r => r.Success))
@@ -102,7 +102,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         }
                         else
                         {
-                            if (await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
+                            if (_manifest == null || await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
                             {
                                 _manifest = newManifest;
 
