@@ -229,4 +229,10 @@ Do you want to continue?</value>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>No files have been selected</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Install</value>
+  </data>
 </root>

@@ -188,12 +188,12 @@
                 <Label Content="{x:Static resources:Text.NoFilesSelected}">
                 </Label>
             </StackPanel>
-            <Button Content="Cancel" 
+            <Button Content="{x:Static resources:Text.Cancel}"
                     Width="65" 
                     DockPanel.Dock="Right"
                     IsCancel="True"
                     KeyboardNavigation.TabIndex="2" />
-            <Button Content="Install"
+            <Button Content="{x:Static resources:Text.Install}"
                     Name="InstallButton"
                     Width="65" 
                     DockPanel.Dock="Right"
