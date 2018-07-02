@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.Editor.Completion;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
+using Microsoft.Web.LibraryManager.Vsix.Json.Completion;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -31,35 +32,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return 1;
             }
 
-            int result = CompareSemanticVersion(SemVersion, otherEntry.SemVersion);
+            int result = CompletionUtility.CompareSemanticVersion(SemVersion, otherEntry.SemVersion);
 
             return (result == 0) ? base.InternalCompareTo(other) : result;
-        }
-
-        internal int CompareSemanticVersion(SemanticVersion selfSemVersion, SemanticVersion otherSemVersion)
-        {
-            if (selfSemVersion == null)
-            {
-                if (otherSemVersion != null)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-            else
-            {
-                if (otherSemVersion != null)
-                {
-                    return -selfSemVersion.CompareTo(otherSemVersion);
-                }
-                else
-                {
-                    return 1;
-                }
-            }
         }
     }
 }
