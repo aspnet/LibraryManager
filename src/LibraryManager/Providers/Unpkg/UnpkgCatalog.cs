@@ -178,6 +178,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
 
+            // TODO: LibraryNamingScheme should not be returning "{name}@" as the name.
+            int at = name.IndexOf('@', 1);
+            name = at > -1 ? name.Substring(0, at) : name;
+
             try
             {
                     // library name completion
@@ -195,8 +199,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                         completions.Add(completionItem);
                     }
-
-                    completionSet.Type = CompletionType.Name;
+                    
+                    completionSet.CompletionType = CompletionSortOrder.AsSpecified;
                 }
 
                     // library version completion
@@ -218,7 +222,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                         completions.Add(completionItem);
                     }
 
-                    completionSet.Type = CompletionType.Version;
+                    completionSet.CompletionType = CompletionSortOrder.Version;
                 }
 
                 completionSet.Completions = completions;

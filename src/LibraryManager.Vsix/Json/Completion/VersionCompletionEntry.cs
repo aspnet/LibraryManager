@@ -3,8 +3,8 @@
 
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
-using Microsoft.Web.Editor.Completion;
 using Microsoft.VisualStudio.Text;
+using Microsoft.Web.Editor.Completion;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -31,22 +31,29 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return 1;
             }
 
-            if (SemVersion == null)
+            int result = CompareSemanticVersion(SemVersion, otherEntry.SemVersion);
+
+            return (result == 0) ? base.InternalCompareTo(other) : result;
+        }
+
+        internal int CompareSemanticVersion(SemanticVersion selfSemVersion, SemanticVersion otherSemVersion)
+        {
+            if (selfSemVersion == null)
             {
-                if (otherEntry.SemVersion != null)
+                if (otherSemVersion != null)
                 {
                     return -1;
                 }
                 else
                 {
-                    return base.InternalCompareTo(other);
+                    return 0;
                 }
             }
             else
             {
-                if (otherEntry.SemVersion != null)
+                if (otherSemVersion != null)
                 {
-                    return -SemVersion.CompareTo(otherEntry.SemVersion);
+                    return -selfSemVersion.CompareTo(otherSemVersion);
                 }
                 else
                 {

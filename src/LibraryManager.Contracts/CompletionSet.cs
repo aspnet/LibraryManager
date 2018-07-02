@@ -30,9 +30,9 @@ namespace Microsoft.Web.LibraryManager.Contracts
         public IEnumerable<CompletionItem> Completions;
 
         /// <summary>
-        /// The type of the completion item.
+        /// The type of the completion item sorting.
         /// </summary>
-        public CompletionType Type;
+        public CompletionSortOrder CompletionType;
     }
 
     /// <summary>
@@ -60,15 +60,15 @@ namespace Microsoft.Web.LibraryManager.Contracts
     }
 
     /// <summary>
-    /// The completion type is to indicate the type of the completion item.
+    /// The completion sort order is to indicate the sorting type of the completion item.
     /// </summary>
-    public enum CompletionType
+    public enum CompletionSortOrder
     {
-        /// <summary>The completion item is neither version nor name specified</summary>
-        Other,
+        /// <summary>The completion item is alphabetical sorted.</summary>
+        Alphavetical,
         /// <summary>The completion item is for library version completion.</summary>
         Version,
-        /// <summary>The completion item is for libraray name completion</summary>
-        Name
+        /// <summary>The completion item is sorted by providers.</summary>
+        AsSpecified
     }
 }
