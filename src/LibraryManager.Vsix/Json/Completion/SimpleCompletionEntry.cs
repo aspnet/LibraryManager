@@ -4,9 +4,9 @@
 using Microsoft.JSON.Editor.Completion;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
-using System.Windows.Media;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.Editor.Completion;
+using System.Windows.Media;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {

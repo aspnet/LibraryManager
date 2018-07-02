@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return default(CompletionSet);
             }
 
-            var span = new CompletionSet
+            var completionSet = new CompletionSet
             {
                 Start = 0,
                 Length = value.Length
@@ -61,14 +61,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     var completion = new CompletionItem
                     {
                         DisplayText = group.DisplayName,
-                        InsertionText = group.DisplayName + "@" + group.Version,
+                        InsertionText = LibraryNamingScheme.Instance.GetLibraryId(group.DisplayName, group.Version),
                         Description = group.Description,
                     };
 
                     completions.Add(completion);
                 }
 
-                span.Type = CompletionType.Name;
+                completionSet.CompletionType = CompletionSortOrder.AsSpecified;
             }
 
             // Version
@@ -78,8 +78,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 if (group != null)
                 {
-                    span.Start = at + 1;
-                    span.Length = value.Length - span.Start;
+                    completionSet.Start = at + 1;
+                    completionSet.Length = value.Length - completionSet.Start;
 
                     IEnumerable<Asset> assets = await GetAssetsAsync(name, CancellationToken.None).ConfigureAwait(false);
 
@@ -88,19 +88,19 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         var completion = new CompletionItem
                         {
                             DisplayText = version,
-                            InsertionText = $"{name}@{version}",
+                            InsertionText = LibraryNamingScheme.Instance.GetLibraryId(name, version),
                         };
 
                         completions.Add(completion);
                     }
                 }
 
-                span.Type = CompletionType.Version;
+                completionSet.CompletionType = CompletionSortOrder.Version;
             }
 
-            span.Completions = completions;
+            completionSet.Completions = completions;
 
-            return span;
+            return completionSet;
         }
 
         public async Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken)
