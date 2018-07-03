@@ -186,6 +186,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void LibrarySearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            OnPropertyChanged(nameof(IsTextEntryEmpty));
+
             TextChange textChange = e.Changes.Last();
 
             // We will invoke completion on text insertion and not deletion.
@@ -216,7 +218,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     }
 
                     PositionCompletions(completionSet.Length);
-                    OnPropertyChanged(nameof(IsTextEntryEmpty));
 
                     if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
                     {
