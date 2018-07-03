@@ -195,6 +195,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 {
                     CompletionSet completionSet = await SearchService?.Invoke(Text, LibrarySearchBox.CaretIndex);
 
+                    if (!completionSet.Completions.Any())
+                    {
+                        Flyout.IsOpen = false;
+                        return;
+                    }
+
                     int atIndex = Text.IndexOf('@');
 
                     if (atIndex >= 0)
