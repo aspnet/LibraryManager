@@ -1,4 +1,4 @@
-<Project ToolsDefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+﻿<Project ToolsDefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
   <Import Project="..\..\LibraryManager.Settings.targets" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
@@ -65,7 +65,6 @@
       <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\Search\ISearchItem.cs" />
-    <Compile Include="UI\Controls\Search\LogicalAndConverter.cs" />
     <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
     <Compile Include="UI\Controls\Search\Wrapper.cs" />
     <Compile Include="UI\Controls\Library.xaml.cs">

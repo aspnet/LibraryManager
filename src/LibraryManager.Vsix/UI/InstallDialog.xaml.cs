@@ -181,10 +181,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 ViewModel.PackageId = null;
                 ViewModel.AnyFileSelected = false;
             }
-            else
-            {
-                LibrarySearchBox.RefreshSearch();
-            }
         }
 
         private void InstallButton_Clicked(object sender, RoutedEventArgs e)

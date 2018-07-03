@@ -10,12 +10,19 @@
              x:Name="ThisControl" Focusable="True" GotFocus="ThisControl_GotFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
-        <search:LogicalAndConverter x:Key="LogicalAnd" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <!-- Text Entry -->
-        <TextBox x:Name="LibrarySearchBox" Text="{Binding ElementName=ThisControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, IsAsync=True}" PreviewKeyDown="HandleKeyPress" KeyUp="HandleKeyUp" Padding="2 2 20 2" PreviewMouseLeftButtonUp="OnMousePositionCaret"/>
+        <TextBox x:Name="LibrarySearchBox"
+                 Text="{Binding ElementName=ThisControl,
+                                Path=Text,
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged,
+                                IsAsync=True}"
+                 TextChanged="LibrarySearchBox_TextChanged"
+                 PreviewKeyDown="HandleKeyPress"
+                 Padding="2 2 20 2" />
         <!-- Watermark -->
         <Label Opacity=".5" Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Top" IsHitTestVisible="False">
             <AccessText Text="{x:Static res:Text.TypeToSearch}" />
@@ -35,13 +42,9 @@
         </controls:BindingProxy>
 
         <!-- Fly out -->
-        <Popup x:Name="Flyout" Placement="Bottom" PlacementTarget="{Binding ElementName=LibrarySearchBox}">
-            <Popup.IsOpen>
-                <MultiBinding Mode="OneWay" Converter="{StaticResource LogicalAnd}">
-                    <Binding ElementName="ThisControl" Path="HasItems" />
-                    <Binding ElementName="AllOrs" Path="Output" />
-                </MultiBinding>
-            </Popup.IsOpen>
+        <Popup x:Name="Flyout"
+               Placement="Bottom"
+               PlacementTarget="{Binding ElementName=LibrarySearchBox}">
             <ListBox x:Name="Options"
                 SelectionMode="Single"
                 PreviewKeyDown="HandleListBoxKeyPress"
