@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.Editor.Completion;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
-using Microsoft.Web.LibraryManager.Vsix.Json.Completion;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {

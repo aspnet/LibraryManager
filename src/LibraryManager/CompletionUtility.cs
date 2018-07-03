@@ -1,6 +1,6 @@
 ﻿using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
-namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
+namespace Microsoft.Web.LibraryManager
 {
     internal static class CompletionUtility
     {

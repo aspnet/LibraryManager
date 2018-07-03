@@ -3,12 +3,11 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
-using Microsoft.Web.LibraryManager.Vsix.Json.Completion;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
     [TestClass]
-    public class VersionCompletionEntryTest
+    public class SemanticVersionComparisonTest
     {
         [DataTestMethod]
         [DataRow(null, "1.0.0", 1)]
