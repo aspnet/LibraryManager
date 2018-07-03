@@ -195,7 +195,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 {
                     CompletionSet completionSet = await SearchService?.Invoke(Text, LibrarySearchBox.CaretIndex);
 
-                    if (!completionSet.Completions.Any())
+                    if (completionSet.Equals(null) || !completionSet.Completions.Any())
                     {
                         Flyout.IsOpen = false;
                         return;
@@ -216,8 +216,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     }
 
                     PositionCompletions(completionSet.Length);
-
-                    OnPropertyChanged(nameof(HasItems));
                     OnPropertyChanged(nameof(IsTextEntryEmpty));
 
                     if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
@@ -237,11 +235,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                         Flyout.IsOpen = true;
                     }
                 });
-
-                return;
             }
-
-            Flyout.IsOpen = false;
         }
     }
 }

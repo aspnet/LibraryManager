@@ -188,35 +188,31 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 {
                     CompletionSet completionSet = await SearchService?.Invoke(Text, TargetLocationSearchTextBox.CaretIndex);
 
-                    if (completionSet.Completions != null)
+                    if (completionSet.Equals(null) || !completionSet.Completions.Any())
                     {
-                        Items.Clear();
-
-                        foreach (CompletionItem entry in completionSet.Completions)
-                        {
-                            Items.Add(new Completion(entry, completionSet.Start, completionSet.Length));
-                        }
-
-                        if (Items.Count > 0)
-                        {
-                            PositionCompletions(completionSet.Length);
-
-                            if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
-                            {
-                                string lastSelected = SelectedItem?.CompletionItem.InsertionText;
-                                SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
-                                Options.ScrollIntoView(SelectedItem);
-                            }
-
-                            Flyout.IsOpen = true;
-                        }
+                        Flyout.IsOpen = false;
+                        return;
                     }
+
+                    Items.Clear();
+
+                    foreach (CompletionItem entry in completionSet.Completions)
+                    {
+                        Items.Add(new Completion(entry, completionSet.Start, completionSet.Length));
+                    }
+
+                    PositionCompletions(completionSet.Length);
+
+                    if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
+                    {
+                        string lastSelected = SelectedItem?.CompletionItem.InsertionText;
+                        SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
+                        Options.ScrollIntoView(SelectedItem);
+                    }
+
+                    Flyout.IsOpen = true;
                 });
-
-                return;
             }
-
-            Flyout.IsOpen = false;
         }
     }
 }
