@@ -53,7 +53,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\InstallLibraryCommand.cs" />
-    <Compile Include="Json\Completion\CompletionUtility.cs" />
     <Compile Include="Shared\DefaultSolutionEvents.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
     <Compile Include="UI\Controls\BindLibraryNameToTargetLocation.cs" />
