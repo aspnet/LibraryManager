@@ -96,20 +96,19 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
                 return Task.FromResult(set);
             }
-            catch (Exception ex)
+            catch (ArgumentException)
             {
                 // Do not provide completion for invalid forms but allow user to type them.
-                if (ex is ArgumentException)
+                var set = new CompletionSet
                 {
-                    var set = new CompletionSet
-                    {
-                        Start = 0,
-                        Length = value.Length
-                    };
+                    Start = 0,
+                    Length = value.Length
+                };
 
-                    return Task.FromResult(set);
-                }
-
+                return Task.FromResult(set);
+            }
+            catch
+            {
                 throw new InvalidLibraryException(value, _provider.Id);
             }
         }
