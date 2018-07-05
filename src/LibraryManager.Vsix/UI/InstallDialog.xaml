@@ -14,7 +14,6 @@
                  xmlns:ui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
                  Title="{x:Static resources:Text.AddClientSideLibrary}"
                  Height="350" Width="500"
-                 PreviewMouseDown="ThemedWindow_PreviewMouseDown"
                  ShowInTaskbar="False"
                  ResizeMode="CanResizeWithGrip"
                  WindowStartupLocation="CenterOwner">
@@ -189,12 +188,12 @@
                 <Label Content="{x:Static resources:Text.NoFilesSelected}">
                 </Label>
             </StackPanel>
-            <Button Content="Cancel" 
+            <Button Content="{x:Static resources:Text.Cancel}"
                     Width="65" 
                     DockPanel.Dock="Right"
                     IsCancel="True"
                     KeyboardNavigation.TabIndex="2" />
-            <Button Content="Install"
+            <Button Content="{x:Static resources:Text.Install}"
                     Name="InstallButton"
                     Width="65" 
                     DockPanel.Dock="Right"

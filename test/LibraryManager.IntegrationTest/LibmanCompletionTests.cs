@@ -157,5 +157,22 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Type("\"library\":");
             Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
         }
+
+        [TestMethod]
+        public void LibmanCompletion_CompletionForBackSpace()
+        {
+            _libManConfig.Open();
+
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
+            Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
+            Editor.KeyboardCommands.Enter();
+
+            Editor.KeyboardCommands.Type("\"library\":");
+            Editor.KeyboardCommands.Type("jque");
+
+            Editor.KeyboardCommands.Backspace();
+            Helpers.Completion.WaitForCompletionEntries(Editor, new string[] { }, caseInsensitive: true);
+        }
     }
 }
