@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Newtonsoft.Json;
 
 namespace Microsoft.Web.LibraryManager
@@ -97,6 +98,7 @@ namespace Microsoft.Web.LibraryManager
         {
             try
             {
+                LibraryIdToNameAndVersionConverter.Instance.Initialize(dependencies);
                 Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
                 manifest._dependencies = dependencies;
                 manifest._hostInteraction = dependencies.GetHostInteractions();

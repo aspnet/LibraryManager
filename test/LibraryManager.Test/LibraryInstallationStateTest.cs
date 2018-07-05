@@ -1,17 +1,18 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Mocks;
-using Microsoft.Web.LibraryManager.Providers.Cdnjs;
-using Microsoft.Web.LibraryManager.Providers.FileSystem;
-using Microsoft.Web.LibraryManager.Providers.Unpkg;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Mocks;
+using Microsoft.Web.LibraryManager.Providers.Cdnjs;
+using Microsoft.Web.LibraryManager.Providers.FileSystem;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -33,6 +34,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory());
+            LibraryIdToNameAndVersionConverter.Instance.Initialize(_dependencies);
         }
 
         [TestMethod]
@@ -148,8 +150,8 @@ namespace Microsoft.Web.LibraryManager.Test
 
             ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
 
-            // IsValidAsync does not validate library files 
-            // Issue https://github.com/aspnet/LibraryManager/issues/254 should fix that 
+            // IsValidAsync does not validate library files
+            // Issue https://github.com/aspnet/LibraryManager/issues/254 should fix that
             Assert.IsTrue(result.Success);
         }
 

@@ -35,6 +35,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         IHostInteraction HostInteraction { get; }
 
         /// <summary>
+        /// Indicates whether the provider supports libraries with versions.
+        /// </summary>
+        bool SupportsLibraryVersions { get; }
+
+        /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.
         /// </summary>
         /// <param name="desiredState">The details about the library to install.</param>

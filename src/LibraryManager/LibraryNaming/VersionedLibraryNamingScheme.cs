@@ -1,20 +1,12 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-namespace Microsoft.Web.LibraryManager.Helpers
+namespace Microsoft.Web.LibraryManager.LibraryNaming
 {
-    /// <summary>
-    /// Defines the way LibraryId is split into name and Version
-    /// </summary>
-    public class LibraryNamingScheme
+    /// <inheritDoc />
+    class VersionedLibraryNamingScheme : ILibraryNamingScheme
     {
         private const char _separator = '@';
-        private LibraryNamingScheme() { }
-
-        /// <summary>
-        /// Singleton instance of the LibraryNamingScheme
-        /// </summary>
-        public static LibraryNamingScheme Instance { get; } = new LibraryNamingScheme();
 
         /// <summary>
         /// Splits libraryId into name and version using '@' as the split char.
@@ -39,10 +31,10 @@ namespace Microsoft.Web.LibraryManager.Helpers
             name = libraryId;
             version = string.Empty;
 
-            if (indexOfAt > 0 && indexOfAt < libraryId.Trim().Length -1)
+            if (indexOfAt > 0 && indexOfAt < libraryId.Trim().Length - 1)
             {
                 name = libraryId.Substring(0, indexOfAt);
-                version = libraryId.Substring(indexOfAt+1);
+                version = libraryId.Substring(indexOfAt + 1);
             }
 
             return (name, version);
