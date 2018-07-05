@@ -92,11 +92,11 @@ Valid files are {2}</source>
         </trans-unit>
         <trans-unit id="ErrorUnknownError" translate="yes" xml:space="preserve">
           <source>An unknown error occurred</source>
-          <target state="new">An unknown error occurred</target>
+          <target state="translated">알 수 없는 오류 발생</target>
         </trans-unit>
         <trans-unit id="ErrorDuplicateLibraries" translate="yes" xml:space="preserve">
           <source>Cannot restore. Multiple definitions for libraries: {0}</source>
-          <target state="new">Cannot restore. Multiple definitions for libraries: {0}</target>
+          <target state="translated">복원할 수 없음. 라이브러리에 대한 여러 개의 정의: {0}</target>
         </trans-unit>
       </group>
     </body>

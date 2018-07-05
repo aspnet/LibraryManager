@@ -92,11 +92,11 @@ I file validi sono {2}</target>
         </trans-unit>
         <trans-unit id="ErrorUnknownError" translate="yes" xml:space="preserve">
           <source>An unknown error occurred</source>
-          <target state="new">An unknown error occurred</target>
+          <target state="translated">Si è verificato un errore sconosciuto</target>
         </trans-unit>
         <trans-unit id="ErrorDuplicateLibraries" translate="yes" xml:space="preserve">
           <source>Cannot restore. Multiple definitions for libraries: {0}</source>
-          <target state="new">Cannot restore. Multiple definitions for libraries: {0}</target>
+          <target state="translated">Non è possibile eseguire il ripristino. Sono presenti più definizioni per le librerie: {0}</target>
         </trans-unit>
       </group>
     </body>

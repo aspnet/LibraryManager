@@ -58,10 +58,10 @@
     <value>&lt;Выберите библиотеку, чтобы выбрать файлы для установки&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Отключить восстановление при сборке</value>
+    <value>&amp;Отключить клиентские библиотеки при сборке</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Включить восстановление клиентских библиотек при сборке</value>
+    <value>&amp;Включить восстановление клиентских библиотек при сборке...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Установка пакета NuGet, содержащего целевой объект MSBuild...</value>
@@ -119,5 +119,11 @@
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Файлы не выбраны</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Установить</value>
   </data>
 </root>

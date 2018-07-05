@@ -58,10 +58,10 @@
     <value>&lt;Yüklenecek dosyaları belirlemek için bir kitaplık seçin&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Derleme Sırasında Geri Yüklemeyi Devre Dışı Bırak</value>
+    <value>Derleme Sırasında İstemci Tarafı Kitaplıkları Devr&amp;e Dışı Bırak</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>İstemci Tarafı Kitaplıkların Derleme Sırasında Geri Yüklenmesini Etkinleştir</value>
+    <value>Derleme Sırasında İstemci Tarafı Kitaplıkların Geri Yüklenmesini &amp;Etkinleştir...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>MSBuild hedefini içeren NuGet paketi yükleniyor...</value>
@@ -119,5 +119,11 @@
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Dosya seçilmedi</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Yükle</value>
   </data>
 </root>

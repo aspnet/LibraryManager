@@ -91,11 +91,11 @@ Valid files are {2}</source>
         </trans-unit>
         <trans-unit id="ErrorUnknownError" translate="yes" xml:space="preserve">
           <source>An unknown error occurred</source>
-          <target state="new">An unknown error occurred</target>
+          <target state="translated">发生未知错误</target>
         </trans-unit>
         <trans-unit id="ErrorDuplicateLibraries" translate="yes" xml:space="preserve">
           <source>Cannot restore. Multiple definitions for libraries: {0}</source>
-          <target state="new">Cannot restore. Multiple definitions for libraries: {0}</target>
+          <target state="translated">无法还原。库存在多个定义: {0}</target>
         </trans-unit>
       </group>
     </body>

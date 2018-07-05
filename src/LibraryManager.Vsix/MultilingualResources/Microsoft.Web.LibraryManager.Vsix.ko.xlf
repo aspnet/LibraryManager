@@ -71,12 +71,12 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="needs-review-translation">빌드에 복원을 사용하지 않도록 설정</target>
+          <target state="translated">빌드에 클라이언트 쪽 라이브러리 사용하지 않음(&amp;E)</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
-          <target state="needs-review-translation">빌드에 클라이언트 쪽 라이브러리 복원 사용</target>
+          <target state="translated">빌드에 클라이언트 쪽 라이브러리 복원 사용(&amp;E)...</target>
           <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
@@ -157,11 +157,11 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="Cancel" translate="yes" xml:space="preserve">
           <source>Cancel</source>
-          <target state="new">Cancel</target>
+          <target state="translated">취소</target>
         </trans-unit>
         <trans-unit id="Install" translate="yes" xml:space="preserve">
           <source>Install</source>
-          <target state="new">Install</target>
+          <target state="translated">설치</target>
         </trans-unit>
       </group>
     </body>
