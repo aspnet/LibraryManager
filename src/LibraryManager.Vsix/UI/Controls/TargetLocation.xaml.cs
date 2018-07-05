@@ -25,7 +25,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
             nameof(Text), typeof(string), typeof(TargetLocation), new PropertyMetadata(default(string)));
 
-        private int _version;
         private string _text;
 
         public TargetLocation()
@@ -35,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // Pre populate textBox with folder name
             TargetLocationSearchTextBox.Text = InstallationFolder.DestinationFolder;
 
-            this.Loaded += new RoutedEventHandler(TargetLocation_Loaded);
+            this.Loaded += TargetLocation_Loaded;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -50,20 +49,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // location is changed or window is resized so that the popup gets repositioned.
             if (window != null)
             {
-                double offset = Flyout.HorizontalOffset;
-
-                window.LocationChanged += delegate (object s, EventArgs args)
-                {
-                    Flyout.HorizontalOffset = offset + 1;
-                    Flyout.HorizontalOffset = offset;
-                };
-
-                window.SizeChanged += delegate (object s, SizeChangedEventArgs e2)
-                {
-                    Flyout.HorizontalOffset = offset + 1;
-                    Flyout.HorizontalOffset = offset;
-                };
+                window.LocationChanged += RepositionPopup;
+                window.SizeChanged += RepositionPopup;
             }
+        }
+
+        private void RepositionPopup(object sender, EventArgs e)
+        {
+            double offset = Flyout.HorizontalOffset;
+
+            Flyout.HorizontalOffset = offset + 1;
+            Flyout.HorizontalOffset = offset;
         }
 
         public int CaretIndex

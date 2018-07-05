@@ -25,13 +25,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
             nameof(Text), typeof(string), typeof(Library), new PropertyMetadata(default(string)));
 
-        private int _version;
-
         public Library()
         {
             InitializeComponent();
 
-            this.Loaded += new RoutedEventHandler(LibrarySearchBox_Loaded);
+            this.Loaded += LibrarySearchBox_Loaded;
         }
 
         private void LibrarySearchBox_Loaded(object sender, RoutedEventArgs e)
@@ -44,20 +42,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // location is changed or window is resized so that the popup gets repositioned.
             if (window != null)
             {
-                double offset = Flyout.HorizontalOffset;
-
-                window.LocationChanged += delegate (object s, EventArgs args)
-                {
-                    Flyout.HorizontalOffset = offset + 1;
-                    Flyout.HorizontalOffset = offset;
-                };
-
-                window.SizeChanged += delegate (object s, SizeChangedEventArgs e2)
-                {
-                    Flyout.HorizontalOffset = offset + 1;
-                    Flyout.HorizontalOffset = offset;
-                };
+                window.LocationChanged += RepositionPopup;
+                window.SizeChanged += RepositionPopup;
             }
+        }
+
+        private void RepositionPopup(object sender, EventArgs e)
+        {
+            double offset = Flyout.HorizontalOffset;
+
+            Flyout.HorizontalOffset = offset + 1;
+            Flyout.HorizontalOffset = offset;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
