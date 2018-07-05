@@ -79,7 +79,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 foreach (IError error in result.Errors)
                 {
-                    telResult.Add("errorcode", error.Code);
+                    TrackOperation("error", TelemetryResult.Failure, new KeyValuePair<string, object>("code", error.Code));
                 }
             }
 

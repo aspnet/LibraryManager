@@ -122,13 +122,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                bool result = FileHelpers.DeleteFiles(filePaths);
-                if (!result)
+                bool success = FileHelpers.DeleteFiles(filePaths);
+                if (!success)
                 {
                     Telemetry.TrackOperation("DeleteFilesFromDiskFailed", TelemetryResult.Failure);
                 }
 
-                return result;
+                return success;
             }, cancellationToken);
         }
     }

@@ -35,6 +35,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     AddLineAndColumn(json, result.InstallationState, displayErrors);
 
                     Errors.AddRange(displayErrors);
+
+                    foreach (IError error in result.Errors)
+                    {
+                        Logger.LogEvent(error.Message, LogLevel.Operation);
+                        Telemetry.TrackOperation("error", TelemetryResult.Failure, new KeyValuePair<string, object>("code", error.Code));
+                    }
                 }
             }
 

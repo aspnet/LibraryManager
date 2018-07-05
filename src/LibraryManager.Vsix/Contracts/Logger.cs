@@ -162,6 +162,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime )
         {
+            LogErrors(totalResults);
             LogEvent(GetSummaryHeaderString(operationType, null), LogLevel.Task);
             LogOperationSummary(totalResults, operationType, elapsedTime);
             LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
@@ -211,6 +212,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
 
                 LogEvent(messageText, LogLevel.Operation);
+            }
+        }
+
+        private static void LogErrors(IEnumerable<ILibraryOperationResult> results)
+        {
+            foreach (ILibraryOperationResult result in results)
+            {
+                if (result.Errors.Any())
+                {
+                    foreach (IError error in result.Errors)
+                    {
+                        LogEvent(error.Message, LogLevel.Operation);
+                    }
+                }
             }
         }
 
