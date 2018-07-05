@@ -30,6 +30,34 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         public Library()
         {
             InitializeComponent();
+
+            this.Loaded += new RoutedEventHandler(LibrarySearchBox_Loaded);
+        }
+
+        private void LibrarySearchBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window window = Window.GetWindow(LibrarySearchBox);
+
+            // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
+            // the dialog is dragged or resized.
+            // In the below section, we will bump up the HorizontalOffset property of the popup whenever the dialog window
+            // location is changed or window is resized so that the popup gets repositioned.
+            if (window != null)
+            {
+                double offset = Flyout.HorizontalOffset;
+
+                window.LocationChanged += delegate (object s, EventArgs args)
+                {
+                    Flyout.HorizontalOffset = offset + 1;
+                    Flyout.HorizontalOffset = offset;
+                };
+
+                window.SizeChanged += delegate (object s, SizeChangedEventArgs e2)
+                {
+                    Flyout.HorizontalOffset = offset + 1;
+                    Flyout.HorizontalOffset = offset;
+                };
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -81,6 +109,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             Text = completion.CompletionItem.InsertionText;
             LibrarySearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
             Flyout.IsOpen = false;
+            SelectedItem = null;
         }
 
         private void HandleKeyPress(object sender, KeyEventArgs e)
@@ -88,13 +117,29 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             switch (e.Key)
             {
                 case Key.Tab:
+                    // SelectedItem could be null if the key press came from keyboard navigation and not commit operation.
+                    // In this case we will just move the focus to next control.
+                    if (SelectedItem == null)
+                    {
+                        LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                        e.Handled = true;
+                        break;
+                    }
+
+                    Commit(SelectedItem);
+                    LibrarySearchBox.Focus();
+                    e.Handled = true;
+                    break;
                 case Key.Enter:
                     Commit(SelectedItem);
+                    LibrarySearchBox.Focus();
+                    e.Handled = true;
                     break;
                 case Key.Escape:
-                    e.Handled = true;
-                    LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                    break;
+                     Flyout.IsOpen = false;
+                     LibrarySearchBox.ScrollToEnd();
+                     e.Handled = true;
+                     break;
                 case Key.Down:
                     if (Options.Items.Count > 0)
                     {
@@ -114,10 +159,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             switch (e.Key)
             {
+                 case Key.Tab:
+                    // SelectedItem could be null if the key press came from keyboard navigation and not commit operation.
+                    // In this case we will just move the focus to next control.
+                    if (SelectedItem == null)
+                    {
+                        LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                        e.Handled = true;
+                        break;
+                    }
+
+                    Commit(SelectedItem);
+                    LibrarySearchBox.Focus();
+                    e.Handled = true;
+                    break;
                 case Key.Enter:
                     Commit(SelectedItem);
-                    e.Handled = true;
                     LibrarySearchBox.Focus();
+                    e.Handled = true;
                     break;
                 case Key.Up:
                     if (Options.SelectedIndex == 0)
@@ -130,9 +189,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     }
                     break;
                 case Key.Escape:
-                    e.Handled = true;
-                    LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                    break;
+                     Flyout.IsOpen = false;
+                     LibrarySearchBox.ScrollToEnd();
+                     e.Handled = true;
+                     break;
                 case Key.Down:
                 case Key.PageDown:
                 case Key.PageUp:
@@ -169,14 +229,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             Flyout.HorizontalOffset = r.Left - 7;
             Options.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             Flyout.Width = Options.DesiredSize.Width;
-        }
-
-        private void ThisControl_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (!Options.IsKeyboardFocusWithin && !LibrarySearchBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
-            {
-                LibrarySearchBox.Focus();
-            }
         }
 
         private IEnumerable<CompletionItem> FilterOutUnmatchedItems(IEnumerable<CompletionItem> items, string versionSuffix)
@@ -236,6 +288,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                         Flyout.IsOpen = true;
                     }
                 });
+            }
+        }
+
+        private void Library_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!Options.IsKeyboardFocusWithin && !LibrarySearchBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
+            {
+                Flyout.IsOpen = false;
             }
         }
     }
