@@ -424,7 +424,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                     await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
 
+                    Telemetry.TrackUserTask("RestoreFromAddClientLibrariesDialog");
                     await _libraryCommandService.RestoreAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+
                 }
                 else
                 {
@@ -435,7 +437,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     rdt.SaveFileIfDirty(configFilePath);
                 }
             }
-            catch { }
+            catch(Exception ex)
+            {
+                Telemetry.TrackException(nameof(InstallPackageAsync), ex);
+            }
         }
 
         private void InsertIntoTextBuffer(IVsTextBuffer document, LibraryInstallationState libraryInstallationState)

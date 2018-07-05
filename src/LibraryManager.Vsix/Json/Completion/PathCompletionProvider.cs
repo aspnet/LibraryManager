@@ -24,6 +24,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
         {
+            Telemetry.TrackUserTask("CompletionForPath");
+
             JSONMember member = context.ContextItem.FindType<JSONMember>();
 
             if (member == null || (member.UnquotedNameText != ManifestConstants.Destination && member.UnquotedNameText != ManifestConstants.DefaultDestination)) 

@@ -67,7 +67,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 list.Add(new UpdateSuggestedAction(_provider, null, "No updates found", true));
             }
 
-            Telemetry.TrackUserTask("checkforupdates");
+            Telemetry.TrackUserTask("SuggestedActionCheckForUpdates");
 
             return new[] { new SuggestedActionSet(list, "Update library") };
         }

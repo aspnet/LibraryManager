@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
+using Microsoft.VisualStudio.Telemetry;
 using Microsoft.Web.LibraryManager.Contracts;
 using Task = System.Threading.Tasks.Task;
 
@@ -77,6 +78,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
+            Telemetry.TrackUserTask($"{nameof(DeleteFilesAsync)}:{absolutePaths.Count}");
+
             //Delete from project
             Project project = VsHelpers.GetDTEProjectFromConfig(_configFilePath);
             bool isCoreProject = await VsHelpers.IsDotNetCoreWebProjectAsync(project);
@@ -119,7 +122,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                return FileHelpers.DeleteFiles(filePaths);
+                bool result = FileHelpers.DeleteFiles(filePaths);
+                if (!result)
+                {
+                    Telemetry.TrackOperation("DeleteFilesFromDiskFailed", TelemetryResult.Failure);
+                }
+
+                return result;
             }, cancellationToken);
         }
     }

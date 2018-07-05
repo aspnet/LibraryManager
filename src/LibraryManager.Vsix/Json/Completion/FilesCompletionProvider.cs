@@ -29,6 +29,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
         {
+            Telemetry.TrackUserTask("CompletionForFiles");
+
             JSONMember member = context.ContextItem.FindType<JSONMember>();
 
             if (member == null || member.UnquotedNameText != "files")

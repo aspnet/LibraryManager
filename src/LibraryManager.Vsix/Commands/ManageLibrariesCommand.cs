@@ -56,7 +56,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task ExecuteAsync(object sender, EventArgs e)
         {
-            Telemetry.TrackUserTask("ManageLibraries");
+            Telemetry.TrackUserTask("ManageLibrariesCommand");
 
             Project project = await VsHelpers.GetProjectOfSelectedItemAsync();
 
@@ -81,10 +81,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     await project.AddFileToProjectAsync(configFilePath);
 
                     Telemetry.TrackUserTask("ConfigFileCreated");
-                    }
-
-                    await VsHelpers.OpenFileAsync(configFilePath);
                 }
+
+                await VsHelpers.OpenFileAsync(configFilePath);
             }
         }
+    }
 }

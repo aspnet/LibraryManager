@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Threading;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -103,6 +102,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
+                Telemetry.TrackException(nameof(LogEvent), ex);
                 System.Diagnostics.Debug.Write(ex);
             }
         }
@@ -230,9 +230,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private static string GetPartialSuccessString(OperationType operation, int successfulRestores, int failedRestores, int cancelledRestores, int upToDateRestores, TimeSpan timeSpan)
         {
             string message = string.Empty;
-            message = successfulRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesSucceeded, successfulRestores, Math.Round(timeSpan.TotalSeconds, 2)) + Environment.NewLine: message;
-            message = failedRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesFailed, failedRestores) + Environment.NewLine : message;
-            message = cancelledRestores > 0 ? message + string.Format(LibraryManager.Resources.Text.Restore_NumberOfLibrariesCancelled, cancelledRestores) + Environment.NewLine : message;
+            message = successfulRestores > 0 ? message + GetAllSuccessString(operation, successfulRestores, timeSpan, null) + Environment.NewLine: message;
+            message = failedRestores > 0 ? message + GetAllFailuresString(operation, failedRestores, null) + Environment.NewLine : message;
+            message = cancelledRestores > 0 ? message + GetAllCancelledString(operation, cancelledRestores, timeSpan, null) + Environment.NewLine : message;
 
             return message;
         }

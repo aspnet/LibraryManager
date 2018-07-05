@@ -15,6 +15,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Telemetry;
 using Microsoft.Web.LibraryManager.Contracts;
 using Task = System.Threading.Tasks.Task;
 
@@ -129,6 +130,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             catch (Exception ex)
             {
                 Logger.LogEvent(ex.ToString(), LogLevel.Error);
+                Telemetry.TrackException(nameof(AddFilesToProjectAsync), ex);
                 System.Diagnostics.Debug.Write(ex);
             }
         }
@@ -272,6 +274,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     if (!success)
                     {
+                        Telemetry.TrackOperation("DeleteProjectFilesFailed", TelemetryResult.Failure);
                         return false;
                     }
 
@@ -283,8 +286,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                Telemetry.TrackException(nameof(DeleteFilesFromProjectAsync), ex);
                 return false;
             }
         }
@@ -309,6 +313,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (File.Exists(configFilePath))
                 {
+                    Telemetry.TrackUserTask($"ProjectContainsLibMan{project.Name}");
                     return true;
                 }
             }
@@ -402,7 +407,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
-                Logger.LogEvent(ex.ToString(), LibraryManager.Contracts.LogLevel.Error);
+                Logger.LogEvent(ex.ToString(), LogLevel.Error);
+                Telemetry.TrackException(nameof(GetDTEProjectFromConfig), ex);
                 System.Diagnostics.Debug.Write(ex);
             }
 
@@ -422,6 +428,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (!success)
                 {
+                    Telemetry.TrackOperation("AddFilesToProjectFailed", TelemetryResult.Failure);
                     return false;
                 }
 
@@ -465,6 +472,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     logAction.Invoke(string.Format(Resources.Text.LibraryAddedToProject, filePath.Replace('\\', '/')), LogLevel.Operation);
                 }
             }
+            catch(Exception ex)
+            {
+                Telemetry.TrackException(nameof(AddProjectItemsInBatchAsync), ex);
+                return false;
+            }
             finally
             {
                 if (bldSystem != null)
@@ -507,6 +519,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
 
                 DeleteEmptyFolders(folders);
+            }
+            catch(Exception ex)
+            {
+                Telemetry.TrackException(nameof(DeleteProjectItemsInBatchAsync), ex);
+                return false;
             }
             finally
             {

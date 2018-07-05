@@ -25,6 +25,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
         {
+            Telemetry.TrackUserTask("CompletionForProvider");
+
             var member = context.ContextItem as JSONMember;
 
             if (member == null || (member.UnquotedNameText != ManifestConstants.Provider && member.UnquotedNameText != ManifestConstants.DefaultProvider))
@@ -40,8 +42,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 yield return new SimpleCompletionEntry(id, _libraryIcon, context.Session);
             }
-
-            Telemetry.TrackUserTask("completionprovider");
         }
     }
 }
