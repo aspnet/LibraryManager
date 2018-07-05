@@ -6,7 +6,8 @@
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
-             x:Name="ThisControl">
+             x:Name="ThisControl"
+             LostFocus="TargetLocation_LostFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
     </UserControl.Resources>

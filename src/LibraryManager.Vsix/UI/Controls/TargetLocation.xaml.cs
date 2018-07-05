@@ -25,7 +25,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
             nameof(Text), typeof(string), typeof(TargetLocation), new PropertyMetadata(default(string)));
 
-        private int _version;
         private string _text;
         private string _lastTargetLocation;
         private string _baseFolder;
@@ -40,9 +39,34 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             _baseFolder = InstallationFolder.DestinationFolder;
             _lastTargetLocation = InstallationFolder.DestinationFolder;
             MutualPropertyChange.Instance.PropertyChanged += this.LibraryNameChanged;
+
+            this.Loaded += TargetLocation_Loaded;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void TargetLocation_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window window = Window.GetWindow(TargetLocationSearchTextBox);
+
+            // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
+            // the dialog is dragged or resized.
+            // In the below section, we will bump up the HorizontalOffset property of the popup whenever the dialog window
+            // location is changed or window is resized so that the popup gets repositioned.
+            if (window != null)
+            {
+                window.LocationChanged += RepositionPopup;
+                window.SizeChanged += RepositionPopup;
+            }
+        }
+
+        private void RepositionPopup(object sender, EventArgs e)
+        {
+            double offset = Flyout.HorizontalOffset;
+
+            Flyout.HorizontalOffset = offset + 1;
+            Flyout.HorizontalOffset = offset;
+        }
 
         public int CaretIndex
         {
@@ -72,8 +96,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get
+            {
+                _text = (string)GetValue(TextProperty);
+
+                InstallationFolder.DestinationFolder = _text;
+                return _text;
+            }
+            set
+            {
+                SetValue(TextProperty, value);
+                InstallationFolder.DestinationFolder = value;
+            }
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -91,6 +125,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             Text = completion.CompletionItem.InsertionText;
             TargetLocationSearchTextBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
             Flyout.IsOpen = false;
+            SelectedItem = null;
         }
 
         private void HandleKeyPress(object sender, KeyEventArgs e)
@@ -98,13 +133,29 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             switch (e.Key)
             {
                 case Key.Tab:
+                    // SelectedItem could be null if the key press came from keyboard navigation and not commit operation.
+                    // In this case we will just move the focus to next control.
+                    if (SelectedItem == null)
+                    {
+                        TargetLocationSearchTextBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                        e.Handled = true;
+                        break;
+                    }
+
+                    Commit(SelectedItem);
+                    TargetLocationSearchTextBox.Focus();
+                    e.Handled = true;
+                    break;
                 case Key.Enter:
                     Commit(SelectedItem);
+                    TargetLocationSearchTextBox.Focus();
+                    e.Handled = true;
                     break;
                 case Key.Escape:
-                    e.Handled = true;
-                    TargetLocationSearchTextBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                    break;
+                     Flyout.IsOpen = false;
+                     TargetLocationSearchTextBox.ScrollToEnd();
+                     e.Handled = true;
+                     break;
                 case Key.Down:
                     if (Options.Items.Count > 0)
                     {
@@ -124,10 +175,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             switch (e.Key)
             {
+                case Key.Tab:
+                    // SelectedItem could be null if the key press came from keyboard navigation and not commit operation.
+                    // In this case we will just move the focus to next control.
+                    if (SelectedItem == null)
+                    {
+                        TargetLocationSearchTextBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                        e.Handled = true;
+                        break;
+                    }
+
+                    Commit(SelectedItem);
+                    TargetLocationSearchTextBox.Focus();
+                    e.Handled = true;
+                    break;
                 case Key.Enter:
                     Commit(SelectedItem);
-                    e.Handled = true;
                     TargetLocationSearchTextBox.Focus();
+                    e.Handled = true;
                     break;
                 case Key.Up:
                     if (Options.SelectedIndex == 0)
@@ -140,9 +205,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     }
                     break;
                 case Key.Escape:
-                    e.Handled = true;
-                    TargetLocationSearchTextBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                    break;
+                     Flyout.IsOpen = false;
+                     TargetLocationSearchTextBox.ScrollToEnd();
+                     e.Handled = true;
+                     break;
                 case Key.Down:
                 case Key.PageDown:
                 case Key.PageUp:
@@ -219,6 +285,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     Flyout.IsOpen = true;
                 });
             }
+
+            InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
         }
 
         private void LibraryNameChanged(object sender, PropertyChangedEventArgs e)
@@ -236,6 +304,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
 
             _lastTargetLocation = TargetLocationSearchTextBox.Text;
+        }
+
+        private void TargetLocation_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!Options.IsKeyboardFocusWithin && !TargetLocationSearchTextBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
+            {
+                Flyout.IsOpen = false;
+            }
         }
     }
 }

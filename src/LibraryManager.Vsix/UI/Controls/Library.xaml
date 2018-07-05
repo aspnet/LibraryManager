@@ -7,7 +7,9 @@
              xmlns:res="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
-             x:Name="ThisControl" Focusable="True" GotFocus="ThisControl_GotFocus">
+             x:Name="ThisControl"
+             Focusable="True"
+             LostFocus="Library_LostFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -45,7 +47,7 @@
         <Popup x:Name="Flyout"
                Placement="Bottom"
                PlacementTarget="{Binding ElementName=LibrarySearchBox}">
-            <ListBox x:Name="Options"
+            <ListBox x:Name="Options"    
                 SelectionMode="Single"
                 PreviewKeyDown="HandleListBoxKeyPress"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
