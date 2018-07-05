@@ -6,14 +6,21 @@
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
-             x:Name="ThisControl">
+             x:Name="ThisControl"
+             LostFocus="TargetLocation_LostFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
-        <search:LogicalAndConverter x:Key="LogicalAnd" />
     </UserControl.Resources>
     <Grid>
         <!-- Text Entry -->
-        <TextBox x:Name="TargetLocationSearchTextBox" Text="{Binding ElementName=ThisControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="HandleKeyPress" KeyUp="HandleKeyUp" Padding="2 2 20 2" PreviewMouseLeftButtonUp="OnMousePositionCaret" />
+        <TextBox x:Name="TargetLocationSearchTextBox"
+                 Text="{Binding ElementName=ThisControl,
+                                Path=Text,
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"
+                 TextChanged="TargetLocationSearchTextBox_TextChanged"
+                 PreviewKeyDown="HandleKeyPress"
+                 Padding="2 2 20 2"  />
 
         <!-- Expand Grip -->
         <Border BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" IsHitTestVisible="False">
@@ -30,13 +37,9 @@
         </controls:BindingProxy>
 
         <!--Fly out-->
-        <Popup x:Name="Flyout" Placement="Bottom" PlacementTarget="{Binding ElementName=TargetLocationSearchTextBox}">
-            <Popup.IsOpen>
-                <MultiBinding Mode="OneWay" Converter="{StaticResource LogicalAnd}">
-                    <Binding ElementName="ThisControl" Path="HasItems" />
-                    <Binding ElementName="AllOrs" Path="Output" />
-                </MultiBinding>
-            </Popup.IsOpen>
+        <Popup x:Name="Flyout"
+               Placement="Bottom"
+               PlacementTarget="{Binding ElementName=TargetLocationSearchTextBox}">
             <ListBox x:Name="Options"
                 SelectionMode="Single"
                 PreviewKeyDown="HandleListBoxKeyPress"

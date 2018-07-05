@@ -31,17 +31,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             _fullPath = fullPath;
             _configFileName = configFileName;
 
-            LostKeyboardFocus += InstallDialog_LostKeyboardFocus;
             Loaded += OnLoaded;
-        }
-
-        private void InstallDialog_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            if (!IsKeyboardFocusWithin && !(e.NewFocus is ListBoxItem))
-            {
-                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
-                MoveFocus(request);
-            }
         }
 
         internal InstallDialogViewModel ViewModel
@@ -180,10 +170,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 ViewModel.IsTreeViewEmpty = true;
                 ViewModel.PackageId = null;
                 ViewModel.AnyFileSelected = false;
-            }
-            else
-            {
-                LibrarySearchBox.RefreshSearch();
             }
         }
 
