@@ -105,6 +105,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             LibrarySearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
             Flyout.IsOpen = false;
             SelectedItem = null;
+
+            MutualPropertyChange.Instance.TargetLibrary = GetLibraryName(Text);
         }
 
         private void HandleKeyPress(object sender, KeyEventArgs e)
@@ -248,6 +250,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                         completionSet.Completions = FilterOutUnmatchedItems(completionSet.Completions, Text.Substring(atIndex + 1));
                     }
 
+                    if (IsValidLibrary(completionSet.Completions))
+                    {
+                        MutualPropertyChange.Instance.TargetLibrary = GetLibraryName(Text);
+                    }
+
                     Items.Clear();
 
                     foreach (CompletionItem entry in completionSet.Completions)
@@ -275,6 +282,40 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     }
                 });
             }
+        }
+
+        private string GetLibraryName(string insertionText)
+        {
+            if (string.IsNullOrEmpty(insertionText))
+            {
+                return string.Empty;
+            }
+
+            int atIndex = insertionText.IndexOf('@', 1);
+
+            if (atIndex > -1)
+            {
+                return insertionText.Substring(0, atIndex);
+            }
+            else
+            {
+                return insertionText;
+            }
+        }
+
+        private bool IsValidLibrary(IEnumerable<CompletionItem> items)
+        {
+            if (items.Count() == 1)
+            {
+                CompletionItem item = items.First();
+
+                if (item.InsertionText.Equals(Text))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void Library_LostFocus(object sender, RoutedEventArgs e)
