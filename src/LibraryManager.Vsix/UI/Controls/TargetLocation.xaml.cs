@@ -132,19 +132,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     if (SelectedItem == null)
                     {
                         TargetLocationSearchTextBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                        e.Handled = true;
-                        break;
+                    }
+                    else
+                    {
+                        CommitSelectionAndMoveFocus();
                     }
 
-                    Commit(SelectedItem);
-                    TargetLocationSearchTextBox.Focus();
                     e.Handled = true;
                     break;
                 case Key.Enter:
-                    Commit(SelectedItem);
-                    TargetLocationSearchTextBox.Focus();
-                    e.Handled = true;
-                    break;
+                     CommitSelectionAndMoveFocus();
+                     e.Handled = true;
+                     break;
                 case Key.Escape:
                      Flyout.IsOpen = false;
                      TargetLocationSearchTextBox.ScrollToEnd();
@@ -170,24 +169,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             switch (e.Key)
             {
                 case Key.Tab:
-                    // SelectedItem could be null if the key press came from keyboard navigation and not commit operation.
-                    // In this case we will just move the focus to next control.
-                    if (SelectedItem == null)
-                    {
-                        TargetLocationSearchTextBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                        e.Handled = true;
-                        break;
-                    }
-
-                    Commit(SelectedItem);
-                    TargetLocationSearchTextBox.Focus();
-                    e.Handled = true;
-                    break;
                 case Key.Enter:
-                    Commit(SelectedItem);
-                    TargetLocationSearchTextBox.Focus();
-                    e.Handled = true;
-                    break;
+                     CommitSelectionAndMoveFocus();
+                     e.Handled = true;
+                     break;
                 case Key.Up:
                     if (Options.SelectedIndex == 0)
                     {
@@ -222,6 +207,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             Commit(SelectedItem);
             e.Handled = true;
+        }
+
+        private void CommitSelectionAndMoveFocus()
+        {
+            Commit(SelectedItem);
+            TargetLocationSearchTextBox.Focus();
         }
 
         private void OnLostFocus(object sender, RoutedEventArgs e)

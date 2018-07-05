@@ -117,24 +117,23 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     if (SelectedItem == null)
                     {
                         LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                        e.Handled = true;
-                        break;
+                    }
+                    else
+                    {
+                        CommitSelectionAndMoveFocus();
                     }
 
-                    Commit(SelectedItem);
-                    LibrarySearchBox.Focus();
                     e.Handled = true;
                     break;
                 case Key.Enter:
-                    Commit(SelectedItem);
-                    LibrarySearchBox.Focus();
+                    CommitSelectionAndMoveFocus();
                     e.Handled = true;
                     break;
                 case Key.Escape:
-                     Flyout.IsOpen = false;
-                     LibrarySearchBox.ScrollToEnd();
-                     e.Handled = true;
-                     break;
+                    Flyout.IsOpen = false;
+                    LibrarySearchBox.ScrollToEnd();
+                    e.Handled = true;
+                    break;
                 case Key.Down:
                     if (Options.Items.Count > 0)
                     {
@@ -154,23 +153,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             switch (e.Key)
             {
-                 case Key.Tab:
-                    // SelectedItem could be null if the key press came from keyboard navigation and not commit operation.
-                    // In this case we will just move the focus to next control.
-                    if (SelectedItem == null)
-                    {
-                        LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                        e.Handled = true;
-                        break;
-                    }
-
-                    Commit(SelectedItem);
-                    LibrarySearchBox.Focus();
-                    e.Handled = true;
-                    break;
+                case Key.Tab:
                 case Key.Enter:
-                    Commit(SelectedItem);
-                    LibrarySearchBox.Focus();
+                    CommitSelectionAndMoveFocus();
                     e.Handled = true;
                     break;
                 case Key.Up:
@@ -184,10 +169,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     }
                     break;
                 case Key.Escape:
-                     Flyout.IsOpen = false;
-                     LibrarySearchBox.ScrollToEnd();
-                     e.Handled = true;
-                     break;
+                    Flyout.IsOpen = false;
+                    LibrarySearchBox.ScrollToEnd();
+                    e.Handled = true;
+                    break;
                 case Key.Down:
                 case Key.PageDown:
                 case Key.PageUp:
@@ -201,6 +186,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     LostFocus += OnLostFocus;
                     break;
             }
+        }
+
+        private void CommitSelectionAndMoveFocus()
+        {
+            Commit(SelectedItem);
+            LibrarySearchBox.Focus();
         }
 
         private void OnItemCommitGesture(object sender, MouseButtonEventArgs e)
