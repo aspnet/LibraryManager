@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Resources;
 
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
@@ -59,6 +59,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             get { return Path.Combine(HostInteraction.CacheDirectory, Id); }
         }
+
+        /// <summary>
+        /// Supports libraries with versions.
+        /// </summary>
+        public bool SupportsLibraryVersions => true;
 
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.

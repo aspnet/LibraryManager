@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -134,7 +134,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, this._provider.Id);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
@@ -168,7 +168,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId,  this._provider.Id);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {

@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Newtonsoft.Json;
 
 namespace Microsoft.Web.LibraryManager
@@ -13,11 +13,36 @@ namespace Microsoft.Web.LibraryManager
     /// <seealso cref="Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" />
     internal class LibraryInstallationState : ILibraryInstallationState
     {
+
+        private string _providerId;
+
         /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
         [JsonProperty(ManifestConstants.Provider)]
-        public string ProviderId { get; set; }
+        public string ProviderId
+        {
+            get
+            {
+                return _providerId;
+            }
+            set
+            {
+                if (_providerId != value)
+                {
+                    string oldProviderId = _providerId;
+                    _providerId = value;
+                    string originalLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(Name, Version, oldProviderId);
+
+                    (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(
+                        originalLibraryId,
+                        _providerId);
+
+                    Name = name;
+                    Version = version;
+                }
+            }
+        }
 
         /// <summary>
         /// The identifyer to uniquely identify the library
@@ -27,12 +52,13 @@ namespace Microsoft.Web.LibraryManager
         {
              get
              {
-                return LibraryNamingScheme.Instance.GetLibraryId(Name, Version);
+                return LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(Name, Version, _providerId);
              }
              set
              {
-                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(
-                    value);
+                (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(
+                    value,
+                    _providerId);
 
                 Name = name;
                 Version = version;

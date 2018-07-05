@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
@@ -14,7 +14,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
     {
         public const string CacheFileName = "cache.json";
         public const string LibraryFileListUrlFormat = "http://unpkg.com/{0}/?meta";
-        public const string LatestLibraryVersonUrl = "http://unpkg.com/{0}/package.json"; 
+        public const string LatestLibraryVersonUrl = "http://unpkg.com/{0}/package.json";
         private UnpkgProvider _provider;
         private CacheService _cacheService;
         private string _cacheFile;
@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+                (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
                 string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, name);
 
                 JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
@@ -55,7 +55,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
@@ -107,7 +107,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             // Parse JSON document returned by unpkg.com/libraryname@version/?meta
             // It looks something like
-            // { 
+            // {
             //   "type" : "directory",
             //   "path" : "/"
             //   "files" : [
@@ -176,7 +176,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             List<CompletionItem> completions = new List<CompletionItem>();
 
-            (string name, string version) = LibraryNamingScheme.Instance.GetLibraryNameAndVersion(libraryNameStart);
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
 
             try
             {

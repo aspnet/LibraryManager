@@ -1,15 +1,16 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
@@ -30,6 +31,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             var hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(hostInteraction, new CdnjsProviderFactory());
             _provider = _dependencies.GetProvider("cdnjs");
+            LibraryIdToNameAndVersionConverter.Instance.Initialize(_dependencies);
 
             Directory.CreateDirectory(_projectFolder);
         }

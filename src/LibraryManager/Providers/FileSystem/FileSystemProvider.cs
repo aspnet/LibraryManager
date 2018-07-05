@@ -46,6 +46,11 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         public string LibraryIdHintText { get; } = Text.FileSystemLibraryIdHintText;
 
         /// <summary>
+        /// Does not support libraries with versions.
+        /// </summary>
+        public bool SupportsLibraryVersions => false;
+
+        /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>
