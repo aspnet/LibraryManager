@@ -53,26 +53,23 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             var telResult = new Dictionary<string, object>();
             telResult.Add("LibrariesCount", results.Count());
-            telResult.Add($@"{operation}_time", Math.Round(elapsedTime.TotalSeconds, 2));
+            telResult.Add($"{operation}_time", Math.Round(elapsedTime.TotalSeconds, 2));
 
             foreach (ILibraryOperationResult result in results.Where(r => r.Success && !r.UpToDate))
             {
-                telResult.Add($@"{result.InstallationState.LibraryId}_Success", new TelemetryPiiProperty(result.InstallationState.LibraryId));
-
                 if (result.InstallationState.ProviderId != null)
                 {
-                    telResult.TryGetValue($@"{result.InstallationState.ProviderId}_Success", out object count);
-                    telResult[$@"{result.InstallationState.ProviderId}_Success"] = count != null ? (int)count + 1 : 1;
+                    telResult[$"LibraryID_{result.InstallationState.ProviderId}_Success"] = new TelemetryPiiProperty(result.InstallationState.LibraryId);
+                    telResult.TryGetValue($"{result.InstallationState.ProviderId}_Success", out object count);
+                    telResult[$"{result.InstallationState.ProviderId}_Success"] = count != null ? (int)count + 1 : 1;
                 }
-
             }
 
             foreach (ILibraryOperationResult result in results.Where(r => r.Errors.Any()))
             {
-                telResult.Add($@"{result.InstallationState.LibraryId}_Failure", new TelemetryPiiProperty(result.InstallationState.LibraryId));
-
                 if (result.InstallationState.ProviderId != null)
                 {
+                    telResult[$"LibraryID_{result.InstallationState.ProviderId}_Failure"] = new TelemetryPiiProperty(result.InstallationState.LibraryId);
                     telResult.TryGetValue($@"{result.InstallationState.ProviderId}_Failure", out object count);
                     telResult[$@"{result.InstallationState.ProviderId}_Failure"] = count != null ? (int)count + 1 : 1;
                 }
@@ -85,10 +82,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (ILibraryOperationResult result in results.Where(r => r.UpToDate))
             {
-                telResult.Add($@"{result.InstallationState.LibraryId}_Uptodate", new TelemetryPiiProperty(result.InstallationState.LibraryId));
-
                 if (result.InstallationState.ProviderId != null)
                 {
+                    telResult[$"LibraryID_{result.InstallationState.ProviderId}_Uptodate"] = new TelemetryPiiProperty(result.InstallationState.LibraryId);
                     telResult.TryGetValue($@"{result.InstallationState.ProviderId}_Uptodate", out object count);
                     telResult[$@"{result.InstallationState.ProviderId}_Uptodate"] = count != null ? (int)count + 1 : 1;
                 }
@@ -96,10 +92,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (ILibraryOperationResult result in results.Where(r => r.Cancelled))
             {
-                telResult.Add($@"{result.InstallationState.LibraryId}_Cancelled", new TelemetryPiiProperty(result.InstallationState.LibraryId));
-
                 if (result.InstallationState.ProviderId != null)
                 {
+                    telResult[$"LibraryID_{result.InstallationState.ProviderId}_Cancelled"] = new TelemetryPiiProperty(result.InstallationState.LibraryId);
                     telResult.TryGetValue($@"{result.InstallationState.ProviderId}_Cancelled", out object count);
                     telResult[$@"{result.InstallationState.ProviderId}_Cancelled"] = count != null ? (int)count + 1 : 1;
                 }
