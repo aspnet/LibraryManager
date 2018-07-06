@@ -17,11 +17,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class CleanCommand : BaseCommand
     {
         public CleanCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
-            : base(throwOnUnexpectedArg, "clean", Resources.CleanCommandDesc, hostEnvironment)
+            : base(throwOnUnexpectedArg, "clean", Resources.Text.CleanCommandDesc, hostEnvironment)
         {
         }
 
-        public override string Remarks => Resources.CleanCommandRemarks;
+        public override string Remarks => Resources.Text.CleanCommandRemarks;
 
         protected override async Task<int> ExecuteInternalAsync()
         {

@@ -12,7 +12,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class CacheCommand : BaseCommand
     {
         public CacheCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true) 
-            : base(throwOnUnexpectedArg, "cache", Resources.CacheCommandDesc, hostEnvironment)
+            : base(throwOnUnexpectedArg, "cache", Resources.Text.CacheCommandDesc, hostEnvironment)
         {
         }
 

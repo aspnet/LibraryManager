@@ -35,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Tools
                 {
                     if (f.InstallationState != null)
                     {
-                        librarySpecificErrors.AppendLine(string.Format(Resources.FailedToRestoreLibraryMessage, f.InstallationState.ToConsoleDisplayString()));
+                        librarySpecificErrors.AppendLine(string.Format(Resources.Text.FailedToRestoreLibraryMessage, f.InstallationState.ToConsoleDisplayString()));
                         foreach (IError e in f.Errors)
                         {
                             librarySpecificErrors.AppendLine($"  - [{e.Code}]: {e.Message}");

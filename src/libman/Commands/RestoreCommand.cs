@@ -15,11 +15,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class RestoreCommand : BaseCommand
     {
         public RestoreCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
-            : base(throwOnUnexpectedArg, "restore", Resources.RestoreCommandDesc, hostEnvironment)
+            : base(throwOnUnexpectedArg, "restore", Resources.Text.RestoreCommandDesc, hostEnvironment)
         {
         }
 
-        public override string Remarks => Resources.RestoreCommandRemarks;
+        public override string Remarks => Resources.Text.RestoreCommandRemarks;
 
         protected override async Task<int> ExecuteInternalAsync()
         {

@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class CacheCleanCommand : BaseCommand
     {
         public CacheCleanCommand(IHostEnvironment environment, bool throwOnUnexpectedArg = true)
-            : base(throwOnUnexpectedArg, "clean", Resources.CacheCleanCommandDesc, environment)
+            : base(throwOnUnexpectedArg, "clean", Resources.Text.CacheCleanCommandDesc, environment)
         {
         }
 
@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            Provider = Argument("provider", Resources.CacheCleanProviderArgumentDesc);
+            Provider = Argument("provider", Resources.Text.CacheCleanProviderArgumentDesc);
 
             return this;
         }
@@ -44,11 +44,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                         Directory.Delete(HostInteractions.CacheDirectory, true);
                     }
 
-                    Logger.Log(Resources.CacheCleanedMessage, LogLevel.Operation);
+                    Logger.Log(Resources.Text.CacheCleanedMessage, LogLevel.Operation);
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(string.Format(Resources.CacheCleanFailed, ex.Message), LogLevel.Error);
+                    Logger.Log(string.Format(Resources.Text.CacheCleanFailed, ex.Message), LogLevel.Error);
                 }
             }
             else if (Directory.Exists(Path.Combine(HostInteractions.CacheDirectory, Provider.Value)))
@@ -57,11 +57,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 {
                     Directory.Delete(Path.Combine(HostInteractions.CacheDirectory, Provider.Value), true);
 
-                    Logger.Log(Resources.CacheForProviderCleanedMessage, LogLevel.Operation);
+                    Logger.Log(Resources.Text.CacheForProviderCleanedMessage, LogLevel.Operation);
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(string.Format(Resources.CacheCleanFailed, ex.Message), LogLevel.Error);
+                    Logger.Log(string.Format(Resources.Text.CacheCleanFailed, ex.Message), LogLevel.Error);
                 }
             }
 

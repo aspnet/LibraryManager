@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class InstallCommand : BaseCommand
     {
         public InstallCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
-            : base(throwOnUnexpectedArg, "install", Resources.InstallCommandDesc, hostEnvironment)
+            : base(throwOnUnexpectedArg, "install", Resources.Text.InstallCommandDesc, hostEnvironment)
         {
         }
 
@@ -85,10 +85,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            LibraryId = Argument("libraryId", Resources.InstallCommandLibraryIdArgumentDesc, multipleValues: false);
-            Provider = Option("--provider|-p", Resources.ProviderOptionDesc, CommandOptionType.SingleValue);
-            Destination = Option("--destination|-d", Resources.DestinationOptionDesc, CommandOptionType.SingleValue);
-            Files = Option("--files", Resources.FilesOptionDesc, CommandOptionType.MultipleValue);
+            LibraryId = Argument("libraryId", Resources.Text.InstallCommandLibraryIdArgumentDesc, multipleValues: false);
+            Provider = Option("--provider|-p", Resources.Text.ProviderOptionDesc, CommandOptionType.SingleValue);
+            Destination = Option("--destination|-d", Resources.Text.DestinationOptionDesc, CommandOptionType.SingleValue);
+            Files = Option("--files", Resources.Text.FilesOptionDesc, CommandOptionType.MultipleValue);
 
             return this;
         }
@@ -134,12 +134,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (results.All(r => r.Success))
             {
                 await _manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
-                Logger.Log(string.Format(Resources.InstalledLibrary, libraryId, InstallDestination), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.Text.InstalledLibrary, libraryId, InstallDestination), LogLevel.Operation);
             }
             else
             {
                 bool isFileConflicts = false;
-                Logger.Log(string.Format(Resources.InstallLibraryFailed, libraryId), LogLevel.Error);
+                Logger.Log(string.Format(Resources.Text.InstallLibraryFailed, libraryId), LogLevel.Error);
                 foreach (ILibraryOperationResult result in results)
                 {
                     foreach (IError error in result.Errors)
@@ -154,7 +154,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 if (isFileConflicts)
                 {
-                    Logger.Log(Resources.SpecifyDifferentDestination, LogLevel.Error);
+                    Logger.Log(Resources.Text.SpecifyDifferentDestination, LogLevel.Error);
                 }
             }
 
@@ -208,7 +208,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 sb.AppendLine("  " + libIds.First());
             }
 
-            sb.Insert(0, $"[{invalidLibraryError.Code}]: {invalidLibraryError.Message} {Environment.NewLine} {Resources.SuggestedIdsMessage}{Environment.NewLine}");
+            sb.Insert(0, $"[{invalidLibraryError.Code}]: {invalidLibraryError.Message} {Environment.NewLine} {Resources.Text.SuggestedIdsMessage}{Environment.NewLine}");
             throw new InvalidOperationException(sb.ToString());
         }
 
@@ -218,7 +218,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (string.IsNullOrWhiteSpace(LibraryId.Value))
             {
-                errors.Add(Resources.LibraryIdRequiredForInstall);
+                errors.Add(Resources.Text.LibraryIdRequiredForInstall);
             }
 
             ProviderId = Provider.HasValue() ? Provider.Value() : manifest.DefaultProvider;
@@ -230,7 +230,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (!ManifestDependencies.Providers.Any(p => p.Id == ProviderId))
             {
-                errors.Add(string.Format(Resources.ProviderNotInstalled, ProviderId));
+                errors.Add(string.Format(Resources.Text.ProviderNotInstalled, ProviderId));
             }
 
             if (errors.Any())
@@ -239,8 +239,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
         }
 
-        public override string Examples => Resources.InstallCommandExamples;
-        public override string Remarks => Resources.InstallCommandRemarks;
+        public override string Examples => Resources.Text.InstallCommandExamples;
+        public override string Remarks => Resources.Text.InstallCommandRemarks;
 
     }
 }
