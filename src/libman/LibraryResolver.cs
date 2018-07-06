@@ -69,9 +69,9 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// <returns></returns>
         public static ILibraryInstallationState ResolveLibraryByUserChoice(IEnumerable<ILibraryInstallationState> installedLibraries, IHostEnvironment hostEnvironment)
         {
-            var sb = new StringBuilder(Resources.ChooseAnOption);
+            var sb = new StringBuilder(Resources.Text.ChooseAnOption);
             sb.AppendLine();
-            sb.Append('-', Resources.ChooseAnOption.Length);
+            sb.Append('-', Resources.Text.ChooseAnOption.Length);
 
             int index = 1;
             foreach (ILibraryInstallationState library in installedLibraries)

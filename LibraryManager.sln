@@ -31,6 +31,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryManager.Vsix", "src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{A72570B1-99EF-4BDD-B629-321CD56C9F7F}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.targets = src\Directory.Build.targets
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}"
 EndProject

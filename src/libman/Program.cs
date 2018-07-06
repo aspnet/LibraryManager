@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Tools
             }
             catch (CommandParsingException cpe)
             {
-                defaultSettings.Logger.Log(string.Format(Resources.InvalidArgumentsMessage, cpe.Command.Name), LogLevel.Error);
+                defaultSettings.Logger.Log(string.Format(Resources.Text.InvalidArgumentsMessage, cpe.Command.Name), LogLevel.Error);
                 cpe.Command.ShowHelp();
             }
             catch (AggregateException ae)

@@ -70,8 +70,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         public virtual BaseCommand Configure(CommandLineApplication parent = null)
         {
             HelpOption("--help|-h");
-            Verbosity = Option("--verbosity", Resources.VerbosityOptionDesc, CommandOptionType.SingleValue);
-            RootDir = Option("--root", Resources.ProjectPathOptionDesc, CommandOptionType.SingleValue);
+            Verbosity = Option("--verbosity", Resources.Text.VerbosityOptionDesc, CommandOptionType.SingleValue);
+            RootDir = Option("--root", Resources.Text.ProjectPathOptionDesc, CommandOptionType.SingleValue);
 
             // Reserving this for now.
             RootDir.ShowInHelpText = false;
@@ -111,7 +111,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (!Directory.Exists(projectPath))
             {
-                throw new DirectoryNotFoundException(string.Format(Resources.DirectoryNotFoundMessage, projectPath));
+                throw new DirectoryNotFoundException(string.Format(Resources.Text.DirectoryNotFoundMessage, projectPath));
             }
 
             return projectPath;
@@ -136,13 +136,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (!string.IsNullOrWhiteSpace(Remarks))
             {
-                help.Append($"{Environment.NewLine}{Resources.RemarksHeader}{Environment.NewLine}");
+                help.Append($"{Environment.NewLine}{Resources.Text.RemarksHeader}{Environment.NewLine}");
                 help.Append($"{Remarks}{Environment.NewLine}");
             }
 
             if (!string.IsNullOrWhiteSpace(Examples))
             {
-                help.Append($"{Environment.NewLine}{Resources.ExamplesHeader}{Environment.NewLine}");
+                help.Append($"{Environment.NewLine}{Resources.Text.ExamplesHeader}{Environment.NewLine}");
                 help.Append($"{Examples}{Environment.NewLine}");
             }
 
@@ -153,14 +153,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             if (!File.Exists(Settings.ManifestFileName))
             {
-                throw new InvalidOperationException(string.Format(Resources.LibmanJsonNotFound, Settings.ManifestFileName));
+                throw new InvalidOperationException(string.Format(Resources.Text.LibmanJsonNotFound, Settings.ManifestFileName));
             }
 
             Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, ManifestDependencies, CancellationToken.None);
 
             if (manifest == null)
             {
-                throw new InvalidOperationException(Resources.FixManifestFile);
+                throw new InvalidOperationException(Resources.Text.FixManifestFile);
             }
 
             return manifest;
@@ -173,7 +173,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             if (File.Exists(Settings.ManifestFileName))
             {
-                throw new InvalidOperationException(Resources.InitFailedLibmanJsonFileExists);
+                throw new InvalidOperationException(Resources.Text.InitFailedLibmanJsonFileExists);
             }
 
             Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, ManifestDependencies, cancellationToken);
@@ -187,7 +187,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (ManifestDependencies.GetProvider(defaultProvider) == null)
             {
                 IError unknownProviderError = PredefinedErrors.ProviderUnknown(defaultProvider);
-                string message = string.Format(Resources.InitFailedUnknownProvider, unknownProviderError.Code, unknownProviderError.Message);
+                string message = string.Format(Resources.Text.InitFailedUnknownProvider, unknownProviderError.Code, unknownProviderError.Message);
                 throw new InvalidOperationException(message);
             }
 

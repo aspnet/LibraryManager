@@ -17,7 +17,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class UninstallCommand : BaseCommand
     {
         public UninstallCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
-           : base(throwOnUnexpectedArg, "uninstall", Resources.UnInstallCommandDesc, hostEnvironment)
+           : base(throwOnUnexpectedArg, "uninstall", Resources.Text.UnInstallCommandDesc, hostEnvironment)
         {
         }
 
@@ -36,8 +36,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            LibraryId = Argument("libraryId", Resources.UninstallCommandLibraryIdArgumentDesc, false);
-            Provider = Option("--provider|-p", Resources.UninstallCommandProviderOptionDesc, CommandOptionType.SingleValue);
+            LibraryId = Argument("libraryId", Resources.Text.UninstallCommandLibraryIdArgumentDesc, false);
+            Provider = Option("--provider|-p", Resources.Text.UninstallCommandProviderOptionDesc, CommandOptionType.SingleValue);
 
             // Reserve this.
             Provider.ShowInHelpText = false;
@@ -53,7 +53,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (installedLibraries == null || !installedLibraries.Any())
             {
-                Logger.Log(string.Format(Resources.NoLibraryToUninstall, LibraryId.Value), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.Text.NoLibraryToUninstall, LibraryId.Value), LogLevel.Operation);
                 return 0;
             }
 
@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (installedLibraries.Count() > 1)
             {
-                Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUninstall, LibraryId.Value), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.Text.MoreThanOneLibraryFoundToUninstall, LibraryId.Value), LogLevel.Operation);
 
                 libraryToUninstall = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment);
             }
@@ -77,11 +77,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (result.Success)
             {
                 await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
-                Logger.Log(string.Format(Resources.UninstalledLibrary, libraryToUninstall.LibraryId), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.Text.UninstalledLibrary, libraryToUninstall.LibraryId), LogLevel.Operation);
             }
             else
             {
-                Logger.Log(string.Format(Resources.UninstallFailed, libraryToUninstall.LibraryId), LogLevel.Error);
+                Logger.Log(string.Format(Resources.Text.UninstallFailed, libraryToUninstall.LibraryId), LogLevel.Error);
                 foreach (IError error in result.Errors)
                 {
                     Logger.Log($"[{error.Code}]: {error.Message}", LogLevel.Error);
@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             var errors = new List<string>();
             if (string.IsNullOrWhiteSpace(LibraryId.Value))
             {
-                errors.Add(Resources.LibraryIdRequiredForUnInstall);
+                errors.Add(Resources.Text.LibraryIdRequiredForUnInstall);
             }
 
             IProvider provider = null;
@@ -106,7 +106,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 provider = ManifestDependencies.GetProvider(Provider.Value());
                 if (provider == null)
                 {
-                    errors.Add(string.Format(Resources.ProviderNotInstalled, Provider.Value()));
+                    errors.Add(string.Format(Resources.Text.ProviderNotInstalled, Provider.Value()));
                 }
             }
 
@@ -120,7 +120,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 provider);
         }
 
-        public override string Remarks => Resources.UnInstallCommandRemarks;
-        public override string Examples => Resources.UnInstallCommandExamples;
+        public override string Remarks => Resources.Text.UnInstallCommandRemarks;
+        public override string Examples => Resources.Text.UnInstallCommandExamples;
     }
 }

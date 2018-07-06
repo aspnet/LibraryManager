@@ -18,7 +18,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class CacheListCommand : BaseCommand
     {
         public CacheListCommand(IHostEnvironment environment, bool throwOnUnexpectedArg = true)
-            : base(throwOnUnexpectedArg, "list", Resources.CacheListCommandDesc, environment)
+            : base(throwOnUnexpectedArg, "list", Resources.Text.CacheListCommandDesc, environment)
         {
         }
 
@@ -37,17 +37,17 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            Files = Option("--files", Resources.CacheListFilesOptionDesc, CommandOptionType.NoValue);
-            Libraries = Option("--libraries", Resources.CacheListLibrariesOptionDesc, CommandOptionType.NoValue);
+            Files = Option("--files", Resources.Text.CacheListFilesOptionDesc, CommandOptionType.NoValue);
+            Libraries = Option("--libraries", Resources.Text.CacheListLibrariesOptionDesc, CommandOptionType.NoValue);
 
             return this;
         }
 
         protected override Task<int> ExecuteInternalAsync()
         {
-            var outputStr = new StringBuilder(Resources.CacheContentMessage);
+            var outputStr = new StringBuilder(Resources.Text.CacheContentMessage);
             outputStr.Append(Environment.NewLine);
-            outputStr.Append('-', Resources.CacheContentMessage.Length);
+            outputStr.Append('-', Resources.Text.CacheContentMessage.Length);
             outputStr.Append(Environment.NewLine);
 
             string cacheRoot = HostEnvironment.EnvironmentSettings.CacheDirectory;
@@ -84,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 else
                 {
                     outputStr.Append(' ', 4);
-                    outputStr.AppendLine(Resources.CacheEmptyMessage);
+                    outputStr.AppendLine(Resources.Text.CacheEmptyMessage);
                 }
             }
 

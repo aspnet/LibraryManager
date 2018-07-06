@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class LibmanApp : BaseCommand
     {
         public LibmanApp(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true) 
-            : base(throwOnUnexpectedArg, "libman", Resources.LibmanCommandDesc, hostEnvironment)
+            : base(throwOnUnexpectedArg, "libman", Resources.Text.LibmanCommandDesc, hostEnvironment)
         {
 
         }

@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
     internal class InitCommand : BaseCommand
     {
         public InitCommand(IHostEnvironment hostEnvironment, bool throwOnUnexpectedArg = true)
-            : base(throwOnUnexpectedArg, "init", Resources.InitCommandDesc, hostEnvironment)
+            : base(throwOnUnexpectedArg, "init", Resources.Text.InitCommandDesc, hostEnvironment)
         {
         }
 
@@ -34,8 +34,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             base.Configure(parent);
 
-            DefaultProvider = Option("--default-provider|-p", Resources.DefaultProviderOptionDesc, CommandOptionType.SingleValue);
-            DefaultDestination = Option("--default-destination|-d", Resources.DefaultDestinationOptionDesc, CommandOptionType.SingleValue);
+            DefaultProvider = Option("--default-provider|-p", Resources.Text.DefaultProviderOptionDesc, CommandOptionType.SingleValue);
+            DefaultDestination = Option("--default-destination|-d", Resources.Text.DefaultDestinationOptionDesc, CommandOptionType.SingleValue);
 
             return this;
         }
@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             if (File.Exists(Settings.ManifestFileName))
             {
-                throw new Exception(Resources.InitFailedLibmanJsonFileExists);
+                throw new Exception(Resources.Text.InitFailedLibmanJsonFileExists);
             }
         }
     }

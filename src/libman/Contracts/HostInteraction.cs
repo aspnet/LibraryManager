@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
                 }
             }
 
-            Logger.Log(string.Format(Resources.FileWrittenToDisk, path.Replace('\\', '/')), LogLevel.Operation);
+            Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, path.Replace('\\', '/')), LogLevel.Operation);
 
             return true;
         }
