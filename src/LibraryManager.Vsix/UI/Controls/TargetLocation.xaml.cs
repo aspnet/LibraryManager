@@ -26,6 +26,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             nameof(Text), typeof(string), typeof(TargetLocation), new PropertyMetadata(default(string)));
 
         private string _text;
+        private string _lastTargetLocation; 
+        private string _baseFolder;
 
         public TargetLocation()
         {
@@ -33,7 +35,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             // Pre populate textBox with folder name
             TargetLocationSearchTextBox.Text = InstallationFolder.DestinationFolder;
+            _baseFolder = InstallationFolder.DestinationFolder;
+            _lastTargetLocation = InstallationFolder.DestinationFolder;
 
+            MutualPropertyChange.Instance.PropertyChanged += this.LibraryNameChanged;
             this.Loaded += TargetLocation_Loaded;
         }
 
@@ -270,6 +275,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     Flyout.IsOpen = true;
                 });
             }
+
+            InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
         }
 
         private void TargetLocation_LostFocus(object sender, RoutedEventArgs e)
@@ -278,6 +285,23 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             {
                 Flyout.IsOpen = false;
             }
+        }
+
+        private void LibraryNameChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (TargetLocationSearchTextBox.Text.Equals(_lastTargetLocation))
+            {
+                string newLib = e.PropertyName;
+
+                if (newLib.Length > 0 && newLib[newLib.Length - 1] == '/')
+                {
+                    newLib = newLib.Substring(0, newLib.Length - 1);
+                }
+
+                TargetLocationSearchTextBox.Text = _baseFolder + newLib + '/';
+            }
+
+            _lastTargetLocation = TargetLocationSearchTextBox.Text;
         }
     }
 }
