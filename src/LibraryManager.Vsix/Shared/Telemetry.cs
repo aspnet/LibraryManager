@@ -51,9 +51,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operation, TimeSpan elapsedTime)
         {
+            double elapsedTimeRounded = Math.Round(elapsedTime.TotalSeconds, 2);
+            string elapsedTimeStr = elapsedTimeRounded.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
             var telResult = new Dictionary<string, object>();
             telResult.Add("LibrariesCount", results.Count());
-            telResult.Add($"{operation}_time", Math.Round(elapsedTime.TotalSeconds, 2));
+            telResult.Add($"{operation}_time", elapsedTimeStr);
 
             LogErrors(results.Where(r => r.Errors.Any()));
 
@@ -71,25 +74,25 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 if (librariesNames_Success.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Success"] = librariesNames_Success.Count;
-                    telResult[$"LibrariesIDs_{provider}_Success"] = new TelemetryPiiProperty(string.Join(" ,", librariesNames_Success));
+                    telResult[$"LibrariesIDs_{provider}_Success"] = new TelemetryPiiProperty(string.Join(" :", librariesNames_Success));
                 }
 
                 if (librariesNames_Failure.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Failure"] = librariesNames_Failure.Count;
-                    telResult[$"LibrariesIDs_{provider}_Failure"] = new TelemetryPiiProperty(string.Join(" ,", librariesNames_Failure));
+                    telResult[$"LibrariesIDs_{provider}_Failure"] = new TelemetryPiiProperty(string.Join(" :", librariesNames_Failure));
                 }
 
                 if (librariesNames_Cancelled.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Cancelled"] = librariesNames_Cancelled.Count;
-                    telResult[$"LibrariesIDs_{provider}_Cancelled"] = new TelemetryPiiProperty(string.Join(" ,", librariesNames_Cancelled));
+                    telResult[$"LibrariesIDs_{provider}_Cancelled"] = new TelemetryPiiProperty(string.Join(" :", librariesNames_Cancelled));
                 }
 
                 if (librariesNames_Uptodate.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Uptodate"] = librariesNames_Uptodate.Count;
-                    telResult[$"LibrariesIDs_{provider}_Uptodate"] = new TelemetryPiiProperty(string.Join(" ,", librariesNames_Uptodate));
+                    telResult[$"LibrariesIDs_{provider}_Uptodate"] = new TelemetryPiiProperty(string.Join(" :", librariesNames_Uptodate));
                 }
 
                 foreach (ILibraryOperationResult result in providerResults)
