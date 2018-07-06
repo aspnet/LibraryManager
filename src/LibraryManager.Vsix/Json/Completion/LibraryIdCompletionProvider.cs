@@ -28,8 +28,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
         {
-            Telemetry.TrackUserTask("CompletionForLibraryId");
-
             var member = context.ContextItem as JSONMember;
 
             if (member == null || member.UnquotedNameText != ManifestConstants.Library)

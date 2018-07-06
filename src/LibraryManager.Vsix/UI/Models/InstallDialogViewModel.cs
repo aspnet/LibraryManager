@@ -424,7 +424,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                     await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
 
-                    Telemetry.TrackUserTask("RestoreFromAddClientLibrariesDialog");
+                    Telemetry.TrackUserTask("Invoke-RestoreFromAddClientLibrariesDialog");
                     await _libraryCommandService.RestoreAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
 
                 }

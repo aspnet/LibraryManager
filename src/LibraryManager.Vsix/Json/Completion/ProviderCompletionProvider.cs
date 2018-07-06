@@ -25,8 +25,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
         {
-            Telemetry.TrackUserTask("CompletionForProvider");
-
             var member = context.ContextItem as JSONMember;
 
             if (member == null || (member.UnquotedNameText != ManifestConstants.Provider && member.UnquotedNameText != ManifestConstants.DefaultProvider))

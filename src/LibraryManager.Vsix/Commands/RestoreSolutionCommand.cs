@@ -75,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task ExecuteAsync(object sender, EventArgs e)
         {
-            Telemetry.TrackUserTask("RestoreSolutionCommand");
+            Telemetry.TrackUserTask("Execute-RestoreSolutionCommand");
 
             var solution = (IVsSolution)ServiceProvider.GetService(typeof(SVsSolution));
             IEnumerable<IVsHierarchy> hierarchies = VsHelpers.GetProjectsInSolution(solution, __VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION);

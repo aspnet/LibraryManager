@@ -111,12 +111,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                                 _manifest = newManifest;
 
                                 await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
-                                Telemetry.TrackUserTask("RestoreOnSave");
+                                Telemetry.TrackUserTask("Invoke-RestoreOnSave");
                             }
                             else
                             {
                                 string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
-                                Telemetry.TrackUserTask("RemovedUnwantedFilesFailed", TelemetryResult.Failure);
+                                Telemetry.TrackUserTask("Fail-RemovedUnwantedFiles", TelemetryResult.Failure);
                                 Logger.LogEvent(textMessage, LogLevel.Task);
                             }
                         }

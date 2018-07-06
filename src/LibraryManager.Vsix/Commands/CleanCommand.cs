@@ -78,7 +78,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task ExecuteAsync()
         {
-            Telemetry.TrackUserTask("CleanCommand");
+            Telemetry.TrackUserTask("Execute-CleanCommand");
 
             ProjectItem configProjectItem = await VsHelpers.GetSelectedItemAsync();
 

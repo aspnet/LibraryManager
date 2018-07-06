@@ -75,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task ExecuteAsync(object sender, EventArgs e)
         {
-            Telemetry.TrackUserTask("InstallLibraryCommand");
+            Telemetry.TrackUserTask("Execute-InstallLibraryCommand");
 
             ProjectItem item = await VsHelpers.GetSelectedItemAsync().ConfigureAwait(false);
 
@@ -106,7 +106,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     dialog.ShowDialog();
 
-                    Telemetry.TrackUserTask("InstallDialogOpened");
+                    Telemetry.TrackUserTask("Open-InstallDialog");
                 }
             }
         }

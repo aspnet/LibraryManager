@@ -122,7 +122,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                                 installer.InstallLatestPackage(null, project, packageId, true, false);
                             }
 
-                            Telemetry.TrackUserTask("InstallNugetPackage");
+                            Telemetry.TrackUserTask("Install-NugetPackage");
                             Logger.LogEvent(Resources.Text.Nuget_PackageInstalled, LogLevel.Status);
                         }
                         catch (Exception ex)
@@ -146,7 +146,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                                 uninstaller.UninstallPackage(project, packageId, false);
                             }
 
-                            Telemetry.TrackUserTask("UninstallNugetPackage");
+                            Telemetry.TrackUserTask("Uninstall-NugetPackage");
                             Logger.LogEvent(Resources.Text.Nuget_PackageUninstalled, LogLevel.Status);
                         }            
                         catch (Exception ex)

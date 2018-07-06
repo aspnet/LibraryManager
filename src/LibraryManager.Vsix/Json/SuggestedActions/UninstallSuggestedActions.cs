@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             try
             {
-                Telemetry.TrackUserTask("UninstallFromSuggestedAction");
+                Telemetry.TrackUserTask("Invoke-UninstallFromSuggestedAction");
                 await _libraryCommandService.UninstallAsync(_provider.ConfigFilePath, _provider.InstallationState.LibraryId, cancellationToken).ConfigureAwait(false);
 
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
