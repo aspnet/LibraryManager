@@ -58,10 +58,10 @@
     <value>&lt;Zur Auswahl der Dateien für die Installation Bibliothek auswählen&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Wiederherstellung beim Build deaktivieren</value>
+    <value>Clientseitige Bibliotheken bei Builderstellung &amp;deaktivieren</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Wiederherstellen clientseitiger Bibliotheken beim Build aktivieren</value>
+    <value>Wiederherstellung clientseitiger Bibliotheken bei Builderstellung &amp;aktivieren...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>NuGet-Paket mit MSBuild-Ziel wird installiert...</value>
@@ -119,5 +119,11 @@
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Es wurden keine Dateien ausgewählt.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Installieren</value>
   </data>
 </root>

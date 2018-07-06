@@ -89,6 +89,14 @@
 Valid files are {2}</source>
           <target state="translated">Folgende Elemente sind in "{0}" nicht enthalten: {1}. Gültige Dateien: {2}</target>
         </trans-unit>
+        <trans-unit id="ErrorUnknownError" translate="yes" xml:space="preserve">
+          <source>An unknown error occurred</source>
+          <target state="translated">Unbekannter Fehler.</target>
+        </trans-unit>
+        <trans-unit id="ErrorDuplicateLibraries" translate="yes" xml:space="preserve">
+          <source>Cannot restore. Multiple definitions for libraries: {0}</source>
+          <target state="translated">Wiederherstellung nicht möglich. Mehrere Definitionen für Bibliotheken: {0}</target>
+        </trans-unit>
       </group>
     </body>
   </file>

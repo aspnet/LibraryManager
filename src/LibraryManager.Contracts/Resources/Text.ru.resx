@@ -73,4 +73,10 @@
     <value>"{0}" не содержит: {1}
 Допустимые файлы: {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>Произошла неизвестная ошибка</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>Невозможно восстановить. Присутствует несколько определений библиотек: {0}</value>
+  </data>
 </root>

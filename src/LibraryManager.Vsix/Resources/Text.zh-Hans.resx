@@ -58,10 +58,10 @@
     <value>&lt;选择库以选择要安装的文件&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>在生成时禁用还原</value>
+    <value>在生成时禁用客户端库(&amp;E)</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>在生成时启用还原客户端库</value>
+    <value>在生成时启用“还原客户端库”(&amp;E)</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>正在安装包含 MSBuild 目标的 NuGet 包...</value>
@@ -119,5 +119,11 @@
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>未选择任何文件</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>安装</value>
   </data>
 </root>

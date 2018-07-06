@@ -1,33 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
-  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" build-num="bb1380375926" target-language="it">
-    <header>
-    </header>
+  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="it">
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
-          <source xml:lang="en">Add Client-Side Library...</source>
-          <target state="translated">Aggiungi libreria lato client...</target>
+          <source xml:lang="en">Client-Side &amp;Library...</source>
+          <target xml:lang="it" state="translated">&amp;Libreria lato client...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target state="translated">Ripristina librerie lato client</target>
+          <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
+          <target xml:lang="it" state="translated">Ripristina &amp;librerie lato client</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
-          <source xml:lang="en">Clean</source>
-          <target state="translated">Pulisci</target>
+          <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
+          <target xml:lang="it" state="translated">&amp;Pulisci librerie lato client</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
-          <source xml:lang="en">Enable Restore on Build...</source>
-          <target state="translated">Consenti ripristino durante la compilazione...</target>
+          <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
+          <target xml:lang="it" state="translated">Abilita ripristino delle librerie lato client durante la compilazione...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
-          <source xml:lang="en">Manage Client-Side Libraries...</source>
-          <target state="translated">Gestisci librerie lato client...</target>
+          <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>
+          <target xml:lang="it" state="translated">&amp;Gestisci librerie lato client...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target state="translated">Ripristina librerie lato client</target>
+          <source xml:lang="en">&amp;Restore Client-Side Libraries</source>
+          <target xml:lang="it" state="translated">&amp;Ripristina librerie lato client</target>
         </trans-unit>
       </group>
     </body>

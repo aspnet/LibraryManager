@@ -60,10 +60,10 @@ Continuare?</value>
     <value>&lt;Scegliere una libreria per selezionare i file da installare&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Disabilita ripristino durante la compilazione</value>
+    <value>Disa&amp;bilita ripristino delle librerie lato client durante la compilazione</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Abilita ripristino delle librerie lato client durante la compilazione</value>
+    <value>&amp;Abilita ripristino delle librerie lato client durante la compilazione...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Installazione del pacchetto NuGet che contiene la destinazione MSBuild...</value>
@@ -121,5 +121,11 @@ Continuare?</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Non è stato selezionato alcun file</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Installa</value>
   </data>
 </root>

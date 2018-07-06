@@ -8,6 +8,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Logging;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -157,13 +158,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         internal static void LogEventsHeader(OperationType operationType, string libraryId)
         {
-            LogEvent(GetOperationHeaderString(operationType, libraryId), LogLevel.Task);
+            LogEvent(LogMessageGenerator.GetOperationHeaderString(operationType, libraryId), LogLevel.Task);
         }
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime )
         {
             LogErrors(totalResults);
-            LogEvent(GetSummaryHeaderString(operationType, null), LogLevel.Task);
+            LogEvent(LogMessageGenerator.GetSummaryHeaderString(operationType, null), LogLevel.Task);
             LogOperationSummary(totalResults, operationType, elapsedTime);
             LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
             LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
@@ -171,46 +172,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static void LogOperationSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation, TimeSpan elapsedTime)
         {
-            if (totalResults != null && totalResults.Any())
+            string messageText = LogMessageGenerator.GetOperationSummaryString(totalResults, operation, elapsedTime);
+
+            if (!string.IsNullOrEmpty(messageText))
             {
-                int totalResultsCounts = totalResults.Count();
-                IEnumerable<ILibraryOperationResult> successfulRestores = totalResults.Where(r => r.Success && !r.UpToDate);
-                IEnumerable<ILibraryOperationResult> failedRestores = totalResults.Where(r => r.Errors.Any());
-                IEnumerable<ILibraryOperationResult> cancelledRestores = totalResults.Where(r => r.Cancelled);
-                IEnumerable<ILibraryOperationResult> upToDateRestores = totalResults.Where(r => r.UpToDate);
-
-                bool allSuccess = successfulRestores.Count() == totalResultsCounts;
-                bool allFailed = failedRestores.Count() == totalResultsCounts;
-                bool allCancelled = cancelledRestores.Count() == totalResultsCounts;
-                bool allUpToDate = upToDateRestores.Count() == totalResultsCounts;
-                bool partialSuccess = successfulRestores.Count() < totalResultsCounts;
-
-                string messageText = string.Empty;
-
-                if (allUpToDate)
-                {
-                    messageText = LibraryManager.Resources.Text.Restore_LibrariesUptodate + Environment.NewLine;
-                }
-                else if (allSuccess)
-                {
-                    string libraryId = GetLibraryId(totalResults, operation);
-                    messageText = GetAllSuccessString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
-                }
-                else if (allCancelled)
-                {
-                    string libraryId = GetLibraryId(totalResults, operation);
-                    messageText = GetAllCancelledString(operation, totalResultsCounts, elapsedTime, libraryId) + Environment.NewLine;
-                }
-                else if (allFailed)
-                {
-                    string libraryId = GetLibraryId(totalResults, operation);
-                    messageText = GetAllFailuresString(operation, totalResultsCounts, libraryId) + Environment.NewLine;
-                }
-                else
-                {
-                    messageText = GetPartialSuccessString(operation, successfulRestores.Count(), failedRestores.Count(), cancelledRestores.Count(), upToDateRestores.Count(), elapsedTime);
-                }
-
                 LogEvent(messageText, LogLevel.Operation);
             }
         }

@@ -180,7 +180,7 @@
         </trans-unit>
         <trans-unit id="LibraryDetail_Unavailable" translate="yes" xml:space="preserve">
           <source>Unavailable</source>
-          <target state="new">Unavailable</target>
+          <target state="translated">사용할 수 없음</target>
         </trans-unit>
       </group>
     </body>
