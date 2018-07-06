@@ -274,7 +274,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     if (!success)
                     {
-                        Telemetry.TrackOperation("DeleteProjectFilesFailed", TelemetryResult.Failure);
                         return false;
                     }
 
@@ -428,7 +427,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (!success)
                 {
-                    Telemetry.TrackOperation("AddFilesToProjectFailed", TelemetryResult.Failure);
                     return false;
                 }
 

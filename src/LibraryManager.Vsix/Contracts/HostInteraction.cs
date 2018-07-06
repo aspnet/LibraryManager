@@ -78,8 +78,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
-            Telemetry.TrackUserTask($"{nameof(DeleteFilesAsync)}:{absolutePaths.Count}");
-
             //Delete from project
             Project project = VsHelpers.GetDTEProjectFromConfig(_configFilePath);
             bool isCoreProject = await VsHelpers.IsDotNetCoreWebProjectAsync(project);
@@ -122,13 +120,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                bool success = FileHelpers.DeleteFiles(filePaths);
-                if (!success)
-                {
-                    Telemetry.TrackOperation("DeleteFilesFromDiskFailed", TelemetryResult.Failure);
-                }
-
-                return success;
+                return FileHelpers.DeleteFiles(filePaths);
             }, cancellationToken);
         }
     }
