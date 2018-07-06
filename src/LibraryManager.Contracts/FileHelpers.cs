@@ -210,8 +210,9 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Deletes files 
         /// </summary>
         /// <param name="filePaths"></param>
+        /// <param name="rootDirectory"></param>
         /// <returns></returns>
-        public static bool DeleteFiles(IEnumerable<string> filePaths)
+        public static bool DeleteFiles(IEnumerable<string> filePaths, string rootDirectory = null)
         {
             HashSet<string> directories = new HashSet<string>();
 
@@ -224,14 +225,21 @@ namespace Microsoft.Web.LibraryManager.Contracts
                         DeleteFileFromDisk(filePath);
                     }
 
-                    string directoryPath = Path.GetDirectoryName(filePath);
-                    if (Directory.Exists(directoryPath))
+                    if (rootDirectory != null)
                     {
-                        directories.Add(directoryPath);
+                        string directoryPath = Path.GetDirectoryName(filePath);
+
+                        if (Directory.Exists(directoryPath))
+                        {
+                            directories.Add(directoryPath);
+                        }
                     }
                 }
 
-                DeleteEmptyFoldersFromDisk(directories);
+                if (rootDirectory != null)
+                {
+                    DeleteEmptyFoldersFromDisk(directories, rootDirectory);
+                }
 
                 return true;
             }
@@ -245,21 +253,33 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Deletes folders if empty
         /// </summary>
         /// <param name="folderPaths"></param>
+        /// <param name="rootDirectory"></param>
         /// <returns></returns>
-        public static bool DeleteEmptyFoldersFromDisk(IEnumerable<string> folderPaths)
+        public static bool DeleteEmptyFoldersFromDisk(IEnumerable<string> folderPaths, string rootDirectory)
         {
+            if (folderPaths.Count() == 0)
+            {
+                return true;
+            }
+
+            HashSet<string> newFolderPaths = new HashSet<string>();
+
             try
             {
                 foreach (string path in folderPaths)
                 {
-                    DirectoryInfo directory = new DirectoryInfo(path);
-                    if (directory.Exists && IsDirectoryEmpty(path))
+                    if (!path.Equals(rootDirectory, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        directory.Delete(true);
+                        DirectoryInfo directory = new DirectoryInfo(path);
+                        if (directory.Exists && IsDirectoryEmpty(path))
+                        {
+                            directory.Delete(true);
+                            newFolderPaths.Add(Directory.GetParent(path).FullName);
+                        }
                     }
                 }
 
-                return true;
+                return DeleteEmptyFoldersFromDisk(newFolderPaths, rootDirectory);
             }
             catch (Exception)
             {
