@@ -72,4 +72,10 @@
   <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
     <value>"{0}" ne contient pas {1}. Les fichiers valides sont {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>Une erreur inconnue s’est produite</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>Restauration impossible. Plusieurs définitions pour les bibliothèques : {0}</value>
+  </data>
 </root>

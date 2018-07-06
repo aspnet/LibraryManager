@@ -60,10 +60,10 @@ Esto puede requerir una conexión a internet.
     <value>&lt;Elegir una biblioteca para seleccionar archivos para instalar&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Desactivar la restauración al compilar</value>
+    <value>Desha&amp;bilitar bibliotecas del lado cliente al compilar</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Habilitar la restauración de bibliotecas del lado cliente en la compilación</value>
+    <value>&amp;Habilitar la restauración de bibliotecas del lado cliente al compilar...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Instalando paquete de NuGet que contiene el destino de MSBuild...</value>
@@ -121,5 +121,11 @@ Esto puede requerir una conexión a internet.
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>No se han seleccionado archivos</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Instalar</value>
   </data>
 </root>

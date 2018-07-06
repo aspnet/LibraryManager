@@ -142,4 +142,7 @@
   <data name="UnpkgProviderHintText" xml:space="preserve">
     <value>Ejemplo: &lt;biblioteca&gt;@&lt;versión&gt;</value>
   </data>
+  <data name="LibraryDetail_Unavailable" xml:space="preserve">
+    <value>No disponible</value>
+  </data>
 </root>

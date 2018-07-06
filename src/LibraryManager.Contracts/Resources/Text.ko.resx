@@ -73,4 +73,10 @@
     <value>"{0}"에 {1}이(가) 포함되어 있지 않습니다.
 유효한 파일은 {2}입니다.</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>알 수 없는 오류 발생</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>복원할 수 없음. 라이브러리에 대한 여러 개의 정의: {0}</value>
+  </data>
 </root>

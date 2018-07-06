@@ -90,6 +90,14 @@ Valid files are {2}</source>
           <target state="translated">"{0}" şunları içermiyor: {1}
 Geçerli dosyalar: {2}</target>
         </trans-unit>
+        <trans-unit id="ErrorUnknownError" translate="yes" xml:space="preserve">
+          <source>An unknown error occurred</source>
+          <target state="translated">Bilinmeyen bir hata oluştu</target>
+        </trans-unit>
+        <trans-unit id="ErrorDuplicateLibraries" translate="yes" xml:space="preserve">
+          <source>Cannot restore. Multiple definitions for libraries: {0}</source>
+          <target state="translated">Geri yüklenemiyor. Kitaplıklara yönelik birden çok tanım: {0}</target>
+        </trans-unit>
       </group>
     </body>
   </file>

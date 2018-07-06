@@ -72,4 +72,10 @@
   <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
     <value>"{0}" 未包含以下項目: {1} 有效的檔案為 {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>發生未知錯誤</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>無法還原。程式庫有多個定義: {0}</value>
+  </data>
 </root>
