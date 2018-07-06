@@ -75,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 if (!results.All(r => r.Success))
                 {
                     AddErrorsToList(results);
-                    Telemetry.TrackUserTask("ManifestFileOpennedWithErrors", TelemetryResult.Failure);
+                    Telemetry.LogErrors("ManifestFileSavedWithErrors", results);
                 }
             });
         }
@@ -101,7 +101,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         if (!results.All(r => r.Success))
                         {
                             AddErrorsToList(results);
-                            Telemetry.TrackUserTask("ManifestFileSavedWithErrors", TelemetryResult.Failure);
+                            Logger.LogErrors(results);
+                            Telemetry.LogErrors("ManifestFileSavedWithErrors", results);
                         }
                         else
                         {
@@ -159,11 +160,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private void AddErrorsToList(IEnumerable<ILibraryOperationResult> errors)
         {
-            if (_errorList == null)
-            {
-                _errorList = new ErrorList(_project?.Name, _manifestPath);
-            }
-
+            _errorList = new ErrorList(_project?.Name, _manifestPath);
             _errorList.HandleErrors(errors);
         }
     }

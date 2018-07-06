@@ -215,7 +215,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private static void LogErrors(IEnumerable<ILibraryOperationResult> results)
+        public static void LogErrors(IEnumerable<ILibraryOperationResult> results)
         {
             foreach (ILibraryOperationResult result in results)
             {

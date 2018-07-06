@@ -28,18 +28,18 @@ namespace Microsoft.Web.LibraryManager
         {
             if (state == null)
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.UnknownError());
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.UnknownError() });
             }
 
             if (string.IsNullOrEmpty(state.ProviderId))
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.ProviderIsUndefined());
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderIsUndefined() });
             }
 
             IProvider provider = dependencies.GetProvider(state.ProviderId);
             if (provider == null)
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.ProviderUnknown(state.ProviderId));
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderUnknown(state.ProviderId) });
             }
 
             return await IsValidAsync(state, provider).ConfigureAwait(false);
@@ -55,17 +55,17 @@ namespace Microsoft.Web.LibraryManager
         {
             if (state == null)
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.UnknownError());
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.UnknownError() });
             }
 
             if (provider == null)
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.ProviderUnknown(provider.Id));
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderUnknown(provider.Id) });
             }
 
             if (string.IsNullOrEmpty(state.LibraryId))
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.LibraryIdIsUndefined());
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.LibraryIdIsUndefined() });
             }
 
             ILibraryCatalog catalog = provider.GetCatalog();
@@ -75,17 +75,17 @@ namespace Microsoft.Web.LibraryManager
             }
             catch
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id));
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id) });
             }
 
             if (string.IsNullOrEmpty(state.DestinationPath))
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.PathIsUndefined());
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.PathIsUndefined() });
             }
 
             if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath) });
             }
 
             return LibraryOperationResult.FromSuccess(state);

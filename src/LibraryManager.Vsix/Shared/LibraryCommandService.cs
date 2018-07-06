@@ -217,7 +217,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     IEnumerable<ILibraryOperationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 
-                    await AddFilesToProjectAsync(manifest.Key, project, results, cancellationToken).ConfigureAwait(false);
+                    await AddFilesToProjectAsync(manifest.Key, project, results.Where(r =>r.Success && !r.UpToDate), cancellationToken).ConfigureAwait(false);
 
                     AddErrorsToErrorList(project?.Name, manifest.Key, results);
                     totalResults.AddRange(results);
@@ -310,7 +310,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 foreach (ILibraryOperationResult state in results)
                 {
-                    if (state.Success && !state.UpToDate)
+                    if (state.Success && !state.UpToDate && state.InstallationState.Files != null)
                     {
                         IEnumerable<string> absoluteFiles = state.InstallationState.Files
                             .Select(file => Path.Combine(workingDirectory, state.InstallationState.DestinationPath, file)
@@ -319,8 +319,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                 }
 
-                var logAction = new Action<string, LogLevel>((message, level) => { Logger.LogEvent(message, level); });
-                await VsHelpers.AddFilesToProjectAsync(project, files, logAction, cancellationToken);
+                if (files.Count > 0)
+                {
+                    var logAction = new Action<string, LogLevel>((message, level) => { Logger.LogEvent(message, level); });
+                    await VsHelpers.AddFilesToProjectAsync(project, files, logAction, cancellationToken);
+                }
             }
         }
 

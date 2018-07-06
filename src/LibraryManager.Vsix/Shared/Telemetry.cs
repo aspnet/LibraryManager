@@ -53,23 +53,26 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             double elapsedTimeRounded = Math.Round(elapsedTime.TotalSeconds, 2);
             string elapsedTimeStr = elapsedTimeRounded.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            List<string> generalErrorCodes = GetErrorCodes(results.Where(r => r.InstallationState == null && r.Errors.Any()));
 
-            var telResult = new Dictionary<string, object>();
+            Dictionary<string, object> telResult = new Dictionary<string, object>();
             telResult.Add("LibrariesCount", results.Count());
             telResult.Add($"{operation}_time", elapsedTimeStr);
+            telResult.Add("ErrorCodes", string.Join(" :", generalErrorCodes));
 
-            LogErrors(results.Where(r => r.Errors.Any()));
-
-            IEnumerable<string> providers = results.Select(r => r.InstallationState.ProviderId);
+            IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId).Distinct();
 
             foreach (string provider in providers)
             {
-                IEnumerable<ILibraryOperationResult> providerResults = results.Where(r => r.InstallationState.ProviderId == provider);
+                IEnumerable<ILibraryOperationResult> providerResults = results.Where(r => r.InstallationState?.ProviderId == provider);
+                List<string> providerErrorCodes = GetErrorCodes(providerResults);
 
                 List<string> librariesNames_Success = GetLibrariesNames(providerResults.Where(r => r.Success && !r.UpToDate));
                 List<string> librariesNames_Failure = GetLibrariesNames(providerResults.Where(r => r.Errors.Any()));
                 List<string> librariesNames_Cancelled = GetLibrariesNames(providerResults.Where(r => r.Cancelled));
                 List<string> librariesNames_Uptodate = GetLibrariesNames(providerResults.Where(r => r.UpToDate));
+
+                telResult.Add($"ErrorCodes_{provider}", string.Join(" :", providerErrorCodes));
 
                 if (librariesNames_Success.Count > 0)
                 {
@@ -97,14 +100,32 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 foreach (ILibraryOperationResult result in providerResults)
                 {
-                    if (result.InstallationState.Files != null)
+                    if (result.InstallationState?.Files != null)
                     {
-                        telResult[$"{provider}_{result.InstallationState.Name}_FilesCount"] = new TelemetryPiiProperty(result.InstallationState.Files.Count);
+                        telResult[$"{provider}_LibraryFilesCount"] = result.InstallationState.Files.Count;
                     }
                 }
             }
 
             TrackUserTask($@"{operation}_Operation", TelemetryResult.None, telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
+        }
+
+        internal static void LogErrors(string eventName, IEnumerable<ILibraryOperationResult> results)
+        {
+            List<string> errorCodes = GetErrorCodes(results.Where(r => r.Errors.Any()));
+            TrackUserTask(eventName, TelemetryResult.Failure, new KeyValuePair<string, object>("Errorcode", string.Join(" :", errorCodes)));
+        }
+
+        private static List<string> GetErrorCodes(IEnumerable<ILibraryOperationResult> results)
+        {
+            List<string> errorCodes = new List<string>();
+
+            foreach (ILibraryOperationResult result in results)
+            {
+                errorCodes.AddRange(result.Errors.Select(e => e.Code));
+            }
+
+            return errorCodes;
         }
 
         private static List<string> GetLibrariesNames(IEnumerable<ILibraryOperationResult> results)
@@ -113,21 +134,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (ILibraryOperationResult result in results)
             {
-                librariesNames.Add(result.InstallationState.LibraryId);
+                librariesNames.Add(result.InstallationState?.LibraryId);
             }
 
             return librariesNames;
-        }
-
-        private static void LogErrors(IEnumerable<ILibraryOperationResult> results)
-        {
-            foreach (ILibraryOperationResult result in results)
-            {
-                foreach (IError error in result.Errors)
-                {
-                    TrackOperation("error", TelemetryResult.Failure, new KeyValuePair<string, object>("code", error.Code));
-                }
-            }
         }
     }
 }
