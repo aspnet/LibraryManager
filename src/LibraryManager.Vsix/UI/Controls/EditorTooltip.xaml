@@ -19,7 +19,7 @@
         <Image x:Name="Glyph" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Width="32" Height="32" Margin="4 3" VerticalAlignment="Top" />
         <Label x:Name="ItemName" Grid.Row="0" Grid.Column="1" FontWeight="Bold" />
         <Label Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="0 0 0 3">
-            <AccessText x:Name="Description" TextWrapping="Wrap"  />
+            <TextBlock x:Name="Description" TextWrapping="Wrap"  />
         </Label>
     </Grid>
 </UserControl>

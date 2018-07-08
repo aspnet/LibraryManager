@@ -50,7 +50,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type controls:Completion}">
                         <Label ToolTip="{Binding Path=Description, Mode=OneWay}" Padding="0">
-                            <AccessText Text="{Binding Path=DisplayText, Mode=OneWay}" />
+                            <TextBlock Text="{Binding Path=DisplayText, Mode=OneWay}" />
                         </Label>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
