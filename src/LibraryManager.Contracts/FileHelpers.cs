@@ -263,13 +263,14 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 return true;
             }
 
-            HashSet<string> newFolderPaths = new HashSet<string>(new LocalPathComparer());
+            LocalPathComparer comparer = new LocalPathComparer();
+            HashSet<string> newFolderPaths = new HashSet<string>(comparer);
 
             try
             {
                 foreach (string path in folderPaths)
                 {
-                    if (!string.Equals(Path.GetFullPath(path), Path.GetFullPath(rootDirectory)))
+                    if (!comparer.Equals(path, rootDirectory))
                     {
                         if (Directory.Exists(path) && !Directory.GetFileSystemEntries(path).Any())
                         {
