@@ -73,4 +73,10 @@
     <value>"{0}" non contiene quanto segue: {1}
 I file validi sono {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>Si è verificato un errore sconosciuto</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>Non è possibile eseguire il ripristino. Sono presenti più definizioni per le librerie: {0}</value>
+  </data>
 </root>

@@ -73,4 +73,10 @@
     <value>"{0}" には次が含まれていません: {1}
 有効なファイルは {2} です</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>不明なエラーが発生しました</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>復元できません。次のライブラリの定義が複数あります: {0}</value>
+  </data>
 </root>

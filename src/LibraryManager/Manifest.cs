@@ -193,7 +193,12 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="destination"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ILibraryOperationResult>> InstallLibraryAsync(string libraryId, string providerId, IReadOnlyList<string> files, string destination, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ILibraryOperationResult>> InstallLibraryAsync(
+            string libraryId,
+            string providerId,
+            IReadOnlyList<string> files,
+            string destination,
+            CancellationToken cancellationToken)
         {
             ILibraryOperationResult result;
 
@@ -229,10 +234,25 @@ namespace Microsoft.Web.LibraryManager
 
             if (result.Success)
             {
-                _libraries.Add(desiredState);
+                AddLibrary(desiredState);
             }
 
             return new [] { result };
+        }
+
+        private ILibraryInstallationState SetDefaultProviderIfNeeded(LibraryInstallationState desiredState)
+        {
+            if (string.IsNullOrEmpty(DefaultProvider))
+            {
+                DefaultProvider = desiredState.ProviderId;
+                desiredState.IsUsingDefaultProvider = true;
+            }
+            else if (DefaultProvider.Equals(desiredState.ProviderId, StringComparison.OrdinalIgnoreCase))
+            {
+                desiredState.IsUsingDefaultProvider = true;
+            }
+
+            return desiredState;
         }
 
         private async Task<IEnumerable<ILibraryOperationResult>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
@@ -254,9 +274,18 @@ namespace Microsoft.Web.LibraryManager
             ILibraryInstallationState existing = _libraries.Find(p => p.LibraryId == state.LibraryId && p.ProviderId == state.ProviderId);
 
             if (existing != null)
+            {
                 _libraries.Remove(existing);
+            }
 
-            _libraries.Add(state);
+            if (state is LibraryInstallationState desiredState)
+            {
+                _libraries.Add(SetDefaultProviderIfNeeded(desiredState));
+            }
+            else
+            {
+                _libraries.Add(state);
+            }
         }
 
         /// <summary>

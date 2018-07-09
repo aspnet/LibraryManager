@@ -58,10 +58,10 @@
     <value>&lt;請選擇程式庫以選取要安裝的檔案&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>在建置時停用還原</value>
+    <value>在建置時停用用戶端程式庫(&amp;E)</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>在建置時啟用還原用戶端程式庫</value>
+    <value>在建置時啟用還原用戶端程式庫(&amp;E)...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>正在安裝包含 MSBuild 目標的 NuGet 套件...</value>
@@ -119,5 +119,11 @@
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>未選取任何檔案</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>安裝</value>
   </data>
 </root>

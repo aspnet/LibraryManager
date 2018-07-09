@@ -60,10 +60,10 @@ Deseja continuar?</value>
     <value>&lt;Escolha uma biblioteca para selecionar os arquivos a serem instalados&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Desabilitar Restauração no Build</value>
+    <value>D&amp;esabilitar Bibliotecas do Lado do Cliente no Build</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Habilitar a Restauração de Bibliotecas do Lado do Cliente no Build</value>
+    <value>&amp;Habilitar Restauração de Bibliotecas do Lado do Cliente no Build...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Instalando o pacote NuGet que contém o destino do MSBuild...</value>
@@ -121,5 +121,11 @@ Deseja continuar?</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Nenhum arquivo foi selecionado</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Instalar</value>
   </data>
 </root>

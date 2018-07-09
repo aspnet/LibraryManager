@@ -68,12 +68,14 @@ Do you want to continue?</source>
           <target state="translated">&lt;Zur Auswahl der Dateien für die Installation Bibliothek auswählen&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
-          <source>Disable Restore on Build</source>
-          <target state="translated">Wiederherstellung beim Build deaktivieren</target>
+          <source>Disabl&amp;e Client-Side Libraries on Build</source>
+          <target state="translated">Clientseitige Bibliotheken bei Builderstellung &amp;deaktivieren</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
-          <source>Enable Restore Client-Side Libraries on Build</source>
-          <target state="translated">Wiederherstellen clientseitiger Bibliotheken beim Build aktivieren</target>
+          <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
+          <target state="translated">Wiederherstellung clientseitiger Bibliotheken bei Builderstellung &amp;aktivieren...</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
@@ -150,6 +152,14 @@ Do you want to continue?</source>
         <trans-unit id="NoFilesSelected" translate="yes" xml:space="preserve">
           <source>No files have been selected</source>
           <target state="translated">Es wurden keine Dateien ausgewählt.</target>
+        </trans-unit>
+        <trans-unit id="Cancel" translate="yes" xml:space="preserve">
+          <source>Cancel</source>
+          <target state="translated">Abbrechen</target>
+        </trans-unit>
+        <trans-unit id="Install" translate="yes" xml:space="preserve">
+          <source>Install</source>
+          <target state="translated">Installieren</target>
         </trans-unit>
       </group>
     </body>

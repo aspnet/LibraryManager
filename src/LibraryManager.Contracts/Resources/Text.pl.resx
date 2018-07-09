@@ -73,4 +73,10 @@
     <value>Element „{0}” nie zawiera następujących plików: {1}
 Prawidłowe pliki to {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>Wystąpił nieznany błąd</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>Nie można przywrócić. Istnieje wiele definicji dla bibliotek: {0}</value>
+  </data>
 </root>

@@ -60,10 +60,10 @@ Chcete pokračovat?</value>
     <value>&lt;Zvolte knihovnu, ze které chcete vybrat soubory k instalaci.&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Zakázat obnovení při sestavení</value>
+    <value>&amp;Zakázat knihovny na straně klienta při sestavení</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Povolit obnovení knihoven na straně klienta při sestavení</value>
+    <value>&amp;Povolit obnovení knihoven na straně klienta při sestavení...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Instaluje se balíček NuGet, který obsahujíce cíl nástroje MSBuild...</value>
@@ -121,5 +121,11 @@ Chcete pokračovat?</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Nejsou vybrané žádné soubory.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Nainstalovat</value>
   </data>
 </root>

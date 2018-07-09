@@ -90,6 +90,14 @@ Valid files are {2}</source>
           <target state="translated">"{0}" não contém: {1}
 Os arquivos válidos são {2}</target>
         </trans-unit>
+        <trans-unit id="ErrorUnknownError" translate="yes" xml:space="preserve">
+          <source>An unknown error occurred</source>
+          <target state="translated">Ocorreu um erro desconhecido</target>
+        </trans-unit>
+        <trans-unit id="ErrorDuplicateLibraries" translate="yes" xml:space="preserve">
+          <source>Cannot restore. Multiple definitions for libraries: {0}</source>
+          <target state="translated">Não é possível restaurar. Várias definições para bibliotecas: {0}</target>
+        </trans-unit>
       </group>
     </body>
   </file>

@@ -1,33 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
-  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="ko" build-num="bb1380375926">
-    <header>
-    </header>
+  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="ko">
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
-          <source xml:lang="en">Add Client-Side Library...</source>
-          <target xml:lang="ko" state="needs-review-translation" state-qualifier="mt-suggestion">클라이언트 라이브러리 추가...</target>
+          <source xml:lang="en">Client-Side &amp;Library...</source>
+          <target xml:lang="ko" state="translated">클라이언트 쪽 라이브러리(&amp;L)...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target xml:lang="ko" state="needs-review-translation" state-qualifier="mt-suggestion">클라이언트 라이브러리를 복원</target>
+          <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
+          <target xml:lang="ko" state="translated">클라이언트 쪽 라이브러리 복원(&amp;L)</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
-          <source xml:lang="en">Clean</source>
-          <target xml:lang="ko" state="needs-review-translation" state-qualifier="mt-suggestion">청소</target>
+          <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
+          <target xml:lang="ko" state="translated">클라이언트 쪽 라이브러리 정리(&amp;C)</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
-          <source xml:lang="en">Enable Restore on Build...</source>
-          <target xml:lang="ko" state="needs-review-translation" state-qualifier="mt-suggestion">빌드에 대 한 복원을 사용...</target>
+          <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
+          <target xml:lang="ko" state="translated">빌드에 클라이언트 쪽 라이브러리 복원 사용...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
-          <source xml:lang="en">Manage Client-Side Libraries...</source>
-          <target xml:lang="ko" state="needs-review-translation" state-qualifier="mt-suggestion">클라이언트 라이브러리를 관리 하는...</target>
+          <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>
+          <target xml:lang="ko" state="translated">클라이언트 쪽 라이브러리 관리(&amp;M)...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target xml:lang="ko" state="needs-review-translation" state-qualifier="mt-suggestion">클라이언트 라이브러리를 복원</target>
+          <source xml:lang="en">&amp;Restore Client-Side Libraries</source>
+          <target xml:lang="ko" state="translated">클라이언트 쪽 라이브러리 복원(&amp;R)</target>
         </trans-unit>
       </group>
     </body>
