@@ -83,18 +83,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
                         {
                             successfulProviderResults.Add(result);
                         }
-
-                        if (result.Errors.Any())
+                        else if (result.Errors.Any())
                         {
                             failedProviderResults.Add(result);
                         }
-
-                        if (result.UpToDate)
+                        else if (result.UpToDate)
                         {
                             uptodateProviderResults.Add(result);
                         }
-
-                        if (result.Cancelled)
+                        else if (result.Cancelled)
                         {
                             cancelledProviderResults.Add(result);
                         }
@@ -104,7 +101,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 if (successfulProviderResults.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Success"] = successfulProviderResults.Count;
-                    telResult[$"LibrariesIDs_{provider}_Success"] = string.Join(":", GetHashedLibrariesNames(successfulProviderResults));
                 }
 
                 if (failedProviderResults.Count > 0)
@@ -112,20 +108,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     List<string> providerErrorCodes = GetErrorCodes(failedProviderResults);
 
                     telResult[$"LibrariesCount_{provider}_Failure"] = failedProviderResults.Count;
-                    telResult[$"LibrariesIDs_{provider}_Failure"] = string.Join(":", GetHashedLibrariesNames(failedProviderResults));
                     telResult.Add($"ErrorCodes_{provider}", string.Join(":", providerErrorCodes));
                 }
 
                 if (cancelledProviderResults.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Cancelled"] = cancelledProviderResults.Count;
-                    telResult[$"LibrariesIDs_{provider}_Cancelled"] = string.Join(":", GetHashedLibrariesNames(cancelledProviderResults));
                 }
 
                 if (uptodateProviderResults.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Uptodate"] = uptodateProviderResults.Count;
-                    telResult[$"LibrariesIDs_{provider}_Uptodate"] = string.Join(":", GetHashedLibrariesNames(uptodateProviderResults));
                 }
             }
 
@@ -148,37 +141,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             return errorCodes;
-        }
-
-        private static List<string> GetHashedLibrariesNames(IEnumerable<ILibraryOperationResult> results)
-        {
-            List<string> hashedLibraryNames= new List<string>();
-
-            using (MD5 md5Hash = MD5.Create())
-            {
-                foreach (ILibraryOperationResult result in results)
-                {
-                    if (result.InstallationState != null)
-                    {
-                        hashedLibraryNames.Add(GetMd5Hash(md5Hash, result.InstallationState.Name));
-                    }
-                }
-            }
-
-            return hashedLibraryNames;
-        }
-
-        static string GetMd5Hash(MD5 md5Hash, string input)
-        {
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-            StringBuilder sBuilder = new StringBuilder();
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-
-            return sBuilder.ToString();
         }
     }
 }
