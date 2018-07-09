@@ -194,19 +194,20 @@
                     <TextBlock.Resources>
                         <Style TargetType="TextBlock">
                             <Setter Property="TextWrapping" Value="Wrap" />
-                            <!--<Setter Property="Margin" Value="4" />-->
-                            <Setter Property="Padding" Value="4" />
+                            <Setter Property="Margin" Value="4" />
                         </Style>
                     </TextBlock.Resources>
                 </TextBlock>
             </Grid>
             <Button Content="{x:Static resources:Text.Cancel}"
+                    Height="Auto"
                     Width="65" 
                     DockPanel.Dock="Right"
                     IsCancel="True"
                     KeyboardNavigation.TabIndex="2" />
             <Button Content="{x:Static resources:Text.Install}"
                     Name="InstallButton"
+                    Height="Auto"
                     Width="65" 
                     DockPanel.Dock="Right"
                     Margin="0 0 6 0" IsDefault="True" 
