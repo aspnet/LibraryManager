@@ -104,8 +104,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 if (successfulProviderResults.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Success"] = successfulProviderResults.Count;
-                    telResult[$"LibrariesIDs_{provider}_Success"] = string.Join(":", GetHashedLibrariesNames(successfulProviderResults);
-                    telResult[$"{provider}_LibrariesFilesCount"] = GetProviderLibraryFilesCount(successfulProviderResults);
+                    telResult[$"LibrariesIDs_{provider}_Success"] = string.Join(":", GetHashedLibrariesNames(successfulProviderResults));
                 }
 
                 if (failedProviderResults.Count > 0)
@@ -131,21 +130,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             TrackUserTask($@"{operation}_Operation", TelemetryResult.None, telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
-        }
-
-        private static int GetProviderLibraryFilesCount(IEnumerable<ILibraryOperationResult> successfulProviderResults)
-        {
-            int count = 0;
-
-            foreach (ILibraryOperationResult result in successfulProviderResults)
-            {
-                if (result.InstallationState != null && result.InstallationState.Files != null)
-                {
-                    count += result.InstallationState.Files.Count();
-                }
-            }
-
-            return count;
         }
 
         internal static void LogErrors(string eventName, IEnumerable<ILibraryOperationResult> results)
