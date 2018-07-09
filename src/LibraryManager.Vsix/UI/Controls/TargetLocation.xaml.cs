@@ -28,6 +28,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         private string _text;
         private string _lastTargetLocation; 
         private string _baseFolder;
+        private BindLibraryNameToTargetLocation _libraryNameChange;
 
         public TargetLocation()
         {
@@ -37,8 +38,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             TargetLocationSearchTextBox.Text = InstallationFolder.DestinationFolder;
             _baseFolder = InstallationFolder.DestinationFolder;
             _lastTargetLocation = InstallationFolder.DestinationFolder;
-            MutualPropertyChange.Instance.TargetLibrary = string.Empty;
-            MutualPropertyChange.Instance.PropertyChanged += this.LibraryNameChanged;
+
             this.Loaded += TargetLocation_Loaded;
         }
 
@@ -46,6 +46,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void TargetLocation_Loaded(object sender, RoutedEventArgs e)
         {
+            InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
+            _libraryNameChange = viewModel.LibraryNameChange;
+            _libraryNameChange.PropertyChanged += this.LibraryNameChanged;
+
             Window window = Window.GetWindow(TargetLocationSearchTextBox);
 
             // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
@@ -289,7 +293,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void LibraryNameChanged(object sender, PropertyChangedEventArgs e)
         {
-            string targetLibrary = MutualPropertyChange.Instance.TargetLibrary;
+            string targetLibrary = _libraryNameChange.LibraryName;
 
             this.Dispatcher.Invoke(() =>
             {
