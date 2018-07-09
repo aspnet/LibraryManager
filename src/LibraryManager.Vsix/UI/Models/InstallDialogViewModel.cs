@@ -344,7 +344,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private bool CanInstallPackage()
         {
-            if (_isInstalling || PackageId == null)
+            if (_isInstalling)
             {
                 return false;
             }
@@ -360,13 +360,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public bool IsLibraryInstallationStateValid()
         {
-            // We don't want to show any warning messages on load.
-            // We'll wait for the user to choose a library before presenting any warnings.
-            if (PackageId == null)
-            {
-                return false;
-            }
-
             LibraryInstallationState libraryInstallationState = new LibraryInstallationState
             {
                 LibraryId = PackageId,
