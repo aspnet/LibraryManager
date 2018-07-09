@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
             name = libraryId;
             version = string.Empty;
 
-            if (indexOfAt > 0 && indexOfAt < libraryId.Trim().Length - 1)
+            if (indexOfAt > 0 && indexOfAt < libraryId.TrimEnd().Length - 1)
             {
                 name = libraryId.Substring(0, indexOfAt);
                 version = libraryId.Substring(indexOfAt + 1);

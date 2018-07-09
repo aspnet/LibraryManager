@@ -86,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         var completion = new CompletionItem
                         {
                             DisplayText = version,
-                            InsertionText = $"{name}@{version}",
+                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, version, _provider.Id),
                         };
 
                         completions.Add(completion);
@@ -134,7 +134,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, this._provider.Id);
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
@@ -168,7 +168,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId,  this._provider.Id);
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
@@ -271,7 +271,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             IEnumerable<Asset> assets = await GetAssetsAsync(groupName, cancellationToken).ConfigureAwait(false);
 
-            return assets?.Select(a => $"{groupName}@{a.Version}");
+            return assets?.Select(a => LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(groupName, a.Version, _provider.Id));
         }
 
         private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)
