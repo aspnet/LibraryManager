@@ -346,6 +346,18 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual("LIB018", results.First().Errors[0].Code);
         }
 
+        [TestMethod]
+        public async Task InstallLibraryAsync_SetsDefaultProvider()
+        {
+            var manifest = Manifest.FromJson(_emptyLibmanJson, _dependencies);
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
+
+            Assert.AreEqual("cdnjs", manifest.DefaultProvider);
+            var libraryState = manifest.Libraries.First() as LibraryInstallationState;
+
+            Assert.IsTrue(libraryState.IsUsingDefaultProvider);
+        }
+
         [DataTestMethod]
         [DataRow("1.5")]
         [DataRow("2.0")]
@@ -448,6 +460,11 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
     }},
   ]
+}}
+";
+        private string _emptyLibmanJson = $@"{{
+  ""{ManifestConstants.Version}"": ""1.0"",
+  ""{ManifestConstants.Libraries}"": [ ]
 }}
 ";
     }

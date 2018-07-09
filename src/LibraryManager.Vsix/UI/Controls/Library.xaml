@@ -27,7 +27,7 @@
                  Padding="2 2 20 2" />
         <!-- Watermark -->
         <Label Opacity=".5" Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Top" IsHitTestVisible="False">
-            <AccessText Text="{x:Static res:Text.TypeToSearch}" />
+            <TextBlock Text="{x:Static res:Text.TypeToSearch}" />
         </Label>
 
         <!-- Expand Grip -->
@@ -57,7 +57,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type controls:Completion}">
                         <Label ToolTip="{Binding Path=Description, Mode=OneWay}" Padding="0">
-                            <AccessText Text="{Binding Path=DisplayText, Mode=OneWay}" />
+                            <TextBlock Text="{Binding Path=DisplayText, Mode=OneWay}" />
                         </Label>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

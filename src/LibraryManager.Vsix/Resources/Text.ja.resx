@@ -60,10 +60,10 @@
     <value>&lt;ライブラリを選択して、インストールするファイルを選択してください&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>ビルドでの復元を無効にします</value>
+    <value>ビルド時のクライアント側ライブラリを無効にする(&amp;E)</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>クライアント側ライブラリのビルドでの復元を有効にします</value>
+    <value>ビルド時のクライアント側ライブラリの復元を有効にする(&amp;E)</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>MSBuild ターゲットを含む NuGet パッケージをインストールしています...</value>
@@ -121,5 +121,11 @@
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>ファイルが選択されていません</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>インストール</value>
   </data>
 </root>
