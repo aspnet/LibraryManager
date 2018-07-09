@@ -61,6 +61,7 @@
     <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="Shared\DefaultSolutionEvents.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
+    <Compile Include="UI\Controls\BindLibraryNameToTargetLocation.cs" />
     <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
       <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
     </Compile>

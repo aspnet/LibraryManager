@@ -211,7 +211,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// </returns>
         public Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
         {
-            return Task.FromResult(libraryId);
+            return Task.FromResult(string.Empty);
         }
     }
 }

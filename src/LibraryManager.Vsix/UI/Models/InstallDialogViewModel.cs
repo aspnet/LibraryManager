@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
+using Microsoft.Web.LibraryManager.Vsix.UI.Controls;
 using Newtonsoft.Json;
 using Controller = Microsoft.Web.Editor.Controller;
 using IVsTextBuffer = Microsoft.VisualStudio.TextManager.Interop.IVsTextBuffer;
@@ -46,6 +47,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private bool _isTreeViewEmpty;
         private string _errorMessage;
         private bool _displayError;
+        private BindLibraryNameToTargetLocation _libraryNameChange;
 
         public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
         {
@@ -57,6 +59,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             _closeDialog = closeDialog;
             _anyFileSelected = false;
             _isTreeViewEmpty = true;
+            _libraryNameChange = new BindLibraryNameToTargetLocation();
 
             List<IProvider> providers = new List<IProvider>();
             foreach (IProvider provider in deps.Providers.OrderBy(x => x.Id))
@@ -156,6 +159,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public HashSet<string> SelectedFiles { get; private set; }
 
+        internal BindLibraryNameToTargetLocation LibraryNameChange
+        {
+            get { return _libraryNameChange; }
+            set { Set(ref _libraryNameChange, value); }
+        }
+
         public ILibrary SelectedPackage
         {
             get { return _selectedPackage; }
@@ -168,6 +177,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                 if (Set(ref _selectedPackage, value) && value != null)
                 {
+                    _libraryNameChange.LibraryName = SelectedProvider.GetSuggestedDestination(SelectedPackage);
                     IsTreeViewEmpty = false;
                     bool canUpdateInstallStatusValue = false;
                     HashSet<string> selectedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -349,7 +359,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             set { Set(ref _errorMessage, value); }
         }
 
-        public bool IsLibraryInstallationStateValid()
+        public async Task<bool> IsLibraryInstallationStateValidAsync()
         {
             LibraryInstallationState libraryInstallationState = new LibraryInstallationState
             {
@@ -359,25 +369,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 Files = SelectedFiles?.ToList()
             };
 
-            if (libraryInstallationState == null)
-            {
-                ErrorMessage = PredefinedErrors.UnknownError().Message;
-                return false;
-            }
-
-            IList<IError> errors = new List<IError>();
-
-            Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                ILibraryOperationResult libraryOperationResult = await libraryInstallationState.IsValidAsync(SelectedProvider).ConfigureAwait(false);
-                errors = libraryOperationResult.Errors;
-            });
+            ILibraryOperationResult libraryOperationResult = await libraryInstallationState.IsValidAsync(SelectedProvider).ConfigureAwait(false);
+            IList<IError> errors = libraryOperationResult.Errors;
 
             ErrorMessage = string.Empty;
 
-            if (errors.Count > 0)
+            if (errors != null && errors.Count > 0)
             {
-                ErrorMessage = errors.First().Message;
+                ErrorMessage = errors[0].Message;
                 return false;
             }
 
@@ -418,32 +417,34 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         {
             try
             {
-                ILibrary selectedPackage = SelectedPackage;
-                InstallPackageCommand.CanExecute(null);
-                Manifest manifest = await Manifest.FromFileAsync(_configFileName, _deps, CancellationToken.None).ConfigureAwait(false);
-                string targetPath = _targetPath;
+                bool isLibraryInstallationStateValid = await IsLibraryInstallationStateValidAsync().ConfigureAwait(false);
 
-                if (!string.IsNullOrEmpty(_configFileName))
+                if (isLibraryInstallationStateValid)
                 {
-                    Uri configContainerUri = new Uri(_configFileName, UriKind.Absolute);
-                    Uri targetUri = new Uri(targetPath, UriKind.Absolute);
-                    targetPath = configContainerUri.MakeRelativeUri(targetUri).ToString();
-                }
+                    ILibrary selectedPackage = SelectedPackage;
+                    InstallPackageCommand.CanExecute(null);
+                    Manifest manifest = await Manifest.FromFileAsync(_configFileName, _deps, CancellationToken.None).ConfigureAwait(false);
+                    string targetPath = _targetPath;
 
-                if (String.IsNullOrEmpty(manifest.Version))
-                {
-                    manifest.Version = Manifest.SupportedVersions.Max().ToString();
-                }
+                    if (!string.IsNullOrEmpty(_configFileName))
+                    {
+                        Uri configContainerUri = new Uri(_configFileName, UriKind.Absolute);
+                        Uri targetUri = new Uri(targetPath, UriKind.Absolute);
+                        targetPath = configContainerUri.MakeRelativeUri(targetUri).ToString();
+                    }
 
-                LibraryInstallationState libraryInstallationState = new LibraryInstallationState
-                {
-                    LibraryId = PackageId,
-                    ProviderId = selectedPackage.ProviderId,
-                    DestinationPath = InstallationFolder.DestinationFolder,
-                };
+                    if (String.IsNullOrEmpty(manifest.Version))
+                    {
+                        manifest.Version = Manifest.SupportedVersions.Max().ToString();
+                    }
 
-                if (IsLibraryInstallationStateValid())
-                {
+                    LibraryInstallationState libraryInstallationState = new LibraryInstallationState
+                    {
+                        LibraryId = PackageId,
+                        ProviderId = selectedPackage.ProviderId,
+                        DestinationPath = InstallationFolder.DestinationFolder,
+                    };
+
                     _isInstalling = true;
 
                     // When "Include all files" option is checked, we don't want to write out the files to libman.json.
@@ -487,10 +488,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         // Save manifest file so we can restore library files.
                         rdt.SaveFileIfDirty(configFilePath);
                     }
-                }
-                else
-                {
-                    _isInstalling = false;
                 }
             }
             catch { }

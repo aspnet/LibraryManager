@@ -3,7 +3,6 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Windows.Interop;
 using EnvDTE;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -59,18 +58,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
             OleMenuCommand button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = await VsHelpers.GetSelectedItemAsync();
+            // When command is invooked from a folder
+            ProjectItem item = await VsHelpers.GetSelectedItemAsync().ConfigureAwait(false);
+            // When command is invoked from project scope
+            Project project = await VsHelpers.GetProjectOfSelectedItemAsync().ConfigureAwait(false);
 
-            if (item?.ContainingProject == null)
+            // We won't enable the command if it was not invoked from a project or a folder
+            if (item?.ContainingProject == null && project == null)
             {
                 return;
             }
 
-            if (VSConstants.ItemTypeGuid.PhysicalFolder_string.Equals(item.Kind, StringComparison.OrdinalIgnoreCase))
-            {
-                button.Visible = true;
-                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive && !_libraryCommandService.IsOperationInProgress;
-            }
+            button.Visible = true;
+            button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive && !_libraryCommandService.IsOperationInProgress;
         }
 
         private async Task ExecuteAsync(object sender, EventArgs e)
@@ -78,34 +78,51 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Telemetry.TrackUserTask("installdialogopened");
 
             ProjectItem item = await VsHelpers.GetSelectedItemAsync().ConfigureAwait(false);
+            Project project = await VsHelpers.GetProjectOfSelectedItemAsync().ConfigureAwait(false);
 
-            if (item != null)
+            if (project != null)
             {
-                string target = item.FileNames[1];
+                string target = string.Empty;
+                string rootFolder = await project.GetRootFolderAsync().ConfigureAwait(false);
 
-                Project project = await VsHelpers.GetProjectOfSelectedItemAsync().ConfigureAwait(false);
-
-                if (project != null)
+                // Install command was invoked from a folder.
+                // So the initial target location should be name of the folder from which
+                // the command was invoked.
+                if (item != null)
                 {
-                    string rootFolder = await project.GetRootFolderAsync().ConfigureAwait(false);
-
-                    string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-                    IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
-
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder);
-
-                    var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-                    int hwnd = dte.MainWindow.HWnd;
-                    WindowInteropHelper windowInteropHelper = new WindowInteropHelper(dialog);
-
-                    // Set visual studio window's handle as the owner of the dialog.
-                    // This will remove the dialog from alt-tab list and will not allow the user to switch the dialog box to the background 
-                    windowInteropHelper.Owner = new IntPtr(hwnd);
-
-                    dialog.ShowDialog();
+                    target = item.FileNames[1];
                 }
+                else
+                {
+                    // Install command was invoked from project scope.
+                    // If wwwroot exists, initial target location should be - wwwroot/lib.
+                    // Else, target location should be - lib
+                    if (Directory.Exists(Path.Combine(rootFolder, "wwwroot")))
+                    {
+                        target = Path.Combine(rootFolder, "wwwroot", "lib") + Path.DirectorySeparatorChar;
+                    }
+                    else
+                    {
+                        target = Path.Combine(rootFolder, "lib") + Path.DirectorySeparatorChar;
+                    }
+                }
+
+                string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
+                IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder);
+
+                var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+                int hwnd = dte.MainWindow.HWnd;
+                WindowInteropHelper windowInteropHelper = new WindowInteropHelper(dialog);
+
+                // Set visual studio window's handle as the owner of the dialog.
+                // This will remove the dialog from alt-tab list and will not allow the user to switch the dialog box to the background 
+                windowInteropHelper.Owner = new IntPtr(hwnd);
+
+                dialog.ShowDialog();
             }
         }
     }
