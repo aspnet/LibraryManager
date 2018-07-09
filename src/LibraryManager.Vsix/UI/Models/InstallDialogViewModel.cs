@@ -330,16 +330,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         public bool AnyFileSelected
         {
             get { return _anyFileSelected; }
-            set
-            {
-                Set(ref _anyFileSelected, value);
-
-                // We will display warning only after user has selected a library
-                if (!value && SelectedPackage != null)
-                {
-                    ErrorMessage = Text.NoFilesSelected;
-                }
-            }
+            set { Set(ref _anyFileSelected, value); }
         }
 
         private bool CanInstallPackage()
