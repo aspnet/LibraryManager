@@ -22,27 +22,42 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
             _versionedNamingScheme = new VersionedLibraryNamingScheme();
             _simpleNamingScheme = new SimpleLibraryNamingScheme();
             _default = _simpleNamingScheme;
+            _isInitialized = false;
+
+            _perProviderNamingScheme = new Dictionary<string, ILibraryNamingScheme>(StringComparer.OrdinalIgnoreCase);
         }
 
         private readonly object _syncObject = new object();
-        private readonly ILibraryNamingScheme _versionedNamingScheme = new VersionedLibraryNamingScheme();
-        private readonly ILibraryNamingScheme _simpleNamingScheme = new SimpleLibraryNamingScheme();
+        private readonly ILibraryNamingScheme _versionedNamingScheme;
+        private readonly ILibraryNamingScheme _simpleNamingScheme;
         private readonly ILibraryNamingScheme _default;
 
 
         private IDependencies _dependencies;
-        private Dictionary<string, ILibraryNamingScheme> _perProviderNamingScheme = new Dictionary<string, ILibraryNamingScheme>();
+        private Dictionary<string, ILibraryNamingScheme> _perProviderNamingScheme;
+        private bool _isInitialized;
 
         /// <summary>
         /// Initializes the LibraryNaming Schemes for the manifest.
         /// </summary>
         /// <param name="dependencies"></param>
-        public void Initialize (IDependencies dependencies)
+        public void EnsureInitialized (IDependencies dependencies)
         {
-            _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
+            if (_isInitialized)
+            {
+                return;
+            }
 
             lock(_syncObject)
             {
+                if (_isInitialized)
+                {
+                    return;
+                }
+
+                _isInitialized = true;
+                _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
+
                 _perProviderNamingScheme.Clear();
 
                 foreach(IProvider p in _dependencies.Providers)
@@ -60,12 +75,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
         /// <returns></returns>
         public (string Name, string Version) GetLibraryNameAndVersion(string libraryId, string providerId)
         {
-            if (!string.IsNullOrEmpty(providerId) && _perProviderNamingScheme.TryGetValue(providerId, out ILibraryNamingScheme _scheme))
-            {
-                return _scheme.GetLibraryNameAndVersion(libraryId);
-            }
-
-            return _default.GetLibraryNameAndVersion(libraryId);
+            return GetSchemeForProvider(providerId).GetLibraryNameAndVersion(libraryId);
         }
 
         /// <summary>
@@ -77,12 +87,17 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
         /// <returns></returns>
         public string GetLibraryId(string name, string version, string providerId)
         {
-            if (!string.IsNullOrEmpty(providerId) && _perProviderNamingScheme.TryGetValue(providerId, out ILibraryNamingScheme _scheme))
-            {
-                return _scheme.GetLibraryId(name, version);
-            }
+            return GetSchemeForProvider(providerId).GetLibraryId(name, version);
+        }
 
-            return _default.GetLibraryId(name, version);
+        private ILibraryNamingScheme GetSchemeForProvider(string providerId)
+        {
+            lock (_syncObject)
+            {
+                return !string.IsNullOrEmpty(providerId ) && _perProviderNamingScheme.TryGetValue(providerId, out ILibraryNamingScheme scheme)
+                    ? scheme :
+                    _default;
+            }
         }
     }
 }
