@@ -44,6 +44,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private FileSelectionType _fileSelectionType;
         private bool _anyFileSelected;
         private bool _isTreeViewEmpty;
+        private string _errorMessage;
+        private bool _displayError;
 
         public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
         {
@@ -146,6 +148,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 else if (Set(ref _packageId, value))
                 {
                     RefreshFileSelections();
+
+                    _dispatcher.Invoke(() =>
+                    {
+                        InstallPackageCommand.CanExecute(null);
+                    });
                 }
             }
         }
@@ -328,18 +335,94 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         public bool AnyFileSelected
         {
             get { return _anyFileSelected; }
-            set { Set(ref _anyFileSelected, value); }
+            set
+            {
+                Set(ref _anyFileSelected, value);
+
+                // We will display warning only after user has selected a library
+                if (!value && SelectedPackage != null)
+                {
+                    ErrorMessage = Text.NoFilesSelected;
+                    DisplayError = true;
+                }
+            }
         }
 
         private bool CanInstallPackage()
         {
-            if (_isInstalling)
+            if (_isInstalling || !IsLibraryInstallationStateValid())
             {
                 return false;
             }
 
+            return true;
+        }
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                Set(ref _errorMessage, value);
+                OnPropertyChanged(nameof(ErrorMessage));
+            }
+        }
+
+        public bool DisplayError
+        {
+            get { return _displayError; }
+            set
+            {
+                Set(ref _displayError, value);
+                OnPropertyChanged(nameof(DisplayError));
+            }
+        }
+
+        public bool IsLibraryInstallationStateValid()
+        {
+            ErrorMessage = string.Empty;
+
+            // We don't want to show any warning messages on load.
+            // We'll wait for the user to choose a library before presenting any warnings.
+            if (PackageId == null)
+            {
+                DisplayError = false;
+                return false;
+            }
+
+            LibraryInstallationState libraryInstallationState = new LibraryInstallationState
+            {
+                LibraryId = PackageId,
+                ProviderId = SelectedProvider.Id,
+                DestinationPath = InstallationFolder.DestinationFolder,
+                Files = SelectedFiles?.ToList()
+            };
+
+            IList<IError> errors = new List<IError>();
+
+            Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                ILibraryOperationResult libraryOperationResult = await libraryInstallationState.IsValidAsync(SelectedProvider).ConfigureAwait(false);
+                errors = libraryOperationResult.Errors;
+            });
+
+            bool hasErrors = errors.Count > 0;
+
+            if (hasErrors)
+            {
+                ErrorMessage = errors.First().Message;
+                return false;
+            }
+
             AnyFileSelected = IsAnyFileSelected(DisplayRoots);
-            return AnyFileSelected;
+
+            if (!AnyFileSelected)
+            {
+                ErrorMessage = Text.NoFilesSelected;
+                return false;
+            }
+
+            return true;
         }
 
         private static bool IsAnyFileSelected(IReadOnlyList<PackageItem> children)

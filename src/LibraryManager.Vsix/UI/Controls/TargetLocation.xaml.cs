@@ -239,7 +239,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // We will invoke completion on text insertion and not deletion.
             // Also, we don't want to invoke completion on dialog load as we pre populate the target
             // location textbox with name of the folder when dialog is initially loaded.
-            if (textChange.AddedLength > 0 && TargetLocationSearchTextBox.CaretIndex > 0)
+           if (textChange.AddedLength > 0 && TargetLocationSearchTextBox.CaretIndex > 0)
             {
                 VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
@@ -270,6 +270,16 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     Flyout.IsOpen = true;
                 });
             }
+
+            if (String.IsNullOrEmpty(Text))
+            {
+                InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
+
+                if (viewModel != null)
+                {
+                    viewModel.InstallPackageCommand.CanExecute(null);
+                }
+            }
         }
 
         private void TargetLocation_LostFocus(object sender, RoutedEventArgs e)
@@ -277,6 +287,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             if (!Options.IsKeyboardFocusWithin && !TargetLocationSearchTextBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
             {
                 Flyout.IsOpen = false;
+
+                InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
+
+                if (viewModel != null && !viewModel.IsLibraryInstallationStateValid())
+                {
+                    viewModel.DisplayError = true;
+                }
             }
         }
     }
