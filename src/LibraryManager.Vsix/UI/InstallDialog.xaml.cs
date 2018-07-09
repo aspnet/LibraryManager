@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Vsix.Resources;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
@@ -179,7 +178,20 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         {
             if (!ViewModel.IsLibraryInstallationStateValid())
             {
-                MessageDialog.Show(Text.OutputWindowTitle, ViewModel.ErrorMessage, MessageDialogCommandSet.Ok);
+                int result;
+                IVsUIShell shell = VisualStudio.Shell.Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
+
+                shell.ShowMessageBox(dwCompRole: 0,
+                rclsidComp: Guid.Empty,
+                pszTitle: null,
+                pszText: ViewModel.ErrorMessage,
+                pszHelpFile: null,
+                dwHelpContextID: 0,
+                msgbtn: OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                msgdefbtn: OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
+                msgicon: OLEMSGICON.OLEMSGICON_WARNING,
+                fSysAlert: 0,
+                pnResult: out result);
             }
             else
             {

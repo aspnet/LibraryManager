@@ -287,8 +287,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             if (!Options.IsKeyboardFocusWithin && !TargetLocationSearchTextBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
             {
                 Flyout.IsOpen = false;
-
-                InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
             }
         }
     }

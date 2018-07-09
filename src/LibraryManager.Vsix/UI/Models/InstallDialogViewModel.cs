@@ -148,11 +148,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 else if (Set(ref _packageId, value))
                 {
                     RefreshFileSelections();
-
-                    _dispatcher.Invoke(() =>
-                    {
-                        InstallPackageCommand.CanExecute(null);
-                    });
                 }
             }
         }
@@ -380,6 +375,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 Files = SelectedFiles?.ToList()
             };
 
+            if (libraryInstallationState == null)
+            {
+                ErrorMessage = PredefinedErrors.UnknownError().Message;
+                return false;
+            }
+
             IList<IError> errors = new List<IError>();
 
             Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
@@ -434,7 +435,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             try
             {
                 ILibrary selectedPackage = SelectedPackage;
-                _isInstalling = true;
                 InstallPackageCommand.CanExecute(null);
                 Manifest manifest = await Manifest.FromFileAsync(_configFileName, _deps, CancellationToken.None).ConfigureAwait(false);
                 string targetPath = _targetPath;
@@ -458,46 +458,55 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     DestinationPath = InstallationFolder.DestinationFolder,
                 };
 
-                // When "Include all files" option is checked, we don't want to write out the files to libman.json.
-                // We will only list the files when user chose to install specific files.
-                if (LibraryFilesToInstall == FileSelectionType.ChooseSpecificFilesToInstall)
+                if (IsLibraryInstallationStateValid())
                 {
-                    libraryInstallationState.Files = SelectedFiles.ToList();
-                }
+                    _isInstalling = true;
 
-                manifest.AddLibrary(libraryInstallationState);
+                    // When "Include all files" option is checked, we don't want to write out the files to libman.json.
+                    // We will only list the files when user chose to install specific files.
+                    if (LibraryFilesToInstall == FileSelectionType.ChooseSpecificFilesToInstall)
+                    {
+                        libraryInstallationState.Files = SelectedFiles.ToList();
+                    }
 
-                await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-                EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
-                project?.AddFileToProjectAsync(_configFileName);
-
-                RunningDocumentTable rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
-                string configFilePath = Path.GetFullPath(_configFileName);
-
-                IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
-
-                _dispatcher.Invoke(() =>
-                {
-                    _closeDialog(true);
-                });
-
-                // The file isn't open. So we'll write to disk directly
-                if (textBuffer == null)
-                {
                     manifest.AddLibrary(libraryInstallationState);
 
-                    await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+                    await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                    await _libraryCommandService.RestoreAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+                    EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
+                    project?.AddFileToProjectAsync(_configFileName);
+
+                    RunningDocumentTable rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
+                    string configFilePath = Path.GetFullPath(_configFileName);
+
+                    IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
+
+                    _dispatcher.Invoke(() =>
+                    {
+                        _closeDialog(true);
+                    });
+
+                    // The file isn't open. So we'll write to disk directly
+                    if (textBuffer == null)
+                    {
+                        manifest.AddLibrary(libraryInstallationState);
+
+                        await manifest.SaveAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+
+                        await _libraryCommandService.RestoreAsync(_configFileName, CancellationToken.None).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        // libman.json file is open, so we will write to the textBuffer.
+                        InsertIntoTextBuffer(textBuffer, libraryInstallationState);
+
+                        // Save manifest file so we can restore library files.
+                        rdt.SaveFileIfDirty(configFilePath);
+                    }
                 }
                 else
                 {
-                    // libman.json file is open, so we will write to the textBuffer.
-                    InsertIntoTextBuffer(textBuffer, libraryInstallationState);
-
-                    // Save manifest file so we can restore library files.
-                    rdt.SaveFileIfDirty(configFilePath);
+                    _isInstalling = false;
                 }
             }
             catch { }
