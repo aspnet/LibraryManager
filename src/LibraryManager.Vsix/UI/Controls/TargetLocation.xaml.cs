@@ -248,7 +248,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // We will invoke completion on text insertion and not deletion.
             // Also, we don't want to invoke completion on dialog load as we pre populate the target
             // location textbox with name of the folder when dialog is initially loaded.
-            if (textChange.AddedLength > 0 && TargetLocationSearchTextBox.CaretIndex > 0)
+           if (textChange.AddedLength > 0 && TargetLocationSearchTextBox.CaretIndex > 0)
             {
                 VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
