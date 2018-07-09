@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.VisualStudio.Telemetry;
 using Microsoft.Web.LibraryManager.Contracts;
 
@@ -55,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             double elapsedTimeRounded = Math.Round(elapsedTime.TotalSeconds, 2);
             string elapsedTimeStr = elapsedTimeRounded.ToString(System.Globalization.CultureInfo.InvariantCulture);
             List<string> generalErrorCodes = GetErrorCodes(results.Where(r => r.InstallationState == null && r.Errors.Any()));
-            IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId).Distinct();
+            IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId.ToLower()).Distinct();
 
             telResult.Add("LibrariesCount", results.Count());
             telResult.Add($"{operation}_time", elapsedTimeStr);
@@ -67,44 +69,64 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (string provider in providers)
             {
-                IEnumerable<ILibraryOperationResult> providerResults = results.Where(r => r.InstallationState?.ProviderId == provider);
-                IEnumerable<ILibraryOperationResult> successfulProviderResults = providerResults.Where(r => r.Success && !r.UpToDate);
-                IEnumerable<ILibraryOperationResult> failedProviderResults = providerResults.Where(r => r.Errors.Any());
-                List<string> providerErrorCodes = GetErrorCodes(failedProviderResults);
+                List<ILibraryOperationResult> successfulProviderResults = new List<ILibraryOperationResult>();
+                List<ILibraryOperationResult> failedProviderResults = new List<ILibraryOperationResult>();
+                List<ILibraryOperationResult> cancelledProviderResults = new List<ILibraryOperationResult>();
+                List<ILibraryOperationResult> uptodateProviderResults = new List<ILibraryOperationResult>();
 
-                List<TelemetryPiiProperty> librariesNames_Success = GetPiiLibrariesNames(successfulProviderResults);
-                List<TelemetryPiiProperty> librariesNames_Failure = GetPiiLibrariesNames(providerResults.Where(r => r.Errors.Any()));
-                List<TelemetryPiiProperty> librariesNames_Cancelled = GetPiiLibrariesNames(providerResults.Where(r => r.Cancelled));
-                List<TelemetryPiiProperty> librariesNames_Uptodate = GetPiiLibrariesNames(providerResults.Where(r => r.UpToDate));
-
-                if (providerErrorCodes.Count() > 0)
+                foreach (ILibraryOperationResult result in results)
                 {
-                    telResult.Add($"ErrorCodes_{provider}", string.Join(":", providerErrorCodes));
+                    if (result.InstallationState != null &&
+                        result.InstallationState.ProviderId.Equals(provider, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (result.Success && !result.UpToDate)
+                        {
+                            successfulProviderResults.Add(result);
+                        }
+
+                        if (result.Errors.Any())
+                        {
+                            failedProviderResults.Add(result);
+                        }
+
+                        if (result.UpToDate)
+                        {
+                            uptodateProviderResults.Add(result);
+                        }
+
+                        if (result.Cancelled)
+                        {
+                            cancelledProviderResults.Add(result);
+                        }
+                    }
                 }
 
-                if (librariesNames_Success.Count > 0)
+                if (successfulProviderResults.Count > 0)
                 {
-                    telResult[$"LibrariesCount_{provider}_Success"] = librariesNames_Success.Count;
-                    telResult[$"LibrariesIDs_{provider}_Success"] = string.Join(":", librariesNames_Success);
+                    telResult[$"LibrariesCount_{provider}_Success"] = successfulProviderResults.Count;
+                    telResult[$"LibrariesIDs_{provider}_Success"] = string.Join(":", GetHashedLibrariesNames(successfulProviderResults);
                     telResult[$"{provider}_LibrariesFilesCount"] = GetProviderLibraryFilesCount(successfulProviderResults);
                 }
 
-                if (librariesNames_Failure.Count > 0)
+                if (failedProviderResults.Count > 0)
                 {
-                    telResult[$"LibrariesCount_{provider}_Failure"] = librariesNames_Failure.Count;
-                    telResult[$"LibrariesIDs_{provider}_Failure"] = string.Join(":", librariesNames_Failure);
+                    List<string> providerErrorCodes = GetErrorCodes(failedProviderResults);
+
+                    telResult[$"LibrariesCount_{provider}_Failure"] = failedProviderResults.Count;
+                    telResult[$"LibrariesIDs_{provider}_Failure"] = string.Join(":", GetHashedLibrariesNames(failedProviderResults));
+                    telResult.Add($"ErrorCodes_{provider}", string.Join(":", providerErrorCodes));
                 }
 
-                if (librariesNames_Cancelled.Count > 0)
+                if (cancelledProviderResults.Count > 0)
                 {
-                    telResult[$"LibrariesCount_{provider}_Cancelled"] = librariesNames_Cancelled.Count;
-                    telResult[$"LibrariesIDs_{provider}_Cancelled"] = string.Join(":", librariesNames_Cancelled);
+                    telResult[$"LibrariesCount_{provider}_Cancelled"] = cancelledProviderResults.Count;
+                    telResult[$"LibrariesIDs_{provider}_Cancelled"] = string.Join(":", GetHashedLibrariesNames(cancelledProviderResults));
                 }
 
-                if (librariesNames_Uptodate.Count > 0)
+                if (uptodateProviderResults.Count > 0)
                 {
-                    telResult[$"LibrariesCount_{provider}_Uptodate"] = librariesNames_Uptodate.Count;
-                    telResult[$"LibrariesIDs_{provider}_Uptodate"] = string.Join(":", librariesNames_Uptodate);
+                    telResult[$"LibrariesCount_{provider}_Uptodate"] = uptodateProviderResults.Count;
+                    telResult[$"LibrariesIDs_{provider}_Uptodate"] = string.Join(":", GetHashedLibrariesNames(uptodateProviderResults));
                 }
             }
 
@@ -122,6 +144,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     count += result.InstallationState.Files.Count();
                 }
             }
+
             return count;
         }
 
@@ -143,19 +166,35 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return errorCodes;
         }
 
-        private static List<TelemetryPiiProperty> GetPiiLibrariesNames(IEnumerable<ILibraryOperationResult> results)
+        private static List<string> GetHashedLibrariesNames(IEnumerable<ILibraryOperationResult> results)
         {
-            List<TelemetryPiiProperty> librariesNames = new List<TelemetryPiiProperty>();
+            List<string> hashedLibraryNames= new List<string>();
 
-            foreach (ILibraryOperationResult result in results)
+            using (MD5 md5Hash = MD5.Create())
             {
-                if (result.InstallationState != null)
+                foreach (ILibraryOperationResult result in results)
                 {
-                    librariesNames.Add(new TelemetryPiiProperty(result.InstallationState.Name));
+                    if (result.InstallationState != null)
+                    {
+                        hashedLibraryNames.Add(GetMd5Hash(md5Hash, result.InstallationState.Name));
+                    }
                 }
             }
 
-            return librariesNames;
+            return hashedLibraryNames;
+        }
+
+        static string GetMd5Hash(MD5 md5Hash, string input)
+        {
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+            StringBuilder sBuilder = new StringBuilder();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            return sBuilder.ToString();
         }
     }
 }
