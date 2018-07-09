@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Windows.Interop;
 using EnvDTE;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -84,17 +82,18 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 string target = string.Empty;
                 string rootFolder = await project.GetRootFolderAsync().ConfigureAwait(false);
 
-                // Add Client-Side Library command was invoked from a folder.
-                // So the initial target location should be name of the folder from which the command was invoked.
+                // Install command was invoked from a folder.
+                // So the initial target location should be name of the folder from which
+                // the command was invoked.
                 if (item != null)
                 {
                     target = item.FileNames[1];
                 }
                 else
                 {
-                    // Add Client-Side Library command was invoked from project scope.
-                    // If wwwroot exists, initial target location will be - wwwroot/lib.
-                    // Else, target location will be - lib
+                    // Install command was invoked from project scope.
+                    // If wwwroot exists, initial target location should be - wwwroot/lib.
+                    // Else, target location should be - lib
                     if (Directory.Exists(Path.Combine(rootFolder, "wwwroot")))
                     {
                         target = Path.Combine(rootFolder, "wwwroot", "lib") + Path.DirectorySeparatorChar;
