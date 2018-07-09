@@ -112,12 +112,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (ILibraryOperationResult result in successfulProviderResults)
             {
-                if (result.InstallationState != null)
+                if (result.InstallationState != null && result.InstallationState.Files != null)
                 {
                     count += result.InstallationState.Files.Count();
                 }
             }
-
             return count;
         }
 
