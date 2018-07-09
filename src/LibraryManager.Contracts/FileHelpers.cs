@@ -214,7 +214,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static bool DeleteFiles(IEnumerable<string> filePaths, string rootDirectory = null)
         {
-            HashSet<string> directories = new HashSet<string>();
+            HashSet<string> directories = new HashSet<string>(new LocalPathComparer());
 
             try
             {
@@ -225,7 +225,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
                         DeleteFileFromDisk(filePath);
                     }
 
-                    if (rootDirectory != null)
+                    if (!string.IsNullOrEmpty(rootDirectory))
                     {
                         string directoryPath = Path.GetDirectoryName(filePath);
 
@@ -236,7 +236,8 @@ namespace Microsoft.Web.LibraryManager.Contracts
                     }
                 }
 
-                if (rootDirectory != null)
+                // TODO: adding network path comparator.
+                if (rootDirectory != null && !IsUNCPath(rootDirectory))
                 {
                     DeleteEmptyFoldersFromDisk(directories, rootDirectory);
                 }
@@ -262,19 +263,18 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 return true;
             }
 
-            HashSet<string> newFolderPaths = new HashSet<string>();
+            HashSet<string> newFolderPaths = new HashSet<string>(new LocalPathComparer());
 
             try
             {
                 foreach (string path in folderPaths)
                 {
-                    if (!path.Equals(rootDirectory, StringComparison.CurrentCultureIgnoreCase))
+                    if (!string.Equals(Path.GetFullPath(path), Path.GetFullPath(rootDirectory)))
                     {
-                        DirectoryInfo directory = new DirectoryInfo(path);
-                        if (directory.Exists && IsDirectoryEmpty(path))
+                        if (Directory.Exists(path) && !Directory.GetFileSystemEntries(path).Any())
                         {
-                            directory.Delete(true);
-                            newFolderPaths.Add(Directory.GetParent(path).FullName);
+                            Directory.Delete(path);
+                            newFolderPaths.Add(Path.GetDirectoryName(path));
                         }
                     }
                 }
@@ -322,6 +322,29 @@ namespace Microsoft.Web.LibraryManager.Contracts
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        private static bool IsUNCPath(string rootPath)
+        {
+            return new Uri(rootPath).IsUnc;
+        }
+
+        private class LocalPathComparer : IEqualityComparer<string>
+        {
+            public bool Equals(string path1, string path2)
+            {
+                string fullPath1 = Path.GetFullPath(path1);
+                string fullPath2 = Path.GetFullPath(path2);
+
+                return string.Equals(fullPath1, fullPath2);
+            }
+
+            public int GetHashCode(string path)
+            {
+                string fullPath = Path.GetFullPath(path);
+
+                return fullPath.GetHashCode();
             }
         }
     }
