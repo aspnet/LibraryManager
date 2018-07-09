@@ -41,7 +41,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E67307E3-04FF-498B-97C7-4F508299DF4D}"
 	ProjectSection(SolutionItems) = preProject
 		build\dependencies.props = build\dependencies.props
-		build\testdependencies.props = build\testdependencies.props
+		build\PackageVersions.targets = build\PackageVersions.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{E559F6DC-25C6-4077-B2C5-D5A06357D1BC}"
