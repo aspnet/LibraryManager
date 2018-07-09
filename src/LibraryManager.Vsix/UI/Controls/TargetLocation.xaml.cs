@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             TargetLocationSearchTextBox.Text = InstallationFolder.DestinationFolder;
             _baseFolder = InstallationFolder.DestinationFolder;
             _lastTargetLocation = InstallationFolder.DestinationFolder;
-            MutualPropertyChange.Instance.TargetLibrary = string.Empty;
+
             MutualPropertyChange.Instance.PropertyChanged += this.LibraryNameChanged;
             this.Loaded += TargetLocation_Loaded;
         }
@@ -289,23 +289,19 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void LibraryNameChanged(object sender, PropertyChangedEventArgs e)
         {
-            string targetLibrary = MutualPropertyChange.Instance.TargetLibrary;
-
-            this.Dispatcher.Invoke(() =>
+            if (TargetLocationSearchTextBox.Text.Equals(_lastTargetLocation))
             {
-                if (TargetLocationSearchTextBox.Text.Equals(_lastTargetLocation))
-                {
-                    if (targetLibrary.Length > 0 && targetLibrary[targetLibrary.Length - 1] == '/')
-                    {
-                        targetLibrary = targetLibrary.Substring(0, targetLibrary.Length - 1);
-                    }
+                string newLib = e.PropertyName;
 
-                    TargetLocationSearchTextBox.Text = _baseFolder + targetLibrary + '/';
-                    InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
+                if (newLib.Length > 0 && newLib[newLib.Length - 1] == '/')
+                {
+                    newLib = newLib.Substring(0, newLib.Length - 1);
                 }
 
-                _lastTargetLocation = TargetLocationSearchTextBox.Text;
-            });
+                TargetLocationSearchTextBox.Text = _baseFolder + newLib + '/';
+            }
+
+            _lastTargetLocation = TargetLocationSearchTextBox.Text;
         }
     }
 }

@@ -17,7 +17,6 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
-using Microsoft.Web.LibraryManager.Vsix.UI.Controls;
 using Newtonsoft.Json;
 using Controller = Microsoft.Web.Editor.Controller;
 using IVsTextBuffer = Microsoft.VisualStudio.TextManager.Interop.IVsTextBuffer;
@@ -163,10 +162,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 if (value == null)
                 {
                     IsTreeViewEmpty = true;
-                }
-                else
-                {
-                    MutualPropertyChange.Instance.TargetLibrary = value.Name;
                 }
 
                 if (Set(ref _selectedPackage, value) && value != null)
