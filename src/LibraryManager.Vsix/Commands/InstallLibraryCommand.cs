@@ -84,19 +84,24 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 string target = string.Empty;
                 string rootFolder = await project.GetRootFolderAsync().ConfigureAwait(false);
 
+                // Add Client-Side Library command was invoked from a folder.
+                // So the initial target location should be name of the folder from which the command was invoked.
                 if (item != null)
                 {
                     target = item.FileNames[1];
                 }
                 else
                 {
+                    // Add Client-Side Library command was invoked from project scope.
+                    // If wwwroot exists, initial target location will be - wwwroot/lib.
+                    // Else, target location will be - lib
                     if (Directory.Exists(Path.Combine(rootFolder, "wwwroot")))
                     {
-                        target = "wwwroot/lib/";
+                        target = Path.Combine(rootFolder, "wwwroot", "lib") + Path.DirectorySeparatorChar;
                     }
                     else
                     {
-                        target = "lib/";
+                        target = Path.Combine(rootFolder, "lib") + Path.DirectorySeparatorChar;
                     }
                 }
 
