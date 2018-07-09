@@ -295,7 +295,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             string targetLibrary = _libraryNameChange.LibraryName;
 
-            if (string.IsNullOrEmpty(targetLibrary))
+            if (!string.IsNullOrEmpty(targetLibrary))
             {
                 this.Dispatcher.Invoke(() =>
                 {
