@@ -58,62 +58,73 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Dictionary<string, object> telResult = new Dictionary<string, object>();
             telResult.Add("LibrariesCount", results.Count());
             telResult.Add($"{operation}_time", elapsedTimeStr);
-            telResult.Add("ErrorCodes", string.Join(" :", generalErrorCodes));
+            telResult.Add("ErrorCodes", string.Join(":", generalErrorCodes));
 
             IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId).Distinct();
 
             foreach (string provider in providers)
             {
                 IEnumerable<ILibraryOperationResult> providerResults = results.Where(r => r.InstallationState?.ProviderId == provider);
+                IEnumerable<ILibraryOperationResult> successfulProviderResults = providerResults.Where(r => r.Success && !r.UpToDate);
+
                 List<string> providerErrorCodes = GetErrorCodes(providerResults);
 
-                List<string> librariesNames_Success = GetLibrariesNames(providerResults.Where(r => r.Success && !r.UpToDate));
-                List<string> librariesNames_Failure = GetLibrariesNames(providerResults.Where(r => r.Errors.Any()));
-                List<string> librariesNames_Cancelled = GetLibrariesNames(providerResults.Where(r => r.Cancelled));
-                List<string> librariesNames_Uptodate = GetLibrariesNames(providerResults.Where(r => r.UpToDate));
+                List<TelemetryPiiProperty> librariesNames_Success = GetPiiLibrariesNames(successfulProviderResults);
+                List<TelemetryPiiProperty> librariesNames_Failure = GetPiiLibrariesNames(providerResults.Where(r => r.Errors.Any()));
+                List<TelemetryPiiProperty> librariesNames_Cancelled = GetPiiLibrariesNames(providerResults.Where(r => r.Cancelled));
+                List<TelemetryPiiProperty> librariesNames_Uptodate = GetPiiLibrariesNames(providerResults.Where(r => r.UpToDate));
 
-                telResult.Add($"ErrorCodes_{provider}", string.Join(" :", providerErrorCodes));
+                telResult.Add($"ErrorCodes_{provider}", string.Join(":", providerErrorCodes));
 
                 if (librariesNames_Success.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Success"] = librariesNames_Success.Count;
-                    telResult[$"LibrariesIDs_{provider}_Success"] = new TelemetryPiiProperty(string.Join(" :", librariesNames_Success));
+                    telResult[$"LibrariesIDs_{provider}_Success"] = string.Join(":", librariesNames_Success);
+                    telResult[$"{provider}_LibrariesFilesCount"] = GetProviderLibraryFilesCount(successfulProviderResults);
                 }
 
                 if (librariesNames_Failure.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Failure"] = librariesNames_Failure.Count;
-                    telResult[$"LibrariesIDs_{provider}_Failure"] = new TelemetryPiiProperty(string.Join(" :", librariesNames_Failure));
+                    telResult[$"LibrariesIDs_{provider}_Failure"] = string.Join(":", librariesNames_Failure);
                 }
 
                 if (librariesNames_Cancelled.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Cancelled"] = librariesNames_Cancelled.Count;
-                    telResult[$"LibrariesIDs_{provider}_Cancelled"] = new TelemetryPiiProperty(string.Join(" :", librariesNames_Cancelled));
+                    telResult[$"LibrariesIDs_{provider}_Cancelled"] = string.Join(":", librariesNames_Cancelled);
                 }
 
                 if (librariesNames_Uptodate.Count > 0)
                 {
                     telResult[$"LibrariesCount_{provider}_Uptodate"] = librariesNames_Uptodate.Count;
-                    telResult[$"LibrariesIDs_{provider}_Uptodate"] = new TelemetryPiiProperty(string.Join(" :", librariesNames_Uptodate));
+                    telResult[$"LibrariesIDs_{provider}_Uptodate"] = string.Join(":", librariesNames_Uptodate);
                 }
 
-                foreach (ILibraryOperationResult result in providerResults)
-                {
-                    if (result.InstallationState?.Files != null)
-                    {
-                        telResult[$"{provider}_LibraryFilesCount"] = result.InstallationState.Files.Count;
-                    }
-                }
             }
 
             TrackUserTask($@"{operation}_Operation", TelemetryResult.None, telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
         }
 
+        private static int GetProviderLibraryFilesCount(IEnumerable<ILibraryOperationResult> successfulProviderResults)
+        {
+            int count = 0;
+
+            foreach (ILibraryOperationResult result in successfulProviderResults)
+            {
+                if (result.InstallationState != null)
+                {
+                    count += result.InstallationState.Files.Count();
+                }
+            }
+
+            return count;
+        }
+
         internal static void LogErrors(string eventName, IEnumerable<ILibraryOperationResult> results)
         {
             List<string> errorCodes = GetErrorCodes(results.Where(r => r.Errors.Any()));
-            TrackUserTask(eventName, TelemetryResult.Failure, new KeyValuePair<string, object>("Errorcode", string.Join(" :", errorCodes)));
+            TrackUserTask(eventName, TelemetryResult.Failure, new KeyValuePair<string, object>("Errorcode", string.Join(":", errorCodes)));
         }
 
         private static List<string> GetErrorCodes(IEnumerable<ILibraryOperationResult> results)
@@ -128,13 +139,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return errorCodes;
         }
 
-        private static List<string> GetLibrariesNames(IEnumerable<ILibraryOperationResult> results)
+        private static List<TelemetryPiiProperty> GetPiiLibrariesNames(IEnumerable<ILibraryOperationResult> results)
         {
-            List<string> librariesNames = new List<string>();
+            List<TelemetryPiiProperty> librariesNames = new List<TelemetryPiiProperty>();
 
             foreach (ILibraryOperationResult result in results)
             {
-                librariesNames.Add(result.InstallationState?.LibraryId);
+                librariesNames.Add(new TelemetryPiiProperty(result.InstallationState?.Name));
             }
 
             return librariesNames;

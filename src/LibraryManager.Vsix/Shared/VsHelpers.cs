@@ -312,7 +312,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (File.Exists(configFilePath))
                 {
-                    Telemetry.TrackUserTask($"ProjectContainsLibMan{project.Name}");
+                    Telemetry.TrackUserTask("ProjectContainsLibMan", TelemetryResult.None, new[] { new KeyValuePair<string, object>("ProjectGUID", project.Kind) });
                     return true;
                 }
             }
