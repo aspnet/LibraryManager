@@ -51,16 +51,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operation, TimeSpan elapsedTime)
         {
+            Dictionary<string, object> telResult = new Dictionary<string, object>();
             double elapsedTimeRounded = Math.Round(elapsedTime.TotalSeconds, 2);
             string elapsedTimeStr = elapsedTimeRounded.ToString(System.Globalization.CultureInfo.InvariantCulture);
             List<string> generalErrorCodes = GetErrorCodes(results.Where(r => r.InstallationState == null && r.Errors.Any()));
+            IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId).Distinct();
 
-            Dictionary<string, object> telResult = new Dictionary<string, object>();
             telResult.Add("LibrariesCount", results.Count());
             telResult.Add($"{operation}_time", elapsedTimeStr);
-            telResult.Add("ErrorCodes", string.Join(":", generalErrorCodes));
 
-            IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId).Distinct();
+            if (generalErrorCodes.Count() > 0)
+            {
+                telResult.Add("ErrorCodes", string.Join(":", generalErrorCodes));
+            }
 
             foreach (string provider in providers)
             {
@@ -74,7 +77,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 List<TelemetryPiiProperty> librariesNames_Cancelled = GetPiiLibrariesNames(providerResults.Where(r => r.Cancelled));
                 List<TelemetryPiiProperty> librariesNames_Uptodate = GetPiiLibrariesNames(providerResults.Where(r => r.UpToDate));
 
-                telResult.Add($"ErrorCodes_{provider}", string.Join(":", providerErrorCodes));
+                if (providerErrorCodes.Count() > 0)
+                {
+                    telResult.Add($"ErrorCodes_{provider}", string.Join(":", providerErrorCodes));
+                }
 
                 if (librariesNames_Success.Count > 0)
                 {
@@ -100,7 +106,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     telResult[$"LibrariesCount_{provider}_Uptodate"] = librariesNames_Uptodate.Count;
                     telResult[$"LibrariesIDs_{provider}_Uptodate"] = string.Join(":", librariesNames_Uptodate);
                 }
-
             }
 
             TrackUserTask($@"{operation}_Operation", TelemetryResult.None, telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
