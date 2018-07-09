@@ -58,9 +58,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             OleMenuCommand button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
-            ProjectItem item = await VsHelpers.GetSelectedItemAsync();
+            // When command is invooked from a folder
+            ProjectItem item = await VsHelpers.GetSelectedItemAsync().ConfigureAwait(false);
+            // When command is invoked from project scope
             Project project = await VsHelpers.GetProjectOfSelectedItemAsync().ConfigureAwait(false);
 
+            // We won't enable the command if it was not invoked from a project or a folder
             if (item?.ContainingProject == null && project == null)
             {
                 return;
