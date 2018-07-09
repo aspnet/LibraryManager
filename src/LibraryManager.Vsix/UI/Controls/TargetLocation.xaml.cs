@@ -295,21 +295,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             string targetLibrary = _libraryNameChange.LibraryName;
 
-            this.Dispatcher.Invoke(() =>
+            if (string.IsNullOrEmpty(targetLibrary))
             {
-                if (TargetLocationSearchTextBox.Text.Equals(_lastTargetLocation))
+                this.Dispatcher.Invoke(() =>
                 {
-                    if (targetLibrary.Length > 0 && targetLibrary[targetLibrary.Length - 1] == '/')
+                    if (TargetLocationSearchTextBox.Text.Equals(_lastTargetLocation))
                     {
-                        targetLibrary = targetLibrary.Substring(0, targetLibrary.Length - 1);
+                        if (targetLibrary.Length > 0 && targetLibrary[targetLibrary.Length - 1] == '/')
+                        {
+                            targetLibrary = targetLibrary.Substring(0, targetLibrary.Length - 1);
+                        }
+
+                        TargetLocationSearchTextBox.Text = _baseFolder + targetLibrary + '/';
+                        InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
                     }
 
-                    TargetLocationSearchTextBox.Text = _baseFolder + targetLibrary + '/';
-                    InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
-                }
-
-                _lastTargetLocation = TargetLocationSearchTextBox.Text;
-            });
+                    _lastTargetLocation = TargetLocationSearchTextBox.Text;
+                });
+            }
         }
     }
 }
