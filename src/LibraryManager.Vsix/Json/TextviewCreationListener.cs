@@ -75,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 if (!results.All(r => r.Success))
                 {
                     AddErrorsToList(results);
-                    Telemetry.LogErrors("ManifestFileSavedWithErrors", results);
+                    Telemetry.LogErrors("Fail-ManifestFileOpenWithErrors", results);
                 }
             });
         }
@@ -102,7 +102,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         {
                             AddErrorsToList(results);
                             Logger.LogErrors(results);
-                            Telemetry.LogErrors("ManifestFileSavedWithErrors", results);
+                            Telemetry.LogErrors("Fail-ManifestFileSaveWithErrors", results);
                         }
                         else
                         {

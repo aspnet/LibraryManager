@@ -148,7 +148,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     }
                 }
             }
-            catch { }
+            catch
+            {
+                // TODO: telemetry.
+                // should we report response failures separate from parse failures?
+            }
 
             return packageNames;
         }
