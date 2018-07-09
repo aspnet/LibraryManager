@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Windows.Interop;
@@ -60,17 +61,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
             button.Visible = button.Enabled = false;
 
             ProjectItem item = await VsHelpers.GetSelectedItemAsync();
+            Project project = await VsHelpers.GetProjectOfSelectedItemAsync().ConfigureAwait(false);
 
-            if (item?.ContainingProject == null)
+            if (item?.ContainingProject == null && project == null)
             {
                 return;
             }
 
-            if (VSConstants.ItemTypeGuid.PhysicalFolder_string.Equals(item.Kind, StringComparison.OrdinalIgnoreCase))
-            {
-                button.Visible = true;
-                button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive && !_libraryCommandService.IsOperationInProgress;
-            }
+            button.Visible = true;
+            button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive && !_libraryCommandService.IsOperationInProgress;
         }
 
         private async Task ExecuteAsync(object sender, EventArgs e)
@@ -78,34 +77,45 @@ namespace Microsoft.Web.LibraryManager.Vsix
             Telemetry.TrackUserTask("installdialogopened");
 
             ProjectItem item = await VsHelpers.GetSelectedItemAsync().ConfigureAwait(false);
+            Project project = await VsHelpers.GetProjectOfSelectedItemAsync().ConfigureAwait(false);
 
-            if (item != null)
+            if (project != null)
             {
-                string target = item.FileNames[1];
+                string target = string.Empty;
+                string rootFolder = await project.GetRootFolderAsync().ConfigureAwait(false);
 
-                Project project = await VsHelpers.GetProjectOfSelectedItemAsync().ConfigureAwait(false);
-
-                if (project != null)
+                if (item != null)
                 {
-                    string rootFolder = await project.GetRootFolderAsync().ConfigureAwait(false);
-
-                    string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-                    IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
-
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-                    UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder);
-
-                    var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-                    int hwnd = dte.MainWindow.HWnd;
-                    WindowInteropHelper windowInteropHelper = new WindowInteropHelper(dialog);
-
-                    // Set visual studio window's handle as the owner of the dialog.
-                    // This will remove the dialog from alt-tab list and will not allow the user to switch the dialog box to the background 
-                    windowInteropHelper.Owner = new IntPtr(hwnd);
-
-                    dialog.ShowDialog();
+                    target = item.FileNames[1];
                 }
+                else
+                {
+                    if (Directory.Exists(Path.Combine(rootFolder, "wwwroot")))
+                    {
+                        target = "wwwroot/lib/";
+                    }
+                    else
+                    {
+                        target = "lib/";
+                    }
+                }
+
+                string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
+                IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder);
+
+                var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+                int hwnd = dte.MainWindow.HWnd;
+                WindowInteropHelper windowInteropHelper = new WindowInteropHelper(dialog);
+
+                // Set visual studio window's handle as the owner of the dialog.
+                // This will remove the dialog from alt-tab list and will not allow the user to switch the dialog box to the background 
+                windowInteropHelper.Owner = new IntPtr(hwnd);
+
+                dialog.ShowDialog();
             }
         }
     }
