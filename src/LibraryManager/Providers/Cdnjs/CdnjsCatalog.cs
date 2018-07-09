@@ -197,7 +197,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             if (!string.IsNullOrEmpty(first))
             {
-                return LibraryNamingScheme.Instance.GetLibraryNameAndVersion(first).Version;
+                return LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(first, _provider.Id).Version;
             }
 
             return null;
