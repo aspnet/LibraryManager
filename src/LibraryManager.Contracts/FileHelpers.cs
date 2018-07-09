@@ -214,33 +214,42 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static bool DeleteFiles(IEnumerable<string> filePaths, string rootDirectory = null)
         {
-            HashSet<string> directories = new HashSet<string>(new LocalPathComparer());
+            HashSet<string> directories = new HashSet<string>();
 
             try
             {
                 foreach (string filePath in filePaths)
                 {
-                    if (File.Exists(filePath))
-                    {
-                        DeleteFileFromDisk(filePath);
-                    }
+                    Debug.Assert(Path.IsPathRooted(filePath));
 
-                    if (!string.IsNullOrEmpty(rootDirectory))
+                    if (Path.IsPathRooted(filePath))
                     {
-                        string directoryPath = Path.GetDirectoryName(filePath);
-
-                        if (Directory.Exists(directoryPath))
+                        if (string.IsNullOrEmpty(rootDirectory))
                         {
-                            directories.Add(directoryPath);
+                            if (File.Exists(filePath))
+                            {
+                                DeleteFileFromDisk(filePath);
+                            }
+                        }
+                        else if (IsUnderRootDirectory(filePath, rootDirectory))
+                        {
+                            if (File.Exists(filePath))
+                            {
+                                string directoryPath = Path.GetDirectoryName(filePath);
+
+                                DeleteFileFromDisk(filePath);
+
+                                if (Directory.Exists(directoryPath))
+                                {
+                                    directories.Add(directoryPath);
+                                }
+                            }
                         }
                     }
                 }
 
                 // TODO: adding network path comparator.
-                if (rootDirectory != null && !IsUNCPath(rootDirectory))
-                {
-                    DeleteEmptyFoldersFromDisk(directories, rootDirectory);
-                }
+                DeleteEmptyFoldersFromDisk(directories, rootDirectory);
 
                 return true;
             }
@@ -256,21 +265,20 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="folderPaths"></param>
         /// <param name="rootDirectory"></param>
         /// <returns></returns>
-        public static bool DeleteEmptyFoldersFromDisk(IEnumerable<string> folderPaths, string rootDirectory)
+        private static bool DeleteEmptyFoldersFromDisk(IEnumerable<string> folderPaths, string rootDirectory)
         {
             if (folderPaths.Count() == 0)
             {
                 return true;
             }
 
-            LocalPathComparer comparer = new LocalPathComparer();
-            HashSet<string> newFolderPaths = new HashSet<string>(comparer);
+            HashSet<string> newFolderPaths = new HashSet<string>();
 
             try
             {
                 foreach (string path in folderPaths)
                 {
-                    if (!comparer.Equals(path, rootDirectory))
+                    if (IsUnderRootDirectory(path, rootDirectory))
                     {
                         if (Directory.Exists(path) && !Directory.GetFileSystemEntries(path).Any())
                         {
@@ -331,38 +339,30 @@ namespace Microsoft.Web.LibraryManager.Contracts
             return new Uri(rootPath).IsUnc;
         }
 
-        private class LocalPathComparer : IEqualityComparer<string>
+        internal static bool IsUnderRootDirectory(string filePath, string rootDirectory)
         {
-            public bool Equals(string path1, string path2)
-            {
-                string normalizedPath1 = NormalizePath(path1);
-                string normalizedPath2 = NormalizePath(path2);
+            string normalizedFilePath = NormalizePath(filePath);
+            string normalizedRootDirectory = NormalizePath(rootDirectory);
 
-                return string.Equals(normalizedPath1, normalizedPath2);
+            return normalizedFilePath.Length > normalizedRootDirectory.Length && normalizedFilePath.StartsWith(normalizedRootDirectory);
+        }
+
+        internal static string NormalizePath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return path;
             }
 
-            public int GetHashCode(string path)
+            // net451 does not have the OSPlatform apis to determine if the OS is windows or not.
+            // This also does not handle the fact that MacOS can be configured to be either sensitive or insenstive 
+            // to the casing.
+            if (Path.DirectorySeparatorChar == '\\')
             {
-                return NormalizePath(path)?.GetHashCode() ?? 0;
+                path.ToLower();
             }
 
-            private string NormalizePath(string path)
-            {
-                if (string.IsNullOrEmpty(path))
-                {
-                    return path;
-                }
-
-                // net451 does not have the OSPlatform apis to determine if the OS is windows or not.
-                // This also does not handle the fact that MacOS can be configured to be either sensitive or insenstive 
-                // to the casing.
-                if (Path.DirectorySeparatorChar == '\\')
-                {
-                    path.ToLower();
-                }
-
-                return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            }
+            return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
     }
 }
