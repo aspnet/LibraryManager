@@ -129,4 +129,3 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
     }
-}
