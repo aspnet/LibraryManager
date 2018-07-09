@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.Web.Editor.SuggestedActions;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -77,9 +77,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             var list = new List<ISuggestedAction>();
             string latestStableVersion = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, false, cancellationToken).ConfigureAwait(false);
-            string latestStable = LibraryNamingScheme.Instance.GetLibraryId(
+            string latestStable = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(
                             _provider.InstallationState.Name,
-                            latestStableVersion);
+                            latestStableVersion,
+                            _provider.InstallationState.ProviderId);
 
             if (!string.IsNullOrEmpty(latestStableVersion) && latestStable != _provider.InstallationState.LibraryId)
             {
@@ -87,8 +88,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             string latestPreVersion = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, true, cancellationToken).ConfigureAwait(false);
-            string latestPre = LibraryNamingScheme.Instance.GetLibraryId(_provider.InstallationState.Name,
-                            latestPreVersion);
+            string latestPre = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(_provider.InstallationState.Name,
+                            latestPreVersion,
+                            _provider.InstallationState.ProviderId);
 
             if (!string.IsNullOrEmpty(latestPreVersion) && latestPre != _provider.InstallationState.LibraryId && latestPre != latestStable)
             {

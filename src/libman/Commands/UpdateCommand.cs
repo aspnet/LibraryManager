@@ -98,7 +98,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 string latestVersion = await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
                 if (!string.IsNullOrEmpty(latestVersion))
                 {
-                    newLibraryId = LibraryNamingScheme.Instance.GetLibraryId(libraryToUpdate.Name, latestVersion);
+                    newLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUpdate.Name, latestVersion, libraryToUpdate.ProviderId);
                 }
             }
 
