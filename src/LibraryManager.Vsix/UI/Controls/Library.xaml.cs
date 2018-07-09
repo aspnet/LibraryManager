@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
@@ -283,13 +282,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             if (!Options.IsKeyboardFocusWithin && !LibrarySearchBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
             {
                 Flyout.IsOpen = false;
-
-                InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
-
-                if (viewModel != null && !viewModel.IsLibraryInstallationStateValid())
-                {
-                    viewModel.DisplayError = true;
-                }
             }
         }
     }

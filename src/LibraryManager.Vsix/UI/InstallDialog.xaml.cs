@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Resources;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
@@ -175,7 +177,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void InstallButton_Clicked(object sender, RoutedEventArgs e)
         {
-            CloseDialog(true);
+            if (!ViewModel.IsLibraryInstallationStateValid())
+            {
+                MessageDialog.Show(Text.OutputWindowTitle, ViewModel.ErrorMessage, MessageDialogCommandSet.Ok);
+            }
+            else
+            {
+                CloseDialog(true);
+            }
         }
     }
 }

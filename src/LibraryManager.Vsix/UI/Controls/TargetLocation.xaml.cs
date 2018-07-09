@@ -289,11 +289,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 Flyout.IsOpen = false;
 
                 InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
-
-                if (viewModel != null && !viewModel.IsLibraryInstallationStateValid())
-                {
-                    viewModel.DisplayError = true;
-                }
             }
         }
     }

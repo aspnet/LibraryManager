@@ -9,7 +9,6 @@
                  xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
                  xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
                  xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
-                 xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
                  mc:Ignorable="d" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}"
                  xmlns:ui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
                  Title="{x:Static resources:Text.AddClientSideLibrary}"
@@ -94,7 +93,7 @@
         </Grid>
 
         <StackPanel Orientation="Vertical"
-                    Grid.Row="1"
+                    Grid.Row="1"                                   
                     Grid.ColumnSpan="4" 
                     Margin="0 0 0 9">
             <RadioButton x:Name="IncludeAllLibraryFilesRb"
@@ -159,55 +158,13 @@
         <DockPanel Grid.Row="4" 
                    Grid.ColumnSpan="4" 
                    LastChildFill="False">
-            <Grid HorizontalAlignment="Left">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=DisplayError}" Value="True">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=DisplayError}" Value="False">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <imaging:CrispImage Width="16" 
-                                    Height="16" 
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Left">
-                    <imaging:CrispImage.Style>
-                        <Style TargetType="{x:Type imaging:CrispImage}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=DisplayError}" Value="True">
-                                    <Setter Property="Moniker" Value="{x:Static catalog:KnownMonikers.StatusWarning}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </imaging:CrispImage.Style>
-                </imaging:CrispImage>
-                <TextBlock Text="{Binding Path=ErrorMessage}" Grid.Column="1">
-                    <TextBlock.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="TextWrapping" Value="Wrap" />
-                            <Setter Property="Margin" Value="4" />
-                        </Style>
-                    </TextBlock.Resources>
-                </TextBlock>
-            </Grid>
             <Button Content="{x:Static resources:Text.Cancel}"
-                    Height="Auto"
                     Width="65" 
                     DockPanel.Dock="Right"
                     IsCancel="True"
                     KeyboardNavigation.TabIndex="2" />
             <Button Content="{x:Static resources:Text.Install}"
                     Name="InstallButton"
-                    Height="Auto"
                     Width="65" 
                     DockPanel.Dock="Right"
                     Margin="0 0 6 0" IsDefault="True" 

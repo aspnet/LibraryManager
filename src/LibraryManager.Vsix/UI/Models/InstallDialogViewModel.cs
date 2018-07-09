@@ -343,16 +343,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 if (!value && SelectedPackage != null)
                 {
                     ErrorMessage = Text.NoFilesSelected;
-                    DisplayError = true;
                 }
-
-                OnPropertyChanged(nameof(AnyFileSelected));
             }
         }
 
         private bool CanInstallPackage()
         {
-            if (_isInstalling || !IsLibraryInstallationStateValid())
+            if (_isInstalling || PackageId == null)
             {
                 return false;
             }
@@ -362,22 +359,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public string ErrorMessage
         {
-            get
-            {
-                if (String.IsNullOrEmpty(_errorMessage))
-                {
-                    DisplayError = false;
-                }
-
-                return _errorMessage;
-            }
+            get { return _errorMessage; }
             set { Set(ref _errorMessage, value); }
-        }
-
-        public bool DisplayError
-        {
-            get { return _displayError; }
-            set { Set(ref _displayError, value); }
         }
 
         public bool IsLibraryInstallationStateValid()
@@ -386,7 +369,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             // We'll wait for the user to choose a library before presenting any warnings.
             if (PackageId == null)
             {
-                DisplayError = false;
                 return false;
             }
 
