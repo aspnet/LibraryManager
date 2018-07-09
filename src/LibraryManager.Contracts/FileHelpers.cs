@@ -334,17 +334,33 @@ namespace Microsoft.Web.LibraryManager.Contracts
         {
             public bool Equals(string path1, string path2)
             {
-                string fullPath1 = Path.GetFullPath(path1);
-                string fullPath2 = Path.GetFullPath(path2);
+                string normalizedPath1 = NormalizePath(path1);
+                string normalizedPath2 = NormalizePath(path2);
 
-                return string.Equals(fullPath1, fullPath2);
+                return string.Equals(normalizedPath1, normalizedPath2);
             }
 
             public int GetHashCode(string path)
             {
-                string fullPath = Path.GetFullPath(path);
+                return NormalizePath(path)?.GetHashCode() ?? 0;
+            }
 
-                return fullPath.GetHashCode();
+            private string NormalizePath(string path)
+            {
+                if (string.IsNullOrEmpty(path))
+                {
+                    return path;
+                }
+
+                // net451 does not have the OSPlatform apis to determine if the OS is windows or not.
+                // This also does not handle the fact that MacOS can be configured to be either sensitive or insenstive 
+                // to the casing.
+                if (Path.DirectorySeparatorChar == '\\')
+                {
+                    path.ToLower();
+                }
+
+                return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             }
         }
     }

@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             string contents = @"{
   ""version"": ""1.0"",
   ""defaultProvider"": ""cdnjs"",
-  ""defaultDestination"": ""wwwroot"",
+  ""defaultDestination"": ""wwwroot/lib/"",
   ""libraries"": [
     {
       ""library"": ""jquery@3.2.1"",
@@ -45,8 +45,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var restoreCommand = new RestoreCommand(HostEnvironment);
             restoreCommand.Configure(null).Execute();
 
-            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
-            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "core.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "lib", "jquery.min.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "lib", "core.js")));
 
             var command = new CleanCommand(HostEnvironment);
             command.Configure(null);
@@ -54,8 +54,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             int result = command.Execute();
             Assert.AreEqual(0, result);
 
-            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
-            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "core.js")));
+            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "lib", "jquery.min.js")));
+            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "lib", "core.js")));
+            Assert.IsFalse(Directory.Exists(Path.Combine(WorkingDir, "wwwroot", "lib")));
+            Assert.IsFalse(Directory.Exists(Path.Combine(WorkingDir, "wwwroot")));
         }
     }
 }
