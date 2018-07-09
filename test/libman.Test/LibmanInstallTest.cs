@@ -40,7 +40,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ""defaultProvider"": ""cdnjs"",
   ""libraries"": [
     {
-      ""provider"": ""cdnjs"",
       ""library"": ""jquery@3.2.1"",
       ""destination"": ""wwwroot""
     }

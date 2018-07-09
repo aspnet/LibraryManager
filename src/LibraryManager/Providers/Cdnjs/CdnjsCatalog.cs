@@ -195,9 +195,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 first = ids.First(id => id.Substring(name.Length).Any(c => !char.IsLetter(c)));
             }
 
-            if (!string.IsNullOrEmpty(first) && ids.IndexOf(first) < ids.IndexOf(libraryId))
+            if (!string.IsNullOrEmpty(first))
             {
-                return first;
+                return LibraryNamingScheme.Instance.GetLibraryNameAndVersion(first).Version;
             }
 
             return null;

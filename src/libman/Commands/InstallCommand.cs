@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
@@ -197,7 +198,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 if (libGroup.DisplayName.Equals(LibraryId.Value, StringComparison.OrdinalIgnoreCase))
                 {
                     // Found a group with an exact match.
-                    string libraryId = libIds.First();
+                    string latestVersion = await ProviderCatalog.GetLatestVersion(libIds.First(), false, cancellationToken);
+                    string libraryId = LibraryNamingScheme.Instance.GetLibraryId(libGroup.DisplayName, latestVersion);
                     ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(libraryId, cancellationToken);
 
                     return (libraryId, libraryToInstall);

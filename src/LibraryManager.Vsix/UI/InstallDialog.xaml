@@ -142,7 +142,7 @@
                     </Style.Triggers>
                 </Style>
             </Label.Style>
-            <AccessText Text="{x:Static resources:Text.SelectLibraryToSelectFilesToInstall}" />
+            <TextBlock Text="{x:Static resources:Text.SelectLibraryToSelectFilesToInstall}" />
         </Label>
 
         <DockPanel Grid.Row="3" 
