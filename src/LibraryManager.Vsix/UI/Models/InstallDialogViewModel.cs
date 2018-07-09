@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
+using Microsoft.Web.LibraryManager.Vsix.UI.Controls;
 using Newtonsoft.Json;
 using Controller = Microsoft.Web.Editor.Controller;
 using IVsTextBuffer = Microsoft.VisualStudio.TextManager.Interop.IVsTextBuffer;
@@ -44,6 +45,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private FileSelectionType _fileSelectionType;
         private bool _anyFileSelected;
         private bool _isTreeViewEmpty;
+        private BindLibraryNameToTargetLocation _libraryNameChange;
 
         public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
         {
@@ -55,6 +57,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             _closeDialog = closeDialog;
             _anyFileSelected = false;
             _isTreeViewEmpty = true;
+            _libraryNameChange = new BindLibraryNameToTargetLocation();
 
             List<IProvider> providers = new List<IProvider>();
             foreach (IProvider provider in deps.Providers.OrderBy(x => x.Id))
@@ -154,6 +157,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public HashSet<string> SelectedFiles { get; private set; }
 
+        internal BindLibraryNameToTargetLocation LibraryNameChange
+        {
+            get { return _libraryNameChange; }
+            set { Set(ref _libraryNameChange, value); }
+        }
+
         public ILibrary SelectedPackage
         {
             get { return _selectedPackage; }
@@ -166,6 +175,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                 if (Set(ref _selectedPackage, value) && value != null)
                 {
+                    _libraryNameChange.LibraryName = SelectedProvider.GetSuggestedDestination(SelectedPackage);
                     IsTreeViewEmpty = false;
                     bool canUpdateInstallStatusValue = false;
                     HashSet<string> selectedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

@@ -26,6 +26,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             nameof(Text), typeof(string), typeof(TargetLocation), new PropertyMetadata(default(string)));
 
         private string _text;
+        private string _lastTargetLocation; 
+        private string _baseFolder;
+        private BindLibraryNameToTargetLocation _libraryNameChange;
 
         public TargetLocation()
         {
@@ -33,6 +36,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             // Pre populate textBox with folder name
             TargetLocationSearchTextBox.Text = InstallationFolder.DestinationFolder;
+            _baseFolder = InstallationFolder.DestinationFolder;
+            _lastTargetLocation = InstallationFolder.DestinationFolder;
 
             this.Loaded += TargetLocation_Loaded;
         }
@@ -41,6 +46,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void TargetLocation_Loaded(object sender, RoutedEventArgs e)
         {
+            InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
+            _libraryNameChange = viewModel.LibraryNameChange;
+            _libraryNameChange.PropertyChanged += this.LibraryNameChanged;
+
             Window window = Window.GetWindow(TargetLocationSearchTextBox);
 
             // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
@@ -270,6 +279,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     Flyout.IsOpen = true;
                 });
             }
+
+            InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
         }
 
         private void TargetLocation_LostFocus(object sender, RoutedEventArgs e)
@@ -277,6 +288,30 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             if (!Options.IsKeyboardFocusWithin && !TargetLocationSearchTextBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
             {
                 Flyout.IsOpen = false;
+            }
+        }
+
+        private void LibraryNameChanged(object sender, PropertyChangedEventArgs e)
+        {
+            string targetLibrary = _libraryNameChange.LibraryName;
+
+            if (string.IsNullOrEmpty(targetLibrary))
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    if (TargetLocationSearchTextBox.Text.Equals(_lastTargetLocation))
+                    {
+                        if (targetLibrary.Length > 0 && targetLibrary[targetLibrary.Length - 1] == '/')
+                        {
+                            targetLibrary = targetLibrary.Substring(0, targetLibrary.Length - 1);
+                        }
+
+                        TargetLocationSearchTextBox.Text = _baseFolder + targetLibrary + '/';
+                        InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
+                    }
+
+                    _lastTargetLocation = TargetLocationSearchTextBox.Text;
+                });
             }
         }
     }
