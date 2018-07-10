@@ -210,8 +210,9 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Deletes files 
         /// </summary>
         /// <param name="filePaths"></param>
+        /// <param name="rootDirectory"></param>
         /// <returns></returns>
-        public static bool DeleteFiles(IEnumerable<string> filePaths)
+        public static bool DeleteFiles(IEnumerable<string> filePaths, string rootDirectory = null)
         {
             HashSet<string> directories = new HashSet<string>();
 
@@ -219,19 +220,36 @@ namespace Microsoft.Web.LibraryManager.Contracts
             {
                 foreach (string filePath in filePaths)
                 {
-                    if (File.Exists(filePath))
-                    {
-                        DeleteFileFromDisk(filePath);
-                    }
+                    Debug.Assert(Path.IsPathRooted(filePath));
 
-                    string directoryPath = Path.GetDirectoryName(filePath);
-                    if (Directory.Exists(directoryPath))
+                    if (Path.IsPathRooted(filePath))
                     {
-                        directories.Add(directoryPath);
+                        if (string.IsNullOrEmpty(rootDirectory))
+                        {
+                            if (File.Exists(filePath))
+                            {
+                                DeleteFileFromDisk(filePath);
+                            }
+                        }
+                        else if (IsUnderRootDirectory(filePath, rootDirectory))
+                        {
+                            if (File.Exists(filePath))
+                            {
+                                string directoryPath = Path.GetDirectoryName(filePath);
+
+                                DeleteFileFromDisk(filePath);
+
+                                if (Directory.Exists(directoryPath))
+                                {
+                                    directories.Add(directoryPath);
+                                }
+                            }
+                        }
                     }
                 }
 
-                DeleteEmptyFoldersFromDisk(directories);
+                // TODO: adding network path comparator.
+                DeleteEmptyFoldersFromDisk(directories, rootDirectory);
 
                 return true;
             }
@@ -245,21 +263,32 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Deletes folders if empty
         /// </summary>
         /// <param name="folderPaths"></param>
+        /// <param name="rootDirectory"></param>
         /// <returns></returns>
-        public static bool DeleteEmptyFoldersFromDisk(IEnumerable<string> folderPaths)
+        private static bool DeleteEmptyFoldersFromDisk(IEnumerable<string> folderPaths, string rootDirectory)
         {
+            if (folderPaths.Count() == 0)
+            {
+                return true;
+            }
+
+            HashSet<string> newFolderPaths = new HashSet<string>();
+
             try
             {
                 foreach (string path in folderPaths)
                 {
-                    DirectoryInfo directory = new DirectoryInfo(path);
-                    if (directory.Exists && IsDirectoryEmpty(path))
+                    if (IsUnderRootDirectory(path, rootDirectory))
                     {
-                        directory.Delete(true);
+                        if (Directory.Exists(path) && !Directory.GetFileSystemEntries(path).Any())
+                        {
+                            Directory.Delete(path);
+                            newFolderPaths.Add(Path.GetDirectoryName(path));
+                        }
                     }
                 }
 
-                return true;
+                return DeleteEmptyFoldersFromDisk(newFolderPaths, rootDirectory);
             }
             catch (Exception)
             {
@@ -303,6 +332,37 @@ namespace Microsoft.Web.LibraryManager.Contracts
             {
                 return false;
             }
+        }
+
+        private static bool IsUNCPath(string rootPath)
+        {
+            return new Uri(rootPath).IsUnc;
+        }
+
+        internal static bool IsUnderRootDirectory(string filePath, string rootDirectory)
+        {
+            string normalizedFilePath = NormalizePath(filePath);
+            string normalizedRootDirectory = NormalizePath(rootDirectory);
+
+            return normalizedFilePath.Length > normalizedRootDirectory.Length && normalizedFilePath.StartsWith(normalizedRootDirectory);
+        }
+
+        internal static string NormalizePath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return path;
+            }
+
+            // net451 does not have the OSPlatform apis to determine if the OS is windows or not.
+            // This also does not handle the fact that MacOS can be configured to be either sensitive or insenstive 
+            // to the casing.
+            if (Path.DirectorySeparatorChar == '\\')
+            {
+                path.ToLower();
+            }
+
+            return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
     }
 }

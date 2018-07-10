@@ -119,7 +119,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                return FileHelpers.DeleteFiles(filePaths);
+                return FileHelpers.DeleteFiles(filePaths, WorkingDirectory);
             }, cancellationToken);
         }
     }

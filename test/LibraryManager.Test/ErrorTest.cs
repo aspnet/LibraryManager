@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public void Constructor()
         {
-            var error = new Error("123", "abc");
+            var error = new Mocks.Error("123", "abc");
 
             Assert.AreEqual("123", error.Code);
             Assert.AreEqual("abc", error.Message);
