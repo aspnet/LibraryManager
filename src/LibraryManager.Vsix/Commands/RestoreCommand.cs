@@ -72,6 +72,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task ExecuteAsync(object sender, EventArgs e)
         {
+            Telemetry.TrackUserTask("Execute-RestoreCommand");
+
             ProjectItem configProjectItem = await VsHelpers.GetSelectedItemAsync();
 
             if (configProjectItem != null)

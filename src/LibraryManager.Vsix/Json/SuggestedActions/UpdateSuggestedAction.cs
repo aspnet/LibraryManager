@@ -31,6 +31,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public override void Invoke(CancellationToken cancellationToken)
         {
+            Telemetry.TrackUserTask("Invoke-UpdateSuggestedAction");
+
             if (_disabled)
             {
                 return;
@@ -61,6 +63,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             catch (Exception ex)
             {
                 Logger.LogEvent(ex.ToString(), LogLevel.Error);
+                Telemetry.TrackException("UpdateSuggestedActionFailed", ex);
             }
         }
     }

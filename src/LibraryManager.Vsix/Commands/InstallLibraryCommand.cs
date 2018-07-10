@@ -75,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task ExecuteAsync(object sender, EventArgs e)
         {
-            Telemetry.TrackUserTask("installdialogopened");
+            Telemetry.TrackUserTask("Execute-InstallLibraryCommand");
 
             ProjectItem item = await VsHelpers.GetSelectedItemAsync().ConfigureAwait(false);
             Project project = await VsHelpers.GetProjectOfSelectedItemAsync().ConfigureAwait(false);
@@ -122,8 +122,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 // This will remove the dialog from alt-tab list and will not allow the user to switch the dialog box to the background 
                 windowInteropHelper.Owner = new IntPtr(hwnd);
 
-                dialog.ShowDialog();
+                    dialog.ShowDialog();
+
+                    Telemetry.TrackUserTask("Open-InstallDialog");
+                }
             }
         }
     }
-}

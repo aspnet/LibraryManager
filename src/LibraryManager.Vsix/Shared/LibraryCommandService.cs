@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio.TaskStatusCenter;
-using Microsoft.VisualStudio.Telemetry;
 using Microsoft.Web.LibraryManager.Contracts;
 using Task = System.Threading.Tasks.Task;
 
@@ -131,6 +130,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             catch (Exception ex)
             {
                 Logger.LogEvent(errorMessage + Environment.NewLine + ex.Message, LogLevel.Operation);
+                Telemetry.TrackException(nameof(RunTaskAsync), ex);
             }
         }
 
@@ -153,6 +153,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             catch (Exception ex)
             {
                 Logger.LogEvent(LibraryManager.Resources.Text.Restore_OperationFailed + Environment.NewLine + ex.Message, LogLevel.Operation);
+                Telemetry.TrackException(nameof(GetManifestFromConfigAsync), ex);
 
                 return null;
             }
@@ -186,10 +187,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 AddErrorsToErrorList(project?.Name, configFileName, results);
                 Logger.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
+                Telemetry.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException ex)
             {
                 Logger.LogEvent(LibraryManager.Resources.Text.Clean_OperationCancelled, LogLevel.Task);
+                Telemetry.TrackException($@"{OperationType.Clean}Cancelled", ex);
             }
         }
 
@@ -214,7 +217,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     IEnumerable<ILibraryOperationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
 
-                    await AddFilesToProjectAsync(manifest.Key, project, results, cancellationToken).ConfigureAwait(false);
+                    await AddFilesToProjectAsync(manifest.Key, project, results.Where(r =>r.Success && !r.UpToDate), cancellationToken).ConfigureAwait(false);
 
                     AddErrorsToErrorList(project?.Name, manifest.Key, results);
                     totalResults.AddRange(results);
@@ -223,11 +226,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 sw.Stop();
 
                 Logger.LogEventsSummary(totalResults, OperationType.Restore, sw.Elapsed);
-                PostRestoreTelemetryData(totalResults, sw.Elapsed);
+                Telemetry.LogEventsSummary(totalResults, OperationType.Restore, sw.Elapsed);
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException ex)
             {
                 Logger.LogEvent(LibraryManager.Resources.Text.Restore_OperationCancelled, LogLevel.Task);
+                Telemetry.TrackException($@"{OperationType.Restore}Cancelled", ex);
             }
         }
 
@@ -262,11 +266,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 sw.Stop();
 
                 Logger.LogEventsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall, sw.Elapsed);
-                Telemetry.TrackUserTask("libraryuninstall");
+                Telemetry.LogEventsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall, sw.Elapsed);
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException ex)
             {
                 Logger.LogEvent(string.Format(LibraryManager.Resources.Text.Uninstall_LibraryCancelled, libraryId), LogLevel.Task);
+                Telemetry.TrackException($@"{OperationType.Uninstall}Cancelled", ex);
             }
         }
 
@@ -290,21 +295,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return string.Empty;
         }
 
-        private void PostRestoreTelemetryData(IEnumerable<ILibraryOperationResult> results, TimeSpan elapsedTime)
-        {
-            var telResult = new Dictionary<string, double>();
-            foreach (ILibraryOperationResult result in results.Where(r => r.Success))
-            {
-                if (result.InstallationState.ProviderId != null)
-                {
-                    telResult.TryGetValue(result.InstallationState.ProviderId, out double count);
-                    telResult[result.InstallationState.ProviderId] = count + 1;
-                }
-            }
-            telResult.Add("time", elapsedTime.TotalMilliseconds);
-            Telemetry.TrackUserTask("restore", TelemetryResult.None, telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
-        }
-
         private void AddErrorsToErrorList(string projectName, string configFile, IEnumerable<ILibraryOperationResult> results)
         {
             var errorList = new ErrorList(projectName, configFile);
@@ -320,7 +310,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 foreach (ILibraryOperationResult state in results)
                 {
-                    if (state.Success && !state.UpToDate)
+                    if (state.Success && !state.UpToDate && state.InstallationState.Files != null)
                     {
                         IEnumerable<string> absoluteFiles = state.InstallationState.Files
                             .Select(file => Path.Combine(workingDirectory, state.InstallationState.DestinationPath, file)
@@ -329,8 +319,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                 }
 
-                var logAction = new Action<string, LogLevel>((message, level) => { Logger.LogEvent(message, level); });
-                await VsHelpers.AddFilesToProjectAsync(project, files, logAction, cancellationToken);
+                if (files.Count > 0)
+                {
+                    var logAction = new Action<string, LogLevel>((message, level) => { Logger.LogEvent(message, level); });
+                    await VsHelpers.AddFilesToProjectAsync(project, files, logAction, cancellationToken);
+                }
             }
         }
 

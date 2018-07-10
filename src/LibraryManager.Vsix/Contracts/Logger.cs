@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Threading;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -104,6 +103,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
+                Telemetry.TrackException(nameof(LogEvent), ex);
                 System.Diagnostics.Debug.Write(ex);
             }
         }
@@ -163,6 +163,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime )
         {
+            LogErrors(totalResults);
             LogEvent(LogMessageGenerator.GetSummaryHeaderString(operationType, null), LogLevel.Task);
             LogOperationSummary(totalResults, operationType, elapsedTime);
             LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
@@ -176,6 +177,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (!string.IsNullOrEmpty(messageText))
             {
                 LogEvent(messageText, LogLevel.Operation);
+            }
+        }
+
+        public static void LogErrors(IEnumerable<ILibraryOperationResult> results)
+        {
+            foreach (ILibraryOperationResult result in results)
+            {
+                foreach (IError error in result.Errors)
+                {
+                    LogEvent(error.Message, LogLevel.Operation);
+                }
             }
         }
     }

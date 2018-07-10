@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.VisualStudio.Telemetry;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
@@ -74,6 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 if (!results.All(r => r.Success))
                 {
                     AddErrorsToList(results);
+                    Telemetry.LogErrors("Fail-ManifestFileOpenWithErrors", results);
                 }
             });
         }
@@ -99,6 +101,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         if (!results.All(r => r.Success))
                         {
                             AddErrorsToList(results);
+                            Logger.LogErrors(results);
+                            Telemetry.LogErrors("Fail-ManifestFileSaveWithErrors", results);
                         }
                         else
                         {
@@ -107,11 +111,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                                 _manifest = newManifest;
 
                                 await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
-                                Telemetry.TrackOperation("restoresave");
+                                Telemetry.TrackUserTask("Invoke-RestoreOnSave");
                             }
                             else
                             {
                                 string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
+                                Telemetry.TrackUserTask("Fail-RemovedUnwantedFiles", TelemetryResult.Failure);
                                 Logger.LogEvent(textMessage, LogLevel.Task);
                             }
                         }
@@ -123,7 +128,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         Logger.LogEvent(textMessage, LogLevel.Task);
                         Logger.LogEvent(ex.ToString(), LogLevel.Error);
 
-                        Telemetry.TrackException("restoresavecancelled", ex);
+                        Telemetry.TrackException("RestoreOnSaveCancelled", ex);
                     }
                     catch (Exception ex)
                     {
@@ -134,7 +139,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
                         Logger.LogEvent(textMessage, LogLevel.Task);
                         Logger.LogEvent(ex.ToString(), LogLevel.Error);
-                        Telemetry.TrackException("restoresavefailed", ex);
+                        Telemetry.TrackException("RestoreOnSaveFailed", ex);
                     }
                 });
             }
@@ -155,11 +160,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private void AddErrorsToList(IEnumerable<ILibraryOperationResult> errors)
         {
-            if (_errorList == null)
-            {
-                _errorList = new ErrorList(_project?.Name, _manifestPath);
-            }
-
+            _errorList = new ErrorList(_project?.Name, _manifestPath);
             _errorList.HandleErrors(errors);
         }
     }
