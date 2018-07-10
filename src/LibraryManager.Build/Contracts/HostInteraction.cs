@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Build
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                return FileHelpers.DeleteFiles(filePaths);
+                return FileHelpers.DeleteFiles(filePaths, WorkingDirectory);
             }, cancellationToken);
         }
 

@@ -81,7 +81,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 filePaths = filePaths.Select(f => Path.Combine(WorkingDirectory, f));
-                return FileHelpers.DeleteFiles(filePaths);
+                return FileHelpers.DeleteFiles(filePaths, WorkingDirectory);
             }, cancellationToken);
         }
 
