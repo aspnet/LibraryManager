@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 HostInteraction hostInteraction = new HostInteraction(configFilePath, perProjectLogger);
                 _cache[configFilePath] = new Dependencies(hostInteraction);
             }
+
+            // We need to initialize naming schemes for the providers before we can proceed with any operation.
+            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(_cache[configFilePath]);
 
             return _cache[configFilePath];
         }
