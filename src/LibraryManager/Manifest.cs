@@ -308,6 +308,20 @@ namespace Microsoft.Web.LibraryManager
             //TODO: This should have an "undo scope"
             var results = new List<ILibraryOperationResult>();
 
+            foreach (ILibraryInstallationState state in Libraries)
+            {
+                results.Add(await RestoreLibraryAsync(state, cancellationToken).ConfigureAwait(false));
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Returns a collection of <see cref="ILibraryOperationResult"/> that represents the status for validation of the Manifest and its libraries
+        /// </summary>
+        /// <param name="cancellationToken">A token that allows for cancellation of the operation.</param>
+        public async Task<IEnumerable<ILibraryOperationResult>> GetValidationResultsAsync(CancellationToken cancellationToken)
+        {
             IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(this, _dependencies, cancellationToken).ConfigureAwait(false);
 
             if (!validationResults.All(r => r.Success))
@@ -315,12 +329,7 @@ namespace Microsoft.Web.LibraryManager
                 return validationResults;
             }
 
-            foreach (ILibraryInstallationState state in Libraries)
-            {
-                results.Add(await RestoreLibraryAsync(state, cancellationToken).ConfigureAwait(false));
-            }
-
-            return results;
+            return validationResults;
         }
 
         private async Task<ILibraryOperationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
@@ -365,6 +374,12 @@ namespace Microsoft.Web.LibraryManager
 
             if (library != null)
             {
+                ILibraryOperationResult validationResult = await library.IsValidAsync(_dependencies);
+                if (!validationResult.Success)
+                {
+                    return validationResult;
+                }
+
                 try
                 {
                     ILibraryOperationResult result = await DeleteLibraryFilesAsync(library, deleteFilesFunction, cancellationToken).ConfigureAwait(false);
@@ -439,13 +454,6 @@ namespace Microsoft.Web.LibraryManager
         public async Task<IEnumerable<ILibraryOperationResult>> CleanAsync(Func<IEnumerable<string>, Task<bool>> deleteFileAction, CancellationToken cancellationToken)
         {
             var results = new List<ILibraryOperationResult>();
-
-            IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(this, _dependencies, cancellationToken).ConfigureAwait(false);
-
-            if (!validationResults.All(r => r.Success))
-            {
-                return validationResults;
-            }
 
             foreach (ILibraryInstallationState state in Libraries)
             {

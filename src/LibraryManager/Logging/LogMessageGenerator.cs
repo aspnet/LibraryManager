@@ -150,10 +150,10 @@ namespace Microsoft.Web.LibraryManager.Logging
                     return LibraryManager.Resources.Text.Clean_OperationCompleted;
 
                 case OperationType.Uninstall:
-                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibrarySucceeded, libraryId ?? string.Empty);
+                    return string.Empty;
 
                 case OperationType.Upgrade:
-                    return string.Format(LibraryManager.Resources.Text.Update_LibrarySucceeded, libraryId ?? string.Empty);
+                    return string.Empty;
 
                 default:
                     return string.Empty;
