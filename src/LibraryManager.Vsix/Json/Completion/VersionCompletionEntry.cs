@@ -31,9 +31,35 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return 1;
             }
 
-            int result = CompletionUtility.CompareSemanticVersion(SemVersion, otherEntry.SemVersion);
+            int result = CompareSemanticVersion(SemVersion, otherEntry.SemVersion);
 
             return (result == 0) ? base.InternalCompareTo(other) : result;
+        }
+
+        private int CompareSemanticVersion(SemanticVersion selfSemVersion, SemanticVersion otherSemVersion)
+        {
+            if (selfSemVersion == null)
+            {
+                if (otherSemVersion != null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                if (otherSemVersion != null)
+                {
+                    return -selfSemVersion.CompareTo(otherSemVersion);
+                }
+                else
+                {
+                    return -1;
+                }
+            }
         }
     }
 }
