@@ -87,7 +87,6 @@ Package the global tool along with the Shims.
                          Copyright=$(Copyright);
                          Description=$(Description);
                          RepositoryUrl=$(RepositoryUrl);
-                         RepositoryCommit='abc';
                          Serviceable=true;
                          PackageOutputPath=$(LibmanArtifactsDir)$(Configuration)\" />
     <!--

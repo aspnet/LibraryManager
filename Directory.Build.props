@@ -19,7 +19,7 @@
     <Authors>Microsoft</Authors>
     <Company>Microsoft Corp.</Company>
     <Description>Create custom providers for the Visual Studio Library Manager</Description>
-    <Copyright>Copyright © Microsoft</Copyright>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
 
     <Product>Microsoft.Web.LibraryManager</Product>
     <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>

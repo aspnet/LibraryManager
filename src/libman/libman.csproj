@@ -6,6 +6,7 @@
     <NuspecFile>libman.nuspec</NuspecFile>
     <PackageType>DotNetTool</PackageType>
     <Description>Command line tool for Library Manager</Description>
+    <CLIToolDescription>Command line tool for Library Manager</CLIToolDescription>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,7 +41,7 @@
   **********************************************************
    -->
 
-  <Target Name="SetGlobalToolProperties" BeforeTargets="GenerateNuspec">
+  <Target Name="SetGlobalToolProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>
       <NuspecProperties>
         publishDir=$(PublishDir);
@@ -49,10 +50,10 @@
         projectUrl=$(PackageProjectUrl);
         serviceable=$(Serviceable);
         copyright=$(Copyright);
-        description=$(Description);
+        description=$(CLIToolDescription);
         repositoryUrl=$(RepositoryUrl);
         targetframework=$(TargetFramework);
-        repositoryCommit=$(RepositoryCommit);
+        repositoryCommit=$(GitCommitId);
       </NuspecProperties>
         <!--
         packageIconUrl=$(PackageIconUrl);
