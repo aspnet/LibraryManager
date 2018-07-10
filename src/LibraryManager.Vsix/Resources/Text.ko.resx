@@ -60,10 +60,10 @@
     <value>&lt;라이브러리를 선택하여 설치할 파일 선택&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>빌드에 복원을 사용하지 않도록 설정</value>
+    <value>빌드에 클라이언트 쪽 라이브러리 사용하지 않음(&amp;E)</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>빌드에 클라이언트 쪽 라이브러리 복원 사용</value>
+    <value>빌드에 클라이언트 쪽 라이브러리 복원 사용(&amp;E)...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>MSBuild 대상이 포함된 NuGet 패키지를 설치하는 중...</value>
@@ -121,5 +121,11 @@
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>파일을 선택하지 않았습니다.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>설치</value>
   </data>
 </root>

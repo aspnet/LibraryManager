@@ -340,8 +340,8 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     libman install jquery@3.2.1 
-        ///    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
+        ///   Looks up a localized string similar to     libman install jquery@3.2.1
+        ///    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
         ///    libman install myCalendar --provider filesystem --files calendar.js --files calendar.css.
         /// </summary>
         internal static string InstallCommandExamples {
@@ -741,9 +741,9 @@ namespace Microsoft.Web.LibraryManager.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     libman update jquery 
+        ///   Looks up a localized string similar to     libman update jquery
         ///    libman update jquery --to 3.3.1
-        ///    libman update jquery -pre 
+        ///    libman update jquery -pre
         ///.
         /// </summary>
         internal static string UpdateCommandExamples {

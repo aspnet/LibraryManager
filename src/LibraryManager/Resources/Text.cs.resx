@@ -142,4 +142,7 @@
   <data name="UnpkgProviderHintText" xml:space="preserve">
     <value>Příklad: &lt;knihovna&gt;@&lt;verze&gt;</value>
   </data>
+  <data name="LibraryDetail_Unavailable" xml:space="preserve">
+    <value>Nedostupné</value>
+  </data>
 </root>

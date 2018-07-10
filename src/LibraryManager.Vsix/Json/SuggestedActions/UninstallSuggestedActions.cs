@@ -43,6 +43,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             try
             {
+                Telemetry.TrackUserTask("Invoke-UninstallFromSuggestedAction");
                 await _libraryCommandService.UninstallAsync(_provider.ConfigFilePath, _provider.InstallationState.LibraryId, cancellationToken).ConfigureAwait(false);
 
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -68,6 +69,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             catch (Exception ex)
             {
                 Logger.LogEvent(ex.ToString(), LibraryManager.Contracts.LogLevel.Error);
+                Telemetry.TrackException("UninstallFromSuggestedActionFailed", ex);
             }
         }
 

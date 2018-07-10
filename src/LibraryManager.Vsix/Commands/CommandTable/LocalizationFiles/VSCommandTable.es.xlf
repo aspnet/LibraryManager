@@ -1,33 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
-  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" build-num="bb1380375926" target-language="es">
-    <header>
-    </header>
+  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="es">
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
-          <source xml:lang="en">Add Client-Side Library...</source>
-          <target state="translated">Agregar biblioteca del lado cliente...</target>
+          <source xml:lang="en">Client-Side &amp;Library...</source>
+          <target xml:lang="es" state="translated">&amp;Biblioteca del lado cliente...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target state="translated">Restaurar bibliotecas del lado cliente</target>
+          <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
+          <target xml:lang="es" state="translated">Restaurar &amp;bibliotecas del lado cliente</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
-          <source xml:lang="en">Clean</source>
-          <target state="translated">Borrar</target>
+          <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
+          <target xml:lang="es" state="translated">&amp;Limpiar bibliotecas del lado cliente</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
-          <source xml:lang="en">Enable Restore on Build...</source>
-          <target state="translated">Habilitar la restauración en la compilación...</target>
+          <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
+          <target xml:lang="es" state="translated">Habilitar la restauración de bibliotecas del lado cliente al compilar...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
-          <source xml:lang="en">Manage Client-Side Libraries...</source>
-          <target state="translated">Administrar bibliotecas del lado cliente...</target>
+          <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>
+          <target xml:lang="es" state="translated">&amp;Administrar bibliotecas del lado cliente...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target state="translated">Restaurar bibliotecas del lado cliente</target>
+          <source xml:lang="en">&amp;Restore Client-Side Libraries</source>
+          <target xml:lang="es" state="translated">&amp;Restaurar bibliotecas del lado cliente</target>
         </trans-unit>
       </group>
     </body>

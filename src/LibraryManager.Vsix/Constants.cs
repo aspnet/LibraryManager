@@ -9,7 +9,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal static class Constants
     {
         public const string ConfigFileName = "libman.json";
-        public const string TelemetryNamespace = "webtools/librarymanager/";
+        public const string TelemetryNamespace = "vs/webtools/librarymanager/";
         public const string MainNuGetPackageId = "Microsoft.Web.LibraryManager.Build";
         public const string ErrorCodeLink = "https://github.com/aspnet/LibraryManager/wiki/Error-codes#{0}";
         public const string WAP = "{349C5851-65DF-11DA-9384-00065B846F21}";

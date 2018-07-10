@@ -40,8 +40,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 yield return new SimpleCompletionEntry(id, _libraryIcon, context.Session);
             }
-
-            Telemetry.TrackUserTask("completionprovider");
         }
     }
 }

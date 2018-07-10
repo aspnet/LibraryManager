@@ -90,6 +90,14 @@ Valid files are {2}</source>
           <target state="translated">"{0}" には次が含まれていません: {1}
 有効なファイルは {2} です</target>
         </trans-unit>
+        <trans-unit id="ErrorUnknownError" translate="yes" xml:space="preserve">
+          <source>An unknown error occurred</source>
+          <target state="translated">不明なエラーが発生しました</target>
+        </trans-unit>
+        <trans-unit id="ErrorDuplicateLibraries" translate="yes" xml:space="preserve">
+          <source>Cannot restore. Multiple definitions for libraries: {0}</source>
+          <target state="translated">復元できません。次のライブラリの定義が複数あります: {0}</target>
+        </trans-unit>
       </group>
     </body>
   </file>

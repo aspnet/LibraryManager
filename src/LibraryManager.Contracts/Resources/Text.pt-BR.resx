@@ -73,4 +73,10 @@
     <value>"{0}" não contém: {1}
 Os arquivos válidos são {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>Ocorreu um erro desconhecido</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>Não é possível restaurar. Várias definições para bibliotecas: {0}</value>
+  </data>
 </root>

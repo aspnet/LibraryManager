@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
@@ -91,11 +91,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (ToVersion.HasValue())
             {
-                newLibraryId = LibraryNamingScheme.Instance.GetLibraryId(libraryToUpdate.Name, ToVersion.Value());
+                newLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUpdate.Name, ToVersion.Value(), libraryToUpdate.ProviderId);
             }
             else
             {
-                newLibraryId = await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
+                string latestVersion = await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
+                if (!string.IsNullOrEmpty(latestVersion))
+                {
+                    newLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUpdate.Name, latestVersion, libraryToUpdate.ProviderId);
+                }
             }
 
             if (newLibraryId == null || newLibraryId == libraryToUpdate.LibraryId)

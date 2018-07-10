@@ -56,10 +56,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             else if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.BACKSPACE)
             {
-                if (_broker.IsCompletionActive(_textView))
-                {
-                    _broker.DismissAllSessions(_textView);
-                }
+                RetriggerAsync(true);
             }
 
             ThreadHelper.Generic.BeginInvoke(() =>

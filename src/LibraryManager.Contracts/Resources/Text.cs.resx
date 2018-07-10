@@ -73,4 +73,10 @@
     <value>{0} neobsahuje následující: {1}
 Platné soubory jsou: {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>Došlo k neznámé chybě.</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>Obnovení nejde provést. Je více definic pro knihovny: {0}</value>
+  </data>
 </root>

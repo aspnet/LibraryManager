@@ -7,9 +7,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
+using Shell = Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
@@ -31,17 +33,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             _fullPath = fullPath;
             _configFileName = configFileName;
 
-            LostKeyboardFocus += InstallDialog_LostKeyboardFocus;
             Loaded += OnLoaded;
-        }
-
-        private void InstallDialog_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            if (!IsKeyboardFocusWithin && !(e.NewFocus is ListBoxItem))
-            {
-                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
-                MoveFocus(request);
-            }
         }
 
         internal InstallDialogViewModel ViewModel
@@ -160,15 +152,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             FocusManager.SetFocusedElement(LibrarySearchBox, LibrarySearchBox);
         }
 
-        private void ThemedWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!LibrarySearchBox.IsMouseOver && !LibrarySearchBox.IsMouseOverFlyout)
-            {
-                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
-                MoveFocus(request);
-            }
-        }
-
         private void IncludeAllLibraryFilesRb_Checked(object sender, RoutedEventArgs e)
         {
             LibraryFilesToInstallTreeView.IsEnabled = false;
@@ -190,15 +173,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 ViewModel.PackageId = null;
                 ViewModel.AnyFileSelected = false;
             }
-            else
-            {
-                LibrarySearchBox.RefreshSearch();
-            }
         }
 
         private void InstallButton_Clicked(object sender, RoutedEventArgs e)
         {
-            CloseDialog(true);
+            bool isLibraryInstallationStateValid = false;
+
+            Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                isLibraryInstallationStateValid = await ViewModel.IsLibraryInstallationStateValidAsync().ConfigureAwait(false);
+            });
+
+            if (isLibraryInstallationStateValid)
+            {
+                CloseDialog(true);
+            }
+            else
+            {
+                int result;
+                IVsUIShell shell = Shell.Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
+
+                shell.ShowMessageBox(dwCompRole: 0,
+                                     rclsidComp: Guid.Empty,
+                                     pszTitle: null,
+                                     pszText: ViewModel.ErrorMessage,
+                                     pszHelpFile: null,
+                                     dwHelpContextID: 0,
+                                     msgbtn: OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                                     msgdefbtn: OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
+                                     msgicon: OLEMSGICON.OLEMSGICON_WARNING,
+                                     fSysAlert: 0,
+                                     pnResult: out result);
+            }
         }
     }
 }

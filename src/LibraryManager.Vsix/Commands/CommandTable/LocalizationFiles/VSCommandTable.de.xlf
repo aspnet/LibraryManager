@@ -1,34 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
-  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="de" build-num="bb1380375926">
-    <header>
-    </header>
+  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="de">
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
-          <source xml:lang="en">Add Client-Side Library...</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Clientseitige Bibliothek hinzufügen</target>
+          <source xml:lang="en">Client-Side &amp;Library...</source>
+          <target xml:lang="de" state="translated">Clientseitige &amp;Bibliothek...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Clientseitige wiederherstellen</target>
-          <note from="bb-metadata">fuzzyMatch="15" wordcount="3" adjWordcount="2.55" curWordcount="2.55"</note>
+          <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
+          <target xml:lang="de" state="translated">Clientseitige &amp;Bibliotheken wiederherstellen</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
-          <source xml:lang="en">Clean</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Bereinigen</target>
+          <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
+          <target xml:lang="de" state="translated">Clientseitige Bibliotheken &amp;bereinigen</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
-          <source xml:lang="en">Enable Restore on Build...</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Aktivieren Sie auf Build...</target>
+          <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
+          <target xml:lang="de" state="translated">Wiederherstellung clientseitiger Bibliotheken bei Builderstellung aktivieren...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
-          <source xml:lang="en">Manage Client-Side Libraries...</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Verwalten Sie clientseitige Bibliotheken...</target>
+          <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>
+          <target xml:lang="de" state="translated">Clientseitige Bibliotheken &amp;verwalten...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
-          <source xml:lang="en">Restore Client-Side Libraries</source>
-          <target xml:lang="de" state="needs-review-translation" state-qualifier="mt-suggestion">Clientseitige wiederherstellen</target>
+          <source xml:lang="en">&amp;Restore Client-Side Libraries</source>
+          <target xml:lang="de" state="translated">Clientseitige Bibliotheken &amp;wiederherstellen</target>
         </trans-unit>
       </group>
     </body>

@@ -73,4 +73,10 @@
     <value>"{0}" şunları içermiyor: {1}
 Geçerli dosyalar: {2}</value>
   </data>
+  <data name="ErrorUnknownError" xml:space="preserve">
+    <value>Bilinmeyen bir hata oluştu</value>
+  </data>
+  <data name="ErrorDuplicateLibraries" xml:space="preserve">
+    <value>Geri yüklenemiyor. Kitaplıklara yönelik birden çok tanım: {0}</value>
+  </data>
 </root>

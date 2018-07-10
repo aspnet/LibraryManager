@@ -60,10 +60,10 @@ Czy chcesz kontynuować?</value>
     <value>&lt;Wybierz bibliotekę, aby wybrać pliki do zainstalowania&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Wyłącz przywracanie przy kompilacji</value>
+    <value>Wyłącz bibliot&amp;eki po stronie klienta przy kompilacji</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Włącz przywracanie bibliotek po stronie klienta przy kompilacji</value>
+    <value>Włącz przywracani&amp;e bibliotek po stronie klienta przy kompilacji...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Trwa instalowanie pakietu NuGet zawierającego element docelowy programu MSBuild...</value>
@@ -121,5 +121,11 @@ Czy chcesz kontynuować?</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Nie wybrano żadnych plików</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Zainstaluj</value>
   </data>
 </root>

@@ -142,4 +142,7 @@
   <data name="UnpkgProviderHintText" xml:space="preserve">
     <value>예: &lt;library&gt;@&lt;version&gt;</value>
   </data>
+  <data name="LibraryDetail_Unavailable" xml:space="preserve">
+    <value>사용할 수 없음</value>
+  </data>
 </root>
