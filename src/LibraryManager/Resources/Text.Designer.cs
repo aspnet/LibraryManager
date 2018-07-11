@@ -115,6 +115,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clean libraries operation completed with errors.
+        /// </summary>
+        public static string Clean_OperationCompletedWithErrors {
+            get {
+                return ResourceManager.GetString("Clean_OperationCompletedWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clean operation failed for {0} libraries.
         /// </summary>
         public static string Clean_OperationFailed {
@@ -304,6 +313,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restore operation completed with errors.
+        /// </summary>
+        public static string Restore_OperationCompletedWithErrors {
+            get {
+                return ResourceManager.GetString("Restore_OperationCompletedWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore operation failed for {0} libraries.
         /// </summary>
         public static string Restore_OperationFailed {
@@ -367,6 +385,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uninstall of library {0} completed with errors.
+        /// </summary>
+        public static string Uninstall_LibraryCompletedWithErrors {
+            get {
+                return ResourceManager.GetString("Uninstall_LibraryCompletedWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uninstall of library {0} failed.
         /// </summary>
         public static string Uninstall_LibraryFailed {
@@ -408,6 +435,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static string Update_LibraryCancelled {
             get {
                 return ResourceManager.GetString("Update_LibraryCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update of library {0} completed.
+        /// </summary>
+        public static string Update_LibraryCompletedWithErrors {
+            get {
+                return ResourceManager.GetString("Update_LibraryCompletedWithErrors", resourceCulture);
             }
         }
         

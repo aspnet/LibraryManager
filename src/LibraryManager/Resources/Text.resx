@@ -250,4 +250,16 @@
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>Unavailable</value>
   </data>
+  <data name="Clean_OperationCompletedWithErrors" xml:space="preserve">
+    <value>Clean libraries operation completed with errors</value>
+  </data>
+  <data name="Restore_OperationCompletedWithErrors" xml:space="preserve">
+    <value>Restore operation completed with errors</value>
+  </data>
+  <data name="Uninstall_LibraryCompletedWithErrors" xml:space="preserve">
+    <value>Uninstall of library {0} completed with errors</value>
+  </data>
+  <data name="Update_LibraryCompletedWithErrors" xml:space="preserve">
+    <value>Update of library {0} completed</value>
+  </data>
 </root>
