@@ -78,7 +78,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime, bool endOfMessage = true)
         {
             LogErrors(totalResults);
-            LogEvent(LogMessageGenerator.GetSummaryHeaderString(operationType, null), LogLevel.Task);
+
+            string summaryHeader = LogMessageGenerator.GetSummaryHeaderString(operationType, null);
+            if (!string.IsNullOrEmpty(summaryHeader))
+            {
+                LogEvent(LogMessageGenerator.GetSummaryHeaderString(operationType, null), LogLevel.Task);
+            }
+
             LogOperationSummary(totalResults, operationType, elapsedTime);
 
             if (endOfMessage)

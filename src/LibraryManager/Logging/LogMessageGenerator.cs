@@ -156,12 +156,6 @@ namespace Microsoft.Web.LibraryManager.Logging
                 case OperationType.Clean:
                     return Resources.Text.Clean_OperationCompleted;
 
-                case OperationType.Uninstall:
-                    return string.Empty;
-
-                case OperationType.Upgrade:
-                    return string.Empty;
-
                 default:
                     return string.Empty;
             }
