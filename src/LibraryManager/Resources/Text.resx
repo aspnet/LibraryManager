@@ -262,4 +262,7 @@
   <data name="Upgrade_OperationCompletedWithErrors" xml:space="preserve">
     <value>Upgrade operation completed with errors</value>
   </data>
+  <data name="Restore_NumberOfLibrariesUptodate" xml:space="preserve">
+    <value>{0} libraries are up-to-date</value>
+  </data>
 </root>

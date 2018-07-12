@@ -17,11 +17,17 @@ namespace Microsoft.Web.LibraryManager.Logging
         /// <summary>
         /// Gets a partial success string for the given operation.
         /// </summary>
-        public static string GetPartialSuccessString(OperationType operation, int successfulResults, int failedResults, int cancelledResults, TimeSpan timeSpan)
+        public static string GetPartialSuccessString(OperationType operation,
+            int successfulResults,
+            int failedResults,
+            int cancelledResults,
+            int uptodateResults,
+            TimeSpan timeSpan)
         {
             string successString = Resources.Text.Restore_NumberOfLibrariesSucceeded;
             string failedString = Resources.Text.Restore_NumberOfLibrariesFailed;
             string cancelledString = Resources.Text.Restore_NumberOfLibrariesCancelled;
+            string uptodateString = Resources.Text.Restore_NumberOfLibrariesUptodate;
 
             // Partial success only applies to Restore and Clean operations.
             // All other bulk operations are treated as restore.
@@ -36,6 +42,7 @@ namespace Microsoft.Web.LibraryManager.Logging
             message = successfulResults > 0 ? message + string.Format(successString, successfulResults, Math.Round(timeSpan.TotalSeconds, 2)) + Environment.NewLine : message;
             message = failedResults > 0 ? message + string.Format(failedString, failedResults) + Environment.NewLine : message;
             message = cancelledResults > 0 ? message + string.Format(cancelledString, cancelledResults) + Environment.NewLine : message;
+            message = uptodateResults > 0 ? message + string.Format(uptodateString, uptodateResults) + Environment.NewLine : message;
 
             return message;
         }
@@ -226,7 +233,8 @@ namespace Microsoft.Web.LibraryManager.Logging
                 }
                 else
                 {
-                    messageText = LogMessageGenerator.GetPartialSuccessString(operation, successfulResults.Count(), failedResults.Count(), cancelledRessults.Count(), elapsedTime);
+                    messageText = LogMessageGenerator.GetPartialSuccessString(operation,
+                        successfulResults.Count(), failedResults.Count(), cancelledRessults.Count(), upToDateResults.Count(), elapsedTime);
                 }
 
                 return messageText;

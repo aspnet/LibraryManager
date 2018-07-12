@@ -52,16 +52,21 @@ namespace Microsoft.Web.LibraryManager.Vsix
             LogEvent(LogMessageGenerator.GetOperationHeaderString(operationType, libraryId), LogLevel.Task);
         }
 
+        public static void LogEventsFooter(OperationType operationType, TimeSpan elapsedTime)
+        {
+            LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
+            LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
+        }
+
         public static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime, bool endOfMessage = true)
         {
             LogErrors(totalResults);
             LogEvent(LogMessageGenerator.GetSummaryHeaderString(operationType, null), LogLevel.Task);
             LogOperationSummary(totalResults, operationType, elapsedTime);
-            LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
 
             if (endOfMessage)
             {
-                LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
+                LogEventsFooter(operationType, elapsedTime);
             }
         }
 
@@ -69,12 +74,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             List<string> errorStrings = GetErrorStrings(results);
             LogErrorsSummary(errorStrings, operationType, endOfMessage);
-        }
-
-        public static void ClearOutputWindow()
-        {
-            // Don't access _outputWindowPane through the property here so that we don't force creation
-            ThreadHelper.Generic.BeginInvoke(() => _outputWindowPane?.Clear());
         }
 
         /// <summary>
@@ -90,12 +89,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 LogEvent(error, LogLevel.Operation);
             }
 
-            LogEvent(LogMessageGenerator.GetErrorsHeaderString(operationType, null) + Environment.NewLine, LogLevel.Task);
+            LogEvent(LogMessageGenerator.GetErrorsHeaderString(operationType, null), LogLevel.Task);
 
             if (endOfMessage)
             {
                 LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
             }
+        }
+        public static void ClearOutputWindow()
+        {
+            // Don't access _outputWindowPane through the property here so that we don't force creation
+            ThreadHelper.Generic.BeginInvoke(() => _outputWindowPane?.Clear());
         }
 
         private static IVsOutputWindowPane OutputWindowPane

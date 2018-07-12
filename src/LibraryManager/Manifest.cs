@@ -109,7 +109,6 @@ namespace Microsoft.Web.LibraryManager
             }
             catch (Exception)
             {
-                dependencies.GetHostInteractions().Logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Task);
                 return null;
             }
         }
