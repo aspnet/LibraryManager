@@ -212,7 +212,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             foreach (IError error in errors)
             {
-                Logger.Log(error.Message, LogLevel.Error);
+                Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
             }
         }
     }

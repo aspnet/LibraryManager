@@ -323,11 +323,6 @@ namespace Microsoft.Web.LibraryManager
         {
             IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(this, _dependencies, cancellationToken).ConfigureAwait(false);
 
-            if (!validationResults.All(r => r.Success))
-            {
-                return validationResults;
-            }
-
             return validationResults;
         }
 

@@ -162,7 +162,7 @@ namespace Microsoft.Web.LibraryManager.Logging
         }
 
         /// <summary>
-        /// Gets the summary header string for an operation.
+        /// Gets the summary header string for an errored operation/ failed operation.
         /// </summary>
         public static string GetErrorsHeaderString(OperationType operationType, string libraryId)
         {
