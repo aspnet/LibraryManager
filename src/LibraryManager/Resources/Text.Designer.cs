@@ -295,6 +295,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} libraries are up-to-date.
+        /// </summary>
+        public static string Restore_NumberOfLibrariesUptodate {
+            get {
+                return ResourceManager.GetString("Restore_NumberOfLibrariesUptodate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore operation has been cancelled.
         /// </summary>
         public static string Restore_OperationCancelled {
