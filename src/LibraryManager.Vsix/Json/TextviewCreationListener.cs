@@ -95,6 +95,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 {
                     try
                     {
+                        Logger.LogEventsHeader(OperationType.Restore, string.Empty);
                         var newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
                         IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
 
