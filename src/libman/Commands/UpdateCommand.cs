@@ -80,7 +80,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 if (installedLibraries == null || !installedLibraries.Any())
                 {
-                    Logger.Log(string.Format(Resources.NoLibraryFoundToUpdate, LibraryName.Value), LogLevel.Operation);
+                    Logger.Log(string.Format(Resources.Text.NoLibraryFoundToUpdate, LibraryName.Value), LogLevel.Operation);
                     return 0;
                 }
 
@@ -88,7 +88,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 if (installedLibraries.Count() > 1)
                 {
-                    Logger.Log(string.Format(Resources.MoreThanOneLibraryFoundToUpdate, LibraryName.Value), LogLevel.Operation);
+                    Logger.Log(string.Format(Resources.Text.MoreThanOneLibraryFoundToUpdate, LibraryName.Value), LogLevel.Operation);
 
                     libraryToUpdate = LibraryResolver.ResolveLibraryByUserChoice(installedLibraries, HostEnvironment);
                 }
@@ -114,7 +114,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 if (newLibraryId == null || newLibraryId == libraryToUpdate.LibraryId)
                 {
-                    Logger.Log(string.Format(Resources.LatestVersionAlreadyInstalled, libraryToUpdate.LibraryId), LogLevel.Operation);
+                    Logger.Log(string.Format(Resources.Text.LatestVersionAlreadyInstalled, libraryToUpdate.LibraryId), LogLevel.Operation);
                     return 0;
                 }
 
@@ -149,17 +149,17 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 if (result.Success)
                 {
                     await manifest.SaveAsync(HostEnvironment.EnvironmentSettings.ManifestFileName, CancellationToken.None);
-                    Logger.Log(string.Format(Resources.LibraryUpdated, oldLibraryName, newLibraryId), LogLevel.Operation);
+                    Logger.Log(string.Format(Resources.Text.LibraryUpdated, oldLibraryName, newLibraryId), LogLevel.Operation);
                 }
                 else if (result.Errors != null)
                 {
                     if (ToVersion.HasValue())
                     {
-                        Logger.Log(string.Format(Resources.UpdateLibraryFailed, oldLibraryName, ToVersion.Value()), LogLevel.Error);
+                        Logger.Log(string.Format(Resources.Text.UpdateLibraryFailed, oldLibraryName, ToVersion.Value()), LogLevel.Error);
                     }
                     else
                     {
-                        Logger.Log(string.Format(Resources.UpdateLibraryToLatestFailed, oldLibraryName), LogLevel.Error);
+                        Logger.Log(string.Format(Resources.Text.UpdateLibraryToLatestFailed, oldLibraryName), LogLevel.Error);
                     }
                     foreach (IError error in result.Errors)
                     {
@@ -169,7 +169,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 return 0;
             }
-            
+
         }
 
         private async Task<string> GetLatestVersionAsync(ILibraryInstallationState libraryToUpdate, CancellationToken cancellationToken)
