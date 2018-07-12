@@ -144,10 +144,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 {
                     Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
                     Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-                    if (manifest != null)
-                    {
-                        manifests.Add(configFilePath, manifest);
-                    }
+                    manifests.Add(configFilePath, manifest);
                 }
             }
             catch (Exception ex)
@@ -213,21 +210,24 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
+                Stopwatch swTotal = new Stopwatch();
+                swTotal.Start();
+
                 foreach (KeyValuePair<string, Manifest> manifest in manifests)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
+                    Stopwatch swLocal = new Stopwatch();
+                    swLocal.Start();
                     IDependencies dependencies = Dependencies.FromConfigFile(manifest.Key);
                     Project project = VsHelpers.GetDTEProjectFromConfig(manifest.Key);
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
 
                     Logger.LogEvent(string.Format(LibraryManager.Resources.Text.Restore_LibrariesForProject, project?.Name), LogLevel.Operation);
 
                     IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(manifest.Value, dependencies, cancellationToken).ConfigureAwait(false);
                     if (!validationResults.All(r => r.Success))
                     {
-                        sw.Stop();
+                        swLocal.Stop();
                         AddErrorsToErrorList(project?.Name, manifest.Key, validationResults);
                         Logger.LogErrorsSummary(validationResults, OperationType.Restore, false);
                         Telemetry.LogErrors($"FailValidation_{OperationType.Restore}", validationResults);
@@ -236,15 +236,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     {
                         IEnumerable<ILibraryOperationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
                         await AddFilesToProjectAsync(manifest.Key, project, results.Where(r =>r.Success && !r.UpToDate), cancellationToken).ConfigureAwait(false);
-                        AddErrorsToErrorList(project?.Name, manifest.Key, results);
-                        sw.Stop();
 
-                        Logger.LogEventsSummary(results, OperationType.Restore, sw.Elapsed, false);
-                        Telemetry.LogEventsSummary(results, OperationType.Restore, sw.Elapsed);
+                        swLocal.Stop();
+                        AddErrorsToErrorList(project?.Name, manifest.Key, results);
+                        Logger.LogEventsSummary(results, OperationType.Restore, swLocal.Elapsed, false);
+                        Telemetry.LogEventsSummary(results, OperationType.Restore, swLocal.Elapsed);
                     }
                 }
 
-                Logger.LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
+                swTotal.Stop();
+                Logger.LogEventsFooter(OperationType.Restore, swTotal.Elapsed);
             }
             catch (OperationCanceledException ex)
             {
