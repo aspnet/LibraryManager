@@ -230,14 +230,25 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        public async Task RestorAsync_ConflictingLibraries()
+        public async Task RestorAsync_ConflictingLibraries_Validate()
         {
             var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.GetValidationResultsAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
             Assert.IsTrue(result.Last().Errors.Any(e => e.Code == "LIB019"), "LIB019 error code expected.");
+        }
+
+        [TestMethod]
+        public async Task RestorAsync_ConflictingLibraries_Restore()
+        {
+            var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
+
+            IEnumerable<ILibraryOperationResult> results = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(2, results.Count());
+            Assert.IsTrue(results.All(r =>r.Success));
         }
 
         [TestMethod]
@@ -257,7 +268,7 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        public async Task FromFileAsync_PathUndefined()
+        public async Task FromFileAsync_PathUndefined_Restore()
         {
             var manifest = Manifest.FromJson("{}", _dependencies);
 
@@ -274,11 +285,32 @@ namespace Microsoft.Web.LibraryManager.Test
 
             Assert.AreEqual(1, result.Count);
             Assert.IsFalse(result[0].Success);
+            Assert.AreEqual(result[0].Errors[0].Code, "LIB002");
+        }
+
+        [TestMethod]
+        public async Task FromFileAsync_PathUndefined_Validate()
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            var state = new LibraryInstallationState
+            {
+                ProviderId = "cdnjs",
+                Files = new[] { "knockout-min.js" }
+            };
+
+            manifest.AddVersion("1.0");
+            manifest.AddLibrary(state);
+
+            var result = await manifest.GetValidationResultsAsync(CancellationToken.None) as List<ILibraryOperationResult>;
+
+            Assert.AreEqual(1, result.Count);
+            Assert.IsFalse(result[0].Success);
             Assert.AreEqual(result[0].Errors[0].Code, "LIB006");
         }
 
         [TestMethod]
-        public async Task FromFileAsync_ProviderUndefined()
+        public async Task FromFileAsync_ProviderUndefined_Restore()
         {
             var manifest = Manifest.FromJson("{}", _dependencies);
 
@@ -293,6 +325,28 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddLibrary(state);
 
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.IsFalse(result.First().Success);
+            Assert.IsNotNull(result.First().Errors.FirstOrDefault(e => e.Code == "LIB001"));
+        }
+
+        [TestMethod]
+        public async Task FromFileAsync_ProviderUndefined_Validate()
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            var state = new LibraryInstallationState
+            {
+                LibraryId = "cdnjs",
+                DestinationPath = "lib",
+                Files = new[] { "knockout-min.js" }
+            };
+
+            manifest.AddVersion("1.0");
+            manifest.AddLibrary(state);
+
+            IEnumerable<ILibraryOperationResult> result = await manifest.GetValidationResultsAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
             Assert.IsFalse(result.First().Success);
@@ -364,7 +418,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow("1.5")]
         [DataRow("2.0")]
         [DataRow("version")]
-        public async Task RestoreAsync_VersionIsNotSupported(string version)
+        public async Task RestoreAsync_VersionIsNotSupported_Validate(string version)
         {
             var manifest = Manifest.FromJson("{}", _dependencies);
 
@@ -379,10 +433,35 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddVersion(version);
             manifest.AddLibrary(state);
 
-            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> result = await manifest.GetValidationResultsAsync(CancellationToken.None);
 
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual("LIB009", result.First().Errors.First().Code);
+        }
+
+        [DataTestMethod]
+        [DataRow("1.5")]
+        [DataRow("2.0")]
+        [DataRow("version")]
+        public async Task RestoreAsync_VersionIsNotSupported_Restore(string version)
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            var state = new LibraryInstallationState
+            {
+                ProviderId = "cdnjs",
+                LibraryId = "jquery@3.2.1",
+                DestinationPath = "lib",
+                Files = new[] { "core.js" }
+            };
+
+            manifest.AddVersion(version);
+            manifest.AddLibrary(state);
+
+            List<ILibraryOperationResult> results = await manifest.RestoreAsync(CancellationToken.None) as List<ILibraryOperationResult>;
+
+            Assert.AreEqual(1, results.Count);
+            Assert.IsTrue(results[0].Success);
         }
 
         private string _doc = $@"{{
