@@ -47,17 +47,34 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
+        /// <summary>
+        /// Logs the header of the summary of an operation
+        /// </summary>
+        /// <param name="operationType"></param>
+        /// <param name="libraryId"></param>
         public static void LogEventsHeader(OperationType operationType, string libraryId)
         {
             LogEvent(LogMessageGenerator.GetOperationHeaderString(operationType, libraryId), LogLevel.Task);
         }
 
+        /// <summary>
+        /// Logs the footer message of the summary of an operation
+        /// </summary>
+        /// <param name="operationType"></param>
+        /// <param name="elapsedTime"></param>
         public static void LogEventsFooter(OperationType operationType, TimeSpan elapsedTime)
         {
             LogEvent(string.Format(LibraryManager.Resources.Text.TimeElapsed, elapsedTime), LogLevel.Operation);
             LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
         }
 
+        /// <summary>
+        /// Logs the summary messages for a given <see cref="OperationType"/>
+        /// </summary>
+        /// <param name="totalResults"></param>
+        /// <param name="operationType"></param>
+        /// <param name="elapsedTime"></param>
+        /// <param name="endOfMessage"></param>
         public static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime, bool endOfMessage = true)
         {
             LogErrors(totalResults);
@@ -70,14 +87,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        public static void LogErrorsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operationType, bool endOfMessage = true)
-        {
-            List<string> errorStrings = GetErrorStrings(results);
-            LogErrorsSummary(errorStrings, operationType, endOfMessage);
-        }
-
         /// <summary>
-        /// Logs error messages for a given <see cref="OperationType"/>
+        /// Logs errors messages for a given <see cref="OperationType"/>
         /// </summary>
         /// <param name="errorMessages">Messages to be logged</param>
         /// <param name="operationType"><see cref="OperationType"/></param>
@@ -96,6 +107,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 LogEvent(LibraryManager.Resources.Text.SummaryEndLine + Environment.NewLine, LogLevel.Operation);
             }
         }
+
+        /// <summary>
+        /// Logs errors messages for a given <see cref="OperationType"/>
+        /// </summary>
+        /// <param name="results">Operation results</param>
+        /// <param name="operationType"><see cref="OperationType"/></param>
+        /// <param name="endOfMessage">Whether or not to log end of message lines</param>
+        public static void LogErrorsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operationType, bool endOfMessage = true)
+        {
+            List<string> errorStrings = GetErrorStrings(results);
+            LogErrorsSummary(errorStrings, operationType, endOfMessage);
+        }
+
         public static void ClearOutputWindow()
         {
             // Don't access _outputWindowPane through the property here so that we don't force creation
