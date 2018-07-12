@@ -207,5 +207,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 Logger.Log(messageText, LogLevel.Operation);
             }
         }
+
+        protected void LogErrors(IEnumerable<IError> errors)
+        {
+            foreach (IError error in errors)
+            {
+                Logger.Log(error.Message, LogLevel.Error);
+            }
+        }
     }
 }
