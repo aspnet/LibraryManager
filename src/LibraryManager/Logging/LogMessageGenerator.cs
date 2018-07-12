@@ -120,16 +120,16 @@ namespace Microsoft.Web.LibraryManager.Logging
             switch (operationType)
             {
                 case OperationType.Restore:
-                    return LibraryManager.Resources.Text.Restore_OperationStarted;
+                    return Resources.Text.Restore_OperationStarted;
 
                 case OperationType.Clean:
-                    return LibraryManager.Resources.Text.Clean_OperationStarted;
+                    return Resources.Text.Clean_OperationStarted;
 
                 case OperationType.Uninstall:
-                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibraryStarted, libraryId ?? string.Empty);
+                    return string.Format(Resources.Text.Uninstall_LibraryStarted, libraryId ?? string.Empty);
 
                 case OperationType.Upgrade:
-                    return string.Format(LibraryManager.Resources.Text.Update_LibraryStarted, libraryId ?? string.Empty);
+                    return string.Format(Resources.Text.Update_LibraryStarted, libraryId ?? string.Empty);
 
                 default:
                     return string.Empty;
@@ -144,16 +144,40 @@ namespace Microsoft.Web.LibraryManager.Logging
             switch (operationType)
             {
                 case OperationType.Restore:
-                    return LibraryManager.Resources.Text.Restore_OperationCompleted;
+                    return Resources.Text.Restore_OperationCompleted;
 
                 case OperationType.Clean:
-                    return LibraryManager.Resources.Text.Clean_OperationCompleted;
+                    return Resources.Text.Clean_OperationCompleted;
 
                 case OperationType.Uninstall:
-                    return string.Format(LibraryManager.Resources.Text.Uninstall_LibrarySucceeded, libraryId ?? string.Empty);
+                    return string.Empty;
 
                 case OperationType.Upgrade:
-                    return string.Format(LibraryManager.Resources.Text.Update_LibrarySucceeded, libraryId ?? string.Empty);
+                    return string.Empty;
+
+                default:
+                    return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets the summary header string for an operation.
+        /// </summary>
+        public static string GetErrorsHeaderString(OperationType operationType, string libraryId)
+        {
+            switch (operationType)
+            {
+                case OperationType.Restore:
+                    return Resources.Text.Restore_OperationCompletedWithErrors;
+
+                case OperationType.Clean:
+                    return Resources.Text.Clean_OperationCompletedWithErrors;
+
+                case OperationType.Uninstall:
+                    return Resources.Text.Uninstall_OperationCompletedWithErrors;
+
+                case OperationType.Upgrade:
+                    return Resources.Text.Upgrade_OperationCompletedWithErrors;
 
                 default:
                     return string.Empty;
