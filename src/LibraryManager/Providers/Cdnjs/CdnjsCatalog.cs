@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     var completion = new CompletionItem
                     {
                         DisplayText = group.DisplayName,
-                        InsertionText = LibraryNamingScheme.Instance.GetLibraryId(group.DisplayName, group.Version),
+                        InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(group.DisplayName, group.Version, _provider.Id),
                         Description = group.Description,
                     };
 

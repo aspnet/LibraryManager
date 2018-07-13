@@ -183,17 +183,17 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                    // library name completion
-                    if (caretPosition < name.Length + 1)
-                    {
-                        IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                // library name completion
+                if (caretPosition < name.Length + 1)
+                {
+                    IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
                     foreach (string packageName in packageNames)
                     {
                         CompletionItem completionItem = new CompletionItem
                         {
                             DisplayText = packageName,
-                            InsertionText = packageName,
+                            InsertionText = packageName
                         };
 
                         completions.Add(completionItem);
@@ -202,21 +202,21 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     completionSet.CompletionType = CompletionSortOrder.AsSpecified;
                 }
 
-                    // library version completion
-                    else
-                    {
-                        completionSet.Start = name.Length + 1;
-                        completionSet.Length = version.Length;
+                // library version completion
+                else
+                {
+                    completionSet.Start = name.Length + 1;
+                    completionSet.Length = version.Length;
 
-                        NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
-                        foreach (SemanticVersion semVersion in npmPackageInfo.Versions)
+                    NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
+                    foreach (SemanticVersion semVersion in npmPackageInfo.Versions)
+                    {
+                        string versionText = semVersion.ToString();
+                        CompletionItem completionItem = new CompletionItem
                         {
-                            string itemText = name + "@" + semVersion.ToString();
-                            CompletionItem completionItem = new CompletionItem
-                            {
-                                DisplayText = itemText,
-                                InsertionText = itemText
-                            };
+                            DisplayText = versionText,
+                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, versionText, _provider.Id)
+                        };
 
                         completions.Add(completionItem);
                     }
