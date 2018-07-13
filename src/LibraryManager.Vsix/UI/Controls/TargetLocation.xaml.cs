@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             nameof(Text), typeof(string), typeof(TargetLocation), new PropertyMetadata(default(string)));
 
         private string _text;
-        private string _lastSuggestedTargetLocation; 
+        private string _lastSuggestedTargetLocation;
         private string _baseFolder;
         private BindLibraryNameToTargetLocation _libraryNameChange;
 
@@ -150,14 +150,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     e.Handled = true;
                     break;
                 case Key.Enter:
-                     CommitSelectionAndMoveFocus();
-                     e.Handled = true;
-                     break;
+                    CommitSelectionAndMoveFocus();
+                    e.Handled = true;
+                    break;
                 case Key.Escape:
-                     Flyout.IsOpen = false;
-                     TargetLocationSearchTextBox.ScrollToEnd();
-                     e.Handled = true;
-                     break;
+                    Flyout.IsOpen = false;
+                    TargetLocationSearchTextBox.ScrollToEnd();
+                    e.Handled = true;
+                    break;
                 case Key.Down:
                     if (Options.Items.Count > 0)
                     {
@@ -179,9 +179,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             {
                 case Key.Tab:
                 case Key.Enter:
-                     CommitSelectionAndMoveFocus();
-                     e.Handled = true;
-                     break;
+                    CommitSelectionAndMoveFocus();
+                    e.Handled = true;
+                    break;
                 case Key.Up:
                     if (Options.SelectedIndex == 0)
                     {
@@ -193,10 +193,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     }
                     break;
                 case Key.Escape:
-                     Flyout.IsOpen = false;
-                     TargetLocationSearchTextBox.ScrollToEnd();
-                     e.Handled = true;
-                     break;
+                    Flyout.IsOpen = false;
+                    TargetLocationSearchTextBox.ScrollToEnd();
+                    e.Handled = true;
+                    break;
                 case Key.Down:
                 case Key.PageDown:
                 case Key.PageUp:
@@ -248,7 +248,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // We will invoke completion on text insertion and not deletion.
             // Also, we don't want to invoke completion on dialog load as we pre populate the target
             // location textbox with name of the folder when dialog is initially loaded.
-           if (textChange.AddedLength > 0 && TargetLocationSearchTextBox.CaretIndex > 0)
+            if (textChange.AddedLength > 0 && TargetLocationSearchTextBox.CaretIndex > 0)
             {
                 VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
