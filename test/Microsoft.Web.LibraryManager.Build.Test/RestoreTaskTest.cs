@@ -57,10 +57,10 @@ namespace Microsoft.Web.LibraryManager.Build.Test
             bool success = _task.Execute();
 
             Assert.IsFalse(success);
-            Assert.AreEqual(1, _buildEngine.Warnings.Count);
+            Assert.AreEqual(0, _buildEngine.Warnings.Count);
             Assert.AreEqual(2, _buildEngine.Messages.Count);
-            Assert.AreEqual(0, _buildEngine.Errors.Count);
-            Assert.AreEqual("LIB002", _buildEngine.Warnings.First().Code);
+            Assert.AreEqual(1, _buildEngine.Errors.Count);
+            Assert.AreEqual("LIB002", _buildEngine.Errors.First().Code);
             Assert.IsNull(_task.FilesWritten);
         }
 
@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Build.Test
             bool succuess = _task.Execute();
 
             Assert.IsFalse(succuess);
-            Assert.AreEqual(1, _buildEngine.Warnings.Count);
+            Assert.AreEqual(1, _buildEngine.Errors.Count);
             Assert.AreEqual(2, _buildEngine.Messages.Count);
             Assert.IsNull(_task.FilesWritten);
         }

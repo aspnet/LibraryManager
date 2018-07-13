@@ -51,16 +51,17 @@ namespace Microsoft.Web.LibraryManager.Build
 
             if (manifest == null)
             {
-                logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Error);
+                sw.Stop();
+                LogErrors(new[] { PredefinedErrors.ManifestMalformed() });
                 FlushLogger(logger);
+
                 return false;
             }
-            
+
             IEnumerable<ILibraryOperationResult> validationResults = manifest.GetValidationResultsAsync(token).Result;
             if (!validationResults.All(r => r.Success))
             {
                 sw.Stop();
-
                 LogErrors(validationResults.SelectMany(r =>r.Errors));
 
                 return false;
@@ -69,7 +70,6 @@ namespace Microsoft.Web.LibraryManager.Build
             IEnumerable<ILibraryOperationResult> results = manifest.RestoreAsync(token).Result;
 
             sw.Stop();
-
             FlushLogger(logger);
             PopulateFilesWritten(results, dependencies.GetHostInteractions());
             LogResults(sw, results);
