@@ -421,6 +421,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uninstall operation completed.
+        /// </summary>
+        public static string Uninstall_OperationCompleted {
+            get {
+                return ResourceManager.GetString("Uninstall_OperationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uninstall operation completed with errors.
         /// </summary>
         public static string Uninstall_OperationCompletedWithErrors {
@@ -471,6 +480,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static string Update_LibrarySucceeded {
             get {
                 return ResourceManager.GetString("Update_LibrarySucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade operation completed.
+        /// </summary>
+        public static string Upgrade_OperationCompleted {
+            get {
+                return ResourceManager.GetString("Upgrade_OperationCompleted", resourceCulture);
             }
         }
         
