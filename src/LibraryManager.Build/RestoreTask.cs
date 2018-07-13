@@ -55,30 +55,27 @@ namespace Microsoft.Web.LibraryManager.Build
                 FlushLogger(logger);
                 return false;
             }
-            else
+            
+            IEnumerable<ILibraryOperationResult> validationResults = manifest.GetValidationResultsAsync(token).Result;
+            if (!validationResults.All(r => r.Success))
             {
-                IEnumerable<ILibraryOperationResult> validationResults = manifest.GetValidationResultsAsync(token).Result;
-                if (!validationResults.All(r => r.Success))
-                {
-                    sw.Stop();
+                sw.Stop();
 
-                    LogErrors(validationResults.SelectMany(r =>r.Errors));
+                LogErrors(validationResults.SelectMany(r =>r.Errors));
 
-                    return false;
-                }
-                else
-                {
-                    IEnumerable<ILibraryOperationResult> results = manifest.RestoreAsync(token).Result;
-
-                    sw.Stop();
-
-                    FlushLogger(logger);
-                    PopulateFilesWritten(results, dependencies.GetHostInteractions());
-                    LogResults(sw, results);
-
-                    return !Log.HasLoggedErrors;
-                }
+                return false;
             }
+
+            IEnumerable<ILibraryOperationResult> results = manifest.RestoreAsync(token).Result;
+
+            sw.Stop();
+
+            FlushLogger(logger);
+            PopulateFilesWritten(results, dependencies.GetHostInteractions());
+            LogResults(sw, results);
+
+            return !Log.HasLoggedErrors;
+
         }
 
         // This is done to fix the issue with async/await in a synchronous Execute() method

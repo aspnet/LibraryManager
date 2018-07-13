@@ -160,7 +160,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (manifest == null)
             {
-                Logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Task);
+                Logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Error);
                 throw new InvalidOperationException(Resources.Text.FixManifestFile);
             }
 

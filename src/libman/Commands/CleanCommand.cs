@@ -39,14 +39,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 return 0;
             }
-            else
-            {
-                IEnumerable<ILibraryOperationResult> results = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
 
-                sw.Stop();
-                LogResultsSummary(results, OperationType.Clean, sw.Elapsed);
-                return 0;
-            }
+            IEnumerable<ILibraryOperationResult> results = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
+            sw.Stop();
+            LogResultsSummary(results, OperationType.Clean, sw.Elapsed);
+
+            return 0;
         }
     }
 }

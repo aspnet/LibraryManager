@@ -37,15 +37,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
                 return 0;
             }
-            else
-            {
-                IEnumerable<ILibraryOperationResult> results = await ManifestRestorer.RestoreManifestAsync(manifest, Logger, CancellationToken.None);
 
-                sw.Stop();
-                LogResultsSummary(results, OperationType.Restore, sw.Elapsed);
+            IEnumerable<ILibraryOperationResult> results = await ManifestRestorer.RestoreManifestAsync(manifest, Logger, CancellationToken.None);
+            sw.Stop();
+            LogResultsSummary(results, OperationType.Restore, sw.Elapsed);
 
-                return 0;
-            }
+            return 0;
         }
     }
 }
