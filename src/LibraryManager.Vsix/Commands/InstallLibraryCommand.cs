@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Threading;
 using System.Windows.Interop;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -82,8 +83,38 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (project != null)
             {
-                string target = string.Empty;
                 string rootFolder = await project.GetRootFolderAsync().ConfigureAwait(false);
+
+                string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
+                IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+
+                Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None).ConfigureAwait(false);
+
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                // If the manifest contains errors, we will not invoke the "Add Client-Side libraries" dialog
+                // Instead we will display a message box indicating the syntax errors in manifest file.
+                if (manifest == null)
+                {
+                    IVsUIShell shell = Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
+                    int result;
+
+                    shell.ShowMessageBox(dwCompRole: 0,
+                                         rclsidComp: Guid.Empty,
+                                         pszTitle: null,
+                                         pszText: PredefinedErrors.ManifestMalformed().Message,
+                                         pszHelpFile: null,
+                                         dwHelpContextID: 0,
+                                         msgbtn: OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                                         msgdefbtn: OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
+                                         msgicon: OLEMSGICON.OLEMSGICON_WARNING,
+                                         fSysAlert: 0,
+                                         pnResult: out result);
+
+                    return;
+                }
+
+                string target = string.Empty;
 
                 // Install command was invoked from a folder.
                 // So the initial target location should be name of the folder from which
@@ -107,11 +138,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                 }
 
-                string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-                IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
-
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
                 UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder);
 
                 var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
@@ -122,10 +148,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 // This will remove the dialog from alt-tab list and will not allow the user to switch the dialog box to the background 
                 windowInteropHelper.Owner = new IntPtr(hwnd);
 
-                    dialog.ShowDialog();
+                dialog.ShowDialog();
 
-                    Telemetry.TrackUserTask("Open-InstallDialog");
-                }
+                Telemetry.TrackUserTask("Open-InstallDialog");
             }
         }
     }
+}
