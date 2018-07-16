@@ -78,7 +78,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime, bool endOfMessage = true)
         {
             LogErrors(totalResults);
-            LogEvent(LogMessageGenerator.GetSummaryHeaderString(operationType, null), LogLevel.Task);
+            LogEvent(LogMessageGenerator.GetSummaryHeaderString(operationType), LogLevel.Task);
             LogOperationSummary(totalResults, operationType, elapsedTime);
 
             if (endOfMessage)
@@ -100,7 +100,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 LogEvent(error, LogLevel.Operation);
             }
 
-            LogEvent(LogMessageGenerator.GetErrorsHeaderString(operationType, null), LogLevel.Task);
+            LogEvent(LogMessageGenerator.GetErrorsHeaderString(operationType), LogLevel.Task);
 
             if (endOfMessage)
             {
