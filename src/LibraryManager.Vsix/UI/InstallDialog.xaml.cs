@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using EnvDTE;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
@@ -21,8 +22,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         private readonly string _fullPath;
         private readonly string _configFileName;
         private readonly ILibraryCommandService _libraryCommandService;
+        private Project _project;
 
-        public InstallDialog(IDependencies dependencies, ILibraryCommandService libraryCommandService, string configFileName, string fullPath, string rootFolder)
+        public InstallDialog(IDependencies dependencies, ILibraryCommandService libraryCommandService, string configFileName, string fullPath, string rootFolder, Project project)
         {
             string destinationFolder = string.Empty;
 
@@ -40,6 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             _deps = dependencies;
             _fullPath = fullPath;
             _configFileName = configFileName;
+            _project = project;
 
             Loaded += OnLoaded;
         }
@@ -155,7 +158,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            ViewModel = new InstallDialogViewModel(Dispatcher, _libraryCommandService, _configFileName, _deps, _fullPath, CloseDialog);
+            ViewModel = new InstallDialogViewModel(Dispatcher, _libraryCommandService, _configFileName, _deps, _fullPath, CloseDialog, _project);
 
             FocusManager.SetFocusedElement(LibrarySearchBox, LibrarySearchBox);
         }
