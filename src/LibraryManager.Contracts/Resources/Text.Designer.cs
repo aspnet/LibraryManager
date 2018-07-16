@@ -161,7 +161,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The manifest file contains syntax errors.
+        ///   Looks up a localized string similar to Library Manager manifest contains syntax errors. Please fix the errors in libman.json, then try again..
         /// </summary>
         internal static string ErrorManifestMalformed {
             get {

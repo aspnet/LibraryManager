@@ -122,7 +122,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsNull(manifest);
             var logger = HostEnvironment.Logger as TestLogger;
 
-            Assert.AreEqual("The manifest file contains syntax errors", logger.Messages[0].Value);
+            Assert.AreEqual("Library Manager manifest contains syntax errors. Please fix the errors in libman.json, then try again.", logger.Messages[0].Value);
         }
     }
 }
