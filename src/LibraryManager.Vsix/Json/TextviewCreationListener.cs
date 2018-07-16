@@ -101,7 +101,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         if (!results.All(r => r.Success))
                         {
                             AddErrorsToList(results);
-                            Logger.LogErrors(results);
+                            Logger.LogErrorsSummary(results, OperationType.Restore);
                             Telemetry.LogErrors("Fail-ManifestFileSaveWithErrors", results);
                         }
                         else
@@ -116,8 +116,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                             else
                             {
                                 string textMessage = string.Concat(Environment.NewLine, LibraryManager.Resources.Text.Restore_OperationHasErrors, Environment.NewLine);
+                                Logger.LogErrorsSummary(new[] { textMessage }, OperationType.Restore);
                                 Telemetry.TrackUserTask("Fail-RemovedUnwantedFiles", TelemetryResult.Failure);
-                                Logger.LogEvent(textMessage, LogLevel.Task);
                             }
                         }
                     }

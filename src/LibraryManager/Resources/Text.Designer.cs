@@ -115,6 +115,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clean operation completed with errors.
+        /// </summary>
+        public static string Clean_OperationCompletedWithErrors {
+            get {
+                return ResourceManager.GetString("Clean_OperationCompletedWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clean operation failed for {0} libraries.
         /// </summary>
         public static string Clean_OperationFailed {
@@ -286,6 +295,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} libraries are up-to-date.
+        /// </summary>
+        public static string Restore_NumberOfLibrariesUptodate {
+            get {
+                return ResourceManager.GetString("Restore_NumberOfLibrariesUptodate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore operation has been cancelled.
         /// </summary>
         public static string Restore_OperationCancelled {
@@ -300,6 +318,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static string Restore_OperationCompleted {
             get {
                 return ResourceManager.GetString("Restore_OperationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore operation completed with errors.
+        /// </summary>
+        public static string Restore_OperationCompletedWithErrors {
+            get {
+                return ResourceManager.GetString("Restore_OperationCompletedWithErrors", resourceCulture);
             }
         }
         
@@ -394,6 +421,24 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uninstall operation completed.
+        /// </summary>
+        public static string Uninstall_OperationCompleted {
+            get {
+                return ResourceManager.GetString("Uninstall_OperationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstall operation completed with errors.
+        /// </summary>
+        public static string Uninstall_OperationCompletedWithErrors {
+            get {
+                return ResourceManager.GetString("Uninstall_OperationCompletedWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Example: &lt;library&gt;@&lt;version&gt;.
         /// </summary>
         public static string UnpkgProviderHintText {
@@ -435,6 +480,24 @@ namespace Microsoft.Web.LibraryManager.Resources {
         public static string Update_LibrarySucceeded {
             get {
                 return ResourceManager.GetString("Update_LibrarySucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade operation completed.
+        /// </summary>
+        public static string Upgrade_OperationCompleted {
+            get {
+                return ResourceManager.GetString("Upgrade_OperationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade operation completed with errors.
+        /// </summary>
+        public static string Upgrade_OperationCompletedWithErrors {
+            get {
+                return ResourceManager.GetString("Upgrade_OperationCompletedWithErrors", resourceCulture);
             }
         }
     }

@@ -144,10 +144,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 {
                     Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
                     Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-                    if (manifest != null)
-                    {
-                        manifests.Add(configFilePath, manifest);
-                    }
+                    manifests.Add(configFilePath, manifest);
                 }
             }
             catch (Exception ex)
@@ -179,15 +176,26 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (manifest != null)
                 {
-                    IHostInteraction hostInteraction = dependencies.GetHostInteractions();
-                    results = await manifest.CleanAsync(async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+                    IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(manifest, dependencies, cancellationToken).ConfigureAwait(false);
+
+                    if (!validationResults.All(r => r.Success))
+                    {
+                        sw.Stop();
+                        AddErrorsToErrorList(project?.Name, configFileName, validationResults);
+                        Logger.LogErrorsSummary(validationResults, OperationType.Clean);
+                        Telemetry.LogErrors($"FailValidation_{OperationType.Clean}", validationResults);
+                    }
+                    else
+                    {
+                        IHostInteraction hostInteraction = dependencies.GetHostInteractions();
+                        results = await manifest.CleanAsync(async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken);
+
+                        sw.Stop();
+                        AddErrorsToErrorList(project?.Name, configFileName, results);
+                        Logger.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
+                        Telemetry.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
+                    }
                 }
-
-                sw.Stop();
-
-                AddErrorsToErrorList(project?.Name, configFileName, results);
-                Logger.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
-                Telemetry.LogEventsSummary(results, OperationType.Clean, sw.Elapsed);
             }
             catch (OperationCanceledException ex)
             {
@@ -200,33 +208,44 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             Logger.LogEventsHeader(OperationType.Restore, string.Empty);
 
-            List<ILibraryOperationResult> totalResults = new List<ILibraryOperationResult>();
-
             try
             {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
+                Stopwatch swTotal = new Stopwatch();
+                swTotal.Start();
 
                 foreach (KeyValuePair<string, Manifest> manifest in manifests)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
+                    Stopwatch swLocal = new Stopwatch();
+                    swLocal.Start();
+                    IDependencies dependencies = Dependencies.FromConfigFile(manifest.Key);
                     Project project = VsHelpers.GetDTEProjectFromConfig(manifest.Key);
 
                     Logger.LogEvent(string.Format(LibraryManager.Resources.Text.Restore_LibrariesForProject, project?.Name), LogLevel.Operation);
 
-                    IEnumerable<ILibraryOperationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
+                    IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(manifest.Value, dependencies, cancellationToken).ConfigureAwait(false);
+                    if (!validationResults.All(r => r.Success))
+                    {
+                        swLocal.Stop();
+                        AddErrorsToErrorList(project?.Name, manifest.Key, validationResults);
+                        Logger.LogErrorsSummary(validationResults, OperationType.Restore, false);
+                        Telemetry.LogErrors($"FailValidation_{OperationType.Restore}", validationResults);
+                    }
+                    else
+                    {
+                        IEnumerable<ILibraryOperationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
+                        await AddFilesToProjectAsync(manifest.Key, project, results.Where(r =>r.Success && !r.UpToDate), cancellationToken).ConfigureAwait(false);
 
-                    await AddFilesToProjectAsync(manifest.Key, project, results.Where(r =>r.Success && !r.UpToDate), cancellationToken).ConfigureAwait(false);
-
-                    AddErrorsToErrorList(project?.Name, manifest.Key, results);
-                    totalResults.AddRange(results);
+                        swLocal.Stop();
+                        AddErrorsToErrorList(project?.Name, manifest.Key, results);
+                        Logger.LogEventsSummary(results, OperationType.Restore, swLocal.Elapsed, false);
+                        Telemetry.LogEventsSummary(results, OperationType.Restore, swLocal.Elapsed);
+                    }
                 }
 
-                sw.Stop();
-
-                Logger.LogEventsSummary(totalResults, OperationType.Restore, sw.Elapsed);
-                Telemetry.LogEventsSummary(totalResults, OperationType.Restore, sw.Elapsed);
+                swTotal.Stop();
+                Logger.LogEventsFooter(OperationType.Restore, swTotal.Elapsed);
             }
             catch (OperationCanceledException ex)
             {
@@ -265,7 +284,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 sw.Stop();
 
-                Logger.LogEventsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall, sw.Elapsed);
+                if (result.Errors.Any())
+                {
+                    Logger.LogErrorsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall);
+                }
+                else
+                {
+                    Logger.LogEventsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall, sw.Elapsed);
+                }
+
                 Telemetry.LogEventsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall, sw.Elapsed);
             }
             catch (OperationCanceledException ex)

@@ -66,6 +66,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         protected override async Task<int> ExecuteInternalAsync()
         {
             Manifest manifest = await GetManifestAsync();
+            IEnumerable<ILibraryOperationResult> validationResults = await manifest.GetValidationResultsAsync(CancellationToken.None);
+
+            if (!validationResults.All(r => r.Success))
+            {
+                LogErrors(validationResults.SelectMany(r => r.Errors));
+
+                return 0;
+            }
+
             IEnumerable<ILibraryInstallationState> installedLibraries = ValidateParametersAndGetLibrariesToUpdate(manifest);
 
             if (installedLibraries == null || !installedLibraries.Any())

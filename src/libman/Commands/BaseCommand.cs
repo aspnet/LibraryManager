@@ -160,6 +160,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             if (manifest == null)
             {
+                Logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Error);
                 throw new InvalidOperationException(Resources.Text.FixManifestFile);
             }
 
@@ -205,6 +206,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (!string.IsNullOrEmpty(messageText))
             {
                 Logger.Log(messageText, LogLevel.Operation);
+            }
+        }
+
+        protected void LogErrors(IEnumerable<IError> errors)
+        {
+            foreach (IError error in errors)
+            {
+                Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
             }
         }
     }

@@ -51,20 +51,31 @@ namespace Microsoft.Web.LibraryManager.Build
 
             if (manifest == null)
             {
-                logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Error);
+                sw.Stop();
+                LogErrors(new[] { PredefinedErrors.ManifestMalformed() });
                 FlushLogger(logger);
+
+                return false;
+            }
+
+            IEnumerable<ILibraryOperationResult> validationResults = manifest.GetValidationResultsAsync(token).Result;
+            if (!validationResults.All(r => r.Success))
+            {
+                sw.Stop();
+                LogErrors(validationResults.SelectMany(r =>r.Errors));
+
                 return false;
             }
 
             IEnumerable<ILibraryOperationResult> results = manifest.RestoreAsync(token).Result;
 
             sw.Stop();
-
             FlushLogger(logger);
             PopulateFilesWritten(results, dependencies.GetHostInteractions());
             LogResults(sw, results);
 
             return !Log.HasLoggedErrors;
+
         }
 
         // This is done to fix the issue with async/await in a synchronous Execute() method
@@ -87,13 +98,7 @@ namespace Microsoft.Web.LibraryManager.Build
 
             if (hasErrors)
             {
-                foreach (IError error in results.SelectMany(r => r.Errors))
-                {
-                    Log.LogWarning(null, error.Code, null, FileName, 0, 0, 0, 0, error.Message);
-                }
-
-                string text = Resources.Text.Restore_OperationHasErrors;
-                Log.LogMessage(MessageImportance.High, Environment.NewLine + text + Environment.NewLine);
+                LogErrors(results.SelectMany(r => r.Errors));
             }
             else
             {
@@ -108,6 +113,17 @@ namespace Microsoft.Web.LibraryManager.Build
                     Log.LogMessage(MessageImportance.High, Environment.NewLine + "Restore completed. Files already up-to-date" + Environment.NewLine);
                 }
             }
+        }
+
+        private void LogErrors(IEnumerable<IError> errors)
+        {
+            foreach (IError error in errors)
+            {
+                Log.LogError(null, error.Code, null, FileName, 0, 0, 0, 0, error.Message);
+            }
+
+            string text = Resources.Text.Restore_OperationHasErrors;
+            Log.LogMessage(MessageImportance.High, Environment.NewLine + text + Environment.NewLine);
         }
 
         private void PopulateFilesWritten(IEnumerable<ILibraryOperationResult> results, IHostInteraction hostInteraction)
