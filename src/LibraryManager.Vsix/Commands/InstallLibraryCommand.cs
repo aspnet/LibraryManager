@@ -138,7 +138,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                 }
 
-                UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder);
+                UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder, project);
 
                 var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
                 int hwnd = dte.MainWindow.HWnd;

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using EnvDTE;
 using Microsoft.JSON.Core.Parser.TreeItems;
 using Microsoft.JSON.Editor.Document;
 using Microsoft.VisualStudio;
@@ -48,8 +49,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private string _errorMessage;
         private bool _displayError;
         private BindLibraryNameToTargetLocation _libraryNameChange;
+        private Project _project;
 
-        public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog)
+        public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog, Project project)
         {
             _libraryCommandService = libraryCommandService;
             _configFileName = configFileName;
@@ -60,6 +62,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             _anyFileSelected = false;
             _isTreeViewEmpty = true;
             _libraryNameChange = new BindLibraryNameToTargetLocation();
+            _project = project;
 
             List<IProvider> providers = new List<IProvider>();
             foreach (IProvider provider in deps.Providers.OrderBy(x => x.Id))
@@ -458,8 +461,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                     await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                    EnvDTE.Project project = VsHelpers.DTE.SelectedItems.Item(1)?.ProjectItem?.ContainingProject;
-                    project?.AddFileToProjectAsync(_configFileName);
+                    if (!File.Exists(_configFileName))
+                    {
+                        await manifest.SaveAsync(_configFileName, CancellationToken.None);
+
+                        if (_project != null)
+                        {
+                            await _project.AddFileToProjectAsync(_configFileName);
+                        }
+                    }
 
                     RunningDocumentTable rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
                     string configFilePath = Path.GetFullPath(_configFileName);
