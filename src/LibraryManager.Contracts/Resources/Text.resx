@@ -130,7 +130,7 @@
     <value>The library id is undefined</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>The manifest file contains syntax errors</value>
+    <value>Library Manager manifest contains syntax errors. Please fix the errors in libman.json, then try again.</value>
   </data>
   <data name="ErrorNotSupportedVersion" xml:space="preserve">
     <value>Version "{0}" is not supported by this version of Library Manager</value>
