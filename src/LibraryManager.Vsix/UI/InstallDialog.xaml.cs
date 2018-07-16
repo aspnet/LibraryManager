@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,7 +25,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         public InstallDialog(IDependencies dependencies, ILibraryCommandService libraryCommandService, string configFileName, string fullPath, string rootFolder)
         {
-            InstallationFolder.DestinationFolder = fullPath.Replace(rootFolder, "").Replace('\\', '/');
+            string destinationFolder = string.Empty;
+
+            if (fullPath.StartsWith(rootFolder, StringComparison.OrdinalIgnoreCase))
+            {
+                destinationFolder = fullPath.Substring(rootFolder.Length);
+            }
+
+            destinationFolder = destinationFolder.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            InstallationFolder.DestinationFolder = destinationFolder.Replace('\\', '/');
 
             InitializeComponent();
 
