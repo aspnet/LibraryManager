@@ -3,6 +3,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Contracts
 {
@@ -38,6 +39,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Indicates whether the provider supports libraries with versions.
         /// </summary>
         bool SupportsLibraryVersions { get; }
+
+        /// <summary>
+        /// LibraryNamingScheme for the provider.
+        /// </summary>
+        ILibraryNamingScheme LibraryNamingScheme { get; }
 
         /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.LibraryNaming;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Resources;
 
@@ -64,6 +65,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// Supports libraries with versions.
         /// </summary>
         public bool SupportsLibraryVersions => true;
+
+        /// <summary>
+        /// LibraryNamingScheme used by this provider.
+        /// </summary>
+        /// <returns></returns>
+        public ILibraryNamingScheme LibraryNamingScheme { get; } = new VersionedLibraryNamingScheme();
 
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.

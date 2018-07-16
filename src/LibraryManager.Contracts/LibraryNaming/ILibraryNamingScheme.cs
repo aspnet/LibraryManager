@@ -1,12 +1,12 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-namespace Microsoft.Web.LibraryManager.LibraryNaming
+namespace Microsoft.Web.LibraryManager.Contracts.LibraryNaming
 {
     /// <summary>
     /// Allows converting libraryId to name and version and vice versa.
     /// </summary>
-    internal interface ILibraryNamingScheme
+    public interface ILibraryNamingScheme
     {
         /// <summary>
         /// Splits libraryId into name and version.

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.LibraryNaming
 {
@@ -19,18 +20,14 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
 
         private LibraryIdToNameAndVersionConverter()
         {
-            _versionedNamingScheme = new VersionedLibraryNamingScheme();
-            _simpleNamingScheme = new SimpleLibraryNamingScheme();
-            _default = _simpleNamingScheme;
+            _defaultLibraryNamingScheme = new SimpleLibraryNamingScheme();
             _isInitialized = false;
 
             _perProviderNamingScheme = new Dictionary<string, ILibraryNamingScheme>(StringComparer.OrdinalIgnoreCase);
         }
 
         private readonly object _syncObject = new object();
-        private readonly ILibraryNamingScheme _versionedNamingScheme;
-        private readonly ILibraryNamingScheme _simpleNamingScheme;
-        private readonly ILibraryNamingScheme _default;
+        private readonly ILibraryNamingScheme _defaultLibraryNamingScheme;
 
 
         private IDependencies _dependencies;
@@ -62,7 +59,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
 
                 foreach(IProvider p in _dependencies.Providers)
                 {
-                    _perProviderNamingScheme[p.Id] = p.SupportsLibraryVersions ? _versionedNamingScheme : _simpleNamingScheme;
+                    _perProviderNamingScheme[p.Id] = p.LibraryNamingScheme ?? _defaultLibraryNamingScheme;
                 }
             }
         }
@@ -96,7 +93,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
             {
                 return !string.IsNullOrEmpty(providerId ) && _perProviderNamingScheme.TryGetValue(providerId, out ILibraryNamingScheme scheme)
                     ? scheme :
-                    _default;
+                    _defaultLibraryNamingScheme;
             }
         }
     }

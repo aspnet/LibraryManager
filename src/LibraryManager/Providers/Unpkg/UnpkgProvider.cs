@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.LibraryNaming;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
@@ -46,6 +48,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public string LibraryIdHintText => Resources.Text.UnpkgProviderHintText;
 
         public bool SupportsLibraryVersions => true;
+
+        public ILibraryNamingScheme LibraryNamingScheme { get; } = new VersionedLibraryNamingScheme();
 
         public async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
