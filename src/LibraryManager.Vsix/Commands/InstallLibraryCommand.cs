@@ -162,7 +162,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private async Task<Manifest> GetManifestAsync(string configFilePath, IDependencies dependencies)
         {
             RunningDocumentTable rdt = new RunningDocumentTable(ServiceProvider.GlobalProvider);
-
             IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
 
             Manifest manifest = null;
