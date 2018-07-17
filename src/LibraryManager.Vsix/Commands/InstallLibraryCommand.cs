@@ -176,7 +176,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             // If the documentBuffer is null, then libman.json is not open. In that case, we'll use the manifest as is.
             // If documentBuffer is not null, then libman.json file is open and could be dirty. So we'll get the contents for the manifest from the buffer.
-
             if (documentBuffer != null)
             {
                 manifest = Manifest.FromJson(documentBuffer.CurrentSnapshot.GetText(), dependencies);
