@@ -84,20 +84,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             List<string> result = new List<string>();
 
-            try
-            {
-                string libraryFileListUrl = string.Format(LibraryFileListUrlFormat, libraryId);
-                JObject fileListObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(libraryFileListUrl, cancellationToken).ConfigureAwait(false);
+            string libraryFileListUrl = string.Format(LibraryFileListUrlFormat, libraryId);
+            JObject fileListObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(libraryFileListUrl, cancellationToken).ConfigureAwait(false);
 
-
-                if (fileListObject != null)
-                {
-                    GetFiles(fileListObject, result);
-                }
-            }
-            catch (Exception ex)
+            if (fileListObject != null)
             {
-                _provider.HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                GetFiles(fileListObject, result);
             }
 
             return result;
