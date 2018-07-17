@@ -174,7 +174,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 documentBuffer = editorAdapterService.GetDocumentBuffer(textBuffer);
             }
 
-
             // If the documentBuffer is null, then libman.json is not open. In that case, we'll use the manifest as is.
             // If documentBuffer is not null, then libman.json file is open and could be dirty. So we'll get the contents for the manifest from the text buffer.
 
