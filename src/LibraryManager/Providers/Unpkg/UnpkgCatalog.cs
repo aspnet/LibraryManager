@@ -91,7 +91,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             {
                 GetFiles(fileListObject, result);
             }
-
+        
             return result;
         }
 
