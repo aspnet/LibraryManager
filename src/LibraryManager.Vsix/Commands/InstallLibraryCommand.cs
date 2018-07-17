@@ -93,7 +93,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
                 IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
 
-                Manifest manifest = await GetManifestAsync(configFilePath, dependencies);
+                Manifest manifest = await GetManifestAsync(configFilePath, dependencies).ConfigureAwait(false);
 
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
@@ -164,15 +164,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             RunningDocumentTable rdt = new RunningDocumentTable(ServiceProvider.GlobalProvider);
             IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
 
-            Manifest manifest = null;
+            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None).ConfigureAwait(false);
 
-            // If the textBuffer is null, then libman.json is not open. In that case, we'll get the manifest from the the file.
+            // If the textBuffer is null, then libman.json is not open. In that case, we'll use the manifest as is.
             // If textBuffer is not null, then libman.json file is open and could be dirty. So we'll get the contents for the manifest from the text buffer.
-            if (textBuffer == null)
-            {
-                manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None).ConfigureAwait(false);
-            }
-            else
+            if (textBuffer != null)
             {
                 IComponentModel componentModel = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
                 IVsEditorAdaptersFactoryService editorAdapterService = componentModel.GetService<IVsEditorAdaptersFactoryService>();
