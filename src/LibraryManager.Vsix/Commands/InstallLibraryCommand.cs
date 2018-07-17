@@ -163,8 +163,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             RunningDocumentTable rdt = new RunningDocumentTable(ServiceProvider.GlobalProvider);
             IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
-
-            Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None).ConfigureAwait(false);
+            ITextBuffer documentBuffer = null;
+            Manifest manifest = null;
 
             // If the textBuffer is null, then libman.json is not open. In that case, we'll use the manifest as is.
             // If textBuffer is not null, then libman.json file is open and could be dirty. So we'll get the contents for the manifest from the text buffer.
@@ -173,12 +173,16 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 IComponentModel componentModel = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
                 IVsEditorAdaptersFactoryService editorAdapterService = componentModel.GetService<IVsEditorAdaptersFactoryService>();
 
-                ITextBuffer documentBuffer = editorAdapterService.GetDocumentBuffer(textBuffer);
+                documentBuffer = editorAdapterService.GetDocumentBuffer(textBuffer);
+            }
 
-                if (documentBuffer != null)
-                {
-                    manifest = Manifest.FromJson(documentBuffer.CurrentSnapshot.GetText(), dependencies);
-                }
+            if (documentBuffer != null)
+            {
+                manifest = Manifest.FromJson(documentBuffer.CurrentSnapshot.GetText(), dependencies);
+            }
+            else
+            {
+                manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None).ConfigureAwait(false);
             }
 
             return manifest;
