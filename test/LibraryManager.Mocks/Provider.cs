@@ -111,5 +111,17 @@ namespace Microsoft.Web.LibraryManager.Mocks
         {
             return library?.Name;
         }
+
+        /// <inheritDoc/>
+        public (string Name, string Version) GetLibraryNameAndVersion(string libraryId)
+        {
+            return LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+        }
+
+        /// <inheritDoc/>
+        public string GetLibraryId(string name, string version)
+        {
+            return LibraryNamingScheme.GetLibraryId(name, version);
+        }
     }
 }

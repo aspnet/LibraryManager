@@ -13,6 +13,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
     internal class UnpkgLibraryGroup : ILibraryGroup
     {
+        private static VersionedLibraryNamingScheme _namingScheme = new VersionedLibraryNamingScheme();
         public UnpkgLibraryGroup(string displayName, string description = null)
         {
             DisplayName = displayName;
@@ -30,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             {
                 return npmPackageInfo.Versions
                     .OrderByDescending(v => v)
-                    .Select(semanticVersion => LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(DisplayName, semanticVersion.ToString(), UnpkgProvider.IdText))
+                    .Select(semanticVersion => _namingScheme.GetLibraryId(DisplayName, semanticVersion.ToString()))
                     .ToList();
             }
 

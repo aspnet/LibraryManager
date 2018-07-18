@@ -69,6 +69,53 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         }
 
         [TestMethod]
+        public void TestUninstall_WithName()
+        {
+            var command = new UninstallCommand(HostEnvironment);
+            command.Configure(null);
+
+            string contents = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""defaultDestination"": ""wwwroot"",
+  ""libraries"": [
+    {
+      ""library"": ""jquery@3.2.1"",
+      ""files"": [ ""jquery.min.js"", ""core.js"" ]
+    }
+  ]
+}";
+
+            string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
+            File.WriteAllText(libmanjsonPath, contents);
+
+            var restoreCommand = new RestoreCommand(HostEnvironment);
+            restoreCommand.Configure(null);
+
+            restoreCommand.Execute();
+
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "core.js")));
+
+            int result = command.Execute("jquery");
+
+            Assert.AreEqual(0, result);
+            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
+            Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "core.js")));
+
+            string expectedText = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""cdnjs"",
+  ""defaultDestination"": ""wwwroot"",
+  ""libraries"": []
+}";
+            string actualText = File.ReadAllText(libmanjsonPath);
+
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
+        }
+
+
+        [TestMethod]
         public void TestUninstall_NoLibraryToUninstall()
         {
             var command = new UninstallCommand(HostEnvironment);

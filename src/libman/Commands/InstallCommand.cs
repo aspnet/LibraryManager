@@ -199,7 +199,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 {
                     // Found a group with an exact match.
                     string latestVersion = await ProviderCatalog.GetLatestVersion(libIds.First(), false, cancellationToken);
-                    string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libGroup.DisplayName, latestVersion, ProviderId);
+                    string libraryId = ProviderToUse.GetLibraryId(libGroup.DisplayName, latestVersion);
                     ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(libraryId, cancellationToken);
 
                     return (libraryId, libraryToInstall);

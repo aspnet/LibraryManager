@@ -150,6 +150,9 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                     return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, Id));
                 }
 
+                desiredState.Name = library.Name;
+                desiredState.Version = library.Version;
+
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
                     return LibraryOperationResult.FromSuccess(desiredState);
@@ -161,6 +164,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                     LibraryId = desiredState.LibraryId,
                     DestinationPath = desiredState.DestinationPath,
                     Files = library.Files.Keys.ToList(),
+                    Name = desiredState.Name,
+                    Version = desiredState.Version
                 };
             }
             catch (InvalidLibraryException)
@@ -258,6 +263,16 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 throw new ResourceDownloadException(sourceUrl);
             }
+        }
+
+        public (string Name, string Version) GetLibraryNameAndVersion(string libraryId)
+        {
+            return LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+        }
+
+        public string GetLibraryId(string name, string version)
+        {
+            return LibraryNamingScheme.GetLibraryId(name, version);
         }
     }
 }

@@ -35,56 +35,52 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
                 CancellationToken.None);
 
             // Matches jquery for all providers.
-            IReadOnlyList<ILibraryInstallationState> result = LibraryResolver.Resolve(
+            IReadOnlyList<ILibraryInstallationState> result = LibraryResolver.ResolveByName(
                 "jquery",
-                manifest,
+                manifest.Libraries,
+                _dependencies,
                 null);
 
             Assert.AreEqual(3, result.Count);
 
-            Assert.AreEqual("jquery", result[0].LibraryId);
-            Assert.AreEqual("jquery@3.3.1", result[1].LibraryId);
-            Assert.AreEqual("jquery@2.2.0", result[2].LibraryId);
-
-            // Matches jquery for cdnjs provider
-            result = LibraryResolver.Resolve(
-                "jquery",
-                manifest,
-                _dependencies.GetProvider("cdnjs"));
-
-            Assert.AreEqual(2, result.Count);
-
             Assert.AreEqual("jquery@3.3.1", result[0].LibraryId);
             Assert.AreEqual("jquery@2.2.0", result[1].LibraryId);
+            Assert.AreEqual("jquery", result[2].LibraryId);
 
-            // Matches only one result.
-            result = LibraryResolver.Resolve(
-                "jquery@3.3.1",
-                manifest,
-                null);
+            // Matches jquery for cdnjs provider
+            result = LibraryResolver.ResolveByName(
+                "jquery",
+                manifest.Libraries,
+                _dependencies,
+                _dependencies.GetProvider("cdnjs"));
 
             Assert.AreEqual(1, result.Count);
+
             Assert.AreEqual("jquery@3.3.1", result[0].LibraryId);
 
-            // Does not match library for a different provider.
-            result = LibraryResolver.Resolve(
+            // Matches nothing as we only do resolution by library name.
+            result = LibraryResolver.ResolveByName(
                 "jquery@3.3.1",
-                manifest,
+                manifest.Libraries,
+                _dependencies,
+                null);
+
+            Assert.AreEqual(0, result.Count);
+
+            // Does not match library for a different provider.
+            result = LibraryResolver.ResolveByName(
+                "twitter-bootstrap",
+                manifest.Libraries,
+                _dependencies,
                 _dependencies.GetProvider("filesystem"));
 
             Assert.AreEqual(0, result.Count);
 
             // Does not return partial matches.
-            result = LibraryResolver.Resolve(
-                "jquery@3.3",
-                manifest,
-                null);
-
-            Assert.AreEqual(0, result.Count);
-
-            result = LibraryResolver.Resolve(
+            result = LibraryResolver.ResolveByName(
                 "jquer",
-                manifest,
+                manifest.Libraries,
+                _dependencies,
                 null);
 
             Assert.AreEqual(0, result.Count);
@@ -124,11 +120,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
     },
     {
       ""library"": ""jquery@2.2.0"",
-      ""destination"": ""lib""
+      ""destination"": ""lib"",
+      ""provider"": ""unpkg""
     },
     {
       ""library"": ""jquery"",
       ""provider"": ""filesystem""
+    },
+    {
+      ""library"": ""twitter-bootstrap@4.1.1"",
     }
   ]
 }";

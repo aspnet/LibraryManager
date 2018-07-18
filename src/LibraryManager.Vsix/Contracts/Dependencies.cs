@@ -39,8 +39,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 _cache[configFilePath] = new Dependencies(hostInteraction);
             }
 
-            // We need to initialize naming schemes for the providers before we can proceed with any operation.
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(_cache[configFilePath]);
 
             return _cache[configFilePath];
         }

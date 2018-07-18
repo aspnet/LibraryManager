@@ -246,6 +246,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
                 }
 
+                desiredState.Name = library.Name;
+                desiredState.Version = library.Version;
+
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
@@ -266,6 +269,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     LibraryId = desiredState.LibraryId,
                     DestinationPath = desiredState.DestinationPath,
                     Files = library.Files.Keys.ToList(),
+                    Name = desiredState.Name,
+                    Version = desiredState.Version
                 };
             }
             catch (InvalidLibraryException)
@@ -283,6 +288,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             return LibraryOperationResult.FromSuccess(desiredState);
+        }
+
+        public (string Name, string Version) GetLibraryNameAndVersion(string libraryId)
+        {
+            return LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+        }
+
+        public string GetLibraryId(string name, string version)
+        {
+            return LibraryNamingScheme.GetLibraryId(name, version);
         }
     }
 }

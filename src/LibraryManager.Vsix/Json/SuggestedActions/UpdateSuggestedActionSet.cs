@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     return false;
                 }
 
-                _actions = GetListOfActionsAsync(catalog, CancellationToken.None);
+                _actions = GetListOfActionsAsync(provider, catalog, CancellationToken.None);
 
                 if (_actions.IsCompleted && _actions.Result.Count == 0)
                     return false;
@@ -73,26 +73,27 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return new[] { new SuggestedActionSet(list, "Update library") };
         }
 
-        private async Task<List<ISuggestedAction>> GetListOfActionsAsync(ILibraryCatalog catalog, CancellationToken cancellationToken)
+        private async Task<List<ISuggestedAction>> GetListOfActionsAsync(IProvider provider, ILibraryCatalog catalog, CancellationToken cancellationToken)
         {
-            var list = new List<ISuggestedAction>();
-            string latestStableVersion = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, false, cancellationToken).ConfigureAwait(false);
-            string latestStable = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(
-                            _provider.InstallationState.Name,
-                            latestStableVersion,
-                            _provider.InstallationState.ProviderId);
+            ILibraryInstallationState selectedLibrary = _provider.InstallationState;
+            string libraryName = provider.GetLibraryNameAndVersion(selectedLibrary.LibraryId).Name;
 
-            if (!string.IsNullOrEmpty(latestStableVersion) && latestStable != _provider.InstallationState.LibraryId)
+            var list = new List<ISuggestedAction>();
+            string latestStableVersion = await catalog.GetLatestVersion(selectedLibrary.LibraryId, false, cancellationToken).ConfigureAwait(false);
+            string latestStable = provider.GetLibraryId(
+                            libraryName,
+                            latestStableVersion);
+
+            if (!string.IsNullOrEmpty(latestStableVersion) && latestStable != selectedLibrary.LibraryId)
             {
                 list.Add(new UpdateSuggestedAction(_provider, latestStable, $"Stable: {latestStable}"));
             }
 
-            string latestPreVersion = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, true, cancellationToken).ConfigureAwait(false);
-            string latestPre = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(_provider.InstallationState.Name,
-                            latestPreVersion,
-                            _provider.InstallationState.ProviderId);
+            string latestPreVersion = await catalog.GetLatestVersion(selectedLibrary.LibraryId, true, cancellationToken).ConfigureAwait(false);
+            string latestPre = provider.GetLibraryId(libraryName,
+                            latestPreVersion);
 
-            if (!string.IsNullOrEmpty(latestPreVersion) && latestPre != _provider.InstallationState.LibraryId && latestPre != latestStable)
+            if (!string.IsNullOrEmpty(latestPreVersion) && latestPre != selectedLibrary.LibraryId && latestPre != latestStable)
             {
                 list.Add(new UpdateSuggestedAction(_provider, latestPre, $"Pre-release: {latestPre}"));
             }

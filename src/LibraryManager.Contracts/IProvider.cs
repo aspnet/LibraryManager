@@ -41,9 +41,17 @@ namespace Microsoft.Web.LibraryManager.Contracts
         bool SupportsLibraryVersions { get; }
 
         /// <summary>
-        /// LibraryNamingScheme for the provider.
+        /// Splits the libraryId into name and version.
         /// </summary>
-        ILibraryNamingScheme LibraryNamingScheme { get; }
+        (string Name, string Version) GetLibraryNameAndVersion(string libraryId);
+
+        /// <summary>
+        /// Combines the name and version of the library into libraryId.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        string GetLibraryId(string name, string version);
 
         /// <summary>
         /// Installs a library as specified in the <paramref name="desiredState"/> parameter.

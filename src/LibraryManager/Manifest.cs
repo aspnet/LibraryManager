@@ -98,7 +98,6 @@ namespace Microsoft.Web.LibraryManager
         {
             try
             {
-                LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(dependencies);
                 Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
                 manifest._dependencies = dependencies;
                 manifest._hostInteraction = dependencies.GetHostInteractions();

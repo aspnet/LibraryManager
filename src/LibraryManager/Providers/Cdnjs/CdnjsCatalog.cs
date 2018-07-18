@@ -134,7 +134,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            (string name, string version) = _provider.LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+            (string name, string version) = _provider.GetLibraryNameAndVersion(libraryId);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
