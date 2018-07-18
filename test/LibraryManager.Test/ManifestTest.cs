@@ -12,7 +12,6 @@ using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 using Microsoft.Web.LibraryManager.Providers.FileSystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -34,7 +33,6 @@ namespace Microsoft.Web.LibraryManager.Test
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory());
 
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(_dependencies);
             Directory.CreateDirectory(_projectFolder);
             File.WriteAllText(_filePath, _doc);
         }

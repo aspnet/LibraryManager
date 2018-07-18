@@ -1,9 +1,10 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Mocks
 {
@@ -64,6 +65,11 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public bool SupportsLibraryVersions { get; set; }
 
         /// <summary>
+        /// The LibraryNaming scheme used by the provider.
+        /// </summary>
+        public ILibraryNamingScheme LibraryNamingScheme { get; set; }
+
+        /// <summary>
         /// Gets the <see cref="T:LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>
@@ -97,13 +103,25 @@ namespace Microsoft.Web.LibraryManager.Mocks
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="library"></param>
         /// <returns></returns>
         public string GetSuggestedDestination(ILibrary library)
         {
             return library?.Name;
+        }
+
+        /// <inheritDoc/>
+        public (string Name, string Version) GetLibraryNameAndVersion(string libraryId)
+        {
+            return LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+        }
+
+        /// <inheritDoc/>
+        public string GetLibraryId(string name, string version)
+        {
+            return LibraryNamingScheme.GetLibraryId(name, version);
         }
     }
 }

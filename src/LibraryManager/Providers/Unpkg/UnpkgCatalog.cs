@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
+                (string name, string version) = _provider.LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
                 string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, name);
 
                 JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
@@ -55,7 +55,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
+            (string name, string version) = _provider.LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
@@ -168,7 +168,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             List<CompletionItem> completions = new List<CompletionItem>();
 
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
+            (string name, string version) = _provider.LibraryNamingScheme.GetLibraryNameAndVersion(libraryNameStart);
 
             try
             {

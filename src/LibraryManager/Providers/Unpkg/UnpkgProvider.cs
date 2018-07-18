@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.LibraryNaming;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
@@ -46,6 +48,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public string LibraryIdHintText => Resources.Text.UnpkgProviderHintText;
 
         public bool SupportsLibraryVersions => true;
+
+        public ILibraryNamingScheme LibraryNamingScheme { get; } = new VersionedLibraryNamingScheme();
 
         public async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
@@ -109,6 +113,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             var tasks = new List<Task>();
+            (state.Name, state.Version) = GetLibraryNameAndVersion(state.LibraryId);
+
             string libraryDir = Path.Combine(CacheFolder, state.Name);
 
             try
@@ -147,6 +153,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private bool IsLibraryUpToDate(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
+            (state.Name, state.Version) = GetLibraryNameAndVersion(state.LibraryId);
+
             string cacheDir = Path.Combine(CacheFolder, state.Name, state.Version);
             string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
 
@@ -215,6 +223,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
+            (state.Name, state.Version) = GetLibraryNameAndVersion(state.LibraryId);
+
             string absolute = Path.Combine(CacheFolder, state.Name, state.Version, sourceFile);
 
             if (File.Exists(absolute))
@@ -242,6 +252,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
                 }
 
+                desiredState.Name = library.Name;
+                desiredState.Version = library.Version;
+
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
@@ -262,6 +275,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     LibraryId = desiredState.LibraryId,
                     DestinationPath = desiredState.DestinationPath,
                     Files = library.Files.Keys.ToList(),
+                    Name = desiredState.Name,
+                    Version = desiredState.Version
                 };
             }
             catch (InvalidLibraryException)
@@ -279,6 +294,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             return LibraryOperationResult.FromSuccess(desiredState);
+        }
+
+        public (string Name, string Version) GetLibraryNameAndVersion(string libraryId)
+        {
+            return LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+        }
+
+        public string GetLibraryId(string name, string version)
+        {
+            return LibraryNamingScheme.GetLibraryId(name, version);
         }
     }
 }

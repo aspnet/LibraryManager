@@ -97,17 +97,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             }
 
             string newLibraryId = null;
-
+            IProvider provider = ManifestDependencies.GetProvider(libraryToUpdate.ProviderId);
+            libraryToUpdate.Name = provider.GetLibraryNameAndVersion(libraryToUpdate.LibraryId).Name;
             if (ToVersion.HasValue())
             {
-                newLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUpdate.Name, ToVersion.Value(), libraryToUpdate.ProviderId);
+                newLibraryId = provider.GetLibraryId(libraryToUpdate.Name, ToVersion.Value());
             }
             else
             {
                 string latestVersion = await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
                 if (!string.IsNullOrEmpty(latestVersion))
                 {
-                    newLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUpdate.Name, latestVersion, libraryToUpdate.ProviderId);
+                    newLibraryId = provider.GetLibraryId(libraryToUpdate.Name, latestVersion);
                 }
             }
 
@@ -215,7 +216,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new InvalidOperationException(string.Join(Environment.NewLine, errors));
             }
 
-            return manifest.Libraries.Where(l => l.Name.Equals(LibraryName.Value, StringComparison.OrdinalIgnoreCase));
+            return LibraryResolver.ResolveByName(LibraryName.Value,
+                manifest.Libraries,
+                ManifestDependencies,
+                provider);
         }
     }
 }

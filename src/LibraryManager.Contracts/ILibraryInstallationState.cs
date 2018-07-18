@@ -18,12 +18,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// The name of the library.
         /// </summary>
-        string Name { get; }
+        string Name { get; set; }
 
         /// <summary>
         /// Version of the library.
         /// </summary>
-        string Version { get; }
+        string Version { get; set; }
 
         /// <summary>
         /// The unique identifier of the provider.

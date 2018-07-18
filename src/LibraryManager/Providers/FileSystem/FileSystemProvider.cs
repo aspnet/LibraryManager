@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.LibraryNaming;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Resources;
 
 namespace Microsoft.Web.LibraryManager.Providers.FileSystem
@@ -48,6 +50,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// Does not support libraries with versions.
         /// </summary>
         public bool SupportsLibraryVersions => false;
+
+        public ILibraryNamingScheme LibraryNamingScheme { get; } = new SimpleLibraryNamingScheme();
 
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
@@ -146,6 +150,9 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                     return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, Id));
                 }
 
+                desiredState.Name = library.Name;
+                desiredState.Version = library.Version;
+
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
                     return LibraryOperationResult.FromSuccess(desiredState);
@@ -157,6 +164,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                     LibraryId = desiredState.LibraryId,
                     DestinationPath = desiredState.DestinationPath,
                     Files = library.Files.Keys.ToList(),
+                    Name = desiredState.Name,
+                    Version = desiredState.Version
                 };
             }
             catch (InvalidLibraryException)
@@ -254,6 +263,16 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 throw new ResourceDownloadException(sourceUrl);
             }
+        }
+
+        public (string Name, string Version) GetLibraryNameAndVersion(string libraryId)
+        {
+            return LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+        }
+
+        public string GetLibraryId(string name, string version)
+        {
+            return LibraryNamingScheme.GetLibraryId(name, version);
         }
     }
 }

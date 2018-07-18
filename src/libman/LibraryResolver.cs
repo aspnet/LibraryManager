@@ -16,49 +16,41 @@ namespace Microsoft.Web.LibraryManager.Tools
     /// </summary>
     internal static class LibraryResolver
     {
-        /// <summary>
-        /// Resolves libraries that match partial name
-        /// </summary>
-        /// <param name="partialName">Can be display name or library id.</param>
-        /// <param name="manifest"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public static IReadOnlyList<ILibraryInstallationState> Resolve(
-            string partialName,
-            Manifest manifest,
-            IProvider provider)
+        public static IReadOnlyList<ILibraryInstallationState> ResolveByName(
+            string libraryName,
+            IEnumerable<ILibraryInstallationState> libraries,
+            IDependencies dependenices,
+            IProvider selectedProvider)
         {
             var resolvedLibraries = new List<ILibraryInstallationState>();
 
-            if (manifest?.Libraries == null || !manifest.Libraries.Any() || string.IsNullOrEmpty(partialName))
+            if (libraries == null || !libraries.Any() || string.IsNullOrEmpty(libraryName))
             {
                 return resolvedLibraries;
             }
 
-            var idMatches = new List<ILibraryInstallationState>();
             var nameMatches = new List<ILibraryInstallationState>();
 
-            foreach(ILibraryInstallationState state in manifest.Libraries)
+            foreach (ILibraryInstallationState state in libraries)
             {
-                if (provider != null && !state.ProviderId.Equals(provider.Id, StringComparison.OrdinalIgnoreCase))
+                if (selectedProvider != null && !state.ProviderId.Equals(selectedProvider.Id, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                if (state.LibraryId.Equals(partialName, StringComparison.OrdinalIgnoreCase))
+                IProvider provider = dependenices.GetProvider(state.ProviderId);
+                if (provider == null)
                 {
-                    idMatches.Add(state);
+                    continue;
                 }
-                else if (state.Name.Equals(partialName, StringComparison.OrdinalIgnoreCase))
+
+                if (libraryName.Equals(provider.GetLibraryNameAndVersion(state.LibraryId).Name, StringComparison.OrdinalIgnoreCase))
                 {
                     nameMatches.Add(state);
                 }
             }
 
-            // Maintain ordering of id matches before name matches.
-            idMatches.AddRange(nameMatches);
-
-            return idMatches;
+            return nameMatches;
         }
 
         /// <summary>

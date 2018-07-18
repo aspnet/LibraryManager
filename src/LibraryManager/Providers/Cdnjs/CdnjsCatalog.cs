@@ -86,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         var completion = new CompletionItem
                         {
                             DisplayText = version,
-                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, version, _provider.Id),
+                            InsertionText = _provider.LibraryNamingScheme.GetLibraryId(name, version),
                         };
 
                         completions.Add(completion);
@@ -134,7 +134,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
+            (string name, string version) = _provider.GetLibraryNameAndVersion(libraryId);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
@@ -168,7 +168,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
+            (string name, string version) = _provider.LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
@@ -197,7 +197,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             if (!string.IsNullOrEmpty(first))
             {
-                return LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(first, _provider.Id).Version;
+                return _provider.LibraryNamingScheme.GetLibraryNameAndVersion(first).Version;
             }
 
             return null;
@@ -271,7 +271,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             IEnumerable<Asset> assets = await GetAssetsAsync(groupName, cancellationToken).ConfigureAwait(false);
 
-            return assets?.Select(a => LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(groupName, a.Version, _provider.Id));
+            return assets?.Select(a => _provider.LibraryNamingScheme.GetLibraryId(groupName, a.Version));
         }
 
         private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)

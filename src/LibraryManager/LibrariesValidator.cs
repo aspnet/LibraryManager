@@ -42,13 +42,6 @@ namespace Microsoft.Web.LibraryManager
                 return validateLibraries;
             }
 
-            // Check for duplicate libraries
-            IEnumerable<ILibraryOperationResult> duplicateLibraries = GetDuplicateLibrariesErrors(libraries);
-            if (!duplicateLibraries.All(t => t.Success))
-            {
-                return duplicateLibraries;
-            }
-
             // Check for files conflicts
             IEnumerable<ILibraryOperationResult> expandLibraries = await ExpandLibrariesAsync(libraries, dependencies, defaultDestination, defaultProvider, cancellationToken).ConfigureAwait(false);
             if (!expandLibraries.All(t => t.Success))
@@ -56,7 +49,15 @@ namespace Microsoft.Web.LibraryManager
                 return expandLibraries;
             }
 
+            // Check for duplicate libraries
+            IEnumerable<ILibraryOperationResult> duplicateLibraries = GetDuplicateLibrariesErrors(libraries);
+            if (!duplicateLibraries.All(t => t.Success))
+            {
+                return duplicateLibraries;
+            }
+
             libraries = expandLibraries.Select(l => l.InstallationState);
+
             IEnumerable<FileConflict> fileConflicts = GetFilesConflicts(libraries);
             ILibraryOperationResult conflictErrors = GetConflictErrors(fileConflicts);
 

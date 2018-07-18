@@ -115,9 +115,17 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new InvalidOperationException(string.Join(Environment.NewLine, errors));
             }
 
-            return LibraryResolver.Resolve(LibraryId.Value,
-                manifest,
-                provider);
+
+            var idMatches = new List<ILibraryInstallationState>();
+
+            idMatches.AddRange(manifest.Libraries.Where(l => l.LibraryId.Equals(LibraryId.Value, StringComparison.OrdinalIgnoreCase)));
+
+            idMatches.AddRange(LibraryResolver.ResolveByName(LibraryId.Value,
+                manifest.Libraries,
+                ManifestDependencies,
+                provider));
+
+            return idMatches;
         }
 
         public override string Remarks => Resources.Text.UnInstallCommandRemarks;

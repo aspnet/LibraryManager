@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.LibraryNaming;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Resources;
 
@@ -64,6 +65,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// Supports libraries with versions.
         /// </summary>
         public bool SupportsLibraryVersions => true;
+
+        /// <summary>
+        /// LibraryNamingScheme used by this provider.
+        /// </summary>
+        /// <returns></returns>
+        public ILibraryNamingScheme LibraryNamingScheme { get; } = new VersionedLibraryNamingScheme();
 
         /// <summary>
         /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
@@ -197,6 +204,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
                 }
 
+                desiredState.Name = library.Name;
+                desiredState.Version = library.Version;
+
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
@@ -217,6 +227,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     LibraryId = desiredState.LibraryId,
                     DestinationPath = desiredState.DestinationPath,
                     Files = library.Files.Keys.ToList(),
+                    Name = desiredState.Name,
+                    Version = desiredState.Version
                 };
             }
             catch (InvalidLibraryException)
@@ -310,6 +322,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             try
             {
+                (state.Name, state.Version) = GetLibraryNameAndVersion(state.LibraryId);
                 if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
                 {
                     string cacheDir = Path.Combine(CacheFolder, state.Name, state.Version);
@@ -333,6 +346,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             return true;
+        }
+
+        public (string Name, string Version) GetLibraryNameAndVersion(string libraryId)
+        {
+            return LibraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+        }
+
+        public string GetLibraryId(string name, string version)
+        {
+            return LibraryNamingScheme.GetLibraryId(name, version);
         }
     }
 }

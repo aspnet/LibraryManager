@@ -236,7 +236,7 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
       ""{ManifestConstants.Provider}"": ""unpkg"",
       ""{ManifestConstants.Destination}"": ""lib2"",
-      ""{ManifestConstants.Files}"": [ ""jquery.js"" ]
+      ""{ManifestConstants.Files}"": [ ""dist/jquery.js"" ]
     }},
   ]
 }}

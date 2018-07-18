@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 
@@ -28,8 +27,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
             var dependencies = new Dependencies(hostInteraction, new CdnjsProviderFactory());
-
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(dependencies);
 
             _provider = dependencies.GetProvider("cdnjs");
             _catalog = _provider.GetCatalog();
