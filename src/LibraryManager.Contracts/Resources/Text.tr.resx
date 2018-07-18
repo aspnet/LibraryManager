@@ -19,7 +19,7 @@
     <value>Kitaplık kimliği tanımlı değil</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Bildirim dosyası söz dizimi hataları içeriyor</value>
+    <value>Kitaplık Yöneticisi bildirimi sözdizimi hataları içeriyor. Lütfen libman.json dosyasındaki hataları düzeltin ve tekrar deneyin.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>"Hedef" tanımlı değil.</value>

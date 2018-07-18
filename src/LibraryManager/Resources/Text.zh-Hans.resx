@@ -145,4 +145,25 @@
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>不可用</value>
   </data>
+  <data name="Clean_OperationCompletedWithErrors" xml:space="preserve">
+    <value>清理操作完成，但出现错误</value>
+  </data>
+  <data name="Restore_OperationCompletedWithErrors" xml:space="preserve">
+    <value>还原操作完成，但出现错误</value>
+  </data>
+  <data name="Uninstall_OperationCompletedWithErrors" xml:space="preserve">
+    <value>卸载操作完成，但出现错误</value>
+  </data>
+  <data name="Upgrade_OperationCompletedWithErrors" xml:space="preserve">
+    <value>升级操作完成，但出现错误</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesUptodate" xml:space="preserve">
+    <value>{0} 库是最新状态</value>
+  </data>
+  <data name="Uninstall_OperationCompleted" xml:space="preserve">
+    <value>卸载操作完成</value>
+  </data>
+  <data name="Upgrade_OperationCompleted" xml:space="preserve">
+    <value>升级操作完成</value>
+  </data>
 </root>

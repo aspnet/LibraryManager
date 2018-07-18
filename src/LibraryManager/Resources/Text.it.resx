@@ -145,4 +145,25 @@
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>Non disponibile</value>
   </data>
+  <data name="Clean_OperationCompletedWithErrors" xml:space="preserve">
+    <value>L'operazione di pulizia è stata completata con errori</value>
+  </data>
+  <data name="Restore_OperationCompletedWithErrors" xml:space="preserve">
+    <value>L'operazione di ripristino è stata completata con errori</value>
+  </data>
+  <data name="Uninstall_OperationCompletedWithErrors" xml:space="preserve">
+    <value>L'operazione di disinstallazione è stata completata con errori</value>
+  </data>
+  <data name="Upgrade_OperationCompletedWithErrors" xml:space="preserve">
+    <value>L'operazione di aggiornamento è stata completata con errori</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesUptodate" xml:space="preserve">
+    <value>{0} librerie sono aggiornate</value>
+  </data>
+  <data name="Uninstall_OperationCompleted" xml:space="preserve">
+    <value>Operazione di disinstallazione completata</value>
+  </data>
+  <data name="Upgrade_OperationCompleted" xml:space="preserve">
+    <value>Operazione di aggiornamento completata</value>
+  </data>
 </root>

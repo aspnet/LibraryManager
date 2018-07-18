@@ -19,7 +19,7 @@
     <value>Identyfikator biblioteki nie został zdefiniowany</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Plik manifestu zawiera błędy składni</value>
+    <value>Manifest menedżera biblioteki zawiera błędy składniowe. Usuń te błędy w pliku libman.json, a następnie spróbuj ponownie.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>„Miejsce docelowe” nie jest zdefiniowane.</value>

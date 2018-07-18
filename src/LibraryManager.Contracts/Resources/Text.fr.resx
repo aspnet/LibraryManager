@@ -19,7 +19,7 @@
     <value>L'ID de la bibliothèque n'est pas défini</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Le fichier manifeste contient des erreurs de syntaxe</value>
+    <value>Le manifeste du Gestionnaire de bibliothèques contient des erreurs de syntaxe. Corrigez les erreurs dans libman.json, puis réessayez.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>La "destination" n'est pas définie.</value>

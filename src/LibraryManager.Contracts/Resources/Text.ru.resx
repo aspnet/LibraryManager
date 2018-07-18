@@ -19,7 +19,7 @@
     <value>Идентификатор библиотеки не определен</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Файл манифеста содержит синтаксические ошибки</value>
+    <value>Манифест диспетчера библиотек содержит синтаксические ошибки. Исправьте ошибки в файле libman.json и повторите попытку.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>Назначение не определено.</value>

@@ -19,7 +19,7 @@
     <value>El id. de la biblioteca no está definido</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>El archivo de manifiesto contiene errores de sintaxis</value>
+    <value>El manifiesto del Administrador de bibliotecas contiene errores de sintaxis. Corrija los errores en libman.json e inténtelo de nuevo.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>El "destino" no está definido.</value>

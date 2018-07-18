@@ -19,7 +19,7 @@
     <value>L'ID libreria non è definito</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Il file manifesto contiene errori di sintassi</value>
+    <value>Il manifesto di Gestione librerie contiene errori di sintassi. Correggere gli errori in libman.json, quindi riprovare.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>Il valore di "destinazione" non è definito.</value>
