@@ -145,4 +145,25 @@
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>無法使用</value>
   </data>
+  <data name="Clean_OperationCompletedWithErrors" xml:space="preserve">
+    <value>清除作業已完成，但有錯誤</value>
+  </data>
+  <data name="Restore_OperationCompletedWithErrors" xml:space="preserve">
+    <value>還原作業已完成，但有錯誤</value>
+  </data>
+  <data name="Uninstall_OperationCompletedWithErrors" xml:space="preserve">
+    <value>解除安裝作業已完成，但有錯誤</value>
+  </data>
+  <data name="Upgrade_OperationCompletedWithErrors" xml:space="preserve">
+    <value>升級作業已完成，但有錯誤</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesUptodate" xml:space="preserve">
+    <value>{0} 個程式庫已是最新</value>
+  </data>
+  <data name="Uninstall_OperationCompleted" xml:space="preserve">
+    <value>解除安裝作業已完成</value>
+  </data>
+  <data name="Upgrade_OperationCompleted" xml:space="preserve">
+    <value>升級作業已完成</value>
+  </data>
 </root>

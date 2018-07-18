@@ -19,7 +19,7 @@
     <value>라이브러리 ID가 정의되어 있지 않습니다.</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>매니페스트 파일에 구문 오류가 있습니다.</value>
+    <value>라이브러리 관리자 매니페스트에 구문 오류가 있습니다. libman.json에서 해당 오류를 수정한 후 다시 시도하세요.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>"대상"이 정의되어 있지 않습니다.</value>

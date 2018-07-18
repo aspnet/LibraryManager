@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="de" original="MICROSOFT.WEB.LIBRARYMANAGER/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
       <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6810.0" tool-company="Microsoft" />
@@ -19,7 +19,6 @@
         <trans-unit id="FileWrittenToDisk" translate="yes" xml:space="preserve">
           <source>{0} written to destination</source>
           <target state="translated">{0} ins Ziel geschrieben.</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
           <note from="MultilingualBuild" annotates="source" priority="2">Shows in Output Window when a file was successfully added to project</note>
         </trans-unit>
         <trans-unit id="LibraryInfoUpdateFailed" translate="yes" xml:space="preserve">
@@ -181,6 +180,34 @@
         <trans-unit id="LibraryDetail_Unavailable" translate="yes" xml:space="preserve">
           <source>Unavailable</source>
           <target state="translated">Nicht verfügbar.</target>
+        </trans-unit>
+        <trans-unit id="Clean_OperationCompletedWithErrors" translate="yes" xml:space="preserve">
+          <source>Clean operation completed with errors</source>
+          <target state="translated">Bereinigungsvorgang mit Fehlern abgeschlossen.</target>
+        </trans-unit>
+        <trans-unit id="Restore_OperationCompletedWithErrors" translate="yes" xml:space="preserve">
+          <source>Restore operation completed with errors</source>
+          <target state="translated">Wiederherstellungsvorgang mit Fehlern abgeschlossen.</target>
+        </trans-unit>
+        <trans-unit id="Uninstall_OperationCompletedWithErrors" translate="yes" xml:space="preserve">
+          <source>Uninstall operation completed with errors</source>
+          <target state="translated">Deinstallationsvorgang mit Fehlern abgeschlossen.</target>
+        </trans-unit>
+        <trans-unit id="Upgrade_OperationCompletedWithErrors" translate="yes" xml:space="preserve">
+          <source>Upgrade operation completed with errors</source>
+          <target state="translated">Upgradevorgang mit Fehlern abgeschlossen.</target>
+        </trans-unit>
+        <trans-unit id="Restore_NumberOfLibrariesUptodate" translate="yes" xml:space="preserve">
+          <source>{0} libraries are up-to-date</source>
+          <target state="translated">{0} Bibliotheken sind auf dem neuesten Stand.</target>
+        </trans-unit>
+        <trans-unit id="Uninstall_OperationCompleted" translate="yes" xml:space="preserve">
+          <source>Uninstall operation completed</source>
+          <target state="translated">Deinstallationsvorgang abgeschlossen</target>
+        </trans-unit>
+        <trans-unit id="Upgrade_OperationCompleted" translate="yes" xml:space="preserve">
+          <source>Upgrade operation completed</source>
+          <target state="translated">Upgradevorgang abgeschlossen</target>
         </trans-unit>
       </group>
     </body>

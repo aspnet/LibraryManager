@@ -19,7 +19,7 @@
     <value>Die Bibliotheks-ID ist nicht definiert.</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Die Manifestdatei enthält Syntaxfehler.</value>
+    <value>Das Bibliotheks-Manager-Manifest enthält Syntaxfehler. Korrigieren Sie die Fehler in "libman.json", und versuchen Sie es noch mal.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>Das "Ziel" ist nicht definiert.</value>

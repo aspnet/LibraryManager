@@ -145,4 +145,25 @@
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>사용할 수 없음</value>
   </data>
+  <data name="Clean_OperationCompletedWithErrors" xml:space="preserve">
+    <value>정리 작업이 완료되었지만 오류가 발생함</value>
+  </data>
+  <data name="Restore_OperationCompletedWithErrors" xml:space="preserve">
+    <value>복원 작업이 완료되었지만 오류가 발생함</value>
+  </data>
+  <data name="Uninstall_OperationCompletedWithErrors" xml:space="preserve">
+    <value>제거 작업이 완료되었지만 오류가 발생함</value>
+  </data>
+  <data name="Upgrade_OperationCompletedWithErrors" xml:space="preserve">
+    <value>업그레이드 작업이 완료되었지만 오류가 발생함</value>
+  </data>
+  <data name="Restore_NumberOfLibrariesUptodate" xml:space="preserve">
+    <value>라이브러리 {0}개가 최신 상태임</value>
+  </data>
+  <data name="Uninstall_OperationCompleted" xml:space="preserve">
+    <value>제거 작업이 완료됨</value>
+  </data>
+  <data name="Upgrade_OperationCompleted" xml:space="preserve">
+    <value>업그레이드 작업이 완료됨</value>
+  </data>
 </root>

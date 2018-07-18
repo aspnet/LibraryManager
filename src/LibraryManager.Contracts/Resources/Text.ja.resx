@@ -19,7 +19,7 @@
     <value>ライブラリ ID は定義されていません</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>マニフェスト ファイルに構文エラーがあります</value>
+    <value>ライブラリ マネージャーのマニフェストに構文エラーがあります。libman.json のエラーを修正してからもう一度お試しください。</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>"宛先" が定義されていません。</value>

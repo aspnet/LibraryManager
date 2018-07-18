@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="fr" original="MICROSOFT.WEB.LIBRARYMANAGER.CONTRACTS/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
       <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6810.0" tool-company="Microsoft" />
@@ -15,18 +15,16 @@
           <target state="translated">L'ID de la bibliothèque n'est pas défini</target>
         </trans-unit>
         <trans-unit id="ErrorManifestMalformed" translate="yes" xml:space="preserve">
-          <source>The manifest file contains syntax errors</source>
-          <target state="translated">Le fichier manifeste contient des erreurs de syntaxe</target>
+          <source>Library Manager manifest contains syntax errors. Please fix the errors in libman.json, then try again.</source>
+          <target state="translated">Le manifeste du Gestionnaire de bibliothèques contient des erreurs de syntaxe. Corrigez les erreurs dans libman.json, puis réessayez.</target>
         </trans-unit>
         <trans-unit id="ErrorPathIsUndefined" translate="yes" xml:space="preserve">
           <source>The "destination" is undefined.</source>
           <target state="translated">La "destination" n'est pas définie.</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorPathOutsideWorkingDirectory" translate="yes" xml:space="preserve">
           <source>The "destination" must be inside the working directory</source>
           <target state="translated">La "destination" doit se trouver dans le répertoire de travail</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ErrorProviderIsUndefined" translate="yes" xml:space="preserve">
           <source>The provider is undefined</source>

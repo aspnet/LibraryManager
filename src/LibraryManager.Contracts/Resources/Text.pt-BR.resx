@@ -19,7 +19,7 @@
     <value>A id da biblioteca é indefinida</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>O arquivo de manifesto contém erros de sintaxe</value>
+    <value>O manifesto do Gerenciador de Bibliotecas contém erros de sintaxe. Corrija os erros em libman.json e tente novamente.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>O "destino" é indefinido.</value>

@@ -19,7 +19,7 @@
     <value>ID knihovny není definováno.</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>Soubor manifestu obsahuje chyby syntaxe.</value>
+    <value>Manifest Správce knihoven obsahuje syntaktické chyby. Opravte prosím chyby v libman.json a pak to zkuste znovu.</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>Cíl není definován.</value>

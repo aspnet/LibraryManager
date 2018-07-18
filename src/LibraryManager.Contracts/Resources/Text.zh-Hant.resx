@@ -19,7 +19,7 @@
     <value>程式庫識別碼未定義</value>
   </data>
   <data name="ErrorManifestMalformed" xml:space="preserve">
-    <value>資訊清單檔案包含語法錯誤</value>
+    <value>程式庫管理員資訊清單包含語法錯誤。請修正 libman.json 中的錯誤，然後再試一次。</value>
   </data>
   <data name="ErrorPathIsUndefined" xml:space="preserve">
     <value>"destination" 未定義。</value>

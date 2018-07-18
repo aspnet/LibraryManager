@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="fr" original="MICROSOFT.WEB.LIBRARYMANAGER.VSIX/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
       <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6810.0" tool-company="Microsoft" />
@@ -70,12 +70,10 @@ Do you want to continue?</source>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
           <target state="translated">Désactiv&amp;er les bibliothèques côté client sur la build</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
           <target state="translated">&amp;Activer la restauration des bibliothèques côté client sur la build</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
