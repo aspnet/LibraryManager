@@ -113,6 +113,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             var tasks = new List<Task>();
+            (state.Name, state.Version) = GetLibraryNameAndVersion(state.LibraryId);
+
             string libraryDir = Path.Combine(CacheFolder, state.Name);
 
             try
@@ -151,6 +153,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private bool IsLibraryUpToDate(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
+            (state.Name, state.Version) = GetLibraryNameAndVersion(state.LibraryId);
+
             string cacheDir = Path.Combine(CacheFolder, state.Name, state.Version);
             string destinationDir = Path.Combine(HostInteraction.WorkingDirectory, state.DestinationPath);
 
@@ -219,6 +223,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
         {
+            (state.Name, state.Version) = GetLibraryNameAndVersion(state.LibraryId);
+
             string absolute = Path.Combine(CacheFolder, state.Name, state.Version, sourceFile);
 
             if (File.Exists(absolute))

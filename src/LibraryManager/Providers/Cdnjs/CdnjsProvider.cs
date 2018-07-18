@@ -322,6 +322,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             try
             {
+                (state.Name, state.Version) = GetLibraryNameAndVersion(state.LibraryId);
                 if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
                 {
                     string cacheDir = Path.Combine(CacheFolder, state.Name, state.Version);
