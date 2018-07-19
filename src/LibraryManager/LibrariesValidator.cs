@@ -17,8 +17,8 @@ namespace Microsoft.Web.LibraryManager
     internal static class LibrariesValidator
     {
         /// <summary>
-        /// Returns a collection of <see cref="ILibraryOperationResult"/> that represents the status for validation of each 
-        ///  library 
+        /// Returns a collection of <see cref="ILibraryOperationResult"/> that represents the status for validation of each
+        ///  library
         /// </summary>
         /// <param name="libraries">Set of libraries to be validated</param>
         /// <param name="dependencies"><see cref="IDependencies"/>used to validate the libraries</param>
@@ -102,7 +102,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Validates the values of each Library property and returns a collection of ILibraryOperationResult for each of them 
+        /// Validates the values of each Library property and returns a collection of ILibraryOperationResult for each of them
         /// </summary>
         /// <param name="libraries"></param>
         /// <param name="dependencies"></param>
@@ -162,7 +162,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Expands the files property for each library 
+        /// Expands the files property for each library
         /// </summary>
         /// <param name="libraries"></param>
         /// <param name="dependencies"></param>
@@ -205,7 +205,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Detects files conflicts in between libraries in the given collection 
+        /// Detects files conflicts in between libraries in the given collection
         /// </summary>
         /// <param name="libraries"></param>
         /// <returns>A collection of <see cref="FileConflict"/> for each library conflict</returns>
@@ -248,7 +248,7 @@ namespace Microsoft.Web.LibraryManager
                 var errors = new List<IError>();
                 foreach (FileConflict conflictingLibraryGroup in fileConflicts)
                 {
-                    errors.Add(PredefinedErrors.ConflictingFilesInManifest(conflictingLibraryGroup.File, conflictingLibraryGroup.Libraries.Select(l => l.LibraryId).ToList()));
+                    errors.Add(PredefinedErrors.ConflictingFilesInManifest(conflictingLibraryGroup.File, conflictingLibraryGroup.Libraries.Select(l => l.Name).ToList()));
                 }
 
                 return new LibraryOperationResult(errors.ToArray());

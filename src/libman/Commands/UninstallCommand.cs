@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Tools.Commands
 {
@@ -72,16 +73,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
 
-            ILibraryOperationResult result = await manifest.UninstallAsync(libraryToUninstall.LibraryId, deleteFileAction, CancellationToken.None);
+            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUninstall.Name, libraryToUninstall.Version, libraryToUninstall.ProviderId);
+
+            ILibraryOperationResult result = await manifest.UninstallAsync(libraryToUninstall.Name, libraryToUninstall.Version, deleteFileAction, CancellationToken.None);
 
             if (result.Success)
             {
                 await manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
-                Logger.Log(string.Format(Resources.Text.UninstalledLibrary, libraryToUninstall.LibraryId), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.Text.UninstalledLibrary, libraryId), LogLevel.Operation);
             }
             else
             {
-                Logger.Log(string.Format(Resources.Text.UninstallFailed, libraryToUninstall.LibraryId), LogLevel.Error);
+                Logger.Log(string.Format(Resources.Text.UninstallFailed, libraryId), LogLevel.Error);
                 foreach (IError error in result.Errors)
                 {
                     Logger.Log($"[{error.Code}]: {error.Message}", LogLevel.Error);

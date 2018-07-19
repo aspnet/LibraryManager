@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager
     public static class Extensions
     {
         /// <summary>
-        /// Validates <see cref="ILibraryInstallationState"/> 
+        /// Validates <see cref="ILibraryInstallationState"/>
         /// </summary>
         /// <param name="state">The <see cref="ILibraryInstallationState"/> to validate.</param>
         /// <param name="dependencies">The <see cref="IDependencies"/> used to validate <see cref="ILibraryInstallationState"/></param>
@@ -46,7 +46,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        ///  Validates <see cref="ILibraryInstallationState"/> 
+        ///  Validates <see cref="ILibraryInstallationState"/>
         /// </summary>
         /// <param name="state">The <see cref="ILibraryInstallationState"/> to validate.</param>
         /// <param name="provider">The <see cref="IProvider"/> used to validate <see cref="ILibraryInstallationState"/></param>
@@ -63,7 +63,7 @@ namespace Microsoft.Web.LibraryManager
                 return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderUnknown(provider.Id) });
             }
 
-            if (string.IsNullOrEmpty(state.LibraryId))
+            if (string.IsNullOrEmpty(state.Name))
             {
                 return new LibraryOperationResult(state, new[] { PredefinedErrors.LibraryIdIsUndefined() });
             }
@@ -71,11 +71,11 @@ namespace Microsoft.Web.LibraryManager
             ILibraryCatalog catalog = provider.GetCatalog();
             try
             {
-                await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None).ConfigureAwait(false);
+                await catalog.GetLibraryAsync(state.Name, state.Version, CancellationToken.None).ConfigureAwait(false);
             }
             catch
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.UnableToResolveSource(state.LibraryId, provider.Id) });
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.UnableToResolveSource(state.Name, state.Version, provider.Id) });
             }
 
             if (string.IsNullOrEmpty(state.DestinationPath))

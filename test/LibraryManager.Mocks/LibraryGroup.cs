@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <returns>
         /// A list of library IDs used to display library information to the user.
         /// </returns>
-        public virtual Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
+        public virtual Task<IEnumerable<string>> GetLibraryVersions(CancellationToken cancellationToken)
         {
             string[] ids = { "test" };
             return Task.FromResult<IEnumerable<string>>(ids);

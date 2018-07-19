@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
@@ -236,14 +237,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
+            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(desiredState.Name, desiredState.Version, desiredState.ProviderId);
             try
             {
                 ILibraryCatalog catalog = GetCatalog();
-                ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
+                ILibrary library = await catalog.GetLibraryAsync(desiredState.Name, desiredState.Version, cancellationToken).ConfigureAwait(false);
+
 
                 if (library == null)
                 {
-                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
+                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(libraryId, desiredState.ProviderId));
                 }
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
@@ -251,7 +254,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
                     if (invalidFiles.Any())
                     {
-                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.LibraryId, invalidFiles, library.Files.Keys);
+                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(libraryId, invalidFiles, library.Files.Keys);
                         return new LibraryOperationResult(desiredState, invalidFilesError);
                     }
                     else
@@ -263,14 +266,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 desiredState = new LibraryInstallationState
                 {
                     ProviderId = Id,
-                    LibraryId = desiredState.LibraryId,
+                    Name = desiredState.Name,
+                    Version = desiredState.Version,
                     DestinationPath = desiredState.DestinationPath,
                     Files = library.Files.Keys.ToList(),
                 };
             }
             catch (InvalidLibraryException)
             {
-                return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
+                return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(libraryId, desiredState.ProviderId));
             }
             catch (UnauthorizedAccessException)
             {

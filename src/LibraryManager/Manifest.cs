@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Json;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Newtonsoft.Json;
 
@@ -43,26 +44,21 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>
         /// The version of the <see cref="Manifest"/> document format.
         /// </summary>
-        [JsonProperty(ManifestConstants.Version)]
         public string Version { get; set; }
 
         /// <summary>
         /// The default <see cref="Manifest"/> library provider.
         /// </summary>
-        [JsonProperty(ManifestConstants.DefaultProvider)]
         public string DefaultProvider { get; set; }
 
         /// <summary>
         /// The default destination path for libraries.
         /// </summary>
-        [JsonProperty(ManifestConstants.DefaultDestination)]
         public string DefaultDestination { get; set; }
 
         /// <summary>
         /// A list of libraries contained in the <see cref="Manifest"/>.
         /// </summary>
-        [JsonProperty(ManifestConstants.Libraries)]
-        [JsonConverter(typeof(LibraryStateTypeConverter))]
         public IEnumerable<ILibraryInstallationState> Libraries => _libraries;
 
         /// <summary>
@@ -99,11 +95,12 @@ namespace Microsoft.Web.LibraryManager
             try
             {
                 LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(dependencies);
-                Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
-                manifest._dependencies = dependencies;
-                manifest._hostInteraction = dependencies.GetHostInteractions();
+                ManifestOnDisk manifestOnDisk = JsonConvert.DeserializeObject<ManifestOnDisk>(json);
 
-                UpdateLibraryProviderAndDestination(manifest);
+                var manifestConverter = new ManifestToFileConverter();
+                Manifest manifest = manifestConverter.ConvertToManifest(manifestOnDisk, dependencies);
+
+                manifest._hostInteraction = dependencies.GetHostInteractions();
 
                 return manifest;
             }
@@ -114,15 +111,15 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Removes the library from the <see cref="Libraries"/>
+        /// Updates the version of the given library installation state.
         /// </summary>
         /// <param name="libraryToUpdate"></param>
-        /// <param name="newlibraryId"></param>
-        public void ReplaceLibraryId(ILibraryInstallationState libraryToUpdate, string newlibraryId)
+        /// <param name="newVersion"></param>
+        public void UpdateLibraryVersion(ILibraryInstallationState libraryToUpdate, string newVersion)
         {
             if (libraryToUpdate != null && libraryToUpdate is LibraryInstallationState state)
             {
-                state.LibraryId = newlibraryId;
+                state.Version = newVersion;
             }
         }
 
@@ -171,7 +168,8 @@ namespace Microsoft.Web.LibraryManager
             {
                 var newState = new LibraryInstallationState()
                 {
-                    LibraryId = lib.LibraryId,
+                    Name = lib.Name,
+                    Version = lib.Version,
                     DestinationPath = lib.DestinationPath,
                     Files = lib.Files == null ? null : new List<string>(lib.Files),
                     ProviderId = lib.ProviderId,
@@ -188,14 +186,16 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>
         /// Installs a library with the given libraryId
         /// </summary>
-        /// <param name="libraryId"></param>
+        /// <param name="libraryName"></param>
+        /// <param name="version"></param>
         /// <param name="providerId"></param>
         /// <param name="files"></param>
         /// <param name="destination"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public async Task<IEnumerable<ILibraryOperationResult>> InstallLibraryAsync(
-            string libraryId,
+            string libraryName,
+            string version,
             string providerId,
             IReadOnlyList<string> files,
             string destination,
@@ -205,13 +205,15 @@ namespace Microsoft.Web.LibraryManager
 
             var desiredState = new LibraryInstallationState()
             {
-                LibraryId = libraryId,
+                Name =  libraryName,
+                Version = version,
                 Files = files,
                 ProviderId = providerId,
                 DestinationPath = destination
             };
 
             UpdateLibraryProviderAndDestination(desiredState, DefaultProvider, DefaultDestination);
+
             ILibraryOperationResult validationResult = await desiredState.IsValidAsync(_dependencies);
             if (!validationResult.Success)
             {
@@ -272,7 +274,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="state">An instance of <see cref="ILibraryInstallationState"/> representing the library to add.</param>
         internal void AddLibrary(ILibraryInstallationState state)
         {
-            ILibraryInstallationState existing = _libraries.Find(p => p.LibraryId == state.LibraryId && p.ProviderId == state.ProviderId);
+            ILibraryInstallationState existing = _libraries.Find(p => p.Name == state.Name && p.Version == state.Version && p.ProviderId == state.ProviderId);
 
             if (existing != null)
             {
@@ -328,7 +330,8 @@ namespace Microsoft.Web.LibraryManager
 
         private async Task<ILibraryOperationResult> RestoreLibraryAsync(ILibraryInstallationState libraryState, CancellationToken cancellationToken)
         {
-            _hostInteraction.Logger.Log(string.Format(Resources.Text.Restore_RestoreOfLibraryStarted, libraryState.LibraryId, libraryState.DestinationPath), LogLevel.Operation);
+            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryState.Name, libraryState.Version, libraryState.ProviderId);
+            _hostInteraction.Logger.Log(string.Format(Resources.Text.Restore_RestoreOfLibraryStarted, libraryId, libraryState.DestinationPath), LogLevel.Operation);
 
             if (cancellationToken.IsCancellationRequested)
             {
@@ -354,12 +357,13 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>
         /// Uninstalls the specified library and removes it from the <see cref="Libraries"/> collection.
         /// </summary>
-        /// <param name="libraryId">The library identifier.</param>
+        /// <param name="libraryName">Name of the library.</param>
+        /// <param name="version">Version of the library to uninstall.</param>
         /// <param name="deleteFilesFunction"></param>
         /// <param name="cancellationToken"></param>
-        public async Task<ILibraryOperationResult> UninstallAsync(string libraryId, Func<IEnumerable<string>, Task<bool>> deleteFilesFunction, CancellationToken cancellationToken)
+        public async Task<ILibraryOperationResult> UninstallAsync(string libraryName, string version, Func<IEnumerable<string>, Task<bool>> deleteFilesFunction, CancellationToken cancellationToken)
         {
-            ILibraryInstallationState library = Libraries.FirstOrDefault(l => l.LibraryId == libraryId);
+            ILibraryInstallationState library = Libraries.FirstOrDefault(l => l.Name == libraryName && l.Version == version);
 
             if (cancellationToken.IsCancellationRequested)
             {
@@ -391,7 +395,7 @@ namespace Microsoft.Web.LibraryManager
                 }
             }
 
-            return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(library.LibraryId));
+            return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(libraryName));
         }
 
         /// <summary>
@@ -423,7 +427,9 @@ namespace Microsoft.Web.LibraryManager
                 }
             }
 
-            string json = JsonConvert.SerializeObject(this, settings);
+            ManifestOnDisk manifestOnDisk = new ManifestToFileConverter().ConvertToManifestOnDisk(this);
+
+            string json = JsonConvert.SerializeObject(manifestOnDisk, settings);
 
             UpdateLibraryProviderAndDestination(this);
 
@@ -523,7 +529,7 @@ namespace Microsoft.Web.LibraryManager
 
                     if (updatedStateResult.Success)
                     {
-                        ILibrary library = await catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None).ConfigureAwait(false);
+                        ILibrary library = await catalog.GetLibraryAsync(state.Name, state.Version, CancellationToken.None).ConfigureAwait(false);
 
                         if (library != null && library.Files != null)
                         {
@@ -550,6 +556,7 @@ namespace Microsoft.Web.LibraryManager
         {
 
             cancellationToken.ThrowIfCancellationRequested();
+            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, state.ProviderId);
 
             try
             {
@@ -584,7 +591,7 @@ namespace Microsoft.Web.LibraryManager
                     }
                     else
                     {
-                        return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(state.LibraryId));
+                        return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(libraryId));
                     }
                 }
 
@@ -596,7 +603,7 @@ namespace Microsoft.Web.LibraryManager
             }
             catch (Exception)
             {
-                return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(state.LibraryId));
+                return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(libraryId));
             }
         }
     }

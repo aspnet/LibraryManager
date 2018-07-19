@@ -3,8 +3,6 @@
 
 using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.LibraryNaming;
-using Newtonsoft.Json;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -13,92 +11,39 @@ namespace Microsoft.Web.LibraryManager
     /// <seealso cref="Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" />
     internal class LibraryInstallationState : ILibraryInstallationState
     {
-
-        private string _providerId;
-
         /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
-        [JsonProperty(ManifestConstants.Provider)]
-        public string ProviderId
-        {
-            get
-            {
-                return _providerId;
-            }
-            set
-            {
-                if (_providerId != value)
-                {
-                    string oldProviderId = _providerId;
-                    _providerId = value;
-                    string originalLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(Name, Version, oldProviderId);
-
-                    (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(
-                        originalLibraryId,
-                        _providerId);
-
-                    Name = name;
-                    Version = version;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The identifyer to uniquely identify the library
-        /// </summary>
-        [JsonProperty(ManifestConstants.Library)]
-        public string LibraryId
-        {
-             get
-             {
-                return LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(Name, Version, _providerId);
-             }
-             set
-             {
-                (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(
-                    value,
-                    _providerId);
-
-                Name = name;
-                Version = version;
-             }
-        }
+        public string ProviderId { get; set; }
 
         /// <summary>
         /// The path relative to the working directory to copy the files to.
         /// </summary>
-        [JsonProperty(ManifestConstants.Destination)]
         public string DestinationPath { get; set; }
 
         /// <summary>
         /// The list of file names to install
         /// </summary>
-        [JsonProperty(ManifestConstants.Files)]
         public IReadOnlyList<string> Files { get; set; }
 
         /// <summary>
         /// Tells whether the library was installed/ restored using default provider.
         /// </summary>
-        [JsonIgnore]
         public bool IsUsingDefaultProvider { get; set; }
 
         /// <summary>
         /// Tells whether the library was installed/ restored to default destination.
         /// </summary>
-        [JsonIgnore]
         public bool IsUsingDefaultDestination { get; set; }
 
         /// <summary>
         /// Name of the library.
         /// </summary>
-        [JsonIgnore]
         public string Name { get; set; }
 
         /// <summary>
         /// Version of the library.
         /// </summary>
-        [JsonIgnore]
         public string Version { get; set; }
 
         /// <summary>Internal use only</summary>
@@ -111,10 +56,13 @@ namespace Microsoft.Web.LibraryManager
 
             return new LibraryInstallationState
             {
-                LibraryId = state.LibraryId,
+                Name = state.Name,
+                Version = state.Version,
                 ProviderId = normalizedProviderId,
                 Files = state.Files,
-                DestinationPath = normalizedDestinationPath
+                DestinationPath = normalizedDestinationPath,
+                IsUsingDefaultDestination = state.IsUsingDefaultDestination,
+                IsUsingDefaultProvider = state.IsUsingDefaultProvider
             };
         }
     }

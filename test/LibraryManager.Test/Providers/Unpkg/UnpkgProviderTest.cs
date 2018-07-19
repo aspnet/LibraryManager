@@ -55,16 +55,17 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             Assert.AreEqual("jquery", group.DisplayName);
 
             // Get all libraries in group to display version list
-            IEnumerable<string> libraryIds = await group.GetLibraryIdsAsync(CancellationToken.None);
-            Assert.IsTrue(libraryIds.Count() >= 0);
+            IEnumerable<string> libraryVersions = await group.GetLibraryVersions(CancellationToken.None);
+            Assert.IsTrue(libraryVersions.Count() >= 0);
 
             // Get the library to install
-            ILibrary library = await catalog.GetLibraryAsync(libraryIds.First(), CancellationToken.None);
+            ILibrary library = await catalog.GetLibraryAsync(group.DisplayName, libraryVersions.First(), CancellationToken.None);
             Assert.AreEqual(group.DisplayName, library.Name);
 
             var desiredState = new LibraryInstallationState
             {
-                LibraryId = "jquery@3.3.1",
+                Name = "jquery",
+                Version="3.3.1",
                 ProviderId = "unpkg",
                 DestinationPath = "lib",
                 Files = new[] { "dist/jquery.js", "dist/jquery.min.js" }
@@ -90,7 +91,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         {
             var desiredState = new LibraryInstallationState
             {
-                LibraryId = "*&(}:@3.3.1",
+                Name = "*&(}:",
+                Version = "3.3.1",
                 ProviderId = "unpkg",
                 DestinationPath = "lib",
                 Files = new[] { "dist/jquery.min.js" }
@@ -107,7 +109,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "unpkg",
-                LibraryId = "jquery@3.3.1",
+                Name = "jquery",
+                Version = "3.3.1",
                 DestinationPath = "lib"
             };
 
@@ -128,7 +131,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "unpkg",
-                LibraryId = "jquery@3.3.1"
+                Name = "jquery",
+                Version = "3.3.1"
             };
 
             // Install library
@@ -144,7 +148,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         {
             var desiredState = new LibraryInstallationState
             {
-                LibraryId = "jquery@3.3.1",
+                Name = "jquery",
+                Version = "3.3.1",
                 DestinationPath = "lib"
             };
 
@@ -158,7 +163,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         {
             var desiredState = new LibraryInstallationState
             {
-                LibraryId = "jquery@3.3.1",
+                Name = "jquery",
+                Version = "3.3.1",
                 ProviderId = "unpkg",
                 DestinationPath = "lib",
                 Files = new[] { "file1.txt", "file2.txt" }

@@ -42,9 +42,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             Assert.AreEqual(3, result.Count);
 
-            Assert.AreEqual("jquery", result[0].LibraryId);
-            Assert.AreEqual("jquery@3.3.1", result[1].LibraryId);
-            Assert.AreEqual("jquery@2.2.0", result[2].LibraryId);
+            Assert.AreEqual("jquery", result[0].Name);
+            Assert.AreEqual("", result[0].Version);
+            Assert.AreEqual("jquery", result[1].Name);
+            Assert.AreEqual("3.3.1", result[1].Version);
+            Assert.AreEqual("jquery", result[2].Name);
+            Assert.AreEqual("2.2.0", result[2].Version);
 
             // Matches jquery for cdnjs provider
             result = LibraryResolver.Resolve(
@@ -54,8 +57,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             Assert.AreEqual(2, result.Count);
 
-            Assert.AreEqual("jquery@3.3.1", result[0].LibraryId);
-            Assert.AreEqual("jquery@2.2.0", result[1].LibraryId);
+            Assert.AreEqual("jquery", result[0].Name);
+            Assert.AreEqual("3.3.1", result[0].Version);
+            Assert.AreEqual("jquery", result[1].Name);
+            Assert.AreEqual("2.2.0", result[1].Version);
 
             // Matches only one result.
             result = LibraryResolver.Resolve(
@@ -64,7 +69,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
                 null);
 
             Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("jquery@3.3.1", result[0].LibraryId);
+            Assert.AreEqual("jquery", result[0].Name);
+            Assert.AreEqual("3.3.1", result[0].Version);
 
             // Does not match library for a different provider.
             result = LibraryResolver.Resolve(
@@ -110,7 +116,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             ILibraryInstallationState result = LibraryResolver.ResolveLibraryByUserChoice(manifest.Libraries, HostEnvironment);
 
-            Assert.AreEqual("jquery@3.3.1", result.LibraryId);
+            Assert.AreEqual("jquery", result.Name);
+            Assert.AreEqual("3.3.1", result.Version);
         }
 
         private string _manifestContents = @"{
