@@ -43,10 +43,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
             Assert.AreEqual(10, absolute.Count);
-            IEnumerable<string> libraryId = await absolute[0].GetLibraryIdsAsync(token);
-            Assert.IsTrue(libraryId.Any());
+            IEnumerable<string> libraryVersions = await absolute[0].GetLibraryVersions(token);
+            Assert.IsTrue(libraryVersions.Any());
 
-            ILibrary library = await _catalog.GetLibraryAsync(libraryId.First(), token);
+            ILibrary library = await _catalog.GetLibraryAsync(absolute[0].DisplayName, libraryVersions.First(), token);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual("jquery", library.Name);
             Assert.AreEqual(0, library.Files.Count(f => f.Value));
@@ -84,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         public async Task GetLibraryAsync_Success()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("jquery@3.3.1", token);
+            ILibrary library = await _catalog.GetLibraryAsync("jquery", "3.3.1", token);
 
             Assert.IsNotNull(library);
             Assert.AreEqual("jquery", library.Name);
@@ -95,7 +95,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", token);
+            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", "invalid_version", token);
         }
 
         [TestMethod]
@@ -130,13 +130,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         {
             CancellationToken token = CancellationToken.None;
             const string libraryId = "bootstrap@3.3.0";
-            string result = await _catalog.GetLatestVersion(libraryId, false, token);
+            string[] existing = libraryId.Split('@');
+            string result = await _catalog.GetLatestVersion(existing[0], false, token);
 
             // It can return null value.
             if (result != null)
             {
-                string[] existing = libraryId.Split('@');
-
                 Assert.AreNotEqual(existing[1], result);
             }
         }
@@ -146,13 +145,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         {
             CancellationToken token = CancellationToken.None;
             const string libraryId = "bootstrap@3.3.0";
-            string result = await _catalog.GetLatestVersion(libraryId, true, token);
+            string[] existing = libraryId.Split('@');
+            string result = await _catalog.GetLatestVersion(existing[0], true, token);
 
             // It can return null value.
             if (result != null)
             {
-                string[] existing = libraryId.Split('@');
-
                 Assert.AreNotEqual(existing[1], result);
             }
         }

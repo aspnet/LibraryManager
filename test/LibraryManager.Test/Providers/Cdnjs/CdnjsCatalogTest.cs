@@ -45,10 +45,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
             IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
             Assert.AreEqual(1, absolute.Count);
-            IEnumerable<string> libraryId = await absolute[0].GetLibraryIdsAsync(token);
-            Assert.IsTrue(libraryId.Any());
+            IEnumerable<string> versions = await absolute[0].GetLibraryVersions(token);
+            Assert.IsTrue(versions.Any());
 
-            ILibrary library = await _catalog.GetLibraryAsync(libraryId.First(), token);
+            ILibrary library = await _catalog.GetLibraryAsync(absolute[0].DisplayName, versions.First(), token);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual(expectedId, library.Name);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
@@ -86,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLibraryAsync_Success()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("jquery@3.1.1", token);
+            ILibrary library = await _catalog.GetLibraryAsync("jquery", "3.1.1", token);
 
             Assert.IsNotNull(library);
             Assert.AreEqual("jquery", library.Name);
@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", token);
+            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", "invalid_version" , token);
         }
 
         [TestMethod]
@@ -131,28 +131,28 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLatestVersion_LatestExist()
         {
             CancellationToken token = CancellationToken.None;
-            const string libraryId = "twitter-bootstrap@3.3.0";
-            string result = await _catalog.GetLatestVersion(libraryId, false, token);
+            // "twitter-bootstrap@3.3.0"
+            const string libraryName = "twitter-bootstrap";
+            const string oldVersion = "3.3.0";
+            string result = await _catalog.GetLatestVersion(libraryName, false, token);
 
             Assert.IsNotNull(result);
 
-            string[] existing = libraryId.Split('@');
-
-            Assert.AreNotEqual(existing[1], result);
+            Assert.AreNotEqual(oldVersion, result);
         }
 
         [TestMethod]
         public async Task GetLatestVersion_PreRelease()
         {
             CancellationToken token = CancellationToken.None;
-            const string libraryId = "twitter-bootstrap@3.3.0";
-            string result = await _catalog.GetLatestVersion(libraryId, true, token);
+            // "twitter-bootstrap@3.3.0"
+            const string libraryName = "twitter-bootstrap";
+            const string oldVersion = "3.3.0";
+            string result = await _catalog.GetLatestVersion(libraryName, true, token);
 
             Assert.IsNotNull(result);
 
-            string[] existing = libraryId.Split('@');
-
-            Assert.AreNotEqual(existing[1], result);
+            Assert.AreNotEqual(oldVersion, result);
         }
 
         [TestMethod]

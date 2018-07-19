@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -42,7 +43,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static void AddLineAndColumn(IEnumerable<string> lines, ILibraryInstallationState state, DisplayError[] errors)
         {
-            if (string.IsNullOrEmpty(state?.LibraryId))
+            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state?.Name, state?.Version, state?.ProviderId);
+
+            if(string.IsNullOrEmpty(libraryId))
             {
                 return;
             }
@@ -58,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     if (line.Trim() == "{")
                         index = i;
 
-                    if (line.Contains(state.LibraryId))
+                    if (line.Contains(libraryId))
                     {
                         error.Line = index > 0 ? index : i;
                         break;

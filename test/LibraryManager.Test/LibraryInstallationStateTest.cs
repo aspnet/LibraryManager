@@ -43,14 +43,15 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new Mocks.LibraryInstallationState
             {
                 ProviderId = "_prov_",
-                LibraryId = "_lib_",
+                Name = "_lib_",
                 DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };
 
             var lis = LibraryInstallationState.FromInterface(state);
             Assert.AreEqual(state.ProviderId, lis.ProviderId);
-            Assert.AreEqual(state.LibraryId, lis.LibraryId);
+            Assert.AreEqual(state.Name, lis.Name);
+            Assert.AreEqual(state.Version, lis.Version);
             Assert.AreEqual(state.DestinationPath, lis.DestinationPath);
             Assert.AreEqual(state.Files, lis.Files);
         }
@@ -73,7 +74,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new Mocks.LibraryInstallationState
             {
                 ProviderId = "_prov_",
-                LibraryId = "_lib_",
+                Name = "_lib_",
                 DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };
@@ -90,7 +91,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             var state = new Mocks.LibraryInstallationState
             {
-                LibraryId = "_lib_",
+                Name = "_lib_",
                 DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };
@@ -125,7 +126,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new Mocks.LibraryInstallationState
             {
                 ProviderId = "unpkg",
-                LibraryId = "_lib_",
+                Name = "_lib_",
                 DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };
@@ -143,7 +144,8 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new Mocks.LibraryInstallationState
             {
                 ProviderId = "unpkg",
-                LibraryId = "jquery@3.3.1",
+                Name = "jquery",
+                Version = "3.3.1",
                 DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };
@@ -161,7 +163,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new Mocks.LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                LibraryId = "|lib_",
+                Name = "|lib_",
                 DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };
@@ -179,7 +181,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new Mocks.LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                LibraryId = "lib",
+                Name = "lib",
                 DestinationPath = "lib",
             };
 
@@ -196,7 +198,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new Mocks.LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                LibraryId = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
+                Name = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
                 DestinationPath = "lib",
                 Files = new[] { "foo.png" }
             };
@@ -213,7 +215,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new Mocks.LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                LibraryId = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
+                Name = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
                 DestinationPath = "|lib"
             };
 
@@ -221,7 +223,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
-            Assert.AreEqual(result.Errors.First().Code, "LIB012");
+            Assert.AreEqual("LIB012", result.Errors.First().Code);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.JSON.Core.Parser;
 using Microsoft.JSON.Core.Parser.TreeItems;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Json;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -64,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return max + 1;
         }
 
-        public static bool TryGetInstallationState(JSONObject parent, out ILibraryInstallationState installationState)
+        public static bool TryGetInstallationState(JSONObject parent, out ILibraryInstallationState installationState, string defaultProvider = null)
         {
             installationState = null;
 
@@ -73,7 +74,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return false;
             }
 
-            var state = new LibraryInstallationState();
+            var state = new LibraryInstallationStateOnDisk();
 
             foreach (JSONMember child in parent.Children.OfType<JSONMember>())
             {
@@ -124,7 +125,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
-            installationState = state;
+            var converter = new LibraryStateToFileConverter(defaultProvider, defaultDestination: null);
+            installationState = converter.ConvertToLibraryInstallationState(state);
 
             return !string.IsNullOrEmpty(installationState.ProviderId);
         }
