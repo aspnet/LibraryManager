@@ -154,5 +154,76 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
             Assert.AreNotEqual(existing[1], result);
         }
+
+        [TestMethod]
+        public void ConvertToLibraryGroup_ValidJsonCatalog()
+        {
+            string json = @"{""results"":[{""name"":""1140"",""latest"":""https://cdnjs.cloudflare.com/ajax/libs/1140/2.0/1140.min.css"",
+""description"":""The 1140 grid fits perfectly into a 1280 monitor. On smaller monitors it becomes fluid and adapts to the width of the browser.""
+,""version"":""2.0""}],""total"":1}";
+
+            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+
+            IEnumerable<CdnjsLibraryGroup> libraryGroup = cdnjsCatalog.ConvertToLibraryGroups(json);
+
+            Assert.AreEqual(1, libraryGroup.Count());
+            CdnjsLibraryGroup library = libraryGroup.First();
+            Assert.AreEqual("1140", library.DisplayName);
+            Assert.AreEqual("The 1140 grid fits perfectly into a 1280 monitor. On smaller monitors it becomes fluid and adapts to the width of the browser.", library.Description);
+            Assert.AreEqual("2.0", library.Version);
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(@"{""results"":[12}")]
+        public void ConvertToLibraryGroup_InvalidJsonCatalog(string json)
+        {
+            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+
+            IEnumerable<CdnjsLibraryGroup> libraryGroup = cdnjsCatalog.ConvertToLibraryGroups(json);
+
+            Assert.IsNull(libraryGroup);
+        }
+
+        [TestMethod]
+        public void ConvertToAssets_ValidAsset()
+        {
+            string json = @"{""name"":""jquery"",""filename"":""jquery.min.js"",""version"":""3.3.1"",""description"":""JavaScript library for DOM operations"",
+""homepage"":""http://jquery.com/"",""keywords"":[""jquery"",""library"",""ajax"",""framework"",""toolkit"",""popular""],""namespace"":""jQuery"",
+""repository"":{""type"":""git"",""url"":""https://github.com/jquery/jquery.git""},""license"":""MIT"",
+""author"":{""name"":""jQuery Foundation and other contributors"",""url"":""https://github.com/jquery/jquery/blob/master/AUTHORS.txt""},
+""autoupdate"":{""type"":""npm"",""target"":""jquery""},
+""assets"":[{""version"":""3.3.1"",""files"":[""core.js"",""jquery.js"",""jquery.min.js"",""jquery.min.map"",""jquery.slim.js"",""jquery.slim.min.js"",""jquery.slim.min.map""]}]}";
+
+            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+
+            List<Asset> list = cdnjsCatalog.ConvertToAssets(json);
+
+            Assert.AreEqual(1, list.Count());
+            Asset asset = list[0];
+            Assert.AreEqual("3.3.1", asset.Version);
+
+            string[] expectedFiles = new string[] { "core.js", "jquery.js", "jquery.min.js", "jquery.min.map", "jquery.slim.js", "jquery.slim.min.js", "jquery.slim.min.map" };
+            Assert.AreEqual(7, asset.Files.Count());
+            foreach(string file in expectedFiles)
+            {
+                Assert.IsTrue(asset.Files.Contains(file));
+            }
+
+            Assert.AreEqual("jquery.min.js", asset.DefaultFile);
+        }
+
+        [TestMethod]
+        public void ConvertToAssets_InvalidAsset()
+        {
+            string json = "abcd";
+
+            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+
+            List<Asset> list = cdnjsCatalog.ConvertToAssets(json);
+
+            Assert.IsNull(list);
+        }
     }
 }

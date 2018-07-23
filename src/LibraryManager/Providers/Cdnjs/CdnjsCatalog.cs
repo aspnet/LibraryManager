@@ -250,10 +250,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     return false;
                 }
 
-                string obj = ((JObject)JsonConvert.DeserializeObject(json))["results"].ToString();
+                _libraryGroups = ConvertToLibraryGroups(json);
 
-                _libraryGroups = JsonConvert.DeserializeObject<IEnumerable<CdnjsLibraryGroup>>(obj).ToArray();
-                return true;
+                return _libraryGroups != null;
             }
             catch (ResourceDownloadException)
             {
@@ -276,7 +275,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)
         {
-            var list = new List<Asset>();
+            var assets = new List<Asset>();
             string localFile = Path.Combine(_provider.CacheFolder, groupName, "metadata.json");
             string url = string.Format(_metaPackageUrlFormat, groupName);
 
@@ -286,17 +285,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
                 if (!string.IsNullOrEmpty(json))
                 {
-                    var root = JObject.Parse(json);
-                    if (root["assets"] != null)
-                    {
-                        IEnumerable<Asset> assets = JsonConvert.DeserializeObject<IEnumerable<Asset>>(root["assets"].ToString());
-                        string defaultFileName = root["filename"]?.Value<string>();
+                    assets = ConvertToAssets(json);
 
-                        foreach (Asset asset in assets)
-                        {
-                            asset.DefaultFile = defaultFileName;
-                            list.Add(asset);
-                        }
+                    if (assets == null)
+                    {
+                        throw new Exception();
                     }
                 }
             }
@@ -309,7 +302,49 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 throw new InvalidLibraryException(groupName, _provider.Id);
             }
 
-            return list;
+            return assets;
+        }
+
+        internal IEnumerable<CdnjsLibraryGroup> ConvertToLibraryGroups(string json)
+        {
+            try
+            {
+                string obj = ((JObject)JsonConvert.DeserializeObject(json))["results"].ToString();
+
+                return JsonConvert.DeserializeObject<IEnumerable<CdnjsLibraryGroup>>(obj).ToArray();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Write(ex);
+
+                return null;
+            }
+        }
+
+        internal List<Asset> ConvertToAssets(string json)
+        {
+            try
+            {
+                List<Asset> assets = new List<Asset>();
+
+                var root = JObject.Parse(json);
+                if (root["assets"] != null)
+                {
+                    assets = JsonConvert.DeserializeObject<IEnumerable<Asset>>(root["assets"].ToString()).ToList();
+                    string defaultFileName = root["filename"]?.Value<string>();
+
+                    if (assets != null)
+                    {
+                        assets.ForEach(a => a.DefaultFile = defaultFileName);
+                    }
+                }
+
+                return assets;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
