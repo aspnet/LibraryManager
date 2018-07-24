@@ -6,12 +6,12 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Mocks;
-using Microsoft.Web.LibraryManager.Providers.Cdnjs;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
-namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
+namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 {
     [TestClass]
-    public class CdnjsProviderFactoryTest
+    public class UnpkgProviderFactoryTest
     {
         private IHostInteraction _hostInteraction;
 
@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public void CreateProvider_Success()
         {
-            var factory = new CdnjsProviderFactory();
+            var factory = new UnpkgProviderFactory();
             IProvider provider = factory.CreateProvider(_hostInteraction);
 
             Assert.AreSame(_hostInteraction.WorkingDirectory, provider.HostInteraction.WorkingDirectory);
@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void CreateProvider_NullParameter()
         {
-            var factory = new CdnjsProviderFactory();
+            var factory = new UnpkgProviderFactory();
             IProvider provider = factory.CreateProvider(null);
         }
     }
