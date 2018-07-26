@@ -65,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken)
         {
-            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(new[] { configFilePath }, cancellationToken);
+            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(new[] { configFilePath }, cancellationToken).ConfigureAwait(false);
 
             if (manifests.Count > 0)
             {
@@ -75,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken)
         {
-            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(configFilePaths, cancellationToken);
+            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(configFilePaths, cancellationToken).ConfigureAwait(false);
             await RestoreAsync(manifests, cancellationToken);
         }
 

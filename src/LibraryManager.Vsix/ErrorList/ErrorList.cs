@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static void AddLineAndColumn(IEnumerable<string> lines, ILibraryInstallationState state, DisplayError[] errors)
         {
-            if(string.IsNullOrEmpty(state?.LibraryId))
+            if (string.IsNullOrEmpty(state?.LibraryId))
             {
                 return;
             }
