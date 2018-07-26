@@ -7,8 +7,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
     /// </summary>
     internal class InstallDialogTestContract
     {
-        public static IInstallDialogTestContract window;
+        public static IInstallDialogTestContract Window;
         // This event lets apex know when the dialog is open.
-        public static EventWaitHandle windowIsUp = new EventWaitHandle(false, EventResetMode.ManualReset);
+        public static EventWaitHandle WindowIsUp = new EventWaitHandle(false, EventResetMode.ManualReset);
     }
 }
