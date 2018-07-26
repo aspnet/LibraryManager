@@ -55,14 +55,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void OnActivateTestContract()
         {
-            InstallDialogTestContract.window = this;
-            InstallDialogTestContract.windowIsUp.Set();
+            InstallDialogTestContract.Window = this;
+            InstallDialogTestContract.WindowIsUp.Set();
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            InstallDialogTestContract.windowIsUp.Reset();
-            InstallDialogTestContract.window = null;
+            InstallDialogTestContract.WindowIsUp.Reset();
+            InstallDialogTestContract.Window = null;
         }
 
         internal InstallDialogViewModel ViewModel

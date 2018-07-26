@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Microsoft.Test.Apex.VisualStudio.Shell.ToolWindows;
 using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.IntegrationTest.Services;
@@ -9,27 +8,47 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     [TestClass]
     public class AddCientSideLibrariesFromUITests : VisualStudioLibmanHostTest
     {
-        ProjectTestExtension _webProject;
-        ProjectItemTestExtension _libManConfig;
+        private ProjectTestExtension _webProject;
         const string _projectName = @"TestProjectCore20";
         const string _libman = "libman.json";
         private string _initialLibmanFileContent;
         private string _pathToLibmanFile;
 
-        [TestInitialize]
-        public void Initialize()
+        protected override void DoHostTestInitialize()
         {
+            base.DoHostTestInitialize();
+
             _webProject = Solution[_projectName];
-            _libManConfig = _webProject[_libman];
+            ProjectItemTestExtension libmanConfig = _webProject[_libman];
             _pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, _libman);
             _initialLibmanFileContent = File.ReadAllText(_pathToLibmanFile);
 
-            if (File.Exists(_libManConfig.FullPath))
+            string libmanConfigFullPath = libmanConfig.FullPath;
+
+            if (File.Exists(libmanConfigFullPath))
             {
                 string projectPath = Path.Combine(SolutionRootPath, _projectName);
-                _libManConfig.Delete();
-                Helpers.FileIO.WaitForDeletedFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false);
+                libmanConfig.Delete();
+                Helpers.FileIO.WaitForDeletedFile(projectPath, libmanConfigFullPath, caseInsensitive: false);
             }
+        }
+
+        protected override void DoHostTestCleanup()
+        {
+            ProjectItemTestExtension libManConfig = _webProject[_libman];
+
+            if (libManConfig != null)
+            {
+                libManConfig.Open();
+
+                Editor.Selection.SelectAll();
+                Editor.KeyboardCommands.Delete();
+                Editor.Edit.InsertTextInBuffer(_initialLibmanFileContent);
+
+                libManConfig.Save();
+            }
+
+            base.DoHostTestCleanup();
         }
 
         [TestMethod]
@@ -93,23 +112,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             installDialogTestExtenstion.SetLibrary(library);
             installDialogTestExtenstion.WaitForFileSelections();
             installDialogTestExtenstion.ClickInstall();
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            _libManConfig = _webProject[_libman];
-
-            if (_libManConfig != null)
-            {
-                _libManConfig.Open();
-
-                Editor.Selection.SelectAll();
-                Editor.KeyboardCommands.Backspace();
-                Editor.Edit.InsertTextInBuffer(_initialLibmanFileContent);
-
-                _libManConfig.Save();
-            }
         }
     }
 }

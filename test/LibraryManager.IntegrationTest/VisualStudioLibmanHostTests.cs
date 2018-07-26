@@ -42,8 +42,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         protected override void DoHostTestCleanup()
         {
-            Thread.Sleep(1000); // This can be removed after bug 624281 get fixed
-
             base.DoHostTestCleanup();
         }
 
