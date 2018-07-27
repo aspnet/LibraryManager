@@ -24,11 +24,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
                 await ExecuteCommandAsync(guid, commandId);
             });
 
-            return WaitForDialog(TimeSpan.FromSeconds(5));
+            return WaitForDialog();
         }
 
         private async Task ExecuteCommandAsync(Guid guid, uint commandId)
         {
+            // We don't wait for completion of the command, since this invokes ShowDialog() which is blocking.
             await Task.Factory.StartNew(() =>
             {
                 UIInvoke(() =>
@@ -57,16 +58,14 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             return null;
         }
 
-        private InstallDialogTestExtension WaitForDialog(TimeSpan timeout)
+        private InstallDialogTestExtension WaitForDialog()
         {
-            InstallDialogTestExtension installDialogExtension = GetInstallDialogTestExtension();
-
-            if (!InstallDialogTestContract.WindowIsUp.WaitOne(TimeSpan.FromMilliseconds(timeout.TotalMilliseconds * SynchronizationService.TimeoutMultiplier)))
+            VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                throw new TimeoutException("Add -> Client Side Libraries dialog didn't pop up");
-            }
+                await InstallDialogTestContract.WindowIsUp?.Task;
+            });
 
-            installDialogExtension = GetInstallDialogTestExtension();
+            InstallDialogTestExtension installDialogExtension = GetInstallDialogTestExtension();
 
             return installDialogExtension;
         }

@@ -56,12 +56,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         private void OnActivateTestContract()
         {
             InstallDialogTestContract.Window = this;
-            InstallDialogTestContract.WindowIsUp.Set();
+            InstallDialogTestContract.WindowIsUp.TrySetResult(true);
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            InstallDialogTestContract.WindowIsUp.Reset();
+            InstallDialogTestContract.WindowIsUp = null;
             InstallDialogTestContract.Window = null;
         }
 
