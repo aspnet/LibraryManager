@@ -1,12 +1,12 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Windows.Media;
 using Microsoft.JSON.Editor.Completion;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.Editor.Completion;
-using System.Windows.Media;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
