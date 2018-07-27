@@ -77,11 +77,22 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (set.Completions != null)
                 {
+                    bool isVersionCompletion = (set.CompletionType == CompletionSortOrder.Version);
+
                     foreach (CompletionItem item in set.Completions)
                     {
+                        // Make sure to double-escape any singly-escaped backslashes.
                         string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                         ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                        yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
+
+                        if (isVersionCompletion)
+                        {
+                            yield return new VersionCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
+                        }
+                        else
+                        {
+                            yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
+                        }
                     }
                 }
             }
@@ -103,9 +114,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                             foreach (CompletionItem item in set.Completions)
                             {
-                                string insertionText = item.InsertionText.Replace("\\", "\\\\");
+                                string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                                 ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                                results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
+
+                                if (set.CompletionType == CompletionSortOrder.Version)
+                                {
+                                    results.Add(new VersionCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
+                                }
+                                else
+                                {
+                                    results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
+                                }
                             }
 
                             UpdateListEntriesSync(context, results);

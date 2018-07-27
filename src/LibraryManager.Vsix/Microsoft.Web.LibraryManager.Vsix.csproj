@@ -117,6 +117,7 @@
     <Compile Include="Json\Completion\BaseCompletionProvider.cs" />
     <Compile Include="Json\Completion\FilesCompletionProvider.cs" />
     <Compile Include="Json\Completion\LibraryIdCompletionProvider.cs" />
+    <Compile Include="Json\Completion\VersionCompletionEntry.cs" />
     <Compile Include="Json\Completion\SimpleCompletionEntry.cs" />
     <Compile Include="UI\Controls\Completion.cs" />
     <Compile Include="UI\Controls\EditorTooltip.xaml.cs">

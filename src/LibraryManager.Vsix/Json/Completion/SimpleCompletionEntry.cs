@@ -4,9 +4,9 @@
 using Microsoft.JSON.Editor.Completion;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.VisualStudio.Text;
 using Microsoft.Web.Editor.Completion;
 using System.Windows.Media;
-using Microsoft.VisualStudio.Text;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         }
 
         public SimpleCompletionEntry(string displayText, string insertionText, string description, ImageMoniker moniker, ITrackingSpan span, IIntellisenseSession session, int specificVersion = 0)
-           : base(displayText, "\"" + insertionText + "\"", description, null, null, false, session as ICompletionSession)
+            : base(displayText, "\"" + insertionText + "\"", description, null, null, false, session as ICompletionSession)
         {
             SetIconMoniker(moniker);
             ApplicableTo = span;
