@@ -1,4 +1,4 @@
-﻿using System.Threading;
+﻿using System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
@@ -8,7 +8,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
     internal class InstallDialogTestContract
     {
         public static IInstallDialogTestContract Window;
-        // This event lets apex know when the dialog is open.
-        public static EventWaitHandle WindowIsUp = new EventWaitHandle(false, EventResetMode.ManualReset);
+        // The TaskCompletionSource lets apex know when the dialog is open.
+        public static TaskCompletionSource<bool> WindowIsUp = new TaskCompletionSource<bool>();
     }
 }
