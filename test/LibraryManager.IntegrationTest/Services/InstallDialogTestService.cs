@@ -19,15 +19,23 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             Guid guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
             uint commandId = 0x0100;
 
-            Task.Factory.StartNew(() =>
+            VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await ExecuteCommandAsync(guid, commandId);
+            });
+
+            return WaitForDialog(TimeSpan.FromSeconds(5));
+        }
+
+        private async Task ExecuteCommandAsync(Guid guid, uint commandId)
+        {
+            await Task.Factory.StartNew(() =>
             {
                 UIInvoke(() =>
                 {
                     CommandingService.ExecuteCommand(guid, commandId, null);
                 });
             });
-
-            return WaitForDialog(TimeSpan.FromSeconds(5));
         }
 
         [Import]
@@ -63,19 +71,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             return installDialogExtension;
         }
 
-        [Import(AllowDefault = true)]
-        private Lazy<CommandingService> LazyCommandingService
+        [Import]
+        private CommandingService CommandingService
         {
             get;
             set;
-        }
-
-        private CommandingService CommandingService
-        {
-            get
-            {
-                return LazyCommandingService.Value;
-            }
         }
     }
 }

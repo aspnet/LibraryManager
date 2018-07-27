@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
         {
             get
             {
-                return this.ObjectUnderTest as IInstallDialogTestContract;
+                return ObjectUnderTest as IInstallDialogTestContract;
             }
         }
 
@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
         {
             UIInvoke(() =>
             {
-                this.InstallDialog.Library = library;
+                InstallDialog.Library = library;
             });
         }
 
@@ -33,7 +33,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             {
                 return UIInvoke(() =>
                 {
-                    return this.InstallDialog.IsAnyFileSelected;
+                    return InstallDialog.IsAnyFileSelected;
                 });
             }, TimeSpan.FromSeconds(20), conditionDescription: "File list not loaded");
         }
