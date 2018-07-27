@@ -4,7 +4,6 @@
     </PropertyGroup>
     <ItemGroup>
       <Compile Remove="FileHelperTest.cs" />
-      <Compile Remove="SemanticVersionComparisonTest.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Remove=".editorconfig" />
