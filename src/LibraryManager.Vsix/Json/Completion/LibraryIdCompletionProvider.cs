@@ -79,7 +79,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     foreach (JSONCompletionEntry completionEntry in results)
                     {
-                        yield return (completionSet.CompletionType == CompletionSortOrder.Version) ? completionEntry as VersionCompletionEntry : completionEntry as SimpleCompletionEntry;
+                        yield return completionEntry;
                     }
                 }
             }
