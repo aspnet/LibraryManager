@@ -72,15 +72,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (task.IsCompleted)
             {
                 CompletionSet completionSet = task.Result;
-                bool isVersionCompletion = (completionSet.CompletionType == CompletionSortOrder.Version);
 
                 if (completionSet.Completions != null)
                 {
-                    List<JSONCompletionEntry> results = GetCompletionList(member, context, completionSet, count, isVersionCompletion);
+                    List<JSONCompletionEntry> results = GetCompletionList(member, context, completionSet, count);
 
                     foreach (JSONCompletionEntry completionEntry in results)
                     {
-                        yield return isVersionCompletion ? completionEntry as VersionCompletionEntry : completionEntry as SimpleCompletionEntry;
+                        yield return (completionSet.CompletionType == CompletionSortOrder.Version) ? completionEntry as VersionCompletionEntry : completionEntry as SimpleCompletionEntry;
                     }
                 }
             }
@@ -93,11 +92,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     if (!context.Session.IsDismissed)
                     {
                         CompletionSet completionSet = task.Result;
-                        bool isVersionCompletion = (completionSet.CompletionType == CompletionSortOrder.Version);
 
                         if (completionSet.Completions != null)
                         {
-                            List<JSONCompletionEntry> results = GetCompletionList(member, context, completionSet, count, isVersionCompletion);
+                            List<JSONCompletionEntry> results = GetCompletionList(member, context, completionSet, count);
 
                             UpdateListEntriesSync(context, results);
                         }
@@ -106,10 +104,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private List<JSONCompletionEntry> GetCompletionList(JSONMember member, JSONCompletionContext context, CompletionSet completionSet, int count, bool isVersionCompletion)
+        private List<JSONCompletionEntry> GetCompletionList(JSONMember member, JSONCompletionContext context, CompletionSet completionSet, int count)
         {
             int start = member.Value.Start;
             ITrackingSpan trackingSpan = context.Snapshot.CreateTrackingSpan(start + 1 + completionSet.Start, completionSet.Length, SpanTrackingMode.EdgeExclusive);
+            bool isVersionCompletion = (completionSet.CompletionType == CompletionSortOrder.Version);
 
             List<JSONCompletionEntry> results = new List<JSONCompletionEntry>();
 
