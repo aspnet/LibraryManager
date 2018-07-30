@@ -71,7 +71,7 @@
     <Compile Include="UI\Converters\NotConverter.cs" />
     <Compile Include="UI\Converters\PackageItemIconConverter.cs" />
     <Compile Include="UI\Converters\VisibleIfNonNullConverter.cs" />
-    <Compile Include="UI\IInstallDialogTestContract.cs" />
+    <Compile Include="UI\IInstallDialog.cs" />
     <Compile Include="UI\InstallDialog.xaml.cs">
       <DependentUpon>InstallDialog.xaml</DependentUpon>
     </Compile>
