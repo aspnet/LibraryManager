@@ -16,7 +16,7 @@ using Shell = Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
-    internal partial class InstallDialog : DialogWindow, IInstallDialogTestContract
+    internal partial class InstallDialog : DialogWindow, IInstallDialog
     {
         private readonly IDependencies _deps;
         private readonly string _fullPath;
@@ -55,14 +55,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void OnActivateTestContract()
         {
-            InstallDialogTestContract.Window = this;
-            InstallDialogTestContract.WindowIsUp.TrySetResult(true);
+            InstallDialogProvider.Window = this;
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            InstallDialogTestContract.WindowIsUp = null;
-            InstallDialogTestContract.Window = null;
+            InstallDialogProvider.Window = null;
         }
 
         internal InstallDialogViewModel ViewModel
@@ -244,7 +242,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             }
         }
 
-        string IInstallDialogTestContract.Library
+        string IInstallDialog.Library
         {
             get
             {
@@ -256,12 +254,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             }
         }
 
-        async Task IInstallDialogTestContract.ClickInstallAsync()
+        async Task IInstallDialog.ClickInstallAsync()
         {
             await ClickInstallButtonAsync();
         }
 
-        bool IInstallDialogTestContract.IsAnyFileSelected
+        bool IInstallDialog.IsAnyFileSelected
         {
             get
             {

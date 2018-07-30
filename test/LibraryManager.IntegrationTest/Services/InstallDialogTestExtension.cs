@@ -11,11 +11,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
         /// <summary>
         /// Add client side libraries dialog test extension for interaction with visual studio inprocess types
         /// </summary>
-        public IInstallDialogTestContract InstallDialog
+        public IInstallDialog InstallDialog
         {
             get
             {
-                return ObjectUnderTest as IInstallDialogTestContract;
+                return ObjectUnderTest as IInstallDialog;
             }
         }
 

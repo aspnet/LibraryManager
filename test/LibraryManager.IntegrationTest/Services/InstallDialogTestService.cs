@@ -48,7 +48,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
 
         private InstallDialogTestExtension GetInstallDialogTestExtension()
         {
-            IInstallDialogTestContract addClientSideLibrariesDialogTestContract = InstallDialogTestContract.Window;
+            IInstallDialog addClientSideLibrariesDialogTestContract = InstallDialogProvider.Window;
 
             if (addClientSideLibrariesDialogTestContract != null)
             {
@@ -60,10 +60,13 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
 
         private InstallDialogTestExtension WaitForDialog()
         {
-            VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
+            if (InstallDialogProvider.Window == null)
             {
-                await InstallDialogTestContract.WindowIsUp?.Task;
-            });
+                VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    await InstallDialogProvider.WindowIsUp?.Task;
+                });
+            }
 
             InstallDialogTestExtension installDialogExtension = GetInstallDialogTestExtension();
 
