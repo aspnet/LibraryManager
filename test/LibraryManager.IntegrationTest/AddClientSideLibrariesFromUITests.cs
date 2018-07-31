@@ -7,14 +7,13 @@ using Microsoft.Web.LibraryManager.IntegrationTest.Services;
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
     [TestClass]
-    public class AddCientSideLibrariesFromUITests : VisualStudioLibmanHostTest
+    public class AddClientSideLibrariesFromUITests : VisualStudioLibmanHostTest
     {
-        private ProjectTestExtension _webProject;
-        const string _projectName = @"TestProjectCore20";
-        const string _libman = "libman.json";
         private string _initialLibmanFileContent;
         private string _pathToLibmanFile;
-
+        private ProjectTestExtension _webProject;
+        private const string _libman = "libman.json";
+        private const string _projectName = @"TestProjectCore20";
         protected override void DoHostTestInitialize()
         {
             base.DoHostTestInitialize();
@@ -36,17 +35,17 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         protected override void DoHostTestCleanup()
         {
-            ProjectItemTestExtension libManConfig = _webProject[_libman];
+            ProjectItemTestExtension libmanConfig = _webProject[_libman];
 
-            if (libManConfig != null)
+            if (libmanConfig != null)
             {
-                libManConfig.Open();
+                libmanConfig.Open();
 
                 Editor.Selection.SelectAll();
                 Editor.KeyboardCommands.Delete();
                 Editor.Edit.InsertTextInBuffer(_initialLibmanFileContent);
 
-                libManConfig.Save();
+                libmanConfig.Save();
             }
 
             base.DoHostTestCleanup();
@@ -113,7 +112,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             InstallDialogTestExtension installDialogTestExtenstion = installDialogTestService.OpenDialog();
 
             installDialogTestExtenstion.SetLibrary(library);
-            installDialogTestExtenstion.WaitForFileSelections();
             installDialogTestExtenstion.ClickInstall();
         }
     }

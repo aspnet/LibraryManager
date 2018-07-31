@@ -25,9 +25,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             {
                 InstallDialog.Library = library;
             });
+
+            WaitForFileSelections();
         }
 
-        public void WaitForFileSelections()
+        private void WaitForFileSelections()
         {
             WaitFor.IsTrue(() =>
             {

@@ -39,13 +39,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             });
         }
 
-        [Import]
-        private ISynchronizationService SynchronizationService
-        {
-            get;
-            set;
-        }
-
         private InstallDialogTestExtension GetInstallDialogTestExtension()
         {
             IInstallDialog addClientSideLibrariesDialogTestContract = InstallDialogProvider.Window;
@@ -84,6 +77,13 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
 
         [Import]
         private CommandingService CommandingService
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        private ISynchronizationService SynchronizationService
         {
             get;
             set;
