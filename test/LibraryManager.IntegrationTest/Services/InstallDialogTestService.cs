@@ -62,10 +62,19 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
         {
             if (InstallDialogProvider.Window == null)
             {
+                TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+                EventHandler onWindowChanged = (object sender, EventArgs e) =>
+                {
+                    tcs.SetResult(true);
+                };
+
+                InstallDialogProvider.WindowChanged += onWindowChanged;
                 VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    await InstallDialogProvider.WindowIsUp?.Task;
+                    await tcs.Task;
                 });
+
+                InstallDialogProvider.WindowChanged -= onWindowChanged;
             }
 
             InstallDialogTestExtension installDialogExtension = GetInstallDialogTestExtension();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
@@ -9,7 +8,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
     internal class InstallDialogProvider
     {
         private static IInstallDialog _installDialog;
-        public static TaskCompletionSource<bool> WindowIsUp = new TaskCompletionSource<bool>();
+        public static event EventHandler WindowChanged;
+
         public static IInstallDialog Window
         {
             get { return _installDialog; }
@@ -17,14 +17,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             {
                 _installDialog = value;
 
-                if (_installDialog == null)
-                {
-                    WindowIsUp = new TaskCompletionSource<bool>();
-                }
-                else
-                {
-                    WindowIsUp.TrySetResult(true);
-                }
+                WindowChanged?.Invoke(null, new EventArgs());
             }
         }
     }

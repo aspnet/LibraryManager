@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.Test.Apex.VisualStudio.Shell.ToolWindows;
 using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.IntegrationTest.Services;
@@ -105,7 +106,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         private void SetLibraryAndClickInstall(string nodeName, string library)
         {
-            SolutionExplorer.Select(nodeName);
+            SolutionExplorerItemTestExtension solutionExplorerItemTestExtension = SolutionExplorer.FindItemRecursive(nodeName);
+            solutionExplorerItemTestExtension.Select();
+
             InstallDialogTestService installDialogTestService = VisualStudio.Get<InstallDialogTestService>();
             InstallDialogTestExtension installDialogTestExtenstion = installDialogTestService.OpenDialog();
 
