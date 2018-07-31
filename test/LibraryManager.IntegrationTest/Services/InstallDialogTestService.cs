@@ -81,5 +81,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             get;
             set;
         }
+
+        [Import]
+        private ISynchronizationService SynchronizationService
+        {
+            get;
+            set;
+        }
     }
 }
