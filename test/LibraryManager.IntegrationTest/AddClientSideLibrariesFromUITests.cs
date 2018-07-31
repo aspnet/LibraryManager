@@ -14,6 +14,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         private ProjectTestExtension _webProject;
         private const string _libman = "libman.json";
         private const string _projectName = @"TestProjectCore20";
+
         protected override void DoHostTestInitialize()
         {
             base.DoHostTestInitialize();
