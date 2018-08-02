@@ -79,10 +79,34 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.xJsDelivr
                 Assert.IsTrue(File.Exists(absolute));
             }
 
+
+            //GitHub library test
             Assert.IsTrue(result.Success);
             Assert.IsFalse(result.Cancelled);
             Assert.AreSame(desiredState, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);
+
+            var desiredStateGH = new LibraryInstallationState
+            {
+                LibraryId = "jquery/jquery@3.3.1",
+                ProviderId = "jsdelivr",
+                DestinationPath = "lib",
+                Files = new[] { "dist/jquery.js", "dist/jquery.min.js" }
+            };
+
+            // Install library
+            ILibraryOperationResult resultGH = await _provider.InstallAsync(desiredStateGH, CancellationToken.None).ConfigureAwait(false);
+
+            foreach (string file in desiredStateGH.Files)
+            {
+                string absolute = Path.Combine(_projectFolder, desiredStateGH.DestinationPath, file);
+                Assert.IsTrue(File.Exists(absolute));
+            }
+
+            Assert.IsTrue(resultGH.Success);
+            Assert.IsFalse(resultGH.Cancelled);
+            Assert.AreSame(desiredStateGH, resultGH.InstallationState);
+            Assert.AreEqual(0, resultGH.Errors.Count);
         }
 
         [TestMethod]

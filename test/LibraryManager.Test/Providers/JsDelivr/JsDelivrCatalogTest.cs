@@ -89,6 +89,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.xJsDelivr
             Assert.IsNotNull(library);
             Assert.AreEqual("jquery", library.Name);
             Assert.AreEqual("3.3.1", library.Version);
+
+            ILibrary libraryGH = await _catalog.GetLibraryAsync("jquery/jquery@3.3.1", token);
+
+            Assert.IsNotNull(libraryGH);
+            Assert.AreEqual("jquery/jquery", libraryGH.Name);
+            Assert.AreEqual("3.3.1", libraryGH.Version);
         }
 
         [TestMethod, ExpectedException(typeof(InvalidLibraryException))]
@@ -136,8 +142,17 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.xJsDelivr
             if (result != null)
             {
                 string[] existing = libraryId.Split('@');
-
                 Assert.AreNotEqual(existing[1], result);
+            }
+
+            const string libraryIdGH = "twbs/bootstrap@3.3.0";
+            string resultGH = await _catalog.GetLatestVersion(libraryIdGH, false, token);
+
+            // It can return null value.
+            if (resultGH != null)
+            {
+                string[] existing = libraryIdGH.Split('@');
+                Assert.AreNotEqual(existing[1], resultGH);
             }
         }
 

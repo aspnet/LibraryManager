@@ -24,14 +24,22 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public async Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
         {
-            Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageInfo npmPackageInfo = await Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageInfoCache.GetPackageInfoAsync(DisplayName, CancellationToken.None);
 
-            if (npmPackageInfo != null)
+            if (JsDelivrCatalog.IsGitHub(DisplayName).Result)
             {
-                return npmPackageInfo.Versions
-                    .OrderByDescending(v => v)
-                    .Select(semanticVersion => LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(DisplayName, semanticVersion.ToString(), JsDelivrProvider.IdText))
-                    .ToList();
+
+            }
+            else
+            {
+                Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageInfo npmPackageInfo = await Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageInfoCache.GetPackageInfoAsync(DisplayName, CancellationToken.None);
+
+                if (npmPackageInfo != null)
+                {
+                    return npmPackageInfo.Versions
+                        .OrderByDescending(v => v)
+                        .Select(semanticVersion => LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(DisplayName, semanticVersion.ToString(), JsDelivrProvider.IdText))
+                        .ToList();
+                }
             }
 
             return Enumerable.Empty<string>();

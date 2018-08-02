@@ -15,6 +15,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
     {
         public const string IdText = "jsdelivr";
         public const string DownloadUrlFormat = "https://cdn.jsdelivr.net/npm/{0}@{1}/{2}";
+        public const string DownloadUrlFormatGH = "https://cdn.jsdelivr.net/gh/{0}@{1}/{2}";
 
         public JsDelivrProvider(IHostInteraction hostInteraction)
         {
@@ -115,7 +116,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 foreach (string sourceFile in state.Files)
                 {
                     string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
-                    string url = string.Format(DownloadUrlFormat, state.Name, state.Version, sourceFile);
+                    string url = string.Format(JsDelivrCatalog.IsGitHub(state.LibraryId).Result ? DownloadUrlFormatGH : DownloadUrlFormat, state.Name, state.Version, sourceFile);
 
                     CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
                     if (!librariesMetadata.Contains(newEntry))
