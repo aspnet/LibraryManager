@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using Microsoft.Test.Apex.Services;
+using Microsoft.Test.Apex.VisualStudio.Shell;
 using Microsoft.Test.Apex.VisualStudio.Shell.ToolWindows;
 using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -40,8 +43,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
             if (libmanConfig != null)
             {
-                libmanConfig.Open();
+                CleanClientSideLibraries();
 
+                libmanConfig.Open();
                 Editor.Selection.SelectAll();
                 Editor.KeyboardCommands.Delete();
                 Editor.Edit.InsertTextInBuffer(_initialLibmanFileContent);
@@ -50,6 +54,22 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
 
             base.DoHostTestCleanup();
+        }
+
+        private void CleanClientSideLibraries()
+        {
+            Guid guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
+            uint commandId = 0x0200;
+            SolutionExplorerItemTestExtension configFileNode = SolutionExplorer.FindItemRecursive(_libman);
+            configFileNode.Select();
+
+            WaitFor.IsTrue(() =>
+            {
+                CommandQueryResult queryResult = VisualStudio.ObjectModel.Commanding.QueryStatusCommand(guid, commandId);
+                return queryResult.IsEnabled;
+            },TimeSpan.FromMilliseconds(40000), TimeSpan.FromMilliseconds(500));
+
+            VisualStudio.ObjectModel.Commanding.ExecuteCommand(guid, commandId, null);
         }
 
         [TestMethod]
