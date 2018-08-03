@@ -5,7 +5,7 @@
       <IntermediateDirectoryForShimsBase Condition="'$(IntermediateDirectoryForShimsBase)' == '' ">$(IntermediateOutputPath)</IntermediateDirectoryForShimsBase>
       <ShimTargetName Condition="'$(ShimTargetName)' == '' ">libman</ShimTargetName>
       <ShimTargetFileName Condition="'$(ShimTargetFileName)' == '' ">libman.dll</ShimTargetFileName>
-      <ShimPackageId Condition="'$(ShimPackageId)' == ''">libman</ShimPackageId>
+      <ShimPackageId Condition="'$(ShimPackageId)' == ''">microsoft.web.librarymanager.cli</ShimPackageId>
   </PropertyGroup>
 
   <Target Name="CleanPreviousOutput">
