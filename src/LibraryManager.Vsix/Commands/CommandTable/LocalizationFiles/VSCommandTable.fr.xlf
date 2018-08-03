@@ -1,31 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
-  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="fr">
+  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" target-language="fr" datatype="xml">
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
           <source xml:lang="en">Client-Side &amp;Library...</source>
-          <target xml:lang="fr" state="translated">&amp;Bibliothèque côté client...</target>
+          <target state="translated">&amp;Bibliothèque côté client...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
           <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
-          <target xml:lang="fr" state="translated">Restaurer les &amp;bibliothèques côté client</target>
+          <target state="translated">Restaurer les &amp;bibliothèques côté client</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
           <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
-          <target xml:lang="fr" state="translated">&amp;Nettoyer les bibliothèques côté client</target>
+          <target state="translated">&amp;Nettoyer les bibliothèques côté client</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
           <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
-          <target xml:lang="fr" state="translated">Activer la restauration des bibliothèques côté client sur la build...</target>
+          <target state="translated">Activer la restauration des bibliothèques côté client sur la build...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
           <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>
-          <target xml:lang="fr" state="translated">&amp;Gérer les bibliothèques côté client...</target>
+          <target state="translated">&amp;Gérer les bibliothèques côté client...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
           <source xml:lang="en">&amp;Restore Client-Side Libraries</source>
-          <target xml:lang="fr" state="translated">&amp;Restaurer les bibliothèques côté client</target>
+          <target state="translated">&amp;Restaurer les bibliothèques côté client</target>
         </trans-unit>
       </group>
     </body>

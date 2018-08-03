@@ -52,7 +52,11 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">這會安裝 NuGet 套件來增強 MSBuild 程序，但不會將任何檔案新增至專案。這需要網際網路連線。要繼續嗎?</target>
+          <target state="translated">這會安裝 NuGet 套件來增強 MSBuild 程序，但不會將任何檔案新增至專案。
+
+這需要網際網路連線。
+
+要繼續嗎?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
