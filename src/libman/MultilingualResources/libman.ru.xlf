@@ -8,377 +8,375 @@
       <group id="LIBMAN/RESOURCES/TEXT.RESX" datatype="resx">
         <trans-unit id="CacheCommandDesc" translate="yes" xml:space="preserve">
           <source>List or clean libman cache contents</source>
-          <target state="new">List or clean libman cache contents</target>
+          <target state="translated">Вывести список содержимого кэша libman или очистить это содержимое</target>
         </trans-unit>
         <trans-unit id="CleanCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all library files defined in libman.json from the project</source>
-          <target state="new">Deletes all library files defined in libman.json from the project</target>
+          <target state="translated">Удаляет из проекта все файлы библиотеки, определенные в файле libman.json</target>
         </trans-unit>
         <trans-unit id="CleanCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Deletes any folders that become empty after this operation. </source>
-          <target state="new">    Deletes any folders that become empty after this operation. </target>
+          <target state="translated">Удаляет любые папки, которые становятся пустыми после выполнения этой операции.</target>
         </trans-unit>
         <trans-unit id="DefaultDestinationOptionDesc" translate="yes" xml:space="preserve">
           <source>The path, relative to the current directory, where library files should be installed if no destination is defined for a given library.</source>
-          <target state="new">The path, relative to the current directory, where library files should be installed if no destination is defined for a given library.</target>
+          <target state="translated">Путь относительно текущего каталога, по которому должны быть установлены библиотеки, если для заданной библиотеки не указано место назначения.</target>
         </trans-unit>
         <trans-unit id="DefaultProviderOptionDesc" translate="yes" xml:space="preserve">
           <source>The provider to use if no provider is defined for a given library. (eg. “cdnjs”, “filesystem”)</source>
-          <target state="new">The provider to use if no provider is defined for a given library. (eg. “cdnjs”, “filesystem”)</target>
+          <target state="translated">Поставщик, который будет использоваться, если поставщик для заданной библиотеки не установлен (например, "cdnjs", "filesystem")</target>
         </trans-unit>
         <trans-unit id="DestinationOptionDesc" translate="yes" xml:space="preserve">
           <source>Location to install the library (if not specified, the default destination location will be used)</source>
-          <target state="new">Location to install the library (if not specified, the default destination location will be used)</target>
+          <target state="translated">Расположение для установки библиотеки (если не указано, будет использоваться расположение по умолчанию)</target>
         </trans-unit>
         <trans-unit id="ExamplesHeader" translate="yes" xml:space="preserve">
           <source>Examples:</source>
-          <target state="new">Examples:</target>
+          <target state="translated">Примеры:</target>
         </trans-unit>
         <trans-unit id="FilesOptionDesc" translate="yes" xml:space="preserve">
           <source>The files from the specified library to install (if not specified, all files from the library will be installed)</source>
-          <target state="new">The files from the specified library to install (if not specified, all files from the library will be installed)</target>
+          <target state="translated">Файлы из указанной библиотеки, которые будут установлены (если этот параметр не указан, будут установлены все файлы из библиотеки)</target>
         </trans-unit>
         <trans-unit id="InitCommandDesc" translate="yes" xml:space="preserve">
           <source>Create a new libman.json</source>
-          <target state="new">Create a new libman.json</target>
+          <target state="translated">Создать новый файл libman.json</target>
         </trans-unit>
         <trans-unit id="InstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Add a library definition to the LibMan.json file, and download the library to the specified location</source>
-          <target state="new">Add a library definition to the LibMan.json file, and download the library to the specified location</target>
+          <target state="translated">Добавьте определение библиотеки в файл LibMan.json и загрузите библиотеку в указанное расположение</target>
         </trans-unit>
         <trans-unit id="InstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman install jquery@3.2.1 
     libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</source>
-          <target state="new">    libman install jquery@3.2.1 
+          <target state="translated">libman install jquery@3.2.1 
     libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</target>
         </trans-unit>
         <trans-unit id="InstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
           <source>Library to install</source>
-          <target state="new">Library to install</target>
+          <target state="translated">Библиотека, которая будет установлена</target>
         </trans-unit>
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="new">    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-    For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</target>
+          <target state="translated">Формат идентификатора для библиотек CDNJS таков: "&lt;имя библиотеки&gt;@&lt;версия библиотеки&gt;"
+    Если в идентификаторе библиотеки CDNJS не указана версия, будет использована последняя доступная версия.</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
     If no default provider exists, --provider option is required
     If no default destination exists, --destination option is required
     If no files are specified, the entire library is included</source>
-          <target state="new">    Initializes a libman.json if one does not exist
-    If no default provider exists, --provider option is required
-    If no default destination exists, --destination option is required
-    If no files are specified, the entire library is included</target>
+          <target state="translated">Инициализирует файл libman.json, если его не существует
+    Если поставщик по умолчанию не задан, параметр --provider является обязательным
+    Если место назначения по умолчанию не задано, параметр --destination является обязательным
+    Если файлы не указаны, будет включена вся библиотека</target>
         </trans-unit>
         <trans-unit id="InvalidArgumentsMessage" translate="yes" xml:space="preserve">
           <source>Invalid arguments for command: {0}</source>
-          <target state="new">Invalid arguments for command: {0}</target>
+          <target state="translated">Недопустимые аргументы для команды: {0}</target>
         </trans-unit>
         <trans-unit id="LibmanCommandDesc" translate="yes" xml:space="preserve">
           <source>Library Manager</source>
-          <target state="new">Library Manager</target>
+          <target state="translated">Диспетчер библиотек</target>
         </trans-unit>
         <trans-unit id="ProviderOptionDesc" translate="yes" xml:space="preserve">
           <source>Provider to use (if not specified, the default provider will be used)</source>
-          <target state="new">Provider to use (if not specified, the default provider will be used)</target>
+          <target state="translated">Используемый поставщик (если не указан, будет использован поставщик по умолчанию)</target>
         </trans-unit>
         <trans-unit id="ProviderSpecificLogicHeader" translate="yes" xml:space="preserve">
           <source>Provider-specific logic:</source>
-          <target state="new">Provider-specific logic:</target>
+          <target state="translated">Логика для определенного поставщика:</target>
         </trans-unit>
         <trans-unit id="RemarksHeader" translate="yes" xml:space="preserve">
           <source>Remarks:</source>
-          <target state="new">Remarks:</target>
+          <target state="translated">Примечания:</target>
         </trans-unit>
         <trans-unit id="RestoreCommandDesc" translate="yes" xml:space="preserve">
           <source>Downloads all files from provider and saves them to specified destination</source>
-          <target state="new">Downloads all files from provider and saves them to specified destination</target>
+          <target state="translated">Скачивает все файлы от поставщика и сохраняет их в указанный каталог</target>
         </trans-unit>
         <trans-unit id="RestoreCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     If a library specifies a provider, it will override the defaultProvider
     If a library specifies a destination, it will override the defaultDestination</source>
-          <target state="new">    Error if no libman.json in current folder
-    If a library specifies a provider, it will override the defaultProvider
-    If a library specifies a destination, it will override the defaultDestination</target>
+          <target state="translated">Ошибка при отсутствии файла libman.json в текущей папке
+    Если для библиотеки указан поставщик, он переопределит defaultProvider
+    Если для библиотеки указано место назначения, оно переопределит defaultDestination</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</source>
-          <target state="new">Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</target>
+          <target state="translated">Удаляет все файлы для указанной библиотеки из указанного места назначения, затем удаляет определение библиотеки из файла libman.json</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
     libman uninstall jquery@3.3.1</source>
-          <target state="new">    libman uninstall jquery
+          <target state="translated">libman uninstall jquery
     libman uninstall jquery@3.3.1</target>
         </trans-unit>
         <trans-unit id="UninstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
           <source>Library to uninstall</source>
-          <target state="new">Library to uninstall</target>
+          <target state="translated">Библиотека, которая будет удалена</target>
         </trans-unit>
         <trans-unit id="UninstallCommandProviderOptionDesc" translate="yes" xml:space="preserve">
           <source>The provider of the library to be uninstalled</source>
-          <target state="new">The provider of the library to be uninstalled</target>
+          <target state="translated">Поставщик библиотеки, который будет удален</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="new">    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-    If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</target>
+          <target state="translated">Формат идентификатора для библиотек CDNJS таков: "&lt;имя библиотеки&gt;@&lt;версия библиотеки&gt;" Если в идентификаторе библиотеки не указана версия, эта команда будет выполнена для всех библиотек, идентификаторы которых соответствуют указанному.</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     Error if specified library doesn't exist
     If there's more than one library with the same libraryId, you'll be prompted to choose.</source>
-          <target state="new">    Error if no libman.json in current folder
-    Error if specified library doesn't exist
-    If there's more than one library with the same libraryId, you'll be prompted to choose.</target>
+          <target state="translated">Ошибка, если файл libman.json отсутствует в текущей папке
+    Ошибка, если указанная библиотека не существует
+    При наличии нескольких библиотек с одним и тем же идентификатором вам будет предложено выбрать библиотеку.</target>
         </trans-unit>
         <trans-unit id="VerbosityOptionDesc" translate="yes" xml:space="preserve">
           <source>Set the verbosity of output (eg. "normal", "detailed", "quiet")</source>
-          <target state="new">Set the verbosity of output (eg. "normal", "detailed", "quiet")</target>
+          <target state="translated">Установить уровень детализации выходных данных (доступные значения: "normal", "detailed", "quiet")</target>
         </trans-unit>
         <trans-unit id="ProjectPathOptionDesc" translate="yes" xml:space="preserve">
           <source>Path to the project (Current directory is used as default)</source>
-          <target state="new">Path to the project (Current directory is used as default)</target>
+          <target state="translated">Путь к проекту (по умолчанию используется текущий каталог)</target>
         </trans-unit>
         <trans-unit id="DirectoryNotFoundMessage" translate="yes" xml:space="preserve">
           <source>Directory not found {0}</source>
-          <target state="new">Directory not found {0}</target>
+          <target state="translated">Каталог не найден {0}</target>
         </trans-unit>
         <trans-unit id="FailedToRestoreLibraryMessage" translate="yes" xml:space="preserve">
           <source>Failed to restore "{0}"</source>
-          <target state="new">Failed to restore "{0}"</target>
+          <target state="translated">Не удалось восстановить "{0}"</target>
         </trans-unit>
         <trans-unit id="FileDeleted" translate="yes" xml:space="preserve">
           <source>{0} deleted</source>
-          <target state="new">{0} deleted</target>
+          <target state="translated">Файл {0} удален</target>
         </trans-unit>
         <trans-unit id="FileDeleteFail" translate="yes" xml:space="preserve">
           <source>Failed to delete {0}</source>
-          <target state="new">Failed to delete {0}</target>
+          <target state="translated">Не удалось удалить {0}</target>
         </trans-unit>
         <trans-unit id="FileWrittenToDisk" translate="yes" xml:space="preserve">
           <source>{0} written to disk</source>
-          <target state="new">{0} written to disk</target>
+          <target state="translated">{0} записан на диск</target>
         </trans-unit>
         <trans-unit id="InitFailedLibmanJsonFileExists" translate="yes" xml:space="preserve">
           <source>Failed to init: A 'libman.json' already exists</source>
-          <target state="new">Failed to init: A 'libman.json' already exists</target>
+          <target state="translated">Не удалось выполнить инициализацию: файл "libman.json" уже существует</target>
         </trans-unit>
         <trans-unit id="CleanFailed" translate="yes" xml:space="preserve">
           <source>Failed to clean some files.</source>
-          <target state="new">Failed to clean some files.</target>
+          <target state="translated">Не удалось очистить некоторые файлы.</target>
         </trans-unit>
         <trans-unit id="LibmanJsonNotFound" translate="yes" xml:space="preserve">
           <source>libman.json was not found:{0}</source>
-          <target state="new">libman.json was not found:{0}</target>
+          <target state="translated">Файл libman.json не найден: {0}</target>
         </trans-unit>
         <trans-unit id="DestinationRequiredWhenNoDefaultIsPresent" translate="yes" xml:space="preserve">
           <source>Default destination is not set. Please provide a destination using '--destination'</source>
-          <target state="new">Default destination is not set. Please provide a destination using '--destination'</target>
+          <target state="translated">Место назначения по умолчанию не задано. Укажите его с помощью параметра '--destination'</target>
         </trans-unit>
         <trans-unit id="LibraryIdRequiredForInstall" translate="yes" xml:space="preserve">
           <source>LibraryId is required to install</source>
-          <target state="new">LibraryId is required to install</target>
+          <target state="translated">Для установки требуется идентификатор библиотеки</target>
         </trans-unit>
         <trans-unit id="LibraryIdRequiredForUnInstall" translate="yes" xml:space="preserve">
           <source>LibraryId is required to uninstall</source>
-          <target state="new">LibraryId is required to uninstall</target>
+          <target state="translated">Для удаления необходимо указать идентификатор библиотеки</target>
         </trans-unit>
         <trans-unit id="MoreThanOneLibraryFoundToUninstall" translate="yes" xml:space="preserve">
           <source>More than one library found with id "{0}"</source>
-          <target state="new">More than one library found with id "{0}"</target>
+          <target state="translated">Обнаружено несколько библиотек с идентификатором "{0}"</target>
         </trans-unit>
         <trans-unit id="ProviderRequiredWhenNoDefaultIsPresent" translate="yes" xml:space="preserve">
           <source>Default Provider is not set. Please provide a provider using '--provider'</source>
-          <target state="new">Default Provider is not set. Please provide a provider using '--provider'</target>
+          <target state="translated">Поставщик по умолчанию не задан. Укажите поставщика с помощью параметра '--provider'</target>
         </trans-unit>
         <trans-unit id="UseProviderToDisambiguateMessage" translate="yes" xml:space="preserve">
           <source>Use --provider to disambiguate libraries of same name from different providers in the project</source>
-          <target state="new">Use --provider to disambiguate libraries of same name from different providers in the project</target>
+          <target state="translated">Используйте параметр --provider, чтобы различить библиотеки с одинаковыми именами от различных поставщиков в проекте</target>
         </trans-unit>
         <trans-unit id="MoreThanOneLibraryFoundToUninstallForProvider" translate="yes" xml:space="preserve">
           <source>More than one library found with id "{0}" for provider "{1}". Please remove the manually from the libman.json file</source>
-          <target state="new">More than one library found with id "{0}" for provider "{1}". Please remove the manually from the libman.json file</target>
+          <target state="translated">Для поставщика "{1}" обнаружено несколько библиотек с идентификатором "{0}". Удалите эти библиотеки из файла libman.json вручную</target>
         </trans-unit>
         <trans-unit id="NoLibraryToUninstall" translate="yes" xml:space="preserve">
           <source>Library "{0}" is not installed. Nothing to uninstall</source>
-          <target state="new">Library "{0}" is not installed. Nothing to uninstall</target>
+          <target state="translated">Библиотека "{0}" не установлена. Удаляемые библиотеки отсутствуют</target>
         </trans-unit>
         <trans-unit id="CacheCleanCommandDesc" translate="yes" xml:space="preserve">
           <source>Delete all files from the local machine's LibMan cache.</source>
-          <target state="new">Delete all files from the local machine's LibMan cache.</target>
+          <target state="translated">Удалить все файлы из кэша на локальном компьютере LibMan.</target>
         </trans-unit>
         <trans-unit id="CacheListCommandDesc" translate="yes" xml:space="preserve">
           <source>Display a list of all libraries that are stored in the local machine’s LibMan cache.</source>
-          <target state="new">Display a list of all libraries that are stored in the local machine’s LibMan cache.</target>
+          <target state="translated">Отображает список всех библиотек, которые хранятся в кэше локального компьютера LibMan.</target>
         </trans-unit>
         <trans-unit id="CacheCleanProviderArgumentDesc" translate="yes" xml:space="preserve">
           <source>Provider for which the cache files should be cleaned.</source>
-          <target state="new">Provider for which the cache files should be cleaned.</target>
+          <target state="translated">Поставщик, для которого необходимо очистить файлы кэша.</target>
         </trans-unit>
         <trans-unit id="UpdateCommandDesc" translate="yes" xml:space="preserve">
           <source>Updates the specified library</source>
-          <target state="new">Updates the specified library</target>
+          <target state="translated">Обновляет указанную библиотеку</target>
         </trans-unit>
         <trans-unit id="UpdateCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman update jquery 
     libman update jquery --to 3.3.1
     libman update jquery -pre 
 </source>
-          <target state="new">    libman update jquery 
+          <target state="translated">libman update jquery 
     libman update jquery --to 3.3.1
-    libman update jquery -pre 
-</target>
+    libman update jquery -pre</target>
         </trans-unit>
         <trans-unit id="UpdateCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     Error if specified library doesn't exist
     If there's more than one library with the same libraryId, you'll be prompted to choose.</source>
-          <target state="new">    Error if no libman.json in current folder
-    Error if specified library doesn't exist
-    If there's more than one library with the same libraryId, you'll be prompted to choose.</target>
+          <target state="translated">Ошибка при отсутствии файла libman.json в текущей папке
+    Ошибка, если указанная библиотека не существует
+    При наличии нескольких библиотек с одинаковыми идентификаторами вам будет предложено выбрать библиотеку.</target>
         </trans-unit>
         <trans-unit id="UpdateCommandLibraryArgumentDesc" translate="yes" xml:space="preserve">
           <source>Name of the library to update (without the version).</source>
-          <target state="new">Name of the library to update (without the version).</target>
+          <target state="translated">Имя обновляемой библиотеки (без номера версии).</target>
         </trans-unit>
         <trans-unit id="UpdateCommandPreReleaseOptionDesc" translate="yes" xml:space="preserve">
           <source>If specified, the latest pre-release version of the library will be downloaded (where applicable)</source>
-          <target state="new">If specified, the latest pre-release version of the library will be downloaded (where applicable)</target>
+          <target state="translated">Если этот параметр указан, будет загружена последняя предварительная версия библиотеки (если применимо)</target>
         </trans-unit>
         <trans-unit id="UpdateCommandProviderOptionDesc" translate="yes" xml:space="preserve">
           <source>If specified, only libraries from the specified provider will be updated</source>
-          <target state="new">If specified, only libraries from the specified provider will be updated</target>
+          <target state="translated">Если этот параметр указан, будут обновлены только библиотеки от указанного поставщика</target>
         </trans-unit>
         <trans-unit id="CacheCleanedMessage" translate="yes" xml:space="preserve">
           <source>Cache cleaned.</source>
-          <target state="new">Cache cleaned.</target>
+          <target state="translated">Очистка кэша выполнена.</target>
         </trans-unit>
         <trans-unit id="CacheCleanFailed" translate="yes" xml:space="preserve">
           <source>Failed to clean cache: {0}</source>
-          <target state="new">Failed to clean cache: {0}</target>
+          <target state="translated">Не удалось очистить кэш: {0}</target>
         </trans-unit>
         <trans-unit id="CacheContentMessage" translate="yes" xml:space="preserve">
           <source>Cache contents:</source>
-          <target state="new">Cache contents:</target>
+          <target state="translated">Содержимое кэша:</target>
         </trans-unit>
         <trans-unit id="CacheEmptyMessage" translate="yes" xml:space="preserve">
           <source>(empty)</source>
-          <target state="new">(empty)</target>
+          <target state="translated">(пусто)</target>
         </trans-unit>
         <trans-unit id="CacheForProviderCleanedMessage" translate="yes" xml:space="preserve">
           <source>{0} cache cleaned.</source>
-          <target state="new">{0} cache cleaned.</target>
+          <target state="translated">Очистка кэша {0} выполнена.</target>
         </trans-unit>
         <trans-unit id="CacheListFilesOptionDesc" translate="yes" xml:space="preserve">
           <source>List files that are cached for each library</source>
-          <target state="new">List files that are cached for each library</target>
+          <target state="translated">Список кэшируемых файлов для каждой библиотеки</target>
         </trans-unit>
         <trans-unit id="MoreThanOneLibraryFoundToUpdate" translate="yes" xml:space="preserve">
           <source>More than one library found with name "{0}"</source>
-          <target state="new">More than one library found with name "{0}"</target>
+          <target state="translated">Обнаружено несколько библиотек с именем "{0}"</target>
         </trans-unit>
         <trans-unit id="NoLibrariesToUpdate" translate="yes" xml:space="preserve">
           <source>No libraries to update. Please use install command to install libraries</source>
-          <target state="new">No libraries to update. Please use install command to install libraries</target>
+          <target state="translated">Библиотеки для обновления отсутствуют. Используйте команду install для установки библиотек</target>
         </trans-unit>
         <trans-unit id="NoLibraryFoundToUpdate" translate="yes" xml:space="preserve">
           <source>No library found with name "{0}" to update.
 Please specify a library name without the version information to update.</source>
-          <target state="new">No library found with name "{0}" to update.
-Please specify a library name without the version information to update.</target>
+          <target state="translated">Отсутствует обновляемая библиотека с именем "{0}".
+Укажите имя библиотеки без версии.</target>
         </trans-unit>
         <trans-unit id="InstallLibraryFailed" translate="yes" xml:space="preserve">
           <source>Failed to install library "{0}"</source>
-          <target state="new">Failed to install library "{0}"</target>
+          <target state="translated">Не удается установить библиотеку "{0}"</target>
         </trans-unit>
         <trans-unit id="CacheListLibrariesOptionDesc" translate="yes" xml:space="preserve">
           <source>Lists the libraries cached for each provider.</source>
-          <target state="new">Lists the libraries cached for each provider.</target>
+          <target state="translated">Список библиотек, которые кэшируются для каждого поставщика.</target>
         </trans-unit>
         <trans-unit id="ProviderNotInstalled" translate="yes" xml:space="preserve">
           <source>Provider "{0}" is not installed</source>
-          <target state="new">Provider "{0}" is not installed</target>
+          <target state="translated">Поставщик "{0}" не установлен</target>
         </trans-unit>
         <trans-unit id="SuggestedIdsMessage" translate="yes" xml:space="preserve">
           <source>Similar libraries: </source>
-          <target state="new">Similar libraries: </target>
+          <target state="translated">Похожие библиотеки:</target>
         </trans-unit>
         <trans-unit id="FixManifestFile" translate="yes" xml:space="preserve">
           <source>Please fix the libman.json file and try again</source>
-          <target state="new">Please fix the libman.json file and try again</target>
+          <target state="translated">Исправьте файл libman.json и повторите попытку.</target>
         </trans-unit>
         <trans-unit id="ChooseAnOption" translate="yes" xml:space="preserve">
           <source>Select an option:</source>
-          <target state="new">Select an option:</target>
+          <target state="translated">Выберите вариант:</target>
         </trans-unit>
         <trans-unit id="LatestVersionAlreadyInstalled" translate="yes" xml:space="preserve">
           <source>The library "{0}" is already up to date</source>
-          <target state="new">The library "{0}" is already up to date</target>
+          <target state="translated">Библиотека "{0}" уже обновлена</target>
         </trans-unit>
         <trans-unit id="InvalidToVersion" translate="yes" xml:space="preserve">
           <source>"{0}" is not a valid value for --to-version</source>
-          <target state="new">"{0}" is not a valid value for --to-version</target>
+          <target state="translated">Значение "{0}" не может использоваться с параметром --to-version</target>
         </trans-unit>
         <trans-unit id="UpdateCommandToVersionOptionDesc" translate="yes" xml:space="preserve">
           <source>The version to update the library to (needs complete libraryid for the provider)</source>
-          <target state="new">The version to update the library to (needs complete libraryid for the provider)</target>
+          <target state="translated">Версия, до которой необходимо обновить библиотеку (необходимо указать идентификатор библиотеки поставщика)</target>
         </trans-unit>
         <trans-unit id="InstalledLibrary" translate="yes" xml:space="preserve">
           <source>Installed library "{0}" to "{1}"</source>
-          <target state="new">Installed library "{0}" to "{1}"</target>
+          <target state="translated">Библиотека "{0}" установлена в "{1}"</target>
         </trans-unit>
         <trans-unit id="UninstalledLibrary" translate="yes" xml:space="preserve">
           <source>Uninstalled library "{0}"</source>
-          <target state="new">Uninstalled library "{0}"</target>
+          <target state="translated">Библиотека "{0}" удалена</target>
         </trans-unit>
         <trans-unit id="InvalidFilesForLibrary" translate="yes" xml:space="preserve">
           <source>Library "{0}" does not contain the following files: {1}</source>
-          <target state="new">Library "{0}" does not contain the following files: {1}</target>
+          <target state="translated">Библиотека "{0}" не содержит следующих файлов: {1}</target>
         </trans-unit>
         <trans-unit id="LibraryCannotBeInstalledDueToConflictingLibraries" translate="yes" xml:space="preserve">
           <source>Library "{0}" cannot be installed. "{1}" is already installed at "{2}".
 Please specify a different destination.</source>
-          <target state="new">Library "{0}" cannot be installed. "{1}" is already installed at "{2}".
-Please specify a different destination.</target>
+          <target state="translated">Невозможно установить библиотеку "{0}". Библиотека "{1}" уже установлена в каталоге "{2}".
+Укажите другое место назначения.</target>
         </trans-unit>
         <trans-unit id="LibraryIdRequiredForUpdate" translate="yes" xml:space="preserve">
           <source>LibraryId is required for update</source>
-          <target state="new">LibraryId is required for update</target>
+          <target state="translated">Для обновления требуется идентификатор библиотеки</target>
         </trans-unit>
         <trans-unit id="SpecifyDifferentDestination" translate="yes" xml:space="preserve">
           <source>Please specify a different destination.</source>
-          <target state="new">Please specify a different destination.</target>
+          <target state="translated">Укажите другое место назначения.</target>
         </trans-unit>
         <trans-unit id="UninstallFailed" translate="yes" xml:space="preserve">
           <source>Failed to uninstall "{0}"</source>
-          <target state="new">Failed to uninstall "{0}"</target>
+          <target state="translated">Не удалось удалить "{0}"</target>
         </trans-unit>
         <trans-unit id="UpdateLibraryFailed" translate="yes" xml:space="preserve">
           <source>Failed to update "{0}" to "{1}"</source>
-          <target state="new">Failed to update "{0}" to "{1}"</target>
+          <target state="translated">Не удалось обновить "{0}" до "{1}"</target>
         </trans-unit>
         <trans-unit id="UpdateLibraryToLatestFailed" translate="yes" xml:space="preserve">
           <source>Failed to update "{0}" to latest</source>
-          <target state="new">Failed to update "{0}" to latest</target>
+          <target state="translated">Не удалось обновить "{0}" до последней версии</target>
         </trans-unit>
         <trans-unit id="LibraryUpdated" translate="yes" xml:space="preserve">
           <source>Updated "{0}" to "{1}"</source>
-          <target state="new">Updated "{0}" to "{1}"</target>
+          <target state="translated">"{0}" обновлено до "{1}"</target>
         </trans-unit>
         <trans-unit id="UnableToFindLatestVersionForLibrary" translate="yes" xml:space="preserve">
           <source>Could not determine the latest version for "{0}"</source>
-          <target state="new">Could not determine the latest version for "{0}"</target>
+          <target state="translated">Не удалось определить последнюю версию "{0}"</target>
         </trans-unit>
         <trans-unit id="InitFailedUnknownProvider" translate="yes" xml:space="preserve">
           <source>Failed to initialize libman.json. [{0}]: {1}</source>
-          <target state="new">Failed to initialize libman.json. [{0}]: {1}</target>
+          <target state="translated">Не удалось инициализировать файл libman.json. [{0}]: {1}</target>
         </trans-unit>
       </group>
     </body>
