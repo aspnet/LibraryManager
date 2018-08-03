@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>libman</id>
-    <tags>libman</tags>
+    <id>Microsoft.Web.LibraryManager.Cli</id>
+    <tags>libman;LibraryManager;DotNetCoreGlobalTool</tags>
     <version>$version$</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
