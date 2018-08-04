@@ -259,7 +259,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             return libraryGroups;
         }
 
-        public async Task<IEnumerable<string>> GetGithubLibraryVersions(string name)
+        private async Task<IEnumerable<string>> GetGithubLibraryVersions(string name)
         {
             List<string> versions = new List<string>();
             JObject versionsObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(string.Format(LatestLibraryVersionUrlGH, name), CancellationToken.None).ConfigureAwait(false);
