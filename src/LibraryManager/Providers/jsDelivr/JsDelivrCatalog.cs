@@ -276,12 +276,17 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public static bool IsGitHub(string libraryId)
         {
-            if (libraryId == null)
+            if (libraryId == null || libraryId.StartsWith("@"))
             {
                 return false;
             }
 
-            return libraryId.Contains('/');
+            if (libraryId.Contains('/'))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
