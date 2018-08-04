@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         public async Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
         {
 
-            if (JsDelivrCatalog.IsGitHub(DisplayName).Result)
+            if (JsDelivrCatalog.IsGitHub(DisplayName))
             {
 
             }

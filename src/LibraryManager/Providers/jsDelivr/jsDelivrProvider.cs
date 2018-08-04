@@ -116,7 +116,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 foreach (string sourceFile in state.Files)
                 {
                     string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
-                    string url = string.Format(JsDelivrCatalog.IsGitHub(state.LibraryId).Result ? DownloadUrlFormatGH : DownloadUrlFormat, state.Name, state.Version, sourceFile);
+                    string url = string.Format(JsDelivrCatalog.IsGitHub(state.LibraryId) ? DownloadUrlFormatGH : DownloadUrlFormat, state.Name, state.Version, sourceFile);
 
                     CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
                     if (!librariesMetadata.Contains(newEntry))
