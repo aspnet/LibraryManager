@@ -267,7 +267,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
             foreach (string version in versionsArray)
             {
-                versions.Add(name + "@" + version);
+                versions.Add(LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, version, _provider.Id));
             }
 
             return versions;
