@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 {
@@ -27,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
             if (!JsDelivrCatalog.IsGitHub(DisplayName))
             {
-                Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageInfo npmPackageInfo = await Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageInfoCache.GetPackageInfoAsync(DisplayName, CancellationToken.None);
+                NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(DisplayName, CancellationToken.None);
 
                 if (npmPackageInfo != null)
                 {
