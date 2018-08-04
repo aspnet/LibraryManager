@@ -156,7 +156,6 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                     files.Add(file.TrimStart('/'));
                     result.Add(file);
                 }
-
             }
         }
 
