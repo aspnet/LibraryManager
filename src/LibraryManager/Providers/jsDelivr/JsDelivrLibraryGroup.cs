@@ -25,11 +25,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         public async Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
         {
 
-            if (JsDelivrCatalog.IsGitHub(DisplayName))
-            {
-
-            }
-            else
+            if (!JsDelivrCatalog.IsGitHub(DisplayName))
             {
                 Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageInfo npmPackageInfo = await Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageInfoCache.GetPackageInfoAsync(DisplayName, CancellationToken.None);
 
