@@ -13,7 +13,7 @@ using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
 
-namespace Microsoft.Web.LibraryManager.Test.Providers.xJsDelivr
+namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 {
     [TestClass]
     public class JsDelivrProviderTest
