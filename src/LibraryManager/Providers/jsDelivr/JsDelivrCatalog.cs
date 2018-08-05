@@ -153,8 +153,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
                 foreach(string file in files)
                 {
-                    files.Add(file.TrimStart('/'));
-                    result.Add(file);
+                    result.Add(file.TrimStart('/'));
                 }
             }
         }
