@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Test.Apex.Editor;
-using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Web.LibraryManager.IntegrationTest
@@ -9,21 +7,10 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     [TestClass]
     public class LibmanCompletionTests : VisualStudioLibmanHostTest
     {
-        ProjectItemTestExtension _libManConfig;
-
-        [TestInitialize()]
-        public void initialize()
-        {
-            string projectName = "TestProjectCore20";
-
-            ProjectTestExtension webProject = Solution.ProjectsRecursive[projectName];
-            _libManConfig = webProject.Find(SolutionItemFind.FileName, "libman.json");
-        }
-
         [TestMethod]
         public void LibmanCompletion_Destination()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
             string[] expectedCompletionEntries = new[] {
                 "Properties/",
                 "wwwroot/",
@@ -41,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_Provider()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
 
             string[] expectedCompletionEntries = new[] {
                 "cdnjs",
@@ -61,7 +48,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_DefaultProvider()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
 
             string[] expectedCompletionEntries = new[] {
                 "cdnjs",
@@ -80,7 +67,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_DefaultDestination()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
             string[] expectedCompletionEntries = new[] {
                 "Properties/",
                 "wwwroot/",
@@ -97,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_LibraryForCdnjs()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
             string[] expectedCompletionEntries = new[] {
                 "jquery",
             };
@@ -116,7 +103,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_LibraryVersionForCdnjs()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
 
             Editor.Caret.MoveToExpression("\"libraries\"");
             Editor.Caret.MoveDown(1);
@@ -135,7 +122,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_LibraryForFilesystem()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
             string[] expectedCompletionEntries = new[] {
                 "Properties/",
                 "wwwroot/",
@@ -156,7 +143,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         public void LibmanCompletion_LibraryForUnpkg()
         {
             // This test needs to be updated once we fix https://github.com/aspnet/LibraryManager/issues/221
-            _libManConfig.Open();
+            _libmanConfig.Open();
 
             Editor.Caret.MoveToExpression("\"libraries\"");
             Editor.Caret.MoveDown(1);
@@ -177,7 +164,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_CompletionForBackSpace()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
 
             Editor.Caret.MoveToExpression("\"libraries\"");
             Editor.Caret.MoveDown(1);
@@ -196,7 +183,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_VersionCompletionInDescendingOrder()
         {
-            _libManConfig.Open();
+            _libmanConfig.Open();
 
             Editor.Caret.MoveToExpression("\"libraries\"");
             Editor.Caret.MoveDown(1);

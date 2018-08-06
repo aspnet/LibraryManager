@@ -18,10 +18,14 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     public class VisualStudioLibmanHostTest : VisualStudioHostTest
     {
         // Solution consts
-        const string _libman = "libman.json";
-        const string _projectName = @"TestProjectCore20";
-        const string _rootDirectoryName = @"TestSolution";
-        const string _testSolutionName = @"TestSolution.sln";
+        protected const string _libman = "libman.json";
+        protected const string _projectName = @"TestProjectCore20";
+        private const string _rootDirectoryName = @"TestSolution";
+        private const string _testSolutionName = @"TestSolution.sln";
+
+        protected ProjectItemTestExtension _libmanConfig;
+        protected string _pathToLibmanFile;
+        protected ProjectTestExtension _webProject;
         private string _initialLibmanFileContent;
         private static VisualStudioLibmanHostTest _instance;
         private static string _resultPath;
@@ -42,8 +46,10 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Solution.Open(_solutionPath);
             Solution.WaitForFullyLoaded(); // This will get modified after bug 627108 get fixed
 
-            string pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, _libman);
-            _initialLibmanFileContent = File.ReadAllText(pathToLibmanFile);
+            _webProject = Solution[_projectName];
+            _libmanConfig = _webProject[_libman];
+            _pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, _libman);
+            _initialLibmanFileContent = File.ReadAllText(_pathToLibmanFile);
         }
 
         protected override void DoHostTestCleanup()

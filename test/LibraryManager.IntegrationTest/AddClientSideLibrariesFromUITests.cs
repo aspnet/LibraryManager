@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Microsoft.Test.Apex.VisualStudio.Shell.ToolWindows;
-using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.IntegrationTest.Services;
 
@@ -9,24 +8,16 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     [TestClass]
     public class AddClientSideLibrariesFromUITests : VisualStudioLibmanHostTest
     {
-        private string _pathToLibmanFile;
-        private const string _libman = "libman.json";
-        private const string _projectName = @"TestProjectCore20";
-
         protected override void DoHostTestInitialize()
         {
             base.DoHostTestInitialize();
 
-            ProjectTestExtension webProject = Solution[_projectName];
-            ProjectItemTestExtension libmanConfig = webProject[_libman];
-            _pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, _libman);
-
-            string libmanConfigFullPath = libmanConfig.FullPath;
+            string libmanConfigFullPath = _libmanConfig.FullPath;
 
             if (File.Exists(libmanConfigFullPath))
             {
                 string projectPath = Path.Combine(SolutionRootPath, _projectName);
-                libmanConfig.Delete();
+                _libmanConfig.Delete();
                 Helpers.FileIO.WaitForDeletedFile(projectPath, libmanConfigFullPath, caseInsensitive: false);
             }
         }
