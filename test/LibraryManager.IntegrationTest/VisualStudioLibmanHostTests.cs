@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Test.Apex.VisualStudio;
 using Microsoft.Test.Apex.VisualStudio.Editor;
+using Microsoft.Test.Apex.VisualStudio.Shell.ToolWindows;
 using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.IntegrationTest.Helpers;
@@ -22,7 +22,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         private static VisualStudioLibmanHostTest _instance;
         private static string _resultPath;
-        private static string _solutionRootPath;
         private static string _solutionPath;
 
         public static string SolutionRootPath { get; private set; }
@@ -43,8 +42,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         protected override void DoHostTestCleanup()
         {
-            Thread.Sleep(1000); // This can be removed after bug 624281 get fixed
-
             base.DoHostTestCleanup();
         }
 
@@ -71,6 +68,14 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             get
             {
                 return VisualStudio.ObjectModel.Solution;
+            }
+        }
+
+        internal SolutionExplorerService SolutionExplorer
+        {
+            get
+            {
+                return VisualStudio.ObjectModel.Shell.ToolWindows.SolutionExplorer;
             }
         }
 

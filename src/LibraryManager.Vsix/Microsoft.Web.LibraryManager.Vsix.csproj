@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="Shared\DefaultSolutionEvents.cs" />
+    <Compile Include="UI\InstallDialogProvider.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
     <Compile Include="UI\Controls\BindLibraryNameToTargetLocation.cs" />
     <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
@@ -70,6 +71,7 @@
     <Compile Include="UI\Converters\NotConverter.cs" />
     <Compile Include="UI\Converters\PackageItemIconConverter.cs" />
     <Compile Include="UI\Converters\VisibleIfNonNullConverter.cs" />
+    <Compile Include="UI\IInstallDialog.cs" />
     <Compile Include="UI\InstallDialog.xaml.cs">
       <DependentUpon>InstallDialog.xaml</DependentUpon>
     </Compile>

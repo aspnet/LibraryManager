@@ -3,6 +3,7 @@
 
 using Microsoft.Web.LibraryManager.Vsix;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
@@ -17,3 +18,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.Vsix.Test")]
 
 [assembly: ComVisible(false)]
+[assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.IntegrationTest")]

@@ -84,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
 
             Providers = providers;
-            InstallPackageCommand = ActionCommand.Create(InstallPackageAsync, CanInstallPackage, false);
+            InstallPackageCommand = ActionCommand.Create(InstallPackage, CanInstallPackage, false);
             Task t = LoadPackagesAsync();
         }
 
@@ -416,7 +416,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             return false;
         }
 
-        private async void InstallPackageAsync()
+        private void InstallPackage()
+        {
+            Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async() => await InstallPackageAsync()).Task.ConfigureAwait(false);
+        }
+
+        private async Task InstallPackageAsync()
         {
             try
             {
