@@ -170,44 +170,52 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
 
+            // Typing '@' after the library name should have version completion.
+            int at = name.LastIndexOf('@');
+            name = at > -1 ? name.Substring(0, at) : name;
+
             try
             {
-                    // library name completion
-                    if (caretPosition < name.Length + 1)
+                // library name completion
+                if (caretPosition < name.Length + 1)
+                {
+                    IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+
+                    foreach (string packageName in packageNames)
                     {
-                        IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
-
-                        foreach (string packageName in packageNames)
+                        CompletionItem completionItem = new CompletionItem
                         {
-                            CompletionItem completionItem = new CompletionItem
-                            {
-                                DisplayText = packageName,
-                                InsertionText = packageName
-                            };
+                            DisplayText = packageName,
+                            InsertionText = packageName,
+                        };
 
-                            completions.Add(completionItem);
-                        }
+                        completions.Add(completionItem);
+                    }
+                    
+                    completionSet.CompletionType = CompletionSortOrder.AsSpecified;
+                }
+
+                // library version completion
+                else
+                {
+                    completionSet.Start = name.Length + 1;
+                    completionSet.Length = version.Length;
+
+                    NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
+                    foreach (SemanticVersion semVersion in npmPackageInfo.Versions)
+                    {
+                        string versionText = semVersion.ToString();
+                        CompletionItem completionItem = new CompletionItem
+                        {
+                            DisplayText = versionText,
+                            InsertionText = name + "@" + versionText
+                        };
+
+                        completions.Add(completionItem);
                     }
 
-                    // library version completion
-                    else
-                    {
-                        completionSet.Start = name.Length + 1;
-                        completionSet.Length = version.Length;
-
-                        NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
-                        foreach (SemanticVersion semVersion in npmPackageInfo.Versions)
-                        {
-                            string itemText = name + "@" + semVersion.ToString();
-                            CompletionItem completionItem = new CompletionItem
-                            {
-                                DisplayText = itemText,
-                                InsertionText = itemText
-                            };
-
-                            completions.Add(completionItem);
-                        }
-                    }
+                    completionSet.CompletionType = CompletionSortOrder.Version;
+                }
 
                 completionSet.Completions = completions;
             }

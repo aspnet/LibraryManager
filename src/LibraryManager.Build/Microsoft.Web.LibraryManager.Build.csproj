@@ -41,7 +41,7 @@
         but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
         -->
         <ItemGroup>
-            <_PackageFiles Include="bin\$(Configuration)\*\*.LibraryManager.dll;bin\$(Configuration)\*\*.LibraryManager.Contracts.dll;bin\$(Configuration)\*\Newtonsoft.Json.dll">
+            <_PackageFiles Include="bin\$(Configuration)\**\*.dll" Exclude="bin\$(Configuration)\**\Microsoft.Build.*.dll">
                 <PackagePath>tools\%(RecursiveDir)</PackagePath>
                 <Visible>false</Visible>
                 <BuildAction>Content</BuildAction>

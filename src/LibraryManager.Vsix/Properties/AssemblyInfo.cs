@@ -5,6 +5,7 @@ using Microsoft.Web.LibraryManager.Vsix;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle(Vsix.Name)]
 [assembly: AssemblyDescription(Vsix.Description)]
@@ -14,6 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright(Vsix.Author)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.Vsix.Test")]
 
 [assembly: ComVisible(false)]
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.IntegrationTest")]

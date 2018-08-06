@@ -28,6 +28,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// The list of completions for the span
         /// </summary>
         public IEnumerable<CompletionItem> Completions;
+
+        /// <summary>
+        /// The type of the completion item sorting.
+        /// </summary>
+        public CompletionSortOrder CompletionType;
     }
 
     /// <summary>
@@ -52,5 +57,18 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// The description is shown in tooltips and parameter info.
         /// </summary>
         public string Description;
+    }
+
+    /// <summary>
+    /// The completion sort order is to indicate the sorting type of the completion item.
+    /// </summary>
+    public enum CompletionSortOrder
+    {
+        /// <summary>The completion item is alphabetical sorted.</summary>
+        Alphabetical,
+        /// <summary>The completion item is for library version completion.</summary>
+        Version,
+        /// <summary>The completion item is sorted by providers.</summary>
+        AsSpecified
     }
 }

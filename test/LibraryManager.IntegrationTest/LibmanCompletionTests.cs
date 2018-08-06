@@ -1,4 +1,6 @@
-﻿using Microsoft.Test.Apex.VisualStudio.Solution;
+﻿using System.Collections.Generic;
+using Microsoft.Test.Apex.Editor;
+using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Web.LibraryManager.IntegrationTest
@@ -140,7 +142,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         }
 
         [TestMethod]
-        [Ignore("Ignored for bug 629065")]
         public void LibmanCompletion_LibraryForUnpkg()
         {
             _libManConfig.Open();
@@ -173,6 +174,36 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
             Editor.KeyboardCommands.Backspace();
             Helpers.Completion.WaitForCompletionEntries(Editor, new string[] { }, caseInsensitive: true);
+        }
+
+        [TestMethod]
+        public void LibmanCompletion_VersionCompletionInDescendingOrder()
+        {
+            _libManConfig.Open();
+
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(2);
+            Editor.KeyboardCommands.Type("\"provider\": \"unpkg\",");
+            Editor.KeyboardCommands.Enter();
+
+            Editor.KeyboardCommands.Type("\"library\":");
+            Editor.KeyboardCommands.Type("jquery@");
+
+            CompletionList items = Helpers.Completion.WaitForCompletionItems(Editor, 5000);
+            Assert.IsNotNull(items, "Time out waiting for the version completion list");
+
+            List<SemanticVersion> semanticVersions = new List<SemanticVersion>();
+
+            // CompletionList implements the List, so foreach can guarentee its iteration order as original.
+            foreach (CompletionItem item in items)
+            {
+                semanticVersions.Add(SemanticVersion.Parse(item.Text));
+            }
+
+            for (int i= 1; i < semanticVersions.Count; ++i)
+            {
+                Assert.IsTrue(semanticVersions[i].CompareTo(semanticVersions[i - 1]) <= 0);
+            }
         }
     }
 }
