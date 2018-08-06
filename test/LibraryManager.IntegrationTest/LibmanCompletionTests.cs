@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Test.Apex.Editor;
 using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,7 +30,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             };
 
             Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"destination\":");
 
             Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
@@ -47,7 +50,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             };
 
             Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"provider\":");
 
             Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true);
@@ -98,7 +103,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             };
 
             Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
             Editor.KeyboardCommands.Enter();
 
@@ -112,7 +119,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             _libManConfig.Open();
 
             Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
             Editor.KeyboardCommands.Enter();
 
@@ -133,7 +142,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             };
 
             Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"provider\": \"filesystem\",");
             Editor.KeyboardCommands.Enter();
 
@@ -144,19 +155,23 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void LibmanCompletion_LibraryForUnpkg()
         {
+            // This test needs to be updated once we fix https://github.com/aspnet/LibraryManager/issues/221
             _libManConfig.Open();
-            string[] expectedCompletionEntries = new[] {
-                "bootstrap",
-                "jquery",
-            };
 
             Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"provider\": \"unpkg\",");
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
-            Helpers.Completion.WaitForCompletionEntries(Editor, expectedCompletionEntries, caseInsensitive: true, timeout: 5000);
+            Editor.KeyboardCommands.Type("bootstr");
+            Helpers.Completion.WaitForCompletionEntries(Editor, new[] { "bootstrap" }, caseInsensitive: true, timeout: 5000);
+
+            Editor.KeyboardCommands.Backspace(7);
+            Editor.KeyboardCommands.Type("jqu");
+            Helpers.Completion.WaitForCompletionEntries(Editor, new[] { "jquery" }, caseInsensitive: true, timeout: 5000);
         }
 
         [TestMethod]
@@ -165,7 +180,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             _libManConfig.Open();
 
             Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
             Editor.KeyboardCommands.Enter();
 
@@ -182,7 +199,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             _libManConfig.Open();
 
             Editor.Caret.MoveToExpression("\"libraries\"");
-            Editor.Caret.MoveDown(2);
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
             Editor.KeyboardCommands.Type("\"provider\": \"unpkg\",");
             Editor.KeyboardCommands.Enter();
 
@@ -200,7 +219,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 semanticVersions.Add(SemanticVersion.Parse(item.Text));
             }
 
-            for (int i= 1; i < semanticVersions.Count; ++i)
+            for (int i = 1; i < semanticVersions.Count; ++i)
             {
                 Assert.IsTrue(semanticVersions[i].CompareTo(semanticVersions[i - 1]) <= 0);
             }

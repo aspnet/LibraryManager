@@ -52,25 +52,15 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     }
   ]
 }";
-            string deletingLibraryContent = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""libraries"": []
-}";
 
             ReplaceFileContent(addingLibraryContent);
             Helpers.FileIO.WaitForRestoredFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
-
-            ReplaceFileContent(deletingLibraryContent);
-            Helpers.FileIO.WaitForDeletedFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
-
-            ReplaceFileContent(_libmanFileContent);
         }
 
         private void ReplaceFileContent(string content)
         {
             Editor.Selection.SelectAll();
-            Editor.KeyboardCommands.Backspace();
+            Editor.KeyboardCommands.Delete();
             Editor.Edit.InsertTextInBuffer(content);
 
             _libManConfig.Save();

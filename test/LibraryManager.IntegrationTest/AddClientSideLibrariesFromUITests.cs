@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.Test.Apex.Services;
-using Microsoft.Test.Apex.VisualStudio.Shell;
+﻿using System.IO;
 using Microsoft.Test.Apex.VisualStudio.Shell.ToolWindows;
 using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,9 +9,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     [TestClass]
     public class AddClientSideLibrariesFromUITests : VisualStudioLibmanHostTest
     {
-        private string _initialLibmanFileContent;
         private string _pathToLibmanFile;
-        private ProjectTestExtension _webProject;
         private const string _libman = "libman.json";
         private const string _projectName = @"TestProjectCore20";
 
@@ -22,10 +17,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             base.DoHostTestInitialize();
 
-            _webProject = Solution[_projectName];
-            ProjectItemTestExtension libmanConfig = _webProject[_libman];
+            ProjectTestExtension webProject = Solution[_projectName];
+            ProjectItemTestExtension libmanConfig = webProject[_libman];
             _pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, _libman);
-            _initialLibmanFileContent = File.ReadAllText(_pathToLibmanFile);
 
             string libmanConfigFullPath = libmanConfig.FullPath;
 
@@ -35,41 +29,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
                 libmanConfig.Delete();
                 Helpers.FileIO.WaitForDeletedFile(projectPath, libmanConfigFullPath, caseInsensitive: false);
             }
-        }
-
-        protected override void DoHostTestCleanup()
-        {
-            ProjectItemTestExtension libmanConfig = _webProject[_libman];
-
-            if (libmanConfig != null)
-            {
-                CleanClientSideLibraries();
-
-                libmanConfig.Open();
-                Editor.Selection.SelectAll();
-                Editor.KeyboardCommands.Delete();
-                Editor.Edit.InsertTextInBuffer(_initialLibmanFileContent);
-
-                libmanConfig.Save();
-            }
-
-            base.DoHostTestCleanup();
-        }
-
-        private void CleanClientSideLibraries()
-        {
-            Guid guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
-            uint commandId = 0x0200;
-            SolutionExplorerItemTestExtension configFileNode = SolutionExplorer.FindItemRecursive(_libman);
-            configFileNode.Select();
-
-            WaitFor.IsTrue(() =>
-            {
-                CommandQueryResult queryResult = VisualStudio.ObjectModel.Commanding.QueryStatusCommand(guid, commandId);
-                return queryResult.IsEnabled;
-            },TimeSpan.FromMilliseconds(40000), TimeSpan.FromMilliseconds(500));
-
-            VisualStudio.ObjectModel.Commanding.ExecuteCommand(guid, commandId, null);
         }
 
         [TestMethod]
