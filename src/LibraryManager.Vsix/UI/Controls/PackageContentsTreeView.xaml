@@ -13,7 +13,7 @@
         <converters:PackageItemIconConverter x:Key="IconConverter" />
         <converters:VisibleIfNonNullConverter x:Key="VisibleIfNonNullConverter" />
     </UserControl.Resources>
-    <TreeView AutomationProperties.Name="{x:Static resources:Text.SelectLibraryToSelectFilesToInstall}"
+    <TreeView AutomationProperties.Name="{x:Static resources:Text.Files}"
               ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
               VirtualizingPanel.IsVirtualizing="True"
               KeyboardNavigation.TabNavigation="Continue">
