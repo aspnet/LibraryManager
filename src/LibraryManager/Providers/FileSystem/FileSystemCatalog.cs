@@ -114,53 +114,54 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         }
 
         /// <summary>
-        /// Gets the library group from the specified <paramref name="libraryId" />.
+        /// Gets the library group from the specified <paramref name="libraryName" />.
         /// </summary>
-        /// <param name="libraryId">The unique library identifier.</param>
+        /// <param name="libraryName">The name of the library.</param>
+        /// <param name="version">Version of the library. (Ignored for FileSystemProvider)</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>
         /// An instance of <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
         /// </returns>
-        public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
+        public async Task<ILibrary> GetLibraryAsync(string libraryName, string version, CancellationToken cancellationToken)
         {
             ILibrary library;
 
             try
             {
-                if (string.IsNullOrEmpty(libraryId) || libraryId.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+                if (string.IsNullOrEmpty(libraryName) || libraryName.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
                 {
-                    throw new InvalidLibraryException(libraryId, _provider.Id);
+                    throw new InvalidLibraryException(libraryName, _provider.Id);
                 }
 
-                if (libraryId.Contains("://"))
+                if (libraryName.Contains("://"))
                 {
                     library = new FileSystemLibrary
                     {
-                        Name = libraryId,
+                        Name = libraryName,
                         ProviderId = _provider.Id,
-                        Files = await GetFilesAsync(libraryId).ConfigureAwait(false)
+                        Files = await GetFilesAsync(libraryName).ConfigureAwait(false)
                     };
 
                     return library;
                 }
 
-                string path = Path.Combine(_provider.HostInteraction.WorkingDirectory, libraryId);
+                string path = Path.Combine(_provider.HostInteraction.WorkingDirectory, libraryName);
 
                 if (!_underTest && !File.Exists(path) && !Directory.Exists(path))
                 {
-                    throw new InvalidLibraryException(libraryId, _provider.Id);
+                    throw new InvalidLibraryException(libraryName, _provider.Id);
                 }
 
                 library = new FileSystemLibrary
                 {
-                    Name = libraryId,
+                    Name = libraryName,
                     ProviderId = _provider.Id,
                     Files = await GetFilesAsync(path).ConfigureAwait(false)
                 };
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(libraryId, _provider.Id);
+                throw new InvalidLibraryException(libraryName, _provider.Id);
             }
 
             return library;

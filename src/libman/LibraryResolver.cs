@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Tools
 {
@@ -45,7 +46,12 @@ namespace Microsoft.Web.LibraryManager.Tools
                     continue;
                 }
 
-                if (state.LibraryId.Equals(partialName, StringComparison.OrdinalIgnoreCase))
+                string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(
+                                        state.Name,
+                                        state.Version,
+                                        state.ProviderId);
+
+                if (libraryId.Equals(partialName, StringComparison.OrdinalIgnoreCase))
                 {
                     idMatches.Add(state);
                 }
@@ -89,38 +95,6 @@ namespace Microsoft.Web.LibraryManager.Tools
                     return installedLibraries.ElementAt(choiceIndex - 1);
                 }
             }
-        }
-
-        private static async Task<IEnumerable<ILibraryInstallationState>> FindCandidatesFromSearchGroupAsync(
-            string partialName,
-            Manifest manifest,
-            string providerId,
-            IReadOnlyList<ILibraryGroup> searchGroups,
-            CancellationToken cancellationToken)
-        {
-            var libraries = new List<ILibraryInstallationState>();
-            if (searchGroups != null && searchGroups.Any())
-            {
-                foreach (ILibraryGroup group in searchGroups)
-                {
-                    if (group.DisplayName.Equals(partialName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        IEnumerable<string> libraryIds = await group.GetLibraryIdsAsync(cancellationToken);
-
-                        var libraryIdSet = libraryIds.ToHashSet(StringComparer.OrdinalIgnoreCase);
-                        IEnumerable<ILibraryInstallationState> candidates = manifest.Libraries
-                            .Where(l => libraryIdSet.Contains(l.LibraryId)
-                                && IsLibraryInstalledByProvider(l, providerId, manifest.DefaultProvider));
-
-                        if (candidates.Any())
-                        {
-                            libraries.AddRange(candidates);
-                        }
-                    }
-                }
-            }
-
-            return libraries;
         }
 
         private static Dictionary<string, ILibraryCatalog> GetCatalogs(Manifest manifest, IDependencies manifestDependencies, IProvider provider)

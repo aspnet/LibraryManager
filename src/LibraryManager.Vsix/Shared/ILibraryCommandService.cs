@@ -9,13 +9,13 @@ using EnvDTE;
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     /// <summary>
-    /// Contains wrapper methods for Manifest operations calls. 
+    /// Contains wrapper methods for Manifest operations calls.
     /// Handles Visual Studio specific behaviors (Task Management, Solution Events listeners and logging)
     /// </summary>
     internal interface ILibraryCommandService
     {
         /// <summary>
-        /// Clean the libraries defined in manifest 
+        /// Clean the libraries defined in manifest
         /// </summary>
         /// <param name="configProjectItem">ProjectItem for the manifest file (libman.json)</param>
         /// <param name="cancellationToken"></param>
@@ -49,13 +49,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
         Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Unsintalls a library from a manifest 
+        /// Unsintalls a library from a manifest
         /// </summary>
         /// <param name="configFilePath">libman.json file path</param>
-        /// <param name="libraryId">library ID</param>
+        /// <param name="libraryName">library ID</param>
+        /// <param name="version">version of the library</param>
+        /// <param name="providerId">Id of the provider for this library</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken);
+        Task UninstallAsync(string configFilePath, string libraryName, string version, string providerId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Returns true if there is already one operation in progress

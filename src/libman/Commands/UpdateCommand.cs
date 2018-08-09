@@ -96,30 +96,19 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 libraryToUpdate = installedLibraries.First();
             }
 
-            string newLibraryId = null;
+            string newVersion = ToVersion.HasValue()
+                ? ToVersion.Value()
+                : await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
 
-            if (ToVersion.HasValue())
+            if (newVersion == null || newVersion == libraryToUpdate.Version)
             {
-                newLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUpdate.Name, ToVersion.Value(), libraryToUpdate.ProviderId);
-            }
-            else
-            {
-                string latestVersion = await GetLatestVersionAsync(libraryToUpdate, CancellationToken.None);
-                if (!string.IsNullOrEmpty(latestVersion))
-                {
-                    newLibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUpdate.Name, latestVersion, libraryToUpdate.ProviderId);
-                }
-            }
-
-            if (newLibraryId == null || newLibraryId == libraryToUpdate.LibraryId)
-            {
-                Logger.Log(string.Format(Resources.Text.LatestVersionAlreadyInstalled, libraryToUpdate.LibraryId), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.Text.LatestVersionAlreadyInstalled, libraryToUpdate.Name), LogLevel.Operation);
                 return 0;
             }
 
             Manifest backup = manifest.Clone();
             string oldLibraryName = libraryToUpdate.Name;
-            manifest.ReplaceLibraryId(libraryToUpdate, newLibraryId);
+            manifest.UpdateLibraryVersion(libraryToUpdate, newVersion);
 
             // Delete files from old version of the library.
             await backup.RemoveUnwantedFilesAsync(manifest, CancellationToken.None);
@@ -130,13 +119,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             foreach (ILibraryOperationResult r in results)
             {
-                if (!r.Success && r.Errors.Any(e => e.Message.Contains(libraryToUpdate.LibraryId)))
+                if (!r.Success && r.Errors.Any(e => e.Message.Contains(libraryToUpdate.Name)))
                 {
                     result = r;
                     break;
                 }
                 else if (r.Success
-                    && r.InstallationState.LibraryId == libraryToUpdate.LibraryId
+                    && r.InstallationState.Name  == libraryToUpdate.Name
                     && r.InstallationState.ProviderId == libraryToUpdate.ProviderId
                     && r.InstallationState.DestinationPath == libraryToUpdate.DestinationPath)
                 {
@@ -148,7 +137,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (result.Success)
             {
                 await manifest.SaveAsync(HostEnvironment.EnvironmentSettings.ManifestFileName, CancellationToken.None);
-                Logger.Log(string.Format(Resources.Text.LibraryUpdated, oldLibraryName, newLibraryId), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.Text.LibraryUpdated, oldLibraryName, newVersion), LogLevel.Operation);
             }
             else if (result.Errors != null)
             {
@@ -179,11 +168,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             try
             {
-                return await catalog.GetLatestVersion(libraryToUpdate.LibraryId, PreRelease.HasValue(), cancellationToken);
+                return await catalog.GetLatestVersion(libraryToUpdate.Name, PreRelease.HasValue(), cancellationToken);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException(string.Format(Resources.Text.UnableToFindLatestVersionForLibrary, libraryToUpdate.LibraryId), ex);
+                throw new InvalidOperationException(string.Format(Resources.Text.UnableToFindLatestVersionForLibrary, libraryToUpdate.Name), ex);
             }
         }
 

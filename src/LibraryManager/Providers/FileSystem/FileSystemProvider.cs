@@ -139,11 +139,11 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             try
             {
                 ILibraryCatalog catalog = GetCatalog();
-                ILibrary library = await catalog.GetLibraryAsync(desiredState.LibraryId, cancellationToken).ConfigureAwait(false);
+                ILibrary library = await catalog.GetLibraryAsync(desiredState.Name, desiredState.Version, cancellationToken).ConfigureAwait(false);
 
                 if (library == null)
                 {
-                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, Id));
+                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.Name, Id));
                 }
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
@@ -154,14 +154,16 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 desiredState = new LibraryInstallationState
                 {
                     ProviderId = Id,
-                    LibraryId = desiredState.LibraryId,
+                    Name = desiredState.Name,
                     DestinationPath = desiredState.DestinationPath,
                     Files = library.Files.Keys.ToList(),
+                    IsUsingDefaultDestination = desiredState.IsUsingDefaultDestination,
+                    IsUsingDefaultProvider = desiredState.IsUsingDefaultProvider
                 };
             }
             catch (InvalidLibraryException)
             {
-                return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.LibraryId, desiredState.ProviderId));
+                return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.Name, desiredState.ProviderId));
             }
             catch (UnauthorizedAccessException)
             {
@@ -201,7 +203,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
         private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string file, CancellationToken cancellationToken)
         {
-            string sourceFile = state.LibraryId;
+            string sourceFile = state.Name;
 
             try
             {
@@ -239,7 +241,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(state.LibraryId, state.ProviderId);
+                throw new InvalidLibraryException(state.Name, state.ProviderId);
             }
         }
 

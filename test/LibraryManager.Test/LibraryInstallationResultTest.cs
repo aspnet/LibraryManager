@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Test
             return new Mocks.LibraryInstallationState
             {
                 ProviderId = "_prov_",
-                LibraryId = "_lib_",
+                Name = "_lib_",
                 DestinationPath = "_path_",
                 Files = new List<string>() { "a", "b" },
             };

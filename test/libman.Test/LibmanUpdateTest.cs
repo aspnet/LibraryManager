@@ -168,7 +168,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            Assert.AreEqual("The library \"jquery@3.3.1\" is already up to date", logger.Messages.Last().Value);
+            Assert.AreEqual("The library \"jquery\" is already up to date", logger.Messages.Last().Value);
         }
 
         [TestMethod]

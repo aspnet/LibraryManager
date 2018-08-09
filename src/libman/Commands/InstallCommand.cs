@@ -129,7 +129,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 destinationToUse = InstallDestination;
             }
 
-            IEnumerable<ILibraryOperationResult> results = await _manifest.InstallLibraryAsync(libraryId, providerIdToUse, files, destinationToUse, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await _manifest.InstallLibraryAsync(
+                                                                library.Name,
+                                                                library.Version,
+                                                                providerIdToUse,
+                                                                files,
+                                                                destinationToUse,
+                                                                CancellationToken.None);
 
             if (results.All(r => r.Success))
             {
@@ -163,9 +169,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         private async Task<(string libraryId, ILibrary library)> ValidateLibraryExistsInCatalogAsync(CancellationToken cancellationToken)
         {
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(LibraryId.Value, ProviderToUse.Id);
             try
             {
-                ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(LibraryId.Value, cancellationToken);
+                ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(name, version, cancellationToken);
 
                 if (libraryToInstall != null)
                 {
@@ -189,23 +196,17 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             foreach (ILibraryGroup libGroup in libraryGroup)
             {
-                IEnumerable<string> libIds = await libGroup.GetLibraryIdsAsync(cancellationToken);
-                if (libIds == null || !libIds.Any())
-                {
-                    continue;
-                }
-
                 if (libGroup.DisplayName.Equals(LibraryId.Value, StringComparison.OrdinalIgnoreCase))
                 {
                     // Found a group with an exact match.
-                    string latestVersion = await ProviderCatalog.GetLatestVersion(libIds.First(), false, cancellationToken);
+                    string latestVersion = await ProviderCatalog.GetLatestVersion(libGroup.DisplayName, false, cancellationToken);
                     string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libGroup.DisplayName, latestVersion, ProviderId);
-                    ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(libraryId, cancellationToken);
+                    ILibrary libraryToInstall = await ProviderCatalog.GetLibraryAsync(libGroup.DisplayName, latestVersion, cancellationToken);
 
                     return (libraryId, libraryToInstall);
                 }
 
-                sb.AppendLine("  " + libIds.First());
+                sb.AppendLine("  " + libGroup.DisplayName);
             }
 
             sb.Insert(0, $"[{invalidLibraryError.Code}]: {invalidLibraryError.Message} {Environment.NewLine} {Resources.Text.SuggestedIdsMessage}{Environment.NewLine}");

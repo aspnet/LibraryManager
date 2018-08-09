@@ -71,17 +71,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (task.IsCompleted)
             {
-                CompletionSet set = task.Result;
-                int start = member.Value.Start;
-                ITrackingSpan trackingSpan = context.Snapshot.CreateTrackingSpan(start + 1 + set.Start, set.Length, SpanTrackingMode.EdgeInclusive);
+                CompletionSet completionSet = task.Result;
 
-                if (set.Completions != null)
+                if (completionSet.Completions != null)
                 {
-                    foreach (CompletionItem item in set.Completions)
+                    List<JSONCompletionEntry> results = GetCompletionList(member, context, completionSet, count);
+
+                    foreach (JSONCompletionEntry completionEntry in results)
                     {
-                        string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
-                        ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                        yield return new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count);
+                        yield return completionEntry;
                     }
                 }
             }
@@ -93,26 +91,43 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 {
                     if (!context.Session.IsDismissed)
                     {
-                        CompletionSet set = task.Result;
-                        int start = member.Value.Start;
-                        ITrackingSpan trackingSpan = context.Snapshot.CreateTrackingSpan(start + 1 + set.Start, set.Length, SpanTrackingMode.EdgeExclusive);
+                        CompletionSet completionSet = task.Result;
 
-                        if (set.Completions != null)
+                        if (completionSet.Completions != null)
                         {
-                            var results = new List<JSONCompletionEntry>();
-
-                            foreach (CompletionItem item in set.Completions)
-                            {
-                                string insertionText = item.InsertionText.Replace("\\", "\\\\");
-                                ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
-                                results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
-                            }
+                            List<JSONCompletionEntry> results = GetCompletionList(member, context, completionSet, count);
 
                             UpdateListEntriesSync(context, results);
                         }
                     }
                 });
             }
+        }
+
+        private List<JSONCompletionEntry> GetCompletionList(JSONMember member, JSONCompletionContext context, CompletionSet completionSet, int count)
+        {
+            int start = member.Value.Start;
+            ITrackingSpan trackingSpan = context.Snapshot.CreateTrackingSpan(start + 1 + completionSet.Start, completionSet.Length, SpanTrackingMode.EdgeExclusive);
+            bool isVersionCompletion = (completionSet.CompletionType == CompletionSortOrder.Version);
+
+            List<JSONCompletionEntry> results = new List<JSONCompletionEntry>();
+
+            foreach (CompletionItem item in completionSet.Completions)
+            {
+                string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
+                ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
+
+                if (isVersionCompletion)
+                {
+                    results.Add(new VersionCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
+                }
+                else
+                {
+                    results.Add(new SimpleCompletionEntry(item.DisplayText, insertionText, item.Description, moniker, trackingSpan, context.Session, ++count));
+                }
+            }
+
+            return results;
         }
     }
 }

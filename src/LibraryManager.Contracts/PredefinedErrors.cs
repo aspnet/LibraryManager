@@ -45,6 +45,19 @@ namespace Microsoft.Web.LibraryManager.Contracts
             => new Error("LIB002", string.Format(Text.ErrorUnableToResolveSource, libraryId, providerId));
 
         /// <summary>
+        /// The <see cref="IProvider"/> is unable to resolve the source.
+        /// </summary>
+        /// <param name="libraryName">Name of the library</param>
+        /// <param name="version">Version of the library</param>
+        /// <param name="providerId">The ID of the <see cref="IProvider"/> that could not resolve the resource.</param>
+        /// <returns>The error code LIB002</returns>
+        public static IError UnableToResolveSource(string libraryName, string version, string providerId)
+        {
+            string libraryId = string.IsNullOrEmpty(version) ? libraryName : $"{libraryName}@{version}";
+            return UnableToResolveSource(libraryId, providerId);
+        }
+
+        /// <summary>
         /// The <see cref="IProvider"/> failed to write a file in the <see cref="ILibraryInstallationState.Files"/> array.
         /// </summary>
         /// <param name="file">The file name that failed to be written to disk.</param>

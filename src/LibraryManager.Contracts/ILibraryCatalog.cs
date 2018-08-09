@@ -20,12 +20,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
         Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition);
 
         /// <summary>
-        /// Gets the library group from the specified <paramref name="libraryId"/>.
+        /// Gets the library group from the specified <paramref name="libraryName"/>.
         /// </summary>
-        /// <param name="libraryId">The unique library identifier.</param>
+        /// <param name="libraryName">The name of the library.</param>
+        /// <param name="version">The version of the library</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>An instance of <see cref="ILibraryGroup"/> or <code>null</code>.</returns>
-        Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken);
+        Task<ILibrary> GetLibraryAsync(string libraryName, string version, CancellationToken cancellationToken);
 
         /// <summary>
         /// Searches the catalog for the specified search term.
@@ -38,10 +39,10 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// Gets the latest version of the library.
         /// </summary>
-        /// <param name="libraryId">The library identifier.</param>
+        /// <param name="libraryName">The library identifier.</param>
         /// <param name="includePreReleases">if set to <c>true</c> includes pre-releases.</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>The library identifier of the latest released version.</returns>
-        Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken);
+        Task<string> GetLatestVersion(string libraryName, bool includePreReleases, CancellationToken cancellationToken);
     }
 }
