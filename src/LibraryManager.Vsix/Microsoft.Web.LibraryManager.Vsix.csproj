@@ -57,15 +57,18 @@
     <Compile Include="UI\InstallDialogProvider.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
     <Compile Include="UI\Controls\BindLibraryNameToTargetLocation.cs" />
+    <Compile Include="UI\Controls\LibraryAutomationPeer.cs" />
     <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
       <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\PackageContentsTreeViewAutomationPeer.cs" />
     <Compile Include="UI\Controls\Search\ISearchItem.cs" />
     <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
     <Compile Include="UI\Controls\Search\Wrapper.cs" />
     <Compile Include="UI\Controls\Library.xaml.cs">
       <DependentUpon>Library.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\TargetLocationAutomationPeer.cs" />
     <Compile Include="UI\Controls\ThemedWindow.cs" />
     <Compile Include="UI\Converters\BoldingConverter.cs" />
     <Compile Include="UI\Converters\NotConverter.cs" />

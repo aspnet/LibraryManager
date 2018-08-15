@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
+﻿using System.Windows.Automation.Peers;
+
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
     /// <summary>
     /// Interaction logic for PackageContentsTreeView.xaml
@@ -7,7 +9,12 @@
     {
         public PackageContentsTreeView()
         {
-            InitializeComponent();         
+            InitializeComponent();
+        }
+
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new PackageContentsTreeViewAutomationPeer(this);
         }
     }
 }
