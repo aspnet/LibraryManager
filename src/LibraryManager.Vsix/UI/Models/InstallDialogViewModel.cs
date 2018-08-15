@@ -17,7 +17,6 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
 using Microsoft.Web.LibraryManager.Vsix.UI.Controls;
 using Newtonsoft.Json;
@@ -85,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
 
             Providers = providers;
-            InstallPackageCommand = ActionCommand.Create(InstallPackage, CanInstallPackage, false);
+            InstallPackageCommand = ActionCommand.Create(InstallPackageAsync, CanInstallPackage, false);
             Task t = LoadPackagesAsync();
         }
 
@@ -289,8 +288,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private void RefreshFileSelections()
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(_packageId, SelectedProvider.Id);
-            SelectedProvider.GetCatalog().GetLibraryAsync(name, version, CancellationToken.None).ContinueWith(x =>
+            SelectedProvider.GetCatalog().GetLibraryAsync(_packageId, CancellationToken.None).ContinueWith(x =>
             {
                 if (x.IsFaulted || x.IsCanceled)
                 {
@@ -366,11 +364,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public async Task<bool> IsLibraryInstallationStateValidAsync()
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(PackageId, SelectedProvider.Id);
             LibraryInstallationState libraryInstallationState = new LibraryInstallationState
             {
-                Name = name,
-                Version = version,
+                LibraryId = PackageId,
                 ProviderId = SelectedProvider.Id,
                 DestinationPath = InstallationFolder.DestinationFolder,
                 Files = SelectedFiles?.ToList()
@@ -420,12 +416,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             return false;
         }
 
-        private void InstallPackage()
-        {
-            Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async() => await InstallPackageAsync()).Task.ConfigureAwait(false);
-        }
-
-        private async Task InstallPackageAsync()
+        private async void InstallPackageAsync()
         {
             try
             {
@@ -450,11 +441,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         manifest.Version = Manifest.SupportedVersions.Max().ToString();
                     }
 
-                    (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(PackageId, SelectedProvider.Id);
                     LibraryInstallationState libraryInstallationState = new LibraryInstallationState
                     {
-                        Name = name,
-                        Version = version,
+                        LibraryId = PackageId,
                         ProviderId = selectedPackage.ProviderId,
                         DestinationPath = InstallationFolder.DestinationFolder,
                     };

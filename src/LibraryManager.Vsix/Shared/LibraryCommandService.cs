@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio.TaskStatusCenter;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.LibraryNaming;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -27,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private CancellationTokenSource _internalCancellationTokenSource;
         private Task _currentOperationTask;
         private DefaultSolutionEvents _solutionEvents;
-        private object _lockObject = new object();
+        private object _lockObject = new object(); 
 
         [ImportingConstructor]
         public LibraryCommandService()
@@ -66,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public async Task RestoreAsync(string configFilePath, CancellationToken cancellationToken)
         {
-            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(new[] { configFilePath }, cancellationToken).ConfigureAwait(false);
+            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(new[] { configFilePath }, cancellationToken);
 
             if (manifests.Count > 0)
             {
@@ -76,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken)
         {
-            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(configFilePaths, cancellationToken).ConfigureAwait(false);
+            Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(configFilePaths, cancellationToken);
             await RestoreAsync(manifests, cancellationToken);
         }
 
@@ -85,14 +84,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             await RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest }, cancellationToken);
         }
 
-        public async Task UninstallAsync(string configFilePath, string libraryName, string version, string providerId, CancellationToken cancellationToken)
+        public async Task UninstallAsync(string configFilePath, string libraryId, CancellationToken cancellationToken)
         {
-            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryName, version, providerId);
-            string taskTitle = GetTaskTitle(OperationType.Uninstall, libraryName);
+            string taskTitle = GetTaskTitle(OperationType.Uninstall, libraryId);
             string errorMessage = string.Format(LibraryManager.Resources.Text.Uninstall_LibraryFailed, libraryId);
 
-            await RunTaskAsync((internalToken)
-                => UninstallLibraryAsync(configFilePath, libraryName, version, providerId, internalToken), taskTitle, errorMessage);
+            await RunTaskAsync((internalToken) => UninstallLibraryAsync(configFilePath, libraryId, internalToken), taskTitle, errorMessage);
         }
 
         public async Task CleanAsync(ProjectItem configProjectItem, CancellationToken cancellationToken)
@@ -262,9 +259,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return await manifest.RestoreAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task UninstallLibraryAsync(string configFilePath, string libraryName, string providerId, string version,CancellationToken cancellationToken)
+        private async Task UninstallLibraryAsync(string configFilePath, string libraryId, CancellationToken cancellationToken)
         {
-            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryName, version, providerId);
             Logger.LogEventsHeader(OperationType.Uninstall, libraryId);
 
             try
@@ -283,7 +279,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 else
                 {
                     IHostInteraction hostInteraction = dependencies.GetHostInteractions();
-                    result = await manifest.UninstallAsync(libraryName, version, async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken).ConfigureAwait(false);
+                    result = await manifest.UninstallAsync(libraryId, async (filesPaths) => await hostInteraction.DeleteFilesAsync(filesPaths, cancellationToken), cancellationToken).ConfigureAwait(false);
                 }
 
                 sw.Stop();

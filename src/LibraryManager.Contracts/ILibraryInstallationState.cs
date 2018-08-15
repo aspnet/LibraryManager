@@ -11,6 +11,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
     public interface ILibraryInstallationState
     {
         /// <summary>
+        /// The identifyer to uniquely identify the library
+        /// </summary>
+        string LibraryId { get; }
+
+        /// <summary>
         /// The name of the library.
         /// </summary>
         string Name { get; }
@@ -34,15 +39,5 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// The path relative to the working directory to copy the files to.
         /// </summary>
         string DestinationPath { get; }
-
-        /// <summary>
-        /// Indicates whether the library is using the default destination
-        /// </summary>
-        bool IsUsingDefaultDestination { get; }
-
-        /// <summary>
-        /// Indicates whether the library is using the default provider
-        /// </summary>
-        bool IsUsingDefaultProvider { get; }
     }
 }

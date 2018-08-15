@@ -58,18 +58,17 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             Assert.IsNotNull(group.Description);
 
             // Get all libraries in group to display version list
-            IEnumerable<string> versions = await group.GetLibraryVersions(CancellationToken.None);
-            Assert.IsTrue(versions.Count() >= 67);
-            Assert.AreEqual("1.2.3", versions.Last(), "Library version mismatch");
+            IEnumerable<string> libraryIds = await group.GetLibraryIdsAsync(CancellationToken.None);
+            Assert.IsTrue(libraryIds.Count() >= 67);
+            Assert.AreEqual("jquery@1.2.3", libraryIds.Last(), "Library version mismatch");
 
             // Get the library to install
-            ILibrary library = await catalog.GetLibraryAsync(group.DisplayName, versions.First(), CancellationToken.None);
+            ILibrary library = await catalog.GetLibraryAsync(libraryIds.First(), CancellationToken.None);
             Assert.AreEqual(group.DisplayName, library.Name);
 
             var desiredState = new LibraryInstallationState
             {
-                Name = "jquery",
-                Version = "3.1.1",
+                LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "jquery.js", "jquery.min.js" }
@@ -95,8 +94,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             var desiredState = new LibraryInstallationState
             {
-                Name = "*&(}:",
-                Version = "3.1.1",
+                LibraryId = "*&(}:@3.1.1",
                 ProviderId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "jquery.min.js" }
@@ -113,8 +111,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "cdnjs",
-                Name = "jquery",
-                Version = "1.2.3",
+                LibraryId = "jquery@1.2.3",
                 DestinationPath = "lib"
             };
 
@@ -135,8 +132,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "cdnjs",
-                Name = "jquery",
-                Version = "1.2.3"
+                LibraryId = "jquery@1.2.3"
             };
 
             // Install library
@@ -152,8 +148,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             var desiredState = new LibraryInstallationState
             {
-                Name = "jquery",
-                Version = "1.2.3",
+                LibraryId = "jquery@1.2.3",
                 DestinationPath = "lib"
             };
 
@@ -167,8 +162,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             var desiredState = new LibraryInstallationState
             {
-                Name = "jquery",
-                Version = "3.1.1",
+                LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "file1.txt", "file2.txt" }

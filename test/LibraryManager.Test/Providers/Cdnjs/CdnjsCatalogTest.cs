@@ -45,10 +45,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
             IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
             Assert.AreEqual(1, absolute.Count);
-            IEnumerable<string> versions = await absolute[0].GetLibraryVersions(token);
-            Assert.IsTrue(versions.Any());
+            IEnumerable<string> libraryId = await absolute[0].GetLibraryIdsAsync(token);
+            Assert.IsTrue(libraryId.Any());
 
-            ILibrary library = await _catalog.GetLibraryAsync(absolute[0].DisplayName, versions.First(), token);
+            ILibrary library = await _catalog.GetLibraryAsync(libraryId.First(), token);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual(expectedId, library.Name);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
@@ -86,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLibraryAsync_Success()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("jquery", "3.1.1", token);
+            ILibrary library = await _catalog.GetLibraryAsync("jquery@3.1.1", token);
 
             Assert.IsNotNull(library);
             Assert.AreEqual("jquery", library.Name);
@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", "invalid_version" , token);
+            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", token);
         }
 
         [TestMethod]
@@ -131,99 +131,28 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLatestVersion_LatestExist()
         {
             CancellationToken token = CancellationToken.None;
-            // "twitter-bootstrap@3.3.0"
-            const string libraryName = "twitter-bootstrap";
-            const string oldVersion = "3.3.0";
-            string result = await _catalog.GetLatestVersion(libraryName, false, token);
+            const string libraryId = "twitter-bootstrap@3.3.0";
+            string result = await _catalog.GetLatestVersion(libraryId, false, token);
 
             Assert.IsNotNull(result);
 
-            Assert.AreNotEqual(oldVersion, result);
+            string[] existing = libraryId.Split('@');
+
+            Assert.AreNotEqual(existing[1], result);
         }
 
         [TestMethod]
         public async Task GetLatestVersion_PreRelease()
         {
             CancellationToken token = CancellationToken.None;
-            // "twitter-bootstrap@3.3.0"
-            const string libraryName = "twitter-bootstrap";
-            const string oldVersion = "3.3.0";
-            string result = await _catalog.GetLatestVersion(libraryName, true, token);
+            const string libraryId = "twitter-bootstrap@3.3.0";
+            string result = await _catalog.GetLatestVersion(libraryId, true, token);
 
             Assert.IsNotNull(result);
 
-            Assert.AreNotEqual(oldVersion, result);
-        }
+            string[] existing = libraryId.Split('@');
 
-        [TestMethod]
-        public void ConvertToLibraryGroup_ValidJsonCatalog()
-        {
-            string json = @"{""results"":[{""name"":""1140"",""latest"":""https://cdnjs.cloudflare.com/ajax/libs/1140/2.0/1140.min.css"",
-""description"":""The 1140 grid fits perfectly into a 1280 monitor. On smaller monitors it becomes fluid and adapts to the width of the browser.""
-,""version"":""2.0""}],""total"":1}";
-
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
-
-            IEnumerable<CdnjsLibraryGroup> libraryGroup = cdnjsCatalog.ConvertToLibraryGroups(json);
-
-            Assert.AreEqual(1, libraryGroup.Count());
-            CdnjsLibraryGroup library = libraryGroup.First();
-            Assert.AreEqual("1140", library.DisplayName);
-            Assert.AreEqual("The 1140 grid fits perfectly into a 1280 monitor. On smaller monitors it becomes fluid and adapts to the width of the browser.", library.Description);
-            Assert.AreEqual("2.0", library.Version);
-        }
-
-        [DataTestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow(@"{""results"":[12}")]
-        public void ConvertToLibraryGroup_InvalidJsonCatalog(string json)
-        {
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
-
-            IEnumerable<CdnjsLibraryGroup> libraryGroup = cdnjsCatalog.ConvertToLibraryGroups(json);
-
-            Assert.IsNull(libraryGroup);
-        }
-
-        [TestMethod]
-        public void ConvertToAssets_ValidAsset()
-        {
-            string json = @"{""name"":""jquery"",""filename"":""jquery.min.js"",""version"":""3.3.1"",""description"":""JavaScript library for DOM operations"",
-""homepage"":""http://jquery.com/"",""keywords"":[""jquery"",""library"",""ajax"",""framework"",""toolkit"",""popular""],""namespace"":""jQuery"",
-""repository"":{""type"":""git"",""url"":""https://github.com/jquery/jquery.git""},""license"":""MIT"",
-""author"":{""name"":""jQuery Foundation and other contributors"",""url"":""https://github.com/jquery/jquery/blob/master/AUTHORS.txt""},
-""autoupdate"":{""type"":""npm"",""target"":""jquery""},
-""assets"":[{""version"":""3.3.1"",""files"":[""core.js"",""jquery.js"",""jquery.min.js"",""jquery.min.map"",""jquery.slim.js"",""jquery.slim.min.js"",""jquery.slim.min.map""]}]}";
-
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
-
-            List<Asset> list = cdnjsCatalog.ConvertToAssets(json);
-
-            Assert.AreEqual(1, list.Count());
-            Asset asset = list[0];
-            Assert.AreEqual("3.3.1", asset.Version);
-
-            string[] expectedFiles = new string[] { "core.js", "jquery.js", "jquery.min.js", "jquery.min.map", "jquery.slim.js", "jquery.slim.min.js", "jquery.slim.min.map" };
-            Assert.AreEqual(7, asset.Files.Count());
-            foreach(string file in expectedFiles)
-            {
-                Assert.IsTrue(asset.Files.Contains(file));
-            }
-
-            Assert.AreEqual("jquery.min.js", asset.DefaultFile);
-        }
-
-        [TestMethod]
-        public void ConvertToAssets_InvalidAsset()
-        {
-            string json = "abcd";
-
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
-
-            List<Asset> list = cdnjsCatalog.ConvertToAssets(json);
-
-            Assert.IsNull(list);
+            Assert.AreNotEqual(existing[1], result);
         }
     }
 }

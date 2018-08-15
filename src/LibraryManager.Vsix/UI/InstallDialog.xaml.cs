@@ -16,7 +16,7 @@ using Shell = Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
-    internal partial class InstallDialog : DialogWindow, IInstallDialog
+    internal partial class InstallDialog : DialogWindow
     {
         private readonly IDependencies _deps;
         private readonly string _fullPath;
@@ -45,22 +45,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             _project = project;
 
             Loaded += OnLoaded;
-        }
-
-        protected override void OnActivated(EventArgs e)
-        {
-            base.OnActivated(e);
-            OnActivateTestContract();
-        }
-
-        private void OnActivateTestContract()
-        {
-            InstallDialogProvider.Window = this;
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            InstallDialogProvider.Window = null;
         }
 
         internal InstallDialogViewModel ViewModel
@@ -202,26 +186,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             }
         }
 
-        private async void InstallButton_ClickedAsync(object sender, RoutedEventArgs e)
+        private void InstallButton_Clicked(object sender, RoutedEventArgs e)
         {
-            await ClickInstallButtonAsync();
-        }
+            bool isLibraryInstallationStateValid = false;
 
-        private async Task<bool> IsLibraryInstallationStateValidAsync()
-        {
-            bool isLibraryInstallationStateValid = await ViewModel.IsLibraryInstallationStateValidAsync().ConfigureAwait(false);
-            return isLibraryInstallationStateValid;
-        }
-
-        async Task ClickInstallButtonAsync()
-        {
-            bool isLibraryInstallationStateValid = await IsLibraryInstallationStateValidAsync().ConfigureAwait(false);
+            Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                isLibraryInstallationStateValid = await ViewModel.IsLibraryInstallationStateValidAsync().ConfigureAwait(false);
+            });
 
             if (isLibraryInstallationStateValid)
             {
-                await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 CloseDialog(true);
-                ViewModel.InstallPackageCommand.Execute(null);
             }
             else
             {
@@ -239,31 +215,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                                      msgicon: OLEMSGICON.OLEMSGICON_WARNING,
                                      fSysAlert: 0,
                                      pnResult: out result);
-            }
-        }
-
-        string IInstallDialog.Library
-        {
-            get
-            {
-                return LibrarySearchBox.Text;
-            }
-            set
-            {
-                this.LibrarySearchBox.Text = value;
-            }
-        }
-
-        async Task IInstallDialog.ClickInstallAsync()
-        {
-            await ClickInstallButtonAsync();
-        }
-
-        bool IInstallDialog.IsAnyFileSelected
-        {
-            get
-            {
-                return !ViewModel.IsTreeViewEmpty;
             }
         }
     }

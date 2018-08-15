@@ -4,7 +4,6 @@
 using System;
 using System.Text;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Tools
 {
@@ -25,12 +24,7 @@ namespace Microsoft.Web.LibraryManager.Tools
                 throw new ArgumentNullException(nameof(libraryInstallationState));
             }
 
-            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(
-                                    libraryInstallationState.Name,
-                                    libraryInstallationState.Version,
-                                    libraryInstallationState.ProviderId);
-
-            var sb = new StringBuilder("{"+libraryId);
+            var sb = new StringBuilder("{"+libraryInstallationState.LibraryId);
 
             if (!string.IsNullOrEmpty(libraryInstallationState.ProviderId))
             {

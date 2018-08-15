@@ -58,7 +58,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                Name = _file1,
+                LibraryId = _file1,
                 DestinationPath = "lib",
                 Files = new[] { "file1.txt" }
             };
@@ -85,7 +85,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                Name = "folder/file.txt",
+                LibraryId = "folder/file.txt",
                 DestinationPath = "lib",
                 Files = new[] { "relative.txt" }
             };
@@ -121,7 +121,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                Name = folder,
+                LibraryId = folder,
                 DestinationPath = "lib",
                 Files = new[] { "file1.js", "file2.js" }
             };
@@ -157,7 +157,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                Name = relativeFolder.OriginalString,
+                LibraryId = relativeFolder.OriginalString,
                 DestinationPath = "lib",
                 Files = new[] { "file1.js", "file2.js" }
             };
@@ -183,7 +183,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                Name = "https://raw.githubusercontent.com/jquery/jquery/master/src/event.js",
+                LibraryId = "https://raw.githubusercontent.com/jquery/jquery/master/src/event.js",
                 DestinationPath = "lib",
                 Files = new[] { "event.js" }
             };
@@ -210,7 +210,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                Name = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
+                LibraryId = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
                 DestinationPath = "lib",
                 Files = new[] { "Flag.png" }
             };
@@ -230,7 +230,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                Name = @"../file/does/not/exist.txt",
+                LibraryId = @"../file/does/not/exist.txt",
                 DestinationPath = "lib",
                 Files = new[] { "file.js" }
             };
@@ -248,7 +248,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             var desiredState = new LibraryInstallationState
             {
                 ProviderId = "filesystem",
-                Name = @"../file/does/not/exist.txt",
+                LibraryId = @"../file/does/not/exist.txt",
                 Files = new[] { "file.js" }
             };
 
@@ -281,7 +281,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             IProvider provider = _dependencies.GetProvider("filesystem");
             var desiredState = new LibraryInstallationState
             {
-                Name = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
+                LibraryId = "http://glyphlist.azurewebsites.net/img/images/Flag.png",
                 DestinationPath = "lib",
                 Files = new[] { "Flag.png" }
             };

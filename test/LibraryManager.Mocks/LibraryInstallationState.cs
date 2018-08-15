@@ -13,6 +13,11 @@ namespace Microsoft.Web.LibraryManager.Mocks
     public class LibraryInstallationState : ILibraryInstallationState
     {
         /// <summary>
+        /// The identifyer to uniquely identify the library
+        /// </summary>
+        public virtual string LibraryId { get; set; }
+
+        /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
         public virtual string ProviderId { get; set; }
@@ -36,15 +41,5 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// Version of the library.
         /// </summary>
         public string Version { get; set; }
-
-        /// <summary>
-        /// Indicates whether the library is using the default destination
-        /// </summary>
-        public bool IsUsingDefaultDestination { get; set; }
-
-        /// <summary>
-        /// Indicates whether the library is using the default provider.
-        /// </summary>
-        public bool IsUsingDefaultProvider { get; set; }
     }
 }

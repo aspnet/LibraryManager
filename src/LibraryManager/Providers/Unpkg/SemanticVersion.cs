@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.Web.LibraryManager
+namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
     internal class SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>
     {

@@ -28,13 +28,12 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <summary>
         /// Gets the library group from the specified <paramref name="libraryId" />.
         /// </summary>
-        /// <param name="libraryId">Name of the library</param>
-        /// <param name="version">Version of the library</param>
+        /// <param name="libraryId">The unique library identifier.</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>
         /// An instance of <see cref="T:LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
         /// </returns>
-        public virtual Task<ILibrary> GetLibraryAsync(string libraryId, string version, CancellationToken cancellationToken)
+        public virtual Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
         {
             var library = new Library
             {

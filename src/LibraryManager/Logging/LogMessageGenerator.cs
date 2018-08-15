@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Logging
 {
@@ -250,8 +249,7 @@ namespace Microsoft.Web.LibraryManager.Logging
             {
                 if (totalResults != null && totalResults.Count() == 1)
                 {
-                    ILibraryInstallationState state = totalResults.First().InstallationState;
-                    return LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, state.ProviderId);
+                    return totalResults.First().InstallationState.LibraryId;
                 }
             }
 

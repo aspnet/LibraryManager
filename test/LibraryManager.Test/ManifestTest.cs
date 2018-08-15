@@ -53,8 +53,7 @@ namespace Microsoft.Web.LibraryManager.Test
             IProvider provider = _dependencies.GetProvider("cdnjs");
             var desiredState = new LibraryInstallationState
             {
-                Name = "jquery",
-                Version = "3.3.1",
+                LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "jquery.min.js" }
@@ -83,8 +82,7 @@ namespace Microsoft.Web.LibraryManager.Test
             IProvider provider = _dependencies.GetProvider("cdnjs");
             var desiredState = new LibraryInstallationState
             {
-                Name = "jquery",
-                Version = "3.3.1",
+                LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "jquery.js", "jquery.min.js" }
@@ -101,7 +99,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsTrue(results.Count() == 1);
             Assert.IsTrue(results.First().Success);
 
-            ILibraryOperationResult uninstallResult = await manifest.UninstallAsync(desiredState.Name, desiredState.Version, (file) => _hostInteraction.DeleteFilesAsync(file, token), token);
+            ILibraryOperationResult uninstallResult = await manifest.UninstallAsync(desiredState.LibraryId, (file) => _hostInteraction.DeleteFilesAsync(file, token), token);
 
             Assert.IsFalse(File.Exists(file1));
             Assert.IsFalse(File.Exists(file2));
@@ -118,8 +116,7 @@ namespace Microsoft.Web.LibraryManager.Test
             IProvider provider = _dependencies.GetProvider("cdnjs");
             var state1 = new LibraryInstallationState
             {
-                Name = "jquery",
-                Version="3.1.1",
+                LibraryId = "jquery@3.1.1",
                 ProviderId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "jquery.js", "jquery.min.js" }
@@ -127,8 +124,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             var state2 = new LibraryInstallationState
             {
-                Name = "knockout",
-                Version= "3.4.2",
+                LibraryId = "knockout@3.4.2",
                 ProviderId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "knockout-min.js" }
@@ -210,8 +206,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new LibraryInstallationState
             {
                 ProviderId = "cdnjs",
-                Name = "jquery",
-                Version = "3.2.1",
+                LibraryId = "jquery@3.2.1",
                 DestinationPath = path,
                 Files = new[] { "core.js" }
             };
@@ -321,8 +316,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             var state = new LibraryInstallationState
             {
-                Name = "cdnjs",
-                Version = "",
+                LibraryId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "knockout-min.js" }
             };
@@ -344,8 +338,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             var state = new LibraryInstallationState
             {
-                Name = "cdnjs",
-                Version = "",
+                LibraryId = "cdnjs",
                 DestinationPath = "lib",
                 Files = new[] { "knockout-min.js" }
             };
@@ -366,19 +359,19 @@ namespace Microsoft.Web.LibraryManager.Test
             var manifest = Manifest.FromJson("{}", _dependencies);
 
             // Null LibraryId
-            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(null, null,"cdnjs", null, "wwwroot", CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(null, "cdnjs", null, "wwwroot", CancellationToken.None);
             Assert.IsFalse(results.First().Success);
             Assert.AreEqual(1, results.First().Errors.Count);
             Assert.AreEqual("LIB006", results.First().Errors[0].Code);
 
             // Empty ProviderId
-            results = await manifest.InstallLibraryAsync("jquery", "3.2.1", "", null, "wwwroot", CancellationToken.None);
+            results = await manifest.InstallLibraryAsync("jquery@3.2.1", "", null, "wwwroot", CancellationToken.None);
             Assert.IsFalse(results.First().Success);
             Assert.AreEqual(1, results.First().Errors.Count);
             Assert.AreEqual("LIB007", results.First().Errors[0].Code);
 
             // Null destination
-            results = await manifest.InstallLibraryAsync("jquery", "3.2.1", "cdnjs", null, null, CancellationToken.None);
+            results = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", null, null, CancellationToken.None);
 
             Assert.IsFalse(results.First().Success);
             Assert.AreEqual(1, results.First().Errors.Count);
@@ -386,25 +379,24 @@ namespace Microsoft.Web.LibraryManager.Test
 
 
             // Valid Options all files.
-            results = await manifest.InstallLibraryAsync("jquery", "3.3.1", "cdnjs", null, "wwwroot", CancellationToken.None);
+            results = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
 
             Assert.IsTrue(results.First().Success);
             Assert.AreEqual("wwwroot", results.First().InstallationState.DestinationPath);
-            Assert.AreEqual("jquery", results.First().InstallationState.Name);
-            Assert.AreEqual("3.3.1", results.First().InstallationState.Version);
+            Assert.AreEqual("jquery@3.2.1", results.First().InstallationState.LibraryId);
             Assert.AreEqual("cdnjs", results.First().InstallationState.ProviderId);
             Assert.IsNotNull(results.First().InstallationState.Files);
 
             // Valid parameters and files.
             var files = new List<string>() { "jquery.min.js" };
-            results = await manifest.InstallLibraryAsync("jquery", "2.2.0", "cdnjs", files, "wwwroot2", CancellationToken.None);
+            results = await manifest.InstallLibraryAsync("jquery@2.2.0", "cdnjs", files, "wwwroot2", CancellationToken.None);
             Assert.IsFalse(results.First().Success);
             Assert.AreEqual(1, results.First().Errors.Count);
             Assert.AreEqual("LIB019", results.First().Errors[0].Code);
 
             // Valid parameters invalid files
             files.Add("abc.js");
-            results = await manifest.InstallLibraryAsync("twitter-bootstrap", "4.1.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
+            results = await manifest.InstallLibraryAsync("twitter-bootstrap@4.1.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
             Assert.IsFalse(results.First().Success);
             Assert.AreEqual(1, results.First().Errors.Count);
             Assert.AreEqual("LIB018", results.First().Errors[0].Code);
@@ -414,7 +406,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task InstallLibraryAsync_SetsDefaultProvider()
         {
             var manifest = Manifest.FromJson(_emptyLibmanJson, _dependencies);
-            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync("jquery", "3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync("jquery@3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
 
             Assert.AreEqual("cdnjs", manifest.DefaultProvider);
             var libraryState = manifest.Libraries.First() as LibraryInstallationState;
@@ -433,8 +425,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new LibraryInstallationState
             {
                 ProviderId = "cdnjs",
-                Name = "jquery",
-                Version = "3.2.1",
+                LibraryId = "jquery@3.2.1",
                 DestinationPath = "lib",
                 Files = new[] { "core.js" }
             };
@@ -459,8 +450,7 @@ namespace Microsoft.Web.LibraryManager.Test
             var state = new LibraryInstallationState
             {
                 ProviderId = "cdnjs",
-                Name = "jquery",
-                Version = "3.2.1",
+                LibraryId = "jquery@3.2.1",
                 DestinationPath = "lib",
                 Files = new[] { "core.js" }
             };

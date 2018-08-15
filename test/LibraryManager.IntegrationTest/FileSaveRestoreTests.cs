@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.Test.Apex.VisualStudio.Solution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Web.LibraryManager.IntegrationTest
@@ -6,19 +7,34 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     [TestClass]
     public class FileSaveRestoreTests : VisualStudioLibmanHostTest
     {
+        ProjectTestExtension _webProject;
+        ProjectItemTestExtension _libManConfig;
+        const string _projectName = @"TestProjectCore20";
+        const string _libman = "libman.json";
+        private string _libmanFileContent;
+
+        [TestInitialize]
+        public void initialize()
+        {
+            _webProject = Solution[_projectName];
+            _libManConfig = _webProject[_libman];
+            string pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, _libman);
+            _libmanFileContent = File.ReadAllText(pathToLibmanFile);
+        }
+
         [TestMethod]
         public void FileSaveRestore_AddDeleteLibrary()
         {
             string projectPath = Path.Combine(SolutionRootPath, _projectName);
 
-            _libmanConfig.Delete();
+            _libManConfig.Delete();
             Helpers.FileIO.WaitForDeletedFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false, timeout: 1000);
 
             VisualStudio.ObjectModel.Commanding.ExecuteCommand("Project.ManageClientSideLibraries");
             Helpers.FileIO.WaitForRestoredFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false, timeout: 1000);
 
-            _libmanConfig = _webProject[_libman];
-            _libmanConfig.Open();
+            _libManConfig = _webProject[_libman];
+            _libManConfig.Open();
 
             string pathToLibrary = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "lib", "jquery-validate");
             string[] expectedFiles = new[]
@@ -36,7 +52,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
     }
   ]
 }";
-
             string deletingLibraryContent = @"{
   ""version"": ""1.0"",
   ""defaultProvider"": ""cdnjs"",
@@ -48,15 +63,17 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
             ReplaceFileContent(deletingLibraryContent);
             Helpers.FileIO.WaitForDeletedFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
+
+            ReplaceFileContent(_libmanFileContent);
         }
 
         private void ReplaceFileContent(string content)
         {
             Editor.Selection.SelectAll();
-            Editor.KeyboardCommands.Delete();
+            Editor.KeyboardCommands.Backspace();
             Editor.Edit.InsertTextInBuffer(content);
 
-            _libmanConfig.Save();
+            _libManConfig.Save();
         }
     }
 }

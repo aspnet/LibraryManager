@@ -63,7 +63,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             ConfigFilePath = doc.FilePath;
             LibraryObject = parent;
 
-            return !string.IsNullOrEmpty(InstallationState.Name);
+            return !string.IsNullOrEmpty(InstallationState.LibraryId);
         }
     }
 }
