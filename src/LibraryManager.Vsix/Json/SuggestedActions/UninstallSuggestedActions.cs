@@ -9,6 +9,8 @@ using System;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.JSON.Core.Parser;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -29,7 +31,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static string GetDisplayText(SuggestedActionProvider provider)
         {
-            string cleanId = provider.InstallationState.LibraryId;
+            ILibraryInstallationState state = provider.InstallationState;
+            string cleanId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, state.ProviderId);
 
             if (cleanId.Length > _maxlength + 10)
             {
@@ -44,7 +47,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             try
             {
                 Telemetry.TrackUserTask("Invoke-UninstallFromSuggestedAction");
-                await _libraryCommandService.UninstallAsync(_provider.ConfigFilePath, _provider.InstallationState.LibraryId, cancellationToken).ConfigureAwait(false);
+                var state = _provider.InstallationState;
+                await _libraryCommandService.UninstallAsync(_provider.ConfigFilePath, state.Name, state.Version, state.ProviderId, cancellationToken)
+                    .ConfigureAwait(false);
 
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 using (ITextEdit edit = TextBuffer.CreateEdit())

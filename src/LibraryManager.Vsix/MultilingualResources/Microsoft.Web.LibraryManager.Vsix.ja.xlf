@@ -53,7 +53,9 @@ This may require an internet connection.
 
 Do you want to continue?</source>
           <target state="translated">NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、ファイルはプロジェクトに追加されません。
+
 これにはインターネット接続が必要になる可能性があります。
+
 続行しますか?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">

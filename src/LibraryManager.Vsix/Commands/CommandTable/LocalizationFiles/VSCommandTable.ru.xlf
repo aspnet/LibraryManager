@@ -1,31 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
-  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" datatype="xml" target-language="ru">
+  <file original="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" target-language="ru" datatype="xml">
     <body>
       <group id="E:\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
           <source xml:lang="en">Client-Side &amp;Library...</source>
-          <target xml:lang="ru" state="translated">Клиентская &amp;библиотека...</target>
+          <target state="translated">Клиентская &amp;библиотека...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
           <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
-          <target xml:lang="ru" state="translated">Восстановить клиент&amp;ские библиотеки</target>
+          <target state="translated">Восстановить клиент&amp;ские библиотеки</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
           <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
-          <target xml:lang="ru" state="translated">&amp;Очистить клиентские библиотеки</target>
+          <target state="translated">&amp;Очистить клиентские библиотеки</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
           <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
-          <target xml:lang="ru" state="translated">Включить восстановление клиентских библиотек при сборке...</target>
+          <target state="translated">Включить восстановление клиентских библиотек при сборке...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
           <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>
-          <target xml:lang="ru" state="translated">&amp;Управление клиентскими библиотеками...</target>
+          <target state="translated">&amp;Управление клиентскими библиотеками...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
           <source xml:lang="en">&amp;Restore Client-Side Libraries</source>
-          <target xml:lang="ru" state="translated">&amp;Восстановить клиентские библиотеки</target>
+          <target state="translated">&amp;Восстановить клиентские библиотеки</target>
         </trans-unit>
       </group>
     </body>

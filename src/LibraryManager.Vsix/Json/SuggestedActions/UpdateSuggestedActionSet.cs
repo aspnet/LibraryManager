@@ -76,23 +76,23 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private async Task<List<ISuggestedAction>> GetListOfActionsAsync(ILibraryCatalog catalog, CancellationToken cancellationToken)
         {
             var list = new List<ISuggestedAction>();
-            string latestStableVersion = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, false, cancellationToken).ConfigureAwait(false);
+            string latestStableVersion = await catalog.GetLatestVersion(_provider.InstallationState.Name, false, cancellationToken).ConfigureAwait(false);
             string latestStable = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(
                             _provider.InstallationState.Name,
                             latestStableVersion,
                             _provider.InstallationState.ProviderId);
 
-            if (!string.IsNullOrEmpty(latestStableVersion) && latestStable != _provider.InstallationState.LibraryId)
+            if (!string.IsNullOrEmpty(latestStableVersion) && latestStableVersion != _provider.InstallationState.Version)
             {
                 list.Add(new UpdateSuggestedAction(_provider, latestStable, $"Stable: {latestStable}"));
             }
 
-            string latestPreVersion = await catalog.GetLatestVersion(_provider.InstallationState.LibraryId, true, cancellationToken).ConfigureAwait(false);
+            string latestPreVersion = await catalog.GetLatestVersion(_provider.InstallationState.Name, true, cancellationToken).ConfigureAwait(false);
             string latestPre = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(_provider.InstallationState.Name,
                             latestPreVersion,
                             _provider.InstallationState.ProviderId);
 
-            if (!string.IsNullOrEmpty(latestPreVersion) && latestPre != _provider.InstallationState.LibraryId && latestPre != latestStable)
+            if (!string.IsNullOrEmpty(latestPreVersion) && latestPreVersion != _provider.InstallationState.Version && latestPre != latestStable)
             {
                 list.Add(new UpdateSuggestedAction(_provider, latestPre, $"Pre-release: {latestPre}"));
             }

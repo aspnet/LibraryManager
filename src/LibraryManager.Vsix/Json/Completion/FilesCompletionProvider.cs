@@ -39,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (!JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
                 yield break;
 
-            if (string.IsNullOrEmpty(state.LibraryId))
+            if (string.IsNullOrEmpty(state.Name))
                 yield break;
 
             var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
@@ -49,7 +49,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (catalog == null)
                 yield break;
 
-            Task<ILibrary> task = catalog.GetLibraryAsync(state.LibraryId, CancellationToken.None);
+            Task<ILibrary> task = catalog.GetLibraryAsync(state.Name, state.Version, CancellationToken.None);
             FrameworkElement presenter = GetPresenter(context);
             IEnumerable<string> usedFiles = GetUsedFiles(context);
 

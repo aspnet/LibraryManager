@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         [JsonProperty("version")]
         public string Version { get; set; }
 
-        public Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
+        public Task<IEnumerable<string>> GetLibraryVersions(CancellationToken cancellationToken)
         {
             return DisplayInfosTask?.Invoke(cancellationToken) ?? Task.FromResult<IEnumerable<string>>(new string[0]);
         }

@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task DetectConflictsAsync_ConflictingFiles_SameDestination()
         {
             string expectedErrorCode = "LIB016";
-            string expectedErrorMessage = "Conflicting file \"lib\\package.json\" found in more than one library: jquery@3.1.1, d3@2.1.3";
+            string expectedErrorMessage = "Conflicting file \"lib\\package.json\" found in more than one library: jquery, d3";
             var manifest = Manifest.FromJson(_docDifferentLibraries_SameFiles_SameLocation, _dependencies);
 
             IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
@@ -46,7 +46,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual(1, conflictsList.Count);
             Assert.IsTrue(conflictsList[0].Errors.Count == 1);
             Assert.AreEqual(conflictsList[0].Errors[0].Code, expectedErrorCode);
-            Assert.AreEqual(conflictsList[0].Errors[0].Message, expectedErrorMessage);
+            Assert.AreEqual(expectedErrorMessage, conflictsList[0].Errors[0].Message);
         }
 
         [TestMethod]
@@ -215,7 +215,7 @@ namespace Microsoft.Web.LibraryManager.Test
       ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
     }},
     {{
-      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
+      ""{ManifestConstants.Library}"": ""jquery@3.2.1"",
       ""{ManifestConstants.Provider}"": ""cdnjs"",
       ""{ManifestConstants.Destination}"": ""lib2"",
       ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]

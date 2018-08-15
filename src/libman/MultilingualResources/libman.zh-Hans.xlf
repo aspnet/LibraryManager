@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="zh-Hans" original="LIBMAN/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
@@ -8,377 +8,366 @@
       <group id="LIBMAN/RESOURCES/TEXT.RESX" datatype="resx">
         <trans-unit id="CacheCommandDesc" translate="yes" xml:space="preserve">
           <source>List or clean libman cache contents</source>
-          <target state="new">List or clean libman cache contents</target>
+          <target state="translated">列出或清除 libman 缓存内容</target>
         </trans-unit>
         <trans-unit id="CleanCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all library files defined in libman.json from the project</source>
-          <target state="new">Deletes all library files defined in libman.json from the project</target>
+          <target state="translated">从项目中删除 libman.json 中定义的所有库文件</target>
         </trans-unit>
         <trans-unit id="CleanCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Deletes any folders that become empty after this operation. </source>
-          <target state="new">    Deletes any folders that become empty after this operation. </target>
+          <target state="translated">删除在此操作后变为空的所有文件夹。</target>
         </trans-unit>
         <trans-unit id="DefaultDestinationOptionDesc" translate="yes" xml:space="preserve">
           <source>The path, relative to the current directory, where library files should be installed if no destination is defined for a given library.</source>
-          <target state="new">The path, relative to the current directory, where library files should be installed if no destination is defined for a given library.</target>
+          <target state="translated">相对于当前目录的路径, 如果没有为给定的库定义目标, 则应在其中安装库文件。</target>
         </trans-unit>
         <trans-unit id="DefaultProviderOptionDesc" translate="yes" xml:space="preserve">
           <source>The provider to use if no provider is defined for a given library. (eg. “cdnjs”, “filesystem”)</source>
-          <target state="new">The provider to use if no provider is defined for a given library. (eg. “cdnjs”, “filesystem”)</target>
+          <target state="translated">未为给定库定义提供程序时要使用的提供程序。(例如 “cdnjs”、“filesystem”)</target>
         </trans-unit>
         <trans-unit id="DestinationOptionDesc" translate="yes" xml:space="preserve">
           <source>Location to install the library (if not specified, the default destination location will be used)</source>
-          <target state="new">Location to install the library (if not specified, the default destination location will be used)</target>
+          <target state="translated">安装库的位置 (如果未指定, 将使用默认目标位置)</target>
         </trans-unit>
         <trans-unit id="ExamplesHeader" translate="yes" xml:space="preserve">
           <source>Examples:</source>
-          <target state="new">Examples:</target>
+          <target state="translated">示例:</target>
         </trans-unit>
         <trans-unit id="FilesOptionDesc" translate="yes" xml:space="preserve">
           <source>The files from the specified library to install (if not specified, all files from the library will be installed)</source>
-          <target state="new">The files from the specified library to install (if not specified, all files from the library will be installed)</target>
+          <target state="translated">要安装的指定库中的文件 (如果未指定, 则将安装库中的所有文件)</target>
         </trans-unit>
         <trans-unit id="InitCommandDesc" translate="yes" xml:space="preserve">
           <source>Create a new libman.json</source>
-          <target state="new">Create a new libman.json</target>
+          <target state="translated">创建新的 libman. json</target>
         </trans-unit>
         <trans-unit id="InstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Add a library definition to the LibMan.json file, and download the library to the specified location</source>
-          <target state="new">Add a library definition to the LibMan.json file, and download the library to the specified location</target>
+          <target state="translated">向 LibMan.json 文件添加库定义, 并将库下载到指定位置</target>
         </trans-unit>
         <trans-unit id="InstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman install jquery@3.2.1 
     libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</source>
-          <target state="new">    libman install jquery@3.2.1 
-    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
-    libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</target>
+          <target state="translated">libman install jquery@3.2.1 libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</target>
         </trans-unit>
         <trans-unit id="InstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
           <source>Library to install</source>
-          <target state="new">Library to install</target>
+          <target state="translated">要安装的库</target>
         </trans-unit>
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="new">    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-    For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</target>
+          <target state="translated">CDNJS 库的库 ID 格式为“&lt;libraryName&gt;@&lt;libraryVersion&gt;” 对于 CDNJS 库，如果库 ID 中未指定版本，则使用可用的最高版本。</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
     If no default provider exists, --provider option is required
     If no default destination exists, --destination option is required
     If no files are specified, the entire library is included</source>
-          <target state="new">    Initializes a libman.json if one does not exist
-    If no default provider exists, --provider option is required
-    If no default destination exists, --destination option is required
-    If no files are specified, the entire library is included</target>
+          <target state="translated">如果不存在 libman.json 则初始化它 如果不存在默认提供程序，则需要 --provider 选项，如果不存在默认目标，则需要 --destination 选项 如果未指定文件，则包括整个库</target>
         </trans-unit>
         <trans-unit id="InvalidArgumentsMessage" translate="yes" xml:space="preserve">
           <source>Invalid arguments for command: {0}</source>
-          <target state="new">Invalid arguments for command: {0}</target>
+          <target state="translated">命令的参数无效: {0}</target>
         </trans-unit>
         <trans-unit id="LibmanCommandDesc" translate="yes" xml:space="preserve">
           <source>Library Manager</source>
-          <target state="new">Library Manager</target>
+          <target state="translated">库管理器</target>
         </trans-unit>
         <trans-unit id="ProviderOptionDesc" translate="yes" xml:space="preserve">
           <source>Provider to use (if not specified, the default provider will be used)</source>
-          <target state="new">Provider to use (if not specified, the default provider will be used)</target>
+          <target state="translated">要使用的提供程序 (如果未指定, 将使用默认提供程序)</target>
         </trans-unit>
         <trans-unit id="ProviderSpecificLogicHeader" translate="yes" xml:space="preserve">
           <source>Provider-specific logic:</source>
-          <target state="new">Provider-specific logic:</target>
+          <target state="translated">特定于提供程序的逻辑:</target>
         </trans-unit>
         <trans-unit id="RemarksHeader" translate="yes" xml:space="preserve">
           <source>Remarks:</source>
-          <target state="new">Remarks:</target>
+          <target state="translated">言论：</target>
         </trans-unit>
         <trans-unit id="RestoreCommandDesc" translate="yes" xml:space="preserve">
           <source>Downloads all files from provider and saves them to specified destination</source>
-          <target state="new">Downloads all files from provider and saves them to specified destination</target>
+          <target state="translated">从提供程序下载所有文件并将其保存到指定的目标</target>
         </trans-unit>
         <trans-unit id="RestoreCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     If a library specifies a provider, it will override the defaultProvider
     If a library specifies a destination, it will override the defaultDestination</source>
-          <target state="new">    Error if no libman.json in current folder
-    If a library specifies a provider, it will override the defaultProvider
-    If a library specifies a destination, it will override the defaultDestination</target>
+          <target state="translated">如果当前文件夹中不存在 libman.json 则出错
+    如果库指定提供程序，它将覆盖 defaultProvider
+    如果库指定目标，它将覆盖 defaultDestination</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</source>
-          <target state="new">Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</target>
+          <target state="translated">从指定的目标删除指定库的所有文件, 然后从 libman.json 删除指定的库定义</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
     libman uninstall jquery@3.3.1</source>
-          <target state="new">    libman uninstall jquery
+          <target state="translated">libman uninstall jquery
     libman uninstall jquery@3.3.1</target>
         </trans-unit>
         <trans-unit id="UninstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
           <source>Library to uninstall</source>
-          <target state="new">Library to uninstall</target>
+          <target state="translated">要卸载的库</target>
         </trans-unit>
         <trans-unit id="UninstallCommandProviderOptionDesc" translate="yes" xml:space="preserve">
           <source>The provider of the library to be uninstalled</source>
-          <target state="new">The provider of the library to be uninstalled</target>
+          <target state="translated">要卸载的库的提供程序</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="new">    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-    If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</target>
+          <target state="translated">CDNJS 库的库 ID 格式为“&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+   如果库 ID 中未指定版本，此命令将应用于 libraryName 与给定 libraryId 匹配的任何库</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     Error if specified library doesn't exist
     If there's more than one library with the same libraryId, you'll be prompted to choose.</source>
-          <target state="new">    Error if no libman.json in current folder
-    Error if specified library doesn't exist
-    If there's more than one library with the same libraryId, you'll be prompted to choose.</target>
+          <target state="translated">若当前文件夹中不存在 libman.json 则出错
+    若指定的库不存在则出错
+    若有多个具有相同 libraryId 的库，则提示你进行选择。</target>
         </trans-unit>
         <trans-unit id="VerbosityOptionDesc" translate="yes" xml:space="preserve">
           <source>Set the verbosity of output (eg. "normal", "detailed", "quiet")</source>
-          <target state="new">Set the verbosity of output (eg. "normal", "detailed", "quiet")</target>
+          <target state="translated">设置输出的详细程度(例如“正常”、“详细”、“安静”)</target>
         </trans-unit>
         <trans-unit id="ProjectPathOptionDesc" translate="yes" xml:space="preserve">
           <source>Path to the project (Current directory is used as default)</source>
-          <target state="new">Path to the project (Current directory is used as default)</target>
+          <target state="translated">项目的路径(默认使用当前目录)</target>
         </trans-unit>
         <trans-unit id="DirectoryNotFoundMessage" translate="yes" xml:space="preserve">
           <source>Directory not found {0}</source>
-          <target state="new">Directory not found {0}</target>
+          <target state="translated">找不到目录 {0}</target>
         </trans-unit>
         <trans-unit id="FailedToRestoreLibraryMessage" translate="yes" xml:space="preserve">
           <source>Failed to restore "{0}"</source>
-          <target state="new">Failed to restore "{0}"</target>
+          <target state="translated">未能还原 "{0}"</target>
         </trans-unit>
         <trans-unit id="FileDeleted" translate="yes" xml:space="preserve">
           <source>{0} deleted</source>
-          <target state="new">{0} deleted</target>
+          <target state="translated">已删除 {0}</target>
         </trans-unit>
         <trans-unit id="FileDeleteFail" translate="yes" xml:space="preserve">
           <source>Failed to delete {0}</source>
-          <target state="new">Failed to delete {0}</target>
+          <target state="translated">未能删除 {0}</target>
         </trans-unit>
         <trans-unit id="FileWrittenToDisk" translate="yes" xml:space="preserve">
           <source>{0} written to disk</source>
-          <target state="new">{0} written to disk</target>
+          <target state="translated">{0} 写入磁盘</target>
         </trans-unit>
         <trans-unit id="InitFailedLibmanJsonFileExists" translate="yes" xml:space="preserve">
           <source>Failed to init: A 'libman.json' already exists</source>
-          <target state="new">Failed to init: A 'libman.json' already exists</target>
+          <target state="translated">初始化失败: "libman.json" 已存在</target>
         </trans-unit>
         <trans-unit id="CleanFailed" translate="yes" xml:space="preserve">
           <source>Failed to clean some files.</source>
-          <target state="new">Failed to clean some files.</target>
+          <target state="translated">无法清理某些文件。</target>
         </trans-unit>
         <trans-unit id="LibmanJsonNotFound" translate="yes" xml:space="preserve">
           <source>libman.json was not found:{0}</source>
-          <target state="new">libman.json was not found:{0}</target>
+          <target state="translated">未找到 libman.json:{0}</target>
         </trans-unit>
         <trans-unit id="DestinationRequiredWhenNoDefaultIsPresent" translate="yes" xml:space="preserve">
           <source>Default destination is not set. Please provide a destination using '--destination'</source>
-          <target state="new">Default destination is not set. Please provide a destination using '--destination'</target>
+          <target state="translated">未设置默认目标。请使用 "--destination" 提供目标</target>
         </trans-unit>
         <trans-unit id="LibraryIdRequiredForInstall" translate="yes" xml:space="preserve">
           <source>LibraryId is required to install</source>
-          <target state="new">LibraryId is required to install</target>
+          <target state="translated">需要 LibraryId 才能安装</target>
         </trans-unit>
         <trans-unit id="LibraryIdRequiredForUnInstall" translate="yes" xml:space="preserve">
           <source>LibraryId is required to uninstall</source>
-          <target state="new">LibraryId is required to uninstall</target>
+          <target state="translated">需要 LibraryId 才能卸载</target>
         </trans-unit>
         <trans-unit id="MoreThanOneLibraryFoundToUninstall" translate="yes" xml:space="preserve">
           <source>More than one library found with id "{0}"</source>
-          <target state="new">More than one library found with id "{0}"</target>
+          <target state="translated">发现多个 ID 为“{0}”的库</target>
         </trans-unit>
         <trans-unit id="ProviderRequiredWhenNoDefaultIsPresent" translate="yes" xml:space="preserve">
           <source>Default Provider is not set. Please provide a provider using '--provider'</source>
-          <target state="new">Default Provider is not set. Please provide a provider using '--provider'</target>
+          <target state="translated">未设置默认提供程序。请用 "--provider" 提供提供程序</target>
         </trans-unit>
         <trans-unit id="UseProviderToDisambiguateMessage" translate="yes" xml:space="preserve">
           <source>Use --provider to disambiguate libraries of same name from different providers in the project</source>
-          <target state="new">Use --provider to disambiguate libraries of same name from different providers in the project</target>
+          <target state="translated">使用 --provider 消除项目中来自不同提供程序的同名库的歧义</target>
         </trans-unit>
         <trans-unit id="MoreThanOneLibraryFoundToUninstallForProvider" translate="yes" xml:space="preserve">
           <source>More than one library found with id "{0}" for provider "{1}". Please remove the manually from the libman.json file</source>
-          <target state="new">More than one library found with id "{0}" for provider "{1}". Please remove the manually from the libman.json file</target>
+          <target state="translated">为提供程序 "{1}" 找到 id 为 "{0}" 的多个库。请从 libman.json 文件中手动删除</target>
         </trans-unit>
         <trans-unit id="NoLibraryToUninstall" translate="yes" xml:space="preserve">
           <source>Library "{0}" is not installed. Nothing to uninstall</source>
-          <target state="new">Library "{0}" is not installed. Nothing to uninstall</target>
+          <target state="translated">未安装库 "{0}"。没有可卸载的内容</target>
         </trans-unit>
         <trans-unit id="CacheCleanCommandDesc" translate="yes" xml:space="preserve">
           <source>Delete all files from the local machine's LibMan cache.</source>
-          <target state="new">Delete all files from the local machine's LibMan cache.</target>
+          <target state="translated">从本地计算机的 LibMan 缓存中删除所有文件。</target>
         </trans-unit>
         <trans-unit id="CacheListCommandDesc" translate="yes" xml:space="preserve">
           <source>Display a list of all libraries that are stored in the local machine’s LibMan cache.</source>
-          <target state="new">Display a list of all libraries that are stored in the local machine’s LibMan cache.</target>
+          <target state="translated">显示存储在本地计算机的 LibMan 缓存中的所有库的列表。</target>
         </trans-unit>
         <trans-unit id="CacheCleanProviderArgumentDesc" translate="yes" xml:space="preserve">
           <source>Provider for which the cache files should be cleaned.</source>
-          <target state="new">Provider for which the cache files should be cleaned.</target>
+          <target state="translated">要为其清除缓存文件的提供程序。</target>
         </trans-unit>
         <trans-unit id="UpdateCommandDesc" translate="yes" xml:space="preserve">
           <source>Updates the specified library</source>
-          <target state="new">Updates the specified library</target>
+          <target state="translated">更新指定的库</target>
         </trans-unit>
         <trans-unit id="UpdateCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman update jquery 
     libman update jquery --to 3.3.1
     libman update jquery -pre 
 </source>
-          <target state="new">    libman update jquery 
-    libman update jquery --to 3.3.1
-    libman update jquery -pre 
-</target>
+          <target state="translated">libman update jquery libman update jquery --to 3.3.1 libman update jquery -pre</target>
         </trans-unit>
         <trans-unit id="UpdateCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     Error if specified library doesn't exist
     If there's more than one library with the same libraryId, you'll be prompted to choose.</source>
-          <target state="new">    Error if no libman.json in current folder
-    Error if specified library doesn't exist
-    If there's more than one library with the same libraryId, you'll be prompted to choose.</target>
+          <target state="translated">若当前文件夹中没有 libman.json 则出错 若指定的库不存在则出错 若存在多个具有相同 libraryId 的库，将提示你进行选择。</target>
         </trans-unit>
         <trans-unit id="UpdateCommandLibraryArgumentDesc" translate="yes" xml:space="preserve">
           <source>Name of the library to update (without the version).</source>
-          <target state="new">Name of the library to update (without the version).</target>
+          <target state="translated">要更新的库的名称 (不带版本)。</target>
         </trans-unit>
         <trans-unit id="UpdateCommandPreReleaseOptionDesc" translate="yes" xml:space="preserve">
           <source>If specified, the latest pre-release version of the library will be downloaded (where applicable)</source>
-          <target state="new">If specified, the latest pre-release version of the library will be downloaded (where applicable)</target>
+          <target state="translated">如果指定, 将下载最新的库预发行版本 (如果适用)</target>
         </trans-unit>
         <trans-unit id="UpdateCommandProviderOptionDesc" translate="yes" xml:space="preserve">
           <source>If specified, only libraries from the specified provider will be updated</source>
-          <target state="new">If specified, only libraries from the specified provider will be updated</target>
+          <target state="translated">如果指定, 则仅更新来自指定提供程序的库</target>
         </trans-unit>
         <trans-unit id="CacheCleanedMessage" translate="yes" xml:space="preserve">
           <source>Cache cleaned.</source>
-          <target state="new">Cache cleaned.</target>
+          <target state="translated">已清理缓存。</target>
         </trans-unit>
         <trans-unit id="CacheCleanFailed" translate="yes" xml:space="preserve">
           <source>Failed to clean cache: {0}</source>
-          <target state="new">Failed to clean cache: {0}</target>
+          <target state="translated">无法清除缓存: {0}</target>
         </trans-unit>
         <trans-unit id="CacheContentMessage" translate="yes" xml:space="preserve">
           <source>Cache contents:</source>
-          <target state="new">Cache contents:</target>
+          <target state="translated">缓存内容:</target>
         </trans-unit>
         <trans-unit id="CacheEmptyMessage" translate="yes" xml:space="preserve">
           <source>(empty)</source>
-          <target state="new">(empty)</target>
+          <target state="translated">(空)</target>
         </trans-unit>
         <trans-unit id="CacheForProviderCleanedMessage" translate="yes" xml:space="preserve">
           <source>{0} cache cleaned.</source>
-          <target state="new">{0} cache cleaned.</target>
+          <target state="translated">已清除 {0} 缓存。</target>
         </trans-unit>
         <trans-unit id="CacheListFilesOptionDesc" translate="yes" xml:space="preserve">
           <source>List files that are cached for each library</source>
-          <target state="new">List files that are cached for each library</target>
+          <target state="translated">列出为每个库缓存的文件</target>
         </trans-unit>
         <trans-unit id="MoreThanOneLibraryFoundToUpdate" translate="yes" xml:space="preserve">
           <source>More than one library found with name "{0}"</source>
-          <target state="new">More than one library found with name "{0}"</target>
+          <target state="translated">发现多个名为 "{0}" 的库</target>
         </trans-unit>
         <trans-unit id="NoLibrariesToUpdate" translate="yes" xml:space="preserve">
           <source>No libraries to update. Please use install command to install libraries</source>
-          <target state="new">No libraries to update. Please use install command to install libraries</target>
+          <target state="translated">没有要更新的库。请使用安装命令安装库</target>
         </trans-unit>
         <trans-unit id="NoLibraryFoundToUpdate" translate="yes" xml:space="preserve">
           <source>No library found with name "{0}" to update.
 Please specify a library name without the version information to update.</source>
-          <target state="new">No library found with name "{0}" to update.
-Please specify a library name without the version information to update.</target>
+          <target state="translated">找不到名为 "{0}" 库以进行更新。
+请指定不含版本信息的库名以进行更新。</target>
         </trans-unit>
         <trans-unit id="InstallLibraryFailed" translate="yes" xml:space="preserve">
           <source>Failed to install library "{0}"</source>
-          <target state="new">Failed to install library "{0}"</target>
+          <target state="translated">安装库 "{0}" 失败</target>
         </trans-unit>
         <trans-unit id="CacheListLibrariesOptionDesc" translate="yes" xml:space="preserve">
           <source>Lists the libraries cached for each provider.</source>
-          <target state="new">Lists the libraries cached for each provider.</target>
+          <target state="translated">列出为每个提供程序缓存的库。</target>
         </trans-unit>
         <trans-unit id="ProviderNotInstalled" translate="yes" xml:space="preserve">
           <source>Provider "{0}" is not installed</source>
-          <target state="new">Provider "{0}" is not installed</target>
+          <target state="translated">未安装提供程序 "{0}"</target>
         </trans-unit>
         <trans-unit id="SuggestedIdsMessage" translate="yes" xml:space="preserve">
           <source>Similar libraries: </source>
-          <target state="new">Similar libraries: </target>
+          <target state="translated">类似的库:</target>
         </trans-unit>
         <trans-unit id="FixManifestFile" translate="yes" xml:space="preserve">
           <source>Please fix the libman.json file and try again</source>
-          <target state="new">Please fix the libman.json file and try again</target>
+          <target state="translated">请修复 libman.json 文件, 然后重试</target>
         </trans-unit>
         <trans-unit id="ChooseAnOption" translate="yes" xml:space="preserve">
           <source>Select an option:</source>
-          <target state="new">Select an option:</target>
+          <target state="translated">选择一个选项:</target>
         </trans-unit>
         <trans-unit id="LatestVersionAlreadyInstalled" translate="yes" xml:space="preserve">
           <source>The library "{0}" is already up to date</source>
-          <target state="new">The library "{0}" is already up to date</target>
+          <target state="translated">库 "{0}" 已是最新版本</target>
         </trans-unit>
         <trans-unit id="InvalidToVersion" translate="yes" xml:space="preserve">
           <source>"{0}" is not a valid value for --to-version</source>
-          <target state="new">"{0}" is not a valid value for --to-version</target>
+          <target state="translated">"{0}" 不是 --to-version 的有效值</target>
         </trans-unit>
         <trans-unit id="UpdateCommandToVersionOptionDesc" translate="yes" xml:space="preserve">
           <source>The version to update the library to (needs complete libraryid for the provider)</source>
-          <target state="new">The version to update the library to (needs complete libraryid for the provider)</target>
+          <target state="translated">要将库更新到的版本 (需要提供程序的完整 libraryid)</target>
         </trans-unit>
         <trans-unit id="InstalledLibrary" translate="yes" xml:space="preserve">
           <source>Installed library "{0}" to "{1}"</source>
-          <target state="new">Installed library "{0}" to "{1}"</target>
+          <target state="translated">已将库 "{0}" 安装到 "{1}"</target>
         </trans-unit>
         <trans-unit id="UninstalledLibrary" translate="yes" xml:space="preserve">
           <source>Uninstalled library "{0}"</source>
-          <target state="new">Uninstalled library "{0}"</target>
+          <target state="translated">已卸载库 "{0}"</target>
         </trans-unit>
         <trans-unit id="InvalidFilesForLibrary" translate="yes" xml:space="preserve">
           <source>Library "{0}" does not contain the following files: {1}</source>
-          <target state="new">Library "{0}" does not contain the following files: {1}</target>
+          <target state="translated">库 "{0}" 不包含以下文件: {1}</target>
         </trans-unit>
         <trans-unit id="LibraryCannotBeInstalledDueToConflictingLibraries" translate="yes" xml:space="preserve">
           <source>Library "{0}" cannot be installed. "{1}" is already installed at "{2}".
 Please specify a different destination.</source>
-          <target state="new">Library "{0}" cannot be installed. "{1}" is already installed at "{2}".
-Please specify a different destination.</target>
+          <target state="translated">无法安装库 "{0}"。"{1}" 已安装在 "{2}" 上。
+请指定其他目标。</target>
         </trans-unit>
         <trans-unit id="LibraryIdRequiredForUpdate" translate="yes" xml:space="preserve">
           <source>LibraryId is required for update</source>
-          <target state="new">LibraryId is required for update</target>
+          <target state="translated">需要 LibraryId 才能更新</target>
         </trans-unit>
         <trans-unit id="SpecifyDifferentDestination" translate="yes" xml:space="preserve">
           <source>Please specify a different destination.</source>
-          <target state="new">Please specify a different destination.</target>
+          <target state="translated">请指定其他目标。</target>
         </trans-unit>
         <trans-unit id="UninstallFailed" translate="yes" xml:space="preserve">
           <source>Failed to uninstall "{0}"</source>
-          <target state="new">Failed to uninstall "{0}"</target>
+          <target state="translated">未能卸载 "{0}"</target>
         </trans-unit>
         <trans-unit id="UpdateLibraryFailed" translate="yes" xml:space="preserve">
           <source>Failed to update "{0}" to "{1}"</source>
-          <target state="new">Failed to update "{0}" to "{1}"</target>
+          <target state="translated">未能将 "{0}" 更新为 "{1}"</target>
         </trans-unit>
         <trans-unit id="UpdateLibraryToLatestFailed" translate="yes" xml:space="preserve">
           <source>Failed to update "{0}" to latest</source>
-          <target state="new">Failed to update "{0}" to latest</target>
+          <target state="translated">未能将 "{0}" 更新到最新版本</target>
         </trans-unit>
         <trans-unit id="LibraryUpdated" translate="yes" xml:space="preserve">
           <source>Updated "{0}" to "{1}"</source>
-          <target state="new">Updated "{0}" to "{1}"</target>
+          <target state="translated">已将 "{0}" 更新为 "{1}"</target>
         </trans-unit>
         <trans-unit id="UnableToFindLatestVersionForLibrary" translate="yes" xml:space="preserve">
           <source>Could not determine the latest version for "{0}"</source>
-          <target state="new">Could not determine the latest version for "{0}"</target>
+          <target state="translated">无法确定 "{0}" 的最新版本</target>
         </trans-unit>
         <trans-unit id="InitFailedUnknownProvider" translate="yes" xml:space="preserve">
           <source>Failed to initialize libman.json. [{0}]: {1}</source>
-          <target state="new">Failed to initialize libman.json. [{0}]: {1}</target>
+          <target state="translated">无法初始化 libman. json。[{0}]: {1}</target>
         </trans-unit>
       </group>
     </body>
