@@ -1,6 +1,5 @@
 ﻿using System.Windows.Automation.Peers;
 using System.Windows.Controls;
-using Microsoft.Web.LibraryManager.Vsix.Resources;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
@@ -13,9 +12,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
         }
 
-        protected override string GetLocalizedControlTypeCore()
+        protected override AutomationControlType GetAutomationControlTypeCore()
         {
-            return Text.Files;
+            return AutomationControlType.Tree;
         }
     }
 }
