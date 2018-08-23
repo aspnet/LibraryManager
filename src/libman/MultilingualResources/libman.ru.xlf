@@ -43,7 +43,7 @@
           <target state="translated">Создать новый файл libman.json</target>
         </trans-unit>
         <trans-unit id="InstallCommandDesc" translate="yes" xml:space="preserve">
-          <source>Add a library definition to the LibMan.json file, and download the library to the specified location</source>
+          <source>Add a library definition to the libman.json file, and download the library to the specified location</source>
           <target state="translated">Добавьте определение библиотеки в файл LibMan.json и загрузите библиотеку в указанное расположение</target>
         </trans-unit>
         <trans-unit id="InstallCommandExamples" translate="yes" xml:space="preserve">
@@ -107,7 +107,7 @@
     Если для библиотеки указано место назначения, оно переопределит defaultDestination</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
-          <source>Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</source>
+          <source>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</source>
           <target state="translated">Удаляет все файлы для указанной библиотеки из указанного места назначения, затем удаляет определение библиотеки из файла libman.json</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">

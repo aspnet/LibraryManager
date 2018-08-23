@@ -331,7 +331,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a library definition to the LibMan.json file, and download the library to the specified location.
+        ///   Looks up a localized string similar to Add a library definition to the libman.json file, and download the library to the specified location.
         /// </summary>
         internal static string InstallCommandDesc {
             get {
@@ -656,7 +656,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json.
+        ///   Looks up a localized string similar to Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json.
         /// </summary>
         internal static string UnInstallCommandDesc {
             get {
