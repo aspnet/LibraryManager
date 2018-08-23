@@ -145,7 +145,7 @@
     <value>Create a new libman.json</value>
   </data>
   <data name="InstallCommandDesc" xml:space="preserve">
-    <value>Add a library definition to the LibMan.json file, and download the library to the specified location</value>
+    <value>Add a library definition to the libman.json file, and download the library to the specified location</value>
   </data>
   <data name="InstallCommandExamples" xml:space="preserve">
     <value>    libman install jquery@3.2.1
@@ -189,7 +189,7 @@
     If a library specifies a destination, it will override the defaultDestination</value>
   </data>
   <data name="UnInstallCommandDesc" xml:space="preserve">
-    <value>Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</value>
+    <value>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
     <value>    libman uninstall jquery
