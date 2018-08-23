@@ -43,7 +43,7 @@
           <target state="translated">Crea un archivo libman.json</target>
         </trans-unit>
         <trans-unit id="InstallCommandDesc" translate="yes" xml:space="preserve">
-          <source>Add a library definition to the LibMan.json file, and download the library to the specified location</source>
+          <source>Add a library definition to the libman.json file, and download the library to the specified location</source>
           <target state="translated">Agregue una definición de biblioteca al archivo LibMan.json y descargue la biblioteca a la ubicación especificada.</target>
         </trans-unit>
         <trans-unit id="InstallCommandExamples" translate="yes" xml:space="preserve">
@@ -99,7 +99,7 @@
           <target state="translated">Error si no hay ningún archivo libman.json en la carpeta actual. Si se especifica un proveedor en una biblioteca, este reemplazará al valor defaultProvider. Si se especifica un destino en una biblioteca, este reemplazará al valor defaultDestination.</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
-          <source>Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</source>
+          <source>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</source>
           <target state="translated">Elimina todos los archivos de la biblioteca especificada del destino establecido y, a continuación, elimina la definición de biblioteca dada del archivo libman.json</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">

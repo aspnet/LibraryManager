@@ -43,7 +43,7 @@
           <target state="translated">새 libman.json을 만듭니다.</target>
         </trans-unit>
         <trans-unit id="InstallCommandDesc" translate="yes" xml:space="preserve">
-          <source>Add a library definition to the LibMan.json file, and download the library to the specified location</source>
+          <source>Add a library definition to the libman.json file, and download the library to the specified location</source>
           <target state="translated">LibMan.json 파일에 라이브러리 정의를 추가하고 라이브러리를 지정한 위치로 다운로드하세요.</target>
         </trans-unit>
         <trans-unit id="InstallCommandExamples" translate="yes" xml:space="preserve">
@@ -104,7 +104,7 @@
     라이브러리에서 대상을 지정하면 이 대상으로 defaultDestination이 재정의됩니다.</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
-          <source>Deletes all files for the specified library from their specified destination, then removess the specified library definition from libman.json</source>
+          <source>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</source>
           <target state="translated">지정한 라이브러리의 모든 파일을 지정된 대상에서 삭제한 다음 지정된 라이브러리 정의를 libman.json에서 제거합니다.</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
