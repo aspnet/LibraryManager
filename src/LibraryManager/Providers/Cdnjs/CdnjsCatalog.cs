@@ -190,13 +190,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return null;
             }
 
-            var versions = (await GetLibraryVersionsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false)).ToList();
-            string first = versions[0];
-
-            if (!includePreReleases)
-            {
-                first = versions.First(id => id.Any(c => !char.IsLetter(c)));
-            }
+            string first = includePreReleases
+                ? (await GetLibraryVersionsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false)).First()
+                : group.Version;
 
             if (!string.IsNullOrEmpty(first))
             {
