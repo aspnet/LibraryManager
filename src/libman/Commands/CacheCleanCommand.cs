@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 {
                     Directory.Delete(Path.Combine(HostInteractions.CacheDirectory, Provider.Value), true);
 
-                    Logger.Log(Resources.Text.CacheForProviderCleanedMessage, LogLevel.Operation);
+                    Logger.Log(string.Format(Resources.Text.CacheForProviderCleanedMessage, Provider.Value), LogLevel.Operation);
                 }
                 catch (Exception ex)
                 {
