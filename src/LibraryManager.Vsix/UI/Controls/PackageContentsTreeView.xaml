@@ -36,7 +36,9 @@
                 </Style.Triggers>
             </Style>
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}" DataType="{x:Type models:PackageItem}">
-                <CheckBox IsChecked="{Binding Path=IsChecked}" VerticalAlignment="Center">
+                <CheckBox IsChecked="{Binding Path=IsChecked}"
+                          AutomationProperties.Name="{x:Static resources:Text.Files}"
+                          VerticalAlignment="Center">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />

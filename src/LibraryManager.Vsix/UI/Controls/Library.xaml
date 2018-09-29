@@ -56,7 +56,9 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 SelectedItem="{Binding ElementName=ThisControl, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ItemsSource="{Binding ElementName=ThisControl, Path=Items, Mode=OneWay}"
-                MaxHeight="300" MinWidth="150">
+                MaxHeight="300" MinWidth="150"
+                AutomationProperties.LabeledBy="{Binding ElementName=LibrarySearchBox}"
+                AutomationProperties.Name="{x:Static res:Text.Library}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type controls:Completion}">
                         <Label ToolTip="{Binding Path=Description, Mode=OneWay}" Padding="0">
