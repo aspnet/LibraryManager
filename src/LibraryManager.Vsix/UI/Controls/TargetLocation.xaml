@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
              x:Name="ThisControl"
+             Focusable="True"
              LostFocus="TargetLocation_LostFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
@@ -14,6 +16,7 @@
     <Grid>
         <!-- Text Entry -->
         <TextBox x:Name="TargetLocationSearchTextBox"
+                 AutomationProperties.Name="{x:Static resources:Text.TargetLocation}"
                  Text="{Binding ElementName=ThisControl,
                                 Path=Text,
                                 Mode=TwoWay,
@@ -26,7 +29,7 @@
         <Border BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" IsHitTestVisible="False">
             <Path Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{Binding ElementName=ThisControl}" />
         </Border>
-        
+
         <controls:BindingProxy x:Name="AllOrs">
             <MultiBinding Mode="OneWay" Converter="{StaticResource LogicalOr}">
                 <Binding ElementName="TargetLocationSearchTextBox" Path="IsKeyboardFocusWithin" />
@@ -46,7 +49,9 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 SelectedItem="{Binding ElementName=ThisControl, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ItemsSource="{Binding ElementName=ThisControl, Path=Items, Mode=OneWay}"
-                MaxHeight="300" MinWidth="150">
+                MaxHeight="300" MinWidth="150"
+                AutomationProperties.LabeledBy="{Binding ElementName=TargetLocationSearchTextBox}"
+                AutomationProperties.Name="{x:Static resources:Text.TargetLocation}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type controls:Completion}">
                         <Label ToolTip="{Binding Path=Description, Mode=OneWay}" Padding="0">

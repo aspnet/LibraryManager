@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
              xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
+             xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
              mc:Ignorable="d" x:Name="ThisControl"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}">
     <UserControl.Resources>
@@ -12,7 +13,10 @@
         <converters:PackageItemIconConverter x:Key="IconConverter" />
         <converters:VisibleIfNonNullConverter x:Key="VisibleIfNonNullConverter" />
     </UserControl.Resources>
-    <TreeView ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}" VirtualizingPanel.IsVirtualizing="True" KeyboardNavigation.TabNavigation="Continue">
+    <TreeView AutomationProperties.Name="{x:Static resources:Text.Files}"
+              ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
+              VirtualizingPanel.IsVirtualizing="True"
+              KeyboardNavigation.TabNavigation="Continue">
         <TreeView.ItemContainerStyle>
             <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
@@ -32,7 +36,9 @@
                 </Style.Triggers>
             </Style>
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}" DataType="{x:Type models:PackageItem}">
-                <CheckBox IsChecked="{Binding Path=IsChecked}" VerticalAlignment="Center">
+                <CheckBox IsChecked="{Binding Path=IsChecked}"
+                          AutomationProperties.Name="{x:Static resources:Text.Files}"
+                          VerticalAlignment="Center">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />

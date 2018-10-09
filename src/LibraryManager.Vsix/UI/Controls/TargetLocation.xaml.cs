@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -61,6 +62,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 window.LocationChanged += RepositionPopup;
                 window.SizeChanged += RepositionPopup;
             }
+        }
+
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new TargetLocationAutomationPeer(this);
         }
 
         private void RepositionPopup(object sender, EventArgs e)

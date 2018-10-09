@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
              xmlns:res="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
+             xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
              x:Name="ThisControl"
@@ -17,6 +18,7 @@
     <Grid>
         <!-- Text Entry -->
         <TextBox x:Name="LibrarySearchBox"
+                 AutomationProperties.Name="{x:Static resources:Text.Library}"
                  Text="{Binding ElementName=ThisControl,
                                 Path=Text,
                                 Mode=TwoWay,
@@ -27,7 +29,8 @@
                  Padding="2 2 20 2" />
         <!-- Watermark -->
         <Label Opacity=".5" Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Top" IsHitTestVisible="False">
-            <TextBlock Text="{x:Static res:Text.TypeToSearch}" />
+            <TextBlock Text="{x:Static res:Text.TypeToSearch}"
+                       AutomationProperties.Name="{x:Static resources:Text.TypeToSearch}" />
         </Label>
 
         <!-- Expand Grip -->
@@ -47,13 +50,15 @@
         <Popup x:Name="Flyout"
                Placement="Bottom"
                PlacementTarget="{Binding ElementName=LibrarySearchBox}">
-            <ListBox x:Name="Options"    
+            <ListBox x:Name="Options"
                 SelectionMode="Single"
                 PreviewKeyDown="HandleListBoxKeyPress"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 SelectedItem="{Binding ElementName=ThisControl, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ItemsSource="{Binding ElementName=ThisControl, Path=Items, Mode=OneWay}"
-                MaxHeight="300" MinWidth="150">
+                MaxHeight="300" MinWidth="150"
+                AutomationProperties.LabeledBy="{Binding ElementName=LibrarySearchBox}"
+                AutomationProperties.Name="{x:Static res:Text.Library}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type controls:Completion}">
                         <Label ToolTip="{Binding Path=Description, Mode=OneWay}" Padding="0">
