@@ -4,8 +4,9 @@ One of the easiest ways to contribute is to participate in discussions and discu
 
 
 ## General feedback and discussions?
-Please start a discussion on the [Home repo issue tracker](https://github.com/aspnet/Home/issues).
+Please start a discussion on the [issue tracker](https://github.com/aspnet/LibraryManager/issues).
 
+We try to use the `Discussion` tag appropriately for topics that we're seeking more input about.
 
 ## Bugs and feature requests?
 For non-security related bugs please log a new issue in the [issue tracker](../../../issues).
@@ -18,7 +19,7 @@ The best way to get your bug fixed is to be as detailed as you can be about the 
 Providing a minimal project with steps to reproduce the problem is ideal.
 Here are questions you can answer before you file a bug to make sure you're not missing any important information.
 
-1. Did you read the [documentation](https://github.com/aspnet/home/wiki)?
+1. Did you read the [documentation](https://github.com/aspnet/librarymanager/wiki)?
 2. Did you include the snippet of broken code in the issue?
 3. What are the *EXACT* steps to reproduce this problem?
 4. What operating system are you using?
@@ -37,7 +38,7 @@ Here's a few things you should always do when making changes to the code base:
 
 **Engineering guidelines**
 
-The coding, style, and general engineering guidelines are published on the [Engineering guidelines](https://github.com/aspnet/Home/wiki/Engineering-guidelines) page.
+The coding, style, and general engineering guidelines are published on the [Engineering guidelines](https://github.com/aspnet/LibraryManager/wiki/Engineering-Guidelines) page.
 
 **Commit/Pull Request Format**
 
