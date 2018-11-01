@@ -46,6 +46,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 ---------------
 unpkg:
     (empty)
+jsdelivr:
+    (empty)
 filesystem:
     (empty)
 cdnjs:
@@ -77,6 +79,8 @@ cdnjs:
             var expectedString = @"Cache contents:
 ---------------
 unpkg:
+    (empty)
+jsdelivr:
     (empty)
 filesystem:
     (empty)

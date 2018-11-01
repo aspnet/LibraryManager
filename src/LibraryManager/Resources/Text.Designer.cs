@@ -205,6 +205,15 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Example: &lt;library&gt;@&lt;version&gt;.
+        /// </summary>
+        public static string JsDelivrProviderHintText {
+            get {
+                return ResourceManager.GetString("JsDelivrProviderHintText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unavailable.
         /// </summary>
         public static string LibraryDetail_Unavailable {
