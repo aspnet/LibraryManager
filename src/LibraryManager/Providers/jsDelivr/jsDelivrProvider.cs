@@ -241,6 +241,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             {
                 ILibraryCatalog catalog = GetCatalog();
                 ILibrary library = await catalog.GetLibraryAsync(desiredState.Name, desiredState.Version, cancellationToken).ConfigureAwait(false);
+                string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(desiredState.Name, desiredState.Version, Id);
 
                 if (library == null)
                 {
@@ -252,7 +253,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
                     if (invalidFiles.Any())
                     {
-                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(desiredState.Name, desiredState.Version, invalidFiles, library.Files.Keys);
+                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(libraryId, invalidFiles, library.Files.Keys);
                         return new LibraryOperationResult(desiredState, invalidFilesError);
                     }
                     else
