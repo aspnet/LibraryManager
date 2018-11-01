@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public string Description { get; }
 
-        public async Task<IEnumerable<string>> GetLibraryIdsAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<string>> GetLibraryVersions(CancellationToken cancellationToken)
         {
 
             if (!JsDelivrCatalog.IsGitHub(DisplayName))
@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 {
                     return npmPackageInfo.Versions
                         .OrderByDescending(v => v)
-                        .Select(semanticVersion => LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(DisplayName, semanticVersion.ToString(), JsDelivrProvider.IdText))
+                        .Select(v => v.ToString())
                         .ToList();
                 }
             }

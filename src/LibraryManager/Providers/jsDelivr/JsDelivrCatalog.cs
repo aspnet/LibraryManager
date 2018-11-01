@@ -58,21 +58,21 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             return latestVersion;
         }
 
-        public async Task<ILibrary> GetLibraryAsync(string libraryId, CancellationToken cancellationToken)
+        public async Task<ILibrary> GetLibraryAsync(string name, string version, CancellationToken cancellationToken)
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryId, _provider.Id);
-
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version))
             {
-                throw new InvalidLibraryException(libraryId, _provider.Id);
+                throw new InvalidLibraryException(name, _provider.Id);
             }
+
+            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, version, _provider.Id);
 
             try
             {
                 IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken);
                 return new JsDelivrLibrary { Version = version, Files = libraryFiles.ToDictionary(k => k, b => false), Name = name, ProviderId = _provider.Id };
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
@@ -125,7 +125,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             if (fileObject != null)
             {
                 JArray fileArray = fileObject["files"] as JArray;
-                foreach (var file in fileArray)
+                foreach (JToken file in fileArray)
                 {
                     JValue pathValue = file["name"] as JValue;
                     string path = pathValue?.Value as string;
@@ -206,12 +206,12 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
                     if (IsGitHub(name))
                     {
-                        versions = await GetGithubLibraryVersions(name);
+                        versions = await GetGithubLibraryVersionsAsync(name);
                     }
                     else
                     {
                         JsDelivrLibraryGroup libGroup = new JsDelivrLibraryGroup(name);
-                        versions = await libGroup.GetLibraryIdsAsync(CancellationToken.None);
+                        versions = await libGroup.GetLibraryVersions(CancellationToken.None);
                     }
 
                     foreach (string libraryId in versions)
@@ -258,7 +258,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             return libraryGroups;
         }
 
-        private async Task<IEnumerable<string>> GetGithubLibraryVersions(string name)
+        private async Task<IEnumerable<string>> GetGithubLibraryVersionsAsync(string name)
         {
             List<string> versions = new List<string>();
             JObject versionsObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(string.Format(LatestLibraryVersionUrlGH, name), CancellationToken.None).ConfigureAwait(false);

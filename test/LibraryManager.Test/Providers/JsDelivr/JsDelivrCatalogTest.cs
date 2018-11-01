@@ -43,10 +43,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 
             IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
             Assert.AreEqual(10, absolute.Count);
-            IEnumerable<string> libraryId = await absolute[0].GetLibraryIdsAsync(token);
-            Assert.IsTrue(libraryId.Any());
+            IEnumerable<string> libraryVersions = await absolute[0].GetLibraryVersions(token);
+            Assert.IsTrue(libraryVersions.Any());
 
-            ILibrary library = await _catalog.GetLibraryAsync(libraryId.First(), token);
+            ILibrary library = await _catalog.GetLibraryAsync("jquery", libraryVersions.First(), token);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual("jquery", library.Name);
             Assert.AreEqual(0, library.Files.Count(f => f.Value));
@@ -84,13 +84,13 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         public async Task GetLibraryAsync_Success()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("jquery@3.3.1", token);
+            ILibrary library = await _catalog.GetLibraryAsync("jquery", "3.3.1", token);
 
             Assert.IsNotNull(library);
             Assert.AreEqual("jquery", library.Name);
             Assert.AreEqual("3.3.1", library.Version);
 
-            ILibrary libraryGH = await _catalog.GetLibraryAsync("jquery/jquery@3.3.1", token);
+            ILibrary libraryGH = await _catalog.GetLibraryAsync("jquery/jquery", "3.3.1", token);
 
             Assert.IsNotNull(libraryGH);
             Assert.AreEqual("jquery/jquery", libraryGH.Name);
@@ -101,7 +101,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", token);
+            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", "", token);
         }
 
         [TestMethod]
