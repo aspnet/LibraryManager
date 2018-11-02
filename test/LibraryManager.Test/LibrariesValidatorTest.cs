@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 using Microsoft.Web.LibraryManager.Providers.FileSystem;
@@ -31,6 +32,7 @@ namespace Microsoft.Web.LibraryManager.Test
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory());
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(_dependencies);
         }
 
         [TestMethod]

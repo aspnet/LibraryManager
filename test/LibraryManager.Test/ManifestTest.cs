@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Test
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory());
 
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(_dependencies);
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(_dependencies);
             Directory.CreateDirectory(_projectFolder);
             File.WriteAllText(_filePath, _doc);
         }

@@ -1,16 +1,17 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.FileSystem;
-using System;
-using System.Linq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 {
@@ -30,6 +31,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
 
             var hostInteraction = new HostInteraction(_projectFolder, "");
             _dependencies = new Dependencies(hostInteraction, new FileSystemProviderFactory());
+
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(_dependencies);
 
             // Create the files to install
             Directory.CreateDirectory(_projectFolder);

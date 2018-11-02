@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory());
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(_dependencies);
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(_dependencies);
         }
 
         [DataTestMethod]
