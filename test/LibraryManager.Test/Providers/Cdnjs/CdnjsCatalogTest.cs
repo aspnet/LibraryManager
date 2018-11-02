@@ -29,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
             var dependencies = new Dependencies(hostInteraction, new CdnjsProviderFactory());
 
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(dependencies);
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);
 
             _provider = dependencies.GetProvider("cdnjs");
             _catalog = _provider.GetCatalog();
