@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Json;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
 using Microsoft.Web.LibraryManager.Vsix.UI.Controls;
@@ -505,7 +506,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     else
                     {
                         // libman.json file is open, so we will write to the textBuffer.
-                        InsertIntoTextBuffer(textBuffer, libraryInstallationState);
+                        InsertIntoTextBuffer(textBuffer, libraryInstallationState, manifest);
 
                         // Save manifest file so we can restore library files.
                         rdt.SaveFileIfDirty(configFilePath);
@@ -518,7 +519,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
         }
 
-        private void InsertIntoTextBuffer(IVsTextBuffer document, LibraryInstallationState libraryInstallationState)
+        private void InsertIntoTextBuffer(IVsTextBuffer document, LibraryInstallationState libraryInstallationState, Manifest manifest)
         {
             ITextBuffer textBuffer = GetTextBuffer(document);
 
@@ -531,7 +532,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     string insertionText;
                     JSONArray jsonArray = libraries.Children.OfType<JSONArray>().First();
 
-                    string newLibrary = GetLibraryToBeInserted(libraryInstallationState);
+                    string newLibrary = GetLibraryTextToBeInserted(libraryInstallationState, manifest);
                     bool containsLibrary = jsonArray.BlockItemChildren.Any();
 
                     int insertionIndex = libraries.AfterEnd - 1;
@@ -624,15 +625,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             return null;
         }
 
-        private string GetLibraryToBeInserted(LibraryInstallationState libraryInstallationState)
+        internal static string GetLibraryTextToBeInserted(LibraryInstallationState libraryInstallationState, Manifest manifest)
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings
+            var fileConverter = new LibraryStateToFileConverter(manifest.DefaultProvider, manifest.DefaultDestination);
+            LibraryInstallationStateOnDisk serializableState = fileConverter.ConvertToLibraryInstallationStateOnDisk(libraryInstallationState);
+
+            var settings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore,
             };
 
-            return JsonConvert.SerializeObject(libraryInstallationState, settings);
+            return JsonConvert.SerializeObject(serializableState, settings);
         }
 
         private ITextBuffer GetTextBuffer(IVsTextBuffer document)
