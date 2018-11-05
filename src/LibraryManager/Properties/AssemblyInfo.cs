@@ -5,3 +5,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.Test")]
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.IntegrationTest")]
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.Vsix")]
+[assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.Vsix.Test")]

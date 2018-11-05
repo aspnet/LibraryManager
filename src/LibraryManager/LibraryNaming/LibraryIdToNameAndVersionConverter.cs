@@ -68,6 +68,26 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
         }
 
         /// <summary>
+        /// TEST ONLY: re-initialize in order to accommodate changes to the IDependencies per test
+        /// </summary>
+        /// <param name="dependencies"></param>
+        internal void Reinitialize(IDependencies dependencies)
+        {
+            lock (_syncObject)
+            {
+                _isInitialized = true;
+                _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
+
+                _perProviderNamingScheme.Clear();
+
+                foreach (IProvider p in _dependencies.Providers)
+                {
+                    _perProviderNamingScheme[p.Id] = p.SupportsLibraryVersions ? _versionedNamingScheme : _simpleNamingScheme;
+                }
+            }
+        }
+
+        /// <summary>
         /// Splits the libraryId into name and version based on the provider.
         /// </summary>
         /// <param name="libraryId"></param>

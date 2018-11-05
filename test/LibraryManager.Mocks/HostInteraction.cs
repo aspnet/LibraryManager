@@ -16,6 +16,15 @@ namespace Microsoft.Web.LibraryManager.Mocks
     public class HostInteraction : IHostInteraction
     {
         /// <summary>
+        /// Initializes a basic mock HostInteraction for tests.
+        /// </summary>
+        public HostInteraction()
+        {
+            WorkingDirectory = Path.Combine(Path.GetTempPath(), "LibraryManager");
+            CacheDirectory = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HostInteraction"/> class.
         /// </summary>
         /// <param name="workingDirectory">The working directory.</param>

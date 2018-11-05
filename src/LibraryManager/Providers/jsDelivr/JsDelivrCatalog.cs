@@ -214,12 +214,12 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                         versions = await libGroup.GetLibraryVersions(CancellationToken.None);
                     }
 
-                    foreach (string libraryId in versions)
+                    foreach (string v in versions)
                     {
                         CompletionItem completionItem = new CompletionItem
                         {
-                            DisplayText = libraryId,
-                            InsertionText = libraryId
+                            DisplayText = v,
+                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, v, _provider.Id)
                         };
 
                         completions.Add(completionItem);

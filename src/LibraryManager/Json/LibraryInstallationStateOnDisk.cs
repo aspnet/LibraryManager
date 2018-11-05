@@ -10,11 +10,11 @@ namespace Microsoft.Web.LibraryManager.Json
 {
     internal class LibraryInstallationStateOnDisk
     {
-        [JsonProperty(ManifestConstants.Library)]
-        public string LibraryId { get; set; }
-
         [JsonProperty(ManifestConstants.Provider)]
         public string ProviderId { get; set; }
+
+        [JsonProperty(ManifestConstants.Library)]
+        public string LibraryId { get; set; }
 
         [JsonProperty(ManifestConstants.Destination)]
         public string DestinationPath { get; set; }

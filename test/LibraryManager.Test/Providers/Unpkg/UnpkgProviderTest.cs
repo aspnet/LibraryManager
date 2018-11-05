@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             var dependencies = new Dependencies(hostInteraction, new UnpkgProviderFactory());
             _provider = dependencies.GetProvider("unpkg");
 
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(dependencies);
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);
             Directory.CreateDirectory(_projectFolder);
         }
 
