@@ -29,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
             var dependencies = new Dependencies(hostInteraction, new JsDelivrProviderFactory());
 
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(dependencies);
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);
 
             _provider = dependencies.GetProvider("jsdelivr");
             _catalog = _provider.GetCatalog();

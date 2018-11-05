@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             var dependencies = new Dependencies(hostInteraction, new JsDelivrProviderFactory());
             _provider = dependencies.GetProvider("jsdelivr");
 
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(dependencies);
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);
             Directory.CreateDirectory(_projectFolder);
         }
 
