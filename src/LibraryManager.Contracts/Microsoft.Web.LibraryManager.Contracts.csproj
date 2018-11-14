@@ -1,38 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-        <PackageTags>library, package, client-side</PackageTags>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.Contracts.xml</DocumentationFile>
-        <Description>The contracts assembly for authoring Library Manager extensions</Description>
-        <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
-        <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+    <PackageTags>library, package, client-side</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.Contracts.xml</DocumentationFile>
+    <Description>The contracts assembly for authoring Library Manager extensions</Description>
+    <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
+    <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
+  </PropertyGroup>
 
-    <Target Name="BuiltProjectOutputGroup" />
-    <Target Name="BuiltProjectOutputGroupDependencies" />
-    <Target Name="GetCopyToOutputDirectoryItems" />
-    <Target Name="SatelliteDllsProjectOutputGroup" />
-    <Target Name="DebugSymbolsProjectOutputGroup" />
-
-    <!-- Needed for Multilingual App Toolkit-->
-    <ItemGroup>
-      <XliffResource Include="MultilingualResources\*.xlf" />
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Update="Resources\Text.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Text.resx</DependentUpon>
-      </Compile>
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Update="Resources\Text.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Text.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Properties\" />
-    </ItemGroup>
+  <Target Name="BuiltProjectOutputGroup" />
+  <Target Name="BuiltProjectOutputGroupDependencies" />
+  <Target Name="GetCopyToOutputDirectoryItems" />
+  <Target Name="SatelliteDllsProjectOutputGroup" />
+  <Target Name="DebugSymbolsProjectOutputGroup" />
+  <ItemGroup>
+    <Reference Include="System.Runtime" />
+  </ItemGroup>
+  <!-- Needed for Multilingual App Toolkit-->
+  <ItemGroup>
+    <XliffResource Include="MultilingualResources\*.xlf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Text.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Text.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Text.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Text.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
 </Project>

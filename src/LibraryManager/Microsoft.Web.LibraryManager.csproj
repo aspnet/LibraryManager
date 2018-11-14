@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageTags>library, package, client-side</PackageTags>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.xml</DocumentationFile>

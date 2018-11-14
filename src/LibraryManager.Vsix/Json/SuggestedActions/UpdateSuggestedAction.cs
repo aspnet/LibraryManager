@@ -1,11 +1,13 @@
-﻿using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.VisualStudio.Imaging;
-using Microsoft.VisualStudio.Text;
-using Microsoft.Web.Editor.SuggestedActions;
-using Microsoft.Web.LibraryManager.Contracts;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Text;
+using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.WebTools.Languages.Json.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Editor.SuggestedActions;
+using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Utility;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -49,13 +51,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     return;
                 }
 
-                JSONMember member = _provider.LibraryObject.Children.OfType<JSONMember>().FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Library);
+                SortedNodeList<Node> children = JsonHelpers.GetChildren(_provider.LibraryObject);
+                MemberNode member = children.OfType<MemberNode>().FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Library);
 
                 if (member != null)
                 {
                     using (ITextEdit edit = TextBuffer.CreateEdit())
                     {
-                        edit.Replace(new Span(member.Value.Start, member.Value.Length), "\"" + _updatedLibraryId + "\"");
+                        edit.Replace(new Span(member.Value.Start, member.Value.Width), "\"" + _updatedLibraryId + "\"");
                         edit.Apply();
                     }
                 }

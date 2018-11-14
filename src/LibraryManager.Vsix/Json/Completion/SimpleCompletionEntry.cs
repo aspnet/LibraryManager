@@ -2,15 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Windows.Media;
-using Microsoft.JSON.Editor.Completion;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
-using Microsoft.Web.Editor.Completion;
+using Microsoft.WebTools.Languages.Json.Editor.Completion;
+using Microsoft.WebTools.Languages.Shared.Editor.Completion;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    internal class SimpleCompletionEntry : JSONCompletionEntry
+    internal class SimpleCompletionEntry : JsonCompletionEntry
     {
         private readonly int _specificVersion;
 

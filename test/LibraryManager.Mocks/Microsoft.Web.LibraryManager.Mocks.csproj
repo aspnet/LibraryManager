@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
         <PackageTags>mocks, unit test, library, client-side, package</PackageTags>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.Mocks.xml</DocumentationFile>

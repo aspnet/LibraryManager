@@ -1,9 +1,9 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.JSON.Core.Parser;
-using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.JSON.Editor.Document;
+using System;
+using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -11,9 +11,9 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
-using System;
-using System.Linq;
-using System.Runtime.InteropServices;
+using Microsoft.WebTools.Languages.Json.Editor.Document;
+using Microsoft.WebTools.Languages.Json.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -112,35 +112,35 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             // Completion may have gotten invoked via by Web Editor OnPostTypeChar(). Don't invoke again, or else we get flikering completion list
-            // TODO:Review the design here post-preview 4 and make sure this completion controller doesn't clash with Web Editors JSON completion controller
+            // TODO:Review the design here post-preview 4 and make sure this completion controller doesn't clash with Web Editors Json completion controller
             completionSession = _broker.GetSessions(_textView).FirstOrDefault();
             if (completionSession != null && completionSession.Properties.TryGetProperty<bool>(RetriggerCompletion, out retrigger))
             {
                 return;
             }
 
-            var doc = JSONEditorDocument.FromTextBuffer(_textView.TextDataModel.DocumentBuffer);
+            var doc = JsonEditorDocument.FromTextBuffer(_textView.TextDataModel.DocumentBuffer);
 
             if (doc == null)
             {
                 return;
             }
 
-            JSONParseItem parseItem = JsonHelpers.GetItemBeforePosition(_textView.Caret.Position.BufferPosition, doc.JSONDocument);
+            Node node = JsonHelpers.GetNodeBeforePosition(_textView.Caret.Position.BufferPosition, doc.DocumentNode);
 
-            if (parseItem == null)
+            if (node == null)
             {
                 return;
             }
 
-            JSONMember member = parseItem.FindType<JSONMember>();
+            MemberNode memberNode = node.FindType<MemberNode>();
 
-            if (member == null || (!member.UnquotedNameText.Equals(ManifestConstants.Library) && !member.UnquotedNameText.Equals(ManifestConstants.Destination) && member.UnquotedValueText?.Length <= 1))
+            if (memberNode == null || (!memberNode.UnquotedNameText.Equals(ManifestConstants.Library) && !memberNode.UnquotedNameText.Equals(ManifestConstants.Destination) && memberNode.UnquotedValueText?.Length <= 1))
             {
                 return;
             }
 
-            JSONObject parent = parseItem.FindType<JSONObject>();
+            ObjectNode parent = node.FindType<ObjectNode>();
 
             if (JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
             {

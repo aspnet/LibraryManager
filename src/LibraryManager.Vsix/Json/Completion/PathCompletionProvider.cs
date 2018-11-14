@@ -1,35 +1,35 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.JSON.Editor.Completion;
-using Microsoft.VisualStudio.Imaging;
-using Microsoft.VisualStudio.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Utilities;
+using Microsoft.WebTools.Languages.Json.Editor.Completion;
+using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    [Export(typeof(IJSONCompletionListProvider))]
+    [Export(typeof(IJsonCompletionListProvider))]
     [Name(nameof(PathCompletionProvider))]
     internal class PathCompletionProvider : BaseCompletionProvider
     {
-        public override JSONCompletionContextType ContextType
+        public override JsonCompletionContextType ContextType
         {
-            get { return JSONCompletionContextType.PropertyValue; }
+            get { return JsonCompletionContextType.PropertyValue; }
         }
 
-        protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
+        protected override IEnumerable<JsonCompletionEntry> GetEntries(JsonCompletionContext context)
         {
-            JSONMember member = context.ContextItem.FindType<JSONMember>();
+            MemberNode member = context.ContextNode.FindType<MemberNode>();
 
             if (member == null || (member.UnquotedNameText != ManifestConstants.Destination && member.UnquotedNameText != ManifestConstants.DefaultDestination)) 
                 yield break;
 
-            JSONMember parent = member.FindType<JSONObject>()?.FindType<JSONMember>();
+            MemberNode parent = member.FindType<ObjectNode>()?.FindType<MemberNode>();
 
             if (member.UnquotedNameText == ManifestConstants.Destination && (parent == null || parent.UnquotedNameText != ManifestConstants.Libraries))
             {

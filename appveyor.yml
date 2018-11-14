@@ -8,8 +8,8 @@ build_script:
   - msbuild /t:BuildAll LibraryManager.msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
   - vstest.console /logger:Appveyor test\libman.Test\bin\Release\netcoreapp2.1\libman.Test.dll
   - vstest.console /logger:Appveyor test\Microsoft.Web.LibraryManager.Build.Test\bin\Release\netcoreapp2.1\Microsoft.Web.LibraryManager.Build.Test.dll
-  - vstest.console /logger:Appveyor test\Microsoft.Web.LibraryManager.Build.Test\bin\Release\net461\Microsoft.Web.LibraryManager.Build.Test.dll
-  - vstest.console /logger:Appveyor test\LibraryManager.Test\bin\Release\net461\Microsoft.Web.LibraryManager.Test.dll
+  - vstest.console /logger:Appveyor test\Microsoft.Web.LibraryManager.Build.Test\bin\Release\net472\Microsoft.Web.LibraryManager.Build.Test.dll
+  - vstest.console /logger:Appveyor test\LibraryManager.Test\bin\Release\net472\Microsoft.Web.LibraryManager.Test.dll
   - vstest.console /logger:Appveyor test\LibraryManager.Test\bin\Release\netcoreapp2.1\Microsoft.Web.LibraryManager.Test.dll
 
 artifacts:
@@ -25,4 +25,4 @@ artifacts:
 test:
   assemblies:
     except:
-      - test\LibraryManager.IntegrationTest\bin\Release\net461\Microsoft.Web.LibraryManager.IntegrationTest.dll
+      - test\LibraryManager.IntegrationTest\bin\Release\net472\Microsoft.Web.LibraryManager.IntegrationTest.dll

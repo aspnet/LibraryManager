@@ -6,30 +6,26 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-using Microsoft.JSON.Core.Schema;
-using Microsoft.JSON.Editor.Completion;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
-using Microsoft.Web.Editor.Completion;
-using Microsoft.Web.Editor.Host;
+using Microsoft.WebTools.Languages.Json.Editor.Completion;
+using Microsoft.WebTools.Languages.Shared.Editor.Completion;
+using Microsoft.WebTools.Languages.Shared.Editor.Host;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    internal abstract class BaseCompletionProvider : IJSONCompletionListProvider
+    internal abstract class BaseCompletionProvider : IJsonCompletionListProvider
     {
-        private static readonly IEnumerable<JSONCompletionEntry> _empty = Enumerable.Empty<JSONCompletionEntry>();
+        private static readonly IEnumerable<JsonCompletionEntry> _empty = Enumerable.Empty<JsonCompletionEntry>();
 
         [Import]
         public ITextDocumentFactoryService DocumentService { get; set; }
 
-        [Import]
-        public IJSONSchemaEvaluationReportCache ReportCache { get; set; }
-
-        public abstract JSONCompletionContextType ContextType { get; }
+        public abstract JsonCompletionContextType ContextType { get; }
 
         public string ConfigFilePath { get; private set; }
 
-        public IEnumerable<JSONCompletionEntry> GetListEntries(JSONCompletionContext context)
+        public IEnumerable<JsonCompletionEntry> GetListEntries(JsonCompletionContext context)
         {
             if (DocumentService.TryGetTextDocument(context.Snapshot.TextBuffer, out ITextDocument document))
             {
@@ -45,9 +41,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return _empty;
         }
 
-        protected abstract IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context);
+        protected abstract IEnumerable<JsonCompletionEntry> GetEntries(JsonCompletionContext context);
 
-        protected void UpdateListEntriesSync(JSONCompletionContext context, IEnumerable<JSONCompletionEntry> allEntries)
+        protected void UpdateListEntriesSync(JsonCompletionContext context, IEnumerable<JsonCompletionEntry> allEntries)
         {
             if (context.Session.IsDismissed)
             {

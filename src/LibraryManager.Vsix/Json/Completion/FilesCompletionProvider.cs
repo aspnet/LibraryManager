@@ -9,32 +9,33 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.JSON.Editor.Completion;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.WebTools.Languages.Json.Editor.Completion;
+using Microsoft.WebTools.Languages.Json.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
-    [Export(typeof(IJSONCompletionListProvider))]
+    [Export(typeof(IJsonCompletionListProvider))]
     [Name(nameof(FilesCompletionProvider))]
     internal class FilesCompletionProvider : BaseCompletionProvider
     {
-        public override JSONCompletionContextType ContextType
+        public override JsonCompletionContextType ContextType
         {
-            get { return JSONCompletionContextType.ArrayElement; }
+            get { return JsonCompletionContextType.ArrayElement; }
         }
 
-        protected override IEnumerable<JSONCompletionEntry> GetEntries(JSONCompletionContext context)
+        protected override IEnumerable<JsonCompletionEntry> GetEntries(JsonCompletionContext context)
         {
-            JSONMember member = context.ContextItem.FindType<JSONMember>();
+            MemberNode member = context.ContextNode.FindType<MemberNode>();
 
             if (member == null || member.UnquotedNameText != "files")
                 yield break;
 
-            var parent = member.Parent as JSONObject;
+            var parent = member.Parent as ObjectNode;
 
             if (!JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
                 yield break;
@@ -78,7 +79,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     if (!context.Session.IsDismissed)
                     {
-                        var results = new List<JSONCompletionEntry>();
+                        var results = new List<JsonCompletionEntry>();
 
                         foreach (string file in library.Files.Keys)
                         {
@@ -95,23 +96,23 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private static IEnumerable<string> GetUsedFiles(JSONCompletionContext context)
+        private static IEnumerable<string> GetUsedFiles(JsonCompletionContext context)
         {
-            JSONArray array = context.ContextItem.FindType<JSONArray>();
+            ArrayNode array = context.ContextNode.FindType<ArrayNode>();
 
             if (array == null)
                 yield break;
 
-            foreach (JSONArrayElement arrayElement in array.Elements)
+            foreach (ArrayElementNode arrayElement in array.Elements)
             {
-                if (arrayElement.Value is JSONTokenItem token && token.Text != context.ContextItem.Text)
+                if (arrayElement.Value is TokenNode token && token.Text != context.ContextNode.GetText())
                 {
-                    yield return token.CanonicalizedText;
+                    yield return token.GetCanonicalizedText();
                 }
             }
         }
 
-        private FrameworkElement GetPresenter(JSONCompletionContext context)
+        private FrameworkElement GetPresenter(JsonCompletionContext context)
         {
             var presenter = context?.Session?.Presenter as FrameworkElement;
 
