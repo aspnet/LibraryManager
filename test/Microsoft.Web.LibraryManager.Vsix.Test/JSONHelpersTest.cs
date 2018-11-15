@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
             Assert.IsTrue(node.IsToken);
-            Assert.AreEqual(expectedText, node.GetText());
+            Assert.AreEqual(expectedText, NodeExtension.GetText(node));
         }
 
         [DataTestMethod]
@@ -55,7 +55,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
             Assert.IsTrue(node.IsToken);
-            Assert.AreEqual(expectedText, node.GetText());
+            Assert.AreEqual(expectedText, NodeExtension.GetText(node));
         }
 
         [TestMethod]
