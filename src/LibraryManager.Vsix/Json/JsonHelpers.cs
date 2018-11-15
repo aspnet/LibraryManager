@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class JsonHelpers
     {
-        internal static Node GetNodeBeforePosition(int pos, ComplexNode parent)
+        public static Node GetNodeBeforePosition(int pos, ComplexNode parent)
         {
             Node node = null;
             SortedNodeList<Node> children = GetChildren(parent);
@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return node;
         }
 
-        internal static int FindInsertIndex(SortedNodeList<Node> nodes, int rangeStart)
+        public static int FindInsertIndex(SortedNodeList<Node> nodes, int rangeStart)
         {
             int min = 0;
             int max = nodes.Count - 1;
@@ -66,7 +66,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return max + 1;
         }
 
-        internal static SortedNodeList<Node> GetChildren(Node node)
+        public static SortedNodeList<Node> GetChildren(Node node)
         {
             SortedNodeList<Node> children = new SortedNodeList<Node>();
 

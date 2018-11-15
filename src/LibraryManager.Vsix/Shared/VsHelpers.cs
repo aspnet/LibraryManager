@@ -470,7 +470,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     logAction.Invoke(string.Format(Resources.Text.LibraryAddedToProject, filePath.Replace('\\', '/')), LogLevel.Operation);
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Telemetry.TrackException(nameof(AddProjectItemsInBatchAsync), ex);
                 return false;
@@ -518,7 +518,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 DeleteEmptyFolders(folders);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Telemetry.TrackException(nameof(DeleteProjectItemsInBatchAsync), ex);
                 return false;

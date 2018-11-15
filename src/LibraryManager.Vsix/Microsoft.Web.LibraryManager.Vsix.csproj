@@ -9,7 +9,6 @@
     <StartAction>Program</StartAction>
     <StartProgram>$(DevEnvDir)\devenv.exe</StartProgram>
     <StartArguments>/rootsuffix Exp</StartArguments>
-    <OldToolsVersion>15.0</OldToolsVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -153,9 +152,6 @@
     <Compile Include="UI\Models\InstallationFolder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
       <Generator>VsixManifestGenerator</Generator>
@@ -164,32 +160,23 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.WebTools.Languages.Css">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Css.dll</HintPath>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Css.dll">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.WebTools.Languages.Json">
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Json.dll</HintPath>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.dll">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.WebTools.Languages.Json.Editor">
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Json.Editor.dll</HintPath>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.Editor.dll">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.WebTools.Languages.Json.VS">
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Json.VS.dll</HintPath>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.VS.dll">
       <Private>False</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.WebTools.Languages.Shared">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Shared.dll</HintPath>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Shared.dll">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.WebTools.Languages.Shared.Editor">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Shared.Editor.dll</HintPath>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Shared.Editor.dll">
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />

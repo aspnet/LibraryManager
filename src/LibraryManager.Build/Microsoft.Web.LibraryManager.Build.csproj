@@ -32,7 +32,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\test\LibraryManager.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj" />
     <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" PrivateAssets="all" />
   </ItemGroup>
 

@@ -14,15 +14,9 @@
     <ProjectReference Include="..\LibraryManager.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.WebTools.Languages.Css">
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Css.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WebTools.Languages.Json">
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WebTools.Languages.Shared">
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Shared.dll</HintPath>
-    </Reference>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Css.dll" />
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.dll" />
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Shared.dll" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />

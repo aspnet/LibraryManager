@@ -24,14 +24,9 @@
     <ProjectReference Include="..\..\src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.WebTools.Languages.Json.Editor">
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Json.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WebTools.Languages.Json.VS">
-      <HintPath>..\..\lib\Microsoft.WebTools.Languages.Json.VS.dll</HintPath>
-    </Reference>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.Editor.dll" />
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.VS.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
