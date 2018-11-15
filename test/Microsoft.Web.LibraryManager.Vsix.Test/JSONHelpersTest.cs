@@ -35,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataTestMethod]
         [DataRow(150, "\"jquery@3.3.1\"")]
         [DataRow(1, "{")]
-        [DataRow(171, "}")]
+        //[DataRow(171, "}")]
         public void JsonHelpers_GetNodeBeforePosition_ValidJson(int position, string expectedText)
         {
             DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
