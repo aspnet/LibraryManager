@@ -34,28 +34,28 @@ namespace Microsoft.Web.LibraryManager.Test
 
         [DataTestMethod]
         [DataRow(150, "\"jquery@3.3.1\"")]  // An inside token node postion
-        [DataRow(1, "{")]   // The first token node postion
         [DataRow(171, "}")] // The last token node position
+        [DataRow(1, "{")]   // The first token node postion
         public void JsonHelpers_GetNodeBeforePosition_ValidJson(int position, string expectedText)
         {
             DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
             Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
             Assert.IsTrue(node.IsToken);
-            Assert.AreEqual(expectedText, NodeExtension.GetText(node));
+            Assert.AreEqual(expectedText, node.GetText());
         }
 
         [DataTestMethod]
         [DataRow(150, "\"jquery@3.3.1\"")]  // An inside token node postion
-        [DataRow(1, "{")]   // The first token node postion
         [DataRow(170, "}")] // The last token node position
+        [DataRow(1, "{")]   // The first token node postion
         public void JsonHelpers_GetNodeBeforePosition_InvalidJson(int position, string expectedText)
         {
             DocumentNode documentNode = JsonNodeParser.Parse(_invalidJsonText);
             Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
             Assert.IsTrue(node.IsToken);
-            Assert.AreEqual(expectedText, NodeExtension.GetText(node));
+            Assert.AreEqual(expectedText, node.GetText());
         }
 
         [TestMethod]
