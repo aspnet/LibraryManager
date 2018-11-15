@@ -47,8 +47,8 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [DataTestMethod]
-        [DataRow(150, "\"jquery@3.3.1\"")]
-        [DataRow(1, "{")]
+       // [DataRow(150, "\"jquery@3.3.1\"")]
+       // [DataRow(1, "{")]
         [DataRow(170, "}")]
         public void JsonHelpers_GetNodeBeforePosition_InvalidJson(int position, string expectedText)
         {
