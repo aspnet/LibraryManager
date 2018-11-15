@@ -4,14 +4,14 @@
 using System;
 using Microsoft.Web.LibraryManager.Contracts;
 
-#if NET461
+#if NET472
 using System.ComponentModel.Composition;
 #endif
 
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 {
 
-#if NET461
+#if NET472
     [Export(typeof(IProviderFactory))]
 #endif
     internal class JsDelivrProviderFactory : IProviderFactory
