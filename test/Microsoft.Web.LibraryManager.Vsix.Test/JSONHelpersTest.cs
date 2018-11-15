@@ -32,30 +32,46 @@ namespace Microsoft.Web.LibraryManager.Test
   
 }";
 
-        [DataTestMethod]
-        [DataRow(150, "\"jquery@3.3.1\"")]  // An inside token node postion
-        [DataRow(1, "{")]   // The first token node postion
-        [DataRow(171, "}")] // The last token node position
-        public void JsonHelpers_GetNodeBeforePosition_ValidJson(int position, string expectedText)
+        [TestMethod]
+        public void JsonHelpers_GetNodeBeforePosition_ValidJson()
         {
             DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
-            Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
+            // First token node
+            Node node = JsonHelpers.GetNodeBeforePosition(1, documentNode);
             Assert.IsTrue(node.IsToken);
-            Assert.AreEqual(expectedText, node.GetText());
+            Assert.AreEqual("{", node.GetText());
+
+            // Inside member node
+            node = JsonHelpers.GetNodeBeforePosition(150, documentNode);
+            Assert.IsTrue(node.IsToken);
+            Assert.AreEqual("\"jquery@3.3.1\"", node.GetText());
+
+            // Last token node
+            node = JsonHelpers.GetNodeBeforePosition(171, documentNode);
+            Assert.IsTrue(node.IsToken);
+            Assert.AreEqual("}", node.GetText());
         }
 
-        [DataTestMethod]
-        [DataRow(150, "\"jquery@3.3.1\"")]  // An inside token node postion
-        [DataRow(1, "{")]   // The first token node postion
-        [DataRow(170, "}")] // The last token node position
-        public void JsonHelpers_GetNodeBeforePosition_InvalidJson(int position, string expectedText)
+        [TestMethod]
+        public void JsonHelpers_GetNodeBeforePosition_InvalidJson()
         {
             DocumentNode documentNode = JsonNodeParser.Parse(_invalidJsonText);
-            Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
+            // First token node
+            Node node = JsonHelpers.GetNodeBeforePosition(1, documentNode);
             Assert.IsTrue(node.IsToken);
-            Assert.AreEqual(expectedText, node.GetText());
+            Assert.AreEqual("{", node.GetText());
+
+            // Inside member node
+            node = JsonHelpers.GetNodeBeforePosition(150, documentNode);
+            Assert.IsTrue(node.IsToken);
+            Assert.AreEqual("\"jquery@3.3.1\"", node.GetText());
+
+            // Last token node
+            node = JsonHelpers.GetNodeBeforePosition(170, documentNode);
+            Assert.IsTrue(node.IsToken);
+            Assert.AreEqual("}", node.GetText());
         }
 
         [TestMethod]
