@@ -37,10 +37,10 @@
     <PackageReference Update="System.ValueTuple" Version="4.3.0" />
 
     <!-- Test references -->
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Update="Microsoft.Test.Apex.VisualStudio" Version="16.0.28117-pre" />
-    <PackageReference Update="MSTest.TestAdapter" Version="1.2.1" />
-    <PackageReference Update="MSTest.TestFramework" Version="1.2.1" />
+    <PackageReference Update="MSTest.TestAdapter" Version="1.4.0-beta" />
+    <PackageReference Update="MSTest.TestFramework" Version="1.4.0-beta" />
 
 
     <!-- CommandLine utils -->
