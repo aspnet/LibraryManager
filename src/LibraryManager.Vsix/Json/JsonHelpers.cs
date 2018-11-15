@@ -3,19 +3,20 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.JSON.Core.Parser;
-using Microsoft.JSON.Core.Parser.TreeItems;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Json;
+using Microsoft.WebTools.Languages.Json.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Utility;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class JsonHelpers
     {
-        internal static JSONParseItem GetItemBeforePosition(int pos, JSONComplexItem parentItem)
+        public static Node GetNodeBeforePosition(int pos, ComplexNode parent)
         {
-            JSONParseItem item = null;
-            JSONParseItemList children = parentItem.Children;
+            Node node = null;
+            SortedNodeList<Node> children = GetChildren(parent);
             int start = 0;
 
             if (children.Any())
@@ -29,28 +30,28 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (i >= 0)
                 {
-                    item = children[i];
+                    node = children[i];
 
-                    if (item is JSONComplexItem complexItem)
+                    if (node is ComplexNode complexNode)
                     {
-                        // Recurse to find the deepest item
-                        item = GetItemBeforePosition(pos, complexItem);
+                        // Recurse to find the deepest node
+                        node = GetNodeBeforePosition(pos, complexNode);
                     }
                 }
             }
 
-            return item;
+            return node;
         }
 
-        internal static int FindInsertIndex(JSONParseItemList jsonParseItems, int rangeStart)
+        public static int FindInsertIndex(SortedNodeList<Node> nodes, int rangeStart)
         {
             int min = 0;
-            int max = jsonParseItems.Count - 1;
+            int max = nodes.Count - 1;
 
             while (min <= max)
             {
                 int mid = (min + max) / 2;
-                int start = jsonParseItems[mid].Start;
+                int start = nodes[mid].Start;
 
                 if (rangeStart <= start)
                 {
@@ -65,7 +66,22 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return max + 1;
         }
 
-        public static bool TryGetInstallationState(JSONObject parent, out ILibraryInstallationState installationState, string defaultProvider = null)
+        public static SortedNodeList<Node> GetChildren(Node node)
+        {
+            SortedNodeList<Node> children = new SortedNodeList<Node>();
+
+            if (node != null)
+            {
+                for (int i = 0; i < node.SlotCount; i++)
+                {
+                    children.Add(node.GetNodeSlot(i));
+                }
+            }
+
+            return children;
+        }
+
+        public static bool TryGetInstallationState(ObjectNode parent, out ILibraryInstallationState installationState, string defaultProvider = null)
         {
             installationState = null;
 
@@ -76,7 +92,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             var state = new LibraryInstallationStateOnDisk();
 
-            foreach (JSONMember child in parent.Children.OfType<JSONMember>())
+            SortedNodeList<Node> children = GetChildren(parent);
+
+            foreach (MemberNode child in children.OfType<MemberNode>())
             {
                 switch (child.UnquotedNameText)
                 {
@@ -90,19 +108,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
                         state.DestinationPath = child.UnquotedValueText;
                         break;
                     case ManifestConstants.Files:
-                        state.Files = (child.Value as JSONArray)?.Elements.Select(e => e.UnquotedValueText).ToList();
+                        state.Files = (child.Value as ArrayNode)?.Elements.Select(e => e.UnquotedValueText).ToList();
                         break;
                 }
             }
 
+            children = GetChildren(parent.Parent?.FindType<ObjectNode>());
+            IEnumerable<MemberNode> rootMembers = children?.OfType<MemberNode>();
+
             // Check for defaultProvider
             if (string.IsNullOrEmpty(state.ProviderId))
             {
-                IEnumerable<JSONMember> rootMembers = parent.Parent?.FindType<JSONObject>()?.Children?.OfType<JSONMember>();
-
                 if (rootMembers != null)
                 {
-                    foreach (JSONMember child in rootMembers)
+                    foreach (MemberNode child in rootMembers)
                     {
                         if (child.UnquotedNameText == "defaultProvider")
                             state.ProviderId = child.UnquotedValueText;
@@ -113,11 +132,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             // Check for defaultDestination
             if (string.IsNullOrEmpty(state.DestinationPath))
             {
-                IEnumerable<JSONMember> rootMembers = parent.Parent?.FindType<JSONObject>()?.Children?.OfType<JSONMember>();
-
                 if (rootMembers != null)
                 {
-                    foreach (JSONMember child in rootMembers)
+                    foreach (MemberNode child in rootMembers)
                     {
                         if (child.UnquotedNameText == ManifestConstants.DefaultDestination)
                             state.DestinationPath = child.UnquotedValueText;

@@ -1,52 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <PackageTags>library, package, client-side, build</PackageTags>
-        <Description>MSBuild target for the Visual Studio Library Manager</Description>
-        <PackageId>Microsoft.Web.LibraryManager.Build</PackageId>
-        <Title>$(PackageId)</Title>
-        <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PackageTags>library, package, client-side, build</PackageTags>
+    <Description>MSBuild target for the Visual Studio Library Manager</Description>
+    <PackageId>Microsoft.Web.LibraryManager.Build</PackageId>
+    <Title>$(PackageId)</Title>
+    <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Build.Framework" />
-        <PackageReference Include="Microsoft.Build.Tasks.Core" />
-        <PackageReference Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" />
+    <PackageReference Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'netstandard2.0'"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="Microsoft.Web.LibraryManager.Build.props">
-            <PackagePath>build</PackagePath>
-            <Pack>true</Pack>
-        </Content>
-        <Content Include="Microsoft.Web.LibraryManager.Build.targets">
-            <Pack>true</Pack>
-            <PackagePath>build</PackagePath>
-        </Content>
-        <Content Include="Third-party-notice.txt">
-            <Pack>true</Pack>
-            <PackagePath></PackagePath>
-        </Content>
-    </ItemGroup>
+  <ItemGroup>
+    <Content Include="Microsoft.Web.LibraryManager.Build.props">
+      <PackagePath>build</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="Microsoft.Web.LibraryManager.Build.targets">
+      <Pack>true</Pack>
+      <PackagePath>build</PackagePath>
+    </Content>
+    <Content Include="Third-party-notice.txt">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" PrivateAssets="all" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" PrivateAssets="all" />
-    </ItemGroup>
-
-    <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
-        <!--
+  <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
+    <!--
         The include needs to happen after output has been copied to build output folder
         but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
         -->
-        <ItemGroup>
-            <_PackageFiles Include="bin\$(Configuration)\**\*.dll" Exclude="bin\$(Configuration)\**\Microsoft.Build.*.dll">
-                <PackagePath>tools\%(RecursiveDir)</PackagePath>
-                <Visible>false</Visible>
-                <BuildAction>Content</BuildAction>
-            </_PackageFiles>
-        </ItemGroup>
-    </Target>
+    <ItemGroup>
+      <_PackageFiles Include="bin\$(Configuration)\**\*.dll" Exclude="bin\$(Configuration)\**\Microsoft.Build.*.dll">
+        <PackagePath>tools\%(RecursiveDir)</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+    </ItemGroup>
+  </Target>
 
 </Project>

@@ -11,30 +11,34 @@
     <PackageReference Update="Microsoft.Build.Framework" Version="15.1.1012" PrivateAssets="All" />
     <PackageReference Update="Microsoft.Build.Tasks.Core" Version="15.1.1012" PrivateAssets="All" />
     <PackageReference Update="Microsoft.Build.Utilities.Core" Version="15.1.1012" PrivateAssets="All" />
-    <PackageReference Update="Microsoft.VisualStudio.ComponentModelHost" Version="15.0.26201" />
-    <PackageReference Update="Microsoft.VisualStudio.Editor" Version="15.0.26201" />
-    <PackageReference Update="Microsoft.VisualStudio.ImageCatalog" Version="15.0.26201" />
-    <PackageReference Update="Microsoft.VisualStudio.Imaging" Version="15.0.26201" />
+    <PackageReference Update="Microsoft.VisualStudio.ComponentModelHost" Version="15.6.27415" />
+    <PackageReference Update="Microsoft.VisualStudio.Editor" Version="16.0.203-g5d5c63964e" />
+    <PackageReference Update="Microsoft.VisualStudio.ImageCatalog" Version="15.8.28010" />
+    <PackageReference Update="Microsoft.VisualStudio.Imaging" Version="15.6.27415" />
     <PackageReference Update="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" Version="15.0.25726-Preview5" />
-    <PackageReference Update="Microsoft.VisualStudio.Language.Intellisense" Version="15.0.26201" />
-    <PackageReference Update="Microsoft.VisualStudio.Shell.15.0" Version="15.0.26201" />
-    <PackageReference Update="Microsoft.VisualStudio.Shell.Framework" Version="15.6.27413" />
-    <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.10.0" Version="10.0.30319" />
-    <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.11.0" Version="11.0.61030" />
+    <PackageReference Update="Microsoft.VisualStudio.Language.Intellisense" Version="16.0.203-g5d5c63964e" />
+    <PackageReference Update="Microsoft.VisualStudio.SDK.EmbedInteropTypes" Version="15.0.27" />
+    <PackageReference Update="Microsoft.VisualStudio.Settings.15.0" Version="15.6.27415" />
+    <PackageReference Update="Microsoft.VisualStudio.Shell.15.0" Version="15.6.27415" />
+    <PackageReference Update="Microsoft.VisualStudio.Shell.Framework" Version="15.6.27415" />
+    <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.10.0" Version="10.0.30320" />
+    <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.11.0" Version="11.0.61031" />
     <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" Version="15.0.25726-Preview5" />
     <PackageReference Update="Microsoft.VisualStudio.Telemetry" Version="15.7.942-master669188BE" />
+    <PackageReference Update="Microsoft.VisualStudio.Threading" Version="15.8.168" />
     <PackageReference Update="Microsoft.VSSDK.BuildTools" Version="15.0.26201" PrivateAssets="All" />
     <PackageReference Update="NerdBank.GitVersioning" Version="2.1.23" PrivateAssets="All" />
     <PackageReference Update="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Update="Nuget.VisualStudio" Version="4.6.1" />
+    <PackageReference Update="Nuget.VisualStudio" Version="4.7.0" />
 
     <PackageReference Update="System.Net.Http" Version="4.3.1" />
+    <PackageReference Update="System.Runtime" Version="4.3.0" />
     <PackageReference Update="System.Runtime.Loader" Version="4.3.0" />
     <PackageReference Update="System.ValueTuple" Version="4.3.0" />
 
     <!-- Test references -->
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Update="Microsoft.Test.Apex.VisualStudio" Version="15.8.27703" />
+    <PackageReference Update="Microsoft.Test.Apex.VisualStudio" Version="16.0.28117-pre" />
     <PackageReference Update="MSTest.TestAdapter" Version="1.2.1" />
     <PackageReference Update="MSTest.TestFramework" Version="1.2.1" />
 

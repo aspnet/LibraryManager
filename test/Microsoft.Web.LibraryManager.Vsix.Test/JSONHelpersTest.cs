@@ -1,12 +1,15 @@
-﻿using Microsoft.JSON.Core.Parser;
-using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Vsix;
+using Microsoft.WebTools.Languages.Json.Parser;
+using Microsoft.WebTools.Languages.Json.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Parser;
+using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Utility;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
     [TestClass]
-    public class JSONHelpersTest
+    public class JsonHelpersTest
     {
         private const string _validJsonText = @"{
   ""version"": ""1.0"",
@@ -30,53 +33,49 @@ namespace Microsoft.Web.LibraryManager.Test
 }";
 
         [DataTestMethod]
-        [DataRow(150, "\"jquery@3.3.1\"")]  // An inside token item postion
-        [DataRow(1, "{")]   // The first token item postion
-        [DataRow(171, "}")] // The last token item position
-        public void JSONHelpers_GetItemBeforePosition_ValidJson(int position, string expectedText)
+        [DataRow(150, "\"jquery@3.3.1\"")]  // An inside token node postion
+        [DataRow(1, "{")]   // The first token node postion
+        [DataRow(171, "}")] // The last token node position
+        public void JsonHelpers_GetNodeBeforePosition_ValidJson(int position, string expectedText)
         {
-            JSONComplexItem complexItem = JSONParser.Parse(_validJsonText);
+            DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
+            Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
-            JSONParseItem item = JsonHelpers.GetItemBeforePosition(position, complexItem);
-
-            Assert.IsTrue(item is JSONTokenItem);
-            Assert.AreEqual(expectedText, item.Text);
+            Assert.IsTrue(node.IsToken);
+            Assert.AreEqual(expectedText, node.GetText());
         }
 
         [DataTestMethod]
-        [DataRow(150, "\"jquery@3.3.1\"")]  // An inside token item postion
-        [DataRow(1, "{")]   // The first token item postion
-        [DataRow(170, "}")] // The last token item position
-        public void JSONHelpers_GetItemBeforePosition_InvalidJson(int position, string expectedText)
+        [DataRow(150, "\"jquery@3.3.1\"")]  // An inside token node postion
+        [DataRow(1, "{")]   // The first token node postion
+        [DataRow(170, "}")] // The last token node position
+        public void JsonHelpers_GetNodeBeforePosition_InvalidJson(int position, string expectedText)
         {
-            JSONComplexItem complexItem = JSONParser.Parse(_invalidJsonText);
+            DocumentNode documentNode = JsonNodeParser.Parse(_invalidJsonText);
+            Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
-            JSONParseItem item = JsonHelpers.GetItemBeforePosition(position, complexItem);
-
-            Assert.IsTrue(item is JSONTokenItem);
-            Assert.AreEqual(expectedText, item.Text);
+            Assert.IsTrue(node.IsToken);
+            Assert.AreEqual(expectedText, node.GetText());
         }
 
         [TestMethod]
-        public void JSONHelpers_GetItemBeforePosition_EmptyFile()
+        public void JsonHelpers_GetNodeBeforePosition_EmptyFile()
         {
-            JSONComplexItem complexItem = JSONParser.Parse(string.Empty);
+            DocumentNode documentNode = JsonNodeParser.Parse(string.Empty);
+            Node node = JsonHelpers.GetNodeBeforePosition(0, documentNode);
 
-            JSONParseItem item = JsonHelpers.GetItemBeforePosition(0, complexItem);
-
-            Assert.IsNull(item);
+            Assert.IsNull(node);
         }
 
         [DataTestMethod]
         [DataRow(150, 4)]   // An inside index position
         [DataRow(1, 1)] // The first index
         [DataRow(171, 5)]   // The last index
-        public void JSONHelpers_FindInsertIndex_ValidJson(int position, int expectedIndex)
+        public void JsonHelpers_FindInsertIndex_ValidJson(int position, int expectedIndex)
         {
-            JSONComplexItem item = JSONParser.Parse(_validJsonText).Children[0] as JSONComplexItem;
-            JSONParseItemList items = item.Children;
-
-            int actualIndex = JsonHelpers.FindInsertIndex(items, position);
+            Node complexNode = JsonNodeParser.Parse(_validJsonText).GetNodeSlot(0);
+            SortedNodeList<Node> children = JsonHelpers.GetChildren(complexNode);
+            int actualIndex = JsonHelpers.FindInsertIndex(children, position);
 
             Assert.AreEqual(expectedIndex, actualIndex);
         }
@@ -85,14 +84,37 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow(150, 4)]   // An inside index position
         [DataRow(1, 1)] // The first index
         [DataRow(170, 5)]   // The last index
-        public void JSONHelpers_FindInsertIndex_InvalidJson(int position, int expectedIndex)
+        public void JsonHelpers_FindInsertIndex_InvalidJson(int position, int expectedIndex)
         {
-            JSONComplexItem item = JSONParser.Parse(_invalidJsonText).Children[0] as JSONComplexItem;
-            JSONParseItemList items = item.Children;
-
-            int actualIndex = JsonHelpers.FindInsertIndex(items, position);
+            Node complexNode = JsonNodeParser.Parse(_invalidJsonText).GetNodeSlot(0);
+            SortedNodeList<Node> children = JsonHelpers.GetChildren(complexNode);
+            int actualIndex = JsonHelpers.FindInsertIndex(children, position);
 
             Assert.AreEqual(expectedIndex, actualIndex);
+        }
+
+        [TestMethod]
+        public void JsonHelpers_GetChildren_ValidJson()
+        {
+            DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
+            ObjectNode topLevelValue = (ObjectNode)documentNode.TopLevelValue;
+            SortedNodeList<Node> children = JsonHelpers.GetChildren(topLevelValue);
+
+            Assert.AreEqual(5, children.Count);
+            Assert.AreEqual(NodeKind.OpenCurlyBrace, children[0].Kind);
+            Assert.AreEqual(NodeKind.JSON_Member, children[1].Kind);
+            Assert.AreEqual(NodeKind.JSON_Member, children[2].Kind);
+            Assert.AreEqual(NodeKind.JSON_Member, children[3].Kind);
+            Assert.AreEqual(NodeKind.CloseCurlyBrace, children[4].Kind);
+        }
+
+        [TestMethod]
+        public void JsonHelpers_GetChildren_TokenNode()
+        {
+            DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
+            TokenNode firstToken = documentNode.GetFirstToken();
+
+            Assert.AreEqual(0, JsonHelpers.GetChildren(firstToken).Count);
         }
     }
 }

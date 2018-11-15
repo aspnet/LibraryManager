@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Language.Intellisense;
-using Microsoft.Web.Editor.SuggestedActions;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.WebTools.Languages.Shared.Editor.SuggestedActions;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {

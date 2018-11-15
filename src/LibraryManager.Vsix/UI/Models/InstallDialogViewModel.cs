@@ -8,8 +8,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using EnvDTE;
-using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.JSON.Editor.Document;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
@@ -21,8 +19,12 @@ using Microsoft.Web.LibraryManager.Json;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
 using Microsoft.Web.LibraryManager.Vsix.UI.Controls;
+using Microsoft.WebTools.Languages.Json.Editor.Document;
+using Microsoft.WebTools.Languages.Json.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Utility;
 using Newtonsoft.Json;
-using Controller = Microsoft.Web.Editor.Controller;
+using Controller = Microsoft.WebTools.Languages.Shared.Editor.Controller;
 using IVsTextBuffer = Microsoft.VisualStudio.TextManager.Interop.IVsTextBuffer;
 using RunningDocumentTable = Microsoft.VisualStudio.Shell.RunningDocumentTable;
 using Shell = Microsoft.VisualStudio.Shell;
@@ -49,7 +51,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private bool _anyFileSelected;
         private bool _isTreeViewEmpty;
         private string _errorMessage;
-        private bool _displayError;
         private BindLibraryNameToTargetLocation _libraryNameChange;
         private Project _project;
 
@@ -525,19 +526,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
             if (textBuffer != null)
             {
-                JSONMember libraries = GetLibraries(textBuffer);
+                MemberNode libraries = GetLibraries(textBuffer);
+                SortedNodeList<Node> children = JsonHelpers.GetChildren(libraries);
 
-                if (libraries?.Children != null)
+                if (children.Count > 0)
                 {
-                    string insertionText;
-                    JSONArray jsonArray = libraries.Children.OfType<JSONArray>().First();
+                    ArrayNode arrayNode = children.OfType<ArrayNode>().First();
 
                     string newLibrary = GetLibraryTextToBeInserted(libraryInstallationState, manifest);
-                    bool containsLibrary = jsonArray.BlockItemChildren.Any();
+                    bool containsLibrary = arrayNode.BlockChildren.Any();
 
-                    int insertionIndex = libraries.AfterEnd - 1;
+                    int insertionIndex = libraries.End - 1;
 
                     string lineBreakText = GetLineBreakTextFromPreviousLine(textBuffer, insertionIndex);
+
+                    string insertionText;
 
                     if (containsLibrary)
                     {
@@ -611,13 +614,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             Keyboard.Focus(editorWindow);
         }
 
-        private JSONMember GetLibraries(ITextBuffer textBuffer)
+        private MemberNode GetLibraries(ITextBuffer textBuffer)
         {
-            JSONEditorDocument document = JSONEditorDocument.FromTextBuffer(textBuffer);
+            JsonEditorDocument document = JsonEditorDocument.FromTextBuffer(textBuffer);
 
             if (document != null)
             {
-                IEnumerable<JSONMember> jsonMembers = document.JSONDocument.TopLevelValue.FindType<JSONObject>().Children.OfType<JSONMember>();
+                Node topLevelNode = document.DocumentNode.TopLevelValue.FindType<ObjectNode>();
+                SortedNodeList<Node> topLevelNodeChildren = JsonHelpers.GetChildren(topLevelNode);
+                IEnumerable<MemberNode> jsonMembers = topLevelNodeChildren.OfType<MemberNode>();
 
                 return jsonMembers.FirstOrDefault(m => m.UnquotedNameText == ManifestConstants.Libraries);
             }

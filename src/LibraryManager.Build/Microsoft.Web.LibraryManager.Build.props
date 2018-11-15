@@ -3,7 +3,7 @@
 
     <PropertyGroup>
         <_ProviderAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">$(MSBuildThisFileDirectory)..\tools\netstandard2.0\Microsoft.Web.LibraryManager.dll</_ProviderAssembly>
-        <_ProviderAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">$(MSBuildThisFileDirectory)..\tools\net461\Microsoft.Web.LibraryManager.dll</_ProviderAssembly>
+        <_ProviderAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">$(MSBuildThisFileDirectory)..\tools\net472\Microsoft.Web.LibraryManager.dll</_ProviderAssembly>
 
         <LibraryProviderAssemblies>
             $(_ProviderAssembly);

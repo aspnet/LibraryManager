@@ -4,7 +4,7 @@
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
-using Microsoft.Web.Editor.Completion;
+using Microsoft.WebTools.Languages.Shared.Editor.Completion;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {

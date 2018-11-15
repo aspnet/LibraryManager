@@ -1,16 +1,17 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.VisualStudio.Imaging;
-using Microsoft.VisualStudio.Text;
-using Microsoft.Web.Editor.SuggestedActions;
 using System;
 using System.Threading;
+using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.JSON.Core.Parser;
+using Microsoft.VisualStudio.Text;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.WebTools.Languages.Json.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Editor.SuggestedActions;
+using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Utility;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -54,17 +55,17 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 using (ITextEdit edit = TextBuffer.CreateEdit())
                 {
-                    var arrayElement = _provider.LibraryObject.Parent as JSONArrayElement;
-                    var prev = GetPreviousSibling(arrayElement) as JSONArrayElement;
-                    var next = GetNextSibling(arrayElement) as JSONArrayElement;
+                    var arrayElement = _provider.LibraryObject.Parent as ArrayElementNode;
+                    var prev = GetPreviousSibling(arrayElement) as ArrayElementNode;
+                    var next = GetNextSibling(arrayElement) as ArrayElementNode;
 
                     int start = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.Start).Start;
-                    int end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.AfterEnd).EndIncludingLineBreak;
+                    int end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.End).EndIncludingLineBreak;
 
                     if (next == null && prev?.Comma != null)
                     {
                         start = prev.Comma.Start;
-                        end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.AfterEnd).End;
+                        end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.End).End;
                     }
 
                     edit.Delete(Span.FromBounds(start, end));
@@ -78,19 +79,23 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
         }
 
-        private JSONParseItem GetPreviousSibling(JSONArrayElement arrayElement)
+        private Node GetPreviousSibling(ArrayElementNode arrayElementNode)
         {
-            JSONComplexItem parent = arrayElement.Parent;
-            return parent != null ? GetPreviousChild(arrayElement, parent.Children) : null;
+            ComplexNode parent = arrayElementNode.Parent as ComplexNode;
+            SortedNodeList<Node> children = JsonHelpers.GetChildren(parent);
+
+            return parent != null ? GetPreviousChild(arrayElementNode, children) : null;
         }
 
-        private JSONParseItem GetNextSibling(JSONArrayElement arrayElement)
+        private Node GetNextSibling(ArrayElementNode arrayElementNode)
         {
-            JSONComplexItem parent = arrayElement.Parent;
-            return parent != null ? GetNextChild(arrayElement, parent.Children) : null;
+            ComplexNode parent = arrayElementNode.Parent as ComplexNode;
+            SortedNodeList<Node> children = JsonHelpers.GetChildren(parent);
+
+            return parent != null ? GetNextChild(arrayElementNode, children) : null;
         }
 
-        private JSONParseItem GetPreviousChild(JSONParseItem child, JSONParseItemList children)
+        private Node GetPreviousChild(Node child, SortedNodeList<Node> children)
         {
             int index = (child != null) ? children.IndexOf(child) : -1;
 
@@ -102,7 +107,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return null;
         }
 
-        private JSONParseItem GetNextChild(JSONParseItem child, JSONParseItemList children)
+        private Node GetNextChild(Node child, SortedNodeList<Node> children)
         {
             int index = (child != null) ? children.IndexOf(child) : -1;
 

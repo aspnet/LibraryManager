@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net461</TargetFrameworks>
+    <TargetFrameworks>net472</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
@@ -8,6 +8,7 @@
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="Nerdbank.GitVersioning" />
+    <PackageReference Include="Microsoft.VisualStudio.Settings.15.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="TestSolution\**\*" />
@@ -23,14 +24,9 @@
     <ProjectReference Include="..\..\src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.JSON.Editor">
-      <HintPath>..\..\lib\Microsoft.JSON.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.JSON.Package">
-      <HintPath>..\..\lib\Microsoft.VisualStudio.JSON.Package.dll</HintPath>
-    </Reference>
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.Editor.dll" />
+    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.VS.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>

@@ -285,7 +285,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Telemetry.TrackException(nameof(DeleteFilesFromProjectAsync), ex);
                 return false;

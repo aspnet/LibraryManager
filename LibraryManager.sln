@@ -1,15 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28307.3004
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager", "src\LibraryManager\Microsoft.Web.LibraryManager.csproj", "{707356DD-96B9-49F6-AF2A-9D23B857A1E2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FF466454-426B-4AD7-8B00-D50011BE716F} = {FF466454-426B-4AD7-8B00-D50011BE716F}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Test", "test\LibraryManager.Test\Microsoft.Web.LibraryManager.Test.csproj", "{08C91CC3-4057-4D76-8B9A-B6A0557B64EB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3ABB42B4-4EF4-4CED-9A56-2B910DF710F8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -24,22 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		version.json = version.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Contracts", "src\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj", "{FF466454-426B-4AD7-8B00-D50011BE716F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Mocks", "test\LibraryManager.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj", "{18F82568-446D-4729-B65E-EB9DF21C3636}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryManager.Vsix", "src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{A72570B1-99EF-4BDD-B629-321CD56C9F7F}"
 	ProjectSection(SolutionItems) = preProject
 		src\Directory.Build.targets = src\Directory.Build.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Build", "src\LibraryManager.Build\Microsoft.Web.LibraryManager.Build.csproj", "{7536DF26-B808-4AC2-A9DA-58E408A1E05B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Build.Test", "test\Microsoft.Web.LibraryManager.Build.Test\Microsoft.Web.LibraryManager.Build.Test.csproj", "{E6AAC5E4-91A3-40D7-9917-B50CB16F0B34}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E67307E3-04FF-498B-97C7-4F508299DF4D}"
 	ProjectSection(SolutionItems) = preProject
@@ -50,8 +33,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{E559F6DC-25C6-4077-B2C5-D5A06357D1BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepoTasks", "RepoTasks", "{A4AE1634-B049-4506-A299-FD0A9F034031}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepoTasks", "build\tasks\RepoTasks.csproj", "{6F8BD284-7043-4B09-B79E-0B81D8290CAD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShimGenerator", "ShimGenerator", "{6B1811F7-5E4B-462E-A86D-BCFCEA190A38}"
 	ProjectSection(SolutionItems) = preProject
@@ -64,13 +45,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppHostRestorerProject", "A
 		tools\ShimGenerator\AppHostRestorerProject\AppHostRestorerProject.csproj = tools\ShimGenerator\AppHostRestorerProject\AppHostRestorerProject.csproj
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager", "src\LibraryManager\Microsoft.Web.LibraryManager.csproj", "{707356DD-96B9-49F6-AF2A-9D23B857A1E2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FF466454-426B-4AD7-8B00-D50011BE716F} = {FF466454-426B-4AD7-8B00-D50011BE716F}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Test", "test\LibraryManager.Test\Microsoft.Web.LibraryManager.Test.csproj", "{08C91CC3-4057-4D76-8B9A-B6A0557B64EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Contracts", "src\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj", "{FF466454-426B-4AD7-8B00-D50011BE716F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Mocks", "test\LibraryManager.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj", "{18F82568-446D-4729-B65E-EB9DF21C3636}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryManager.Vsix", "src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Build", "src\LibraryManager.Build\Microsoft.Web.LibraryManager.Build.csproj", "{7536DF26-B808-4AC2-A9DA-58E408A1E05B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Build.Test", "test\Microsoft.Web.LibraryManager.Build.Test\Microsoft.Web.LibraryManager.Build.Test.csproj", "{E6AAC5E4-91A3-40D7-9917-B50CB16F0B34}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepoTasks", "build\tasks\RepoTasks.csproj", "{6F8BD284-7043-4B09-B79E-0B81D8290CAD}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libman", "src\libman\libman.csproj", "{E98B5AB3-E58F-482A-8A81-829CFEA63E31}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libman.Test", "Test\libman.Test\libman.Test.csproj", "{AD605AA7-6E43-47F1-A096-1ACDF67BF1DB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.IntegrationTest", "test\LibraryManager.IntegrationTest\Microsoft.Web.LibraryManager.IntegrationTest.csproj", "{E9BE3307-5F07-4757-BB06-3460813D7B9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryManager.Vsix.Test", "test\Microsoft.Web.LibraryManager.Vsix.Test\Microsoft.Web.LibraryManager.Vsix.Test.csproj", "{00EE7B7F-EDA3-49E6-AA38-118C15B58CDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Vsix.Test", "test\Microsoft.Web.LibraryManager.Vsix.Test\Microsoft.Web.LibraryManager.Vsix.Test.csproj", "{00EE7B7F-EDA3-49E6-AA38-118C15B58CDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -231,6 +231,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{A4AE1634-B049-4506-A299-FD0A9F034031} = {E67307E3-04FF-498B-97C7-4F508299DF4D}
+		{6B1811F7-5E4B-462E-A86D-BCFCEA190A38} = {E559F6DC-25C6-4077-B2C5-D5A06357D1BC}
+		{E9F67355-871B-4104-B887-0BC6D0A04B65} = {6B1811F7-5E4B-462E-A86D-BCFCEA190A38}
 		{707356DD-96B9-49F6-AF2A-9D23B857A1E2} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
 		{08C91CC3-4057-4D76-8B9A-B6A0557B64EB} = {FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}
 		{FF466454-426B-4AD7-8B00-D50011BE716F} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
@@ -238,10 +241,7 @@ Global
 		{EDA2179C-D952-449F-9A3D-8B3A152D6E5A} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
 		{7536DF26-B808-4AC2-A9DA-58E408A1E05B} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
 		{E6AAC5E4-91A3-40D7-9917-B50CB16F0B34} = {FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}
-		{A4AE1634-B049-4506-A299-FD0A9F034031} = {E67307E3-04FF-498B-97C7-4F508299DF4D}
 		{6F8BD284-7043-4B09-B79E-0B81D8290CAD} = {A4AE1634-B049-4506-A299-FD0A9F034031}
-		{6B1811F7-5E4B-462E-A86D-BCFCEA190A38} = {E559F6DC-25C6-4077-B2C5-D5A06357D1BC}
-		{E9F67355-871B-4104-B887-0BC6D0A04B65} = {6B1811F7-5E4B-462E-A86D-BCFCEA190A38}
 		{E98B5AB3-E58F-482A-8A81-829CFEA63E31} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
 		{AD605AA7-6E43-47F1-A096-1ACDF67BF1DB} = {FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}
 		{E9BE3307-5F07-4757-BB06-3460813D7B9D} = {FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}

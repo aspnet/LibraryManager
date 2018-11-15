@@ -3,7 +3,7 @@
 
     <PropertyGroup>
         <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">..\tools\netstandard2.0\Microsoft.Web.LibraryManager.Build.dll</_LibraryTaskAssembly>
-        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net461\Microsoft.Web.LibraryManager.Build.dll</_LibraryTaskAssembly>
+        <_LibraryTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net472\Microsoft.Web.LibraryManager.Build.dll</_LibraryTaskAssembly>
     </PropertyGroup>
 
     <PropertyGroup>
