@@ -132,6 +132,9 @@
   <data name="DefaultProviderOptionDesc" xml:space="preserve">
     <value>The provider to use if no provider is defined for a given library. (eg. “cdnjs”, “filesystem”)</value>
   </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>Cannot prompt for user input in this console.</value>
+  </data>
   <data name="DestinationOptionDesc" xml:space="preserve">
     <value>Location to install the library (if not specified, the default destination location will be used)</value>
   </data>
@@ -387,5 +390,11 @@ Please specify a different destination.</value>
   </data>
   <data name="InitFailedUnknownProvider" xml:space="preserve">
     <value>Failed to initialize libman.json. [{0}]: {1}</value>
+  </data>
+  <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
+    <value>Please specify the complete library id and the also the provider using '--provider' option.</value>
+  </data>
+  <data name="SpecifyFieldUsingOption" xml:space="preserve">
+    <value>Please specify '{0}' using the '--{1}' option.</value>
   </data>
 </root>

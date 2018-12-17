@@ -27,7 +27,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         {
             if (CreateNewManifest)
             {
-                Manifest = await CreateManifestAsync(DefaultProvider, DefaultDestination, Settings, CancellationToken.None);
+                Manifest = await CreateManifestAsync(DefaultProvider, DefaultDestination, Settings, "", CancellationToken.None);
             }
             else
             {

@@ -88,7 +88,16 @@ namespace Microsoft.Web.LibraryManager.Tools
 
             while (true)
             {
-                string choice = hostEnvironment.InputReader.GetUserInput(sb.ToString());
+                string choice = string.Empty;
+                try
+                {
+                    choice = hostEnvironment.InputReader.GetUserInput(sb.ToString());
+                }
+                catch (InvalidOperationException)
+                {
+                    hostEnvironment.Logger.Log(Resources.Text.SpecifyDisabmiguatedLibrary, LogLevel.Error);
+                    throw;
+                }
 
                 if (int.TryParse(choice, out int choiceIndex) && choiceIndex > 0 && choiceIndex < index)
                 {
