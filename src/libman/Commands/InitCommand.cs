@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected async override Task<int> ExecuteInternalAsync()
         {
-            await CreateManifestAsync(DefaultProvider.Value(), DefaultDestination.Value(), Settings, CancellationToken.None);
+            await CreateManifestAsync(DefaultProvider.Value(), DefaultDestination.Value(), Settings, DefaultProvider.LongName, CancellationToken.None);
 
             return 0;
         }

@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Text {
@@ -555,6 +555,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot prompt for user input in this console..
+        /// </summary>
+        internal static string NonInteractiveConsoleMessage {
+            get {
+                return ResourceManager.GetString("NonInteractiveConsoleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path to the project (Current directory is used as default).
         /// </summary>
         internal static string ProjectPathOptionDesc {
@@ -634,6 +643,24 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         internal static string SpecifyDifferentDestination {
             get {
                 return ResourceManager.GetString("SpecifyDifferentDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify the complete library id and the also the provider using &apos;--provider&apos; option..
+        /// </summary>
+        internal static string SpecifyDisabmiguatedLibrary {
+            get {
+                return ResourceManager.GetString("SpecifyDisabmiguatedLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify &apos;{0}&apos; using the &apos;{1}&apos; option..
+        /// </summary>
+        internal static string SpecifyFieldUsingOption {
+            get {
+                return ResourceManager.GetString("SpecifyFieldUsingOption", resourceCulture);
             }
         }
         

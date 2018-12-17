@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             if (!File.Exists(Settings.ManifestFileName))
             {
-                await CreateManifestAsync(Provider.Value(), null, Settings, CancellationToken.None);
+                await CreateManifestAsync(Provider.Value(), null, Settings, Provider.LongName, CancellationToken.None);
             }
 
             _manifest = await GetManifestAsync();
@@ -120,7 +120,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (string.IsNullOrWhiteSpace(InstallDestination))
             {
                 string destinationHint = Path.Combine(Settings.DefaultDestinationRoot, ProviderToUse.GetSuggestedDestination(library));
-                InstallDestination = HostEnvironment.InputReader.GetUserInputWithDefault(nameof(Destination), destinationHint);
+                InstallDestination = GetUserInputWithDefault(
+                    fieldName: nameof(Destination),
+                    defaultFieldValue: destinationHint,
+                    optionLongName: Destination.LongName);
             }
 
             string destinationToUse = Destination.Value();

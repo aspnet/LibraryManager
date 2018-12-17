@@ -170,6 +170,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         protected async Task<Manifest> CreateManifestAsync(string defaultProvider,
             string defaultDestination,
             EnvironmentSettings settings,
+            string providerOptionString,
             CancellationToken cancellationToken)
         {
             if (File.Exists(Settings.ManifestFileName))
@@ -181,9 +182,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             manifest.AddVersion(Manifest.SupportedVersions.Last().ToString());
             manifest.DefaultDestination = string.IsNullOrEmpty(defaultDestination) ? null : defaultDestination;
 
-            defaultProvider = string.IsNullOrEmpty(defaultProvider)
-                ? HostEnvironment.InputReader.GetUserInputWithDefault(nameof(settings.DefaultProvider), settings.DefaultProvider)
-                : defaultProvider;
+            if (string.IsNullOrEmpty(defaultProvider))
+            {
+                defaultProvider = GetUserInputWithDefault(
+                    fieldName: nameof(settings.DefaultProvider),
+                    defaultFieldValue: settings.DefaultProvider,
+                    optionLongName: providerOptionString);
+            }
 
             if (ManifestDependencies.GetProvider(defaultProvider) == null)
             {
@@ -214,6 +219,21 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             foreach (IError error in errors)
             {
                 Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
+            }
+        }
+
+        protected string GetUserInputWithDefault(string fieldName, string defaultFieldValue, string optionLongName)
+        {
+            try
+            {
+                // If the console's input is being redirected, we cannot read user input interactively.
+                // All the inputs for this case should come from the commandline directly.
+                return HostEnvironment.InputReader.GetUserInputWithDefault(fieldName, defaultFieldValue);
+            }
+            catch (InvalidOperationException)
+            {
+                HostEnvironment.Logger.Log(string.Format(Resources.Text.SpecifyFieldUsingOption, fieldName, optionLongName), LogLevel.Error);
+                throw;
             }
         }
     }

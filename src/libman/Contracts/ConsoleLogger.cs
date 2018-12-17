@@ -28,7 +28,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         /// <returns></returns>
         public string GetUserInput(string fieldName)
         {
-            lock(_syncObject)
+            ThrowIfInputIsRedirected();
+
+            lock (_syncObject)
             {
                 Console.Out.Write($"{fieldName}: ");
                 return Console.ReadLine();
@@ -43,6 +45,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         /// <returns></returns>
         public string GetUserInputWithDefault(string fieldName, string defaultValue)
         {
+            ThrowIfInputIsRedirected();
+
             lock (_syncObject)
             {
                 string message = $"{fieldName} [{defaultValue}]: ";
@@ -82,6 +86,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
                 {
                     Console.Out.WriteLine(message);
                 }
+            }
+        }
+
+        private void ThrowIfInputIsRedirected()
+        {
+            if (Console.IsInputRedirected)
+            {
+                throw new InvalidOperationException(Resources.Text.NonInteractiveConsoleMessage);
             }
         }
     }
