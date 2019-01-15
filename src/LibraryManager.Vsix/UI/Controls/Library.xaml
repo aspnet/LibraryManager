@@ -49,6 +49,7 @@
         <!-- Fly out -->
         <Popup x:Name="Flyout"
                Placement="Bottom"
+               StaysOpen="False"
                PlacementTarget="{Binding ElementName=LibrarySearchBox}">
             <ListBox x:Name="Options"
                 SelectionMode="Single"
