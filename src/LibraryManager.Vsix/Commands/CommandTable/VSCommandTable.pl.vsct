@@ -9,14 +9,14 @@
     </Groups>
     <Buttons>
       <!-- Folder -->
-      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
+      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0101" type="Button">
         <Parent guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" />
         <Icon guid="ImageCatalogGuid" id="JSWebScript" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Dodaj bibliotekę po stronie klienta...</ButtonText>
+          <ButtonText>Bib&amp;lioteka po stronie klienta...</ButtonText>
         </Strings>
       </Button>
       <!-- Config file -->
@@ -27,7 +27,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Przywróć biblioteki po stronie klienta</ButtonText>
+          <ButtonText>Przywróć bib&amp;lioteki po stronie klienta</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
@@ -35,7 +35,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Czyste</ButtonText>
+          <ButtonText>Wy&amp;czyść biblioteki po stronie klienta</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">
@@ -44,7 +44,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Włącz przywracanie przy kompilacji...</ButtonText>
+          <ButtonText>Włącz przywracanie bibliotek po stronie klienta przy kompilacji...</ButtonText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>
@@ -56,7 +56,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Zarządzaj bibliotekami po stronie klienta...</ButtonText>
+          <ButtonText>Zarządzaj biblioteka&amp;mi po stronie klienta...</ButtonText>
           <CanonicalName>ManageClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
@@ -68,7 +68,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Przywróć biblioteki po stronie klienta</ButtonText>
+          <ButtonText>P&amp;rzywróć biblioteki po stronie klienta</ButtonText>
           <CanonicalName>RestoreClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
@@ -77,7 +77,7 @@
   <CommandPlacements>
     <!-- Folder menu -->
     <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100">
-      <Parent guid="guidSHLMainMenu" id="IDM_VS_CSCD_PROJECT_ADD"/>
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CSCD_PROJECT_ADD" />
     </CommandPlacement>
     <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0500">
       <Parent guid="guidVenusCmdId" id="IDG_CTX_REFERENCE" />
