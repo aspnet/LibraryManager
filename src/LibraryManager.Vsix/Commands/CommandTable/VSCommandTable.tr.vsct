@@ -9,14 +9,14 @@
     </Groups>
     <Buttons>
       <!-- Folder -->
-      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100" type="Button">
+      <Button guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0101" type="Button">
         <Parent guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" />
         <Icon guid="ImageCatalogGuid" id="JSWebScript" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>İstemci tarafı kitaplığı Ekle...</ButtonText>
+          <ButtonText>İstemci Tarafı &amp;Kitaplık...</ButtonText>
         </Strings>
       </Button>
       <!-- Config file -->
@@ -27,7 +27,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>İstemci tarafı kitaplıkları geri yükle</ButtonText>
+          <ButtonText>İstemci Tarafı &amp;Kitaplıkları Geri Yükle</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
@@ -35,7 +35,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Temiz</ButtonText>
+          <ButtonText>İstemci Tarafı Kitaplıkları &amp;Temizle</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">
@@ -44,7 +44,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Geri Yükleme'yi yapı izin ver...</ButtonText>
+          <ButtonText>Derleme Sırasında İstemci Tarafı Kitaplıkların Geri Yüklenmesini Etkinleştir...</ButtonText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>
@@ -56,7 +56,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>İstemci tarafı kitaplıkları Yönet...</ButtonText>
+          <ButtonText>İstemci Tarafı Kitaplıkları &amp;Yönet...</ButtonText>
           <CanonicalName>ManageClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
@@ -68,7 +68,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>İstemci tarafı kitaplıkları geri yükle</ButtonText>
+          <ButtonText>İstemci Tarafı Kitaplıkları &amp;Geri Yükle</ButtonText>
           <CanonicalName>RestoreClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
@@ -77,7 +77,7 @@
   <CommandPlacements>
     <!-- Folder menu -->
     <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0100">
-      <Parent guid="guidSHLMainMenu" id="IDM_VS_CSCD_PROJECT_ADD"/>
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CSCD_PROJECT_ADD" />
     </CommandPlacement>
     <CommandPlacement guid="guidLibraryManagerPackageCmdSet" id="InstallPackage" priority="0x0500">
       <Parent guid="guidVenusCmdId" id="IDG_CTX_REFERENCE" />
