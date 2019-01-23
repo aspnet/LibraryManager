@@ -235,7 +235,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             TextChange textChange = e.Changes.Last();
 
             // We will invoke completion on text insertion and not deletion.
-            if (textChange.AddedLength > 0)
+            if (textChange.AddedLength > 0 && !string.IsNullOrEmpty(Text))
             {
                 VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
