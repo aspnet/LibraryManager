@@ -319,5 +319,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 });
             }
         }
+
+        protected override void OnAccessKey(AccessKeyEventArgs e)
+        {
+            TargetLocationSearchTextBox.Focus();
+        }
     }
 }

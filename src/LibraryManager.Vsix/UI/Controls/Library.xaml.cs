@@ -290,5 +290,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 Flyout.IsOpen = false;
             }
         }
+
+        protected override void OnAccessKey(AccessKeyEventArgs e)
+        {
+            LibrarySearchBox.Focus();
+        }
     }
 }
