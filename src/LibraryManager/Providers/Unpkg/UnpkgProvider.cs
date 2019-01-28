@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
     internal class UnpkgProvider : IProvider
     {
         public const string IdText = "unpkg";
-        public const string DownloadUrlFormat = "http://unpkg.com/{0}@{1}/{2}";
+        public const string DownloadUrlFormat = "https://unpkg.com/{0}@{1}/{2}";
 
         public UnpkgProvider(IHostInteraction hostInteraction)
         {

@@ -13,8 +13,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
     internal class UnpkgCatalog : ILibraryCatalog
     {
         public const string CacheFileName = "cache.json";
-        public const string LibraryFileListUrlFormat = "http://unpkg.com/{0}@{1}/?meta"; // http://unpkg.com/jquery@3.3.1/?meta
-        public const string LatestLibraryVersonUrl = "http://unpkg.com/{0}/package.json"; // http://unpkg.com/jquery/package.json
+        public const string LibraryFileListUrlFormat = "https://unpkg.com/{0}@{1}/?meta"; // e.g. https://unpkg.com/jquery@3.3.1/?meta
+        public const string LatestLibraryVersonUrl = "https://unpkg.com/{0}/package.json"; // e.g. https://unpkg.com/jquery/package.json
         private UnpkgProvider _provider;
         private CacheService _cacheService;
         private string _cacheFile;
