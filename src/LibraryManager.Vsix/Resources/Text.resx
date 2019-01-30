@@ -212,27 +212,27 @@ Do you want to continue?</value>
     <value>Files:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>Library:</value>
+    <value>_Library:</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>Provider: </value>
+    <value>_Provider: </value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>Target Location:</value>
+    <value>_Target Location:</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>Choose specific files:</value>
+    <value>Choose _specific files:</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>Include all library files</value>
+    <value>Include _all library files</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>No files have been selected</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>_Cancel</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>Install</value>
+    <value>_Install</value>
   </data>
 </root>

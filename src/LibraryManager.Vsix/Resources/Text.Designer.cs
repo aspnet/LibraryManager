@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Text {
@@ -70,7 +70,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to _Cancel.
         /// </summary>
         public static string Cancel {
             get {
@@ -88,7 +88,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose specific files:.
+        ///   Looks up a localized string similar to Choose _specific files:.
         /// </summary>
         public static string ChooseSpecificFiles {
             get {
@@ -160,7 +160,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include all library files.
+        ///   Looks up a localized string similar to Include _all library files.
         /// </summary>
         public static string IncludeAllLibraryFiles {
             get {
@@ -169,7 +169,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Install.
+        ///   Looks up a localized string similar to _Install.
         /// </summary>
         public static string Install {
             get {
@@ -178,7 +178,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library:.
+        ///   Looks up a localized string similar to _Library:.
         /// </summary>
         public static string Library {
             get {
@@ -335,7 +335,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provider: .
+        ///   Looks up a localized string similar to _Provider: .
         /// </summary>
         public static string Provider {
             get {
@@ -353,7 +353,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target Location:.
+        ///   Looks up a localized string similar to _Target Location:.
         /// </summary>
         public static string TargetLocation {
             get {

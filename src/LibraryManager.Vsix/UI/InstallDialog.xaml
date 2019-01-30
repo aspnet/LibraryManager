@@ -48,11 +48,15 @@
             <Label Name="Provider" 
                    Grid.Row="0"
                    Grid.Column="0"
-                   Content="{x:Static resources:Text.Provider}" />
+                   Target="{Binding ElementName=ProviderComboBox}">
+                <AccessText Text="{x:Static resources:Text.Provider}" />
+            </Label>
             <Label Name="LibraryId" 
                    Grid.Row="1"
                    Grid.Column="0"
-                   Content="{x:Static resources:Text.Library}" />
+                   Target="{Binding ElementName=LibrarySearchBox}">
+                <AccessText Text="{x:Static resources:Text.Library}" />
+            </Label>
             <ComboBox x:Name="ProviderComboBox"
                       AutomationProperties.Name="{x:Static resources:Text.Provider}"
                       Grid.Row="0"
@@ -150,8 +154,10 @@
                    Grid.ColumnSpan="4" 
                    Margin="0 0 0 9">
             <Label Name="TargetLocation" 
-                   Content="{x:Static resources:Text.TargetLocation}"
-                   Width="Auto"/>
+                   Target="{Binding ElementName=DestinationFolder}"
+                   Width="Auto">
+                <AccessText Text="{x:Static resources:Text.TargetLocation}" />
+            </Label>
             <controls:TargetLocation x:Name="DestinationFolder"
                                      AutomationProperties.Name="{x:Static resources:Text.TargetLocation}"
                                      VerticalAlignment="Center"
