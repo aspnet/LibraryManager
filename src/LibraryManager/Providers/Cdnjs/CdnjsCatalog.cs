@@ -223,7 +223,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private static string NormalizedGroupName(string groupName)
         {
-            if (groupName.EndsWith("js"))
+            if (groupName.EndsWith("js", StringComparison.OrdinalIgnoreCase))
             {
                 groupName = groupName
                     .Substring(0, groupName.Length - 2)

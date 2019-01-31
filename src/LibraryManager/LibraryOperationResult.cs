@@ -50,7 +50,7 @@ namespace Microsoft.Web.LibraryManager
         /// <code>True</code> if the install was successfull; otherwise <code>False</code>.
         /// </summary>
         /// <remarks>
-        /// The value is usually <code>True</code> if the <see cref="P:Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult.Errors" /> list is empty.
+        /// The value is usually <code>True</code> if the <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult.Errors" /> list is empty.
         /// </remarks>
         public bool Success
         {
@@ -63,8 +63,8 @@ namespace Microsoft.Web.LibraryManager
         public IList<IError> Errors { get; set; }
 
         /// <summary>
-        /// The <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" /> object passed to the
-        /// <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" /> for installation.
+        /// The <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" /> object passed to the
+        /// <see cref="Microsoft.Web.LibraryManager.Contracts.IProvider" /> for installation.
         /// </summary>
         public ILibraryInstallationState InstallationState { get; set; }
 

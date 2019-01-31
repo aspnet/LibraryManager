@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             double elapsedTimeRounded = Math.Round(elapsedTime.TotalSeconds, 2);
             string elapsedTimeStr = elapsedTimeRounded.ToString(System.Globalization.CultureInfo.InvariantCulture);
             List<string> generalErrorCodes = GetErrorCodes(results.Where(r => r.InstallationState == null && r.Errors.Any()));
-            IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId.ToLower()).Distinct();
+            IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId).Distinct(StringComparer.OrdinalIgnoreCase);
 
             telResult.Add("LibrariesCount", results.Count());
             telResult.Add($"{operation}_time", elapsedTimeStr);

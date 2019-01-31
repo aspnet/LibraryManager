@@ -16,7 +16,7 @@ namespace Microsoft.Web.LibraryManager
         {
             if (string.IsNullOrEmpty(file))
             {
-                throw new ArgumentException(nameof(file));
+                throw new ArgumentException($"{nameof(file)} cannot be null or empty.", nameof(file));
             }
 
             File = file;

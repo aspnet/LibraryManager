@@ -21,11 +21,15 @@ namespace Microsoft.Web.LibraryManager.Build
         [Required]
         public string ProjectDirectory { get; set; }
 
+#pragma warning disable CA1819 // Properties should not return arrays
         [Required]
         public ITaskItem[] ProviderAssemblies { get; set; }
+#pragma warning restore CA1819 // Properties should not return arrays
 
+#pragma warning disable CA1819 // Properties should not return arrays
         [Output]
         public ITaskItem[] FilesWritten { get; set; }
+#pragma warning restore CA1819 // Properties should not return arrays
 
         public override bool Execute()
         {

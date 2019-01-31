@@ -138,7 +138,10 @@ namespace Microsoft.Web.LibraryManager
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     string jsonText = await reader.ReadToEndAsync();
-                    result = await Task.Factory.StartNew(() => ((JObject)JsonConvert.DeserializeObject(jsonText)), cancellationToken);
+                    result = await Task.Factory.StartNew(() => ((JObject)JsonConvert.DeserializeObject(jsonText)),
+                                                         cancellationToken,
+                                                         TaskCreationOptions.None,
+                                                         TaskScheduler.Default);
                 }
             }
 

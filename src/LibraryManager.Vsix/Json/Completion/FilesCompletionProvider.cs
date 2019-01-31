@@ -72,9 +72,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 yield return new SimpleCompletionEntry(Resources.Text.Loading, string.Empty, KnownMonikers.Loading, context.Session);
 
-                task.ContinueWith((a) =>
+                _ = task.ContinueWith(async (t) =>
                 {
-                    if (!(task.Result is ILibrary library))
+                    await VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                    if (!(t.Result is ILibrary library))
                         return;
 
                     if (!context.Session.IsDismissed)
@@ -92,7 +94,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                         UpdateListEntriesSync(context, results);
                     }
-                });
+                }, TaskScheduler.Default);
             }
         }
 

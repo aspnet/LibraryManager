@@ -120,7 +120,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <param name="version">Version of the library. (Ignored for FileSystemProvider)</param>
         /// <param name="cancellationToken">A token that allows the search to be cancelled.</param>
         /// <returns>
-        /// An instance of <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
+        /// An instance of <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
         /// </returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryName, string version, CancellationToken cancellationToken)
         {

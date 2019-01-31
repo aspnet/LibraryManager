@@ -75,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             {
                 return ViewModel.SelectedProvider.GetCatalog().GetLibraryCompletionSetAsync(searchText, caretPosition);
             }
-            catch (InvalidLibraryException ex)
+            catch (InvalidLibraryException)
             {
                 // Make the warning visible with ex.Message
                 return Task.FromResult<CompletionSet>(default(CompletionSet));

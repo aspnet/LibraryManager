@@ -17,6 +17,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
     /// this exception could be thrown so it can be handled inside <see cref="Contracts.IProvider.InstallAsync"/>
     /// and an <see cref="IError"/> added to the <see cref="ILibraryOperationResult.Errors"/> collection.
     /// </remarks>
+    [Serializable]
     public class InvalidLibraryException : Exception
     {
         /// <summary>
@@ -29,6 +30,14 @@ namespace Microsoft.Web.LibraryManager.Contracts
         {
             LibraryId = libraryId;
             ProviderId = providerId;
+        }
+
+        /// <summary>
+        /// Serializable constructor for <see cref="InvalidLibraryException"/>.
+        /// </summary>
+        protected InvalidLibraryException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
+            :this(serializationInfo.GetString(nameof(LibraryId)), serializationInfo.GetString(nameof(ProviderId)))
+        {
         }
 
         /// <summary>

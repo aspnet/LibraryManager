@@ -17,11 +17,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
     internal class CdnjsProviderFactory : IProviderFactory
     {
         /// <summary>
-        /// Creates an <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" /> instance.
+        /// Creates an <see cref="Microsoft.Web.LibraryManager.Contracts.IProvider" /> instance.
         /// </summary>
-        /// <param name="hostInteraction">The <see cref="T:Microsoft.Web.LibraryManager.Contracts.IHostInteraction" /> provided by the host to handle file system writes etc.</param>
+        /// <param name="hostInteraction">The <see cref="Microsoft.Web.LibraryManager.Contracts.IHostInteraction" /> provided by the host to handle file system writes etc.</param>
         /// <returns>
-        /// A <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" /> instance.
+        /// A <see cref="Microsoft.Web.LibraryManager.Contracts.IProvider" /> instance.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">hostInteraction</exception>
         public IProvider CreateProvider(IHostInteraction hostInteraction)

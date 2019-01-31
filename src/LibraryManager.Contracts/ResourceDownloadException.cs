@@ -11,6 +11,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
     /// </summary>
     /// <remarks>
     /// </remarks>
+    [Serializable]
     public class ResourceDownloadException : Exception
     {
         /// <summary>
@@ -38,5 +39,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         public string Url { get; }
 
+        /// <summary>
+        /// Serialization constructor for this exception type.
+        /// </summary>
+        protected ResourceDownloadException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
+            : this(serializationInfo.GetString(nameof(Url)))
+        {
+        }
     }
 }

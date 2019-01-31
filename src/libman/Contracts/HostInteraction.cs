@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Logger = settings.Logger ?? throw new ArgumentNullException(nameof(settings.Logger));
+            Logger = settings.Logger ?? throw new ArgumentException($"{nameof(settings)} must have a non-null {nameof(settings.Logger)}", nameof(settings));
 
             WorkingDirectory = settings.CurrentWorkingDirectory;
             CacheDirectory = settings.CacheDirectory;
@@ -48,7 +48,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
                 return true;
             }
 
-            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+            // Note: using ordinal comparison as some filesystems are case sensitive.
+            if (!absolutePath.FullName.StartsWith(WorkingDirectory, StringComparison.Ordinal))
             {
                 throw new UnauthorizedAccessException();
             }
