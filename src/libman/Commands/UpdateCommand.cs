@@ -119,7 +119,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             foreach (ILibraryOperationResult r in results)
             {
-                if (!r.Success && r.Errors.Any(e => e.Message.Contains(libraryToUpdate.Name)))
+                if (!r.Success && r.Errors.Any(e => e.Message.Contains(libraryToUpdate.Name, StringComparison.OrdinalIgnoreCase)))
                 {
                     result = r;
                     break;

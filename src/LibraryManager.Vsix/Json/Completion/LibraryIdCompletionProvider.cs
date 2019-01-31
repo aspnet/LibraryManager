@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
@@ -87,20 +88,23 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 yield return new SimpleCompletionEntry(Resources.Text.Loading, string.Empty, KnownMonikers.Loading, context.Session);
 
-                task.ContinueWith((a) =>
+                _ = task.ContinueWith((t) =>
                 {
-                    if (!context.Session.IsDismissed)
+                    if (!t.IsCanceled || !t.IsFaulted)
                     {
-                        CompletionSet completionSet = task.Result;
-
-                        if (completionSet.Completions != null)
+                        if (!context.Session.IsDismissed)
                         {
-                            List<JsonCompletionEntry> results = GetCompletionList(member, context, completionSet, count);
+                            CompletionSet completionSet = t.Result;
 
-                            UpdateListEntriesSync(context, results);
+                            if (completionSet.Completions != null)
+                            {
+                                List<JsonCompletionEntry> results = GetCompletionList(member, context, completionSet, count);
+
+                                UpdateListEntriesSync(context, results);
+                            }
                         }
                     }
-                });
+                }, TaskScheduler.Default);
             }
         }
 
@@ -115,7 +119,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             foreach (CompletionItem item in completionSet.Completions)
             {
                 string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
-                ImageMoniker moniker = item.DisplayText.EndsWith("/") || item.DisplayText.EndsWith("\\") ? _folderIcon : _libraryIcon;
+                ImageMoniker moniker = item.DisplayText.EndsWith("/", StringComparison.Ordinal) || item.DisplayText.EndsWith("\\", StringComparison.Ordinal)
+                    ? _folderIcon
+                    : _libraryIcon;
 
                 if (isVersionCompletion)
                 {

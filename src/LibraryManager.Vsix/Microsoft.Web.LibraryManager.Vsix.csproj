@@ -62,7 +62,6 @@
       <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\PackageContentsTreeViewAutomationPeer.cs" />
-    <Compile Include="UI\Controls\Search\ISearchItem.cs" />
     <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
     <Compile Include="UI\Controls\Search\Wrapper.cs" />
     <Compile Include="UI\Controls\Library.xaml.cs">

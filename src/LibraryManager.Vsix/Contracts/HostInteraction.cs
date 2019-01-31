@@ -37,7 +37,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return true;
             }
 
-            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+            // Note: using OrdinalIgnoreCase comparison as this code path is exclusive to Windows
+            if (!absolutePath.FullName.StartsWith(WorkingDirectory, StringComparison.OrdinalIgnoreCase))
             {
                 throw new UnauthorizedAccessException();
             }

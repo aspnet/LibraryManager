@@ -267,7 +267,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     {
                         if (atIndex >= 0)
                         {
-                            SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(Text.Substring(atIndex + 1))) ?? Items[0];
+                            SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(Text.Substring(atIndex + 1), StringComparison.OrdinalIgnoreCase)) ?? Items[0];
                         }
                         else
                         {

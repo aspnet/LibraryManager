@@ -305,7 +305,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    if (TargetLocationSearchTextBox.Text.Equals(_lastSuggestedTargetLocation))
+                    if (TargetLocationSearchTextBox.Text.Equals(_lastSuggestedTargetLocation, StringComparison.Ordinal))
                     {
                         if (targetLibrary.Length > 0 && targetLibrary[targetLibrary.Length - 1] == '/')
                         {

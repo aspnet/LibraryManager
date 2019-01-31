@@ -83,7 +83,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             string text = _currentSession?.SelectedCompletionSet?.SelectionStatus?.Completion?.DisplayText;
 
-            if (text.EndsWith("/") || text.EndsWith("\\"))
+            if (text.EndsWith("/", StringComparison.Ordinal) || text.EndsWith("\\", StringComparison.Ordinal))
             {
                 System.Windows.Forms.SendKeys.Send("{LEFT}");
                 RetriggerAsync(true);
@@ -135,7 +135,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             MemberNode memberNode = node.FindType<MemberNode>();
 
-            if (memberNode == null || (!memberNode.UnquotedNameText.Equals(ManifestConstants.Library) && !memberNode.UnquotedNameText.Equals(ManifestConstants.Destination) && memberNode.UnquotedValueText?.Length <= 1))
+            if (memberNode == null
+                || (!memberNode.UnquotedNameText.Equals(ManifestConstants.Library, StringComparison.Ordinal)
+                    && !memberNode.UnquotedNameText.Equals(ManifestConstants.Destination, StringComparison.Ordinal)
+                    && memberNode.UnquotedValueText?.Length <= 1))
             {
                 return;
             }

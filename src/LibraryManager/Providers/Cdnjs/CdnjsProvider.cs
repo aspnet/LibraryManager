@@ -66,7 +66,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         public bool SupportsLibraryVersions => true;
 
         /// <summary>
-        /// Gets the <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="T:Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
+        /// Gets the <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>
         public ILibraryCatalog GetCatalog()
@@ -80,7 +80,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <param name="desiredState">The details about the library to install.</param>
         /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
         /// <returns>
-        /// The <see cref="T:Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult" /> from the installation process.
+        /// The <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult" /> from the installation process.
         /// </returns>
         /// <exception cref="InvalidLibraryException"></exception>
         public async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)

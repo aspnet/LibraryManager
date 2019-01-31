@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         {
             if (environment == null)
             {
-                throw new ArgumentException(nameof(environment));
+                throw new ArgumentNullException(nameof(environment));
             }
 
             _hostInteraction = environment?.HostInteraction;

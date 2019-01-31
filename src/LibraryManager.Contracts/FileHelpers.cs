@@ -200,7 +200,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 return false;
             }
 
-            if (string.Compare(firstFile.Name, secondFile.Name, true) != 0 ||
+            if (string.Compare(firstFile.Name, secondFile.Name, StringComparison.OrdinalIgnoreCase) != 0 ||
                 secondFile.Length != firstFile.Length ||
                 secondFile.LastWriteTime.CompareTo(firstFile.LastWriteTime) > 0)
             {
@@ -348,7 +348,8 @@ namespace Microsoft.Web.LibraryManager.Contracts
             string normalizedFilePath = NormalizePath(filePath);
             string normalizedRootDirectory = NormalizePath(rootDirectory);
 
-            return normalizedFilePath.Length > normalizedRootDirectory.Length && normalizedFilePath.StartsWith(normalizedRootDirectory);
+            return normalizedFilePath.Length > normalizedRootDirectory.Length
+                && normalizedFilePath.StartsWith(normalizedRootDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
         internal static string NormalizePath(string path)
@@ -363,7 +364,10 @@ namespace Microsoft.Web.LibraryManager.Contracts
             // to the casing.
             if (Path.DirectorySeparatorChar == '\\')
             {
-                path.ToLower();
+#pragma warning disable CA1308 // Normalize strings to uppercase
+                               // Reason: we prefer lowercase names for file paths
+                path.ToLowerInvariant();
+#pragma warning restore CA1308 // Normalize strings to uppercase
             }
 
             return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);

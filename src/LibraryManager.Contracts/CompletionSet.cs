@@ -1,8 +1,12 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+
+// TODO: resolve why we are using fields instead of properties.
+#pragma warning disable CA1051 // Do not declare visible instance fields
 
 namespace Microsoft.Web.LibraryManager.Contracts
 {
@@ -10,7 +14,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
     /// A span for use by completion
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct CompletionSet
+    public struct CompletionSet : IEquatable<CompletionSet>
     {
         // IMPORTANT: Do not change the order of the fields below!!!
 
@@ -33,13 +37,63 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// The type of the completion item sorting.
         /// </summary>
         public CompletionSortOrder CompletionType;
+
+        /// <summary>
+        /// Returns whether the objects are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        public override bool Equals(object obj)
+        {
+            if (obj is CompletionSet other)
+            {
+                // TODO: Should this also compare Completions?
+                return Equals(other);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns whether the CompletionSets are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        public bool Equals(CompletionSet other)
+        {
+            // TODO: Should this also compare Completions?
+            return Start == other.Start
+                && Length == other.Length
+                && CompletionType == other.CompletionType;
+        }
+
+        /// <summary>
+        /// Equality operator for CompletionSets
+        /// </summary>
+        public static bool operator ==(CompletionSet left, CompletionSet right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Inequality operator for CompletionSets
+        /// </summary>
+        public static bool operator !=(CompletionSet left, CompletionSet right)
+        {
+            return !(left == right);
+        }
+
+        /// <summary>
+        /// Gets a hash code for the object.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return Start ^ Length ^ Completions.GetHashCode() ^ CompletionType.GetHashCode();
+        }
     }
 
     /// <summary>
     /// The completion item to show in supporting editors.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct CompletionItem
+    public struct CompletionItem : IEquatable<CompletionItem>
     {
         // IMPORTANT: Do not change the order of the fields below!!!
 
@@ -57,6 +111,54 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// The description is shown in tooltips and parameter info.
         /// </summary>
         public string Description;
+
+        /// <summary>
+        /// Returns whether the two objects are equal.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            if (obj is CompletionItem other)
+            {
+                return Equals(other);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns whether the two CompletionItems are equal
+        /// </summary>
+        public bool Equals(CompletionItem other)
+        {
+            return InsertionText == other.InsertionText
+                && DisplayText == other.DisplayText
+                && Description == other.Description;
+        }
+
+        /// <summary>
+        /// Gets a hash code for the object
+        /// </summary>
+        public override int GetHashCode()
+        {
+            // Much of the time, InsertionText == DisplayText, so XORing those would just cancel out.
+            return InsertionText.GetHashCode() ^ Description.GetHashCode();
+        }
+
+        /// <summary>
+        /// Equality operator for CompletionItems
+        /// </summary>
+        public static bool operator ==(CompletionItem left, CompletionItem right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Inequality operator for CompletionItems
+        /// </summary>
+        public static bool operator !=(CompletionItem left, CompletionItem right)
+        {
+            return !(left == right);
+        }
     }
 
     /// <summary>
@@ -72,3 +174,6 @@ namespace Microsoft.Web.LibraryManager.Contracts
         AsSpecified
     }
 }
+
+#pragma warning restore CA1051 // Do not declare visible instance fields
+

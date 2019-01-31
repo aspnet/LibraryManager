@@ -30,6 +30,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NerdBank.GitVersioning" Version="$(NerdbankGitVersioningPackageVersion)" PrivateAssets="all" />
+    <PackageReference Include="NerdBank.GitVersioning" />
   </ItemGroup>
 </Project>

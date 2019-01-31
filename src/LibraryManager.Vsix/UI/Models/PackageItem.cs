@@ -17,7 +17,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         public PackageItem(InstallDialogViewModel parent, PackageItem parentNode, HashSet<string> selectedFiles)
         {
             _selectedFiles = selectedFiles;
-            Children = new PackageItem[0];
+            Children = Array.Empty<PackageItem>();
             ParentModel = parent;
             Parent = parentNode;
         }

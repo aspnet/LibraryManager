@@ -20,9 +20,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             if (searchTerm == null)
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
-            else if (searchTerm.StartsWith("@"))
+            else if (searchTerm.StartsWith("@", StringComparison.Ordinal))
             {
                 return await GetPackageNamesWithScopeAsync(searchTerm, cancellationToken).ConfigureAwait(false);
             }
@@ -34,10 +34,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private static async Task<IEnumerable<string>> GetPackageNamesWithScopeAsync(string searchTerm, CancellationToken cancellationToken)
         {
-            Debug.Assert(searchTerm.StartsWith("@"));
+            Debug.Assert(searchTerm.StartsWith("@", StringComparison.Ordinal));
             List<string> packageNames = new List<string>();
 
-            int slash = searchTerm.IndexOf("/");
+            int slash = searchTerm.IndexOf("/", StringComparison.Ordinal);
             if (slash > 0)
             {
                 string scope = searchTerm.Substring(1, slash - 1);
@@ -183,7 +183,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             NpmPackageInfo packageInfo = null;
 
-            if (packageName.StartsWith("@"))
+            if (packageName.StartsWith("@", StringComparison.Ordinal))
             {
                 packageInfo = await GetPackageInfoForScopedPackageAsync(packageName, cancellationToken).ConfigureAwait(false);
             }
@@ -197,7 +197,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private static async Task<NpmPackageInfo> GetPackageInfoForScopedPackageAsync(string packageName, CancellationToken cancellationToken)
         {
-            Debug.Assert(packageName.StartsWith("@"));
+            Debug.Assert(packageName.StartsWith("@", StringComparison.Ordinal));
             string searchName = "@" + HttpUtility.UrlEncode(packageName.Substring(1));
             NpmPackageInfo packageInfo = null;
 

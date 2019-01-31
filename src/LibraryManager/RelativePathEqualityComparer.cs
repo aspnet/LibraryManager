@@ -52,7 +52,11 @@ namespace Microsoft.Web.LibraryManager
             // to the casing.
             if (Path.DirectorySeparatorChar == '\\')
             {
-                path.ToLower();
+                // Windows filesystem is case insensistive
+#pragma warning disable CA1308 // Normalize strings to uppercase
+                               // Reason: we prefer lowercased file paths.
+                path = path.ToLowerInvariant();
+#pragma warning restore CA1308 // Normalize strings to uppercase
             }
 
             // All paths should be treated as relative paths for comparison purposes.

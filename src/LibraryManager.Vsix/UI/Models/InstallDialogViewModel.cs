@@ -221,7 +221,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                             if (isFolder)
                             {
-                                PackageItem next = currentRealParent.Children.FirstOrDefault(x => x.ItemType == PackageItemType.Folder && string.Equals(x.Name, parts[i]));
+                                PackageItem next = currentRealParent.Children.FirstOrDefault(x => x.ItemType == PackageItemType.Folder && string.Equals(x.Name, parts[i], StringComparison.OrdinalIgnoreCase));
 
                                 if (next == null)
                                 {
@@ -292,7 +292,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private void RefreshFileSelections()
         {
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(_packageId, SelectedProvider.Id);
-            SelectedProvider.GetCatalog().GetLibraryAsync(name, version, CancellationToken.None).ContinueWith(x =>
+            _ = SelectedProvider.GetCatalog()
+                                .GetLibraryAsync(name, version, CancellationToken.None)
+                                .ContinueWith(x =>
             {
                 if (x.IsFaulted || x.IsCanceled)
                 {
@@ -301,7 +303,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 }
 
                 SelectedPackage = x.Result;
-            });
+            }, TaskScheduler.Default);
         }
 
         public FileSelectionType LibraryFilesToInstall

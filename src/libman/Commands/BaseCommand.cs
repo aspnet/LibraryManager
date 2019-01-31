@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         {
             if (string.IsNullOrEmpty(commandName))
             {
-                throw new ArgumentException(nameof(commandName));
+                throw new ArgumentException($"{nameof(commandName)} cannot be null or empty.", nameof(commandName));
             }
 
             HostEnvironment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -131,7 +131,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         /// <returns></returns>
         public override string GetHelpText(string commandName = null)
         {
-            string baseHelp = base.GetHelpText(commandName).Replace("dotnet libman", "libman");
+            string baseHelp = base.GetHelpText(commandName).Replace("dotnet libman", "libman", StringComparison.OrdinalIgnoreCase);
             var help = new StringBuilder(baseHelp);
 
             if (!string.IsNullOrWhiteSpace(Remarks))

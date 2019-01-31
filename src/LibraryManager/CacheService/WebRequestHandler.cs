@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryManager
     /// <summary>
     /// Helper class to hold the HttpClient instance and send requests to get resources
     /// </summary>
-    internal class WebRequestHandler : IWebRequestHandler
+    internal class WebRequestHandler : IWebRequestHandler, IDisposable
     {
         private HttpClient _httpClient;
         private WebRequestHandler()
@@ -23,6 +23,11 @@ namespace Microsoft.Web.LibraryManager
         }
 
         public static IWebRequestHandler Instance { get; } = new WebRequestHandler();
+
+        public void Dispose()
+        {
+            ((IDisposable)_httpClient).Dispose();
+        }
 
         public async Task<Stream> GetStreamAsync(string url, CancellationToken cancellationToken)
         {

@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         public Task<IEnumerable<string>> GetLibraryVersions(CancellationToken cancellationToken)
         {
-            return DisplayInfosTask?.Invoke(cancellationToken) ?? Task.FromResult<IEnumerable<string>>(new string[0]);
+            return DisplayInfosTask?.Invoke(cancellationToken) ?? Task.FromResult<IEnumerable<string>>(Array.Empty<string>());
         }
 
         public Func<CancellationToken, Task<IEnumerable<string>>> DisplayInfosTask { get; set; }

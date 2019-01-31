@@ -30,7 +30,8 @@ namespace Microsoft.Web.LibraryManager.Build
                 return true;
             }
 
-            if (!absolutePath.FullName.StartsWith(WorkingDirectory))
+            // Note: use ordinal comparison here, as some filesystems are case sensitive.
+            if (!absolutePath.FullName.StartsWith(WorkingDirectory, StringComparison.Ordinal))
             {
                 throw new UnauthorizedAccessException();
             }

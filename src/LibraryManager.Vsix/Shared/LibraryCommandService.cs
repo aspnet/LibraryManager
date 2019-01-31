@@ -18,7 +18,7 @@ using Task = System.Threading.Tasks.Task;
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     [Export(typeof(ILibraryCommandService))]
-    internal class LibraryCommandService : ILibraryCommandService
+    internal class LibraryCommandService : ILibraryCommandService, IDisposable
     {
         [Import(typeof(ITaskStatusCenterService))]
         internal ITaskStatusCenterService TaskStatusCenterServiceInstance;
@@ -392,6 +392,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             _currentOperationTask = null;
             _solutionEvents.Dispose();
+        }
+
+        public void Dispose()
+        {
+            CancelOperation();
         }
     }
 }
