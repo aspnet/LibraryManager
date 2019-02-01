@@ -544,7 +544,8 @@ namespace Microsoft.Web.LibraryManager
             }
             else
             {
-                Debug.Assert(validationResult.Success);
+                // Assert disabled due to breaking unit test execution.  See: https://github.com/Microsoft/testfx/issues/561
+                //Debug.Assert(validationResult.Success);
             }
 
             return filesWithVersions;
