@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Reflection;
+using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Web.LibraryManager.Vsix;
@@ -14,7 +15,11 @@ using Microsoft.Web.LibraryManager.Vsix;
 [assembly: AssemblyCopyright(Vsix.Author)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.Vsix.Test")]
 
 [assembly: ComVisible(false)]
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.IntegrationTest")]
+[assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.Vsix.Test")]
+
+// TODO: Setting the NeutralResourcesLanguage attribute breaks our menu commands.
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1824:Mark assemblies with NeutralResourcesLanguagesAttribute", Justification = "Currently doing this causes our menu items (commands) to not load.")]
+//[assembly: NeutralResourcesLanguage("en")]
