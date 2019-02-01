@@ -30,9 +30,9 @@ namespace Microsoft.Web.LibraryManager
             {
                 return await _httpClient.GetStreamAsync(url).WithCancellation(cancellationToken).ConfigureAwait(false);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new ResourceDownloadException(url);
+                throw new ResourceDownloadException(url, ex);
             }
         }
     }
