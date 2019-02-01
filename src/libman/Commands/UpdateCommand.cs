@@ -108,7 +108,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             Manifest backup = manifest.Clone();
             string oldLibraryName = libraryToUpdate.Name;
-            manifest.UpdateLibraryVersion(libraryToUpdate, newVersion);
+            Manifest.UpdateLibraryVersion(libraryToUpdate, newVersion);
 
             // Delete files from old version of the library.
             await backup.RemoveUnwantedFilesAsync(manifest, CancellationToken.None);

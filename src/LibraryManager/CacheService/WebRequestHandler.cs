@@ -33,7 +33,7 @@ namespace Microsoft.Web.LibraryManager
         {
             try
             {
-                return await _httpClient.GetStreamAsync(url).WithCancellation(cancellationToken).ConfigureAwait(false);
+                return await _httpClient.GetStreamAsync(new Uri(url)).WithCancellation(cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

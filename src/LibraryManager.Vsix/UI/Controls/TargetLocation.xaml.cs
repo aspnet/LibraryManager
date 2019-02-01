@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             nameof(SearchService), typeof(Func<string, int, Task<CompletionSet>>), typeof(TargetLocation), new PropertyMetadata(default(Func<string, int, Task<CompletionSet>>)));
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            nameof(SelectedItem), typeof(Completion), typeof(TargetLocation), new PropertyMetadata(default(Completion)));
+            nameof(SelectedItem), typeof(CompletionEntry), typeof(TargetLocation), new PropertyMetadata(default(CompletionEntry)));
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
             nameof(Text), typeof(string), typeof(TargetLocation), new PropertyMetadata(default(string)));
@@ -87,9 +87,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         public bool IsTextEntryEmpty => string.IsNullOrEmpty(Text);
 
-        public bool HasItems => Items.Count > 0;
+        public bool HasItems => CompletionEntries.Count > 0;
 
-        public ObservableCollection<Completion> Items { get; } = new ObservableCollection<Completion>();
+        public ObservableCollection<CompletionEntry> CompletionEntries { get; } = new ObservableCollection<CompletionEntry>();
 
         public Func<string, int, Task<CompletionSet>> SearchService
         {
@@ -97,9 +97,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             set { SetValue(SearchServiceProperty, value); }
         }
 
-        internal Completion SelectedItem
+        internal CompletionEntry SelectedItem
         {
-            get { return (Completion)GetValue(SelectedItemProperty); }
+            get { return (CompletionEntry)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
         }
 
@@ -124,7 +124,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void Commit(Completion completion)
+        private void Commit(CompletionEntry completion)
         {
             if (completion == null)
             {
@@ -191,7 +191,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 case Key.Up:
                     if (Options.SelectedIndex == 0)
                     {
-                        SelectedItem = Items[0];
+                        SelectedItem = CompletionEntries[0];
                         LostFocus -= OnLostFocus;
                         TargetLocationSearchTextBox.Focus();
                         TargetLocationSearchTextBox.CaretIndex = index;
@@ -266,19 +266,19 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                         return;
                     }
 
-                    Items.Clear();
+                    CompletionEntries.Clear();
 
                     foreach (CompletionItem entry in completionSet.Completions)
                     {
-                        Items.Add(new Completion(entry, completionSet.Start, completionSet.Length));
+                        CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
                     }
 
                     PositionCompletions(completionSet.Length);
 
-                    if (Items != null && Items.Count > 0 && Options.SelectedIndex == -1)
+                    if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
                     {
                         string lastSelected = SelectedItem?.CompletionItem.InsertionText;
-                        SelectedItem = Items.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? Items[0];
+                        SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? CompletionEntries[0];
                         Options.ScrollIntoView(SelectedItem);
                     }
 

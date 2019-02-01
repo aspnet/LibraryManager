@@ -115,7 +115,7 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         /// <param name="libraryToUpdate"></param>
         /// <param name="newVersion"></param>
-        public void UpdateLibraryVersion(ILibraryInstallationState libraryToUpdate, string newVersion)
+        public static void UpdateLibraryVersion(ILibraryInstallationState libraryToUpdate, string newVersion)
         {
             if (libraryToUpdate != null && libraryToUpdate is LibraryInstallationState state)
             {
