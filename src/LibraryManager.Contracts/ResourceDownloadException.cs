@@ -18,7 +18,17 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         /// <param name="url">The url for the resource.</param>
         public ResourceDownloadException(string url)
-            : base(string.Format(Text.ErrorUnableToDownloadResource, url))
+            : this(string.Format(Text.ErrorUnableToDownloadResource, url), null)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="ResourceDownloadException"/>.
+        /// </summary>
+        /// <param name="url">The url for the resource.</param>
+        /// <param name="innerException">Inner exception</param>
+        public ResourceDownloadException(string url, Exception innerException)
+            : base(string.Format(Text.ErrorUnableToDownloadResource, url), innerException)
         {
             Url = url;
         }

@@ -53,15 +53,37 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>
         /// Downloads a resource from specified url to a destination file
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="fileName"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        private async Task DownloadToFileAsync(string url, string fileName, CancellationToken cancellationToken)
+        /// <param name="url">Url to download</param>
+        /// <param name="fileName">Destination file path</param>
+        /// <param name="attempts">Number of times to attempt the download</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        private async Task DownloadToFileAsync(string url, string fileName, int attempts, CancellationToken cancellationToken)
         {
-            using (Stream libraryStream = await _requestHandler.GetStreamAsync(url, cancellationToken))
+            if (attempts < 1)
             {
-                await FileHelpers.SafeWriteToFileAsync(fileName, libraryStream, cancellationToken);
+                throw new ArgumentException("Must attempt at least one time", nameof(attempts));
+            }
+
+            for (int i = 0; i < attempts; i++)
+            {
+                try
+                {
+                    using (Stream libraryStream = await _requestHandler.GetStreamAsync(url, cancellationToken))
+                    {
+                        await FileHelpers.SafeWriteToFileAsync(fileName, libraryStream, cancellationToken);
+                        break;
+                    }
+                }
+                catch (ResourceDownloadException)
+                {
+                    // rethrow last exception
+                    if (i == attempts - 1)
+                    {
+                        throw;
+                    }
+                }
+
+                await Task.Delay(200);
             }
         }
 
@@ -71,7 +93,7 @@ namespace Microsoft.Web.LibraryManager
 
             if (!File.Exists(localFile) || File.GetLastWriteTime(localFile) < DateTime.Now.AddDays(-expiration))
             {
-                await DownloadToFileAsync(url, localFile, cancellationToken).ConfigureAwait(false);
+                await DownloadToFileAsync(url, localFile, attempts: 1, cancellationToken: cancellationToken).ConfigureAwait(false);
             }
 
             return await FileHelpers.ReadFileAsTextAsync(localFile, cancellationToken).ConfigureAwait(false);
@@ -93,7 +115,7 @@ namespace Microsoft.Web.LibraryManager
             {
                 if (!File.Exists(metadata.DestinationPath) || File.GetLastWriteTime(metadata.DestinationPath) < DateTime.Now.AddDays(-_libraryExpiresAfterDays))
                 {
-                    Task readFileTask = DownloadToFileAsync(metadata.Source, metadata.DestinationPath, cancellationToken);
+                    Task readFileTask = DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
                     await readFileTask;
                     refreshTasks.Add(readFileTask);
                 }
