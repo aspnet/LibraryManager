@@ -366,7 +366,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
             {
 #pragma warning disable CA1308 // Normalize strings to uppercase
                                // Reason: we prefer lowercase names for file paths
-                path.ToLowerInvariant();
+                path = path.ToLowerInvariant();
 #pragma warning restore CA1308 // Normalize strings to uppercase
             }
 

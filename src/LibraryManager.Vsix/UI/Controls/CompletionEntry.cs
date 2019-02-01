@@ -2,9 +2,9 @@
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
-    public class Completion
+    public class CompletionEntry
     {
-        public Completion(CompletionItem completionItem, int start, int length)
+        public CompletionEntry(CompletionItem completionItem, int start, int length)
         {
             Start = start;
             Length = length;
