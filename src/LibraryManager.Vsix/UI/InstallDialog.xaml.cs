@@ -95,8 +95,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 InstallButton.IsEnabled = true;
             }
 
-            Dependencies dependencies = Dependencies.FromConfigFile(_configFileName);
-            string cwd = dependencies?.GetHostInteractions().WorkingDirectory;
+            string cwd = _deps?.GetHostInteractions().WorkingDirectory;
 
             IEnumerable<Tuple<string, string>> completions = GetCompletions(cwd, searchText, caretPosition, out Span textSpan);
 

@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.WebTools.Languages.Json.Editor.Completion;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 
@@ -21,6 +22,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         private static readonly ImageMoniker _libraryIcon = KnownMonikers.Method;
         private static readonly ImageMoniker _folderIcon = KnownMonikers.FolderClosed;
+
+        private IDependenciesFactory _dependenciesFactory { get; set;}
+
+        [ImportingConstructor]
+        internal LibraryIdCompletionProvider(IDependenciesFactory dependenciesFactory)
+        {
+            _dependenciesFactory = dependenciesFactory;
+        }
 
         public override JsonCompletionContextType ContextType
         {
@@ -43,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 yield break;
             }
 
-            var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
+            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
             IProvider provider = dependencies.GetProvider(state.ProviderId);
             ILibraryCatalog catalog = provider?.GetCatalog();
 

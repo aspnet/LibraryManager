@@ -13,6 +13,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.TaskStatusCenter;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -20,18 +21,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [Export(typeof(ILibraryCommandService))]
     internal class LibraryCommandService : ILibraryCommandService, IDisposable
     {
-        [Import(typeof(ITaskStatusCenterService))]
-        internal ITaskStatusCenterService TaskStatusCenterServiceInstance;
-
         private CancellationTokenSource _linkedCancellationTokenSource;
         private CancellationTokenSource _internalCancellationTokenSource;
         private Task _currentOperationTask;
+        private readonly IDependenciesFactory _dependenciesFactory;
+        private readonly ITaskStatusCenterService _taskStatusCenterService;
         private DefaultSolutionEvents _solutionEvents;
         private object _lockObject = new object();
 
         [ImportingConstructor]
-        public LibraryCommandService()
+        public LibraryCommandService(IDependenciesFactory dependenciesFactory, ITaskStatusCenterService taskStatusCenterService)
         {
+            _dependenciesFactory = dependenciesFactory;
+            _taskStatusCenterService = taskStatusCenterService;
+            
             _solutionEvents = new DefaultSolutionEvents();
             _solutionEvents.BeforeCloseSolution += OnBeforeCloseSolution;
             _solutionEvents.BeforeCloseProject += OnBeforeCloseProject;
@@ -119,7 +122,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                ITaskHandler handler = await TaskStatusCenterServiceInstance.CreateTaskHandlerAsync(taskTitle);
+                ITaskHandler handler = await _taskStatusCenterService.CreateTaskHandlerAsync(taskTitle);
                 CancellationToken internalToken = RegisterCancellationToken(handler.UserCancellation);
 
                 lock (_lockObject)
@@ -145,7 +148,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 foreach (string configFilePath in configFiles)
                 {
-                    Dependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+                    IDependencies dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
                     Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
                     manifests.Add(configFilePath, manifest);
                 }
@@ -171,7 +174,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 sw.Start();
 
                 string configFileName = configProjectItem.FileNames[1];
-                var dependencies = Dependencies.FromConfigFile(configFileName);
+                var dependencies = _dependenciesFactory.FromConfigFile(configFileName);
                 Project project = VsHelpers.GetDTEProjectFromConfig(configFileName);
 
                 Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
@@ -222,7 +225,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     Stopwatch swLocal = new Stopwatch();
                     swLocal.Start();
-                    IDependencies dependencies = Dependencies.FromConfigFile(manifest.Key);
+                    IDependencies dependencies = _dependenciesFactory.FromConfigFile(manifest.Key);
                     Project project = VsHelpers.GetDTEProjectFromConfig(manifest.Key);
 
                     Logger.LogEvent(string.Format(LibraryManager.Resources.Text.Restore_LibrariesForProject, project?.Name), LogLevel.Operation);
@@ -272,7 +275,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-                var dependencies = Dependencies.FromConfigFile(configFilePath);
+                var dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
                 Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
                 ILibraryOperationResult result = null;
 

@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             get
             {
-                var dependencies = Dependencies.FromConfigFile(_provider.ConfigFilePath);
+                var dependencies = _provider.DependenciesFactory.FromConfigFile(_provider.ConfigFilePath);
                 IProvider provider = dependencies.GetProvider(_provider.InstallationState.ProviderId);
                 ILibraryCatalog catalog = provider?.GetCatalog();
 

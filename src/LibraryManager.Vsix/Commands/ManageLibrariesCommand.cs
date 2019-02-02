@@ -1,13 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using EnvDTE;
-using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel.Design;
-using System.Threading;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -16,11 +17,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         private readonly Package _package;
         private readonly ILibraryCommandService _libraryCommandService;
+        private readonly IDependenciesFactory _dependenciesFactory;
 
-        private ManageLibrariesCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
+        private ManageLibrariesCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
             _package = package;
             _libraryCommandService = libraryCommandService;
+            _dependenciesFactory = dependenciesFactory;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.ManageLibraries);
             var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
@@ -32,9 +35,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private IServiceProvider ServiceProvider => _package;
 
-        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
+        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
-            Instance = new ManageLibrariesCommand(package, commandService, libraryCommandService);
+            Instance = new ManageLibrariesCommand(package, commandService, libraryCommandService, dependenciesFactory);
         }
 
         private void BeforeQueryStatus(object sender, EventArgs e)
@@ -72,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
                 else
                 {
-                    var dependencies = Dependencies.FromConfigFile(configFilePath);
+                    var dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
                     Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None);
                     manifest.DefaultProvider = "cdnjs";
                     manifest.Version = Manifest.SupportedVersions.Max().ToString();
