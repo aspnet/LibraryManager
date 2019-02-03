@@ -268,7 +268,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return await manifest.RestoreAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task UninstallLibraryAsync(string configFilePath, string libraryName, string providerId, string version,CancellationToken cancellationToken)
+        private async Task UninstallLibraryAsync(string configFilePath, string libraryName, string version, string providerId, CancellationToken cancellationToken)
         {
             string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryName, version, providerId);
             Logger.LogEventsHeader(OperationType.Uninstall, libraryId);
