@@ -30,12 +30,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private object _lockObject = new object();
 
         [ImportingConstructor]
-        public LibraryCommandService(IDependenciesFactory dependenciesFactory, ITaskStatusCenterService taskStatusCenterService)
+        public LibraryCommandService(IDependenciesFactory dependenciesFactory,
+                                     ITaskStatusCenterService taskStatusCenterService,
+                                     // HACK: lets tests inject one but still satisfy MEF construction since there is no Export
+                                     [Import(AllowDefault = true)] DefaultSolutionEvents solutionEvents)
         {
             _dependenciesFactory = dependenciesFactory;
             _taskStatusCenterService = taskStatusCenterService;
             
-            _solutionEvents = new DefaultSolutionEvents();
+            _solutionEvents = solutionEvents ?? new DefaultSolutionEvents();
             _solutionEvents.BeforeCloseSolution += OnBeforeCloseSolution;
             _solutionEvents.BeforeCloseProject += OnBeforeCloseProject;
             _solutionEvents.BeforeUnloadProject += OnBeforeUnloadProject;

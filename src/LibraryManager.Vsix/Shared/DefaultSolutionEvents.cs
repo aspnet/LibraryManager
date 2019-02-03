@@ -29,8 +29,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private uint _solutionEventsCookie;
 
         public DefaultSolutionEvents()
+            : this(Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution)
         {
-            _solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
+        }
+
+        public DefaultSolutionEvents(IVsSolution solution)
+        {
+            _solution = solution;
             _solution.AdviseSolutionEvents(this, out _solutionEventsCookie);
         }
 
@@ -73,7 +78,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             BeforeUnloadProject?.Invoke(this, new ParamEventArgs(pRealHierarchy, pStubHierarchy));
 
             return VSConstants.S_OK;
-    }
+        }
 
         int IVsSolutionEvents.OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
         {
