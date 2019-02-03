@@ -43,20 +43,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
   ""libraries"": []
 }";
 
-            ReplaceFileContent(addingLibraryContent);
+            SetManifestContents(addingLibraryContent);
             Helpers.FileIO.WaitForRestoredFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
 
-            ReplaceFileContent(deletingLibraryContent);
+            SetManifestContents(deletingLibraryContent);
             Helpers.FileIO.WaitForDeletedFiles(pathToLibrary, expectedFiles, caseInsensitive: true);
-        }
-
-        private void ReplaceFileContent(string content)
-        {
-            Editor.Selection.SelectAll();
-            Editor.KeyboardCommands.Delete();
-            Editor.Edit.InsertTextInBuffer(content);
-
-            _libmanConfig.Save();
         }
     }
 }
