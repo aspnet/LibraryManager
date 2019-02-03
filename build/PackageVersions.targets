@@ -28,6 +28,7 @@
     <PackageReference Update="Microsoft.VisualStudio.Telemetry" Version="15.7.942-master669188BE" />
     <PackageReference Update="Microsoft.VisualStudio.Threading" Version="15.8.168" />
     <PackageReference Update="Microsoft.VSSDK.BuildTools" Version="15.0.26201" PrivateAssets="All" />
+    <PackageReference Update="Moq" Version="4.10.1" PrivateAssets="All" />
     <PackageReference Update="NerdBank.GitVersioning" Version="2.1.23" PrivateAssets="All" />
     <PackageReference Update="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Update="Nuget.VisualStudio" Version="4.7.0" />

@@ -17,6 +17,8 @@ using Microsoft.Web.LibraryManager.Vsix;
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
+
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.IntegrationTest")]
 [assembly: InternalsVisibleTo("Microsoft.Web.LibraryManager.Vsix.Test")]
 

@@ -11,6 +11,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         private static HashSet<string> GetSubDirectoriesAndFiles(string currentWorkingDirectory, bool caseInsensitive)
         {
+            if(!Directory.Exists(currentWorkingDirectory))
+            {
+                return new HashSet<string>();
+            }
+
             StringComparer comparer = caseInsensitive ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
 
             IEnumerable<string> subItems = Directory.EnumerateFileSystemEntries(currentWorkingDirectory, "*", SearchOption.AllDirectories);
@@ -49,6 +54,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             WaitForRestoredFiles(currentWorkingDirectory, new[] { expectedFile }, caseInsensitive, timeout);
         }
 
+        // TODO: This method expects that expectedFiles will be full paths, not relative to currentWorkingDirectory.  Instead it should use relative paths.
+        //       With the current design, each caller basically uses the form WaitFor*File(dir, Path.Combine(dir, expectedFile)), which is a silly API to use.
         private static string WaitForRestoredFilesHelper(string currentWorkingDirectory, IEnumerable<string> expectedFiles, bool caseInsensitive, int timeout)
         {
             string errorMessage = null;

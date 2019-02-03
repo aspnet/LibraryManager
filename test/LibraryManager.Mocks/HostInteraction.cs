@@ -65,9 +65,6 @@ namespace Microsoft.Web.LibraryManager.Mocks
         {
             var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, path));
 
-            if (absolutePath.Exists)
-                return true;
-
             if (!absolutePath.FullName.StartsWith(WorkingDirectory))
                 throw new UnauthorizedAccessException();
 
