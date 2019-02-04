@@ -241,15 +241,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No updates found at this time.
-        /// </summary>
-        public static string NoUpdatesFound {
-            get {
-                return ResourceManager.GetString("NoUpdatesFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Installing NuGet package containing MSBuild target....
         /// </summary>
         public static string Nuget_InstallingPackage {
@@ -358,6 +349,42 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         public static string SelectLibraryToSelectFilesToInstall {
             get {
                 return ResourceManager.GetString("SelectLibraryToSelectFilesToInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No updates found at this time.
+        /// </summary>
+        public static string SuggestedAction_Update_NoUpdatesFound {
+            get {
+                return ResourceManager.GetString("SuggestedAction_Update_NoUpdatesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pre-release: {0}.
+        /// </summary>
+        public static string SuggestedAction_Update_Prerelease {
+            get {
+                return ResourceManager.GetString("SuggestedAction_Update_Prerelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stable: {0}.
+        /// </summary>
+        public static string SuggestedAction_Update_Stable {
+            get {
+                return ResourceManager.GetString("SuggestedAction_Update_Stable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Library.
+        /// </summary>
+        public static string SuggestedAction_Update_Title {
+            get {
+                return ResourceManager.GetString("SuggestedAction_Update_Title", resourceCulture);
             }
         }
         
