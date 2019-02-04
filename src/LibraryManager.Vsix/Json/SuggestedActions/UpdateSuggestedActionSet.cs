@@ -65,12 +65,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (list.Count == 0)
             {
-                list.Add(new UpdateSuggestedAction(_provider, null, "No updates found", true));
+                list.Add(new UpdateSuggestedAction(_provider, null, Resources.Text.SuggestedAction_Update_NoUpdatesFound, true));
             }
 
             Telemetry.TrackUserTask("Invoke-SuggestedActionCheckForUpdates");
 
-            return new[] { new SuggestedActionSet(list, "Update library") };
+            return new[] { new SuggestedActionSet(PredefinedSuggestedActionCategoryNames.Any, list, Resources.Text.SuggestedAction_Update_Title) };
         }
 
         private async Task<List<ISuggestedAction>> GetListOfActionsAsync(ILibraryCatalog catalog, CancellationToken cancellationToken)
@@ -84,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (!string.IsNullOrEmpty(latestStableVersion) && latestStableVersion != _provider.InstallationState.Version)
             {
-                list.Add(new UpdateSuggestedAction(_provider, latestStable, $"Stable: {latestStable}"));
+                list.Add(new UpdateSuggestedAction(_provider, latestStable, string.Format(Resources.Text.SuggestedAction_Update_Stable, latestStable)));
             }
 
             string latestPreVersion = await catalog.GetLatestVersion(_provider.InstallationState.Name, true, cancellationToken).ConfigureAwait(false);
@@ -94,7 +94,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (!string.IsNullOrEmpty(latestPreVersion) && latestPreVersion != _provider.InstallationState.Version && latestPre != latestStable)
             {
-                list.Add(new UpdateSuggestedAction(_provider, latestPre, $"Pre-release: {latestPre}"));
+                list.Add(new UpdateSuggestedAction(_provider, latestPre, string.Format(Resources.Text.SuggestedAction_Update_Prerelease, latestPre)));
             }
 
             return list;
