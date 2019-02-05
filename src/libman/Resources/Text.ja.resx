@@ -12,4 +12,279 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CacheCommandDesc" xml:space="preserve">
+    <value>libman キャッシュ コンテンツをリストまたはクリーンします</value>
+  </data>
+  <data name="CleanCommandDesc" xml:space="preserve">
+    <value>libman.json で定義されているすべてのライブラリ ファイルをプロジェクトから削除します</value>
+  </data>
+  <data name="CleanCommandRemarks" xml:space="preserve">
+    <value>この操作の後、空になったフォルダーがあればすべて削除します。</value>
+  </data>
+  <data name="DefaultDestinationOptionDesc" xml:space="preserve">
+    <value>指定されたライブラリに宛先が定義されていない場合、ライブラリ ファイルがインストールされる現在のディレクトリに対する相対パス。</value>
+  </data>
+  <data name="DefaultProviderOptionDesc" xml:space="preserve">
+    <value>指定されたライブラリでプロバイダーが定義されていない場合に使用するプロバイダー (“cdnjs”、“filesystem” など)</value>
+  </data>
+  <data name="DestinationOptionDesc" xml:space="preserve">
+    <value>ライブラリをインストールする場所 (指定しない場合、既定のインストール先の場所が使用されます)</value>
+  </data>
+  <data name="ExamplesHeader" xml:space="preserve">
+    <value>例:</value>
+  </data>
+  <data name="FilesOptionDesc" xml:space="preserve">
+    <value>指定されたライブラリのインストール対象ファイル (指定しない場合、ライブラリのすべてのファイルがインストールされます)</value>
+  </data>
+  <data name="InitCommandDesc" xml:space="preserve">
+    <value>新しい libman.json を作成します</value>
+  </data>
+  <data name="InstallCommandDesc" xml:space="preserve">
+    <value>ライブラリ定義を LibMan.json ファイルに追加し、指定した場所にライブラリをダウンロードします</value>
+  </data>
+  <data name="InstallCommandExamples" xml:space="preserve">
+    <value>libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
+    libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</value>
+  </data>
+  <data name="InstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>インストールするライブラリ</value>
+  </data>
+  <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>CDNJS ライブラリには、次の形式のライブラリ ID があります: “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+    CDNJS ライブラリでは、ライブラリ ID でバージョンが指定されていない場合、使用可能な最新のバージョンが使用されます。</value>
+  </data>
+  <data name="InstallCommandRemarks" xml:space="preserve">
+    <value>libman.json が存在しない場合は、初期化されます
+    既定のプロバイダーが存在しない場合は、--provider オプションが必要です
+    既定の宛先が存在はない場合は、--destination オプションが必要です
+    ファイルを指定しない場合は、ライブラリ全体がインクルードされます</value>
+  </data>
+  <data name="InvalidArgumentsMessage" xml:space="preserve">
+    <value>コマンドの引数が無効です: {0}</value>
+  </data>
+  <data name="LibmanCommandDesc" xml:space="preserve">
+    <value>ライブラリ マネージャー</value>
+  </data>
+  <data name="ProviderOptionDesc" xml:space="preserve">
+    <value>使用するプロバイダー (指定しない場合、既定のプロバイダーが使用されます)</value>
+  </data>
+  <data name="ProviderSpecificLogicHeader" xml:space="preserve">
+    <value>プロバイダー固有のロジック:</value>
+  </data>
+  <data name="RemarksHeader" xml:space="preserve">
+    <value>注釈:</value>
+  </data>
+  <data name="RestoreCommandDesc" xml:space="preserve">
+    <value>プロバイダーからすべてのファイルをダウンロードし、指定した宛先に保存します</value>
+  </data>
+  <data name="RestoreCommandRemarks" xml:space="preserve">
+    <value>現在のフォルダーに libman.json がない場合は、エラーになります。ライブラリでプロバイダーを指定している場合は、defaultProvider がオーバーライドされます。ライブラリで宛先を指定している場合は、defaultDestination がオーバーライドされます。</value>
+  </data>
+  <data name="UnInstallCommandDesc" xml:space="preserve">
+    <value>指定したターゲットから指定したライブラリのすべてのファイルを削除し、libman.json から指定したライブラリの定義を削除します</value>
+  </data>
+  <data name="UnInstallCommandExamples" xml:space="preserve">
+    <value>libman uninstall jquery
+    libman uninstall jquery@3.3.1</value>
+  </data>
+  <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>アンインストールするライブラリ</value>
+  </data>
+  <data name="UninstallCommandProviderOptionDesc" xml:space="preserve">
+    <value>アンインストールするライブラリのプロバイダー</value>
+  </data>
+  <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>CDNJS ライブラリには、次の形式のライブラリ ID があります: “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+    ライブラリ ID にバージョンが指定されていない場合、このコマンドは、所定の libraryId に一致する libraryName を持つすべてのライブラリに作用します。</value>
+  </data>
+  <data name="UnInstallCommandRemarks" xml:space="preserve">
+    <value>現在のフォルダーに libman.json がない場合は、エラーになります
+    指定したライブラリが存在しな場合は、エラーになります
+    同じ libraryId のライブラリが複数ある場合は、選択するようにとのプロンプトが出ます。</value>
+  </data>
+  <data name="VerbosityOptionDesc" xml:space="preserve">
+    <value>出力の詳細度を設定します ("normal"、"detailed"、"quiet" など)</value>
+  </data>
+  <data name="ProjectPathOptionDesc" xml:space="preserve">
+    <value>プロジェクトへのパス (既定では現在のディレクトリが使用されます)</value>
+  </data>
+  <data name="DirectoryNotFoundMessage" xml:space="preserve">
+    <value>ディレクトリ {0} が見つかりません</value>
+  </data>
+  <data name="FailedToRestoreLibraryMessage" xml:space="preserve">
+    <value>"{0}" を復元できませんでした</value>
+  </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>{0} は削除されました</value>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>{0} を削除できませんでした。</value>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>{0} はディスクに書き込まれました</value>
+  </data>
+  <data name="InitFailedLibmanJsonFileExists" xml:space="preserve">
+    <value>初期化に失敗しました: 'libman.json' は既に存在します</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>いくつかのファイルをクリーンアップできませんでした。</value>
+  </data>
+  <data name="LibmanJsonNotFound" xml:space="preserve">
+    <value>libman.json が見つかりませんでした: {0}</value>
+  </data>
+  <data name="DestinationRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>既定の宛先が設定されていません。 '--destination' を使用して宛先を指定してください</value>
+  </data>
+  <data name="LibraryIdRequiredForInstall" xml:space="preserve">
+    <value>インストールするにはライブラリ ID が必要です</value>
+  </data>
+  <data name="LibraryIdRequiredForUnInstall" xml:space="preserve">
+    <value>アンインストールするには LibraryId が必要です</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
+    <value>ID が "{0}" のライブラリが複数あります。</value>
+  </data>
+  <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>既定のプロバイダーが設定されていません。'--provider' を使用してプロバイダーを指定してください</value>
+  </data>
+  <data name="UseProviderToDisambiguateMessage" xml:space="preserve">
+    <value>同じ名前のライブラリとプロジェクト内の異なるプロバイダーを区別するには --provider を使用します</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstallForProvider" xml:space="preserve">
+    <value>プロバイダー "{1}" には ID が "{0}" のライブラリが複数あります。libman.json ファイルから手動で削除してください</value>
+  </data>
+  <data name="NoLibraryToUninstall" xml:space="preserve">
+    <value>ライブラリ "{0}" はインストールされていません。アンインストールするものがありません</value>
+  </data>
+  <data name="CacheCleanCommandDesc" xml:space="preserve">
+    <value>ローカル マシンの LibMan キャッシュからすべてのファイルを削除します。</value>
+  </data>
+  <data name="CacheListCommandDesc" xml:space="preserve">
+    <value>ローカル マシンの LibMan キャッシュに格納されているすべてのライブラリの一覧を表示します。</value>
+  </data>
+  <data name="CacheCleanProviderArgumentDesc" xml:space="preserve">
+    <value>キャッシュ ファイルを消去する必要のあるプロバイダー。</value>
+  </data>
+  <data name="UpdateCommandDesc" xml:space="preserve">
+    <value>指定したライブラリを更新します</value>
+  </data>
+  <data name="UpdateCommandExamples" xml:space="preserve">
+    <value>libman update jquery
+    libman update jquery --to 3.3.1
+    libman update jquery -pre</value>
+  </data>
+  <data name="UpdateCommandRemarks" xml:space="preserve">
+    <value>現在のフォルダーに libman.json がない場合はエラーになります 指定されたライブラリが存在しない場合はエラーになります 同じ libraryId のライブラリが複数ある場合は選択するようメッセージが表示されます。</value>
+  </data>
+  <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
+    <value>更新するライブラリの名前 (バージョンを含めない)。</value>
+  </data>
+  <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
+    <value>指定した場合、ライブラリの最新のプレリリース バージョンがダウンロードされます (存在する場合)</value>
+  </data>
+  <data name="UpdateCommandProviderOptionDesc" xml:space="preserve">
+    <value>指定すると、指定されたプロバイダーのライブラリのみが更新されます</value>
+  </data>
+  <data name="CacheCleanedMessage" xml:space="preserve">
+    <value>キャッシュが消去されました。</value>
+  </data>
+  <data name="CacheCleanFailed" xml:space="preserve">
+    <value>キャッシュを消去できませんでした: {0}</value>
+  </data>
+  <data name="CacheContentMessage" xml:space="preserve">
+    <value>キャッシュの内容:</value>
+  </data>
+  <data name="CacheEmptyMessage" xml:space="preserve">
+    <value>(空)</value>
+  </data>
+  <data name="CacheForProviderCleanedMessage" xml:space="preserve">
+    <value>{0} キャッシュが消去されました。</value>
+  </data>
+  <data name="CacheListFilesOptionDesc" xml:space="preserve">
+    <value>各ライブラリのキャッシュされたファイルを一覧表示します</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUpdate" xml:space="preserve">
+    <value>名前が "{0}" のライブラリが複数見つかりました</value>
+  </data>
+  <data name="NoLibrariesToUpdate" xml:space="preserve">
+    <value>更新するライブラリがありません。インストール コマンドを使ってライブラリをインストールしてください。</value>
+  </data>
+  <data name="NoLibraryFoundToUpdate" xml:space="preserve">
+    <value>名前が "{0}" の更新するライブラリが見つかりません。
+更新するライブラリ名を、バージョン情報なしで指定してください。</value>
+  </data>
+  <data name="InstallLibraryFailed" xml:space="preserve">
+    <value>ライブラリ "{0}" をインストールできませんでした</value>
+  </data>
+  <data name="CacheListLibrariesOptionDesc" xml:space="preserve">
+    <value>各プロバイダーにキャッシュされたライブラリをリストします。</value>
+  </data>
+  <data name="ProviderNotInstalled" xml:space="preserve">
+    <value>プロバイダー "{0}" はインストールされていません</value>
+  </data>
+  <data name="SuggestedIdsMessage" xml:space="preserve">
+    <value>類似ライブラリ:</value>
+  </data>
+  <data name="FixManifestFile" xml:space="preserve">
+    <value>libman.json ファイルを修正して、もう一度やり直してください</value>
+  </data>
+  <data name="ChooseAnOption" xml:space="preserve">
+    <value>オプションを選択:</value>
+  </data>
+  <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
+    <value>ライブラリ "{0}" は既に最新の状態です</value>
+  </data>
+  <data name="InvalidToVersion" xml:space="preserve">
+    <value>"{0}" は --to-version の有効な値ではありません</value>
+  </data>
+  <data name="UpdateCommandToVersionOptionDesc" xml:space="preserve">
+    <value>ライブラリを更新するバージョン (プロバイダーの完全な libraryid が必要)</value>
+  </data>
+  <data name="InstalledLibrary" xml:space="preserve">
+    <value>ライブラリ "{0}" が "{1}" にインストールされました</value>
+  </data>
+  <data name="UninstalledLibrary" xml:space="preserve">
+    <value>ライブラリ "{0}" がアンインストールされました</value>
+  </data>
+  <data name="InvalidFilesForLibrary" xml:space="preserve">
+    <value>ライブラリ "{0}" に次のファイルは含まれていません: {1}</value>
+  </data>
+  <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
+    <value>ライブラリ "{0}" はインストールできません。"{1}" は既に "{2}" にインストールされています。
+別のインストール先を指定してください。</value>
+  </data>
+  <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
+    <value>更新するには libraryId が必要です</value>
+  </data>
+  <data name="SpecifyDifferentDestination" xml:space="preserve">
+    <value>別の宛先を指定してください。</value>
+  </data>
+  <data name="UninstallFailed" xml:space="preserve">
+    <value>"{0}" をアンインストールできませんでした</value>
+  </data>
+  <data name="UpdateLibraryFailed" xml:space="preserve">
+    <value>"{0}" を "{1}" に更新できませんでした</value>
+  </data>
+  <data name="UpdateLibraryToLatestFailed" xml:space="preserve">
+    <value>"{0}" を最新バージョンに更新できませんでした</value>
+  </data>
+  <data name="LibraryUpdated" xml:space="preserve">
+    <value>"{0}" が "{1}" に更新されました</value>
+  </data>
+  <data name="UnableToFindLatestVersionForLibrary" xml:space="preserve">
+    <value>"{0}" の最新バージョンを特定できませんでした</value>
+  </data>
+  <data name="InitFailedUnknownProvider" xml:space="preserve">
+    <value>Libman.json を初期化できませんでした。[{0}]: {1}</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>このコンソールでユーザーの入力を要求することはできません。</value>
+  </data>
+  <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
+    <value>完全なライブラリ ID と、'--provider' オプションを使用してプロバイダーを指定してください。</value>
+  </data>
+  <data name="SpecifyFieldUsingOption" xml:space="preserve">
+    <value>'--{1}' オプションを使って '{0}' を指定してください。</value>
+  </data>
 </root>

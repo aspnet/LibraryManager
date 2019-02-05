@@ -46,11 +46,13 @@
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>Será instalado um pacote NuGet para aumentar o processo MSBuild, mas nenhum arquivo será adicionado ao projeto.
+
 Isso pode exigir uma conexão com a Internet.
+
 Deseja continuar?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;Digite para pesquisar&gt;</value>
+    <value>&lt;Type to search&gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>Adicionar Biblioteca do Lado do Cliente</value>
@@ -60,7 +62,7 @@ Deseja continuar?</value>
     <value>&lt;Escolha uma biblioteca para selecionar os arquivos a serem instalados&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>D&amp;esabilitar Bibliotecas do Lado do Cliente no Build</value>
+    <value>Desabi&amp;litar Bibliotecas do Lado do Cliente no Build</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
     <value>&amp;Habilitar Restauração de Bibliotecas do Lado do Cliente no Build...</value>
@@ -105,27 +107,27 @@ Deseja continuar?</value>
     <value>Arquivos:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>Biblioteca:</value>
+    <value>_Biblioteca:</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>Provedor: </value>
+    <value>_Provedor:</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>Local de Destino:</value>
+    <value>Local de _Destino:</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>Escolha arquivos específicos:</value>
+    <value>Escolha arquivos _específicos:</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>Incluir todos os arquivos de biblioteca</value>
+    <value>Incluir _todos os arquivos da biblioteca</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Nenhum arquivo foi selecionado</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancelar</value>
+    <value>_Cancelar</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>Instalar</value>
+    <value>_Instalação</value>
   </data>
 </root>

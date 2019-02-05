@@ -58,7 +58,7 @@ Chcete pokračovat?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated">&lt;Začněte psát, co chcete najít.&gt;</target>
+          <target state="translated"><it id="1" pos="open">&lt;Zadejte, co chcete vyhledat.&gt;</it></target>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
@@ -67,15 +67,15 @@ Chcete pokračovat?</target>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated">&lt;Zvolte knihovnu, ze které chcete vybrat soubory k instalaci.&gt;</target>
+          <target state="translated"><it id="1" pos="open">&lt;Zvolte knihovnu a vyberte soubory k instalaci.&gt;</it></target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">&amp;Zakázat knihovny na straně klienta při sestavení</target>
+          <target state="translated">Při s&amp;estavení zakázat knihovny na straně klienta</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">&amp;Povolit obnovení knihoven na straně klienta při sestavení...</target>
+          <target state="translated">Při s&amp;estavení povolit obnovení knihoven na straně klienta...</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
@@ -130,36 +130,36 @@ Chcete pokračovat?</target>
           <target state="translated">Soubory:</target>
         </trans-unit>
         <trans-unit id="Library" translate="yes" xml:space="preserve">
-          <source>Library:</source>
-          <target state="translated">Knihovna:</target>
+          <source>_Library:</source>
+          <target state="translated">_Knihovna:</target>
         </trans-unit>
         <trans-unit id="Provider" translate="yes" xml:space="preserve">
-          <source>Provider: </source>
-          <target state="translated">Poskytovatel: </target>
+          <source>_Provider: </source>
+          <target state="translated">Z_prostředkovatel:</target>
         </trans-unit>
         <trans-unit id="TargetLocation" translate="yes" xml:space="preserve">
-          <source>Target Location:</source>
-          <target state="translated">Cílové umístění:</target>
+          <source>_Target Location:</source>
+          <target state="translated">Cílové umís_tění:</target>
         </trans-unit>
         <trans-unit id="ChooseSpecificFiles" translate="yes" xml:space="preserve">
-          <source>Choose specific files:</source>
-          <target state="translated">Zvolte konkrétní soubory:</target>
+          <source>Choose _specific files:</source>
+          <target state="translated">Zvolit _konkrétní soubory:</target>
         </trans-unit>
         <trans-unit id="IncludeAllLibraryFiles" translate="yes" xml:space="preserve">
-          <source>Include all library files</source>
-          <target state="translated">Zahrnout všechny soubory z knihovny</target>
+          <source>Include _all library files</source>
+          <target state="translated">Z_ahrnout všechny soubory knihovny</target>
         </trans-unit>
         <trans-unit id="NoFilesSelected" translate="yes" xml:space="preserve">
           <source>No files have been selected</source>
           <target state="translated">Nejsou vybrané žádné soubory.</target>
         </trans-unit>
         <trans-unit id="Cancel" translate="yes" xml:space="preserve">
-          <source>Cancel</source>
-          <target state="translated">Zrušit</target>
+          <source>_Cancel</source>
+          <target state="translated">_Zrušit</target>
         </trans-unit>
         <trans-unit id="Install" translate="yes" xml:space="preserve">
-          <source>Install</source>
-          <target state="translated">Nainstalovat</target>
+          <source>_Install</source>
+          <target state="translated">_Instalovat</target>
         </trans-unit>
       </group>
     </body>

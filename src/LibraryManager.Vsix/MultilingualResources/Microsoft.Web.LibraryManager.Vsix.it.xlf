@@ -60,7 +60,7 @@ Continuare?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated">&lt;Digitare per eseguire la ricerca&gt;</target>
+          <target state="translated"><it id="1" pos="open">&lt;Digitare per eseguire la ricerca&gt;</it></target>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
@@ -69,11 +69,11 @@ Continuare?</target>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated">&lt;Scegliere una libreria per selezionare i file da installare&gt;</target>
+          <target state="translated"><it id="1" pos="open">&lt;Scegliere una libreria per selezionare i file da installare&gt;</it></target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">Disa&amp;bilita ripristino delle librerie lato client durante la compilazione</target>
+          <target state="translated">Disa&amp;bilita librerie lato client durante la compilazione</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
@@ -132,36 +132,36 @@ Continuare?</target>
           <target state="translated">File:</target>
         </trans-unit>
         <trans-unit id="Library" translate="yes" xml:space="preserve">
-          <source>Library:</source>
-          <target state="translated">Libreria:</target>
+          <source>_Library:</source>
+          <target state="translated">_Libreria:</target>
         </trans-unit>
         <trans-unit id="Provider" translate="yes" xml:space="preserve">
-          <source>Provider: </source>
-          <target state="translated">Provider: </target>
+          <source>_Provider: </source>
+          <target state="translated">_Provider:</target>
         </trans-unit>
         <trans-unit id="TargetLocation" translate="yes" xml:space="preserve">
-          <source>Target Location:</source>
-          <target state="translated">Percorso di destinazione:</target>
+          <source>_Target Location:</source>
+          <target state="translated">Percorso di _destinazione:</target>
         </trans-unit>
         <trans-unit id="ChooseSpecificFiles" translate="yes" xml:space="preserve">
-          <source>Choose specific files:</source>
-          <target state="translated">Scegliere i file specifici:</target>
+          <source>Choose _specific files:</source>
+          <target state="translated">Scegli i file _specifici:</target>
         </trans-unit>
         <trans-unit id="IncludeAllLibraryFiles" translate="yes" xml:space="preserve">
-          <source>Include all library files</source>
-          <target state="translated">Includi tutti i file di libreria</target>
+          <source>Include _all library files</source>
+          <target state="translated">Includi tutti i _file di libreria</target>
         </trans-unit>
         <trans-unit id="NoFilesSelected" translate="yes" xml:space="preserve">
           <source>No files have been selected</source>
           <target state="translated">Non è stato selezionato alcun file</target>
         </trans-unit>
         <trans-unit id="Cancel" translate="yes" xml:space="preserve">
-          <source>Cancel</source>
-          <target state="translated">Annulla</target>
+          <source>_Cancel</source>
+          <target state="translated">_Annulla</target>
         </trans-unit>
         <trans-unit id="Install" translate="yes" xml:space="preserve">
-          <source>Install</source>
-          <target state="translated">Installa</target>
+          <source>_Install</source>
+          <target state="translated">_Installa</target>
         </trans-unit>
       </group>
     </body>

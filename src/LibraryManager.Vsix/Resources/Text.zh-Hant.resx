@@ -45,10 +45,14 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>這會安裝 NuGet 套件來增強 MSBuild 程序，但不會將任何檔案新增至專案。這需要網際網路連線。要繼續嗎?</value>
+    <value>這會安裝 NuGet 套件來增強 MSBuild 程序，但不會將任何檔案新增至專案。
+
+這需要網際網路連線。
+
+要繼續嗎?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;請鍵入以搜尋&gt;</value>
+    <value>&lt;輸入以搜尋&gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>新增用戶端程式庫</value>
@@ -103,27 +107,27 @@
     <value>檔案:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>程式庫:</value>
+    <value>程式庫(_L):</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>提供者:</value>
+    <value>提供者(_P):</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>目標位置:</value>
+    <value>目標位置(_T):</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>選擇特定檔案:</value>
+    <value>選擇特定檔案(_S):</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>包含所有程式庫檔案</value>
+    <value>包含所有程式庫檔案(_A)</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>未選取任何檔案</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>取消</value>
+    <value>取消(_C)</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>安裝</value>
+    <value>安裝(_I)</value>
   </data>
 </root>

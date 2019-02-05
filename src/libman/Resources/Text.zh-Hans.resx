@@ -12,4 +12,277 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CacheCommandDesc" xml:space="preserve">
+    <value>列出或清除 libman 缓存内容</value>
+  </data>
+  <data name="CleanCommandDesc" xml:space="preserve">
+    <value>从项目中删除 libman.json 中定义的所有库文件</value>
+  </data>
+  <data name="CleanCommandRemarks" xml:space="preserve">
+    <value>删除在此操作后变为空的所有文件夹。</value>
+  </data>
+  <data name="DefaultDestinationOptionDesc" xml:space="preserve">
+    <value>相对于当前目录的路径, 如果没有为给定的库定义目标, 则应在其中安装库文件。</value>
+  </data>
+  <data name="DefaultProviderOptionDesc" xml:space="preserve">
+    <value>未为给定库定义提供程序时要使用的提供程序。(例如 “cdnjs”、“filesystem”)</value>
+  </data>
+  <data name="DestinationOptionDesc" xml:space="preserve">
+    <value>安装库的位置 (如果未指定, 将使用默认目标位置)</value>
+  </data>
+  <data name="ExamplesHeader" xml:space="preserve">
+    <value>示例:</value>
+  </data>
+  <data name="FilesOptionDesc" xml:space="preserve">
+    <value>要安装的指定库中的文件 (如果未指定, 则将安装库中的所有文件)</value>
+  </data>
+  <data name="InitCommandDesc" xml:space="preserve">
+    <value>创建新的 libman. json</value>
+  </data>
+  <data name="InstallCommandDesc" xml:space="preserve">
+    <value>向 LibMan.json 文件添加库定义, 并将库下载到指定位置</value>
+  </data>
+  <data name="InstallCommandExamples" xml:space="preserve">
+    <value>libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
+    libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</value>
+  </data>
+  <data name="InstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>要安装的库</value>
+  </data>
+  <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>CDNJS 库的库 ID 格式为“&lt;libraryName&gt;@&lt;libraryVersion&gt;” 对于 CDNJS 库，如果库 ID 中未指定版本，则使用可用的最高版本。</value>
+  </data>
+  <data name="InstallCommandRemarks" xml:space="preserve">
+    <value>如果不存在 libman.json 则初始化它 如果不存在默认提供程序，则需要 --provider 选项，如果不存在默认目标，则需要 --destination 选项 如果未指定文件，则包括整个库</value>
+  </data>
+  <data name="InvalidArgumentsMessage" xml:space="preserve">
+    <value>命令的参数无效: {0}</value>
+  </data>
+  <data name="LibmanCommandDesc" xml:space="preserve">
+    <value>库管理器</value>
+  </data>
+  <data name="ProviderOptionDesc" xml:space="preserve">
+    <value>要使用的提供程序 (如果未指定, 将使用默认提供程序)</value>
+  </data>
+  <data name="ProviderSpecificLogicHeader" xml:space="preserve">
+    <value>特定于提供程序的逻辑:</value>
+  </data>
+  <data name="RemarksHeader" xml:space="preserve">
+    <value>言论：</value>
+  </data>
+  <data name="RestoreCommandDesc" xml:space="preserve">
+    <value>从提供程序下载所有文件并将其保存到指定的目标</value>
+  </data>
+  <data name="RestoreCommandRemarks" xml:space="preserve">
+    <value>如果当前文件夹中不存在 libman.json 则出错
+    如果库指定提供程序，它将覆盖 defaultProvider
+    如果库指定目标，它将覆盖 defaultDestination</value>
+  </data>
+  <data name="UnInstallCommandDesc" xml:space="preserve">
+    <value>从指定的目标删除指定库的所有文件, 然后从 libman.json 删除指定的库定义</value>
+  </data>
+  <data name="UnInstallCommandExamples" xml:space="preserve">
+    <value>libman uninstall jquery
+    libman uninstall jquery@3.3.1</value>
+  </data>
+  <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>要卸载的库</value>
+  </data>
+  <data name="UninstallCommandProviderOptionDesc" xml:space="preserve">
+    <value>要卸载的库的提供程序</value>
+  </data>
+  <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>CDNJS 库的库 ID 格式为“&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+   如果库 ID 中未指定版本，此命令将应用于 libraryName 与给定 libraryId 匹配的任何库</value>
+  </data>
+  <data name="UnInstallCommandRemarks" xml:space="preserve">
+    <value>若当前文件夹中不存在 libman.json 则出错
+    若指定的库不存在则出错
+    若有多个具有相同 libraryId 的库，则提示你进行选择。</value>
+  </data>
+  <data name="VerbosityOptionDesc" xml:space="preserve">
+    <value>设置输出的详细程度(例如“正常”、“详细”、“安静”)</value>
+  </data>
+  <data name="ProjectPathOptionDesc" xml:space="preserve">
+    <value>项目的路径(默认使用当前目录)</value>
+  </data>
+  <data name="DirectoryNotFoundMessage" xml:space="preserve">
+    <value>找不到目录 {0}</value>
+  </data>
+  <data name="FailedToRestoreLibraryMessage" xml:space="preserve">
+    <value>未能还原 "{0}"</value>
+  </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>已删除 {0}</value>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>未能删除 {0}</value>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>{0} 写入磁盘</value>
+  </data>
+  <data name="InitFailedLibmanJsonFileExists" xml:space="preserve">
+    <value>初始化失败: "libman.json" 已存在</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>无法清理某些文件。</value>
+  </data>
+  <data name="LibmanJsonNotFound" xml:space="preserve">
+    <value>未找到 libman.json:{0}</value>
+  </data>
+  <data name="DestinationRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>未设置默认目标。请使用 "--destination" 提供目标</value>
+  </data>
+  <data name="LibraryIdRequiredForInstall" xml:space="preserve">
+    <value>需要 LibraryId 才能安装</value>
+  </data>
+  <data name="LibraryIdRequiredForUnInstall" xml:space="preserve">
+    <value>需要 LibraryId 才能卸载</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
+    <value>发现多个 ID 为“{0}”的库</value>
+  </data>
+  <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>未设置默认提供程序。请用 "--provider" 提供提供程序</value>
+  </data>
+  <data name="UseProviderToDisambiguateMessage" xml:space="preserve">
+    <value>使用 --provider 消除项目中来自不同提供程序的同名库的歧义</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstallForProvider" xml:space="preserve">
+    <value>为提供程序 "{1}" 找到 id 为 "{0}" 的多个库。请从 libman.json 文件中手动删除</value>
+  </data>
+  <data name="NoLibraryToUninstall" xml:space="preserve">
+    <value>未安装库 "{0}"。没有可卸载的内容</value>
+  </data>
+  <data name="CacheCleanCommandDesc" xml:space="preserve">
+    <value>从本地计算机的 LibMan 缓存中删除所有文件。</value>
+  </data>
+  <data name="CacheListCommandDesc" xml:space="preserve">
+    <value>显示存储在本地计算机的 LibMan 缓存中的所有库的列表。</value>
+  </data>
+  <data name="CacheCleanProviderArgumentDesc" xml:space="preserve">
+    <value>要为其清除缓存文件的提供程序。</value>
+  </data>
+  <data name="UpdateCommandDesc" xml:space="preserve">
+    <value>更新指定的库</value>
+  </data>
+  <data name="UpdateCommandExamples" xml:space="preserve">
+    <value>libman update jquery
+    libman update jquery --to 3.3.1
+    libman update jquery -pre</value>
+  </data>
+  <data name="UpdateCommandRemarks" xml:space="preserve">
+    <value>若当前文件夹中没有 libman.json 则出错 若指定的库不存在则出错 若存在多个具有相同 libraryId 的库，将提示你进行选择。</value>
+  </data>
+  <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
+    <value>要更新的库的名称 (不带版本)。</value>
+  </data>
+  <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
+    <value>如果指定, 将下载最新的库预发行版本 (如果适用)</value>
+  </data>
+  <data name="UpdateCommandProviderOptionDesc" xml:space="preserve">
+    <value>如果指定, 则仅更新来自指定提供程序的库</value>
+  </data>
+  <data name="CacheCleanedMessage" xml:space="preserve">
+    <value>已清理缓存。</value>
+  </data>
+  <data name="CacheCleanFailed" xml:space="preserve">
+    <value>无法清除缓存: {0}</value>
+  </data>
+  <data name="CacheContentMessage" xml:space="preserve">
+    <value>缓存内容:</value>
+  </data>
+  <data name="CacheEmptyMessage" xml:space="preserve">
+    <value>(空)</value>
+  </data>
+  <data name="CacheForProviderCleanedMessage" xml:space="preserve">
+    <value>已清除 {0} 缓存。</value>
+  </data>
+  <data name="CacheListFilesOptionDesc" xml:space="preserve">
+    <value>列出为每个库缓存的文件</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUpdate" xml:space="preserve">
+    <value>发现多个名为 "{0}" 的库</value>
+  </data>
+  <data name="NoLibrariesToUpdate" xml:space="preserve">
+    <value>没有要更新的库。请使用安装命令安装库</value>
+  </data>
+  <data name="NoLibraryFoundToUpdate" xml:space="preserve">
+    <value>找不到名为 "{0}" 库以进行更新。
+请指定不含版本信息的库名以进行更新。</value>
+  </data>
+  <data name="InstallLibraryFailed" xml:space="preserve">
+    <value>安装库 "{0}" 失败</value>
+  </data>
+  <data name="CacheListLibrariesOptionDesc" xml:space="preserve">
+    <value>列出为每个提供程序缓存的库。</value>
+  </data>
+  <data name="ProviderNotInstalled" xml:space="preserve">
+    <value>未安装提供程序 "{0}"</value>
+  </data>
+  <data name="SuggestedIdsMessage" xml:space="preserve">
+    <value>类似的库:</value>
+  </data>
+  <data name="FixManifestFile" xml:space="preserve">
+    <value>请修复 libman.json 文件, 然后重试</value>
+  </data>
+  <data name="ChooseAnOption" xml:space="preserve">
+    <value>选择一个选项:</value>
+  </data>
+  <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
+    <value>库 "{0}" 已是最新版本</value>
+  </data>
+  <data name="InvalidToVersion" xml:space="preserve">
+    <value>"{0}" 不是 --to-version 的有效值</value>
+  </data>
+  <data name="UpdateCommandToVersionOptionDesc" xml:space="preserve">
+    <value>要将库更新到的版本 (需要提供程序的完整 libraryid)</value>
+  </data>
+  <data name="InstalledLibrary" xml:space="preserve">
+    <value>已将库 "{0}" 安装到 "{1}"</value>
+  </data>
+  <data name="UninstalledLibrary" xml:space="preserve">
+    <value>已卸载库 "{0}"</value>
+  </data>
+  <data name="InvalidFilesForLibrary" xml:space="preserve">
+    <value>库 "{0}" 不包含以下文件: {1}</value>
+  </data>
+  <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
+    <value>无法安装库 "{0}"。"{1}" 已安装在 "{2}" 上。
+请指定其他目标。</value>
+  </data>
+  <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
+    <value>需要 LibraryId 才能更新</value>
+  </data>
+  <data name="SpecifyDifferentDestination" xml:space="preserve">
+    <value>请指定其他目标。</value>
+  </data>
+  <data name="UninstallFailed" xml:space="preserve">
+    <value>未能卸载 "{0}"</value>
+  </data>
+  <data name="UpdateLibraryFailed" xml:space="preserve">
+    <value>未能将 "{0}" 更新为 "{1}"</value>
+  </data>
+  <data name="UpdateLibraryToLatestFailed" xml:space="preserve">
+    <value>未能将 "{0}" 更新到最新版本</value>
+  </data>
+  <data name="LibraryUpdated" xml:space="preserve">
+    <value>已将 "{0}" 更新为 "{1}"</value>
+  </data>
+  <data name="UnableToFindLatestVersionForLibrary" xml:space="preserve">
+    <value>无法确定 "{0}" 的最新版本</value>
+  </data>
+  <data name="InitFailedUnknownProvider" xml:space="preserve">
+    <value>无法初始化 libman. json。[{0}]: {1}</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>无法在此控制台中提示用户输入。</value>
+  </data>
+  <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
+    <value>请指定完整的库 ID，并使用 “--provider” 选项指定提供程序。</value>
+  </data>
+  <data name="SpecifyFieldUsingOption" xml:space="preserve">
+    <value>请使用 “--{1}” 选项指定“{0}”。</value>
+  </data>
 </root>

@@ -76,6 +76,6 @@
     <value>Une erreur inconnue s’est produite</value>
   </data>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
-    <value>Restauration impossible. Plusieurs définitions pour les bibliothèques : {0}</value>
+    <value>Restauration impossible. Plusieurs définitions pour les bibliothèques : {0}</value>
   </data>
 </root>

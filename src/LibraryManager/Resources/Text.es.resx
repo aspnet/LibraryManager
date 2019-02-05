@@ -134,7 +134,7 @@
     <value>Restaurando bibliotecas para proyecto {0}</value>
   </data>
   <data name="CdnjsLibraryIdHintText" xml:space="preserve">
-    <value>Ejemplo: &lt;biblioteca&gt;@&lt;versión&gt;</value>
+    <value>Ejemplo: &lt;bilioteca&gt;@&lt;versión&gt;</value>
   </data>
   <data name="FileSystemLibraryIdHintText" xml:space="preserve">
     <value>Debe ser una ruta de sistema de archivos válida.</value>
@@ -165,5 +165,8 @@
   </data>
   <data name="Upgrade_OperationCompleted" xml:space="preserve">
     <value>Operación de actualización completada</value>
+  </data>
+  <data name="JsDelivrProviderHintText" xml:space="preserve">
+    <value>Ejemplo: &lt;biblioteca&gt;@&lt;versión&gt;</value>
   </data>
 </root>

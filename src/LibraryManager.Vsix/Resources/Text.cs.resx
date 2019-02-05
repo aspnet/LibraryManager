@@ -50,20 +50,20 @@ Může to vyžadovat připojení k internetu.
 Chcete pokračovat?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;Začněte psát, co chcete najít.&gt;</value>
+    <value>&lt;Zadejte, co chcete vyhledat.&gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>Přidat knihovnu na straně klienta</value>
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Zvolte knihovnu, ze které chcete vybrat soubory k instalaci.&gt;</value>
+    <value>&lt;Zvolte knihovnu a vyberte soubory k instalaci.&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Zakázat knihovny na straně klienta při sestavení</value>
+    <value>Při s&amp;estavení zakázat knihovny na straně klienta</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Povolit obnovení knihoven na straně klienta při sestavení...</value>
+    <value>Při s&amp;estavení povolit obnovení knihoven na straně klienta...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Instaluje se balíček NuGet, který obsahujíce cíl nástroje MSBuild...</value>
@@ -105,27 +105,27 @@ Chcete pokračovat?</value>
     <value>Soubory:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>Knihovna:</value>
+    <value>_Knihovna:</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>Poskytovatel: </value>
+    <value>Z_prostředkovatel:</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>Cílové umístění:</value>
+    <value>Cílové umís_tění:</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>Zvolte konkrétní soubory:</value>
+    <value>Zvolit _konkrétní soubory:</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>Zahrnout všechny soubory z knihovny</value>
+    <value>Z_ahrnout všechny soubory knihovny</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Nejsou vybrané žádné soubory.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Zrušit</value>
+    <value>_Zrušit</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>Nainstalovat</value>
+    <value>_Instalovat</value>
   </data>
 </root>

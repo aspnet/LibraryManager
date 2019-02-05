@@ -45,10 +45,14 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>需要安装 NuGet 包才能增强 MSBuild 进程，但不会将任何文件添加到该项目。 这可能需要 Internet 连接。 是否继续?</value>
+    <value>需要安装 NuGet 包才能增强 MSBuild 进程，但不会将任何文件添加到该项目。
+
+这可能需要 Internet 连接。
+
+是否继续?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;搜索类型&gt;</value>
+    <value>&lt;要搜索的类型&gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>添加客户端库</value>
@@ -103,27 +107,27 @@
     <value>文件:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>库:</value>
+    <value>库(_L):</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>提供程序:</value>
+    <value>提供程序(_P):</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>目标位置:</value>
+    <value>目标位置(_T):</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>选择特定文件:</value>
+    <value>选择特定文件(_S):</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>包括所有库文件</value>
+    <value>包括所有库文件(_A):</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>未选择任何文件</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>取消</value>
+    <value>取消(_C)</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>安装</value>
+    <value>安装(_I)</value>
   </data>
 </root>

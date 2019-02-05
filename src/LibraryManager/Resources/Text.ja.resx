@@ -166,4 +166,7 @@
   <data name="Upgrade_OperationCompleted" xml:space="preserve">
     <value>アップグレード操作が完了しました</value>
   </data>
+  <data name="JsDelivrProviderHintText" xml:space="preserve">
+    <value>例: &lt;library&gt;@&lt;version&gt;</value>
+  </data>
 </root>

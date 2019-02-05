@@ -47,11 +47,11 @@
           <target state="translated">ライブラリ定義を LibMan.json ファイルに追加し、指定した場所にライブラリをダウンロードします</target>
         </trans-unit>
         <trans-unit id="InstallCommandExamples" translate="yes" xml:space="preserve">
-          <source>    libman install jquery@3.2.1 
-    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
+          <source>    libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</source>
-          <target state="translated">libman install jquery@3.2.1 
-    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
+          <target state="translated">libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</target>
         </trans-unit>
         <trans-unit id="InstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
@@ -61,7 +61,8 @@
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="translated">CDNJS ライブラリには、"&lt;libraryName&gt;@&lt;libraryVersion&gt;" という形式のライブラリ ID があります。CDNJS ライブラリについてライブラリ ID でバージョンを指定していない場合は、利用可能な最新のバージョンが使用されます。</target>
+          <target state="translated">CDNJS ライブラリには、次の形式のライブラリ ID があります: “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
+    CDNJS ライブラリでは、ライブラリ ID でバージョンが指定されていない場合、使用可能な最新のバージョンが使用されます。</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
@@ -105,7 +106,7 @@
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</source>
-          <target state="translated">指定したライブラリのすべてのファイルを、指定した宛先から削除した後、指定したライブラリ定義を libman.json から削除します</target>
+          <target state="translated">指定したターゲットから指定したライブラリのすべてのファイルを削除し、libman.json から指定したライブラリの定義を削除します</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
@@ -124,7 +125,8 @@
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="translated">CDNJS ライブラリのライブラリ ID の形式は “&lt;libraryName&gt;@&lt;libraryVersion&gt;”です ライブラリ ID にバージョンが指定されていない場合、このコマンドは、指定された libraryId に一致する libraryName を持つすべてのライブラリに対して実行されます</target>
+          <target state="translated">CDNJS ライブラリには、次の形式のライブラリ ID があります: “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
+    ライブラリ ID にバージョンが指定されていない場合、このコマンドは、所定の libraryId に一致する libraryName を持つすべてのライブラリに作用します。</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -223,11 +225,11 @@
           <target state="translated">指定したライブラリを更新します</target>
         </trans-unit>
         <trans-unit id="UpdateCommandExamples" translate="yes" xml:space="preserve">
-          <source>    libman update jquery 
+          <source>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre 
+    libman update jquery -pre
 </source>
-          <target state="translated">libman update jquery 
+          <target state="translated">libman update jquery
     libman update jquery --to 3.3.1
     libman update jquery -pre</target>
         </trans-unit>
@@ -372,6 +374,18 @@ Please specify a different destination.</source>
         <trans-unit id="InitFailedUnknownProvider" translate="yes" xml:space="preserve">
           <source>Failed to initialize libman.json. [{0}]: {1}</source>
           <target state="translated">Libman.json を初期化できませんでした。[{0}]: {1}</target>
+        </trans-unit>
+        <trans-unit id="NonInteractiveConsoleMessage" translate="yes" xml:space="preserve">
+          <source>Cannot prompt for user input in this console.</source>
+          <target state="translated">このコンソールでユーザーの入力を要求することはできません。</target>
+        </trans-unit>
+        <trans-unit id="SpecifyDisabmiguatedLibrary" translate="yes" xml:space="preserve">
+          <source>Please specify the complete library id and the also the provider using '--provider' option.</source>
+          <target state="translated">完全なライブラリ ID と、'--provider' オプションを使用してプロバイダーを指定してください。</target>
+        </trans-unit>
+        <trans-unit id="SpecifyFieldUsingOption" translate="yes" xml:space="preserve">
+          <source>Please specify '{0}' using the '--{1}' option.</source>
+          <target state="translated">'--{1}' オプションを使って '{0}' を指定してください。</target>
         </trans-unit>
       </group>
     </body>

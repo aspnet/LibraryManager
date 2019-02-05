@@ -46,7 +46,9 @@
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>NuGet 패키지가 설치되어 MSBuild 프로세스가 확대되지만, 프로젝트에 파일이 추가되지 않습니다.
+
 이 작업은 인터넷 연결이 필요합니다.
+
 계속하시겠습니까?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
@@ -105,27 +107,27 @@
     <value>파일 수:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>라이브러리:</value>
+    <value>라이브러리(_L):</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>공급자: </value>
+    <value>공급자(_P):</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>대상 위치:</value>
+    <value>대상 위치(_T):</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>특정 파일 선택:</value>
+    <value>특정 파일 선택(_S):</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>모든 라이브러리 파일 포함</value>
+    <value>모든 라이브러리 파일 포함(_A)</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>파일을 선택하지 않았습니다.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>취소</value>
+    <value>취소(_C)</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>설치</value>
+    <value>설치(_I)</value>
   </data>
 </root>
