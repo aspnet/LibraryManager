@@ -12,4 +12,271 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CacheCommandDesc" xml:space="preserve">
+    <value>Libman önbellek içeriklerini listeleyin veya temizleyin</value>
+  </data>
+  <data name="CleanCommandDesc" xml:space="preserve">
+    <value>Projedeki libman.json projesi içinde tanımlanan tüm kütüphane dosyaları siler</value>
+  </data>
+  <data name="CleanCommandRemarks" xml:space="preserve">
+    <value>Bu işlemden sonra boş olan klasörleri siler.</value>
+  </data>
+  <data name="DefaultDestinationOptionDesc" xml:space="preserve">
+    <value>Geçerli dizine göre, belirli bir kitaplık için hedef tanımlanmadığında kitaplık dosyalarının yükleneceği yol</value>
+  </data>
+  <data name="DefaultProviderOptionDesc" xml:space="preserve">
+    <value>Belirli bir kitaplık için herhangi bir sağlayıcı belirlenmediğinde kullanılacak sağlayıcı. (örneğin. “cdnjs”, “filesystem”)</value>
+  </data>
+  <data name="DestinationOptionDesc" xml:space="preserve">
+    <value>Kitaplığın yükleneceği konum (belirtilmezse, varsayılan hedef konumu kullanılır)</value>
+  </data>
+  <data name="ExamplesHeader" xml:space="preserve">
+    <value>Örnekler:</value>
+  </data>
+  <data name="FilesOptionDesc" xml:space="preserve">
+    <value>Belirtilen kitaplıktaki yüklenecek dosyalar (belirtilmemişse kitaplıktaki tüm dosyalar yüklenir)</value>
+  </data>
+  <data name="InitCommandDesc" xml:space="preserve">
+    <value>Yeni bir libman.json oluşturun</value>
+  </data>
+  <data name="InstallCommandDesc" xml:space="preserve">
+    <value>LibMan.json dosyasına bir kitaplık tanımı ekleyin ve kitaplığı belirtilen konuma indirin</value>
+  </data>
+  <data name="InstallCommandExamples" xml:space="preserve">
+    <value>libman yükleme jquery@3.2.1
+    libman yükleme jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
+    libman yükleme myCalendar --provider filesystem --files calendar.js --files calendar.css</value>
+  </data>
+  <data name="InstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>Yüklenecek kitaplık</value>
+  </data>
+  <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>CDNJS kitaplıklarının, “&lt;kitaplıkAdı&gt;@&lt;kitaplıkSürümü&gt;” biçiminde bir kitaplık kimliği olur.
+    CDNJS kitaplıklarında, kitaplık kimliğinde sürüm belirtilmediğinde mümkün olan en yüksek sürüm kullanılır.</value>
+  </data>
+  <data name="InstallCommandRemarks" xml:space="preserve">
+    <value>Bir libman.json yoksa bir tane başlatır Varsayılan sağlayıcı yoksa sağlayıcı seçeneği gereklidir Varsayılan hedef yoksa hedef seçeneği gereklidir Belirtilen dosya yoksa kitaplığın tamamı dahil edilir</value>
+  </data>
+  <data name="InvalidArgumentsMessage" xml:space="preserve">
+    <value>Komut için geçersiz bağımsız değişkenler: {0}</value>
+  </data>
+  <data name="LibmanCommandDesc" xml:space="preserve">
+    <value>Kütüphane Yöneticisi</value>
+  </data>
+  <data name="ProviderOptionDesc" xml:space="preserve">
+    <value>Kullanılacak sağlayıcı (belirtilmezse varsayılan sağlayıcı kullanılır)</value>
+  </data>
+  <data name="ProviderSpecificLogicHeader" xml:space="preserve">
+    <value>Sağlayıcıya özel mantık:</value>
+  </data>
+  <data name="RemarksHeader" xml:space="preserve">
+    <value>Açıklamalar:</value>
+  </data>
+  <data name="RestoreCommandDesc" xml:space="preserve">
+    <value>Sağlayıcıdan tüm dosyaları indirir ve belirtilen hedefe kaydeder</value>
+  </data>
+  <data name="RestoreCommandRemarks" xml:space="preserve">
+    <value>Geçerli klasörde libman.json olmadığında gösterilen hata Kitaplık bir sağlayıcı belirtiyorsa, bu varsayılan defaultProvider değerini geçersiz kılar Kitaplık bir hedef belirtiyorsa, bu defaultDestination değerini geçersiz kılar</value>
+  </data>
+  <data name="UnInstallCommandDesc" xml:space="preserve">
+    <value>Belirtilen kitaplığa ilişkin tüm dosyaları belirtilen konumdan siler, ardından belirtilen kitaplık tanımını libman.json dosyasından kaldırır</value>
+  </data>
+  <data name="UnInstallCommandExamples" xml:space="preserve">
+    <value>libman uninstall jquery libman uninstall jquery@3.3.1</value>
+  </data>
+  <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>Kaldırılacak kitaplık</value>
+  </data>
+  <data name="UninstallCommandProviderOptionDesc" xml:space="preserve">
+    <value>Kaldırılacak kitaplığın sağlayıcısı</value>
+  </data>
+  <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>CDNJS kitaplıklarının, “&lt;kitaplıkAdı&gt;@&lt;kitaplıkSürümü&gt;” biçiminde bir kitaplık kimliği olur.
+    Kitaplık kimliğinde sürüm belirtilmediğinde bu komut, verilen kitaplıkKimliği ile eşleşen kitaplıkAdına sahip olan tüm kitaplıklarda işlem yapar</value>
+  </data>
+  <data name="UnInstallCommandRemarks" xml:space="preserve">
+    <value>Geçerli klasörde libman.json olmadığında gösterilen hata Belirtilen kitaplık mevcut olmadığında gösterilen hata Aynı kitaplıkKimliği ile birden fazla kitaplık varsa seçim yapmanız istenir.</value>
+  </data>
+  <data name="VerbosityOptionDesc" xml:space="preserve">
+    <value>Çıktı ayrıntılarını belirleyin (örneğin, "normal", "ayrıntılı", "sessiz")</value>
+  </data>
+  <data name="ProjectPathOptionDesc" xml:space="preserve">
+    <value>Proje yolu (geçerli dizin varsayılan kullanılır)</value>
+  </data>
+  <data name="DirectoryNotFoundMessage" xml:space="preserve">
+    <value>Dizin bulunamadı {0}</value>
+  </data>
+  <data name="FailedToRestoreLibraryMessage" xml:space="preserve">
+    <value>"{0}" geri yüklenemedi</value>
+  </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>{0} silindi</value>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>{0} silinemedi</value>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>{0} diske yazıldı</value>
+  </data>
+  <data name="InitFailedLibmanJsonFileExists" xml:space="preserve">
+    <value>Başlatılamadı: Zaten bir 'libman.json' var</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>Bazı dosyalar temizlenemedi.</value>
+  </data>
+  <data name="LibmanJsonNotFound" xml:space="preserve">
+    <value>Libman.JSON bulunamadı: {0}</value>
+  </data>
+  <data name="DestinationRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>Varsayılan hedef ayaranmadı. Lütfen '--destination' kullanarak bir hedef sağlayın</value>
+  </data>
+  <data name="LibraryIdRequiredForInstall" xml:space="preserve">
+    <value>Yüklemek için LibraryId gereklidir</value>
+  </data>
+  <data name="LibraryIdRequiredForUnInstall" xml:space="preserve">
+    <value>Kaldırmak için LibraryId gereklidir</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
+    <value>"{0}" kimliğine sahip birden fazla kitaplık bulundu</value>
+  </data>
+  <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>Varsayılan sağlayıcı ayarlanmamış. Lütfen '--provider' kullanarak bir sağlayıcı belirtin</value>
+  </data>
+  <data name="UseProviderToDisambiguateMessage" xml:space="preserve">
+    <value>Projedeki farklı sağlayıcılara ait olup aynı adı taşıyan kitaplıkları netleştirmek için --provider kullanın</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstallForProvider" xml:space="preserve">
+    <value>"{1}" sağlayıcısı için "{0}" kimliğine sahip birden fazla kitaplık bulundu. Lütfen bunları libman.json dosyasından el ile kaldırın</value>
+  </data>
+  <data name="NoLibraryToUninstall" xml:space="preserve">
+    <value>"{0}" kitaplığı yüklü değil. Kaldırılacak bir şey yok</value>
+  </data>
+  <data name="CacheCleanCommandDesc" xml:space="preserve">
+    <value>Yerel makinenin LibMan önbelleğindeki tüm dosyaları silin.</value>
+  </data>
+  <data name="CacheListCommandDesc" xml:space="preserve">
+    <value>Yerel makinenin LibMan önbelleğinde depolanan tüm kitaplıkları listesini görüntüler.</value>
+  </data>
+  <data name="CacheCleanProviderArgumentDesc" xml:space="preserve">
+    <value>Önbellek dosyalarının temizlenmesi gereken sağlayıcı.</value>
+  </data>
+  <data name="UpdateCommandDesc" xml:space="preserve">
+    <value>Belirtilen kitaplığı güncelleştirir</value>
+  </data>
+  <data name="UpdateCommandExamples" xml:space="preserve">
+    <value>libman güncelleştirme jquery
+    libman güncelleştirme jquery --to 3.3.1
+    libman güncelleştirme jquery -pre</value>
+  </data>
+  <data name="UpdateCommandRemarks" xml:space="preserve">
+    <value>Geçerli klasörde libman.json olmadığında gösterilecek hata Belirtilen kitaplık mevcut olmadığında gösterilecek hata Aynı libraryId ile birden fazla kitaplık varsa seçim yapmanız istenir.</value>
+  </data>
+  <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
+    <value>Güncelleştirilecek kitaplığın adı (sürüm bilgisi olmadan).</value>
+  </data>
+  <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
+    <value>Belirtilmişse kitaplığın en son yayım öncesi sürümü indirilir (uygun olduğunda)</value>
+  </data>
+  <data name="UpdateCommandProviderOptionDesc" xml:space="preserve">
+    <value>Belirtilmişse, yalnızca belirtilen sağlayıcının kitaplıkları güncelleştirilir</value>
+  </data>
+  <data name="CacheCleanedMessage" xml:space="preserve">
+    <value>Önbellek temizlendi.</value>
+  </data>
+  <data name="CacheCleanFailed" xml:space="preserve">
+    <value>Önbellek temizlenemedi: {0}</value>
+  </data>
+  <data name="CacheContentMessage" xml:space="preserve">
+    <value>Önbellek içeriği:</value>
+  </data>
+  <data name="CacheEmptyMessage" xml:space="preserve">
+    <value>(boş)</value>
+  </data>
+  <data name="CacheForProviderCleanedMessage" xml:space="preserve">
+    <value>{0} önbellek temizlendi.</value>
+  </data>
+  <data name="CacheListFilesOptionDesc" xml:space="preserve">
+    <value>Her kitaplık için önbelleğe alınan dosyaları listeleyin</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUpdate" xml:space="preserve">
+    <value>"{0}" adında birden fazla kitaplık bulundu</value>
+  </data>
+  <data name="NoLibrariesToUpdate" xml:space="preserve">
+    <value>Güncelleştirilecek kitaplık yok. Kitaplık yüklemek için lütfen yükleme komutlarını kullanın</value>
+  </data>
+  <data name="NoLibraryFoundToUpdate" xml:space="preserve">
+    <value>Güncelleştirilmek üzere "{0}" adında bir kitaplık bulunamadı. Lütfen güncelleştirilmesi için sürüm bilgilerini içermeyen bir kitaplık adı belirtin.</value>
+  </data>
+  <data name="InstallLibraryFailed" xml:space="preserve">
+    <value>"{0}" kitaplığı yüklenemedi</value>
+  </data>
+  <data name="CacheListLibrariesOptionDesc" xml:space="preserve">
+    <value>Her sağlayıcı için önbelleğe alınan kütüphaneleri listeler.</value>
+  </data>
+  <data name="ProviderNotInstalled" xml:space="preserve">
+    <value>"{0}" sağlayıcısı yüklü değil</value>
+  </data>
+  <data name="SuggestedIdsMessage" xml:space="preserve">
+    <value>Benzer kitaplıklar:</value>
+  </data>
+  <data name="FixManifestFile" xml:space="preserve">
+    <value>Lütfen libman.json dosyasını düzeltin ve yeniden deneyin</value>
+  </data>
+  <data name="ChooseAnOption" xml:space="preserve">
+    <value>Bir seçenek belirleyin:</value>
+  </data>
+  <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
+    <value>"{0}" kitaplığı güncel durumda</value>
+  </data>
+  <data name="InvalidToVersion" xml:space="preserve">
+    <value>"{0}", --to-version için geçerli bir değer değil</value>
+  </data>
+  <data name="UpdateCommandToVersionOptionDesc" xml:space="preserve">
+    <value>Kitaplığın güncelleştirileceği sürüm (sağlayıcının tam libraryid bilgisi gerekir)</value>
+  </data>
+  <data name="InstalledLibrary" xml:space="preserve">
+    <value>"{0}" kitaplığı "{1}" üzerinde yüklendi</value>
+  </data>
+  <data name="UninstalledLibrary" xml:space="preserve">
+    <value>"{0}" kitaplığı kaldırıldı</value>
+  </data>
+  <data name="InvalidFilesForLibrary" xml:space="preserve">
+    <value>"{0}" kitaplığı şu dosyaları içermiyor: {1}</value>
+  </data>
+  <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
+    <value>"{0}" kitaplığı yüklenemiyor. "{1}", "{2}" üzerinde zaten yüklü durumda. Lütfen farklı bir hedef belirtin.</value>
+  </data>
+  <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
+    <value>Güncelleştirme için LibraryId gereklidir</value>
+  </data>
+  <data name="SpecifyDifferentDestination" xml:space="preserve">
+    <value>Lütfen farklı bir hedef belirtin.</value>
+  </data>
+  <data name="UninstallFailed" xml:space="preserve">
+    <value>"{0}" kaldırılamadı</value>
+  </data>
+  <data name="UpdateLibraryFailed" xml:space="preserve">
+    <value>"{0}", "{1}" sürümüne güncelleştirilemedi</value>
+  </data>
+  <data name="UpdateLibraryToLatestFailed" xml:space="preserve">
+    <value>"{0}" en son sürüme güncelleştirilemedi</value>
+  </data>
+  <data name="LibraryUpdated" xml:space="preserve">
+    <value>"{0}", "{1}" olarak güncelleştirildi</value>
+  </data>
+  <data name="UnableToFindLatestVersionForLibrary" xml:space="preserve">
+    <value>"{0}" için en son sürüm belirlenemedi</value>
+  </data>
+  <data name="InitFailedUnknownProvider" xml:space="preserve">
+    <value>Libman.JSON başlatılamadı. [{0}]: {1}</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>Bu konsolda kullanıcı girdisi istenemez.</value>
+  </data>
+  <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
+    <value>Lütfen kitaplık kimliğini eksiksiz olarak belirtin ve '--provider' seçeneğini kullanarak sağlayıcı bilgilerini verin.</value>
+  </data>
+  <data name="SpecifyFieldUsingOption" xml:space="preserve">
+    <value>Lütfen '--{1}' seçeneğini kullanarak '{0}' öğesini belirtin.</value>
+  </data>
 </root>

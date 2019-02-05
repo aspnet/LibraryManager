@@ -45,7 +45,11 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Будет установлен пакет NuGet, который дополнит процесс сборки MSBuild, но файлы в проект добавлены не будут. Для этого может потребоваться подключение к Интернету. Вы действительно хотите продолжить?</value>
+    <value>Будет установлен пакет NuGet, который дополнит процесс сборки MSBuild, но файлы в проект добавлены не будут.
+
+Для этого может потребоваться подключение к Интернету.
+
+Вы действительно хотите продолжить?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Введите текст для поиска&gt;</value>
@@ -55,10 +59,10 @@
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Выберите библиотеку, чтобы выбрать файлы для установки&gt;</value>
+    <value>&lt;Укажите библиотеку, чтобы выбрать файлы для установки&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Отключить клиентские библиотеки при сборке</value>
+    <value>Отклю&amp;чить клиентские библиотеки при сборке</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
     <value>&amp;Включить восстановление клиентских библиотек при сборке...</value>
@@ -103,27 +107,27 @@
     <value>Файлы:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>Библиотека:</value>
+    <value>_Библиотека:</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>Поставщик: </value>
+    <value>_Поставщик:</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>Целевое расположение:</value>
+    <value>_Целевое расположение:</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>Выберите конкретные файлы:</value>
+    <value>Выберите _указанные файлы:</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>Включить все файлы библиотек</value>
+    <value>Включить _все файлы библиотеки</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Файлы не выбраны</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Отмена</value>
+    <value>_Отмена</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>Установить</value>
+    <value>_Установить</value>
   </data>
 </root>

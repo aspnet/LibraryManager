@@ -47,11 +47,11 @@
           <target state="translated">Добавьте определение библиотеки в файл LibMan.json и загрузите библиотеку в указанное расположение</target>
         </trans-unit>
         <trans-unit id="InstallCommandExamples" translate="yes" xml:space="preserve">
-          <source>    libman install jquery@3.2.1 
-    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
+          <source>    libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</source>
-          <target state="translated">libman install jquery@3.2.1 
-    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
+          <target state="translated">libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</target>
         </trans-unit>
         <trans-unit id="InstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
@@ -61,8 +61,8 @@
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="translated">Формат идентификатора для библиотек CDNJS таков: "&lt;имя библиотеки&gt;@&lt;версия библиотеки&gt;"
-    Если в идентификаторе библиотеки CDNJS не указана версия, будет использована последняя доступная версия.</target>
+          <target state="translated">Для библиотек CDNJS используется следующий формат идентификатора библиотеки: "<it id="1" pos="open">&lt;имя библиотеки&gt;</it>@<it id="2" pos="open">&lt;версия библиотеки&gt;</it>"
+    Если в идентификаторе библиотеки CDNJS не указана версия, используется максимальная доступная версия.</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
@@ -108,7 +108,7 @@
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</source>
-          <target state="translated">Удаляет все файлы для указанной библиотеки из указанного места назначения, затем удаляет определение библиотеки из файла libman.json</target>
+          <target state="translated">Удаляет все файлы для указанной библиотеки из указанного места назначения, а затем удаляет определение указанной библиотеки из файла libman.json</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
@@ -127,7 +127,8 @@
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="translated">Формат идентификатора для библиотек CDNJS таков: "&lt;имя библиотеки&gt;@&lt;версия библиотеки&gt;" Если в идентификаторе библиотеки не указана версия, эта команда будет выполнена для всех библиотек, идентификаторы которых соответствуют указанному.</target>
+          <target state="translated">Для библиотек CDNJS используется следующий формат идентификатора библиотеки: "<it id="1" pos="open">&lt;имя библиотеки&gt;</it>@<it id="2" pos="open">&lt;версия библиотеки&gt;</it>"
+    Если в идентификаторе библиотеки не указана версия, эта команда будет применена ко всем библиотекам, название которых соответствует указанному идентификатору библиотеки</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -226,11 +227,11 @@
           <target state="translated">Обновляет указанную библиотеку</target>
         </trans-unit>
         <trans-unit id="UpdateCommandExamples" translate="yes" xml:space="preserve">
-          <source>    libman update jquery 
+          <source>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre 
+    libman update jquery -pre
 </source>
-          <target state="translated">libman update jquery 
+          <target state="translated">libman update jquery
     libman update jquery --to 3.3.1
     libman update jquery -pre</target>
         </trans-unit>
@@ -377,6 +378,18 @@ Please specify a different destination.</source>
         <trans-unit id="InitFailedUnknownProvider" translate="yes" xml:space="preserve">
           <source>Failed to initialize libman.json. [{0}]: {1}</source>
           <target state="translated">Не удалось инициализировать файл libman.json. [{0}]: {1}</target>
+        </trans-unit>
+        <trans-unit id="NonInteractiveConsoleMessage" translate="yes" xml:space="preserve">
+          <source>Cannot prompt for user input in this console.</source>
+          <target state="translated">Невозможно запросить входные данные у пользователя в этой консоли.</target>
+        </trans-unit>
+        <trans-unit id="SpecifyDisabmiguatedLibrary" translate="yes" xml:space="preserve">
+          <source>Please specify the complete library id and the also the provider using '--provider' option.</source>
+          <target state="translated">Укажите полный идентификатор библиотеки, а также укажите поставщика с помощью параметра "--provider".</target>
+        </trans-unit>
+        <trans-unit id="SpecifyFieldUsingOption" translate="yes" xml:space="preserve">
+          <source>Please specify '{0}' using the '--{1}' option.</source>
+          <target state="translated">Укажите "{0}" с помощью параметра "--{1}".</target>
         </trans-unit>
       </group>
     </body>

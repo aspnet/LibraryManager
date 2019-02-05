@@ -167,7 +167,7 @@
         </trans-unit>
         <trans-unit id="CdnjsLibraryIdHintText" translate="yes" xml:space="preserve">
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
-          <target state="translated">Przykład: &lt;library&gt;@&lt;version&gt;</target>
+          <target state="translated">Przykład: <it id="1" pos="open">&lt;biblioteka&gt;</it>@<it id="2" pos="open">&lt;wersja&gt;</it></target>
         </trans-unit>
         <trans-unit id="FileSystemLibraryIdHintText" translate="yes" xml:space="preserve">
           <source>Must be a valid filesystem path.</source>
@@ -175,7 +175,7 @@
         </trans-unit>
         <trans-unit id="UnpkgProviderHintText" translate="yes" xml:space="preserve">
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
-          <target state="translated">Przykład: &lt;library&gt;@&lt;version&gt;</target>
+          <target state="translated">Przykład: <it id="1" pos="open">&lt;biblioteka&gt;</it>@<it id="2" pos="open">&lt;wersja&gt;</it></target>
         </trans-unit>
         <trans-unit id="LibraryDetail_Unavailable" translate="yes" xml:space="preserve">
           <source>Unavailable</source>
@@ -208,6 +208,10 @@
         <trans-unit id="Upgrade_OperationCompleted" translate="yes" xml:space="preserve">
           <source>Upgrade operation completed</source>
           <target state="translated">Operacja uaktualniania została zakończona</target>
+        </trans-unit>
+        <trans-unit id="JsDelivrProviderHintText" translate="yes" xml:space="preserve">
+          <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
+          <target state="translated">Przykład: <it id="1" pos="open">&lt;biblioteka&gt;</it>@<it id="2" pos="open">&lt;wersja&gt;</it></target>
         </trans-unit>
       </group>
     </body>

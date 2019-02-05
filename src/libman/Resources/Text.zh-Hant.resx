@@ -12,4 +12,282 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CacheCommandDesc" xml:space="preserve">
+    <value>列出或清除 libman 快取內容</value>
+  </data>
+  <data name="CleanCommandDesc" xml:space="preserve">
+    <value>從專案刪除 libman.json 中定義的所有程式庫檔案</value>
+  </data>
+  <data name="CleanCommandRemarks" xml:space="preserve">
+    <value>刪除在這項作業之後變為空白的所有資料夾。</value>
+  </data>
+  <data name="DefaultDestinationOptionDesc" xml:space="preserve">
+    <value>相對於目前目錄的路徑，如果未為指定的程式庫定義目的地，就會在其中安裝程式庫檔案。</value>
+  </data>
+  <data name="DefaultProviderOptionDesc" xml:space="preserve">
+    <value>在未為指定的程式庫定義任何提供者時，要使用的提供者 (例如 “cdnjs”、“filesystem”)</value>
+  </data>
+  <data name="DestinationOptionDesc" xml:space="preserve">
+    <value>要安裝程式庫的位置 (若未指定，會使用預設目的地位置)</value>
+  </data>
+  <data name="ExamplesHeader" xml:space="preserve">
+    <value>範例:</value>
+  </data>
+  <data name="FilesOptionDesc" xml:space="preserve">
+    <value>指定的程式庫中要安裝的檔案 (若未指定，會安裝程式庫的所有檔案)</value>
+  </data>
+  <data name="InitCommandDesc" xml:space="preserve">
+    <value>建立新的 libman.json</value>
+  </data>
+  <data name="InstallCommandDesc" xml:space="preserve">
+    <value>將程式庫定義新增到 LibMan.json 檔案，並將程式庫下載到指定的位置</value>
+  </data>
+  <data name="InstallCommandExamples" xml:space="preserve">
+    <value>libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
+    libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</value>
+  </data>
+  <data name="InstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>要安裝的程式庫</value>
+  </data>
+  <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>CDNJS 程式庫的程式庫識別碼格式為 “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+對於 CDNJS 程式庫，若未在程式庫識別碼中指定任何版本，就會使用可用的最高版本。</value>
+  </data>
+  <data name="InstallCommandRemarks" xml:space="preserve">
+    <value>如果沒有 libman.json，就加以初始化
+如果沒有預設提供者，就需要 --provider 選項
+如果沒有預設目的地，就需要 --destination 選項
+如果未指定檔案，會包含整個程式庫</value>
+  </data>
+  <data name="InvalidArgumentsMessage" xml:space="preserve">
+    <value>命令的引數無效: {0}</value>
+  </data>
+  <data name="LibmanCommandDesc" xml:space="preserve">
+    <value>程式庫管理員</value>
+  </data>
+  <data name="ProviderOptionDesc" xml:space="preserve">
+    <value>要使用的提供者 (若未指定，會使用預設提供者)</value>
+  </data>
+  <data name="ProviderSpecificLogicHeader" xml:space="preserve">
+    <value>提供者專屬的邏輯:</value>
+  </data>
+  <data name="RemarksHeader" xml:space="preserve">
+    <value>備註:</value>
+  </data>
+  <data name="RestoreCommandDesc" xml:space="preserve">
+    <value>從提供者下載所有檔案，並將其儲存到指定的目的地</value>
+  </data>
+  <data name="RestoreCommandRemarks" xml:space="preserve">
+    <value>若目前的資料夾中沒有 libman.json，會發生錯誤
+若程式庫指定了提供者，就會覆寫 defaultProvider
+若程式庫指定了目的地，就會覆寫 defaultDestination</value>
+  </data>
+  <data name="UnInstallCommandDesc" xml:space="preserve">
+    <value>從指定的目的地刪除指定程式庫的所有檔案，然後從 libman.json 移除指定的程式庫定義</value>
+  </data>
+  <data name="UnInstallCommandExamples" xml:space="preserve">
+    <value>libman uninstall jquery libman uninstall jquery@3.3.1</value>
+  </data>
+  <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>要解除安裝的程式庫</value>
+  </data>
+  <data name="UninstallCommandProviderOptionDesc" xml:space="preserve">
+    <value>要解除安裝的程式庫提供者</value>
+  </data>
+  <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>CDNJS 程式庫的程式庫識別碼格式為 “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+若未在程式庫識別碼中指定任何版本，就會對 libraryName 符合指定 libraryId 的任何程式庫執行這項命令</value>
+  </data>
+  <data name="UnInstallCommandRemarks" xml:space="preserve">
+    <value>若目前的資料夾沒有 libman.json，會發生錯誤
+若指定的程式庫不存在，會發生錯誤
+若有多個 libraryId 相同的程式庫，系統會提示您選擇。</value>
+  </data>
+  <data name="VerbosityOptionDesc" xml:space="preserve">
+    <value>設定輸出的詳細資訊層級 (例如「正常」、「詳細」、「安靜」)</value>
+  </data>
+  <data name="ProjectPathOptionDesc" xml:space="preserve">
+    <value>專案的路徑 (預設會使用目前目錄)</value>
+  </data>
+  <data name="DirectoryNotFoundMessage" xml:space="preserve">
+    <value>找不到目錄 {0}</value>
+  </data>
+  <data name="FailedToRestoreLibraryMessage" xml:space="preserve">
+    <value>無法還原 "{0}"</value>
+  </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>{0} 已刪除</value>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>無法刪除 {0}</value>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>{0} 已寫入磁碟</value>
+  </data>
+  <data name="InitFailedLibmanJsonFileExists" xml:space="preserve">
+    <value>無法初始化: 'libman.json' 已存在</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>無法清除某些檔案。</value>
+  </data>
+  <data name="LibmanJsonNotFound" xml:space="preserve">
+    <value>找不到 libman.json: {0}</value>
+  </data>
+  <data name="DestinationRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>未設定預設目的地。請使用 '--destination' 提供目的地</value>
+  </data>
+  <data name="LibraryIdRequiredForInstall" xml:space="preserve">
+    <value>必須安裝 LibraryId</value>
+  </data>
+  <data name="LibraryIdRequiredForUnInstall" xml:space="preserve">
+    <value>必須將 LibraryId 解除安裝</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
+    <value>找到多個識別碼為 "{0}" 的程式庫</value>
+  </data>
+  <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>未設定預設提供者。請使用 '--provider' 提供提供者</value>
+  </data>
+  <data name="UseProviderToDisambiguateMessage" xml:space="preserve">
+    <value>使用 --provider 來區分專案中不同提供者之間的同名程式庫</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstallForProvider" xml:space="preserve">
+    <value>找到提供者 "{1}" 有多個識別碼為 "{0}" 的程式庫。請從 libman.json 檔案手動予以移除</value>
+  </data>
+  <data name="NoLibraryToUninstall" xml:space="preserve">
+    <value>程式庫 "{0}" 未安裝。未將任何項目解除安裝</value>
+  </data>
+  <data name="CacheCleanCommandDesc" xml:space="preserve">
+    <value>從本機電腦的 LibMan 快取中刪除所有檔案。</value>
+  </data>
+  <data name="CacheListCommandDesc" xml:space="preserve">
+    <value>顯示所有儲存於本機電腦 LibMan 快取中的程式庫清單。</value>
+  </data>
+  <data name="CacheCleanProviderArgumentDesc" xml:space="preserve">
+    <value>要為其清除快取檔案的提供者。</value>
+  </data>
+  <data name="UpdateCommandDesc" xml:space="preserve">
+    <value>更新指定的程式庫</value>
+  </data>
+  <data name="UpdateCommandExamples" xml:space="preserve">
+    <value>libman update jquery
+    libman update jquery --to 3.3.1
+    libman update jquery -pre</value>
+  </data>
+  <data name="UpdateCommandRemarks" xml:space="preserve">
+    <value>若目前的資料庫沒有 libman.json，會發生錯誤
+若指定的程式庫不存在，會發生錯誤
+若有多個 libraryId 相同的程式庫，系統會提示您選擇。</value>
+  </data>
+  <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
+    <value>要更新的程式庫名稱 (不含版本)。</value>
+  </data>
+  <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
+    <value>如有指定，就會下載程式庫的最新發行版本 (如果適用)</value>
+  </data>
+  <data name="UpdateCommandProviderOptionDesc" xml:space="preserve">
+    <value>如有指定，就只會更新來自指定提供者的程式庫</value>
+  </data>
+  <data name="CacheCleanedMessage" xml:space="preserve">
+    <value>快取已清除。</value>
+  </data>
+  <data name="CacheCleanFailed" xml:space="preserve">
+    <value>無法清除快取: {0}</value>
+  </data>
+  <data name="CacheContentMessage" xml:space="preserve">
+    <value>快取內容:</value>
+  </data>
+  <data name="CacheEmptyMessage" xml:space="preserve">
+    <value>(空白)</value>
+  </data>
+  <data name="CacheForProviderCleanedMessage" xml:space="preserve">
+    <value>已清除 {0} 快取。</value>
+  </data>
+  <data name="CacheListFilesOptionDesc" xml:space="preserve">
+    <value>列出為各個程式庫快取的檔案</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUpdate" xml:space="preserve">
+    <value>找到多個名稱為 "{0}" 的程式庫</value>
+  </data>
+  <data name="NoLibrariesToUpdate" xml:space="preserve">
+    <value>沒有任何可更新的程式庫。請使用 install 命令安裝程式庫</value>
+  </data>
+  <data name="NoLibraryFoundToUpdate" xml:space="preserve">
+    <value>找不到任何名稱為 "{0}" 的程式庫可更新。
+請指定沒有版本資訊的程式庫名稱以更新。</value>
+  </data>
+  <data name="InstallLibraryFailed" xml:space="preserve">
+    <value>無法安裝程式庫 "{0}"</value>
+  </data>
+  <data name="CacheListLibrariesOptionDesc" xml:space="preserve">
+    <value>列出為各個提供者快取的程式庫。</value>
+  </data>
+  <data name="ProviderNotInstalled" xml:space="preserve">
+    <value>未安裝提供者 "{0}"</value>
+  </data>
+  <data name="SuggestedIdsMessage" xml:space="preserve">
+    <value>相似的程式庫:</value>
+  </data>
+  <data name="FixManifestFile" xml:space="preserve">
+    <value>請修正 libman.json 檔案，然後再試一次</value>
+  </data>
+  <data name="ChooseAnOption" xml:space="preserve">
+    <value>請選取選項:</value>
+  </data>
+  <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
+    <value>程式庫 "{0}" 已在最新狀態</value>
+  </data>
+  <data name="InvalidToVersion" xml:space="preserve">
+    <value>"{0}" 對 --to-version 而言不是有效的值</value>
+  </data>
+  <data name="UpdateCommandToVersionOptionDesc" xml:space="preserve">
+    <value>程式庫要更新的目標版本 (需要提供者的完整 libraryid)</value>
+  </data>
+  <data name="InstalledLibrary" xml:space="preserve">
+    <value>已將程式庫 "{0}" 安裝到 "{1}"</value>
+  </data>
+  <data name="UninstalledLibrary" xml:space="preserve">
+    <value>已將程式庫 "{0}" 解除安裝</value>
+  </data>
+  <data name="InvalidFilesForLibrary" xml:space="preserve">
+    <value>程式庫 "{0}" 未包含下列檔案: {1}</value>
+  </data>
+  <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
+    <value>無法安裝程式庫 "{0}"。"{1}" 已安裝於 "{2}"。
+請指定其他目的地。</value>
+  </data>
+  <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
+    <value>必須更新 LibraryId</value>
+  </data>
+  <data name="SpecifyDifferentDestination" xml:space="preserve">
+    <value>請指定其他目的地。</value>
+  </data>
+  <data name="UninstallFailed" xml:space="preserve">
+    <value>無法將 "{0}" 解除安裝</value>
+  </data>
+  <data name="UpdateLibraryFailed" xml:space="preserve">
+    <value>無法將 "{0}" 更新為 "{1}"</value>
+  </data>
+  <data name="UpdateLibraryToLatestFailed" xml:space="preserve">
+    <value>無法將 "{0}" 更新為最新</value>
+  </data>
+  <data name="LibraryUpdated" xml:space="preserve">
+    <value>已將 "{0}" 更新為 "{1}"</value>
+  </data>
+  <data name="UnableToFindLatestVersionForLibrary" xml:space="preserve">
+    <value>無法判斷 "{0}" 的最新版本</value>
+  </data>
+  <data name="InitFailedUnknownProvider" xml:space="preserve">
+    <value>無法將 libman.json 初始化。[{0}]: {1}</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>無法在此主控台提示使用者輸入。</value>
+  </data>
+  <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
+    <value>請使用 '--provider' 選項指定完整的程式庫識別碼及提供者。</value>
+  </data>
+  <data name="SpecifyFieldUsingOption" xml:space="preserve">
+    <value>請使用 '--{1}' 選項指定 '{0}'。</value>
+  </data>
 </root>

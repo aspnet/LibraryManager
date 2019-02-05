@@ -45,7 +45,11 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>MSBuild işlemini artırmak için bir NUGet paketi yüklenecek ancak projeye dosya eklenmeyecek. Bu işlem İnternet bağlantısı gerektirebilir. Devam etmek istiyor musunuz?</value>
+    <value>MSBuild işlemini artırmak için bir NUGet paketi yüklenecek ancak projeye dosya eklenmeyecek.
+
+Bu işlem İnternet bağlantısı gerektirebilir.
+
+Devam etmek istiyor musunuz?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Aramak için yazın&gt;</value>
@@ -55,13 +59,13 @@
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Yüklenecek dosyaları belirlemek için bir kitaplık seçin&gt;</value>
+    <value>&lt;Yüklenecek dosyaları belirlemek için bir kitaplık seçinChoose a library to select files to install&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Derleme Sırasında İstemci Tarafı Kitaplıkları Devr&amp;e Dışı Bırak</value>
+    <value>Derlemede İstemci Tarafı Kitaplıkları Devre Dışı Bıra&amp;k</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>Derleme Sırasında İstemci Tarafı Kitaplıkların Geri Yüklenmesini &amp;Etkinleştir...</value>
+    <value>&amp;Derlemede İstemci Tarafı Kitaplıkları Geri Yüklemeyi Etkinleştir...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>MSBuild hedefini içeren NuGet paketi yükleniyor...</value>
@@ -103,27 +107,27 @@
     <value>Dosyalar:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>Kitaplık:</value>
+    <value>_Kitaplık:</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>Sağlayıcı: </value>
+    <value>_Sağlayıcı:</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>Hedef konumu:</value>
+    <value>_Hedef Konum:</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>Belirli dosyaları seçin:</value>
+    <value>Belirli _dosyaları seçin:</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>Tüm kütüphane dosyalarını ekle</value>
+    <value>_Tüm kitaplık dosyalarını dahil et</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Dosya seçilmedi</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>İptal</value>
+    <value>_İptal</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>Yükle</value>
+    <value>_Yükle</value>
   </data>
 </root>

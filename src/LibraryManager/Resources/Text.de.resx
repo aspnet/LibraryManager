@@ -134,13 +134,13 @@
     <value>Für das Projekt "{0}" werden Bibliotheken wiederhergestellt.</value>
   </data>
   <data name="CdnjsLibraryIdHintText" xml:space="preserve">
-    <value>Beispiel: &lt;bibliothek&gt;@&lt;version&gt;</value>
+    <value>Beispiel: &lt;Bibliothek&gt;@&lt;Version&gt;</value>
   </data>
   <data name="FileSystemLibraryIdHintText" xml:space="preserve">
     <value>Ein gültiger Dateisystempfad ist erforderlich.</value>
   </data>
   <data name="UnpkgProviderHintText" xml:space="preserve">
-    <value>Beispiel: &lt;bibliothek&gt;@&lt;version&gt;</value>
+    <value>Beispiel: &lt;Bibliothek&gt;@&lt;Version&gt;</value>
   </data>
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>Nicht verfügbar.</value>
@@ -165,5 +165,8 @@
   </data>
   <data name="Upgrade_OperationCompleted" xml:space="preserve">
     <value>Upgradevorgang abgeschlossen</value>
+  </data>
+  <data name="JsDelivrProviderHintText" xml:space="preserve">
+    <value>Beispiel: &lt;Bibliothek&gt;@&lt;Version&gt;</value>
   </data>
 </root>

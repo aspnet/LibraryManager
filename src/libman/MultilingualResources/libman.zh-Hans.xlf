@@ -47,10 +47,12 @@
           <target state="translated">向 LibMan.json 文件添加库定义, 并将库下载到指定位置</target>
         </trans-unit>
         <trans-unit id="InstallCommandExamples" translate="yes" xml:space="preserve">
-          <source>    libman install jquery@3.2.1 
-    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js 
+          <source>    libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</source>
-          <target state="translated">libman install jquery@3.2.1 libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</target>
+          <target state="translated">libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
+    libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</target>
         </trans-unit>
         <trans-unit id="InstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
           <source>Library to install</source>
@@ -59,7 +61,7 @@
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="translated">CDNJS 库的库 ID 格式为“&lt;libraryName&gt;@&lt;libraryVersion&gt;” 对于 CDNJS 库，如果库 ID 中未指定版本，则使用可用的最高版本。</target>
+          <target state="translated">CDNJS 库的库 ID 格式为“<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>” 对于 CDNJS 库，如果库 ID 中未指定版本，则使用可用的最高版本。</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
@@ -121,7 +123,7 @@
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="translated">CDNJS 库的库 ID 格式为“&lt;libraryName&gt;@&lt;libraryVersion&gt;”
+          <target state="translated">CDNJS 库的库 ID 格式为“<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
    如果库 ID 中未指定版本，此命令将应用于 libraryName 与给定 libraryId 匹配的任何库</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
@@ -221,11 +223,13 @@
           <target state="translated">更新指定的库</target>
         </trans-unit>
         <trans-unit id="UpdateCommandExamples" translate="yes" xml:space="preserve">
-          <source>    libman update jquery 
+          <source>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre 
+    libman update jquery -pre
 </source>
-          <target state="translated">libman update jquery libman update jquery --to 3.3.1 libman update jquery -pre</target>
+          <target state="translated">libman update jquery
+    libman update jquery --to 3.3.1
+    libman update jquery -pre</target>
         </trans-unit>
         <trans-unit id="UpdateCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -368,6 +372,18 @@ Please specify a different destination.</source>
         <trans-unit id="InitFailedUnknownProvider" translate="yes" xml:space="preserve">
           <source>Failed to initialize libman.json. [{0}]: {1}</source>
           <target state="translated">无法初始化 libman. json。[{0}]: {1}</target>
+        </trans-unit>
+        <trans-unit id="NonInteractiveConsoleMessage" translate="yes" xml:space="preserve">
+          <source>Cannot prompt for user input in this console.</source>
+          <target state="translated">无法在此控制台中提示用户输入。</target>
+        </trans-unit>
+        <trans-unit id="SpecifyDisabmiguatedLibrary" translate="yes" xml:space="preserve">
+          <source>Please specify the complete library id and the also the provider using '--provider' option.</source>
+          <target state="translated">请指定完整的库 ID，并使用 “--provider” 选项指定提供程序。</target>
+        </trans-unit>
+        <trans-unit id="SpecifyFieldUsingOption" translate="yes" xml:space="preserve">
+          <source>Please specify '{0}' using the '--{1}' option.</source>
+          <target state="translated">请使用 “--{1}” 选项指定“{0}”。</target>
         </trans-unit>
       </group>
     </body>

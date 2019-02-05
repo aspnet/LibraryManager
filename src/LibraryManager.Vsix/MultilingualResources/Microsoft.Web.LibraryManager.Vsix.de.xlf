@@ -60,7 +60,7 @@ Möchten Sie fortfahren?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated">&lt;Zur Suche Eingabe beginnen&gt;</target>
+          <target state="translated"><it id="1" pos="open">&lt;Suchtext eingeben&gt;</it></target>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
@@ -69,15 +69,15 @@ Möchten Sie fortfahren?</target>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated">&lt;Zur Auswahl der Dateien für die Installation Bibliothek auswählen&gt;</target>
+          <target state="translated"><it id="1" pos="open">&lt;Wählen Sie eine Bibliothek, um Dateien auszuwählen, die installiert werden sollen&gt;</it></target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">Clientseitige Bibliotheken bei Builderstellung &amp;deaktivieren</target>
+          <target state="translated">Clienseitige Bibliotheken im Build deaktiviere&amp;n</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">Wiederherstellung clientseitiger Bibliotheken bei Builderstellung &amp;aktivieren...</target>
+          <target state="translated">&amp;Wiederherstellen von clienseitigen Bibliotheken im Build aktivieren...</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
@@ -132,36 +132,36 @@ Möchten Sie fortfahren?</target>
           <target state="translated">Dateien:</target>
         </trans-unit>
         <trans-unit id="Library" translate="yes" xml:space="preserve">
-          <source>Library:</source>
-          <target state="translated">Bibliothek:</target>
+          <source>_Library:</source>
+          <target state="translated">_Bibliothek:</target>
         </trans-unit>
         <trans-unit id="Provider" translate="yes" xml:space="preserve">
-          <source>Provider: </source>
-          <target state="translated">Anbieter: </target>
+          <source>_Provider: </source>
+          <target state="translated">_Anbieter:</target>
         </trans-unit>
         <trans-unit id="TargetLocation" translate="yes" xml:space="preserve">
-          <source>Target Location:</source>
-          <target state="translated">Zielort:</target>
+          <source>_Target Location:</source>
+          <target state="translated">_Zielspeicherort:</target>
         </trans-unit>
         <trans-unit id="ChooseSpecificFiles" translate="yes" xml:space="preserve">
-          <source>Choose specific files:</source>
-          <target state="translated">Bestimmte Dateien wählen:</target>
+          <source>Choose _specific files:</source>
+          <target state="translated">_Spezifische Dateien auswählen:</target>
         </trans-unit>
         <trans-unit id="IncludeAllLibraryFiles" translate="yes" xml:space="preserve">
-          <source>Include all library files</source>
-          <target state="translated">Alle Bibliotheksdateien einbeziehen</target>
+          <source>Include _all library files</source>
+          <target state="translated">_Alle Bibliotheksdateien einbeziehen</target>
         </trans-unit>
         <trans-unit id="NoFilesSelected" translate="yes" xml:space="preserve">
           <source>No files have been selected</source>
           <target state="translated">Es wurden keine Dateien ausgewählt.</target>
         </trans-unit>
         <trans-unit id="Cancel" translate="yes" xml:space="preserve">
-          <source>Cancel</source>
-          <target state="translated">Abbrechen</target>
+          <source>_Cancel</source>
+          <target state="translated">_Abbrechen</target>
         </trans-unit>
         <trans-unit id="Install" translate="yes" xml:space="preserve">
-          <source>Install</source>
-          <target state="translated">Installieren</target>
+          <source>_Install</source>
+          <target state="translated">_Installieren</target>
         </trans-unit>
       </group>
     </body>

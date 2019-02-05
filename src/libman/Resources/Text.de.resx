@@ -12,4 +12,271 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CacheCommandDesc" xml:space="preserve">
+    <value>Inhalte des libman-Caches auflisten oder bereinigen</value>
+  </data>
+  <data name="CleanCommandDesc" xml:space="preserve">
+    <value>Hiermit werden alle in der Datei "libman.json" definierten Bibliotheksdateien aus dem Projekt gelöscht.</value>
+  </data>
+  <data name="CleanCommandRemarks" xml:space="preserve">
+    <value>Hiermit werden alle Ordner gelöscht, die nach diesem Vorgang leer sind.</value>
+  </data>
+  <data name="DefaultDestinationOptionDesc" xml:space="preserve">
+    <value>Der Pfad (relativ zum aktuellen Verzeichnis), in dem Bibliotheksdateien installiert werden sollen, wenn für eine Bibliothek kein Ziel definiert ist.</value>
+  </data>
+  <data name="DefaultProviderOptionDesc" xml:space="preserve">
+    <value>Der zu verwendende Anbieter, wenn für eine Bibliothek kein Anbieter definiert wurde (z. B. "cdnjs", "filesystem")</value>
+  </data>
+  <data name="DestinationOptionDesc" xml:space="preserve">
+    <value>Speicherort zum Installieren der Bibliothek (sofern nicht angegeben, wird der Standardspeicherort verwendet)</value>
+  </data>
+  <data name="ExamplesHeader" xml:space="preserve">
+    <value>Beispiele:</value>
+  </data>
+  <data name="FilesOptionDesc" xml:space="preserve">
+    <value>Die Dateien aus der angegebenen Bibliothek, die installiert werden sollen (sofern nicht angegeben, werden alle Dateien aus der Bibliothek installiert)</value>
+  </data>
+  <data name="InitCommandDesc" xml:space="preserve">
+    <value>Neue Datei "libman.json" erstellen</value>
+  </data>
+  <data name="InstallCommandDesc" xml:space="preserve">
+    <value>Fügen Sie der Datei "libman.json" eine Bibliotheksdefinition hinzu, und laden Sie die Bibliothek an den angegebenen Speicherort herunter.</value>
+  </data>
+  <data name="InstallCommandExamples" xml:space="preserve">
+    <value>libman install jquery@3.2.1
+    libman install jquery --provider cdnjs --destination wwwroot\scripts\jquery --files jquery.min.js
+    libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</value>
+  </data>
+  <data name="InstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>Bibliothek, die installiert werden soll</value>
+  </data>
+  <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>Die Bibliotheks-ID von CDNJS-Bibliotheken weist das Format “&lt;libraryName&gt;@&lt;libraryVersion&gt;” auf. 
+Wenn bei CDNJS-Bibliotheken keine Version in der Bibliotheks-ID angegeben wird, wird die höchste verfügbare Version verwendet.</value>
+  </data>
+  <data name="InstallCommandRemarks" xml:space="preserve">
+    <value>Hiermit wird eine Datei "libman.json" initialisiert, wenn keine vorhanden ist. Wenn kein Standardanbieter vorhanden ist, muss die Option "--provider" angegeben werden. Wenn kein Standardziel vorhanden ist, muss die Option "--destination" angegeben werden. Wenn keine Dateien angegeben werden, wird die gesamte Bibliothek eingeschlossen.</value>
+  </data>
+  <data name="InvalidArgumentsMessage" xml:space="preserve">
+    <value>Ungültige Argumente für Befehl: {0}</value>
+  </data>
+  <data name="LibmanCommandDesc" xml:space="preserve">
+    <value>Bibliotheks-Manager</value>
+  </data>
+  <data name="ProviderOptionDesc" xml:space="preserve">
+    <value>Der zu verwendende Anbieter (sofern nicht angegeben, wird der Standardanbieter verwendet)</value>
+  </data>
+  <data name="ProviderSpecificLogicHeader" xml:space="preserve">
+    <value>Anbieterspezifische Logik:</value>
+  </data>
+  <data name="RemarksHeader" xml:space="preserve">
+    <value>Hinweise:</value>
+  </data>
+  <data name="RestoreCommandDesc" xml:space="preserve">
+    <value>Hiermit werden alle Dateien aus dem Anbieter heruntergeladen und am angegebenen Ziel gespeichert.</value>
+  </data>
+  <data name="RestoreCommandRemarks" xml:space="preserve">
+    <value>Fehler, wenn keine Datei "libman.json" im aktuellen Ordner vorliegt. Wenn eine Bibliothek einen Anbieter angibt, überschreibt dieser den defaultProvider-Wert. Wenn eine Bibliothek ein Ziel angibt, überschreibt dieses den defaultDestination-Wert.</value>
+  </data>
+  <data name="UnInstallCommandDesc" xml:space="preserve">
+    <value>Löscht alle Dateien für die angegebene Bibliothek aus den angegeben Zielen und entfernt anschließend die angegebene Bibliotheksdefinition aus "libman.json".</value>
+  </data>
+  <data name="UnInstallCommandExamples" xml:space="preserve">
+    <value>libman uninstall jquery libman uninstall jquery@3.3.1</value>
+  </data>
+  <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
+    <value>Bibliothek, die installiert werden soll</value>
+  </data>
+  <data name="UninstallCommandProviderOptionDesc" xml:space="preserve">
+    <value>Der Anbieter der Bibliothek, die deinstalliert werden soll</value>
+  </data>
+  <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
+    <value>Die Bibliotheks-ID von CDNJS-Bibliotheken weist das Format “&lt;libraryName&gt;@&lt;libraryVersion&gt;” auf. 
+Wenn in der Bibliotheks-ID keine Version angegeben wird, gilt dieser Befehl für alle Bibliotheken, deren libraryName mit der angegebenen librarsId übereinstimmt.</value>
+  </data>
+  <data name="UnInstallCommandRemarks" xml:space="preserve">
+    <value>Fehler, wenn keine Datei "libman.json" im aktuellen Ordner vorliegt. Fehler, wenn die angegebene Bibliothek nicht vorhanden ist. Falls mehr als eine Bibliothek mit derselben libraryId gefunden wird, werden Sie zur Auswahl aufgefordert.</value>
+  </data>
+  <data name="VerbosityOptionDesc" xml:space="preserve">
+    <value>Ausführlichkeit der Ausgabe festlegen (z. B. "normal", "detailed", "quiet")</value>
+  </data>
+  <data name="ProjectPathOptionDesc" xml:space="preserve">
+    <value>Pfad zum Projekt (standardmäßig wird das aktuelle Verzeichnis verwendet)</value>
+  </data>
+  <data name="DirectoryNotFoundMessage" xml:space="preserve">
+    <value>Verzeichnis nicht gefunden: "{0}"</value>
+  </data>
+  <data name="FailedToRestoreLibraryMessage" xml:space="preserve">
+    <value>Fehler beim Wiederherstellen von "{0}".</value>
+  </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>"{0}" wurde gelöscht.</value>
+  </data>
+  <data name="FileDeleteFail" xml:space="preserve">
+    <value>Fehler beim Löschen von "{0}".</value>
+  </data>
+  <data name="FileWrittenToDisk" xml:space="preserve">
+    <value>"{0}" wurde auf die Festplatte geschrieben.</value>
+  </data>
+  <data name="InitFailedLibmanJsonFileExists" xml:space="preserve">
+    <value>Fehler bei der Initialisierung: Es ist bereits eine Datei "libman.json" vorhanden.</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>Fehler beim Bereinigen einiger Dateien.</value>
+  </data>
+  <data name="LibmanJsonNotFound" xml:space="preserve">
+    <value>Die Datei "libman.json" wurde nicht gefunden: {0}</value>
+  </data>
+  <data name="DestinationRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>Das Standardziel ist nicht festgelegt. Geben Sie mithilfe von "--destination" ein Ziel an.</value>
+  </data>
+  <data name="LibraryIdRequiredForInstall" xml:space="preserve">
+    <value>LibraryId für Installation erforderlich</value>
+  </data>
+  <data name="LibraryIdRequiredForUnInstall" xml:space="preserve">
+    <value>Die LibraryId muss deinstalliert werden.</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstall" xml:space="preserve">
+    <value>Mehr als eine Bibliothek mit der ID "{0}" gefunden.</value>
+  </data>
+  <data name="ProviderRequiredWhenNoDefaultIsPresent" xml:space="preserve">
+    <value>Der Standardanbieter ist nicht festgelegt. Geben Sie mit "--provider" einen Anbieter an.</value>
+  </data>
+  <data name="UseProviderToDisambiguateMessage" xml:space="preserve">
+    <value>Verwenden Sie "--provider", um gleichnamige Bibliotheken unterschiedlicher Anbieter im Projekt eindeutig zu kennzeichnen.</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUninstallForProvider" xml:space="preserve">
+    <value>Für den Anbieter "{1}" wurde mehr als eine Bibliothek mit der ID "{0}" gefunden. Entfernen Sie die Bibliothek manuell aus der Datei "libman.json".</value>
+  </data>
+  <data name="NoLibraryToUninstall" xml:space="preserve">
+    <value>Die Bibliothek "{0}" ist nicht installiert. Keine Elemente zur Installation vorhanden.</value>
+  </data>
+  <data name="CacheCleanCommandDesc" xml:space="preserve">
+    <value>Hiermit werden alle Dateien aus dem LibMan-Cache des lokalen Computers gelöscht.</value>
+  </data>
+  <data name="CacheListCommandDesc" xml:space="preserve">
+    <value>Hiermit wird eine Liste aller Bibliotheken angezeigt, die im LibMan-Cache des lokalen Computers gespeichert sind.</value>
+  </data>
+  <data name="CacheCleanProviderArgumentDesc" xml:space="preserve">
+    <value>Anbieter, für den die Cachedateien bereinigt werden sollen.</value>
+  </data>
+  <data name="UpdateCommandDesc" xml:space="preserve">
+    <value>Hiermit wird die angegebene Bibliothek aktualisiert.</value>
+  </data>
+  <data name="UpdateCommandExamples" xml:space="preserve">
+    <value>libman update jquery
+    libman update jquery --to 3.3.1
+    libman update jquery -pre</value>
+  </data>
+  <data name="UpdateCommandRemarks" xml:space="preserve">
+    <value>Fehler, wenn keine Datei "libman.json" im aktuellen Ordner vorliegt. Fehler, wenn die angegebene Bibliothek nicht vorhanden ist. Falls mehr als eine Bibliothek mit derselben libraryId vorhanden ist, werden Sie zur Auswahl aufgefordert.</value>
+  </data>
+  <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
+    <value>Name der Bibliothek, die aktualisiert werden soll (ohne Version).</value>
+  </data>
+  <data name="UpdateCommandPreReleaseOptionDesc" xml:space="preserve">
+    <value>Sofern angegeben, wird die neueste Vorabversion der Bibliothek heruntergeladen (wo zutreffend)</value>
+  </data>
+  <data name="UpdateCommandProviderOptionDesc" xml:space="preserve">
+    <value>Sofern angegeben, werden nur Bibliotheken des angegebenen Anbieters aktualisiert.</value>
+  </data>
+  <data name="CacheCleanedMessage" xml:space="preserve">
+    <value>Cache bereinigt.</value>
+  </data>
+  <data name="CacheCleanFailed" xml:space="preserve">
+    <value>Fehler beim Bereinigen des Caches: {0}</value>
+  </data>
+  <data name="CacheContentMessage" xml:space="preserve">
+    <value>Inhalte des Caches:</value>
+  </data>
+  <data name="CacheEmptyMessage" xml:space="preserve">
+    <value>(leer)</value>
+  </data>
+  <data name="CacheForProviderCleanedMessage" xml:space="preserve">
+    <value>{0} Cache bereinigt.</value>
+  </data>
+  <data name="CacheListFilesOptionDesc" xml:space="preserve">
+    <value>Für jede Bibliothek zwischengespeicherte Dateien auflisten</value>
+  </data>
+  <data name="MoreThanOneLibraryFoundToUpdate" xml:space="preserve">
+    <value>Es wurde mehr als eine Bibliothek mit dem Namen "{0}" gefunden.</value>
+  </data>
+  <data name="NoLibrariesToUpdate" xml:space="preserve">
+    <value>Keine Bibliotheken zur Aktualisierung vorhanden. Verwenden Sie den install-Befehl zum Installieren von Bibliotheken.</value>
+  </data>
+  <data name="NoLibraryFoundToUpdate" xml:space="preserve">
+    <value>Es wurde keine Bibliothek mit dem Namen "{0}" für die Aktualisierung gefunden. Geben Sie einen Bibliotheksnamen ohne Versionsinformationen für die Aktualisierung an.</value>
+  </data>
+  <data name="InstallLibraryFailed" xml:space="preserve">
+    <value>Fehler beim Installieren der Bibliothek "{0}".</value>
+  </data>
+  <data name="CacheListLibrariesOptionDesc" xml:space="preserve">
+    <value>Hiermit werden die für jeden Anbieter zwischengespeicherten Bibliotheken aufgelistet.</value>
+  </data>
+  <data name="ProviderNotInstalled" xml:space="preserve">
+    <value>Der Anbieter "{0}" ist nicht installiert.</value>
+  </data>
+  <data name="SuggestedIdsMessage" xml:space="preserve">
+    <value>Ähnliche Bibliotheken: </value>
+  </data>
+  <data name="FixManifestFile" xml:space="preserve">
+    <value>Korrigieren Sie die Datei "libman.json", und wiederholen Sie den Vorgang.</value>
+  </data>
+  <data name="ChooseAnOption" xml:space="preserve">
+    <value>Wählen Sie eine Option aus:</value>
+  </data>
+  <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
+    <value>Die Bibliothek "{0}" ist bereits auf dem neuesten Stand.</value>
+  </data>
+  <data name="InvalidToVersion" xml:space="preserve">
+    <value>"{0}" ist kein gültiger Wert für "--to-version".</value>
+  </data>
+  <data name="UpdateCommandToVersionOptionDesc" xml:space="preserve">
+    <value>Die Version, auf die die Bibliothek aktualisiert werden soll (erfordert die vollständige libraryid für den Anbieter)</value>
+  </data>
+  <data name="InstalledLibrary" xml:space="preserve">
+    <value>Die Bibliothek "{0}" wurde in "{1}" installiert.</value>
+  </data>
+  <data name="UninstalledLibrary" xml:space="preserve">
+    <value>Bibliothek "{0}" deinstalliert</value>
+  </data>
+  <data name="InvalidFilesForLibrary" xml:space="preserve">
+    <value>In der Bibliothek "{0}" sind die folgenden Dateien nicht enthalten: {1}</value>
+  </data>
+  <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
+    <value>Die Bibliothek "{0}" kann nicht installiert werden. "{1}" ist bereits in "{2}" installiert. Geben Sie ein anderes Ziel an.</value>
+  </data>
+  <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
+    <value>LibraryId ist für Aktualisierung erforderlich.</value>
+  </data>
+  <data name="SpecifyDifferentDestination" xml:space="preserve">
+    <value>Geben Sie ein anderes Ziel an.</value>
+  </data>
+  <data name="UninstallFailed" xml:space="preserve">
+    <value>Fehler beim Deinstallierne von "{0}".</value>
+  </data>
+  <data name="UpdateLibraryFailed" xml:space="preserve">
+    <value>Fehler beim Aktualisieren von "{0}" auf "{1}".</value>
+  </data>
+  <data name="UpdateLibraryToLatestFailed" xml:space="preserve">
+    <value>Fehler beim Aktualisieren von "{0}" auf die neueste Version.</value>
+  </data>
+  <data name="LibraryUpdated" xml:space="preserve">
+    <value>"{0}" auf "{1}" aktualisiert</value>
+  </data>
+  <data name="UnableToFindLatestVersionForLibrary" xml:space="preserve">
+    <value>Die neueste Version für "{0}" konnte nicht bestimmt werden.</value>
+  </data>
+  <data name="InitFailedUnknownProvider" xml:space="preserve">
+    <value>Fehler beim Initialisieren von "libman.json". [{0}]: {1}</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>In dieser Konsole ist keine Benutzereingabe möglich.</value>
+  </data>
+  <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
+    <value>Bitte geben Sie die vollständige Bibliotheks-ID und den Anbieter mit der "--Provider"-Option an.</value>
+  </data>
+  <data name="SpecifyFieldUsingOption" xml:space="preserve">
+    <value>Bitte geben Sie "{0}" mit der Option "--{1}" an.</value>
+  </data>
 </root>

@@ -166,4 +166,7 @@
   <data name="Upgrade_OperationCompleted" xml:space="preserve">
     <value>Обновление выполнено</value>
   </data>
+  <data name="JsDelivrProviderHintText" xml:space="preserve">
+    <value>Пример: &lt;библиотека&gt;@&lt;версия&gt;</value>
+  </data>
 </root>

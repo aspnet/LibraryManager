@@ -46,7 +46,9 @@
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>Verrà installato un pacchetto NuGet per potenziare il processo di MSBuild, ma non verrà aggiunto alcun file al progetto.
+
 Per questa operazione potrebbe essere necessaria una connessione Internet.
+
 Continuare?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
@@ -60,7 +62,7 @@ Continuare?</value>
     <value>&lt;Scegliere una libreria per selezionare i file da installare&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Disa&amp;bilita ripristino delle librerie lato client durante la compilazione</value>
+    <value>Disa&amp;bilita librerie lato client durante la compilazione</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
     <value>&amp;Abilita ripristino delle librerie lato client durante la compilazione...</value>
@@ -105,27 +107,27 @@ Continuare?</value>
     <value>File:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>Libreria:</value>
+    <value>_Libreria:</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>Provider: </value>
+    <value>_Provider:</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>Percorso di destinazione:</value>
+    <value>Percorso di _destinazione:</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>Scegliere i file specifici:</value>
+    <value>Scegli i file _specifici:</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>Includi tutti i file di libreria</value>
+    <value>Includi tutti i _file di libreria</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>Non è stato selezionato alcun file</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Annulla</value>
+    <value>_Annulla</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>Installa</value>
+    <value>_Installa</value>
   </data>
 </root>

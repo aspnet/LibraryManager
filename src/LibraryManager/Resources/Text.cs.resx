@@ -166,4 +166,7 @@
   <data name="Upgrade_OperationCompleted" xml:space="preserve">
     <value>Operace upgradu se dokončila.</value>
   </data>
+  <data name="JsDelivrProviderHintText" xml:space="preserve">
+    <value>Příklad: &lt;knihovna&gt;@&lt;verze&gt;</value>
+  </data>
 </root>

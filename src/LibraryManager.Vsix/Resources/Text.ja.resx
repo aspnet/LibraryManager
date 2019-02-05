@@ -46,24 +46,26 @@
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、ファイルはプロジェクトに追加されません。
+
 これにはインターネット接続が必要になる可能性があります。
+
 続行しますか?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;入力して検索&gt;</value>
+    <value>&lt; 検索するタイプ &gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>クライアント側のライブラリを追加します</value>
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;ライブラリを選択して、インストールするファイルを選択してください&gt;</value>
+    <value>&lt;ライブラリを選択して、インストールするファイルを選ぶ&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>ビルド時のクライアント側ライブラリを無効にする(&amp;E)</value>
+    <value>ビルドの際にクライアント側ライブラリを無効にする(&amp;E)</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>ビルド時のクライアント側ライブラリの復元を有効にする(&amp;E)</value>
+    <value>ビルドの際にクライアント側ライブラリの復元を有効にする(&amp;E)...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>MSBuild ターゲットを含む NuGet パッケージをインストールしています...</value>
@@ -105,27 +107,27 @@
     <value>ファイル:</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>ライブラリ:</value>
+    <value>ライブラリ(_L):</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>プロバイダー:</value>
+    <value>プロバイダー(_P):</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>ターゲットの場所:</value>
+    <value>ターゲット ロケーション(_T):</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>特定のファイルを選択します。</value>
+    <value>特定のファイルの選択( _S):</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>ライブラリのすべてのファイルを含める</value>
+    <value>Include _all library files</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>ファイルが選択されていません</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>キャンセル</value>
+    <value>キャンセル(_C)</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>インストール</value>
+    <value>インストール(_I)</value>
   </data>
 </root>
