@@ -171,7 +171,8 @@ namespace Microsoft.Web.LibraryManager.Contracts
 
                         // Do not use File.Move, as it causes destination not to inherit security permissions.
                         // Our IIS projects set ACL to give AppPool user permissions, and it gets inherited by project files.
-                        // See https://support.microsoft.com/en-us/help/310316/how-permissions-are-handled-when-you-copy-and-move-files-and-folders                        File.Copy(sourceFile, destinationFile);
+                        // See https://support.microsoft.com/en-us/help/310316/how-permissions-are-handled-when-you-copy-and-move-files-and-folders
+                        File.Copy(sourceFile, destinationFile);
                         File.Delete(sourceFile);
                     }
                 ).ConfigureAwait(false);
