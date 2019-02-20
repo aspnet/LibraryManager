@@ -216,10 +216,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         async Task ClickInstallButtonAsync()
         {
             bool isLibraryInstallationStateValid = await IsLibraryInstallationStateValidAsync().ConfigureAwait(false);
+            await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             if (isLibraryInstallationStateValid)
             {
-                await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 CloseDialog(true);
                 ViewModel.InstallPackageCommand.Execute(null);
             }
