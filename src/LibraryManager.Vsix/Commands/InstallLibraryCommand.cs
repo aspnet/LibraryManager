@@ -145,15 +145,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder, project);
 
-                var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-                int hwnd = dte.MainWindow.HWnd;
-                WindowInteropHelper windowInteropHelper = new WindowInteropHelper(dialog);
-
-                // Set visual studio window's handle as the owner of the dialog.
-                // This will remove the dialog from alt-tab list and will not allow the user to switch the dialog box to the background 
-                windowInteropHelper.Owner = new IntPtr(hwnd);
-
-                dialog.ShowDialog();
+                dialog.ShowModal();
 
                 Telemetry.TrackUserTask("Open-InstallDialog");
             }
