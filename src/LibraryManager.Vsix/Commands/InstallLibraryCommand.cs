@@ -143,8 +143,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                 }
 
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
                 UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder, project);
 
                 dialog.ShowModal();
