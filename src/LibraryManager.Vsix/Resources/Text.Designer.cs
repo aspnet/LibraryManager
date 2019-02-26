@@ -88,7 +88,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose _specific files:.
+        ///   Looks up a localized string similar to Choose _specific files.
         /// </summary>
         public static string ChooseSpecificFiles {
             get {
@@ -151,7 +151,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Files:.
+        ///   Looks up a localized string similar to Files.
         /// </summary>
         public static string Files {
             get {
@@ -178,7 +178,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Library:.
+        ///   Looks up a localized string similar to _Library.
         /// </summary>
         public static string Library {
             get {
@@ -335,7 +335,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Provider: .
+        ///   Looks up a localized string similar to _Provider.
         /// </summary>
         public static string Provider {
             get {
@@ -353,7 +353,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Target Location:.
+        ///   Looks up a localized string similar to _Target Location.
         /// </summary>
         public static string TargetLocation {
             get {

@@ -209,19 +209,19 @@ Do you want to continue?</value>
     <value>Library Manager operation already in progress.</value>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>Files:</value>
+    <value>Files</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>_Library:</value>
+    <value>_Library</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>_Provider: </value>
+    <value>_Provider</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>_Target Location:</value>
+    <value>_Target Location</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
-    <value>Choose _specific files:</value>
+    <value>Choose _specific files</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
     <value>Include _all library files</value>
