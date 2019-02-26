@@ -115,25 +115,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void HandleKeyPress(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+        switch (e.Key)
             {
                 case Key.Tab:
-                    if (e.KeyboardDevice.Modifiers == ModifierKeys.Shift)
-                    {
-                        LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Previous));
-                    }
-                    // SelectedItem could be null if the key press came from keyboard navigation and not commit operation.
-                    // In this case we will just move the focus to next control.
-                    else if (SelectedItem == null)
-                    {
-                        LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                    }
-                    else
+                    if (SelectedItem != null)
                     {
                         CommitSelectionAndMoveFocus();
                     }
-
-                    e.Handled = true;
                     break;
                 case Key.Enter:
                     CommitSelectionAndMoveFocus();
