@@ -115,7 +115,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void HandleKeyPress(object sender, KeyEventArgs e)
         {
-        switch (e.Key)
+            switch (e.Key)
             {
                 case Key.Tab:
                     if (SelectedItem != null)
