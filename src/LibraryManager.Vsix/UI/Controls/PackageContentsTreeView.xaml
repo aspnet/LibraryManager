@@ -22,6 +22,7 @@
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                 <Setter Property="Focusable" Value="False" />
                 <Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>
+                <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
