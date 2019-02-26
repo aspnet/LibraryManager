@@ -118,9 +118,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             switch (e.Key)
             {
                 case Key.Tab:
+                    if (e.KeyboardDevice.Modifiers == ModifierKeys.Shift)
+                    {
+                        LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Previous));
+                    }
                     // SelectedItem could be null if the key press came from keyboard navigation and not commit operation.
                     // In this case we will just move the focus to next control.
-                    if (SelectedItem == null)
+                    else if (SelectedItem == null)
                     {
                         LibrarySearchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                     }
