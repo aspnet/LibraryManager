@@ -295,5 +295,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             LibrarySearchBox.Focus();
         }
+
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && Flyout.IsOpen)
+            {
+                LibrarySearchBox.Focus();
+            }
+        }
     }
 }
