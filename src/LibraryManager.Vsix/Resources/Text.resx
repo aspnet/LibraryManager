@@ -212,13 +212,13 @@ Do you want to continue?</value>
     <value>Files</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>_Library</value>
+    <value>_Library:</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>_Provider</value>
+    <value>_Provider:</value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>_Target Location</value>
+    <value>_Target Location:</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
     <value>Choose _specific files</value>
