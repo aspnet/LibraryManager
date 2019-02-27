@@ -20,8 +20,7 @@
         <TreeView.ItemContainerStyle>
             <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
-                <Setter Property="Focusable" Value="False" />
-                <Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>
+                <Setter Property="KeyboardNavigation.TabNavigation" Value="Once"/>
                 <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
             </Style>
         </TreeView.ItemContainerStyle>
