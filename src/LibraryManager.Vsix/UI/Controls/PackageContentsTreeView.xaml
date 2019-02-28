@@ -16,7 +16,8 @@
     <TreeView AutomationProperties.Name="{x:Static resources:Text.Files}"
               ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
               VirtualizingPanel.IsVirtualizing="True"
-              KeyboardNavigation.TabNavigation="Continue">
+              KeyboardNavigation.TabNavigation="Continue"
+              PreviewKeyUp="OnPreviewKeyUp">
         <TreeView.ItemContainerStyle>
             <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
@@ -38,6 +39,7 @@
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}" DataType="{x:Type models:PackageItem}">
                 <CheckBox IsChecked="{Binding Path=IsChecked}"
                           AutomationProperties.Name="{x:Static resources:Text.Files}"
+                          Focusable="False"
                           VerticalAlignment="Center">
                     <Grid>
                         <Grid.ColumnDefinitions>
