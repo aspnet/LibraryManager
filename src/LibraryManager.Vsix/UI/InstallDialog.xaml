@@ -69,7 +69,13 @@
                       ItemsSource="{Binding Providers}" 
                       HorizontalAlignment="Left" 
                       VerticalAlignment="Center"
-                      Width="auto" />
+                      Width="auto">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding Id}"/>
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
             <DockPanel Grid.Row="1" 
                        Grid.Column="1" 
                        LastChildFill="True" 
