@@ -7,6 +7,7 @@
                  xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
                  xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
                  xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
+                 xmlns:extensions="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Extensions"
                  xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
                  xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
                  mc:Ignorable="d" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}"
@@ -58,7 +59,7 @@
                 <AccessText Text="{x:Static resources:Text.Library}" />
             </Label>
             <ComboBox x:Name="ProviderComboBox"
-                      AutomationProperties.Name="{x:Static resources:Text.Provider}"
+                      AutomationProperties.Name="{extensions:RemoveSubstring {x:Static resources:Text.Provider}}"
                       Grid.Row="0"
                       Grid.Column="1"
                       Margin="0 0 0 9"
