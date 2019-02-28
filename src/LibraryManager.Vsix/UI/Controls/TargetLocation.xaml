@@ -61,6 +61,7 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding DisplayText}"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <EventSetter Event="MouseLeftButtonUp" Handler="OnItemCommitGesture" />
                         <EventSetter Event="PreviewKeyDown" Handler="HandleListBoxKeyPress" />
