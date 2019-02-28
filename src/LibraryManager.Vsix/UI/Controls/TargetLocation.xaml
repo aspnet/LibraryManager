@@ -7,6 +7,7 @@
              xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
+             xmlns:extensions="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Extensions"
              x:Name="ThisControl"
              Focusable="True"
              LostFocus="TargetLocation_LostFocus">
@@ -16,7 +17,7 @@
     <Grid>
         <!-- Text Entry -->
         <TextBox x:Name="TargetLocationSearchTextBox"
-                 AutomationProperties.Name="{x:Static resources:Text.TargetLocation}"
+                 AutomationProperties.Name="{extensions:RemoveSubstring {x:Static resources:Text.TargetLocation}}"
                  Text="{Binding ElementName=ThisControl,
                                 Path=Text,
                                 Mode=TwoWay,
