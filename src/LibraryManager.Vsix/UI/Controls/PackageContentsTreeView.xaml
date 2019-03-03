@@ -23,6 +23,11 @@
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                 <Setter Property="KeyboardNavigation.TabNavigation" Value="Once"/>
                 <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
@@ -58,7 +63,16 @@
                                 </MultiBinding>
                             </Image.Source>
                         </Image>
-                        <Label Grid.Column="1" Margin="2 0 0 0" Padding="0" VerticalAlignment="Center" Content="{Binding Name}" FontWeight="{Binding Path=IsMain, Converter={StaticResource BoldingConverter}}" />
+                        <Label
+                            Grid.Column="1"
+                            Margin="2 0 0 0"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            Content="{Binding Name}"
+                            FontWeight="{Binding Path=IsMain, Converter={StaticResource BoldingConverter}}"
+                            Foreground="{Binding Foreground,
+                            RelativeSource={RelativeSource Mode=FindAncestor,
+                                            AncestorType=TreeViewItem}}"/>
                     </Grid>
                 </CheckBox>
             </HierarchicalDataTemplate>
