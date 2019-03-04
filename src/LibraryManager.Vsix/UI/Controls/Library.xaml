@@ -9,7 +9,6 @@
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
              xmlns:extensions="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Extensions"
-             xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
              x:Name="ThisControl"
              Focusable="True"
              LostFocus="Library_LostFocus">
