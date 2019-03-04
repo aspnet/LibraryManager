@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
+using Microsoft.Web.LibraryManager.Vsix.Resources;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
 {
@@ -17,11 +18,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
 
             if (isChecked)
             {
-                return "Checked" + (string)values[0];
+                return Text.Checked + ' ' + (string)values[0];
             }
             else
             {
-                return "UnChecked" + (string)values[0];
+                return Text.UnChecked + ' ' + (string)values[0];
             }
         }
 

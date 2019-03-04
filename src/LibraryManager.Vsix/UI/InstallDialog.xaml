@@ -133,9 +133,8 @@
                 BorderBrush="Black"
                 BorderThickness="1"
                 KeyboardNavigation.TabNavigation="Once">
-            <controls:PackageContentsTreeView
-                x:Name="LibraryFilesToInstallTreeView"
-                AutomationProperties.Name="{x:Static resources:Text.Files}" />
+            <controls:PackageContentsTreeView x:Name="LibraryFilesToInstallTreeView"
+                                              AutomationProperties.Name="{x:Static resources:Text.Files}" />
         </Border>
 
         <Label Grid.Row="2" 
