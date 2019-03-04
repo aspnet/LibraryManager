@@ -9,12 +9,14 @@
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
              xmlns:extensions="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Extensions"
+             xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
              x:Name="ThisControl"
              Focusable="True"
              LostFocus="Library_LostFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:RemoveCharacterConverter x:Key="RemoveCharacterConverter" />
     </UserControl.Resources>
     <Grid>
         <!-- Text Entry -->
