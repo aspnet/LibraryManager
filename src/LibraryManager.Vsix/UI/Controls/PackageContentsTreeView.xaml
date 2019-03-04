@@ -24,9 +24,16 @@
                 <Setter Property="KeyboardNavigation.TabNavigation" Value="Once"/>
                 <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
                 <Style.Triggers>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Foreground" Value="White"/>
-                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsSelected" Value="True"/>
+                            <Condition Property="IsFocused" Value="True"/>
+                        </MultiTrigger.Conditions>
+                        <MultiTrigger.Setters>
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                        </MultiTrigger.Setters>
+                    </MultiTrigger>
                 </Style.Triggers>
             </Style>
         </TreeView.ItemContainerStyle>
@@ -71,8 +78,8 @@
                             Content="{Binding Name}"
                             FontWeight="{Binding Path=IsMain, Converter={StaticResource BoldingConverter}}"
                             Foreground="{Binding Foreground,
-                            RelativeSource={RelativeSource Mode=FindAncestor,
-                                            AncestorType=TreeViewItem}}"/>
+                                                 RelativeSource={RelativeSource Mode=FindAncestor,
+                                                 AncestorType=TreeViewItem}}" />
                     </Grid>
                 </CheckBox>
             </HierarchicalDataTemplate>
