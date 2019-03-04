@@ -79,7 +79,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Checked.
+        ///   Looks up a localized string similar to Checked {0}.
         /// </summary>
         public static string Checked {
             get {
@@ -380,7 +380,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UnChecked.
+        ///   Looks up a localized string similar to UnChecked {0}.
         /// </summary>
         public static string UnChecked {
             get {

@@ -18,11 +18,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
 
             if (isChecked)
             {
-                return Text.Checked + ' ' + (string)values[0];
+                return string.Format(Text.Checked, (string)values[0]);
             }
             else
             {
-                return Text.UnChecked + ' ' + (string)values[0];
+                return string.Format(Text.UnChecked, (string)values[0]);
             }
         }
 
