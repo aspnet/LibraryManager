@@ -10,11 +10,11 @@
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}">
     <UserControl.Resources>
         <converters:BoldingConverter x:Key="BoldingConverter" />
+        <converters:CheckBoxAutomationNameConverter x:Key="CheckBoxAutomationNameConverter" />
         <converters:PackageItemIconConverter x:Key="IconConverter" />
         <converters:VisibleIfNonNullConverter x:Key="VisibleIfNonNullConverter" />
     </UserControl.Resources>
-    <TreeView AutomationProperties.Name="{x:Static resources:Text.Files}"
-              ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
+    <TreeView ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
               VirtualizingPanel.IsVirtualizing="True"
               KeyboardNavigation.TabNavigation="Continue"
               PreviewKeyUp="OnPreviewKeyUp">
@@ -22,7 +22,14 @@
             <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                 <Setter Property="KeyboardNavigation.TabNavigation" Value="Once"/>
-                <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
+                <Setter Property="AutomationProperties.Name">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource CheckBoxAutomationNameConverter}">
+                            <Binding Path="Name"/>
+                            <Binding Path="IsChecked"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
                 <Style.Triggers>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
@@ -50,7 +57,6 @@
             </Style>
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}" DataType="{x:Type models:PackageItem}">
                 <CheckBox IsChecked="{Binding Path=IsChecked}"
-                          AutomationProperties.Name="{x:Static resources:Text.Files}"
                           Focusable="False"
                           VerticalAlignment="Center">
                     <Grid>
