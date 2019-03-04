@@ -36,7 +36,7 @@
                Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                VerticalAlignment="Top" IsHitTestVisible="False">
             <TextBlock Text="{x:Static res:Text.TypeToSearch}"
-                       AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.TypeToSearch}, _}" />
+                       AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.TypeToSearch}, &lt;&gt;}" />
         </Label>
 
         <!-- Expand Grip -->
