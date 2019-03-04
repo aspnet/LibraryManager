@@ -9,17 +9,19 @@
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
              xmlns:extensions="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Extensions"
+             xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
              x:Name="ThisControl"
              Focusable="True"
              LostFocus="Library_LostFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:RemoveCharacterConverter x:Key="RemoveCharacterConverter" />
     </UserControl.Resources>
     <Grid>
         <!-- Text Entry -->
         <TextBox x:Name="LibrarySearchBox"
-                 AutomationProperties.Name="{extensions:RemoveSubstring {x:Static resources:Text.Library}}"
+                 AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.Library}, _}"
                  Text="{Binding ElementName=ThisControl,
                                 Path=Text,
                                 Mode=TwoWay,
@@ -29,9 +31,12 @@
                  PreviewKeyDown="HandleKeyPress"
                  Padding="2 2 20 2" />
         <!-- Watermark -->
-        <Label Opacity=".5" Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Top" IsHitTestVisible="False">
+        <Label Opacity=".5"
+               Target="{Binding ElementName=LibrarySearchBox}"
+               Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+               VerticalAlignment="Top" IsHitTestVisible="False">
             <TextBlock Text="{x:Static res:Text.TypeToSearch}"
-                       AutomationProperties.Name="{x:Static resources:Text.TypeToSearch}" />
+                       AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.TypeToSearch}, _}" />
         </Label>
 
         <!-- Expand Grip -->
