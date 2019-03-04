@@ -16,7 +16,6 @@
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converters:RemoveCharacterConverter x:Key="RemoveCharacterConverter" />
     </UserControl.Resources>
     <Grid>
         <!-- Text Entry -->
