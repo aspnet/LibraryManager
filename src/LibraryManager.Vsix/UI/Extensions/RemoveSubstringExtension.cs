@@ -17,7 +17,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Extensions
         public RemoveSubstringExtension(object text, string remove)
         {
             _text = text;
-            _remove = remove;
+            _remove = remove ?? "_";
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
@@ -27,7 +27,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Extensions
                 return null;
             }
 
-            string remove = _remove ?? "_";
             string s = null;
 
             MarkupExtension m = _text as MarkupExtension;
@@ -43,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Extensions
 
             if (s != null)
             {
-                return s.Replace(remove, string.Empty);
+                return s.Replace(_remove, string.Empty);
             }
 
             return null;
