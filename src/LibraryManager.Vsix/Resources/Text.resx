@@ -235,4 +235,10 @@ Do you want to continue?</value>
   <data name="Install" xml:space="preserve">
     <value>_Install</value>
   </data>
+  <data name="Checked" xml:space="preserve">
+    <value>Checked {0}</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>UnChecked {0}</value>
+  </data>
 </root>

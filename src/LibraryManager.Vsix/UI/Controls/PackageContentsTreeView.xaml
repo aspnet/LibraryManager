@@ -10,19 +10,38 @@
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}">
     <UserControl.Resources>
         <converters:BoldingConverter x:Key="BoldingConverter" />
+        <converters:CheckBoxAutomationNameConverter x:Key="CheckBoxAutomationNameConverter" />
         <converters:PackageItemIconConverter x:Key="IconConverter" />
         <converters:VisibleIfNonNullConverter x:Key="VisibleIfNonNullConverter" />
     </UserControl.Resources>
-    <TreeView AutomationProperties.Name="{x:Static resources:Text.Files}"
-              ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
+    <TreeView ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
               VirtualizingPanel.IsVirtualizing="True"
-              KeyboardNavigation.TabNavigation="Continue">
+              KeyboardNavigation.TabNavigation="Continue"
+              PreviewKeyUp="OnPreviewKeyUp">
         <TreeView.ItemContainerStyle>
             <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
-                <Setter Property="Focusable" Value="False" />
-                <Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>
-                <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
+                <Setter Property="KeyboardNavigation.TabNavigation" Value="Once"/>
+                <Setter Property="AutomationProperties.Name">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource CheckBoxAutomationNameConverter}">
+                            <Binding Path="Name"/>
+                            <Binding Path="IsChecked"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsSelected" Value="True"/>
+                            <Condition Property="IsFocused" Value="True"/>
+                        </MultiTrigger.Conditions>
+                        <MultiTrigger.Setters>
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                        </MultiTrigger.Setters>
+                    </MultiTrigger>
+                </Style.Triggers>
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
@@ -38,7 +57,7 @@
             </Style>
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}" DataType="{x:Type models:PackageItem}">
                 <CheckBox IsChecked="{Binding Path=IsChecked}"
-                          AutomationProperties.Name="{x:Static resources:Text.Files}"
+                          Focusable="False"
                           VerticalAlignment="Center">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -57,7 +76,16 @@
                                 </MultiBinding>
                             </Image.Source>
                         </Image>
-                        <Label Grid.Column="1" Margin="2 0 0 0" Padding="0" VerticalAlignment="Center" Content="{Binding Name}" FontWeight="{Binding Path=IsMain, Converter={StaticResource BoldingConverter}}" />
+                        <Label
+                            Grid.Column="1"
+                            Margin="2 0 0 0"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            Content="{Binding Name}"
+                            FontWeight="{Binding Path=IsMain, Converter={StaticResource BoldingConverter}}"
+                            Foreground="{Binding Foreground,
+                                                 RelativeSource={RelativeSource Mode=FindAncestor,
+                                                 AncestorType=TreeViewItem}}" />
                     </Grid>
                 </CheckBox>
             </HierarchicalDataTemplate>

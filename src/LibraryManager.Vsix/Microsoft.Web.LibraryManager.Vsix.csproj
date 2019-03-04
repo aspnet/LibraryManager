@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="Shared\DefaultSolutionEvents.cs" />
+    <Compile Include="UI\Converters\CheckBoxAutomationNameConverter.cs" />
     <Compile Include="UI\Extensions\RemoveSubstringExtension.cs" />
     <Compile Include="UI\InstallDialogProvider.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />

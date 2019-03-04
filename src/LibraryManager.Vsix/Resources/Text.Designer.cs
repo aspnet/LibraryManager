@@ -79,6 +79,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checked {0}.
+        /// </summary>
+        public static string Checked {
+            get {
+                return ResourceManager.GetString("Checked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for updates.
         /// </summary>
         public static string CheckForUpdates {
@@ -367,6 +376,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         public static string TypeToSearch {
             get {
                 return ResourceManager.GetString("TypeToSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UnChecked {0}.
+        /// </summary>
+        public static string UnChecked {
+            get {
+                return ResourceManager.GetString("UnChecked", resourceCulture);
             }
         }
         
