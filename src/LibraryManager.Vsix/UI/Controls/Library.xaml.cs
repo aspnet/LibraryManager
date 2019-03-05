@@ -5,10 +5,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.UI.Extensions;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
@@ -294,6 +297,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             {
                 LibrarySearchBox.Focus();
             }
+        }
+
+        private void LibrarySearchBox_GotKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(LibrarySearchBox.Text))
+            {
+                RemoveCharacterExtension removeChareacterExtension = new RemoveCharacterExtension(Microsoft.Web.LibraryManager.Vsix.Resources.Text.TypeToSearch, "<>");
+                string text = (string)removeChareacterExtension.ProvideValue(ServiceProvider.GlobalProvider);
+                LibrarySearchBox.SetValue(AutomationProperties.HelpTextProperty, text);
+            }
+
+            e.Handled = true;
         }
     }
 }

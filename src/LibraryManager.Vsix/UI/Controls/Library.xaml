@@ -27,6 +27,7 @@
                                 IsAsync=True}"
                  TextChanged="LibrarySearchBox_TextChanged"
                  PreviewKeyDown="HandleKeyPress"
+                 GotKeyboardFocus="LibrarySearchBox_GotKeyboardForcus"
                  Padding="2 2 20 2" />
         <!-- Watermark -->
         <Label Opacity=".5"
@@ -34,7 +35,7 @@
                Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                VerticalAlignment="Top" IsHitTestVisible="False">
             <TextBlock Text="{x:Static res:Text.TypeToSearch}"
-                       AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.TypeToSearch}, &lt;&gt;}" />
+                       AutomationProperties.HelpText="{extensions:RemoveCharacter {x:Static resources:Text.TypeToSearch}, &lt;&gt;}" />
         </Label>
 
         <!-- Expand Grip -->
