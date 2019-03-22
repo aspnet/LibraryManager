@@ -16,7 +16,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>İstemci Tarafı &amp;Kitaplık...</ButtonText>
+          <ButtonText>İstemci Tarafı &amp;Kitaplığı...</ButtonText>
         </Strings>
       </Button>
       <!-- Config file -->
@@ -44,7 +44,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Derleme Sırasında İstemci Tarafı Kitaplıkların Geri Yüklenmesini Etkinleştir...</ButtonText>
+          <ButtonText>Derleme Sırasında İstemci Tarafı Kitaplıkları Geri Yüklemeyi Etkinleştir...</ButtonText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>

@@ -44,7 +44,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>빌드에 클라이언트 쪽 라이브러리 복원 사용...</ButtonText>
+          <ButtonText>빌드 시 클라이언트 쪽 라이브러리 복원 사용...</ButtonText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>

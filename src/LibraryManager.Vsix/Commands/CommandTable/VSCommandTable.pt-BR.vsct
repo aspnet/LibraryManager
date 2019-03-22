@@ -27,7 +27,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Restaurar &amp;Bibliotecas do Lado do Cliente</ButtonText>
+          <ButtonText>Restaurar as &amp;Bibliotecas do Lado do Cliente</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
@@ -44,7 +44,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Habilitar Restauração de Bibliotecas do Lado do Cliente no Build...</ButtonText>
+          <ButtonText>Habilitar a Restauração de Bibliotecas do Lado do Cliente no Build...</ButtonText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>
