@@ -36,20 +36,16 @@
     <value>更新プログラムの確認</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="NoUpdatesFound" xml:space="preserve">
-    <value>更新プログラムが見つかりませんでした</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="UninstallLibrary" xml:space="preserve">
     <value>{0} をアンインストールします</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、ファイルはプロジェクトに追加されません。
+    <value>MSBuild プロセスを強化するために NuGet パッケージがインストールされますが、プロジェクトにはファイルは追加されません。
 
-これにはインターネット接続が必要になる可能性があります。
+これにはインターネット接続が必要です。
 
-続行しますか?</value>
+続行しますか。</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt; 検索するタイプ &gt;</value>
@@ -119,7 +115,7 @@
     <value>特定のファイルの選択( _S):</value>
   </data>
   <data name="IncludeAllLibraryFiles" xml:space="preserve">
-    <value>Include _all library files</value>
+    <value>ライブラリのすべてのファイルを含める(_A)</value>
   </data>
   <data name="NoFilesSelected" xml:space="preserve">
     <value>ファイルが選択されていません</value>
@@ -129,5 +125,25 @@
   </data>
   <data name="Install" xml:space="preserve">
     <value>インストール(_I)</value>
+  </data>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>現時点で、更新プログラムはありません</value>
+    <comment>Used in message box when light bulb found no updates</comment>
+  </data>
+  <data name="Checked" xml:space="preserve">
+    <value>チェック済み {0}</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>未チェック {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
+    <value>プレリリース: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Stable" xml:space="preserve">
+    <value>安定: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Title" xml:space="preserve">
+    <value>ライブラリの更新</value>
+    <comment>Title for SuggestedAction set</comment>
   </data>
 </root>

@@ -36,11 +36,6 @@
           <target state="translated">更新プログラムの確認</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in JSON editor light bulb</note>
         </trans-unit>
-        <trans-unit id="NoUpdatesFound" translate="yes" xml:space="preserve">
-          <source>No updates found at this time</source>
-          <target state="translated">更新プログラムが見つかりませんでした</target>
-          <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
-        </trans-unit>
         <trans-unit id="UninstallLibrary" translate="yes" xml:space="preserve">
           <source>Uninstall {0}</source>
           <target state="translated">{0} をアンインストールします</target>
@@ -52,11 +47,11 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、ファイルはプロジェクトに追加されません。
+          <target state="translated">MSBuild プロセスを強化するために NuGet パッケージがインストールされますが、プロジェクトにはファイルは追加されません。
 
-これにはインターネット接続が必要になる可能性があります。
+これにはインターネット接続が必要です。
 
-続行しますか?</target>
+続行しますか。</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
@@ -149,7 +144,7 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="IncludeAllLibraryFiles" translate="yes" xml:space="preserve">
           <source>Include _all library files</source>
-          <target state="translated">Include _all library files</target>
+          <target state="translated">ライブラリのすべてのファイルを含める(_A)</target>
         </trans-unit>
         <trans-unit id="NoFilesSelected" translate="yes" xml:space="preserve">
           <source>No files have been selected</source>
@@ -162,6 +157,32 @@ Do you want to continue?</source>
         <trans-unit id="Install" translate="yes" xml:space="preserve">
           <source>_Install</source>
           <target state="translated">インストール(_I)</target>
+        </trans-unit>
+        <trans-unit id="SuggestedAction_Update_NoUpdatesFound" translate="yes" xml:space="preserve">
+          <source>No updates found at this time</source>
+          <target state="translated">現時点で、更新プログラムはありません</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
+        </trans-unit>
+        <trans-unit id="Checked" translate="yes" xml:space="preserve">
+          <source>Checked {0}</source>
+          <target state="translated">チェック済み {0}</target>
+        </trans-unit>
+        <trans-unit id="UnChecked" translate="yes" xml:space="preserve">
+          <source>UnChecked {0}</source>
+          <target state="translated">未チェック {0}</target>
+        </trans-unit>
+        <trans-unit id="SuggestedAction_Update_Prerelease" translate="yes" xml:space="preserve">
+          <source>Pre-release: {0}</source>
+          <target state="translated">プレリリース: {0}</target>
+        </trans-unit>
+        <trans-unit id="SuggestedAction_Update_Stable" translate="yes" xml:space="preserve">
+          <source>Stable: {0}</source>
+          <target state="translated">安定: {0}</target>
+        </trans-unit>
+        <trans-unit id="SuggestedAction_Update_Title" translate="yes" xml:space="preserve">
+          <source>Update Library</source>
+          <target state="translated">ライブラリの更新</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Title for SuggestedAction set</note>
         </trans-unit>
       </group>
     </body>

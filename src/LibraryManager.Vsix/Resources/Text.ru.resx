@@ -36,18 +36,14 @@
     <value>Проверить наличие обновлений</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="NoUpdatesFound" xml:space="preserve">
-    <value>Обновления не найдены</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="UninstallLibrary" xml:space="preserve">
     <value>Удалить {0}</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Будет установлен пакет NuGet, который дополнит процесс сборки MSBuild, но файлы в проект добавлены не будут.
+    <value>Будет установлен пакет NuGet для дополнения процесса MSBuild, но файлы не будут добавлены в проект.
 
-Для этого может потребоваться подключение к Интернету.
+Возможно, потребуется подключение к Интернету.
 
 Вы действительно хотите продолжить?</value>
   </data>
@@ -129,5 +125,25 @@
   </data>
   <data name="Install" xml:space="preserve">
     <value>_Установить</value>
+  </data>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>Обновления в данный момент не найдены.</value>
+    <comment>Used in message box when light bulb found no updates</comment>
+  </data>
+  <data name="Checked" xml:space="preserve">
+    <value>Отмечено: {0}</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>Неотмечено: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
+    <value>Предварительный выпуск: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Stable" xml:space="preserve">
+    <value>Стабильная: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Title" xml:space="preserve">
+    <value>Обновление библиотеки</value>
+    <comment>Title for SuggestedAction set</comment>
   </data>
 </root>

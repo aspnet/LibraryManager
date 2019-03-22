@@ -36,17 +36,15 @@
     <value>Vyhledat aktualizace</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="NoUpdatesFound" xml:space="preserve">
-    <value>V této chvíli nebyly nalezeny žádné aktualizace.</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="UninstallLibrary" xml:space="preserve">
     <value>Odinstalovat produkt {0}</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Nainstaluje se balíček NuGet pro podporu procesu MSBuild, ale do projektu se nepřidají žádné soubory.
+    <value>Bude nainstalován balíček NuGet pro rozšíření procesu MSBuild, ale do projektu nebudou přidány žádné soubory.
+
 Může to vyžadovat připojení k internetu.
+
 Chcete pokračovat?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
@@ -127,5 +125,25 @@ Chcete pokračovat?</value>
   </data>
   <data name="Install" xml:space="preserve">
     <value>_Instalovat</value>
+  </data>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>Nenašly se žádné aktualizace</value>
+    <comment>Used in message box when light bulb found no updates</comment>
+  </data>
+  <data name="Checked" xml:space="preserve">
+    <value>Zaškrtnuto: {0}</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>Nezaškrtnuto: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
+    <value>Předběžná verze: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Stable" xml:space="preserve">
+    <value>Stabilní: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Title" xml:space="preserve">
+    <value>Aktualizovat knihovnu</value>
+    <comment>Title for SuggestedAction set</comment>
   </data>
 </root>
