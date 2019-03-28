@@ -36,20 +36,16 @@
     <value>检查更新</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="NoUpdatesFound" xml:space="preserve">
-    <value>此时未找到任何更新</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="UninstallLibrary" xml:space="preserve">
     <value>卸载 {0}</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>需要安装 NuGet 包才能增强 MSBuild 进程，但不会将任何文件添加到该项目。
+    <value>将安装 NuGet 包以扩充 MSBuild 进程，但不向项目添加任何文件。
 
 这可能需要 Internet 连接。
 
-是否继续?</value>
+是否要继续?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;要搜索的类型&gt;</value>
@@ -129,5 +125,25 @@
   </data>
   <data name="Install" xml:space="preserve">
     <value>安装(_I)</value>
+  </data>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>此时找不到更新</value>
+    <comment>Used in message box when light bulb found no updates</comment>
+  </data>
+  <data name="Checked" xml:space="preserve">
+    <value>已勾选 {0}</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>已取消勾选 {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
+    <value>预发布: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Stable" xml:space="preserve">
+    <value>稳定: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Title" xml:space="preserve">
+    <value>更新库</value>
+    <comment>Title for SuggestedAction set</comment>
   </data>
 </root>

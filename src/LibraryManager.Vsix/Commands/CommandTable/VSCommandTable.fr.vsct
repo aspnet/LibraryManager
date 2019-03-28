@@ -16,7 +16,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>&amp;Bibliothèque côté client...</ButtonText>
+          <ButtonText>Bib&amp;liothèque côté client...</ButtonText>
         </Strings>
       </Button>
       <!-- Config file -->
@@ -44,7 +44,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Activer la restauration des bibliothèques côté client sur la build...</ButtonText>
+          <ButtonText>Activer les bibliothèques côté client de restauration lors de la build...</ButtonText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>

@@ -36,16 +36,12 @@
     <value>Sprawdź aktualizacje</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="NoUpdatesFound" xml:space="preserve">
-    <value>Nie znaleziono teraz żadnych aktualizacji</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="UninstallLibrary" xml:space="preserve">
     <value>Odinstaluj plik {0}</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Pakiet NuGet zostanie zainstalowany w celu rozszerzenia procesu programu MSBuild, ale żadne pliki nie zostaną dodane do projektu.
+    <value>Pakiet NuGet zostanie zainstalowany w celu rozszerzenia procesu MSBuild, ale żadne pliki nie zostaną dodane do projektu.
 
 Może to wymagać połączenia z Internetem.
 
@@ -129,5 +125,25 @@ Czy chcesz kontynuować?</value>
   </data>
   <data name="Install" xml:space="preserve">
     <value>_Instaluj</value>
+  </data>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>W tej chwili nie znaleziono żadnych aktualizacji</value>
+    <comment>Used in message box when light bulb found no updates</comment>
+  </data>
+  <data name="Checked" xml:space="preserve">
+    <value>Zaznaczone: {0}</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>Niezaznaczone: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
+    <value>Wersja wstępna: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Stable" xml:space="preserve">
+    <value>Stabilne: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Title" xml:space="preserve">
+    <value>Aktualizowanie biblioteki</value>
+    <comment>Title for SuggestedAction set</comment>
   </data>
 </root>

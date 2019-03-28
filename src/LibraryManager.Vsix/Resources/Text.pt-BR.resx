@@ -36,16 +36,12 @@
     <value>Verificar se há atualizações</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="NoUpdatesFound" xml:space="preserve">
-    <value>Sem atualizações no momento</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="UninstallLibrary" xml:space="preserve">
     <value>Desinstalar {0}</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Será instalado um pacote NuGet para aumentar o processo MSBuild, mas nenhum arquivo será adicionado ao projeto.
+    <value>Um pacote NuGet será instalado para aumentar o processo do MSBuild, mas nenhum arquivo será adicionado ao projeto.
 
 Isso pode exigir uma conexão com a Internet.
 
@@ -110,10 +106,10 @@ Deseja continuar?</value>
     <value>_Biblioteca:</value>
   </data>
   <data name="Provider" xml:space="preserve">
-    <value>_Provedor:</value>
+    <value>_Provedor: </value>
   </data>
   <data name="TargetLocation" xml:space="preserve">
-    <value>Local de _Destino:</value>
+    <value>_Local de Destino:</value>
   </data>
   <data name="ChooseSpecificFiles" xml:space="preserve">
     <value>Escolha arquivos _específicos:</value>
@@ -128,6 +124,26 @@ Deseja continuar?</value>
     <value>_Cancelar</value>
   </data>
   <data name="Install" xml:space="preserve">
-    <value>_Instalação</value>
+    <value>_Instalar</value>
+  </data>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>Nenhuma atualização encontrada no momento</value>
+    <comment>Used in message box when light bulb found no updates</comment>
+  </data>
+  <data name="Checked" xml:space="preserve">
+    <value>Verificado {0}</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>Não Verificado {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
+    <value>Pré-lançamento: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Stable" xml:space="preserve">
+    <value>Estável: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Title" xml:space="preserve">
+    <value>Atualizar Biblioteca</value>
+    <comment>Title for SuggestedAction set</comment>
   </data>
 </root>

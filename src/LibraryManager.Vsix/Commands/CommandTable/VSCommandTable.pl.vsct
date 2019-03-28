@@ -44,7 +44,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Włącz przywracanie bibliotek po stronie klienta przy kompilacji...</ButtonText>
+          <ButtonText>Włącz przywracanie bibliotek po stronie klienta podczas kompilacji...</ButtonText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>

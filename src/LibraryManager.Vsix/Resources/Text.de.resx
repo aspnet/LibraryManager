@@ -36,20 +36,16 @@
     <value>Nach Updates suchen</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="NoUpdatesFound" xml:space="preserve">
-    <value>Zurzeit liegen keine Updates vor.</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="UninstallLibrary" xml:space="preserve">
     <value>"{0}" deinstallieren</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Ein NuGet-Paket wird installiert, um den MSBuild-Prozess zu verbessern, dem Projekt werden jedoch keine Dateien hinzugefügt.
+    <value>Zur Verbesserung des MSBuild-Prozesses wird ein NuGet-Paket installiert, aber dem Projekt werden keine Dateien hinzugefügt.
 
-Möglicherweise ist hierzu eine Internetverbindung erforderlich.
+Dazu ist möglicherweise eine Internetverbindung erforderlich.
 
-Möchten Sie fortfahren?</value>
+Möchten Sie den Vorgang fortsetzen?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Suchtext eingeben&gt;</value>
@@ -129,5 +125,25 @@ Möchten Sie fortfahren?</value>
   </data>
   <data name="Install" xml:space="preserve">
     <value>_Installieren</value>
+  </data>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>Gegenwärtig liegen keine Updates vor.</value>
+    <comment>Used in message box when light bulb found no updates</comment>
+  </data>
+  <data name="Checked" xml:space="preserve">
+    <value>"{0}" aktiviert</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>"{0}" deaktiviert</value>
+  </data>
+  <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
+    <value>Vorabversion: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Stable" xml:space="preserve">
+    <value>Stabil: {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Title" xml:space="preserve">
+    <value>Bibliothek aktualisieren</value>
+    <comment>Title for SuggestedAction set</comment>
   </data>
 </root>

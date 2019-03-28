@@ -16,7 +16,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Clientseitige &amp;Bibliothek...</ButtonText>
+          <ButtonText>&amp;Clientseitige Bibliothek...</ButtonText>
         </Strings>
       </Button>
       <!-- Config file -->

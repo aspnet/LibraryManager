@@ -36,18 +36,14 @@
     <value>Rechercher les mises à jour</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="NoUpdatesFound" xml:space="preserve">
-    <value>Aucune mise à jour n'a été trouvée pour l'instant</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="UninstallLibrary" xml:space="preserve">
     <value>Désinstaller {0}</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Un package NuGet est installé pour augmenter le processus MSBuild, mais aucun fichier n'est ajouté au projet.
+    <value>Un package NuGet sera installé pour augmenter le processus MSBuild, mais aucun fichier ne sera ajouté au projet.
 
-Une connexion Internet peut être nécessaire.
+Cette opération risque de nécessiter une connexion Internet.
 
 Voulez-vous continuer ?</value>
   </data>
@@ -129,5 +125,25 @@ Voulez-vous continuer ?</value>
   </data>
   <data name="Install" xml:space="preserve">
     <value>_Installer</value>
+  </data>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>Aucune mise à jour trouvée pour l'instant</value>
+    <comment>Used in message box when light bulb found no updates</comment>
+  </data>
+  <data name="Checked" xml:space="preserve">
+    <value>Archivé {0}</value>
+  </data>
+  <data name="UnChecked" xml:space="preserve">
+    <value>Non archivé {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
+    <value>Préversion : {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Stable" xml:space="preserve">
+    <value>Stable : {0}</value>
+  </data>
+  <data name="SuggestedAction_Update_Title" xml:space="preserve">
+    <value>Mettre à jour la bibliothèque</value>
+    <comment>Title for SuggestedAction set</comment>
   </data>
 </root>

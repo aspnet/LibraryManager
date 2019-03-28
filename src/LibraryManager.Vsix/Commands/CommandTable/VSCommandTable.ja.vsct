@@ -16,7 +16,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>クライアント側ライブラリ(&amp;L)...</ButtonText>
+          <ButtonText>クライアント側のライブラリ(&amp;L)...</ButtonText>
         </Strings>
       </Button>
       <!-- Config file -->
@@ -27,7 +27,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>クライアント側ライブラリの復元(&amp;L)</ButtonText>
+          <ButtonText>クライアント側のライブラリを復元(&amp;L)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
@@ -35,7 +35,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>クライアント側ライブラリのクリーンアップ(&amp;C)</ButtonText>
+          <ButtonText>クライアント側のライブラリをクリーン(&amp;C)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">
@@ -44,7 +44,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>ビルド時のクライアント側ライブラリの復元を有効にする...</ButtonText>
+          <ButtonText>ビルド時にクライアント側のライブラリの復元を有効にする...</ButtonText>
           <LocCanonicalName>ToggleLibraryRestoreOnBuild</LocCanonicalName>
         </Strings>
       </Button>
@@ -56,7 +56,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>クライアント側ライブラリの管理(&amp;M)...</ButtonText>
+          <ButtonText>クライアント側のライブラリを管理(&amp;M)...</ButtonText>
           <CanonicalName>ManageClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
@@ -68,7 +68,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>クライアント側ライブラリの復元(&amp;R)</ButtonText>
+          <ButtonText>クライアント側のライブラリを復元(&amp;R)</ButtonText>
           <CanonicalName>RestoreClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
