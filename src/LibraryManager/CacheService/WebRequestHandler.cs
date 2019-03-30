@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Microsoft.Web.LibraryManager
         private WebRequestHandler()
         {
             HttpClientHandler httpMessageHandler = new HttpClientHandler();
+            httpMessageHandler.Proxy = WebRequest.DefaultWebProxy;
             _httpClient = new HttpClient(httpMessageHandler);
         }
 
