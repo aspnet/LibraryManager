@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="4.5.0" />
     <PackageReference Include="System.ValueTuple" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
     <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
     <Reference Include="System.ComponentModel.Composition" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
