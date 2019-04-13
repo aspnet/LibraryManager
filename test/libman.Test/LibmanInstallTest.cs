@@ -224,7 +224,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
             command.Execute("jquery", "--files", "abc.js");
-            string expectedMessage = @"[LIB018]: ""jquery@3.3.1"" does not contain the following: abc.js
+            string expectedMessage = @"[LIB018]: ""jquery@3.4.0"" does not contain the following: abc.js
 Valid files are core.js, jquery.js, jquery.min.js, jquery.min.map, jquery.slim.js, jquery.slim.min.js, jquery.slim.min.map";
 
             var logger = HostEnvironment.Logger as TestLogger;

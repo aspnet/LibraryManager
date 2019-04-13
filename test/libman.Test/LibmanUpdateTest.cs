@@ -68,7 +68,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ""defaultDestination"": ""wwwroot"",
   ""libraries"": [
     {
-      ""library"": ""jquery@3.3.1"",
+      ""library"": ""jquery@3.4.0"",
       ""files"": [
         ""jquery.min.js"",
         ""jquery.js""
@@ -139,7 +139,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ""defaultDestination"": ""wwwroot"",
   ""libraries"": [
     {
-      ""library"": ""jquery@3.3.1"",
+      ""library"": ""jquery@3.4.0"",
       ""files"": [ ""jquery.min.js"", ""jquery.js"" ]
     }
   ]
