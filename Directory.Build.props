@@ -29,6 +29,10 @@
     <PackageOutputPath>$(RepoRoot)\artifacts\$(Configuration)</PackageOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="NerdBank.GitVersioning" />
   </ItemGroup>
