@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Json
 {
@@ -26,7 +27,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
     internal class TextviewCreationListener : IVsTextViewCreationListener
     {
         private Manifest _manifest;
-        private Dependencies _dependencies;
+        private IDependencies _dependencies;
         private Project _project;
         private ErrorList _errorList;
         private string _manifestPath;
@@ -42,6 +43,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         [Import]
         ILibraryCommandService libraryCommandService { get; set; }
+
+        [Import]
+        private IDependenciesFactory DependenciesFactory { get; set; }
 
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
@@ -61,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             new CompletionController(textViewAdapter, textView, CompletionBroker);
 
-            _dependencies = Dependencies.FromConfigFile(doc.FilePath);
+            _dependencies = DependenciesFactory.FromConfigFile(doc.FilePath);
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
             _manifestPath = doc.FilePath;
             _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);

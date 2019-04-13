@@ -12,6 +12,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Collections.Generic;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -20,11 +21,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private bool _isPackageInstalled;
         private readonly IComponentModel _componentModel;
         private readonly Package _package;
+        private readonly IDependenciesFactory _dependenciesFactory;
 
-        private RestoreOnBuildCommand(Package package, OleMenuCommandService commandService)
+        private RestoreOnBuildCommand(Package package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
         {
             _package = package;
             _componentModel = VsHelpers.GetService<SComponentModel, IComponentModel>();
+            _dependenciesFactory = dependenciesFactory;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.RestoreOnBuild);
             var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
@@ -39,9 +42,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             get { return _package; }
         }
 
-        public static void Initialize(Package package, OleMenuCommandService commandService)
+        public static void Initialize(Package package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
         {
-            Instance = new RestoreOnBuildCommand(package, commandService);
+            Instance = new RestoreOnBuildCommand(package, commandService, dependenciesFactory);
         }
 
         private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)
@@ -99,7 +102,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                var dependencies = Dependencies.FromConfigFile(projectItem.FileNames[1]);
+                var dependencies = _dependenciesFactory.FromConfigFile(projectItem.FileNames[1]);
                 IEnumerable<string> packageIds = dependencies.Providers
                                                              .Where(p => p.NuGetPackageId != null)
                                                              .Select(p => p.NuGetPackageId)

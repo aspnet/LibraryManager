@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Json.VS.SuggestedActions;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
@@ -29,6 +30,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         [Import]
         public ILibraryCommandService LibraryCommandService { get; set; }
+
+        [Import]
+        public IDependenciesFactory DependenciesFactory { get; private set;}
 
         public IEnumerable<ISuggestedAction> GetSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, Node node)
         {

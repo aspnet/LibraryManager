@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -19,8 +20,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal sealed class InstallLibraryCommand
     {
         private readonly ILibraryCommandService _libraryCommandService;
+        private readonly IDependenciesFactory _dependenciesFactory;
 
-        private InstallLibraryCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
+        private InstallLibraryCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
             CommandID cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.InstallPackage);
             OleMenuCommand cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
@@ -28,6 +30,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             commandService.AddCommand(cmd);
 
             _libraryCommandService = libraryCommandService;
+            _dependenciesFactory = dependenciesFactory;
         }
 
         public static InstallLibraryCommand Instance
@@ -36,9 +39,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             private set;
         }
 
-        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
+        public static void Initialize(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
-            Instance = new InstallLibraryCommand(commandService, libraryCommandService);
+            Instance = new InstallLibraryCommand(commandService, libraryCommandService, dependenciesFactory);
         }
 
         private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)
@@ -91,7 +94,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 string rootFolder = await project.GetRootFolderAsync().ConfigureAwait(false);
 
                 string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
-                IDependencies dependencies = Dependencies.FromConfigFile(configFilePath);
+                IDependencies dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
 
                 Manifest manifest = await GetManifestAsync(configFilePath, dependencies).ConfigureAwait(false);
 

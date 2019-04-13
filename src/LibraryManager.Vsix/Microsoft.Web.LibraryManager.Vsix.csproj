@@ -53,6 +53,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\InstallLibraryCommand.cs" />
+    <Compile Include="Contracts\DependenciesFactory.cs" />
+    <Compile Include="Contracts\IDependenciesFactory.cs" />
     <Compile Include="Shared\DefaultSolutionEvents.cs" />
     <Compile Include="UI\Converters\CheckBoxAutomationNameConverter.cs" />
     <Compile Include="UI\Extensions\RemoveSubstringExtension.cs" />

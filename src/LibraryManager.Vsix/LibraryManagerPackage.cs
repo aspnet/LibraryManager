@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Tasks = System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -46,7 +47,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal sealed class LibraryManagerPackage : AsyncPackage
     {
         [Import]
-        ILibraryCommandService LibraryCommandService { get; set; }
+        internal ILibraryCommandService LibraryCommandService { get; set; }
+
+        [Import]
+        internal IDependenciesFactory DependenciesFactory { get; private set; }
 
         protected override async Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
@@ -59,12 +63,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (commandService != null && LibraryCommandService != null)
             {
-                InstallLibraryCommand.Initialize(this, commandService, LibraryCommandService);
+                InstallLibraryCommand.Initialize(commandService, LibraryCommandService, DependenciesFactory);
                 CleanCommand.Initialize(this, commandService, LibraryCommandService);
                 RestoreCommand.Initialize(this, commandService, LibraryCommandService);
                 RestoreSolutionCommand.Initialize(this, commandService, LibraryCommandService);
-                RestoreOnBuildCommand.Initialize(this, commandService);
-                ManageLibrariesCommand.Initialize(this, commandService, LibraryCommandService);
+                RestoreOnBuildCommand.Initialize(this, commandService, DependenciesFactory);
+                ManageLibrariesCommand.Initialize(this, commandService, LibraryCommandService, DependenciesFactory);
             }
         }
     }

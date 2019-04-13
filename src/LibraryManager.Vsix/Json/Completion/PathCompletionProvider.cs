@@ -8,6 +8,7 @@ using System.IO;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.WebTools.Languages.Json.Editor.Completion;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 
@@ -17,6 +18,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [Name(nameof(PathCompletionProvider))]
     internal class PathCompletionProvider : BaseCompletionProvider
     {
+        private readonly IDependenciesFactory _dependenciesFactory;
+
+        [ImportingConstructor]
+        internal PathCompletionProvider(IDependenciesFactory dependenciesFactory)
+        {
+            _dependenciesFactory = dependenciesFactory;
+        }
+
         public override JsonCompletionContextType ContextType
         {
             get { return JsonCompletionContextType.PropertyValue; }
@@ -48,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 yield break;
             }
 
-            var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
+            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
             string cwd = dependencies?.GetHostInteractions().WorkingDirectory;
 
             if (string.IsNullOrEmpty(cwd))

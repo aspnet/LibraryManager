@@ -92,6 +92,18 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             }
         }
 
+        /// <summary>
+        /// Sets the contents of the manifest file by editing it in VS
+        /// </summary>
+        protected void SetManifestContents(string contents)
+        {
+            var doc = _libmanConfig.Open();
+            Editor.Selection.SelectAll();
+            Editor.KeyboardCommands.Delete();
+            Editor.Edit.InsertTextInBuffer(contents);
+            doc.Save();
+        }
+
         protected override VisualStudioHostConfiguration GetVisualStudioHostConfiguration()
         {
             VisualStudioHostConfiguration configuration = base.GetVisualStudioHostConfiguration();

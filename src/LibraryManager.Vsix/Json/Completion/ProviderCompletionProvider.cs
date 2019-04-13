@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.WebTools.Languages.Json.Editor.Completion;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 
@@ -17,6 +18,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal class ProviderCompletionProvider : BaseCompletionProvider
     {
         private static readonly ImageMoniker _libraryIcon = KnownMonikers.Method;
+
+        private readonly IDependenciesFactory _dependenciesFactory;
+
+        [ImportingConstructor]
+        internal ProviderCompletionProvider(IDependenciesFactory dependenciesFactory)
+        {
+            _dependenciesFactory = dependenciesFactory;
+        }
 
         public override JsonCompletionContextType ContextType
         {
@@ -30,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (member == null || (member.UnquotedNameText != ManifestConstants.Provider && member.UnquotedNameText != ManifestConstants.DefaultProvider))
                 yield break;
 
-            var dependencies = Dependencies.FromConfigFile(ConfigFilePath);
+            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
             IEnumerable<string> providerIds = dependencies.Providers?.Select(p => p.Id);
 
             if (providerIds == null || !providerIds.Any())
