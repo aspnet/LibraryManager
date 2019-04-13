@@ -1,7 +1,9 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using Microsoft.Test.Apex.Services;
 using Microsoft.Test.Apex.VisualStudio;
 using Microsoft.Test.Apex.VisualStudio.Shell;
 using Microsoft.Web.LibraryManager.Vsix.UI;
@@ -16,27 +18,18 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
     {
         public InstallDialogTestExtension OpenDialog()
         {
-            Guid guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
+            var guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
             uint commandId = 0x0100;
 
-            VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await ExecuteCommandAsync(guid, commandId);
-            });
-
-            return WaitForDialog();
-        }
-
-        private async Task ExecuteCommandAsync(Guid guid, uint commandId)
-        {
-            // We don't wait for completion of the command, since this invokes ShowDialog() which is blocking.
-            await Task.Factory.StartNew(() =>
+            _ = Task.Run(() =>
             {
                 UIInvoke(() =>
                 {
                     CommandingService.ExecuteCommand(guid, commandId, null);
                 });
             });
+
+            return WaitForDialog();
         }
 
         private InstallDialogTestExtension GetInstallDialogTestExtension()
@@ -55,17 +48,16 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
         {
             if (InstallDialogProvider.Window == null)
             {
-                TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
-                EventHandler onWindowChanged = (object sender, EventArgs e) =>
+                var tcs = new TaskCompletionSource<bool>();
+                void onWindowChanged(object sender, EventArgs e)
                 {
                     tcs.SetResult(true);
-                };
+                }
 
                 InstallDialogProvider.WindowChanged += onWindowChanged;
-                VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
-                {
-                    await tcs.Task;
-                });
+#pragma warning disable VSTHRD102 // Implement internal logic asynchronously
+                VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => await tcs.Task);
+#pragma warning restore VSTHRD102 // Implement internal logic asynchronously
 
                 InstallDialogProvider.WindowChanged -= onWindowChanged;
             }
@@ -77,13 +69,6 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
 
         [Import]
         private CommandingService CommandingService
-        {
-            get;
-            set;
-        }
-
-        [Import]
-        private ISynchronizationService SynchronizationService
         {
             get;
             set;

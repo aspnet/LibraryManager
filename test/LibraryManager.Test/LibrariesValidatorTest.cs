@@ -41,7 +41,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB016";
             string expectedErrorMessage = "Conflicting file \"lib\\package.json\" found in more than one library: jquery, d3";
-            var manifest = Manifest.FromJson(_docDifferentLibraries_SameFiles_SameLocation, _dependencies);
+            var manifest = Manifest.FromJson(DocDifferentLibraries_SameFiles_SameLocation, _dependencies);
 
             IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
             var conflictsList = conflicts.ToList();
@@ -55,7 +55,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task DetectConflictsAsync_ConflictingFiles_DifferentDestinations()
         {
-            var manifest = Manifest.FromJson(_docDifferentLibraries_SameFiles_DifferentLocation, _dependencies);
+            var manifest = Manifest.FromJson(DocDifferentLibraries_SameFiles_DifferentLocation, _dependencies);
 
             IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
@@ -67,7 +67,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB019";
             string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
-            var manifest = Manifest.FromJson(_docSameLibrary_DifferentDestination, _dependencies);
+            var manifest = Manifest.FromJson(DocSameLibrary_DifferentDestination, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
@@ -83,7 +83,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB019";
             string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
-            var manifest = Manifest.FromJson(_docSameLibrary_DifferentProviders, _dependencies);
+            var manifest = Manifest.FromJson(DocSameLibrary_DifferentProviders, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
@@ -99,7 +99,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB019";
             string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
-            var manifest = Manifest.FromJson(_docSameLibrary_DifferentVersions_DifferentFiles, _dependencies);
+            var manifest = Manifest.FromJson(DocSameLibrary_DifferentVersions_DifferentFiles, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
@@ -128,7 +128,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task GetManifestErrors_ManifestHasUnsupportedVersion()
         {
             string expectedErrorCode = "LIB009";
-            var manifest = Manifest.FromJson(_docUnsupportedVersion, _dependencies);
+            var manifest = Manifest.FromJson(DocUnsupportedVersion, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
@@ -142,7 +142,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task GetLibrariesErrors_LibrariesNoProvider()
         {
             string expectedErrorCode = "LIB007";
-            var manifest = Manifest.FromJson(_docNoProvider, _dependencies);
+            var manifest = Manifest.FromJson(DocNoProvider, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
 
@@ -152,7 +152,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual(resultsList[0].Errors[0].Code, expectedErrorCode);
         }
 
-        private string _docDifferentLibraries_SameFiles_SameLocation = $@"{{
+        private static readonly string DocDifferentLibraries_SameFiles_SameLocation = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -170,7 +170,7 @@ namespace Microsoft.Web.LibraryManager.Test
   ]
 }}
 ";
-        private string _docDifferentLibraries_SameFiles_DifferentLocation = $@"{{
+        private static readonly string DocDifferentLibraries_SameFiles_DifferentLocation = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -189,7 +189,7 @@ namespace Microsoft.Web.LibraryManager.Test
 }}
 ";
 
-        private string _docSameLibrary_DifferentVersions_DifferentFiles = $@"{{
+        private static readonly string DocSameLibrary_DifferentVersions_DifferentFiles = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -208,7 +208,7 @@ namespace Microsoft.Web.LibraryManager.Test
 }}
 ";
 
-        private string _docSameLibrary_DifferentDestination = $@"{{
+        private static readonly string DocSameLibrary_DifferentDestination = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -226,7 +226,7 @@ namespace Microsoft.Web.LibraryManager.Test
   ]
 }}
 ";
-        private string _docSameLibrary_DifferentProviders = $@"{{
+        private static readonly string DocSameLibrary_DifferentProviders = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -245,31 +245,7 @@ namespace Microsoft.Web.LibraryManager.Test
 }}
 ";
 
-        private string _docInvalidSource = $@"{{
-  ""{ManifestConstants.Version}"": ""1.0"",
-  ""{ManifestConstants.Libraries}"": [
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
-      ""{ManifestConstants.Provider}"": ""cdnjs"",
-      ""{ManifestConstants.Destination}"": ""lib"",
-      ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
-    }},
-    {{
-      ""{ManifestConstants.Library}"": ""../path/to/file.txt"",
-      ""{ManifestConstants.Provider}"": ""filesystem"",
-      ""{ManifestConstants.Destination}"": ""lib"",
-      ""{ManifestConstants.Files}"": [ ""file.txt"" ]
-    }},
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@2.2.1"",
-      ""{ManifestConstants.Provider}"": ""cdnjs"",
-      ""{ManifestConstants.Destination}"": ""lib2"",
-      ""{ManifestConstants.Files}"": [ ""jquery.min.js"" ]
-    }},
-  ]
-}}
-";
-        private string _docUnsupportedVersion = $@"{{
+        private static readonly string DocUnsupportedVersion = $@"{{
   ""{ManifestConstants.Version}"": ""2.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -281,7 +257,7 @@ namespace Microsoft.Web.LibraryManager.Test
   ]
 }}
 ";
-        private string _docNoProvider = $@"{{
+        private static readonly string DocNoProvider = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{

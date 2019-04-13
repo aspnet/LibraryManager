@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -30,7 +33,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             InitializeComponent();
 
-            this.Loaded += LibrarySearchBox_Loaded;
+            Loaded += LibrarySearchBox_Loaded;
         }
 
         protected override AutomationPeer OnCreateAutomationPeer()
@@ -40,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void LibrarySearchBox_Loaded(object sender, RoutedEventArgs e)
         {
-            Window window = Window.GetWindow(LibrarySearchBox);
+            var window = Window.GetWindow(LibrarySearchBox);
 
             // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
             // the dialog is dragged or resized.
@@ -136,7 +139,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     if (Options.Items.Count > 0)
                     {
                         Options.ScrollIntoView(Options.Items[0]);
-                        FrameworkElement fe = (FrameworkElement)Options.ItemContainerGenerator.ContainerFromIndex(0);
+                        var fe = (FrameworkElement)Options.ItemContainerGenerator.ContainerFromIndex(0);
                         fe?.Focus();
                         Options.SelectedIndex = 0;
                         e.Handled = true;
@@ -229,7 +232,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // We will invoke completion on text insertion and not deletion.
             if (textChange.AddedLength > 0 && !string.IsNullOrEmpty(Text))
             {
-                VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
+                _ = VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
                     CompletionSet completionSet = await SearchService?.Invoke(Text, LibrarySearchBox.CaretIndex);
 

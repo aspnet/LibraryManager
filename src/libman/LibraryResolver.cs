@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 
@@ -88,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Tools
 
             while (true)
             {
-                string choice = string.Empty;
+                string choice;
                 try
                 {
                     choice = hostEnvironment.InputReader.GetUserInput(sb.ToString());
@@ -104,35 +102,6 @@ namespace Microsoft.Web.LibraryManager.Tools
                     return installedLibraries.ElementAt(choiceIndex - 1);
                 }
             }
-        }
-
-        private static Dictionary<string, ILibraryCatalog> GetCatalogs(Manifest manifest, IDependencies manifestDependencies, IProvider provider)
-        {
-            var catalogs = new Dictionary<string, ILibraryCatalog>(StringComparer.OrdinalIgnoreCase);
-
-            if (provider != null)
-            {
-                catalogs[provider.Id] = provider.GetCatalog();
-            }
-            else
-            {
-                var usedProviders = manifest.Libraries.Select(l => l.ProviderId).ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-                IEnumerable<IProvider> candidateProviders = manifestDependencies.Providers
-                    .Where(p => manifest.DefaultProvider == p.Id || usedProviders.Contains(p.Id));
-
-                foreach (IProvider p in manifestDependencies.Providers)
-                {
-                    catalogs[p.Id] = p.GetCatalog();
-                }
-            }
-
-            return catalogs;
-        }
-
-        private static bool IsLibraryInstalledByProvider(ILibraryInstallationState l, string providerId, string defaultProvider)
-        {
-            return l.ProviderId == providerId || (string.IsNullOrEmpty(l.ProviderId) && defaultProvider == providerId);
         }
     }
 }

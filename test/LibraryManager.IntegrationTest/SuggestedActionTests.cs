@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Test.Apex.VisualStudio.Editor;
-using Microsoft.Test.Apex.VisualStudio.Shell;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Web.LibraryManager.IntegrationTest
@@ -36,7 +33,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
             SetManifestContents(withLibrary);
 
-            string restoreFolder = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "UninstallSuggestedAction", "files");
+            string restoreFolder = Path.Combine(SolutionRootPath, ProjectName, "wwwroot", "UninstallSuggestedAction", "files");
             Helpers.FileIO.WaitForRestoredFile(restoreFolder, Path.Combine(restoreFolder, "jquery.min.js"), true);
 
             Editor.Caret.MoveToExpression("jquery");

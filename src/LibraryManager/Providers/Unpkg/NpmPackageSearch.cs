@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -35,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         private static async Task<IEnumerable<string>> GetPackageNamesWithScopeAsync(string searchTerm, CancellationToken cancellationToken)
         {
             Debug.Assert(searchTerm.StartsWith("@", StringComparison.Ordinal));
-            List<string> packageNames = new List<string>();
+            var packageNames = new List<string>();
 
             int slash = searchTerm.IndexOf("/", StringComparison.Ordinal);
             if (slash > 0)
@@ -69,18 +72,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     //          }
                     //      }, ...
 
-                    JArray resultsValues =  packageListJsonObject["results"] as JArray;
-                    if (resultsValues != null)
+                    if (packageListJsonObject["results"] is JArray resultsValues)
                     {
                         foreach (JObject packageEntry in resultsValues.Children())
                         {
                             if (packageEntry != null)
                             {
-                                JObject packageDetails = packageEntry["package"] as JObject;
-                                if (packageDetails != null)
+                                if (packageEntry["package"] is JObject packageDetails)
                                 {
                                     string currentPackageName = packageDetails.GetJObjectMemberStringValue("name");
-                                    if (!String.IsNullOrWhiteSpace(currentPackageName))
+                                    if (!string.IsNullOrWhiteSpace(currentPackageName))
                                     {
                                         packageNames.Add(currentPackageName);
                                     }
@@ -96,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private static async Task<IEnumerable<string>> GetPackageNamesFromSimpleQueryAsync(string searchTerm, CancellationToken cancellationToken)
         {
-            List<string> packageNames = new List<string>();
+            var packageNames = new List<string>();
 
             string searchUrl = GetCustomNpmRegistryUrl() ?? NpmPackageSearchUrl;
             string packageListUrl = string.Format(searchUrl, searchTerm);
@@ -123,21 +124,19 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     //    {"key":["angelabilities-exec"],"value":1}
                     //]}
 
-                    JArray packageListJSON = packageListJsonObject["rows"] as JArray;
 
-                    if (packageListJSON != null)
+                    if (packageListJsonObject["rows"] is JArray packageListJSON)
                     {
                         foreach (JObject packageEntry in packageListJSON.Children())
                         {
                             if (packageEntry != null)
                             {
-                                JArray keysArray = packageEntry["key"] as JArray;
-                                if (keysArray != null)
+                                if (packageEntry["key"] is JArray keysArray)
                                 {
                                     foreach (JToken key in keysArray.Children())
                                     {
                                         string currentPackageName = key.ToString();
-                                        if (!String.IsNullOrWhiteSpace(currentPackageName))
+                                        if (!string.IsNullOrWhiteSpace(currentPackageName))
                                         {
                                             packageNames.Add(currentPackageName);
                                         }
@@ -181,8 +180,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public static async Task<NpmPackageInfo> GetPackageInfoAsync(string packageName, CancellationToken cancellationToken)
         {
-            NpmPackageInfo packageInfo = null;
-
+            NpmPackageInfo packageInfo;
             if (packageName.StartsWith("@", StringComparison.Ordinal))
             {
                 packageInfo = await GetPackageInfoForScopedPackageAsync(packageName, cancellationToken).ConfigureAwait(false);
@@ -244,10 +242,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     packageInfo = NpmPackageInfo.Parse(packageInfoJSON);
                 }
 
-                JObject versionsList = packageInfoJSON["versions"] as JObject;
-                if (versionsList != null)
+                if (packageInfoJSON["versions"] is JObject versionsList)
                 {
-                    List<SemanticVersion> semanticVersions = versionsList.Properties().Select(p => SemanticVersion.Parse(p.Name)).ToList<SemanticVersion>();
+                    var semanticVersions = versionsList.Properties()
+                                                       .Select(p => SemanticVersion.Parse(p.Name))
+                                                       .ToList();
                     string latestVersion = semanticVersions.Max().OriginalText;
                     IList<SemanticVersion> filteredSemanticVersions = FilterOldPrereleaseVersions(semanticVersions);
 
@@ -270,8 +269,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         internal static IList<SemanticVersion> FilterOldPrereleaseVersions(List<SemanticVersion> semanticVersions)
         {
-            List<SemanticVersion> filteredVersions = new List<SemanticVersion>();
-            List<SemanticVersion> releasedVersions = semanticVersions.Where(sv => sv.PrereleaseVersion == null).ToList<SemanticVersion>();
+            var filteredVersions = new List<SemanticVersion>();
+            var releasedVersions = semanticVersions.Where(sv => sv.PrereleaseVersion == null).ToList();
             SemanticVersion latestReleaseVersion = releasedVersions.Max();
 
             filteredVersions.AddRange(releasedVersions);

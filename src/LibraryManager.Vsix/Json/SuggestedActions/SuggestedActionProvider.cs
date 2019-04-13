@@ -49,8 +49,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public bool HasSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, Node node)
         {
-            if (!DocumentService.TryGetTextDocument(textView.TextBuffer, out var doc))
+            if (!DocumentService.TryGetTextDocument(textView.TextBuffer, out ITextDocument doc))
+            {
                 return false;
+            }
 
             ObjectNode parent = node.FindType<ObjectNode>();
 

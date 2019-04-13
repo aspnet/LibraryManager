@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Windows.Markup;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Extensions
@@ -6,8 +9,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Extensions
     [MarkupExtensionReturnType(typeof(string))]
     internal class RemoveSubstringExtension : MarkupExtension
     {
-        private object _text;
-        private string _remove;
+        private readonly object _text;
+        private readonly string _remove;
 
         public RemoveSubstringExtension(object text)
             : this(text, null)
@@ -29,8 +32,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Extensions
 
             string s = null;
 
-            MarkupExtension m = _text as MarkupExtension;
-            if (m != null)
+            if (_text is MarkupExtension m)
             {
                 s = m.ProvideValue(serviceProvider) as string;
             }

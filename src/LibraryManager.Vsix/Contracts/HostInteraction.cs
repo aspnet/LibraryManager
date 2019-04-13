@@ -14,7 +14,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class HostInteraction : IHostInteraction
     {
-        private string _configFilePath;
+        private readonly string _configFilePath;
+
         public HostInteraction(string configFilePath, ILogger logger)
         {
             string cwd = Path.GetDirectoryName(configFilePath);
@@ -30,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public async Task<bool> WriteFileAsync(string relativePath, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            FileInfo absolutePath = new FileInfo(Path.Combine(WorkingDirectory, relativePath));
+            var absolutePath = new FileInfo(Path.Combine(WorkingDirectory, relativePath));
 
             if (absolutePath.Exists)
             {
@@ -65,12 +66,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            List<string> absolutePaths = new List<string>();
+            var absolutePaths = new List<string>();
 
             foreach (string filePath in relativeFilePaths)
             {
                 string absoluteFilePath = Path.Combine(WorkingDirectory, filePath);
-                FileInfo file = new FileInfo(absoluteFilePath);
+                var file = new FileInfo(absoluteFilePath);
 
                 if (file.Exists)
                 {

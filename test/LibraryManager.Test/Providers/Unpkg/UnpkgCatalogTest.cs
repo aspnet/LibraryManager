@@ -95,13 +95,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", "invalid_version", token);
+            _ = await _catalog.GetLibraryAsync("invalid_id", "invalid_version", token);
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery", 0);
 
             Assert.AreEqual(0, result.Start);
@@ -115,7 +114,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         [Ignore] // Enable it after version completion sorting is committed.
         public async Task GetLibraryCompletionSetAsync_Versions()
         {
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery@", 7);
 
             Assert.AreEqual(7, result.Start);

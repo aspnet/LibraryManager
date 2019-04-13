@@ -10,10 +10,11 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.WebTools.Languages.Json.Editor.Document;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
+
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -21,10 +22,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         internal const string RetriggerCompletion = "LibManForceRetrigger";
 
-        private ITextView _textView;
-        private IOleCommandTarget _nextCommandTarget;
-        private ICompletionBroker _broker;
-        private int _delay = 500;
+        private readonly ITextView _textView;
+        private readonly IOleCommandTarget _nextCommandTarget;
+        private readonly ICompletionBroker _broker;
+        private const int Delay = 500;
         private DateTime _lastTyped;
         private ICompletionSession _currentSession;
 
@@ -43,24 +44,26 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (char.IsLetterOrDigit(typedChar) && _broker.IsCompletionActive(_textView))
                 {
-                    RetriggerAsync(false);
+                    _ = RetriggerAsync(false);
                 }
                 else if (typedChar == '/' || typedChar == '\\' && !_broker.IsCompletionActive(_textView))
                 {
-                    RetriggerAsync(false);
+                    _ = RetriggerAsync(false);
                 }
                 else if (typedChar == '@')
                 {
-                    RetriggerAsync(true);
+                    _ = RetriggerAsync(true);
                 }
             }
             else if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.BACKSPACE)
             {
-                RetriggerAsync(true);
+                _ = RetriggerAsync(true);
             }
 
-            ThreadHelper.Generic.BeginInvoke(() =>
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                 if (_currentSession == null && _broker.IsCompletionActive(_textView))
                 {
                     _currentSession = _broker.GetSessions(_textView)[0];
@@ -86,24 +89,26 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (text.EndsWith("/", StringComparison.Ordinal) || text.EndsWith("\\", StringComparison.Ordinal))
             {
                 System.Windows.Forms.SendKeys.Send("{LEFT}");
-                RetriggerAsync(true);
+                _ = RetriggerAsync(true);
             }
         }
 
-        private async void RetriggerAsync(bool force)
+        private async Task RetriggerAsync(bool force)
         {
             _lastTyped = DateTime.Now;
-            int delay = force ? 50 : _delay;
+            int delay = force ? 50 : Delay;
 
             // Don't leave "stale" completion session up while the user is typing, or else we could
             // get completion from a stale session.
             ICompletionSession completionSession = _broker.GetSessions(_textView).FirstOrDefault();
-            if (completionSession != null && completionSession.Properties.TryGetProperty<bool>(RetriggerCompletion, out bool retrigger) && retrigger)
+            if (completionSession != null
+                && completionSession.Properties.TryGetProperty<bool>(RetriggerCompletion, out bool retrigger)
+                && retrigger)
             {
                 completionSession.Dismiss();
             }
 
-            await System.Threading.Tasks.Task.Delay(delay);
+            await Task.Delay(delay);
 
             // Prevents retriggering from happening while typing fast
             if (_lastTyped.AddMilliseconds(delay) > DateTime.Now)
@@ -114,7 +119,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             // Completion may have gotten invoked via by Web Editor OnPostTypeChar(). Don't invoke again, or else we get flikering completion list
             // TODO:Review the design here post-preview 4 and make sure this completion controller doesn't clash with Web Editors Json completion controller
             completionSession = _broker.GetSessions(_textView).FirstOrDefault();
-            if (completionSession != null && completionSession.Properties.TryGetProperty<bool>(RetriggerCompletion, out retrigger))
+            if (completionSession != null && completionSession.Properties.TryGetProperty<bool>(RetriggerCompletion, out _))
             {
                 return;
             }
@@ -144,8 +149,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
 
             ObjectNode parent = node.FindType<ObjectNode>();
-
-            if (JsonHelpers.TryGetInstallationState(parent, out ILibraryInstallationState state))
+            if (JsonHelpers.TryGetInstallationState(parent, out _))
             {
                 VsHelpers.DTE.ExecuteCommand("Edit.ListMembers");
             }

@@ -16,7 +16,6 @@ namespace Microsoft.Web.LibraryManager.Test
     [TestClass]
     public class LibraryIdToNameAndVersionConverterTest
     {
-        private string _filePath;
         private string _cacheFolder;
         private string _projectFolder;
         private IDependencies _dependencies;
@@ -27,7 +26,6 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             _cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
-            _filePath = Path.Combine(_projectFolder, "libman.json");
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory());

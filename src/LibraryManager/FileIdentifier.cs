@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -22,9 +21,7 @@ namespace Microsoft.Web.LibraryManager
 
         public override bool Equals(object obj)
         {
-            FileIdentifier other = obj as FileIdentifier;
-
-            if (other == null)
+            if (!(obj is FileIdentifier other))
             {
                 return false;
             }

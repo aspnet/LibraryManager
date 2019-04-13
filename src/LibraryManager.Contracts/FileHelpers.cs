@@ -30,8 +30,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
 
             string tempFileName = Path.GetTempFileName();
 
-            bool result = true;
-
+            bool result;
             if (string.IsNullOrWhiteSpace(tempFileName))
             {
                 Debug.Fail($"Unexpected: null or empty {nameof(tempFileName)}");
@@ -82,7 +81,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
 
             if (!string.IsNullOrEmpty(directoryPath))
             {
-                DirectoryInfo dir = Directory.CreateDirectory(directoryPath);
+                _ = Directory.CreateDirectory(directoryPath);
                 using (FileStream destination = File.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     await sourceStream.CopyToAsync(destination);
@@ -117,6 +116,8 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static Task<Stream> ReadFileAsStreamAsync(string fileName, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             return Task.FromResult<Stream>(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read, 1, useAsync: true));
         }
 
@@ -218,7 +219,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static bool DeleteFiles(IEnumerable<string> filePaths, string rootDirectory = null)
         {
-            HashSet<string> directories = new HashSet<string>();
+            var directories = new HashSet<string>();
 
             try
             {
@@ -276,7 +277,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 return true;
             }
 
-            HashSet<string> newFolderPaths = new HashSet<string>();
+            var newFolderPaths = new HashSet<string>();
 
             try
             {
@@ -324,7 +325,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         {
             try
             {
-                FileInfo fileInfo = new FileInfo(filePath);
+                var fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists)
                 {
                     File.Delete(filePath);
@@ -336,11 +337,6 @@ namespace Microsoft.Web.LibraryManager.Contracts
             {
                 return false;
             }
-        }
-
-        private static bool IsUNCPath(string rootPath)
-        {
-            return new Uri(rootPath).IsUnc;
         }
 
         internal static bool IsUnderRootDirectory(string filePath, string rootDirectory)

@@ -8,13 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Json;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 using Microsoft.Web.LibraryManager.Providers.FileSystem;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
-using Newtonsoft.Json;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -22,17 +20,16 @@ namespace Microsoft.Web.LibraryManager.Test
     [TestClass]
     public class LibraryInstallationStateTest
     {
-        private string _filePath;
         private string _cacheFolder;
         private string _projectFolder;
         private IDependencies _dependencies;
         private HostInteraction _hostInteraction;
+
         [TestInitialize]
         public void Setup()
         {
             _cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
-            _filePath = Path.Combine(_projectFolder, "libman.json");
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
             _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory());

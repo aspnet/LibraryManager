@@ -24,8 +24,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private InstallLibraryCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
-            CommandID cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.InstallPackage);
-            OleMenuCommand cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
+            var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.InstallPackage);
+            var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatusHandlerAsync;
             commandService.AddCommand(cmd);
 
@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task BeforeQueryStatusAsync(object sender, EventArgs e)
         {
-            OleMenuCommand button = (OleMenuCommand)sender;
+            var button = (OleMenuCommand)sender;
             button.Visible = button.Enabled = false;
 
             // When command is invooked from a folder
@@ -104,9 +104,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 // Instead we will display a message box indicating the syntax errors in manifest file.
                 if (manifest == null)
                 {
-                    IVsUIShell shell = Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
-                    int result;
-
+                    var shell = Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
                     shell.ShowMessageBox(dwCompRole: 0,
                                          rclsidComp: Guid.Empty,
                                          pszTitle: null,
@@ -117,12 +115,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                                          msgdefbtn: OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
                                          msgicon: OLEMSGICON.OLEMSGICON_WARNING,
                                          fSysAlert: 0,
-                                         pnResult: out result);
+                                         pnResult: out _);
 
                     return;
                 }
 
-                string target = string.Empty;
+                string target;
 
                 // Install command was invoked from a folder.
                 // So the initial target location should be name of the folder from which
@@ -146,7 +144,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                 }
 
-                UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder, project);
+                var dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder, project);
 
                 dialog.ShowModal();
 
@@ -156,19 +154,18 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task<Manifest> GetManifestAsync(string configFilePath, IDependencies dependencies)
         {
-            RunningDocumentTable rdt = new RunningDocumentTable(ServiceProvider.GlobalProvider);
-            IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
+            var rdt = new RunningDocumentTable(ServiceProvider.GlobalProvider);
             ITextBuffer documentBuffer = null;
-            Manifest manifest = null;
 
-            if (textBuffer != null)
+            if (rdt.FindDocument(configFilePath) is IVsTextBuffer textBuffer)
             {
-                IComponentModel componentModel = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+                var componentModel = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
                 IVsEditorAdaptersFactoryService editorAdapterService = componentModel.GetService<IVsEditorAdaptersFactoryService>();
 
                 documentBuffer = editorAdapterService.GetDocumentBuffer(textBuffer);
             }
 
+            Manifest manifest;
             // If the documentBuffer is null, then libman.json is not open. In that case, we'll use the manifest as is.
             // If documentBuffer is not null, then libman.json file is open and could be dirty. So we'll get the contents for the manifest from the buffer.
             if (documentBuffer != null)

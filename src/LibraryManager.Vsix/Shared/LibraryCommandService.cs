@@ -26,8 +26,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private Task _currentOperationTask;
         private readonly IDependenciesFactory _dependenciesFactory;
         private readonly ITaskStatusCenterService _taskStatusCenterService;
-        private DefaultSolutionEvents _solutionEvents;
-        private object _lockObject = new object();
+        private readonly DefaultSolutionEvents _solutionEvents;
+        private readonly object _lockObject = new object();
 
         [ImportingConstructor]
         public LibraryCommandService(IDependenciesFactory dependenciesFactory,
@@ -76,19 +76,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (manifests.Count > 0)
             {
-                await RestoreAsync(manifests, cancellationToken);
+                await RestoreAsync(manifests);
             }
         }
 
         public async Task RestoreAsync(IEnumerable<string> configFilePaths, CancellationToken cancellationToken)
         {
             Dictionary<string, Manifest> manifests = await GetManifestFromConfigAsync(configFilePaths, cancellationToken).ConfigureAwait(false);
-            await RestoreAsync(manifests, cancellationToken);
+            await RestoreAsync(manifests);
         }
 
         public async Task RestoreAsync(string configFilePath, Manifest manifest, CancellationToken cancellationToken)
         {
-            await RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest }, cancellationToken);
+            await RestoreAsync(new Dictionary<string, Manifest>() { [configFilePath] = manifest });
         }
 
         public async Task UninstallAsync(string configFilePath, string libraryName, string version, string providerId, CancellationToken cancellationToken)
@@ -108,7 +108,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             await RunTaskAsync((internalToken) => CleanLibrariesAsync(configProjectItem, internalToken), taskTitle, LibraryManager.Resources.Text.Clean_OperationFailed);
         }
 
-        private async Task RestoreAsync(Dictionary<string, Manifest> manifests, CancellationToken cancellationToken)
+        private async Task RestoreAsync(Dictionary<string, Manifest> manifests)
         {
             string taskTitle = GetTaskTitle(OperationType.Restore, string.Empty);
             string errorMessage = LibraryManager.Resources.Text.Restore_OperationFailed;
@@ -145,7 +145,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private async Task<Dictionary<string, Manifest>> GetManifestFromConfigAsync(IEnumerable<string> configFiles, CancellationToken cancellationToken)
         {
-            Dictionary<string, Manifest> manifests = new Dictionary<string, Manifest>();
+            var manifests = new Dictionary<string, Manifest>();
 
             try
             {
@@ -173,11 +173,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                Stopwatch sw = new Stopwatch();
+                var sw = new Stopwatch();
                 sw.Start();
 
                 string configFileName = configProjectItem.FileNames[1];
-                var dependencies = _dependenciesFactory.FromConfigFile(configFileName);
+                IDependencies dependencies = _dependenciesFactory.FromConfigFile(configFileName);
                 Project project = VsHelpers.GetDTEProjectFromConfig(configFileName);
 
                 Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
@@ -219,14 +219,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                Stopwatch swTotal = new Stopwatch();
+                var swTotal = new Stopwatch();
                 swTotal.Start();
 
                 foreach (KeyValuePair<string, Manifest> manifest in manifests)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    Stopwatch swLocal = new Stopwatch();
+                    var swLocal = new Stopwatch();
                     swLocal.Start();
                     IDependencies dependencies = _dependenciesFactory.FromConfigFile(manifest.Key);
                     Project project = VsHelpers.GetDTEProjectFromConfig(manifest.Key);
@@ -254,7 +254,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
 
                 swTotal.Stop();
-                Logger.LogEventsFooter(OperationType.Restore, swTotal.Elapsed);
+                Logger.LogEventsFooter(swTotal.Elapsed);
             }
             catch (OperationCanceledException ex)
             {
@@ -275,10 +275,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                Stopwatch sw = new Stopwatch();
+                var sw = new Stopwatch();
                 sw.Start();
 
-                var dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
+                IDependencies dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
                 Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
                 ILibraryOperationResult result = null;
 
@@ -366,10 +366,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private CancellationToken RegisterCancellationToken(CancellationToken userCancellation)
         {
-            CancellationTokenSource internalSource = new CancellationTokenSource();
+            var internalSource = new CancellationTokenSource();
             _internalCancellationTokenSource = internalSource;
 
-            CancellationTokenSource linkedSource = CancellationTokenSource.CreateLinkedTokenSource(userCancellation);
+            var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(userCancellation);
             _linkedCancellationTokenSource = linkedSource;
 
             linkedSource.Token.Register(() =>

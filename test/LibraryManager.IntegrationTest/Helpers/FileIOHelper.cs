@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Omni.Common;
@@ -33,11 +36,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
                 if (newErrorMessage != null)
                 {
-                    errorMessage = String.Concat(errorMessage, "\r\nFailed even when forcing completion with double timeout");
+                    errorMessage = string.Concat(errorMessage, "\r\nFailed even when forcing completion with double timeout");
                 }
                 else
                 {
-                    errorMessage = String.Concat(errorMessage, "\r\n*Didn't* fail when forcing completion with double timeout");
+                    errorMessage = string.Concat(errorMessage, "\r\n*Didn't* fail when forcing completion with double timeout");
                 }
 
                 throw new TimeoutException(errorMessage);

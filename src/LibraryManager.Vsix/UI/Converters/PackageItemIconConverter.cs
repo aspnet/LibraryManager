@@ -1,3 +1,6 @@
+// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Globalization;
 using System.Windows;
@@ -31,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
                 y = 1;
             }
 
-            PackageItemType type = (PackageItemType) values[0];
+            var type = (PackageItemType)values[0];
             if (type == PackageItemType.Folder)
             {
                 bool isExpanded = (bool) values[2];
@@ -40,8 +43,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
             }
 
             string name = (string) values[1];
-            bool isThemeIcon;
-            ImageSource source = WpfUtil.GetIconForFile((DependencyObject)values[5], name, out isThemeIcon);
+            ImageSource source = WpfUtil.GetIconForFile((DependencyObject)values[5], name, out _);
             return source;
         }
 

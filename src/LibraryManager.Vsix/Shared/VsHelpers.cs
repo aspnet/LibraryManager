@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class VsHelpers
     {
-        private static IComponentModel _compositionService;
+        private static IComponentModel CompositionService;
 
         public static DTE2 DTE { get; } = GetService<DTE, DTE2>();
 
@@ -58,7 +58,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 DTE.SourceControl.CheckOutItem(file);
             }
 
-            var info = new FileInfo(file)
+            _ = new FileInfo(file)
             {
                 IsReadOnly = false
             };
@@ -156,10 +156,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
             }
 
-            var solutionService = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
-
-            IVsHierarchy hierarchy = null;
-            if (solutionService != null && !ErrorHandler.Failed(solutionService.GetProjectOfUniqueName(project.UniqueName, out hierarchy)))
+            if (Package.GetGlobalService(typeof(SVsSolution)) is IVsSolution solutionService
+                && !ErrorHandler.Failed(solutionService.GetProjectOfUniqueName(project.UniqueName, out IVsHierarchy hierarchy)))
             {
                 if (hierarchy == null)
                 {
@@ -264,12 +262,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             try
             {
                 IVsHierarchy hierarchy = GetHierarchy(project);
-                IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
-                List<string> filesToRemove = filePaths.ToList();
+                var bldSystem = hierarchy as IVsProjectBuildSystem;
+                var filesToRemove = filePaths.ToList();
 
                 while (filesToRemove.Any())
                 {
-                    List<string> nextBatch = filesToRemove.Take(batchSize).ToList();
+                    var nextBatch = filesToRemove.Take(batchSize).ToList();
                     bool success = await DeleteProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
 
                     if (!success)
@@ -294,11 +292,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static void SatisfyImportsOnce(this object o)
         {
-            _compositionService = _compositionService ?? GetService<SComponentModel, IComponentModel>();
+            CompositionService = CompositionService ?? GetService<SComponentModel, IComponentModel>();
 
-            if (_compositionService != null)
+            if (CompositionService != null)
             {
-                _compositionService.DefaultCompositionService.SatisfyImportsOnce(o);
+                CompositionService.DefaultCompositionService.SatisfyImportsOnce(o);
             }
         }
 
@@ -350,7 +348,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 yield break;
             }
 
-            IVsHierarchy[] hierarchy = new IVsHierarchy[1];
+            var hierarchy = new IVsHierarchy[1];
             while (ErrorHandler.Succeeded(enumHierarchies.Next(1, hierarchy, out uint fetched)) && fetched == 1)
             {
                 if (hierarchy.Length > 0 && hierarchy[0] != null)
@@ -384,7 +382,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static IVsHierarchy GetHierarchy(Project project)
         {
-            IVsSolution solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
+            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
 
             if (ErrorHandler.Succeeded(solution.GetProjectOfUniqueName(project.FullName, out IVsHierarchy hierarchy)))
             {
@@ -418,11 +416,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             int batchSize = 10;
 
-            List<string> filesToAdd = filePaths.ToList();
+            var filesToAdd = filePaths.ToList();
 
             while (filesToAdd.Any())
             {
-                List<string> nextBatch = filesToAdd.Take(batchSize).ToList();
+                var nextBatch = filesToAdd.Take(batchSize).ToList();
                 bool success = await AddProjectItemsInBatchAsync(hierarchy, nextBatch, logAction, cancellationToken);
 
                 if (!success)
@@ -443,7 +441,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            IVsProjectBuildSystem bldSystem = vsHierarchy as IVsProjectBuildSystem;
+            var bldSystem = vsHierarchy as IVsProjectBuildSystem;
 
             try
             {
@@ -455,7 +453,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var vsProject = (IVsProject)vsHierarchy;
-                VSADDRESULT[] result = new VSADDRESULT[filePaths.Count()];
+                var result = new VSADDRESULT[filePaths.Count()];
 
                 vsProject.AddItem(VSConstants.VSITEMID_ROOT,
                             VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE,
@@ -491,8 +489,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
-            HashSet<ProjectItem> folders = new HashSet<ProjectItem>();
+            var bldSystem = hierarchy as IVsProjectBuildSystem;
+            var folders = new HashSet<ProjectItem>();
 
             try
             {
@@ -509,7 +507,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                     if (item != null)
                     {
-                        ProjectItem parentFolder = item.Collection.Parent as ProjectItem;
+                        var parentFolder = item.Collection.Parent as ProjectItem;
                         folders.Add(parentFolder);
                         item.Delete();
                         logAction.Invoke(string.Format(Resources.Text.LibraryDeletedFromProject, filePath.Replace('\\', '/')), LogLevel.Operation);

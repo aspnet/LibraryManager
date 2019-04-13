@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +15,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
+
 using Shell = Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
@@ -78,7 +82,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             catch (InvalidLibraryException)
             {
                 // Make the warning visible with ex.Message
-                return Task.FromResult<CompletionSet>(default(CompletionSet));
+                return Task.FromResult<CompletionSet>(default);
             }
         }
 
@@ -86,7 +90,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         {
             // Target location text box is pre populated with name of the folder from where the - Add Client-Side Library command was invoked.
             // If the user clears the field at any point, we should make sure the Install button is disabled till valid folder name is provided.
-            if (String.IsNullOrEmpty(searchText))
+            if (string.IsNullOrEmpty(searchText))
             {
                 InstallButton.IsEnabled = false;
             }
@@ -99,13 +103,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
             IEnumerable<Tuple<string, string>> completions = GetCompletions(cwd, searchText, caretPosition, out Span textSpan);
 
-            CompletionSet completionSet = new CompletionSet
+            var completionSet = new CompletionSet
             {
                 Start = 0,
                 Length = searchText.Length
             };
 
-            List<CompletionItem> completionItems = new List<CompletionItem>();
+            var completionItems = new List<CompletionItem>();
 
             foreach (Tuple<string, string> completion in completions)
             {
@@ -113,7 +117,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
                 if (insertionText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) > -1)
                 {
-                    CompletionItem completionItem = new CompletionItem
+                    var completionItem = new CompletionItem
                     {
                         DisplayText = completion.Item1,
                         InsertionText = insertionText,
@@ -131,7 +135,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         private IEnumerable<Tuple<string, string>> GetCompletions(string cwd, string value, int caretPosition, out Span span)
         {
             span = new Span(0, value.Length);
-            List<Tuple<string, string>> completions = new List<Tuple<string, string>>();
+            var completions = new List<Tuple<string, string>>();
             int index = 0;
 
             if (value.Contains("/"))
@@ -148,7 +152,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                 span = new Span(index + 1, value.Length - index - 1);
             }
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(cwd);
+            var directoryInfo = new DirectoryInfo(cwd);
 
             if (directoryInfo.Exists)
             {
@@ -173,7 +177,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            ViewModel = new InstallDialogViewModel(Dispatcher, _libraryCommandService, _configFileName, _deps, _fullPath, CloseDialog, _project);
+            ViewModel = new InstallDialogViewModel(_libraryCommandService, _configFileName, _deps, _fullPath, CloseDialog, _project);
 
             FocusManager.SetFocusedElement(LibrarySearchBox, LibrarySearchBox);
         }
@@ -194,7 +198,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             if (!ViewModel.IsTreeViewEmpty)
             {
                 IncludeAllLibraryFilesRb.IsChecked = true;
-                LibrarySearchBox.Text = String.Empty;
+                LibrarySearchBox.Text = string.Empty;
                 ViewModel.IsTreeViewEmpty = true;
                 ViewModel.PackageId = null;
                 ViewModel.AnyFileSelected = false;
@@ -224,8 +228,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             }
             else
             {
-                int result;
-                IVsUIShell shell = Shell.Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
+                var shell = Shell.Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
 
                 shell.ShowMessageBox(dwCompRole: 0,
                                      rclsidComp: Guid.Empty,
@@ -237,7 +240,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
                                      msgdefbtn: OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
                                      msgicon: OLEMSGICON.OLEMSGICON_WARNING,
                                      fSysAlert: 0,
-                                     pnResult: out result);
+                                     pnResult: out _);
             }
         }
 
@@ -249,7 +252,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             }
             set
             {
-                this.LibrarySearchBox.Text = value;
+                LibrarySearchBox.Text = value;
             }
         }
 

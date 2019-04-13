@@ -13,13 +13,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class Telemetry
     {
-        private const string _namespace = Constants.TelemetryNamespace;
+        private const string Namespace = Constants.TelemetryNamespace;
 
         public static void TrackUserTask(string name, TelemetryResult result = TelemetryResult.None, params KeyValuePair<string, object>[] properties)
         {
             string actualName = name.Replace(" ", "_");
 
-            var task = new UserTaskEvent(_namespace + actualName, result);
+            var task = new UserTaskEvent(Namespace + actualName, result);
 
             foreach (KeyValuePair<string, object> property in properties)
             {
@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void TrackOperation(string name, TelemetryResult result = TelemetryResult.None, params KeyValuePair<string, object>[] properties)
         {
             string actualName = name.Replace(" ", "_");
-            var task = new OperationEvent(_namespace + actualName, result);
+            var task = new OperationEvent(Namespace + actualName, result);
 
             foreach (KeyValuePair<string, object> property in properties)
             {
@@ -48,12 +48,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
 
             string actualName = name.Replace(" ", "_");
-            TelemetryService.DefaultSession.PostFault(_namespace + actualName, exception.Message, exception);
+            TelemetryService.DefaultSession.PostFault(Namespace + actualName, exception.Message, exception);
         }
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operation, TimeSpan elapsedTime)
         {
-            Dictionary<string, object> telResult = new Dictionary<string, object>();
+            var telResult = new Dictionary<string, object>();
             double elapsedTimeRounded = Math.Round(elapsedTime.TotalSeconds, 2);
             string elapsedTimeStr = elapsedTimeRounded.ToString(System.Globalization.CultureInfo.InvariantCulture);
             List<string> generalErrorCodes = GetErrorCodes(results.Where(r => r.InstallationState == null && r.Errors.Any()));
@@ -69,10 +69,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (string provider in providers)
             {
-                List<ILibraryOperationResult> successfulProviderResults = new List<ILibraryOperationResult>();
-                List<ILibraryOperationResult> failedProviderResults = new List<ILibraryOperationResult>();
-                List<ILibraryOperationResult> cancelledProviderResults = new List<ILibraryOperationResult>();
-                List<ILibraryOperationResult> uptodateProviderResults = new List<ILibraryOperationResult>();
+                var successfulProviderResults = new List<ILibraryOperationResult>();
+                var failedProviderResults = new List<ILibraryOperationResult>();
+                var cancelledProviderResults = new List<ILibraryOperationResult>();
+                var uptodateProviderResults = new List<ILibraryOperationResult>();
 
                 foreach (ILibraryOperationResult result in results)
                 {
@@ -133,7 +133,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static List<string> GetErrorCodes(IEnumerable<ILibraryOperationResult> results)
         {
-            List<string> errorCodes = new List<string>();
+            var errorCodes = new List<string>();
 
             foreach (ILibraryOperationResult result in results)
             {

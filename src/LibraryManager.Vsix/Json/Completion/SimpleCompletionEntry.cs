@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         }
 
         public SimpleCompletionEntry(string displayText, string insertionText, ImageMoniker moniker, IIntellisenseSession session)
-            : base(displayText, insertionText, null, null, null, false, session as ICompletionSession)
+            : this(displayText, insertionText, null, moniker, session as ICompletionSession)
         {
         }
 
@@ -59,9 +59,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override int InternalCompareTo(CompletionEntry other)
         {
-            var otherEntry = other as SimpleCompletionEntry;
-
-            if (_specificVersion != 0 && otherEntry != null)
+            if (_specificVersion != 0 && other is SimpleCompletionEntry otherEntry)
             {
                 return _specificVersion.CompareTo(otherEntry._specificVersion);
             }

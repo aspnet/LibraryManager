@@ -5,8 +5,8 @@ namespace Microsoft.Web.LibraryManager.Json
 {
     internal class LibraryStateToFileConverter
     {
-        private string _defaultProvider;
-        private string _defaultDestination;
+        private readonly string _defaultProvider;
+        private readonly string _defaultDestination;
 
         public LibraryStateToFileConverter(string defaultProvider, string defaultDestination)
         {

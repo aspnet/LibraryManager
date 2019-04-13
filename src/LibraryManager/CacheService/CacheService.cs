@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager
         private readonly int _catalogExpiresAfterDays = 1;
         private readonly int _metadataExpiresAfterDays = 1;
         private readonly int _libraryExpiresAfterDays = 30;
-        private IWebRequestHandler _requestHandler;
+        private readonly IWebRequestHandler _requestHandler;
 
         public CacheService(IWebRequestHandler requestHandler)
         {
@@ -109,7 +109,7 @@ namespace Microsoft.Web.LibraryManager
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            List<Task> refreshTasks = new List<Task>();
+            var refreshTasks = new List<Task>();
 
             foreach (CacheServiceMetadata metadata in librariesCacheMetadata)
             {

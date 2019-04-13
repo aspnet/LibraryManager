@@ -196,30 +196,11 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        private void GetCatalog()
+        public void GetCatalog()
         {
             ILibraryCatalog catalog = _provider.GetCatalog();
 
             Assert.IsNotNull(catalog);
         }
-
-        private string _doc = $@"{{
-  ""{ManifestConstants.Version}"": ""1.0"",
-  ""{ManifestConstants.Libraries}"": [
-    {{
-      ""{ManifestConstants.Provider}"": ""cdnjs"",
-      ""{ManifestConstants.Library}"": ""jquery@3.1.1"",
-      ""{ManifestConstants.Destination}"": ""lib"",
-      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
-    }},
-    {{
-      ""{ManifestConstants.Provider}"": ""cdnjs"",
-      ""{ManifestConstants.Library}"": ""knockout@3.4.1"",
-      ""{ManifestConstants.Destination}"": ""lib"",
-      ""{ManifestConstants.Files}"": [ ""knockout-min.js"" ]
-    }}
-  ]
-}}
-";
     }
 }

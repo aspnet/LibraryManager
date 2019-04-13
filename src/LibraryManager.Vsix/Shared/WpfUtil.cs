@@ -25,9 +25,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return null;
             }
 
-            var vsIconService = ServiceProvider.GlobalProvider.GetService(typeof(SVsImageService)) as IVsImageService2;
-
-            if (vsIconService == null)
+            if (!(ServiceProvider.GlobalProvider.GetService(typeof(SVsImageService)) is IVsImageService2 vsIconService))
             {
                 return null;
             }
@@ -59,11 +57,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static ImageSource GetImage(DependencyObject owner, string file, __VSUIDATAFORMAT format, out bool themeIcon)
         {
-            var imageService = ServiceProvider.GlobalProvider.GetService(typeof(SVsImageService)) as IVsImageService;
             BitmapSource result = null;
             uint iconSource = (uint)__VSIconSource.IS_Unknown;
 
-            if (imageService != null && !string.IsNullOrWhiteSpace(file))
+            if (ServiceProvider.GlobalProvider.GetService(typeof(SVsImageService)) is IVsImageService imageService
+                && !string.IsNullOrWhiteSpace(file))
             {
                 try
                 {

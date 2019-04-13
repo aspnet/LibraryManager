@@ -92,8 +92,7 @@ namespace Microsoft.Web.LibraryManager
 
         private static bool IsValidManifestVersion(string version)
         {
-            Version parsedVersion;
-            if (Version.TryParse(version, out parsedVersion))
+            if (Version.TryParse(version, out Version parsedVersion))
             {
                 return Manifest.SupportedVersions.Contains(parsedVersion);
             }
@@ -177,7 +176,7 @@ namespace Microsoft.Web.LibraryManager
             string defaultProvider,
             CancellationToken cancellationToken)
         {
-            List<ILibraryOperationResult> expandedLibraries = new List<ILibraryOperationResult>();
+            var expandedLibraries = new List<ILibraryOperationResult>();
 
             foreach (ILibraryInstallationState library in libraries)
             {
@@ -211,7 +210,7 @@ namespace Microsoft.Web.LibraryManager
         /// <returns>A collection of <see cref="FileConflict"/> for each library conflict</returns>
         private static IEnumerable<FileConflict> GetFilesConflicts(IEnumerable<ILibraryInstallationState> libraries)
         {
-            Dictionary<string, List<ILibraryInstallationState>> _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
+            var _fileToLibraryMap = new Dictionary<string, List<ILibraryInstallationState>>(RelativePathEqualityComparer.Instance);
 
             foreach (ILibraryInstallationState library in libraries)
             {

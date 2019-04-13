@@ -30,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public IHostInteraction HostInteraction { get; }
 
-        private CacheService _cacheService;
+        private readonly CacheService _cacheService;
         private ILibraryCatalog _catalog;
 
         public ILibraryCatalog GetCatalog()
@@ -71,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             }
 
             // Check if Library is already up tp date
-            if (IsLibraryUpToDate(desiredState, cancellationToken))
+            if (IsLibraryUpToDate(desiredState))
             {
                 return LibraryOperationResult.FromUpToDate(desiredState);
             }
@@ -108,19 +108,18 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 return LibraryOperationResult.FromCancelled(state);
             }
 
-            var tasks = new List<Task>();
             string libraryDir = Path.Combine(CacheFolder, state.Name);
 
             try
             {
-                List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                var librariesMetadata = new List<CacheServiceMetadata>();
                 foreach (string sourceFile in state.Files)
                 {
                     string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
                     string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, state.ProviderId);
                     string url = string.Format(JsDelivrCatalog.IsGitHub(libraryId) ? DownloadUrlFormatGH : DownloadUrlFormat, state.Name, state.Version, sourceFile);
 
-                    CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                    var newEntry = new CacheServiceMetadata(url, cacheFile);
                     if (!librariesMetadata.Contains(newEntry))
                     {
                         librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
@@ -146,7 +145,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             return LibraryOperationResult.FromSuccess(state);
         }
 
-        private bool IsLibraryUpToDate(ILibraryInstallationState state, CancellationToken cancellationToken)
+        private bool IsLibraryUpToDate(ILibraryInstallationState state)
         {
             try
             {
@@ -253,7 +252,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
                     if (invalidFiles.Any())
                     {
-                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(libraryId, invalidFiles, library.Files.Keys);
+                        IError invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(libraryId, invalidFiles, library.Files.Keys);
                         return new LibraryOperationResult(desiredState, invalidFilesError);
                     }
                     else

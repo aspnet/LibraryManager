@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
@@ -7,15 +10,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
     /// </summary>
     internal class InstallDialogProvider
     {
-        private static IInstallDialog _installDialog;
+        private static IInstallDialog InstallDialog;
         public static event EventHandler WindowChanged;
 
         public static IInstallDialog Window
         {
-            get { return _installDialog; }
+            get { return InstallDialog; }
             set
             {
-                _installDialog = value;
+                InstallDialog = value;
 
                 WindowChanged?.Invoke(null, new EventArgs());
             }

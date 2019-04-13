@@ -12,14 +12,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class CleanCommand
     {
-        private readonly Package _package;
         private readonly BuildEvents _buildEvents;
         private readonly SolutionEvents _solutionEvents;
         private readonly ILibraryCommandService _libraryCommandService;
 
-        private CleanCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
+        private CleanCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            _package = package;
             _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.Clean);
@@ -36,11 +34,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static CleanCommand Instance { get; private set; }
 
-        private IServiceProvider ServiceProvider => _package;
-
-        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
+        public static void Initialize(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            Instance = new CleanCommand(package, commandService, libraryCommandService);
+            Instance = new CleanCommand(commandService, libraryCommandService);
         }
 
         private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)

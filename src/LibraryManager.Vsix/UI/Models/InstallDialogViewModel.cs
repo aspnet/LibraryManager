@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,12 +9,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -24,10 +27,12 @@ using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Utility;
 using Newtonsoft.Json;
+
 using Controller = Microsoft.WebTools.Languages.Shared.Editor.Controller;
 using IVsTextBuffer = Microsoft.VisualStudio.TextManager.Interop.IVsTextBuffer;
 using RunningDocumentTable = Microsoft.VisualStudio.Shell.RunningDocumentTable;
 using Shell = Microsoft.VisualStudio.Shell;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
@@ -38,7 +43,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private readonly Action<bool> _closeDialog;
         private readonly string _configFileName;
         private readonly IDependencies _deps;
-        private readonly Dispatcher _dispatcher;
         private readonly string _targetPath;
         private IProvider _activeProvider;
         private IReadOnlyList<ILibraryGroup> _availablePackages;
@@ -52,22 +56,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private bool _isTreeViewEmpty;
         private string _errorMessage;
         private BindLibraryNameToTargetLocation _libraryNameChange;
-        private Project _project;
+        private readonly Project _project;
 
-        public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog, Project project)
+        public InstallDialogViewModel(ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog, Project project)
         {
             _libraryCommandService = libraryCommandService;
             _configFileName = configFileName;
             _targetPath = targetPath;
             _deps = deps;
-            _dispatcher = dispatcher;
             _closeDialog = closeDialog;
             _anyFileSelected = false;
             _isTreeViewEmpty = true;
             _libraryNameChange = new BindLibraryNameToTargetLocation();
             _project = project;
 
-            List<IProvider> providers = new List<IProvider>();
+            var providers = new List<IProvider>();
             foreach (IProvider provider in deps.Providers.OrderBy(x => x.Id))
             {
                 ILibraryCatalog catalog = provider.GetCatalog();
@@ -88,7 +91,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
             Providers = providers;
             InstallPackageCommand = ActionCommand.Create(InstallPackage, CanInstallPackage, false);
-            Task t = LoadPackagesAsync();
+            _ = LoadPackagesAsync();
         }
 
         public IReadOnlyList<ILibraryGroup> AvailablePackages
@@ -113,7 +116,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
             set
             {
-                if (String.IsNullOrEmpty(PackageId))
+                if (string.IsNullOrEmpty(PackageId))
                 {
                     Set(ref _displayRoots, null);
                 }
@@ -144,7 +147,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             set
             {
                 // If libraryId is null, then we need to clear the tree view for files and show warning message.
-                if (String.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
                     if (Set(ref _packageId, value))
                     {
@@ -186,9 +189,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     _libraryNameChange.LibraryName = SelectedProvider.GetSuggestedDestination(SelectedPackage);
                     IsTreeViewEmpty = false;
                     bool canUpdateInstallStatusValue = false;
-                    HashSet<string> selectedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                    Func<bool> canUpdateInstallStatus = () => canUpdateInstallStatusValue;
-                    PackageItem root = new PackageItem(this, null, selectedFiles)
+                    var selectedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    bool canUpdateInstallStatus() => canUpdateInstallStatusValue;
+                    var root = new PackageItem(this, null, selectedFiles)
                     {
                         CanUpdateInstallStatus = canUpdateInstallStatus,
                         ItemType = PackageItemType.Folder,
@@ -196,7 +199,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         IsChecked = false
                     };
 
-                    PackageItem packageItem = new PackageItem(this, root, selectedFiles)
+                    var packageItem = new PackageItem(this, root, selectedFiles)
                     {
                         CanUpdateInstallStatus = canUpdateInstallStatus,
                         Name = value.Name,
@@ -233,7 +236,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                                         IsChecked = false
                                     };
 
-                                    List<PackageItem> children = new List<PackageItem>(currentRealParent.Children) { next };
+                                    var children = new List<PackageItem>(currentRealParent.Children) { next };
 
                                     children.Sort((x, y) => x.ItemType == y.ItemType ? StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name) : y.ItemType == PackageItemType.Folder ? 1 : -1);
 
@@ -250,7 +253,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                             }
                             else
                             {
-                                PackageItem next = new PackageItem(this, currentVirtualParent, selectedFiles)
+                                var next = new PackageItem(this, currentVirtualParent, selectedFiles)
                                 {
                                     CanUpdateInstallStatus = canUpdateInstallStatus,
                                     FullPath = file.Key,
@@ -264,7 +267,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                                     selectedFiles.Add(next.FullPath);
                                 }
 
-                                List<PackageItem> children = new List<PackageItem>(currentRealParent.Children) { next };
+                                var children = new List<PackageItem>(currentRealParent.Children) { next };
                                 children.Sort((x, y) => x.ItemType == y.ItemType ? StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name) : y.ItemType == PackageItemType.Folder ? -1 : 1);
 
                                 currentRealParent.Children = children;
@@ -277,8 +280,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         }
                     }
 
-                    _dispatcher.Invoke(() =>
+                    ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                     {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                         canUpdateInstallStatusValue = true;
                         SetNodeOpenStates(root);
                         DisplayRoots = new[] { root };
@@ -328,7 +333,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 if (Set(ref _activeProvider, value))
                 {
                     _catalog = value.GetCatalog();
-                    Task t = LoadPackagesAsync();
+                    _ = LoadPackagesAsync();
                 }
             }
         }
@@ -371,7 +376,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         public async Task<bool> IsLibraryInstallationStateValidAsync()
         {
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(PackageId, SelectedProvider.Id);
-            LibraryInstallationState libraryInstallationState = new LibraryInstallationState
+            var libraryInstallationState = new LibraryInstallationState
             {
                 Name = name,
                 Version = version,
@@ -406,7 +411,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         {
             if (children != null)
             {
-                List<PackageItem> toProcess = children.ToList();
+                var toProcess = children.ToList();
 
                 for (int i = 0; i < toProcess.Count; i++)
                 {
@@ -444,18 +449,18 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
                     if (!string.IsNullOrEmpty(_configFileName))
                     {
-                        Uri configContainerUri = new Uri(_configFileName, UriKind.Absolute);
-                        Uri targetUri = new Uri(targetPath, UriKind.Absolute);
+                        var configContainerUri = new Uri(_configFileName, UriKind.Absolute);
+                        var targetUri = new Uri(targetPath, UriKind.Absolute);
                         targetPath = configContainerUri.MakeRelativeUri(targetUri).ToString();
                     }
 
-                    if (String.IsNullOrEmpty(manifest.Version))
+                    if (string.IsNullOrEmpty(manifest.Version))
                     {
                         manifest.Version = Manifest.SupportedVersions.Max().ToString();
                     }
 
                     (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(PackageId, SelectedProvider.Id);
-                    LibraryInstallationState libraryInstallationState = new LibraryInstallationState
+                    var libraryInstallationState = new LibraryInstallationState
                     {
                         Name = name,
                         Version = version,
@@ -486,18 +491,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         }
                     }
 
-                    RunningDocumentTable rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
+                    var rdt = new RunningDocumentTable(Shell.ServiceProvider.GlobalProvider);
                     string configFilePath = Path.GetFullPath(_configFileName);
 
-                    IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
-
-                    _dispatcher.Invoke(() =>
+                    _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                     {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         _closeDialog(true);
                     });
 
                     // The file isn't open. So we'll write to disk directly
-                    if (textBuffer == null)
+                    if (!(rdt.FindDocument(configFilePath) is IVsTextBuffer textBuffer))
                     {
                         manifest.AddLibrary(libraryInstallationState);
 
@@ -591,11 +595,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 textEdit.Apply();
             }
 
-            IOleCommandTarget commandTarget = Shell.Package.GetGlobalService(typeof(Shell.Interop.SUIHostCommandDispatcher)) as IOleCommandTarget;
+            var commandTarget = Shell.Package.GetGlobalService(typeof(Shell.Interop.SUIHostCommandDispatcher)) as IOleCommandTarget;
 
             SendFocusToEditor(textView);
 
-            SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, insertionIndex, insertionText.Length + 1);
+            var snapshotSpan = new SnapshotSpan(textView.TextSnapshot, insertionIndex, insertionText.Length + 1);
             textView.Selection.Select(snapshotSpan, false);
 
             Guid guidVSStd2K = VSConstants.VSStd2K;
@@ -618,7 +622,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private MemberNode GetLibraries(ITextBuffer textBuffer)
         {
-            JsonEditorDocument document = JsonEditorDocument.FromTextBuffer(textBuffer);
+            var document = JsonEditorDocument.FromTextBuffer(textBuffer);
 
             if (document != null)
             {
@@ -648,7 +652,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private ITextBuffer GetTextBuffer(IVsTextBuffer document)
         {
-            IComponentModel componentModel = Shell.ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+            var componentModel = Shell.ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
             IVsEditorAdaptersFactoryService adapterService = componentModel.GetService<IVsEditorAdaptersFactoryService>();
 
             return adapterService.GetDocumentBuffer(document);

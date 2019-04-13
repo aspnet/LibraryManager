@@ -1,4 +1,7 @@
-﻿using System.Windows.Automation.Peers;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
@@ -24,10 +27,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             if (e.Key == Key.Space)
             {
-                TreeView treeView = (TreeView)sender;
-                PackageItem packageItem = treeView.SelectedItem as PackageItem;
+                var treeView = (TreeView)sender;
 
-                if (packageItem != null)
+                if (treeView.SelectedItem is PackageItem packageItem)
                 {
                     packageItem.IsChecked = !packageItem.IsChecked;
                     e.Handled = true;

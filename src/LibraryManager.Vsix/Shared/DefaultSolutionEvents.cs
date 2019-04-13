@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public event EventHandler<ParamEventArgs> BeforeUnloadProject;
         public event EventHandler<ParamEventArgs> BeforeCloseProject;
 
-        private IVsSolution _solution;
+        private readonly IVsSolution _solution;
         private uint _solutionEventsCookie;
 
         public DefaultSolutionEvents()

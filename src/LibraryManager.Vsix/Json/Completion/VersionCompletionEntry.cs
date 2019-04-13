@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override int InternalCompareTo(CompletionEntry other)
         {
-            VersionCompletionEntry otherEntry = other as VersionCompletionEntry;
+            var otherEntry = other as VersionCompletionEntry;
 
             // The version completion list should be displayed in descending order.
             int result = -CompareSemanticVersion(SemVersion, otherEntry?.SemVersion);

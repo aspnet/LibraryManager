@@ -12,7 +12,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
     /// </summary>
     internal class ConsoleLogger : ILogger, IInputReader
     {
-        private object _syncObject = new object();
+        private static readonly object SyncObject = new object();
 
         private ConsoleLogger()
         {
@@ -30,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         {
             ThrowIfInputIsRedirected();
 
-            lock (_syncObject)
+            lock (SyncObject)
             {
                 Console.Out.Write($"{fieldName}: ");
                 return Console.ReadLine();
@@ -47,7 +47,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         {
             ThrowIfInputIsRedirected();
 
-            lock (_syncObject)
+            lock (SyncObject)
             {
                 string message = $"{fieldName} [{defaultValue}]: ";
                 Console.Out.Write(message);
@@ -69,7 +69,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
         /// <param name="level"></param>
         public void Log(string message, LogLevel level)
         {
-            lock (_syncObject)
+            lock (SyncObject)
             {
                 if (level == LogLevel.Error)
                 {

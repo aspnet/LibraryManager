@@ -17,7 +17,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             }
             else if (control.Resources != ThemeResources)
             {
-                ResourceDictionary d = new ResourceDictionary();
+                var d = new ResourceDictionary();
                 d.MergedDictionaries.Add(ThemeResources);
                 d.MergedDictionaries.Add(control.Resources);
                 control.Resources = null;
@@ -27,11 +27,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private static ResourceDictionary BuildThemeResources()
         {
-            ResourceDictionary allResources = new ResourceDictionary();
-            ResourceDictionary shellResources = (ResourceDictionary) Application.LoadComponent(new Uri("Microsoft.VisualStudio.Platform.WindowManagement;component/Themes/ThemedDialogDefaultStyles.xaml", UriKind.Relative));
-            ResourceDictionary scrollStyleContainer = (ResourceDictionary) Application.LoadComponent(new Uri("Microsoft.VisualStudio.Shell.UI.Internal;component/Styles/ScrollBarStyle.xaml", UriKind.Relative));
-            ResourceDictionary localThemingContainer = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Controls/Shared.xaml", UriKind.Relative));
-            ResourceDictionary comboTheme = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Controls/VsThemedComboBox.xaml", UriKind.Relative));
+            var allResources = new ResourceDictionary();
+            var shellResources = (ResourceDictionary) Application.LoadComponent(new Uri("Microsoft.VisualStudio.Platform.WindowManagement;component/Themes/ThemedDialogDefaultStyles.xaml", UriKind.Relative));
+            var scrollStyleContainer = (ResourceDictionary) Application.LoadComponent(new Uri("Microsoft.VisualStudio.Shell.UI.Internal;component/Styles/ScrollBarStyle.xaml", UriKind.Relative));
+            var localThemingContainer = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Controls/Shared.xaml", UriKind.Relative));
+            var comboTheme = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Controls/VsThemedComboBox.xaml", UriKind.Relative));
             allResources.MergedDictionaries.Add(shellResources);
             allResources.MergedDictionaries.Add(scrollStyleContainer);
             allResources.MergedDictionaries.Add(localThemingContainer);

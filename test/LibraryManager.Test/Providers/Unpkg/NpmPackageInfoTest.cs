@@ -32,8 +32,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
   ""dependencies"": {}
 }";
 
-            JObject packageInfoJson = JObject.Parse(json);
-            NpmPackageInfo packageInfo = NpmPackageInfo.Parse(packageInfoJson);
+            var packageInfoJson = JObject.Parse(json);
+            var packageInfo = NpmPackageInfo.Parse(packageInfoJson);
 
             Assert.AreEqual("jquery", packageInfo.Name);
             Assert.AreEqual("JavaScript library for DOM operations", packageInfo.Description);
@@ -50,8 +50,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
   ""invlidForm"": """"
 }";
 
-            JObject packageInfoJson = JObject.Parse(json);
-            NpmPackageInfo packageInfo = NpmPackageInfo.Parse(packageInfoJson);
+            var packageInfoJson = JObject.Parse(json);
+            var packageInfo = NpmPackageInfo.Parse(packageInfoJson);
 
             Assert.AreEqual(string.Empty, packageInfo.Name);
             Assert.AreEqual(string.Empty, packageInfo.Description);

@@ -12,9 +12,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
     /// </summary>
     internal static class Constants
     {
-        public const string ConfigFileName = "libman.json";
-        public const string TelemetryNamespace = "webtools/librarymanager/";
-
         /// <summary>
         /// Defines the cache folder to use for libman
         /// </summary>

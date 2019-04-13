@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         [TestMethod]
         public void TestInit()
         {
-            InitCommand command = new InitCommand(HostEnvironment);
+            var command = new InitCommand(HostEnvironment);
 
             command.Configure(null);
 
@@ -51,12 +51,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         [TestMethod]
         public void TestInit_Interactive()
         {
-            TestInputReader reader = HostEnvironment.InputReader as TestInputReader;
+            var reader = HostEnvironment.InputReader as TestInputReader;
 
             reader.Inputs.Add("DefaultProvider", "cdnjs");
             reader.Inputs.Add("DefaultDestination:", "wwwroot");
 
-            InitCommand command = new InitCommand(HostEnvironment);
+            var command = new InitCommand(HostEnvironment);
             command.Configure(null);
 
             int result = command.Execute();

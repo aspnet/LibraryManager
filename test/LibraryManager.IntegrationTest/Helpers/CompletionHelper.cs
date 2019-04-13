@@ -18,11 +18,11 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Helpers
 
                 if (newErrorMessage != null)
                 {
-                    errorMessage = String.Concat(errorMessage, "\r\nFailed even when forcing completion with double timeout");
+                    errorMessage = string.Concat(errorMessage, "\r\nFailed even when forcing completion with double timeout");
                 }
                 else
                 {
-                    errorMessage = String.Concat(errorMessage, "\r\n*Didn't* fail when forcing completion with double timeout");
+                    errorMessage = string.Concat(errorMessage, "\r\n*Didn't* fail when forcing completion with double timeout");
                 }
 
                 throw new TimeoutException(errorMessage);
@@ -113,7 +113,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Helpers
                         {
                             if (!comparisonSet.Contains(curEntry))
                             {
-                                errorMessage = String.Concat(errorMessage, "\r\nTimed out waiting for completion entry: ", curEntry, ".");
+                                errorMessage = string.Concat(errorMessage, "\r\nTimed out waiting for completion entry: ", curEntry, ".");
                             }
                         }
 

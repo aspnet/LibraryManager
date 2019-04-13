@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Test.Apex.VisualStudio;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 namespace Microsoft.Web.LibraryManager.IntegrationTest.Helpers
 {
     public class HelperWrapper
     {
-        public HelperWrapper(VisualStudioHost vsHost)
+        public HelperWrapper()
         {
             Completion = new CompletionHelper();
             FileIO = new FileIOHelper();

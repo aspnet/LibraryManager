@@ -17,13 +17,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class UninstallSuggestedAction : SuggestedActionBase
     {
-        private static readonly Guid _guid = new Guid("2975f71b-809d-4ed6-a170-6bbc04058424");
+        private static readonly Guid Guid = new Guid("2975f71b-809d-4ed6-a170-6bbc04058424");
         private readonly SuggestedActionProvider _provider;
         private readonly ILibraryCommandService _libraryCommandService;
-        private const int _maxlength = 40;
+        private const int Maxlength = 40;
 
         public UninstallSuggestedAction(SuggestedActionProvider provider, ILibraryCommandService libraryCommandService)
-            : base(provider.TextBuffer, provider.TextView, GetDisplayText(provider), _guid)
+            : base(provider.TextBuffer, provider.TextView, GetDisplayText(provider), Guid)
         {
             _libraryCommandService = libraryCommandService;
             _provider = provider;
@@ -35,53 +35,58 @@ namespace Microsoft.Web.LibraryManager.Vsix
             ILibraryInstallationState state = provider.InstallationState;
             string cleanId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, state.ProviderId);
 
-            if (cleanId.Length > _maxlength + 10)
+            if (cleanId.Length > Maxlength + 10)
             {
-                cleanId = $"...{cleanId.Substring(cleanId.Length - _maxlength)}";
+                cleanId = $"...{cleanId.Substring(cleanId.Length - Maxlength)}";
             }
 
             return string.Format(Resources.Text.UninstallLibrary, cleanId);
         }
 
-        public override async void Invoke(CancellationToken cancellationToken)
+        public override void Invoke(CancellationToken cancellationToken)
         {
-            try
+#pragma warning disable VSTHRD102 // Implement internal logic asynchronously.  Reason: public API
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+#pragma warning restore VSTHRD102 // Implement internal logic asynchronously
             {
-                Telemetry.TrackUserTask("Invoke-UninstallFromSuggestedAction");
-                var state = _provider.InstallationState;
-                await _libraryCommandService.UninstallAsync(_provider.ConfigFilePath, state.Name, state.Version, state.ProviderId, cancellationToken)
-                    .ConfigureAwait(false);
-
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                using (ITextEdit edit = TextBuffer.CreateEdit())
+                try
                 {
-                    var arrayElement = _provider.LibraryObject.Parent as ArrayElementNode;
-                    var prev = GetPreviousSibling(arrayElement) as ArrayElementNode;
-                    var next = GetNextSibling(arrayElement) as ArrayElementNode;
+                    Telemetry.TrackUserTask("Invoke-UninstallFromSuggestedAction");
+                    ILibraryInstallationState state = _provider.InstallationState;
+                    await _libraryCommandService.UninstallAsync(_provider.ConfigFilePath, state.Name, state.Version, state.ProviderId, cancellationToken)
+                        .ConfigureAwait(false);
 
-                    int start = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.Start).Start;
-                    int end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.End).EndIncludingLineBreak;
-
-                    if (next == null && prev?.Comma != null)
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    using (ITextEdit edit = TextBuffer.CreateEdit())
                     {
-                        start = prev.Comma.Start;
-                        end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.End).End;
-                    }
+                        var arrayElement = _provider.LibraryObject.Parent as ArrayElementNode;
+                        var prev = GetPreviousSibling(arrayElement) as ArrayElementNode;
+                        var next = GetNextSibling(arrayElement) as ArrayElementNode;
 
-                    edit.Delete(Span.FromBounds(start, end));
-                    edit.Apply();
+                        int start = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.Start).Start;
+                        int end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.End).EndIncludingLineBreak;
+
+                        if (next == null && prev?.Comma != null)
+                        {
+                            start = prev.Comma.Start;
+                            end = TextBuffer.CurrentSnapshot.GetLineFromPosition(arrayElement.End).End;
+                        }
+
+                        edit.Delete(Span.FromBounds(start, end));
+                        edit.Apply();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogEvent(ex.ToString(), LibraryManager.Contracts.LogLevel.Error);
-                Telemetry.TrackException("UninstallFromSuggestedActionFailed", ex);
-            }
+                catch (Exception ex)
+                {
+                    Logger.LogEvent(ex.ToString(), LibraryManager.Contracts.LogLevel.Error);
+                    Telemetry.TrackException("UninstallFromSuggestedActionFailed", ex);
+                }
+            });
         }
 
         private Node GetPreviousSibling(ArrayElementNode arrayElementNode)
         {
-            ComplexNode parent = arrayElementNode.Parent as ComplexNode;
+            var parent = arrayElementNode.Parent as ComplexNode;
             SortedNodeList<Node> children = JsonHelpers.GetChildren(parent);
 
             return parent != null ? GetPreviousChild(arrayElementNode, children) : null;
@@ -89,7 +94,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private Node GetNextSibling(ArrayElementNode arrayElementNode)
         {
-            ComplexNode parent = arrayElementNode.Parent as ComplexNode;
+            var parent = arrayElementNode.Parent as ComplexNode;
             SortedNodeList<Node> children = JsonHelpers.GetChildren(parent);
 
             return parent != null ? GetNextChild(arrayElementNode, children) : null;

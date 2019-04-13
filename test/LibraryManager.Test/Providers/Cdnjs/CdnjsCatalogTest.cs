@@ -97,13 +97,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
             CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", "invalid_version" , token);
+            _ = await _catalog.GetLibraryAsync("invalid_id", "invalid_version", token);
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery", 0);
 
             Assert.AreEqual(0, result.Start);
@@ -117,7 +116,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Versions()
         {
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery@", 7);
 
             Assert.AreEqual(7, result.Start);
@@ -162,7 +160,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 ""description"":""The 1140 grid fits perfectly into a 1280 monitor. On smaller monitors it becomes fluid and adapts to the width of the browser.""
 ,""version"":""2.0""}],""total"":1}";
 
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+            var cdnjsCatalog = _catalog as CdnjsCatalog;
 
             IEnumerable<CdnjsLibraryGroup> libraryGroup = cdnjsCatalog.ConvertToLibraryGroups(json);
 
@@ -179,7 +177,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [DataRow(@"{""results"":[12}")]
         public void ConvertToLibraryGroup_InvalidJsonCatalog(string json)
         {
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+            var cdnjsCatalog = _catalog as CdnjsCatalog;
 
             IEnumerable<CdnjsLibraryGroup> libraryGroup = cdnjsCatalog.ConvertToLibraryGroups(json);
 
@@ -196,7 +194,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 ""autoupdate"":{""type"":""npm"",""target"":""jquery""},
 ""assets"":[{""version"":""3.3.1"",""files"":[""core.js"",""jquery.js"",""jquery.min.js"",""jquery.min.map"",""jquery.slim.js"",""jquery.slim.min.js"",""jquery.slim.min.map""]}]}";
 
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+            var cdnjsCatalog = _catalog as CdnjsCatalog;
 
             List<Asset> list = cdnjsCatalog.ConvertToAssets(json);
 
@@ -219,7 +217,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             string json = "abcd";
 
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+            var cdnjsCatalog = _catalog as CdnjsCatalog;
 
             List<Asset> list = cdnjsCatalog.ConvertToAssets(json);
 

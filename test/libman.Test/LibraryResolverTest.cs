@@ -16,6 +16,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
     [TestClass]
     public class LibraryResolverTest : CommandTestBase
     {
+        private Dependencies _dependencies;
+
         [TestInitialize]
         public override void Setup()
         {
@@ -27,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         public async Task TestResolveLibraryAsync()
         {
             string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
-            File.WriteAllText(libmanjsonPath, _manifestContents);
+            File.WriteAllText(libmanjsonPath, ManifestContents);
 
             Manifest manifest = await Manifest.FromFileAsync(
                 libmanjsonPath,
@@ -101,7 +103,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         public async Task TestResolveByUserChoiceAsync()
         {
             string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
-            File.WriteAllText(libmanjsonPath, _manifestContents);
+            File.WriteAllText(libmanjsonPath, ManifestContents);
 
             Manifest manifest = await Manifest.FromFileAsync(
                 libmanjsonPath,
@@ -120,7 +122,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.AreEqual("3.3.1", result.Version);
         }
 
-        private string _manifestContents = @"{
+        private static readonly string ManifestContents = @"{
   ""version"": ""1.0"",
   ""defaultProvider"": ""cdnjs"",
   ""defaultDestination"": ""wwwroot"",
@@ -139,6 +141,5 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
     }
   ]
 }";
-        private Dependencies _dependencies;
     }
 }

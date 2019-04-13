@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryManager.Tools
     /// </summary>
     internal class EnvironmentSettings
     {
-        private const string _libmanJsonFileName = "libman.json";
+        private const string LibmanJsonFileName = "libman.json";
 
         /// <summary>
         /// Input Reader for getting user inputs.
@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// <summary>
         /// Full path of libman.json in the current working directory.
         /// </summary>
-        public string ManifestFileName => Path.Combine(CurrentWorkingDirectory, _libmanJsonFileName);
+        public string ManifestFileName => Path.Combine(CurrentWorkingDirectory, LibmanJsonFileName);
 
         public string DefaultProvider { get; set; }
 

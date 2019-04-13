@@ -133,9 +133,9 @@ namespace Microsoft.Web.LibraryManager
         {
             JObject result = null;
 
-            using (Stream stream = await WebRequestHandler.Instance.GetStreamAsync(url, cancellationToken))
+            using (Stream stream = await webRequestHandler.GetStreamAsync(url, cancellationToken))
             {
-                using (StreamReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     string jsonText = await reader.ReadToEndAsync();
                     result = await Task.Factory.StartNew(() => ((JObject)JsonConvert.DeserializeObject(jsonText)),
@@ -159,8 +159,7 @@ namespace Microsoft.Web.LibraryManager
         {
             string propertyValue = defaultValue;
 
-            JValue jValue = jObject[propertyName] as JValue;
-            if (jValue != null)
+            if (jObject[propertyName] is JValue jValue)
             {
                 propertyValue = jValue.Value as string ?? defaultValue;
             }

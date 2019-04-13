@@ -144,7 +144,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         {
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync(url, 0);
 
-            Assert.AreEqual(default(CompletionSet), result);
+            Assert.AreEqual(default, result);
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.IsNull(result.Completions);

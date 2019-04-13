@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -13,9 +16,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
     internal class DependenciesFactory : IDependenciesFactory
     {
         [ImportMany(typeof(IProviderFactory), AllowRecomposition = true)]
-        private IEnumerable<IProviderFactory> _providerFactories = null;
+        private IEnumerable<IProviderFactory> ProviderFactories { get; set; }
 
-        private static readonly Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
+        private static readonly Dictionary<string, Dependencies> Cache = new Dictionary<string, Dependencies>();
 
         /// <summary>
         /// Creates or re-uses a cached Dependencies for the given path
@@ -23,23 +26,23 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         /// <param name="configFilePath">File path to the libman.json file</param>
         public IDependencies FromConfigFile(string configFilePath)
         {
-            if (!_cache.ContainsKey(configFilePath))
+            if (!Cache.ContainsKey(configFilePath))
             {
                 var perProjectLogger = new PerProjectLogger(configFilePath);
                 var hostInteraction = new HostInteraction(configFilePath, perProjectLogger);
                 IReadOnlyList<IProvider> providers = GetProviders(hostInteraction);
-                _cache[configFilePath] = new Dependencies(hostInteraction, providers);
+                Cache[configFilePath] = new Dependencies(hostInteraction, providers);
             }
 
             // We need to initialize naming schemes for the providers before we can proceed with any operation.
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(_cache[configFilePath]);
+            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(Cache[configFilePath]);
 
-            return _cache[configFilePath];
+            return Cache[configFilePath];
         }
 
         private IReadOnlyList<IProvider> GetProviders(IHostInteraction hostInteraction)
         {
-            return _providerFactories.Select(pf => pf.CreateProvider(hostInteraction)).ToList();
+            return ProviderFactories.Select(pf => pf.CreateProvider(hostInteraction)).ToList();
         }
     }
 }

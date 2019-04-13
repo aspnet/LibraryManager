@@ -16,7 +16,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal abstract class BaseCompletionProvider : IJsonCompletionListProvider
     {
-        private static readonly IEnumerable<JsonCompletionEntry> _empty = Enumerable.Empty<JsonCompletionEntry>();
+        private static readonly IEnumerable<JsonCompletionEntry> Empty = Enumerable.Empty<JsonCompletionEntry>();
 
         [Import]
         public ITextDocumentFactoryService DocumentService { get; set; }
@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
             }
 
-            return _empty;
+            return Empty;
         }
 
         protected abstract IEnumerable<JsonCompletionEntry> GetEntries(JsonCompletionContext context);

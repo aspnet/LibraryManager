@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
@@ -43,8 +46,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             string license = packageInfo.GetJObjectMemberStringValue("license");
 
             string author = string.Empty;
-            JObject authorObject = packageInfo["author"] as JObject;
-            if (authorObject != null)
+            if (packageInfo["author"] is JObject authorObject)
             {
                 author = authorObject.GetJObjectMemberStringValue("name");
             }

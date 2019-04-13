@@ -16,7 +16,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// </remarks>
     public class Dependencies : IDependencies
     {
-        private IHostInteraction _hostInteractions;
+        private readonly IHostInteraction _hostInteractions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Dependencies"/> class.

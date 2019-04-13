@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Tools
         public string ToolInstallationDir { get; } = Path.GetDirectoryName(typeof(HostEnvironment).Assembly.Location);
 
 
-        static object _syncObj = new object();
+        private static readonly object SyncObj = new object();
 
         /// <summary>
         /// Initiliazes the HostEnvironment using the <paramref name="settings"/>
@@ -46,14 +46,14 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// <returns></returns>
         public static HostEnvironment Initialize(EnvironmentSettings settings)
         {
-            lock (_syncObj)
+            lock (SyncObj)
             {
-                Instance = new HostEnvironment(settings);
-
-                Instance.InputReader = settings.InputReader;
-                Instance.Logger = settings.Logger;
-
-                Instance.HostInteraction = new HostInteraction(settings);
+                Instance = new HostEnvironment(settings)
+                {
+                    InputReader = settings.InputReader,
+                    Logger = settings.Logger,
+                    HostInteraction = new HostInteraction(settings),
+                };
 
                 return Instance;
             }

@@ -22,7 +22,7 @@
                                 Path=Text,
                                 Mode=TwoWay,
                                 UpdateSourceTrigger=PropertyChanged}"
-                 TextChanged="TargetLocationSearchTextBox_TextChanged"
+                 TextChanged="TargetLocationSearchTextBox_TextChangedAsync"
                  PreviewKeyDown="HandleKeyPress"
                  Padding="2 2 20 2"  />
 

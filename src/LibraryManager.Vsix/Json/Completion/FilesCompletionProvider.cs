@@ -52,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (string.IsNullOrEmpty(state.Name))
                 yield break;
 
-            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
+            IDependencies dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
             IProvider provider = dependencies.GetProvider(state.ProviderId);
             ILibraryCatalog catalog = provider?.GetCatalog();
 
@@ -65,7 +65,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (task.IsCompleted)
             {
+#pragma warning disable VSTHRD002 // Avoid problematic synchronous waits. Reason: already checked for completion
                 if (!(task.Result is ILibrary library))
+#pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
                     yield break;
 
                 foreach (string file in library.Files.Keys)

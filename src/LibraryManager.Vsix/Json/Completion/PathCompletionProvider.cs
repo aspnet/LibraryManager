@@ -8,6 +8,7 @@ using System.IO;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.WebTools.Languages.Json.Editor.Completion;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
@@ -57,7 +58,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 yield break;
             }
 
-            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
+            IDependencies dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
             string cwd = dependencies?.GetHostInteractions().WorkingDirectory;
 
             if (string.IsNullOrEmpty(cwd))

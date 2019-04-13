@@ -7,10 +7,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Mocks;
-using Microsoft.Web.LibraryManager.Providers.Cdnjs;
-using Microsoft.Web.LibraryManager.Providers.FileSystem;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -18,12 +14,9 @@ namespace Microsoft.Web.LibraryManager.Test
     public class CacheServiceTest
     {
 
-        private string _filePath;
         private string _cacheFolder;
         private string _projectFolder;
         private string _catalogCacheFile;
-        private IDependencies _dependencies;
-        private HostInteraction _hostInteraction;
         private CacheService _cacheService;
 
         [TestInitialize]
@@ -32,10 +25,7 @@ namespace Microsoft.Web.LibraryManager.Test
             _cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             _catalogCacheFile = Path.Combine(_cacheFolder, "TestCatalog.json");
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
-            _filePath = Path.Combine(_projectFolder, "libman.json");
 
-            _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
-            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory());
             _cacheService = new CacheService(new Mocks.WebRequestHandler());
 
             Directory.CreateDirectory(_projectFolder);
@@ -52,8 +42,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task GetCatalogAsync_ThrowsForInvalidCacheFilePath()
         {
             string validUrl = "Valid Url";
-
-            string content = await _cacheService.GetCatalogAsync(validUrl, "invalid path", CancellationToken.None);
+            _ = await _cacheService.GetCatalogAsync(validUrl, "invalid path", CancellationToken.None);
         }
 
         [TestMethod]
@@ -98,28 +87,24 @@ namespace Microsoft.Web.LibraryManager.Test
         [ExpectedException(typeof(OperationCanceledException))]
         public async Task GetCatalogAsync_Throws_OperationCanceled_WhenCancelled()
         {
-            TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            var tokenSource = new CancellationTokenSource();
 
             string invalidUrl = "Invalid Url";
 
             tokenSource.Cancel();
             await _cacheService.GetCatalogAsync(invalidUrl, _catalogCacheFile, tokenSource.Token);
-
         }
 
         [TestMethod]
         [ExpectedException(typeof(OperationCanceledException))]
         public async Task HydrateCache_Throws_OperationCanceled_WhenCancelled()
         {
-            TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            var tokenSource = new CancellationTokenSource();
             string libraryFile1_Path = Path.Combine(_cacheFolder, "Library1", "file1.txt");
             string libraryFile2_Path = Path.Combine(_cacheFolder, "Library1", "file2.txt");
             string validUrl = "";
-            string destinationFile = _cacheFolder;
 
-            List<CacheServiceMetadata> desiredCasheFiles = new List<CacheServiceMetadata>()
+            var desiredCasheFiles = new List<CacheServiceMetadata>()
             {
                 new CacheServiceMetadata(validUrl, libraryFile1_Path),
                 new CacheServiceMetadata(validUrl, libraryFile2_Path)
@@ -133,14 +118,11 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task HydrateCache_WriteLibraryFilesToCacheFolder()
         {
-            TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
             string libraryFile1_Path = Path.Combine(_cacheFolder, "Library1", "file1.txt");
             string libraryFile2_Path = Path.Combine(_cacheFolder, "Library1", "file2.txt");
             string validUrl = "";
-            string destinationFile = _cacheFolder;
 
-            List<CacheServiceMetadata> desiredCasheFiles = new List<CacheServiceMetadata>()
+            var desiredCasheFiles = new List<CacheServiceMetadata>()
             {
                 new CacheServiceMetadata(validUrl, libraryFile1_Path),
                 new CacheServiceMetadata(validUrl, libraryFile2_Path)

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -32,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             ShowInTaskbar = false;
 
-            Grid host = new Grid();
+            var host = new Grid();
             //Header
             host.RowDefinitions.Add(new RowDefinition
             {
@@ -45,7 +48,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             header.SetValue(Grid.RowProperty, 0);
             host.Children.Add(header);
 
-            ContentPresenter contentPresenter = new ContentPresenter();
+            var contentPresenter = new ContentPresenter();
             contentPresenter.SetValue(Grid.RowProperty, 1);
             contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding
             {
@@ -62,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             host.SetResourceReference(BackgroundProperty, EnvironmentColors.ToolWindowBackgroundBrushKey);
 
-            Border hostContainer = new Border
+            var hostContainer = new Border
             {
                 Child = host,
                 //Margin = new Thickness(1, 1, 5, 5),
@@ -88,7 +91,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         public new void Show()
         {
-            new WindowInteropHelper(this)
+            _ = new WindowInteropHelper(this)
             {
                 Owner = new IntPtr((Package.GetGlobalService(typeof(SDTE)) as DTE)?.MainWindow.HWnd ?? 0)
             };
@@ -98,7 +101,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         public new bool? ShowDialog()
         {
-            new WindowInteropHelper(this)
+            _ = new WindowInteropHelper(this)
             {
                 Owner = new IntPtr((Package.GetGlobalService(typeof(SDTE)) as DTE)?.MainWindow.HWnd ?? 0)
             };
@@ -146,13 +149,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private FrameworkElement BuildHeaderArea()
         {
-            Grid header = new Grid();
+            var header = new Grid();
             header.ColumnDefinitions.Add(new ColumnDefinition());
             header.ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
             header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
             //Move grip containing the icon and title
-            Grid moveGrip = new Grid();
+            var moveGrip = new Grid();
             moveGrip.ColumnDefinitions.Add(new ColumnDefinition
             {
                 Width = GridLength.Auto
@@ -162,7 +165,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             moveGrip.SetValue(Grid.ColumnProperty, 0);
             moveGrip.MouseLeftButtonDown += TitleBarLeftMouseButtonDown;
 
-            Image icon = new Image
+            var icon = new Image
             {
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(10, 5, 4, 0)
@@ -175,7 +178,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             });
             moveGrip.Children.Add(icon);
 
-            Label label = new Label
+            var label = new Label
             {
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 2, 0, 0)
@@ -192,11 +195,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             header.Children.Add(moveGrip);
 
             //Close button
-            FrameworkElement closeGlyph;
-            Path buttonPath;
-            GenerateCloseGlyph(out closeGlyph, out buttonPath);
+            GenerateCloseGlyph(out FrameworkElement closeGlyph, out Path buttonPath);
 
-            Style closeButtonStyle = new Style(typeof(Button));
+            var closeButtonStyle = new Style(typeof(Button));
             closeButtonStyle.Setters.Add(new Setter(HeightProperty, (double)25));
             closeButtonStyle.Setters.Add(new Setter(WidthProperty, (double)25));
             closeButtonStyle.Setters.Add(new Setter(FocusVisualStyleProperty, null));
@@ -205,7 +206,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             closeButtonStyle.Setters.Add(new Setter(BorderBrushProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonActiveBorderBrushKey)));
             closeButtonStyle.Setters.Add(new Setter(TemplateProperty, FindResource("FlatButton")));
 
-            Trigger closeButtonHoverTrigger = new Trigger
+            var closeButtonHoverTrigger = new Trigger
             {
                 Property = IsMouseOverProperty,
                 Value = true
@@ -216,7 +217,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             closeButtonHoverTrigger.Setters.Add(new Setter(BorderBrushProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonHoverActiveBorderBrushKey)));
             closeButtonStyle.Triggers.Add(closeButtonHoverTrigger);
 
-            Trigger closeButtonPressTrigger = new Trigger
+            var closeButtonPressTrigger = new Trigger
             {
                 Property = ButtonBase.IsPressedProperty,
                 Value = true
@@ -227,7 +228,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             closeButtonPressTrigger.Setters.Add(new Setter(BorderBrushProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonDownBorderBrushKey)));
             closeButtonStyle.Triggers.Add(closeButtonPressTrigger);
 
-            Button closeButton = new Button
+            var closeButton = new Button
             {
                 Style = closeButtonStyle,
                 Name = "closeButton",
@@ -257,9 +258,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void GenerateCloseGlyph(out FrameworkElement container, out Path path)
         {
-            Path buttonPath = new Path();
-            PathGeometry geometry = new PathGeometry();
-            PathFigure figure = new PathFigure
+            var buttonPath = new Path();
+            var geometry = new PathGeometry();
+            var figure = new PathFigure
             {
                 StartPoint = new Point(0, 0)
             };
@@ -327,7 +328,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             geometry.Figures.Add(figure);
             buttonPath.Data = geometry;
 
-            Canvas closeGlyphCanvas = new Canvas
+            var closeGlyphCanvas = new Canvas
             {
                 Width = 10,
                 Height = 8

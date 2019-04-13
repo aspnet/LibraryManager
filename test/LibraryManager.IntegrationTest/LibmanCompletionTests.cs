@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System.Collections.Generic;
 using Microsoft.Test.Apex.Editor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -198,7 +201,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             CompletionList items = Helpers.Completion.WaitForCompletionItems(Editor, 5000);
             Assert.IsNotNull(items, "Time out waiting for the version completion list");
 
-            List<SemanticVersion> semanticVersions = new List<SemanticVersion>();
+            var semanticVersions = new List<SemanticVersion>();
 
             // CompletionList implements the List, so foreach can guarentee its iteration order as original.
             foreach (CompletionItem item in items)

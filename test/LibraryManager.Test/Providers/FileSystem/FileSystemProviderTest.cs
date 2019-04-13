@@ -296,7 +296,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         [TestMethod]
         public async Task RestoreAsync_Manifest()
         {
-            IProvider provider = _dependencies.GetProvider("filesystem");
             string config = GetConfig();
             var manifest = Manifest.FromJson(config, _dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
@@ -331,9 +330,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         }
 
         [TestMethod]
-        private void GetCatalog()
+        public void GetCatalog()
         {
-            IProvider provider = _dependencies.GetProvider("cdnjs");
+            IProvider provider = _dependencies.GetProvider("filesystem");
             ILibraryCatalog catalog = provider.GetCatalog();
 
             Assert.IsNotNull(catalog);

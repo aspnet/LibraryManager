@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -14,22 +17,22 @@ using Microsoft.Web.LibraryManager.IntegrationTest.Helpers;
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(_rootDirectoryName, _rootDirectoryName)]
+    [DeploymentItem(RootDirectoryName, RootDirectoryName)]
     public class VisualStudioLibmanHostTest : VisualStudioHostTest
     {
         // Solution consts
-        protected const string _libman = "libman.json";
-        protected const string _projectName = @"TestProjectCore20";
-        private const string _rootDirectoryName = @"TestSolution";
-        private const string _testSolutionName = @"TestSolution.sln";
+        protected const string LibmanJsonFileName = "libman.json";
+        protected const string ProjectName = @"TestProjectCore20";
+        private const string RootDirectoryName = @"TestSolution";
+        private const string TestSolutionName = @"TestSolution.sln";
 
         protected ProjectItemTestExtension _libmanConfig;
         protected string _pathToLibmanFile;
         protected ProjectTestExtension _webProject;
         private string _initialLibmanFileContent;
-        private static VisualStudioLibmanHostTest _instance;
-        private static string _resultPath;
-        private static string _solutionPath;
+        private static VisualStudioLibmanHostTest Instance;
+        private static string ResultPath;
+        private static string SolutionPath;
 
         public static string SolutionRootPath { get; private set; }
 
@@ -37,25 +40,25 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         protected override void DoHostTestInitialize()
         {
-            _instance = this;
+            Instance = this;
 
             base.DoHostTestInitialize();
 
-            Helpers = new HelperWrapper(VisualStudio);
+            Helpers = new HelperWrapper();
 
-            Solution.Open(_solutionPath);
+            Solution.Open(SolutionPath);
             Solution.WaitForFullyLoaded(); // This will get modified after bug 627108 get fixed
 
-            _webProject = Solution[_projectName];
-            _libmanConfig = _webProject[_libman];
-            _pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, _libman);
+            _webProject = Solution[ProjectName];
+            _libmanConfig = _webProject[LibmanJsonFileName];
+            _pathToLibmanFile = Path.Combine(SolutionRootPath, ProjectName, LibmanJsonFileName);
             _initialLibmanFileContent = File.ReadAllText(_pathToLibmanFile);
         }
 
         protected override void DoHostTestCleanup()
         {
-            ProjectTestExtension webProject = Solution[_projectName];
-            ProjectItemTestExtension libmanConfig = webProject[_libman];
+            ProjectTestExtension webProject = Solution[ProjectName];
+            ProjectItemTestExtension libmanConfig = webProject[LibmanJsonFileName];
 
             if (libmanConfig != null)
             {
@@ -74,9 +77,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         private void CleanClientSideLibraries()
         {
-            Guid guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
+            var guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
             uint commandId = 0x0200;
-            SolutionExplorerItemTestExtension libmanConfigNode = SolutionExplorer.FindItemRecursive(_libman);
+            SolutionExplorerItemTestExtension libmanConfigNode = SolutionExplorer.FindItemRecursive(LibmanJsonFileName);
 
             if (libmanConfigNode != null)
             {
@@ -97,7 +100,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         /// </summary>
         protected void SetManifestContents(string contents)
         {
-            var doc = _libmanConfig.Open();
+            DocumentWindowTestExtension doc = _libmanConfig.Open();
             Editor.Selection.SelectAll();
             Editor.KeyboardCommands.Delete();
             Editor.Edit.InsertTextInBuffer(contents);
@@ -141,9 +144,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
         {
-            _resultPath = context.DeploymentDirectory;
-            SolutionRootPath = Path.Combine(_resultPath, _rootDirectoryName);
-            _solutionPath = Path.Combine(SolutionRootPath, _testSolutionName);
+            ResultPath = context.DeploymentDirectory;
+            SolutionRootPath = Path.Combine(ResultPath, RootDirectoryName);
+            SolutionPath = Path.Combine(SolutionRootPath, TestSolutionName);
         }
 
         [AssemblyCleanup()]
@@ -151,16 +154,16 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             try
             {
-                if (_instance != null)
+                if (Instance != null)
                 {
-                    Process visualStudioProcess = _instance.VisualStudio.HostProcess;
+                    Process visualStudioProcess = Instance.VisualStudio.HostProcess;
 
-                    if (_instance.VisualStudio.ObjectModel.Solution.IsOpen)
+                    if (Instance.VisualStudio.ObjectModel.Solution.IsOpen)
                     {
-                        _instance.VisualStudio.ObjectModel.Solution.Close();
+                        Instance.VisualStudio.ObjectModel.Solution.Close();
                     }
 
-                    PostMessage(_instance.VisualStudio.MainWindowHandle, 0x10, IntPtr.Zero, IntPtr.Zero); // WM_CLOSE
+                    PostMessage(Instance.VisualStudio.MainWindowHandle, 0x10, IntPtr.Zero, IntPtr.Zero); // WM_CLOSE
                     visualStudioProcess.WaitForExit(5000);
 
                     if (!visualStudioProcess.HasExited)

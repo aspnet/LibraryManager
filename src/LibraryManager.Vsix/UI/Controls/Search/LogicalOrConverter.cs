@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Globalization;
 using System.Windows.Data;
 
@@ -8,9 +11,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            Wrapper wrapper = parameter as Wrapper;
-
-            if (wrapper != null && wrapper.Parameter)
+            if (parameter is Wrapper wrapper && wrapper.Parameter)
             {
                 return true;
             }

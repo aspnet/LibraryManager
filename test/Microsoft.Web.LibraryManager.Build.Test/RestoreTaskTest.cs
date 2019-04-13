@@ -52,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Build.Test
         public void Execute_PartiallyValidManifest()
         {
             string path = Path.Combine(_projectFolder, _task.FileName);
-            File.WriteAllText(path, _doc);
+            File.WriteAllText(path, Doc);
 
             bool success = _task.Execute();
 
@@ -93,7 +93,7 @@ namespace Microsoft.Web.LibraryManager.Build.Test
             Assert.IsNull(_task.FilesWritten);
         }
 
-        private string _doc = $@"{{
+        private static readonly string Doc = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{

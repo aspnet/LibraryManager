@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,10 +22,9 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <returns></returns>
         public Task<Stream> GetStreamAsync(string url, CancellationToken cancellationToken)
         {
-            UnicodeEncoding uniEncoding = new UnicodeEncoding();
-            byte[] content = uniEncoding.GetBytes("Stream content for test");
+            byte[] content = Encoding.Unicode.GetBytes("Stream content for test");
 
-            return Task.FromResult<Stream>( new MemoryStream(content));
+            return Task.FromResult<Stream>(new MemoryStream(content));
         }
     }
 }

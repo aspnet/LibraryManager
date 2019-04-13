@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
 
 
         private IDependencies _dependencies;
-        private Dictionary<string, ILibraryNamingScheme> _perProviderNamingScheme;
+        private readonly Dictionary<string, ILibraryNamingScheme> _perProviderNamingScheme;
         private bool _isInitialized;
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public void CreateProvider_NullParameter()
         {
             var factory = new CdnjsProviderFactory();
-            IProvider provider = factory.CreateProvider(null);
+            _ = factory.CreateProvider(null);
         }
     }
 }

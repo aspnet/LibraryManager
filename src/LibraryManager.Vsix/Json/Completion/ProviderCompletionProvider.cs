@@ -17,7 +17,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [Name(nameof(ProviderCompletionProvider))]
     internal class ProviderCompletionProvider : BaseCompletionProvider
     {
-        private static readonly ImageMoniker _libraryIcon = KnownMonikers.Method;
+        private static readonly ImageMoniker LibraryIcon = KnownMonikers.Method;
 
         private readonly IDependenciesFactory _dependenciesFactory;
 
@@ -34,12 +34,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override IEnumerable<JsonCompletionEntry> GetEntries(JsonCompletionContext context)
         {
-            var member = context.ContextNode as MemberNode;
 
-            if (member == null || (member.UnquotedNameText != ManifestConstants.Provider && member.UnquotedNameText != ManifestConstants.DefaultProvider))
+            if (!(context.ContextNode is MemberNode member)
+                || (member.UnquotedNameText != ManifestConstants.Provider
+                    && member.UnquotedNameText != ManifestConstants.DefaultProvider))
+            {
                 yield break;
+            }
 
-            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
+            LibraryManager.Contracts.IDependencies dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
             IEnumerable<string> providerIds = dependencies.Providers?.Select(p => p.Id);
 
             if (providerIds == null || !providerIds.Any())
@@ -47,7 +50,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (string id in providerIds)
             {
-                yield return new SimpleCompletionEntry(id, _libraryIcon, context.Session);
+                yield return new SimpleCompletionEntry(id, LibraryIcon, context.Session);
             }
         }
     }

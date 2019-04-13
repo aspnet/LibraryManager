@@ -1,18 +1,18 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
 using EnvDTE;
-using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using NuGet.VisualStudio;
-using System;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Collections.Generic;
-using Task = System.Threading.Tasks.Task;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using NuGet.VisualStudio;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -102,7 +102,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                var dependencies = _dependenciesFactory.FromConfigFile(projectItem.FileNames[1]);
+                IDependencies dependencies = _dependenciesFactory.FromConfigFile(projectItem.FileNames[1]);
                 IEnumerable<string> packageIds = dependencies.Providers
                                                              .Where(p => p.NuGetPackageId != null)
                                                              .Select(p => p.NuGetPackageId)
@@ -111,59 +111,64 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 if (!_isPackageInstalled)
                 {
                     if (!UserWantsToInstall())
-                        return;
-
-                    await Task.Run(() =>
                     {
-                        Logger.LogEvent(Resources.Text.Nuget_InstallingPackage, LogLevel.Status);
+                        return;
+                    }
 
-                        try
-                        {
-                            foreach (string packageId in packageIds)
-                            {
-                                IVsPackageInstaller2 installer = _componentModel.GetService<IVsPackageInstaller2>();
-                                installer.InstallLatestPackage(null, project, packageId, true, false);
-                            }
-
-                            Telemetry.TrackUserTask("Install-NugetPackage");
-                            Logger.LogEvent(Resources.Text.Nuget_PackageInstalled, LogLevel.Status);
-                        }
-                        catch (Exception ex)
-                        {
-                            Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
-                            Logger.LogEvent(Resources.Text.Nuget_PackageFailedToInstall, LogLevel.Status);
-                        }
-                    });
+                    InstallPackage(project, packageIds);
                 }
                 else
                 {
-                    await Task.Run(() =>
-                    {
-                        Logger.LogEvent(Resources.Text.Nuget_UninstallingPackage, LogLevel.Status);
-
-                        try
-                        {
-                            foreach (string packageId in packageIds)
-                            {
-                                IVsPackageUninstaller uninstaller = _componentModel.GetService<IVsPackageUninstaller>();
-                                uninstaller.UninstallPackage(project, packageId, false);
-                            }
-
-                            Telemetry.TrackUserTask("Uninstall-NugetPackage");
-                            Logger.LogEvent(Resources.Text.Nuget_PackageUninstalled, LogLevel.Status);
-                        }            
-                        catch (Exception ex)
-                        {
-                            Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
-                            Logger.LogEvent(Resources.Text.Nuget_PackageFailedToUninstall, LogLevel.Status);
-                        }
-                    });
+                    UninstallPackage(project, packageIds);
                 }
             }
             catch (Exception ex)
             {
                 Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
                 Logger.LogEvent(Resources.Text.Nuget_PackageFailedToInstall, LogLevel.Status);
+            }
+        }
+
+        private void InstallPackage(Project project, IEnumerable<string> packageIds)
+        {
+            Logger.LogEvent(Resources.Text.Nuget_InstallingPackage, LogLevel.Status);
+            try
+            {
+                foreach (string packageId in packageIds)
+                {
+                    IVsPackageInstaller2 installer = _componentModel.GetService<IVsPackageInstaller2>();
+                    installer.InstallLatestPackage(null, project, packageId, true, false);
+                }
+
+                Telemetry.TrackUserTask("Install-NugetPackage");
+                Logger.LogEvent(Resources.Text.Nuget_PackageInstalled, LogLevel.Status);
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
+                Logger.LogEvent(Resources.Text.Nuget_PackageFailedToInstall, LogLevel.Status);
+            }
+        }
+
+        private void UninstallPackage(Project project, IEnumerable<string> packageIds)
+        {
+            Logger.LogEvent(Resources.Text.Nuget_UninstallingPackage, LogLevel.Status);
+
+            try
+            {
+                foreach (string packageId in packageIds)
+                {
+                    IVsPackageUninstaller uninstaller = _componentModel.GetService<IVsPackageUninstaller>();
+                    uninstaller.UninstallPackage(project, packageId, false);
+                }
+
+                Telemetry.TrackUserTask("Uninstall-NugetPackage");
+                Logger.LogEvent(Resources.Text.Nuget_PackageUninstalled, LogLevel.Status);
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
+                Logger.LogEvent(Resources.Text.Nuget_PackageFailedToUninstall, LogLevel.Status);
             }
         }
 

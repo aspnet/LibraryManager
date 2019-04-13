@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager
 
         internal static SemanticVersion Parse(string value)
         {
-            SemanticVersion ver = new SemanticVersion(value);
+            var ver = new SemanticVersion(value);
 
             if (value == null)
             {
@@ -93,22 +93,19 @@ namespace Microsoft.Web.LibraryManager
 
             if (versionParts.Length > 0)
             {
-                int major;
-                int.TryParse(versionParts[0], out major);
+                _ = int.TryParse(versionParts[0], out int major);
                 ver.Major = major;
             }
 
             if (versionParts.Length > 1)
             {
-                int minor;
-                int.TryParse(versionParts[1], out minor);
+                _ = int.TryParse(versionParts[1], out int minor);
                 ver.Minor = minor;
             }
 
             if (versionParts.Length > 2)
             {
-                int patch;
-                int.TryParse(versionParts[2], out patch);
+                _ = int.TryParse(versionParts[2], out int patch);
                 ver.Patch = patch;
             }
 

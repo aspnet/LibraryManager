@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         public void CreateProvider_NullParameter()
         {
             var factory = new JsDelivrProviderFactory();
-            IProvider provider = factory.CreateProvider(null);
+            _ = factory.CreateProvider(null);
         }
     }
 }

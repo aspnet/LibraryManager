@@ -12,12 +12,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class RestoreCommand
     {
-        private readonly Package _package;
         private readonly ILibraryCommandService _libraryCommandService;
 
-        private RestoreCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
+        private RestoreCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            _package = package;
             _libraryCommandService = libraryCommandService;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.Restore);
@@ -28,11 +26,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static RestoreCommand Instance { get; private set; }
 
-        private IServiceProvider ServiceProvider => _package;
-
-        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
+        public static void Initialize(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService)
         {
-            Instance = new RestoreCommand(package, commandService, libraryCommandService);
+            Instance = new RestoreCommand(commandService, libraryCommandService);
         }
 
         private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)

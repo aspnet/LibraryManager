@@ -20,15 +20,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [Name(nameof(LibraryIdCompletionProvider))]
     internal class LibraryIdCompletionProvider : BaseCompletionProvider
     {
-        private static readonly ImageMoniker _libraryIcon = KnownMonikers.Method;
-        private static readonly ImageMoniker _folderIcon = KnownMonikers.FolderClosed;
+        private static readonly ImageMoniker LibraryIcon = KnownMonikers.Method;
+        private static readonly ImageMoniker FolderIcon = KnownMonikers.FolderClosed;
 
-        private IDependenciesFactory _dependenciesFactory { get; set;}
+        private IDependenciesFactory DependenciesFactory { get; set;}
 
         [ImportingConstructor]
         internal LibraryIdCompletionProvider(IDependenciesFactory dependenciesFactory)
         {
-            _dependenciesFactory = dependenciesFactory;
+            DependenciesFactory = dependenciesFactory;
         }
 
         public override JsonCompletionContextType ContextType
@@ -38,9 +38,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         protected override IEnumerable<JsonCompletionEntry> GetEntries(JsonCompletionContext context)
         {
-            var member = context.ContextNode as MemberNode;
-
-            if (member == null || member.UnquotedNameText != ManifestConstants.Library)
+            if (!(context.ContextNode is MemberNode member) || member.UnquotedNameText != ManifestConstants.Library)
             {
                 yield break;
             }
@@ -52,7 +50,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 yield break;
             }
 
-            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
+            IDependencies dependencies = DependenciesFactory.FromConfigFile(ConfigFilePath);
             IProvider provider = dependencies.GetProvider(state.ProviderId);
             ILibraryCatalog catalog = provider?.GetCatalog();
 
@@ -81,7 +79,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (task.IsCompleted)
             {
+#pragma warning disable VSTHRD002 // Avoid problematic synchronous waits. Reason: already checked for completion
                 CompletionSet completionSet = task.Result;
+#pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
 
                 if (completionSet.Completions != null)
                 {
@@ -123,14 +123,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             ITrackingSpan trackingSpan = context.Snapshot.CreateTrackingSpan(start + 1 + completionSet.Start, completionSet.Length, SpanTrackingMode.EdgeExclusive);
             bool isVersionCompletion = (completionSet.CompletionType == CompletionSortOrder.Version);
 
-            List<JsonCompletionEntry> results = new List<JsonCompletionEntry>();
+            var results = new List<JsonCompletionEntry>();
 
             foreach (CompletionItem item in completionSet.Completions)
             {
                 string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                 ImageMoniker moniker = item.DisplayText.EndsWith("/", StringComparison.Ordinal) || item.DisplayText.EndsWith("\\", StringComparison.Ordinal)
-                    ? _folderIcon
-                    : _libraryIcon;
+                    ? FolderIcon
+                    : LibraryIcon;
 
                 if (isVersionCompletion)
                 {

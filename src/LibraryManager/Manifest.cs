@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager
         public static readonly Version[] SupportedVersions = { new Version("1.0") };
         private IHostInteraction _hostInteraction;
         private readonly List<ILibraryInstallationState> _libraries;
-        private IDependencies _dependencies;
+        private readonly IDependencies _dependencies;
 
         /// <summary>
         /// Creates a new instance of <see cref="Manifest"/>.
@@ -133,9 +133,7 @@ namespace Microsoft.Web.LibraryManager
 
         private static void UpdateLibraryProviderAndDestination(ILibraryInstallationState state, string defaultProvider, string defaultDestination)
         {
-            LibraryInstallationState libraryState = state as LibraryInstallationState;
-
-            if (libraryState == null)
+            if (!(state is LibraryInstallationState libraryState))
             {
                 return;
             }
@@ -260,8 +258,10 @@ namespace Microsoft.Web.LibraryManager
 
         private async Task<IEnumerable<ILibraryOperationResult>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
-            var libraries = new List<ILibraryInstallationState>(Libraries);
-            libraries.Add(desiredState);
+            var libraries = new List<ILibraryInstallationState>(Libraries)
+            {
+                desiredState,
+            };
 
             IEnumerable<ILibraryOperationResult> fileConflicts = await LibrariesValidator.GetLibrariesErrorsAsync(libraries, _dependencies, DefaultDestination, DefaultProvider, cancellationToken).ConfigureAwait(false);
 
@@ -566,7 +566,7 @@ namespace Microsoft.Web.LibraryManager
 
                 if (updatedStateResult.Success)
                 {
-                    List<string> filesToDelete = new List<string>();
+                    var filesToDelete = new List<string>();
                     state = updatedStateResult.InstallationState;
 
                     foreach (string file in state.Files)

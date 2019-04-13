@@ -76,7 +76,7 @@ cdnjs:
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            var expectedString = @"Cache contents:
+            string expectedString = @"Cache contents:
 ---------------
 unpkg:
     (empty)

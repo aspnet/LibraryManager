@@ -7,10 +7,10 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Telemetry;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         ICompletionBroker CompletionBroker { get; set; }
 
         [Import]
-        ILibraryCommandService libraryCommandService { get; set; }
+        ILibraryCommandService LibraryCommandService { get; set; }
 
         [Import]
         private IDependenciesFactory DependenciesFactory { get; set; }
@@ -63,17 +63,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 return;
             }
 
-            new CompletionController(textViewAdapter, textView, CompletionBroker);
+            _ = new CompletionController(textViewAdapter, textView, CompletionBroker);
 
             _dependencies = DependenciesFactory.FromConfigFile(doc.FilePath);
-            _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
+            _manifest = ThreadHelper.JoinableTaskFactory.Run(() => Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None));
             _manifestPath = doc.FilePath;
             _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);
 
             doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
 
-            Task.Run(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
                 if (!results.All(r => r.Success))
@@ -86,16 +86,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
         {
-            if (libraryCommandService.IsOperationInProgress)
+            if (LibraryCommandService.IsOperationInProgress)
             {
                 Logger.LogEvent(Resources.Text.OperationInProgress, LogLevel.Operation);
             }
 
-            var textDocument = sender as ITextDocument;
-
-            if (e.FileActionType == FileActionTypes.ContentSavedToDisk && textDocument != null)
+            if (e.FileActionType == FileActionTypes.ContentSavedToDisk && sender is ITextDocument textDocument)
             {
-                Task.Run(async () =>
+                VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
                     try
                     {
@@ -114,7 +112,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                             {
                                 _manifest = newManifest;
 
-                                await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                await LibraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                                 Telemetry.TrackUserTask("Invoke-RestoreOnSave");
                             }
                             else

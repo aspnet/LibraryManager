@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -8,7 +11,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
     internal class BindingProxy : FrameworkElement
     {
         public static readonly DependencyProperty InputProperty = DependencyProperty.Register(
-            nameof(Input), typeof(object), typeof(BindingProxy), new PropertyMetadata(default(object), InputChanged));
+            nameof(Input), typeof(object), typeof(BindingProxy), new PropertyMetadata(default, InputChanged));
 
         public static readonly DependencyProperty OutputProperty = DependencyProperty.Register(
             nameof(Output), typeof(object), typeof(BindingProxy), new PropertyMetadata(default(object)));

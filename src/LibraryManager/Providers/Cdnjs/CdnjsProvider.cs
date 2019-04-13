@@ -17,10 +17,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
     internal class CdnjsProvider : IProvider
     {
         // TO DO: This should become Provider properties to be passed to CacheService
-        private const string _downloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
+        private const string DownloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
 
         private CdnjsCatalog _catalog;
-        private CacheService _cacheService;
+        private readonly CacheService _cacheService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdnjsProvider"/> class.
@@ -268,21 +268,19 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return LibraryOperationResult.FromCancelled(state);
             }
 
-            var tasks = new List<Task>();
-
             try
             {
                 if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
                 {
                     string libraryDir = Path.Combine(CacheFolder, state.Name);
-                    List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                    var librariesMetadata = new List<CacheServiceMetadata>();
 
                     foreach (string sourceFile in state.Files)
                     {
                         string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
-                        string url = string.Format(_downloadUrlFormat, state.Name, state.Version, sourceFile);
+                        string url = string.Format(DownloadUrlFormat, state.Name, state.Version, sourceFile);
 
-                        CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                        var newEntry = new CacheServiceMetadata(url, cacheFile);
                         if (!librariesMetadata.Contains(newEntry))
                         {
                             librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));

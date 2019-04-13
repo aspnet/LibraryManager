@@ -17,6 +17,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public const string IdText = "unpkg";
         public const string DownloadUrlFormat = "https://unpkg.com/{0}@{1}/{2}";
 
+        private readonly CacheService _cacheService;
+        private ILibraryCatalog _catalog;
+
         public UnpkgProvider(IHostInteraction hostInteraction)
         {
             HostInteraction = hostInteraction;
@@ -29,9 +32,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public string NuGetPackageId { get; } = "Microsoft.Web.LibraryManager.Build";
 
         public IHostInteraction HostInteraction { get; }
-
-        private CacheService _cacheService;
-        private ILibraryCatalog _catalog;
 
         public ILibraryCatalog GetCatalog()
         {
@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             // Check if Library is already up tp date
-            if (IsLibraryUpToDate(desiredState, cancellationToken))
+            if (IsLibraryUpToDate(desiredState))
             {
                 return LibraryOperationResult.FromUpToDate(desiredState);
             }
@@ -109,18 +109,17 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 return LibraryOperationResult.FromCancelled(state);
             }
 
-            var tasks = new List<Task>();
             string libraryDir = Path.Combine(CacheFolder, state.Name);
 
             try
             {
-                    List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                    var librariesMetadata = new List<CacheServiceMetadata>();
                     foreach (string sourceFile in state.Files)
                     {
                         string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
                         string url = string.Format(DownloadUrlFormat, state.Name, state.Version, sourceFile);
 
-                        CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                        var newEntry = new CacheServiceMetadata(url, cacheFile);
                         if (!librariesMetadata.Contains(newEntry))
                         {
                             librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
@@ -146,7 +145,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return LibraryOperationResult.FromSuccess(state);
         }
 
-        private bool IsLibraryUpToDate(ILibraryInstallationState state, CancellationToken cancellationToken)
+        private bool IsLibraryUpToDate(ILibraryInstallationState state)
         {
             try
             {
@@ -254,7 +253,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     IReadOnlyList<string> invalidFiles = library.GetInvalidFiles(desiredState.Files);
                     if (invalidFiles.Any())
                     {
-                        var invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(libraryId, invalidFiles, library.Files.Keys);
+                        IError invalidFilesError = PredefinedErrors.InvalidFilesInLibrary(libraryId, invalidFiles, library.Files.Keys);
                         return new LibraryOperationResult(desiredState, invalidFilesError);
                     }
                     else

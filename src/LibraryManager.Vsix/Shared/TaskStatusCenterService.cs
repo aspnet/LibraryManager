@@ -20,12 +20,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            IVsTaskStatusCenterService taskStatusCenter = (IVsTaskStatusCenterService)Package.GetGlobalService(typeof(SVsTaskStatusCenterService));
-            TaskHandlerOptions options = default(TaskHandlerOptions);
+            var taskStatusCenter = (IVsTaskStatusCenterService)Package.GetGlobalService(typeof(SVsTaskStatusCenterService));
+            TaskHandlerOptions options = default;
             options.Title = title;
             options.ActionsAfterCompletion = CompletionActions.None;
 
-            TaskProgressData data = default(TaskProgressData);
+            TaskProgressData data = default;
             data.CanBeCanceled = true;
 
             ITaskHandler handler = taskStatusCenter.PreRegister(options, data);

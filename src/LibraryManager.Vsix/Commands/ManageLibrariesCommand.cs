@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Task = System.Threading.Tasks.Task;
 
@@ -15,13 +16,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal sealed class ManageLibrariesCommand
     {
-        private readonly Package _package;
         private readonly ILibraryCommandService _libraryCommandService;
         private readonly IDependenciesFactory _dependenciesFactory;
 
-        private ManageLibrariesCommand(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
+        private ManageLibrariesCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
-            _package = package;
             _libraryCommandService = libraryCommandService;
             _dependenciesFactory = dependenciesFactory;
 
@@ -33,11 +32,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static ManageLibrariesCommand Instance { get; private set; }
 
-        private IServiceProvider ServiceProvider => _package;
-
-        public static void Initialize(Package package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
+        public static void Initialize(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
-            Instance = new ManageLibrariesCommand(package, commandService, libraryCommandService, dependenciesFactory);
+            Instance = new ManageLibrariesCommand(commandService, libraryCommandService, dependenciesFactory);
         }
 
         private void BeforeQueryStatus(object sender, EventArgs e)
@@ -75,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 }
                 else
                 {
-                    var dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
+                    IDependencies dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
                     Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None);
                     manifest.DefaultProvider = "cdnjs";
                     manifest.Version = Manifest.SupportedVersions.Max().ToString();

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -7,8 +10,11 @@ using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Threading;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
@@ -40,7 +46,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             _baseFolder = InstallationFolder.DestinationFolder;
             _lastSuggestedTargetLocation = InstallationFolder.DestinationFolder;
 
-            this.Loaded += TargetLocation_Loaded;
+            Loaded += TargetLocation_Loaded;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,9 +55,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
             _libraryNameChange = viewModel.LibraryNameChange;
-            _libraryNameChange.PropertyChanged += this.LibraryNameChanged;
+            _libraryNameChange.PropertyChanged += LibraryNameChanged;
 
-            Window window = Window.GetWindow(TargetLocationSearchTextBox);
+            var window = Window.GetWindow(TargetLocationSearchTextBox);
 
             // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
             // the dialog is dragged or resized.
@@ -160,7 +166,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     if (Options.Items.Count > 0)
                     {
                         Options.ScrollIntoView(Options.Items[0]);
-                        FrameworkElement fe = (FrameworkElement)Options.ItemContainerGenerator.ContainerFromIndex(0);
+                        var fe = (FrameworkElement)Options.ItemContainerGenerator.ContainerFromIndex(0);
                         fe?.Focus();
                         Options.SelectedIndex = 0;
                         e.Handled = true;
@@ -239,8 +245,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             Flyout.Width = Options.DesiredSize.Width;
         }
 
-        private void TargetLocationSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void TargetLocationSearchTextBox_TextChangedAsync(object sender, TextChangedEventArgs e)
         {
+            await OnTargetLocationSearchTextBoxChangedAsync(e);
+        }
+
+        private async Task OnTargetLocationSearchTextBoxChangedAsync(TextChangedEventArgs e)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             TextChange textChange = e.Changes.Last();
 
             // We will invoke completion on text insertion and not deletion.
@@ -248,36 +261,33 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // location textbox with name of the folder when dialog is initially loaded.
             if (textChange.AddedLength > 0 && TargetLocationSearchTextBox.CaretIndex > 0)
             {
-                VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
+                CompletionSet completionSet = await SearchService?.Invoke(Text, TargetLocationSearchTextBox.CaretIndex);
+
+                if (completionSet.Equals(null) || !completionSet.Completions.Any())
                 {
-                    CompletionSet completionSet = await SearchService?.Invoke(Text, TargetLocationSearchTextBox.CaretIndex);
+                    Flyout.IsOpen = false;
+                    return;
+                }
 
-                    if (completionSet.Equals(null) || !completionSet.Completions.Any())
-                    {
-                        Flyout.IsOpen = false;
-                        return;
-                    }
+                CompletionEntries.Clear();
 
-                    CompletionEntries.Clear();
+                foreach (CompletionItem entry in completionSet.Completions)
+                {
+                    CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
+                }
 
-                    foreach (CompletionItem entry in completionSet.Completions)
-                    {
-                        CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
-                    }
+                PositionCompletions(completionSet.Length);
 
-                    PositionCompletions(completionSet.Length);
+                if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
+                {
+                    string lastSelected = SelectedItem?.CompletionItem.InsertionText;
+                    SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? CompletionEntries[0];
+                    Options.ScrollIntoView(SelectedItem);
+                }
 
-                    if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
-                    {
-                        string lastSelected = SelectedItem?.CompletionItem.InsertionText;
-                        SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? CompletionEntries[0];
-                        Options.ScrollIntoView(SelectedItem);
-                    }
-
-                    Flyout.IsOpen = true;
-                });
+                Flyout.IsOpen = true;
             }
-
+            
             InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
         }
 
@@ -295,8 +305,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
             if (!string.IsNullOrEmpty(targetLibrary))
             {
-                this.Dispatcher.Invoke(() =>
+                _ = VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
+                    await VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                     if (TargetLocationSearchTextBox.Text.Equals(_lastSuggestedTargetLocation, StringComparison.Ordinal))
                     {
                         if (targetLibrary.Length > 0 && targetLibrary[targetLibrary.Length - 1] == '/')
@@ -323,6 +335,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             {
                 TargetLocationSearchTextBox.Focus();
             }
+        }
+
+        private void TargetLocationSearchTextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -14,12 +14,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class UpdateSuggestedActionSet : SuggestedActionBase
     {
-        private static readonly Guid _guid = new Guid("2975f71b-809a-4ed6-a170-6bbc04058424");
+        private static readonly Guid Guid = new Guid("2975f71b-809a-4ed6-a170-6bbc04058424");
         private readonly SuggestedActionProvider _provider;
         private Task<List<ISuggestedAction>> _actions;
 
         public UpdateSuggestedActionSet(SuggestedActionProvider provider)
-            : base(provider.TextBuffer, provider.TextView, Resources.Text.CheckForUpdates, _guid)
+            : base(provider.TextBuffer, provider.TextView, Resources.Text.CheckForUpdates, Guid)
         {
             _provider = provider;
         }
@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             get
             {
-                var dependencies = _provider.DependenciesFactory.FromConfigFile(_provider.ConfigFilePath);
+                IDependencies dependencies = _provider.DependenciesFactory.FromConfigFile(_provider.ConfigFilePath);
                 IProvider provider = dependencies.GetProvider(_provider.InstallationState.ProviderId);
                 ILibraryCatalog catalog = provider?.GetCatalog();
 
@@ -39,7 +39,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 _actions = GetListOfActionsAsync(catalog, CancellationToken.None);
 
+#pragma warning disable VSTHRD002 // Avoid problematic synchronous waits.  Reason: already checked for task completion.
                 if (_actions.IsCompleted && _actions.Result.Count == 0)
+#pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
                     return false;
 
                 return true;

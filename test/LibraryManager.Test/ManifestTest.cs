@@ -7,12 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 using Microsoft.Web.LibraryManager.Providers.FileSystem;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -24,6 +24,7 @@ namespace Microsoft.Web.LibraryManager.Test
         private string _projectFolder;
         private IDependencies _dependencies;
         private HostInteraction _hostInteraction;
+
         [TestInitialize]
         public void Setup()
         {
@@ -36,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
             LibraryIdToNameAndVersionConverter.Instance.Reinitialize(_dependencies);
             Directory.CreateDirectory(_projectFolder);
-            File.WriteAllText(_filePath, _doc);
+            File.WriteAllText(_filePath, Doc);
         }
 
         [TestCleanup]
@@ -158,7 +159,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task RestoreAsync_PartialSuccess()
         {
-            var manifest = Manifest.FromJson(_doc, _dependencies);
+            var manifest = Manifest.FromJson(Doc, _dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(2, result.Count());
@@ -170,7 +171,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task RestoreAsync_UsingDefaultProvider()
         {
-            var manifest = Manifest.FromJson(_docDefaultProvider, _dependencies);
+            var manifest = Manifest.FromJson(DocDefaultProvider, _dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(2, result.Count());
@@ -181,7 +182,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task RestoreAsync_UsingDefaultDestination()
         {
-            var manifest = Manifest.FromJson(_docDefaultDestination, _dependencies);
+            var manifest = Manifest.FromJson(DocDefaultDestination, _dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(1, result.Count());
@@ -193,7 +194,7 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task RestoreAsync_UsingUnknownProvider()
         {
             var dependencies = new Dependencies(_dependencies.GetHostInteractions());
-            var manifest = Manifest.FromJson(_doc, dependencies);
+            var manifest = Manifest.FromJson(Doc, dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None).ConfigureAwait(false);
 
             Assert.AreEqual(2, result.Count());
@@ -228,16 +229,16 @@ namespace Microsoft.Web.LibraryManager.Test
         [ExpectedException(typeof(OperationCanceledException))]
         public async Task RestoreAsync_AllRestoreOperationsCancelled()
         {
-            var manifest = Manifest.FromJson(_doc, _dependencies);
+            var manifest = Manifest.FromJson(Doc, _dependencies);
             var source = new CancellationTokenSource();
             source.Cancel();
-            IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(source.Token);
+            _ = await manifest.RestoreAsync(source.Token);
         }
 
         [TestMethod]
         public async Task RestorAsync_ConflictingLibraries_Validate()
         {
-            var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
+            var manifest = Manifest.FromJson(DocConflictingLibraries, _dependencies);
 
             IEnumerable<ILibraryOperationResult> result = await manifest.GetValidationResultsAsync(CancellationToken.None);
 
@@ -248,7 +249,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task RestorAsync_ConflictingLibraries_Restore()
         {
-            var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
+            var manifest = Manifest.FromJson(DocConflictingLibraries, _dependencies);
 
             IEnumerable<ILibraryOperationResult> results = await manifest.RestoreAsync(CancellationToken.None);
 
@@ -413,8 +414,8 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task InstallLibraryAsync_SetsDefaultProvider()
         {
-            var manifest = Manifest.FromJson(_emptyLibmanJson, _dependencies);
-            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync("jquery", "3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
+            var manifest = Manifest.FromJson(EmptyLibmanJson, _dependencies);
+            _ = await manifest.InstallLibraryAsync("jquery", "3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
 
             Assert.AreEqual("cdnjs", manifest.DefaultProvider);
             var libraryState = manifest.Libraries.First() as LibraryInstallationState;
@@ -468,13 +469,13 @@ namespace Microsoft.Web.LibraryManager.Test
             manifest.AddVersion(version);
             manifest.AddLibrary(state);
 
-            List<ILibraryOperationResult> results = await manifest.RestoreAsync(CancellationToken.None) as List<ILibraryOperationResult>;
+            var results = await manifest.RestoreAsync(CancellationToken.None) as List<ILibraryOperationResult>;
 
             Assert.AreEqual(1, results.Count);
             Assert.IsTrue(results[0].Success);
         }
 
-        private string _doc = $@"{{
+        private static readonly string Doc = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -493,7 +494,7 @@ namespace Microsoft.Web.LibraryManager.Test
 }}
 ";
 
-        private string _docDefaultProvider = $@"{{
+        private static readonly string DocDefaultProvider = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.DefaultProvider}"": ""cdnjs"",
   ""{ManifestConstants.Libraries}"": [
@@ -511,7 +512,7 @@ namespace Microsoft.Web.LibraryManager.Test
   ]
 }}
 ";
-        private string _docDefaultDestination = $@"{{
+        private static readonly string DocDefaultDestination = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.DefaultDestination}"": ""lib"",
   ""{ManifestConstants.Libraries}"": [
@@ -523,19 +524,7 @@ namespace Microsoft.Web.LibraryManager.Test
   ]
 }}
 ";
-        private string _docOldVersionLibrary = $@"{{
-  ""{ManifestConstants.Version}"": ""1.0"",
-  ""{ManifestConstants.DefaultDestination}"": ""lib"",
-  ""{ManifestConstants.Libraries}"": [
-    {{
-      ""{ManifestConstants.Library}"": ""jquery@2.2.0"",
-      ""{ManifestConstants.Provider}"": ""cdnjs"",
-      ""{ManifestConstants.Files}"": [ ""jquery.js"", ""jquery.min.js"" ]
-    }}
-  ]
-}}
-";
-        private string _docConflictingLibraries = $@"{{
+        private static readonly string DocConflictingLibraries = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [
     {{
@@ -553,7 +542,7 @@ namespace Microsoft.Web.LibraryManager.Test
   ]
 }}
 ";
-        private string _emptyLibmanJson = $@"{{
+        private static readonly string EmptyLibmanJson = $@"{{
   ""{ManifestConstants.Version}"": ""1.0"",
   ""{ManifestConstants.Libraries}"": [ ]
 }}

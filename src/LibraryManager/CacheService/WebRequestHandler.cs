@@ -15,10 +15,11 @@ namespace Microsoft.Web.LibraryManager
     /// </summary>
     internal class WebRequestHandler : IWebRequestHandler, IDisposable
     {
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
+
         private WebRequestHandler()
         {
-            HttpClientHandler httpMessageHandler = new HttpClientHandler();
+            var httpMessageHandler = new HttpClientHandler();
             _httpClient = new HttpClient(httpMessageHandler);
         }
 
