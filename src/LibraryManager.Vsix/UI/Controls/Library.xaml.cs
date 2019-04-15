@@ -301,11 +301,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void LibrarySearchBox_GotKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
         {
+            // If the library search box is empty, the watermark text will be visible. We'll make sure that narrator reads it.
             if (string.IsNullOrEmpty(LibrarySearchBox.Text))
             {
-                RemoveCharacterExtension removeChareacterExtension = new RemoveCharacterExtension(Microsoft.Web.LibraryManager.Vsix.Resources.Text.TypeToSearch, "<>");
-                string text = (string)removeChareacterExtension.ProvideValue(ServiceProvider.GlobalProvider);
-                LibrarySearchBox.SetValue(AutomationProperties.HelpTextProperty, text);
+                RemoveCharacterExtension removeCharacterExtension = new RemoveCharacterExtension(Microsoft.Web.LibraryManager.Vsix.Resources.Text.TypeToSearch, "<>");
+                string watermarkText = (string)removeCharacterExtension.ProvideValue(ServiceProvider.GlobalProvider);
+
+                LibrarySearchBox.SetValue(AutomationProperties.HelpTextProperty, watermarkText);
             }
 
             e.Handled = true;
