@@ -33,7 +33,8 @@
         <Label Opacity=".5"
                Target="{Binding ElementName=LibrarySearchBox}"
                Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-               VerticalAlignment="Top" IsHitTestVisible="False">
+               VerticalAlignment="Top"
+               IsHitTestVisible="False">
             <TextBlock Text="{x:Static res:Text.TypeToSearch}"
                        AutomationProperties.HelpText="{extensions:RemoveCharacter {x:Static resources:Text.TypeToSearch}, &lt;&gt;}" />
         </Label>
