@@ -36,7 +36,7 @@
                VerticalAlignment="Top"
                IsHitTestVisible="False">
             <TextBlock Text="{x:Static res:Text.TypeToSearch}"
-                       AutomationProperties.HelpText="{extensions:RemoveCharacter {x:Static resources:Text.TypeToSearch}, &lt;&gt;}" />
+                       AutomationProperties.Name="{x:Static resources:Text.TypeToSearch}" />
         </Label>
 
         <!-- Expand Grip -->

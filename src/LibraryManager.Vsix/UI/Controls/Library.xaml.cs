@@ -309,6 +309,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
                 LibrarySearchBox.SetValue(AutomationProperties.HelpTextProperty, watermarkText);
             }
+            else
+            {
+                LibrarySearchBox.ClearValue(AutomationProperties.HelpTextProperty);
+            }
 
             e.Handled = true;
         }
