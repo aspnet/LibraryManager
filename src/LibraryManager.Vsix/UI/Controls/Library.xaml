@@ -19,7 +19,7 @@
     <Grid>
         <!-- Text Entry -->
         <TextBox x:Name="LibrarySearchBox"
-                 AutomationProperties.Name="{extensions:RemoveSubstring {x:Static resources:Text.Library}}"
+                 AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.Library}, _}"
                  Text="{Binding ElementName=ThisControl,
                                 Path=Text,
                                 Mode=TwoWay,
@@ -27,9 +27,14 @@
                                 IsAsync=True}"
                  TextChanged="LibrarySearchBox_TextChanged"
                  PreviewKeyDown="HandleKeyPress"
+                 GotKeyboardFocus="LibrarySearchBox_GotKeyboardForcus"
                  Padding="2 2 20 2" />
         <!-- Watermark -->
-        <Label Opacity=".5" Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Top" IsHitTestVisible="False">
+        <Label Opacity=".5"
+               Target="{Binding ElementName=LibrarySearchBox}"
+               Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+               VerticalAlignment="Top"
+               IsHitTestVisible="False">
             <TextBlock Text="{x:Static res:Text.TypeToSearch}"
                        AutomationProperties.Name="{x:Static resources:Text.TypeToSearch}" />
         </Label>

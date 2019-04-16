@@ -17,7 +17,7 @@
     <Grid>
         <!-- Text Entry -->
         <TextBox x:Name="TargetLocationSearchTextBox"
-                 AutomationProperties.Name="{extensions:RemoveSubstring {x:Static resources:Text.TargetLocation}}"
+                 AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.TargetLocation}, _}"
                  Text="{Binding ElementName=ThisControl,
                                 Path=Text,
                                 Mode=TwoWay,

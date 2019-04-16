@@ -59,7 +59,7 @@
                 <AccessText Text="{x:Static resources:Text.Library}" />
             </Label>
             <ComboBox x:Name="ProviderComboBox"
-                      AutomationProperties.Name="{extensions:RemoveSubstring {x:Static resources:Text.Provider}}"
+                      AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.Provider}, _}"
                       Grid.Row="0"
                       Grid.Column="1"
                       Margin="0 0 0 9"

@@ -4,20 +4,15 @@ using System.Windows.Markup;
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Extensions
 {
     [MarkupExtensionReturnType(typeof(string))]
-    internal class RemoveSubstringExtension : MarkupExtension
+    internal class RemoveCharacterExtension : MarkupExtension
     {
         private object _text;
         private string _remove;
 
-        public RemoveSubstringExtension(object text)
-            : this(text, null)
-        {
-        }
-
-        public RemoveSubstringExtension(object text, string remove)
+        public RemoveCharacterExtension(object text, string remove)
         {
             _text = text;
-            _remove = remove ?? "_";
+            _remove = remove;
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
@@ -40,12 +35,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Extensions
                 s = _text as string;
             }
 
-            if (s != null)
+            for (int i = 0; i < _remove.Length; i++)
             {
-                return s.Replace(_remove, string.Empty);
+                if (s != null)
+                {
+                    s = s.Replace(_remove[i].ToString(), string.Empty);
+                }
             }
 
-            return null;
+            return s;
         }
     }
 }
