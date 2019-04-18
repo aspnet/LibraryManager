@@ -18,7 +18,7 @@ namespace Microsoft.Web.LibraryManager.Build
         }
 
         public string WorkingDirectory { get; }
-        public string CacheDirectory => Constants.CacheFolder;
+        public string CacheDirectory => CacheService.CacheFolder;
         public ILogger Logger => Build.Logger.Instance;
 
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)

@@ -119,10 +119,10 @@ namespace Microsoft.Web.LibraryManager.Test
             string validUrl = "";
             string destinationFile = _cacheFolder;
 
-            List<CacheServiceMetadata> desiredCasheFiles = new List<CacheServiceMetadata>()
+            List<CacheFileMetadata> desiredCasheFiles = new List<CacheFileMetadata>()
             {
-                new CacheServiceMetadata(validUrl, libraryFile1_Path),
-                new CacheServiceMetadata(validUrl, libraryFile2_Path)
+                new CacheFileMetadata(validUrl, libraryFile1_Path),
+                new CacheFileMetadata(validUrl, libraryFile2_Path)
             };
 
             tokenSource.Cancel();
@@ -140,10 +140,10 @@ namespace Microsoft.Web.LibraryManager.Test
             string validUrl = "";
             string destinationFile = _cacheFolder;
 
-            List<CacheServiceMetadata> desiredCasheFiles = new List<CacheServiceMetadata>()
+            List<CacheFileMetadata> desiredCasheFiles = new List<CacheFileMetadata>()
             {
-                new CacheServiceMetadata(validUrl, libraryFile1_Path),
-                new CacheServiceMetadata(validUrl, libraryFile2_Path)
+                new CacheFileMetadata(validUrl, libraryFile1_Path),
+                new CacheFileMetadata(validUrl, libraryFile2_Path)
             };
 
             // act 

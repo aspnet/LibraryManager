@@ -59,7 +59,7 @@ namespace Microsoft.Web.LibraryManager.Tools
                 Logger = ConsoleLogger.Instance,
                 InputReader = ConsoleLogger.Instance,
                 CurrentWorkingDirectory = Directory.GetCurrentDirectory(),
-                CacheDirectory = Constants.CacheFolder,
+                CacheDirectory = CacheService.CacheFolder,
                 DefaultProvider = "cdnjs",
             };
         }

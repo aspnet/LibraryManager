@@ -24,7 +24,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         }
 
         public string WorkingDirectory { get; }
-        public string CacheDirectory => Constants.CacheFolder;
+        public string CacheDirectory => CacheService.CacheFolder;
         public ILogger Logger { get; internal set; }
 
 

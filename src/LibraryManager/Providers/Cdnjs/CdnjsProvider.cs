@@ -275,17 +275,17 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
                 {
                     string libraryDir = Path.Combine(CacheFolder, state.Name);
-                    List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                    List<CacheFileMetadata> librariesMetadata = new List<CacheFileMetadata>();
 
                     foreach (string sourceFile in state.Files)
                     {
                         string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
                         string url = string.Format(_downloadUrlFormat, state.Name, state.Version, sourceFile);
 
-                        CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                        CacheFileMetadata newEntry = new CacheFileMetadata(url, cacheFile);
                         if (!librariesMetadata.Contains(newEntry))
                         {
-                            librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
+                            librariesMetadata.Add(new CacheFileMetadata(url, cacheFile));
                         }
                     }
 
