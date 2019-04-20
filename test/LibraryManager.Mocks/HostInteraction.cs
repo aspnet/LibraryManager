@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.Web.LibraryManager.Contracts.Configuration;
 
 namespace Microsoft.Web.LibraryManager.Mocks
 {
@@ -52,6 +53,9 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// Gets the logger associated with the host.
         /// </summary>
         public virtual ILogger Logger { get; } = new Logger();
+
+        /// <inheritdoc />
+        public virtual ISettings Settings { get; } = new Settings();
 
         /// <summary>
         /// Writes a file to disk based on the specified <see cref="ILibraryInstallationState"/>.

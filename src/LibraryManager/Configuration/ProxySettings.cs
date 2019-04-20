@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Configuration
         /// <summary>
         /// Returns a ProxySettings that uses the default configuration file.
         /// </summary>
-        public static ProxySettings Default => new ProxySettings(new Settings());
+        public static ProxySettings Default => new ProxySettings(Settings.DefaultSettings);
 
         /// <summary>
         /// Create a ProxySettings using the specified ISettings instance

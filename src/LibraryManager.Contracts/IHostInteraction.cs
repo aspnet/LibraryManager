@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Web.LibraryManager.Contracts.Configuration;
 
 namespace Microsoft.Web.LibraryManager.Contracts
 {
@@ -31,6 +32,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Gets the logger associated with the host.
         /// </summary>
         ILogger Logger { get; }
+
+        /// <summary>
+        /// Gets access to the configuration settings
+        /// </summary>
+        ISettings Settings { get; }
 
         /// <summary>
         /// Writes a file to disk based on the specified <see cref="ILibraryInstallationState"/>.
