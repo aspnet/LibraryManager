@@ -31,6 +31,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             Commands.Add(new CleanCommand(HostEnvironment).Configure(this));
             Commands.Add(new CacheCommand(HostEnvironment).Configure(this));
             Commands.Add(new UpdateCommand(HostEnvironment).Configure(this));
+            Commands.Add(new ConfigCommand(HostEnvironment).Configure(this));
 
             // These are shown by child commands.
             RootDir.ShowInHelpText = false;
