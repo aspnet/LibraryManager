@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         {
             base.Setup();
 
-            HostEnvironment.HostInteraction = new Mocks.HostInteractionInternal()
+            HostEnvironment.HostInteraction = new Mocks.HostInteractionInternal(string.Empty, string.Empty)
             {
                 Logger = new LibraryManager.Mocks.Logger(),
                 Settings = new LibraryManager.Mocks.Settings(),

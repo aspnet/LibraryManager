@@ -57,7 +57,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             {
                 if (factory != null)
                 {
-                    _providers.Add(factory.CreateProvider(_hostInteraction));
+                    var provider = factory.CreateProvider(_hostInteraction);
+                    if (!string.IsNullOrEmpty(provider.Id))
+                    {
+                        _providers.Add(provider);
+                    }
                 }
             }
         }

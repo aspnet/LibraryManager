@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -14,9 +15,20 @@ namespace Microsoft.Web.LibraryManager.Tools.Test.Mocks
 {
     internal class HostInteractionInternal : IHostInteractionInternal
     {
-        public string CacheDirectory => throw new NotImplementedException();
+        public HostInteractionInternal(string workingDirectory, string cacheDirectory)
+        {
+            WorkingDirectory = workingDirectory;
+            CacheDirectory = cacheDirectory;
 
-        public string WorkingDirectory => throw new NotImplementedException();
+            if (!string.IsNullOrEmpty(WorkingDirectory))
+            {
+                Directory.CreateDirectory(WorkingDirectory);
+            }
+        }
+
+        public string CacheDirectory { get; set; }
+
+        public string WorkingDirectory { get; set; }
 
         public ILogger Logger { get; set; }
 
@@ -29,7 +41,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Test.Mocks
 
         public Task<bool> DeleteFilesAsync(IEnumerable<string> filePaths, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+
+            IEnumerable<string> fullPaths = filePaths.Select(f => Path.Combine(WorkingDirectory, f));
+            bool result = FileHelpers.DeleteFiles(fullPaths, WorkingDirectory);
+
+            return Task.FromResult(result);
         }
 
         public Task<Stream> ReadFileAsync(string filePath, CancellationToken cancellationToken)
@@ -44,7 +60,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Test.Mocks
 
         public Task<bool> WriteFileAsync(string filePath, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            string path = Path.Combine(WorkingDirectory, filePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            File.Create(path).Dispose();
+            return Task.FromResult(true);
         }
     }
 }

@@ -111,7 +111,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
                 var ioe = age.InnerExceptions[0] as InvalidOperationException;
                 if (ioe == null)
                 {
-                    Assert.Fail("Unexpected exception thrown");
+                    Assert.Fail($"Unexpected exception thrown: {age.InnerExceptions[0].GetType().Name}");
                 }
 
                 Assert.AreEqual("Please fix the libman.json file and try again", ioe.Message);
