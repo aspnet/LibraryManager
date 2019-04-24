@@ -1,8 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Tools.Contracts;
-
 namespace Microsoft.Web.LibraryManager.Tools.Test
 {
     internal class TestEnvironmentHelper
@@ -18,9 +16,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             };
         }
 
-        public static HostEnvironment GetTestHostEnvironment(string workingDirectory, string cacheDirectory)
+        public static IHostEnvironment GetTestHostEnvironment(string workingDirectory, string cacheDirectory)
         {
-            return HostEnvironment.Initialize(GetTestSettings(workingDirectory, cacheDirectory));
+            return new Mocks.HostEnvironment(GetTestSettings(workingDirectory, cacheDirectory));
         }
     }
 }

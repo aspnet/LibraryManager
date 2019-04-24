@@ -15,20 +15,5 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public const string WAP = "{349C5851-65DF-11DA-9384-00065B846F21}";
         public const string WebsiteProject = "{E24C65DC-7377-472B-9ABA-BC803B73C61A}";
         public const string DotNetCoreWebCapability = "DotNetCoreWeb";
-
-        public static string CacheFolder
-        {
-            get
-            {
-                string envVar = "%HOME%";
-
-                if (Path.DirectorySeparatorChar == '\\') // Windows
-                {
-                    envVar = "%USERPROFILE%";
-                }
-
-                return Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".librarymanager");
-            }
-        }
     }
 }

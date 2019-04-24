@@ -113,17 +113,17 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
             try
             {
-                List<CacheServiceMetadata> librariesMetadata = new List<CacheServiceMetadata>();
+                List<CacheFileMetadata> librariesMetadata = new List<CacheFileMetadata>();
                 foreach (string sourceFile in state.Files)
                 {
                     string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
                     string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, state.ProviderId);
                     string url = string.Format(JsDelivrCatalog.IsGitHub(libraryId) ? DownloadUrlFormatGH : DownloadUrlFormat, state.Name, state.Version, sourceFile);
 
-                    CacheServiceMetadata newEntry = new CacheServiceMetadata(url, cacheFile);
+                    CacheFileMetadata newEntry = new CacheFileMetadata(url, cacheFile);
                     if (!librariesMetadata.Contains(newEntry))
                     {
-                        librariesMetadata.Add(new CacheServiceMetadata(url, cacheFile));
+                        librariesMetadata.Add(new CacheFileMetadata(url, cacheFile));
                     }
                 }
                 await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);

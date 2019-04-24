@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.Web.LibraryManager.Contracts.Configuration;
 
 namespace Microsoft.Web.LibraryManager.Mocks
 {
@@ -41,17 +42,20 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <remarks>
         /// The cache directory is not being created, so each <see cref="IProvider"/> should ensure to do that if needed.
         /// </remarks>
-        public virtual string CacheDirectory { get; }
+        public virtual string CacheDirectory { get; set; }
 
         /// <summary>
         /// The root directory from where file paths are calculated.
         /// </summary>
-        public virtual string WorkingDirectory { get; }
+        public virtual string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Gets the logger associated with the host.
         /// </summary>
-        public virtual ILogger Logger { get; } = new Logger();
+        public virtual ILogger Logger { get; set; } = new Logger();
+
+        /// <inheritdoc />
+        public virtual ISettings Settings { get; set; } = new Settings();
 
         /// <summary>
         /// Writes a file to disk based on the specified <see cref="ILibraryInstallationState"/>.

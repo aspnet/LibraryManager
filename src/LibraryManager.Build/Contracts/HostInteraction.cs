@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Configuration;
 
 namespace Microsoft.Web.LibraryManager.Build
 {
@@ -18,8 +19,9 @@ namespace Microsoft.Web.LibraryManager.Build
         }
 
         public string WorkingDirectory { get; }
-        public string CacheDirectory => Constants.CacheFolder;
+        public string CacheDirectory => CacheService.CacheFolder;
         public ILogger Logger => Build.Logger.Instance;
+        public ISettings Settings => Configuration.Settings.DefaultSettings;
 
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {

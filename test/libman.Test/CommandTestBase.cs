@@ -15,6 +15,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
         public virtual void Setup()
         {
             WorkingDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            Directory.CreateDirectory(WorkingDir);
             CacheDir = Path.Combine(WorkingDir, "cache");
             Directory.CreateDirectory(CacheDir);
 

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -13,17 +14,46 @@ namespace Microsoft.Web.LibraryManager
     /// <summary>
     /// Service to manage basic operations on libraries cache
     /// </summary>
-    internal class CacheService
+    public class CacheService
     {
         // TO DO: Move these expirations to the provider 
         private readonly int _catalogExpiresAfterDays = 1;
         private readonly int _metadataExpiresAfterDays = 1;
         private readonly int _libraryExpiresAfterDays = 30;
-        private IWebRequestHandler _requestHandler;
+        private readonly IWebRequestHandler _requestHandler;
 
+        private static string _cacheFolder;
+
+        /// <summary>
+        /// Instantiate the CacheService
+        /// </summary>
+        /// <param name="requestHandler"></param>
         public CacheService(IWebRequestHandler requestHandler)
         {
             _requestHandler = requestHandler;
+        }
+
+        /// <summary>
+        /// Defines the root cache directory.  This should be consistent across all LibMan tools. 
+        /// </summary>
+        public static string CacheFolder
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_cacheFolder))
+                {
+                    string envVar = "%HOME%";
+
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        envVar = "%USERPROFILE%";
+                    }
+
+                    _cacheFolder = Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".librarymanager", "cache");
+                }
+
+                return _cacheFolder;
+            }
         }
 
         /// <summary>
@@ -105,13 +135,13 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="librariesCacheMetadata"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task RefreshCacheAsync(IEnumerable<CacheServiceMetadata> librariesCacheMetadata, CancellationToken cancellationToken)
+        public async Task RefreshCacheAsync(IEnumerable<CacheFileMetadata> librariesCacheMetadata, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             List<Task> refreshTasks = new List<Task>();
 
-            foreach (CacheServiceMetadata metadata in librariesCacheMetadata)
+            foreach (CacheFileMetadata metadata in librariesCacheMetadata)
             {
                 if (!File.Exists(metadata.DestinationPath) || File.GetLastWriteTime(metadata.DestinationPath) < DateTime.Now.AddDays(-_libraryExpiresAfterDays))
                 {

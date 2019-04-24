@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Configuration;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -24,9 +25,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
         }
 
         public string WorkingDirectory { get; }
-        public string CacheDirectory => Constants.CacheFolder;
+        public string CacheDirectory => CacheService.CacheFolder;
         public ILogger Logger { get; internal set; }
 
+        /// <inheritdoc />
+        public ISettings Settings => Configuration.Settings.DefaultSettings;
 
         public async Task<bool> WriteFileAsync(string relativePath, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)
         {

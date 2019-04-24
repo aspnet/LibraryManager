@@ -196,6 +196,82 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name of the setting to retrieve.
+        /// </summary>
+        internal static string ConfigCommand_ArgumentDescription {
+            get {
+                return ResourceManager.GetString("ConfigCommand_ArgumentDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gets or sets configuration settings.
+        /// </summary>
+        internal static string ConfigCommand_Description {
+            get {
+                return ResourceManager.GetString("ConfigCommand_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot read and write settings in the same operation.
+        /// </summary>
+        internal static string ConfigCommand_Error_ConflictingParameters {
+            get {
+                return ResourceManager.GetString("ConfigCommand_Error_ConflictingParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key {0} not found..
+        /// </summary>
+        internal static string ConfigCommand_Error_KeyNotFound {
+            get {
+                return ResourceManager.GetString("ConfigCommand_Error_KeyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to     libman config http_proxy
+        ///    libman config --set http_proxy=http://example
+        ///    libman config --setEncrypted http_proxy.password=passwordText.
+        /// </summary>
+        internal static string ConfigCommand_Examples {
+            get {
+                return ResourceManager.GetString("ConfigCommand_Examples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets a key-value pair in the configuration store.  The option should be in the form key=value.
+        /// </summary>
+        internal static string ConfigCommand_OptionDescription_Set {
+            get {
+                return ResourceManager.GetString("ConfigCommand_OptionDescription_Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets a key with an encrypted value in the configuraiton store.  The option should be in the form key=plaintext.
+        /// </summary>
+        internal static string ConfigCommand_OptionDescription_SetEncrypted {
+            get {
+                return ResourceManager.GetString("ConfigCommand_OptionDescription_SetEncrypted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to     Settings cannot be read and stored in the same operation.
+        ///    To remove a setting, set it to an empty string (--set key=).
+        ///    Retrieving decrypted values for encrypted settings is not supported..
+        /// </summary>
+        internal static string ConfigCommand_Remarks {
+            get {
+                return ResourceManager.GetString("ConfigCommand_Remarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The path, relative to the current directory, where library files should be installed if no destination is defined for a given library..
         /// </summary>
         internal static string DefaultDestinationOptionDesc {
@@ -656,7 +732,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify &apos;{0}&apos; using the &apos;{1}&apos; option..
+        ///   Looks up a localized string similar to Please specify &apos;{0}&apos; using the &apos;--{1}&apos; option..
         /// </summary>
         internal static string SpecifyFieldUsingOption {
             get {

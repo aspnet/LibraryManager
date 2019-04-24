@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Configuration;
 
 namespace Microsoft.Web.LibraryManager.Tools.Contracts
 {
@@ -35,6 +36,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
 
         /// <inheritdoc />
         public ILogger Logger { get; }
+
+        /// <inheritdoc />
+        public ISettings Settings => Configuration.Settings.DefaultSettings;
 
         /// <inheritdoc />
         public async Task<bool> WriteFileAsync(string path, Func<Stream> content, ILibraryInstallationState state, CancellationToken cancellationToken)

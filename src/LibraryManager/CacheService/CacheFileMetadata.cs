@@ -6,9 +6,14 @@ namespace Microsoft.Web.LibraryManager
     /// <summary>
     /// Holds information for pair: source, destination for a resource to be cached
     /// </summary>
-    internal class CacheServiceMetadata
+    public class CacheFileMetadata
     {
-        public CacheServiceMetadata(string source, string cacheFile)
+        /// <summary>
+        /// Create a new CacheFileMetadata
+        /// </summary>
+        /// <param name="source">The URI from where the file originated</param>
+        /// <param name="cacheFile">The path where the file is to be cached</param>
+        public CacheFileMetadata(string source, string cacheFile)
         {
             DestinationPath = cacheFile;
             Source = source;
