@@ -116,5 +116,25 @@ namespace Microsoft.Web.LibraryManager.Test
 
             Assert.AreEqual(0, JsonHelpers.GetChildren(firstToken).Count);
         }
+
+        [TestMethod]
+        public void TryGetInstallationState_PathsContainingBackslashes_ShouldNotOverescape()
+        {
+            string libraryJson = @"{
+  ""library"": ""C:\\libraryPath"",
+  ""provider"": ""test\\provider"",
+  ""destination"": ""lib\\path"",
+  ""files"": [ ""subfolder\\file.js"" ]
+}";
+            var value = JsonNodeParser.Parse(libraryJson).TopLevelValue as ObjectNode;
+
+            JsonHelpers.TryGetInstallationState(value, out Contracts.ILibraryInstallationState state);
+
+            Assert.IsNotNull(state);
+            Assert.AreEqual(@"C:\libraryPath", state.Name);
+            Assert.AreEqual(@"subfolder\file.js", state.Files[0]);
+            Assert.AreEqual(@"test\provider", state.ProviderId);
+            Assert.AreEqual(@"lib\path", state.DestinationPath);
+        }
     }
 }
