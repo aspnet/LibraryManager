@@ -94,21 +94,32 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             SortedNodeList<Node> children = GetChildren(parent);
 
+            string GetCanonicalizedValue(BlockChildNode m)
+            {
+                if (m.Value is TokenNode value)
+                {
+                    return value.GetCanonicalizedText();
+                }
+                return m.UnquotedValueText;
+            }
+
             foreach (MemberNode child in children.OfType<MemberNode>())
             {
+                // note: the Json parser escapes backslashes in the node's Value text,
+                // so we need to unescape those so that they match the value from the manifest.
                 switch (child.UnquotedNameText)
                 {
                     case ManifestConstants.Provider:
-                        state.ProviderId = child.UnquotedValueText;
+                        state.ProviderId = GetCanonicalizedValue(child);
                         break;
                     case ManifestConstants.Library:
-                        state.LibraryId = child.UnquotedValueText;
+                        state.LibraryId = GetCanonicalizedValue(child);
                         break;
                     case ManifestConstants.Destination:
-                        state.DestinationPath = child.UnquotedValueText;
+                        state.DestinationPath = GetCanonicalizedValue(child);
                         break;
                     case ManifestConstants.Files:
-                        state.Files = (child.Value as ArrayNode)?.Elements.Select(e => e.UnquotedValueText).ToList();
+                        state.Files = (child.Value as ArrayNode)?.Elements.Select(e => GetCanonicalizedValue(e)).ToList();
                         break;
                 }
             }
