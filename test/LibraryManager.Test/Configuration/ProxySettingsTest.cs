@@ -92,6 +92,7 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
             var mockSettings = new Mock<ISettings>();
             string proxyServer = "http://proxyValue/";
             string proxyUser = "proxyUser";
+            // [SuppressMessage("Microsoft.Security", "CS002:SecretInNextLine", Justification="test value; not a real secret")]
             string proxyPassword = "proxyPassword";
             mockSettings.Setup(s => s.TryGetValue(It.Is<string>(v => v.Equals("http_proxy")), out proxyServer))
                         .Returns(true);
