@@ -7,6 +7,7 @@ namespace Microsoft.Web.LibraryManager.Configuration
     {
         public const string HttpProxy = "http_proxy";
         public const string HttpProxyUser = "http_proxy.user";
+        // [SuppressMessage("Microsoft.Security", "CS002:SecretInNextLine", Justification = "Configuration setting name, not a secret.")]
         public const string HttpProxyPassword = "http_proxy.password";
         public const string HttpProxyBypass = "http_proxy.bypass";
     }
