@@ -16,7 +16,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
             if (File.Exists(libmanConfigFullPath))
             {
-                string projectPath = Path.Combine(SolutionRootPath, _projectName);
+                string projectPath = Path.Combine(SolutionRootPath, ProjectName);
                 _libmanConfig.Delete();
                 Helpers.FileIO.WaitForDeletedFile(projectPath, libmanConfigFullPath, caseInsensitive: false);
             }
@@ -25,9 +25,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void InstallClientSideLibraries_FromProjectRoot_SmokeTest()
         {
-            SetLibraryAndClickInstall(_projectName, "jquery-validate@1.17.0");
+            SetLibraryAndClickInstall(ProjectName, "jquery-validate@1.17.0");
 
-            string pathToLibrary = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "lib", "jquery-validate");
+            string pathToLibrary = Path.Combine(SolutionRootPath, ProjectName, "wwwroot", "lib", "jquery-validate");
             string[] expectedFiles = new[]
             {
                 Path.Combine(pathToLibrary, "jquery.validate.js"),
@@ -53,7 +53,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             SetLibraryAndClickInstall("wwwroot", "jquery-validate@1.17.0");
 
-            string pathToLibrary = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "jquery-validate");
+            string pathToLibrary = Path.Combine(SolutionRootPath, ProjectName, "wwwroot", "jquery-validate");
             string[] expectedFiles = new[]
             {
                 Path.Combine(pathToLibrary, "jquery.validate.js"),

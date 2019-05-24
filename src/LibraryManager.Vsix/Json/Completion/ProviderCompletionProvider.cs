@@ -17,7 +17,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [Name(nameof(ProviderCompletionProvider))]
     internal class ProviderCompletionProvider : BaseCompletionProvider
     {
-        private static readonly ImageMoniker _libraryIcon = KnownMonikers.Method;
+        private static readonly ImageMoniker LibraryIcon = KnownMonikers.Method;
 
         private readonly IDependenciesFactory _dependenciesFactory;
 
@@ -47,7 +47,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             foreach (string id in providerIds)
             {
-                yield return new SimpleCompletionEntry(id, _libraryIcon, context.Session);
+                yield return new SimpleCompletionEntry(id, LibraryIcon, context.Session);
             }
         }
     }

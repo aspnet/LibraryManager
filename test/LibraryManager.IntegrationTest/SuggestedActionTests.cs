@@ -37,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
             SetManifestContents(withLibrary);
 
-            string restoreFolder = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "UninstallSuggestedAction", "files");
+            string restoreFolder = Path.Combine(SolutionRootPath, ProjectName, "wwwroot", "UninstallSuggestedAction", "files");
             Helpers.FileIO.WaitForRestoredFile(restoreFolder, Path.Combine(restoreFolder, "jquery.min.js"), true);
 
             Editor.Caret.MoveToExpression("jquery");
@@ -74,7 +74,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
             SetManifestContents(withLibrary);
 
-            string restoreFolder = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "UninstallSuggestedAction", "files");
+            string restoreFolder = Path.Combine(SolutionRootPath, ProjectName, "wwwroot", "UninstallSuggestedAction", "files");
             Helpers.FileIO.WaitForRestoredFile(restoreFolder, Path.Combine(restoreFolder, "filesystem.js"), true);
 
             Editor.Caret.MoveToExpression(@"""library""");

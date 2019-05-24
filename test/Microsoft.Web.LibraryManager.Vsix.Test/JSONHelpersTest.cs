@@ -11,7 +11,7 @@ namespace Microsoft.Web.LibraryManager.Test
     [TestClass]
     public class JsonHelpersTest
     {
-        private const string _validJsonText = @"{
+        private const string ValidJsonText = @"{
   ""version"": ""1.0"",
   ""defaultProvider"": ""cdnjs"",
   ""libraries"": [
@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Test
     }
   ]
 }";
-        private const string _invalidJsonText = @"{
+        private const string InvalidJsonText = @"{
   ""version"": ""1.0"",
   ""defaultProvider"": ""cdnjs"",
   ""libraries"": [
@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Test
         //[DataRow(171, "}")] // The last token node position
         public void JsonHelpers_GetNodeBeforePosition_ValidJson(int position, string expectedText)
         {
-            DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
+            DocumentNode documentNode = JsonNodeParser.Parse(ValidJsonText);
             Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
             Assert.IsTrue(node.IsToken);
@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryManager.Test
         //[DataRow(170, "}")] // The last token node position
         public void JsonHelpers_GetNodeBeforePosition_InvalidJson(int position, string expectedText)
         {
-            DocumentNode documentNode = JsonNodeParser.Parse(_invalidJsonText);
+            DocumentNode documentNode = JsonNodeParser.Parse(InvalidJsonText);
             Node node = JsonHelpers.GetNodeBeforePosition(position, documentNode);
 
             Assert.IsTrue(node.IsToken);
@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow(171, 5)]   // The last index
         public void JsonHelpers_FindInsertIndex_ValidJson(int position, int expectedIndex)
         {
-            Node complexNode = JsonNodeParser.Parse(_validJsonText).GetNodeSlot(0);
+            Node complexNode = JsonNodeParser.Parse(ValidJsonText).GetNodeSlot(0);
             SortedNodeList<Node> children = JsonHelpers.GetChildren(complexNode);
             int actualIndex = JsonHelpers.FindInsertIndex(children, position);
 
@@ -86,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow(170, 5)]   // The last index
         public void JsonHelpers_FindInsertIndex_InvalidJson(int position, int expectedIndex)
         {
-            Node complexNode = JsonNodeParser.Parse(_invalidJsonText).GetNodeSlot(0);
+            Node complexNode = JsonNodeParser.Parse(InvalidJsonText).GetNodeSlot(0);
             SortedNodeList<Node> children = JsonHelpers.GetChildren(complexNode);
             int actualIndex = JsonHelpers.FindInsertIndex(children, position);
 
@@ -96,7 +96,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public void JsonHelpers_GetChildren_ValidJson()
         {
-            DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
+            DocumentNode documentNode = JsonNodeParser.Parse(ValidJsonText);
             ObjectNode topLevelValue = (ObjectNode)documentNode.TopLevelValue;
             SortedNodeList<Node> children = JsonHelpers.GetChildren(topLevelValue);
 
@@ -111,7 +111,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public void JsonHelpers_GetChildren_TokenNode()
         {
-            DocumentNode documentNode = JsonNodeParser.Parse(_validJsonText);
+            DocumentNode documentNode = JsonNodeParser.Parse(ValidJsonText);
             TokenNode firstToken = documentNode.GetFirstToken();
 
             Assert.AreEqual(0, JsonHelpers.GetChildren(firstToken).Count);

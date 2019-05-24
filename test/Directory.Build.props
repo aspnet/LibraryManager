@@ -1,0 +1,10 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)\TestGlobalSuppressions.cs">
+      <Link>TestGlobalSuppressions.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+</Project>

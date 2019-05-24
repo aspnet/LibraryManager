@@ -7,15 +7,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
     /// </summary>
     internal class InstallDialogProvider
     {
-        private static IInstallDialog _installDialog;
+        private static IInstallDialog InstallDialog;
         public static event EventHandler WindowChanged;
 
         public static IInstallDialog Window
         {
-            get { return _installDialog; }
+            get { return InstallDialog; }
             set
             {
-                _installDialog = value;
+                InstallDialog = value;
 
                 WindowChanged?.Invoke(null, new EventArgs());
             }

@@ -13,13 +13,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class Telemetry
     {
-        private const string _namespace = Constants.TelemetryNamespace;
+        private const string Namespace = Constants.TelemetryNamespace;
 
         public static void TrackUserTask(string name, TelemetryResult result = TelemetryResult.None, params KeyValuePair<string, object>[] properties)
         {
             string actualName = name.Replace(" ", "_");
 
-            var task = new UserTaskEvent(_namespace + actualName, result);
+            var task = new UserTaskEvent(Namespace + actualName, result);
 
             foreach (KeyValuePair<string, object> property in properties)
             {
@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void TrackOperation(string name, TelemetryResult result = TelemetryResult.None, params KeyValuePair<string, object>[] properties)
         {
             string actualName = name.Replace(" ", "_");
-            var task = new OperationEvent(_namespace + actualName, result);
+            var task = new OperationEvent(Namespace + actualName, result);
 
             foreach (KeyValuePair<string, object> property in properties)
             {
@@ -48,7 +48,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 return;
 
             string actualName = name.Replace(" ", "_");
-            TelemetryService.DefaultSession.PostFault(_namespace + actualName, exception.Message, exception);
+            TelemetryService.DefaultSession.PostFault(Namespace + actualName, exception.Message, exception);
         }
 
         internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operation, TimeSpan elapsedTime)

@@ -22,7 +22,7 @@ namespace Microsoft.Web.LibraryManager
         private readonly int _libraryExpiresAfterDays = 30;
         private readonly IWebRequestHandler _requestHandler;
 
-        private static string _cacheFolder;
+        private static string CacheFolderValue;
 
         /// <summary>
         /// Instantiate the CacheService
@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryManager
         {
             get
             {
-                if (string.IsNullOrEmpty(_cacheFolder))
+                if (string.IsNullOrEmpty(CacheFolderValue))
                 {
                     string envVar = "%HOME%";
 
@@ -49,10 +49,10 @@ namespace Microsoft.Web.LibraryManager
                         envVar = "%USERPROFILE%";
                     }
 
-                    _cacheFolder = Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".librarymanager", "cache");
+                    CacheFolderValue = Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".librarymanager", "cache");
                 }
 
-                return _cacheFolder;
+                return CacheFolderValue;
             }
         }
 

@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class VsHelpers
     {
-        private static IComponentModel _compositionService;
+        private static IComponentModel CompositionService;
 
         public static DTE2 DTE { get; } = GetService<DTE, DTE2>();
 
@@ -294,11 +294,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static void SatisfyImportsOnce(this object o)
         {
-            _compositionService = _compositionService ?? GetService<SComponentModel, IComponentModel>();
+            CompositionService = CompositionService ?? GetService<SComponentModel, IComponentModel>();
 
-            if (_compositionService != null)
+            if (CompositionService != null)
             {
-                _compositionService.DefaultCompositionService.SatisfyImportsOnce(o);
+                CompositionService.DefaultCompositionService.SatisfyImportsOnce(o);
             }
         }
 

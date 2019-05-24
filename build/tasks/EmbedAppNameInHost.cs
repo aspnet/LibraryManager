@@ -32,8 +32,8 @@ namespace Microsoft.DotNet.Cli.Utils
         }
 #endregion
 
-        private static string _placeHolder = "c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2"; //hash value embedded in default apphost executable
-        private static byte[] _bytesToSearch = Encoding.UTF8.GetBytes(_placeHolder);
+        private static readonly string PlaceHolder = "c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2"; //hash value embedded in default apphost executable
+        private static readonly byte[] BytesToSearch = Encoding.UTF8.GetBytes(PlaceHolder);
 
         /// <summary>
         /// Create an AppHost with embedded configuration of app binary location
@@ -64,7 +64,7 @@ namespace Microsoft.DotNet.Cli.Utils
 
             var array = File.ReadAllBytes(appHostSourceFilePath);
 
-            SearchAndReplace(array, _bytesToSearch, bytesToWrite, appHostSourceFilePath);
+            SearchAndReplace(array, BytesToSearch, bytesToWrite, appHostSourceFilePath);
 
             if (!Directory.Exists(destinationDirectory))
             {
@@ -158,7 +158,7 @@ namespace Microsoft.DotNet.Cli.Utils
             {
                 throw new Exception(string.Format(
                     "Unable to use '{0}' as application host executable as it does not contain the expected placeholder byte sequence '{1}' that would mark where the application name would be written.",
-                    appHostSourcePath, _placeHolder));
+                    appHostSourcePath, PlaceHolder));
             }
 
             patternToReplace.CopyTo(array, offset);

@@ -20,10 +20,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
     [Name(nameof(LibraryIdCompletionProvider))]
     internal class LibraryIdCompletionProvider : BaseCompletionProvider
     {
-        private static readonly ImageMoniker _libraryIcon = KnownMonikers.Method;
-        private static readonly ImageMoniker _folderIcon = KnownMonikers.FolderClosed;
+        private static readonly ImageMoniker LibraryIcon = KnownMonikers.Method;
+        private static readonly ImageMoniker FolderIcon = KnownMonikers.FolderClosed;
 
-        private IDependenciesFactory _dependenciesFactory { get; set;}
+        private readonly IDependenciesFactory _dependenciesFactory;
 
         [ImportingConstructor]
         internal LibraryIdCompletionProvider(IDependenciesFactory dependenciesFactory)
@@ -129,8 +129,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 string insertionText = item.InsertionText.Replace("\\\\", "\\").Replace("\\", "\\\\");
                 ImageMoniker moniker = item.DisplayText.EndsWith("/", StringComparison.Ordinal) || item.DisplayText.EndsWith("\\", StringComparison.Ordinal)
-                    ? _folderIcon
-                    : _libraryIcon;
+                    ? FolderIcon
+                    : LibraryIcon;
 
                 if (isVersionCompletion)
                 {

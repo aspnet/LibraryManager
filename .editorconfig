@@ -52,29 +52,28 @@ dotnet_style_explicit_tuple_names                               = true : suggest
 # Naming rules - properties must use PascalCase
 dotnet_naming_rule.properties_must_use_pascal_case.severity = warning
 dotnet_naming_rule.properties_must_use_pascal_case.symbols  = properties
-
-dotnet_naming_style.properties.capitalization               = pascal_case
+dotnet_naming_rule.properties_must_use_pascal_case.style    = pascal_case_style
 
 dotnet_naming_symbols.properties.applicable_kinds           = property
 
-# Naming rules - async methods to be prefixed with Async
-dotnet_naming_rule.async_methods_must_end_with_async.severity   = warning
-dotnet_naming_rule.async_methods_must_end_with_async.symbols    = method_symbols
-dotnet_naming_rule.async_methods_must_end_with_async.style      = end_in_async_style
+# Naming rules - static fields must use PascalCase
+dotnet_naming_rule.static_fields_must_be_pascal_cased.symbols   = static_field_symbols
+dotnet_naming_rule.static_fields_must_be_pascal_cased.style     = pascal_case_style
+dotnet_naming_rule.static_fields_must_be_pascal_cased.severity  = warning
 
-dotnet_naming_symbols.method_symbols.applicable_kinds           = method
-dotnet_naming_symbols.method_symbols.required_modifiers         = async
-
-dotnet_naming_style.end_in_async_style.capitalization           = pascal_case
-dotnet_naming_style.end_in_async_style.required_suffix          = Async
+dotnet_naming_symbols.static_field_symbols.applicable_kinds     = field
+dotnet_naming_symbols.static_field_symbols.required_modifiers   = static,shared
 
 # Naming rules - private fields must start with an underscore
-dotnet_naming_rule.field_must_start_with_underscore.severity    = warning
 dotnet_naming_rule.field_must_start_with_underscore.symbols     = private_fields
 dotnet_naming_rule.field_must_start_with_underscore.style       = start_underscore_style
+dotnet_naming_rule.field_must_start_with_underscore.severity    = warning
 
 dotnet_naming_symbols.private_fields.applicable_kinds           = field
 dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+# Naming Styles
+dotnet_naming_style.pascal_case_style.capitalization            = pascal_case
 
 dotnet_naming_style.start_underscore_style.capitalization       = camel_case
 dotnet_naming_style.start_underscore_style.required_prefix      = _
