@@ -46,13 +46,13 @@
                 <ColumnDefinition Width="76*" />
                 <ColumnDefinition Width="391*" />
             </Grid.ColumnDefinitions>
-            <Label Name="Provider" 
+            <Label Name="Provider"
                    Grid.Row="0"
                    Grid.Column="0"
                    Target="{Binding ElementName=ProviderComboBox}">
                 <AccessText Text="{x:Static resources:Text.Provider}" />
             </Label>
-            <Label Name="LibraryId" 
+            <Label Name="LibraryId"
                    Grid.Row="1"
                    Grid.Column="0"
                    Target="{Binding ElementName=LibrarySearchBox}">
@@ -63,12 +63,12 @@
                       Grid.Row="0"
                       Grid.Column="1"
                       Margin="0 0 0 9"
-                      SelectedIndex="0" 
-                      DisplayMemberPath="Id" 
-                      SelectedItem="{Binding SelectedProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                      SelectedIndex="0"
+                      DisplayMemberPath="Id"
+                      SelectedItem="{Binding SelectedProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       SelectionChanged="ProviderComboBox_SelectionChanged"
-                      ItemsSource="{Binding Providers}" 
-                      HorizontalAlignment="Left" 
+                      ItemsSource="{Binding Providers}"
+                      HorizontalAlignment="Left"
                       VerticalAlignment="Center"
                       Width="auto">
                 <ComboBox.ItemContainerStyle>
@@ -77,14 +77,14 @@
                     </Style>
                 </ComboBox.ItemContainerStyle>
             </ComboBox>
-            <DockPanel Grid.Row="1" 
+            <DockPanel Grid.Row="1"
                        Grid.Column="1"
                        KeyboardNavigation.TabNavigation="Local"
                        Focusable="False"
-                       LastChildFill="True" 
+                       LastChildFill="True"
                        Margin="0 0 0 9">
-                <imaging:CrispImage Width="13" 
-                                    Height="13" 
+                <imaging:CrispImage Width="13"
+                                    Height="13"
                                     Margin="6 0 0 0"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
@@ -102,40 +102,39 @@
                         <Label Content="{Binding Converter={StaticResource HintTextConverter}}"/>
                     </imaging:CrispImage.ToolTip>
                 </imaging:CrispImage>
-                <controls:Library x:Name="LibrarySearchBox"
+                <controls:TextBoxWithSearch x:Name="LibrarySearchBox"
                                   AutomationProperties.Name="{x:Static resources:Text.Library}"
                                   DockPanel.Dock="Left"
-                                  SearchService="PerformSearch"
-                                  Text="{Binding Path=PackageId, Mode=OneWayToSource}"
                                   KeyboardNavigation.TabNavigation="Local"
-                                  KeyboardNavigation.TabIndex="1"/>
+                                  KeyboardNavigation.TabIndex="1"
+                                  DataContext="{Binding LibraryIdViewModel}" />
             </DockPanel>
         </Grid>
 
         <StackPanel Orientation="Vertical"
                     Grid.Row="1"
-                    Grid.ColumnSpan="4" 
+                    Grid.ColumnSpan="4"
                     Margin="0 0 0 9">
             <RadioButton x:Name="IncludeAllLibraryFilesRb"
                          Margin="0 0 0 9"
-                         GroupName="FilesToInstall" 
+                         GroupName="FilesToInstall"
                          Content="{x:Static resources:Text.IncludeAllLibraryFiles}"
                          Checked="IncludeAllLibraryFilesRb_Checked"
                          IsChecked="{Binding LibraryFilesToInstall,
                                              Mode=TwoWay,
-                                             Converter={StaticResource EnumToBoolConverter}, 
+                                             Converter={StaticResource EnumToBoolConverter},
                                              ConverterParameter=InstallAllLibraryFiles}" />
             <RadioButton Content="{x:Static resources:Text.ChooseSpecificFiles}"
-                         GroupName="FilesToInstall"  
+                         GroupName="FilesToInstall"
                          Checked="ChooseSpecificFilesRb_Checked"
                          IsChecked="{Binding LibraryFilesToInstall,
                                              Mode=TwoWay,
-                                             Converter={StaticResource EnumToBoolConverter}, 
+                                             Converter={StaticResource EnumToBoolConverter},
                                              ConverterParameter=ChooseSpecificFilesToInstall}" />
         </StackPanel>
 
-        <Border Grid.Row="2"   
-                Grid.ColumnSpan="4" 
+        <Border Grid.Row="2"
+                Grid.ColumnSpan="4"
                 Margin="0 0 0 9"
                 BorderBrush="Black"
                 BorderThickness="1"
@@ -144,10 +143,10 @@
                                               AutomationProperties.Name="{x:Static resources:Text.Files}" />
         </Border>
 
-        <Label Grid.Row="2" 
-               Grid.ColumnSpan="4" 
+        <Label Grid.Row="2"
+               Grid.ColumnSpan="4"
                Margin="0 0 0 9"
-               Opacity=".5" 
+               Opacity=".5"
                VerticalAlignment="Center"
                Name="ChooseLibraryFilesToInstallLabel"
                HorizontalAlignment="Center">
@@ -166,35 +165,36 @@
             <TextBlock Text="{x:Static resources:Text.SelectLibraryToSelectFilesToInstall}" />
         </Label>
 
-        <DockPanel Grid.Row="3" 
-                   Grid.ColumnSpan="4" 
+        <DockPanel Grid.Row="3"
+                   Grid.ColumnSpan="4"
                    Margin="0 0 0 9">
-            <Label Name="TargetLocation" 
+            <Label Name="TargetLocation"
                    Target="{Binding ElementName=DestinationFolder}"
                    Width="Auto">
                 <AccessText Text="{x:Static resources:Text.TargetLocation}" />
             </Label>
-            <controls:TargetLocation x:Name="DestinationFolder"
+            <controls:TextBoxWithSearch x:Name="DestinationFolder"
                                      AutomationProperties.Name="{x:Static resources:Text.TargetLocation}"
                                      VerticalAlignment="Center"
-                                     SearchService="TargetLocationSearch" />
+                                     DataContext="{Binding TargetLocationViewModel}" />
         </DockPanel>
 
-        <DockPanel Grid.Row="4" 
-                   Grid.ColumnSpan="4" 
+        <DockPanel Grid.Row="4"
+                   Grid.ColumnSpan="4"
                    LastChildFill="False">
             <Button Content="{x:Static resources:Text.Cancel}"
-                    Width="65" 
+                    Width="65"
                     DockPanel.Dock="Right"
                     IsCancel="True"
                     KeyboardNavigation.TabIndex="2" />
             <Button Content="{x:Static resources:Text.Install}"
                     Name="InstallButton"
-                    Width="65" 
+                    Width="65"
                     DockPanel.Dock="Right"
                     Margin="0 0 6 0"
                     IsDefault="True"
                     Click="InstallButton_ClickedAsync"
+                    IsEnabled="{Binding ElementName=DestinationFolder, Path=Text.Length}"
                     KeyboardNavigation.TabIndex="1" />
         </DockPanel>
     </Grid>

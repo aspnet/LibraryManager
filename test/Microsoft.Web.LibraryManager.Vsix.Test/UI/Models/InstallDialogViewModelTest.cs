@@ -6,6 +6,8 @@ using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
 {
+    using Mocks = LibraryManager.Mocks;
+
     [TestClass]
     public class InstallDialogViewModelTest
     {

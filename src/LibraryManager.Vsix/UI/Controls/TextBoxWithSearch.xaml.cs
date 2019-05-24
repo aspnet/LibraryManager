@@ -1,57 +1,45 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.UI.Controls.AutomationPeers;
+using Microsoft.Web.LibraryManager.Vsix.UI.Extensions;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
-    public partial class TargetLocation : INotifyPropertyChanged
+    public partial class TextBoxWithSearch : INotifyPropertyChanged
     {
-        public static readonly DependencyProperty CaretIndexProperty = DependencyProperty.Register(
-            nameof(CaretIndex), typeof(int), typeof(TargetLocation), new PropertyMetadata(default(int)));
-
-        public static readonly DependencyProperty SearchServiceProperty = DependencyProperty.Register(
-            nameof(SearchService), typeof(Func<string, int, Task<CompletionSet>>), typeof(TargetLocation), new PropertyMetadata(default(Func<string, int, Task<CompletionSet>>)));
-
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            nameof(SelectedItem), typeof(CompletionEntry), typeof(TargetLocation), new PropertyMetadata(default(CompletionEntry)));
+            nameof(SelectedItem), typeof(CompletionEntry), typeof(TextBoxWithSearch), new PropertyMetadata(default(CompletionEntry)));
 
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            nameof(Text), typeof(string), typeof(TargetLocation), new PropertyMetadata(default(string)));
-
-        private string _text;
-        private string _lastSuggestedTargetLocation;
-        private string _baseFolder;
-        private BindLibraryNameToTargetLocation _libraryNameChange;
-
-        public TargetLocation()
+        public TextBoxWithSearch()
         {
             InitializeComponent();
 
-            // Pre populate textBox with folder name
-            TargetLocationSearchTextBox.Text = InstallationFolder.DestinationFolder;
-            _baseFolder = InstallationFolder.DestinationFolder;
-            _lastSuggestedTargetLocation = InstallationFolder.DestinationFolder;
-
-            this.Loaded += TargetLocation_Loaded;
+            Loaded += HandleLoaded;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void TargetLocation_Loaded(object sender, RoutedEventArgs e)
+        protected override AutomationPeer OnCreateAutomationPeer()
         {
-            InstallDialogViewModel viewModel = ((InstallDialog)Window.GetWindow(this)).ViewModel;
-            _libraryNameChange = viewModel.LibraryNameChange;
-            _libraryNameChange.PropertyChanged += this.LibraryNameChanged;
+            return new TextControlTypeAutomationPeer(this);
+        }
 
-            Window window = Window.GetWindow(TargetLocationSearchTextBox);
+        private void HandleLoaded(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow(this);
 
             // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
             // the dialog is dragged or resized.
@@ -64,11 +52,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
         }
 
-        protected override AutomationPeer OnCreateAutomationPeer()
-        {
-            return new TargetLocationAutomationPeer(this);
-        }
-
         private void RepositionPopup(object sender, EventArgs e)
         {
             double offset = Flyout.HorizontalOffset;
@@ -77,46 +60,16 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             Flyout.HorizontalOffset = offset;
         }
 
-        public int CaretIndex
-        {
-            get { return (int)GetValue(CaretIndexProperty); }
-            set { SetValue(CaretIndexProperty, value); }
-        }
-
         public bool IsMouseOverFlyout => Options.IsMouseOver;
-
-        public bool IsTextEntryEmpty => string.IsNullOrEmpty(Text);
 
         public bool HasItems => CompletionEntries.Count > 0;
 
         public ObservableCollection<CompletionEntry> CompletionEntries { get; } = new ObservableCollection<CompletionEntry>();
 
-        public Func<string, int, Task<CompletionSet>> SearchService
-        {
-            get { return (Func<string, int, Task<CompletionSet>>)GetValue(SearchServiceProperty); }
-            set { SetValue(SearchServiceProperty, value); }
-        }
-
-        internal CompletionEntry SelectedItem
+        public CompletionEntry SelectedItem
         {
             get { return (CompletionEntry)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
-        }
-
-        public string Text
-        {
-            get
-            {
-                _text = (string)GetValue(TextProperty);
-
-                InstallationFolder.DestinationFolder = _text;
-                return _text;
-            }
-            set
-            {
-                SetValue(TextProperty, value);
-                InstallationFolder.DestinationFolder = value;
-            }
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -131,8 +84,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 return;
             }
 
-            Text = completion.CompletionItem.InsertionText;
-            TargetLocationSearchTextBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
+            ViewModel.SearchText = completion.CompletionItem.InsertionText;
+            SearchTextBox.CaretIndex = ViewModel.SearchText.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
             Flyout.IsOpen = false;
             SelectedItem = null;
         }
@@ -153,14 +106,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     break;
                 case Key.Escape:
                     Flyout.IsOpen = false;
-                    TargetLocationSearchTextBox.ScrollToEnd();
+                    SearchTextBox.ScrollToEnd();
                     e.Handled = true;
                     break;
                 case Key.Down:
                     if (Options.Items.Count > 0)
                     {
                         Options.ScrollIntoView(Options.Items[0]);
-                        FrameworkElement fe = (FrameworkElement)Options.ItemContainerGenerator.ContainerFromIndex(0);
+                        var fe = (FrameworkElement)Options.ItemContainerGenerator.ContainerFromIndex(0);
                         fe?.Focus();
                         Options.SelectedIndex = 0;
                         e.Handled = true;
@@ -171,7 +124,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void HandleListBoxKeyPress(object sender, KeyEventArgs e)
         {
-            int index = TargetLocationSearchTextBox.CaretIndex;
+            int index = SearchTextBox.CaretIndex;
 
             switch (e.Key)
             {
@@ -185,14 +138,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     {
                         SelectedItem = CompletionEntries[0];
                         LostFocus -= OnLostFocus;
-                        TargetLocationSearchTextBox.Focus();
-                        TargetLocationSearchTextBox.CaretIndex = index;
+                        SearchTextBox.Focus();
+                        SearchTextBox.CaretIndex = index;
                         LostFocus += OnLostFocus;
                     }
                     break;
                 case Key.Escape:
                     Flyout.IsOpen = false;
-                    TargetLocationSearchTextBox.ScrollToEnd();
+                    SearchTextBox.ScrollToEnd();
                     e.Handled = true;
                     break;
                 case Key.Down:
@@ -203,8 +156,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     break;
                 default:
                     LostFocus -= OnLostFocus;
-                    TargetLocationSearchTextBox.Focus();
-                    TargetLocationSearchTextBox.CaretIndex = index;
+                    SearchTextBox.Focus();
+                    SearchTextBox.CaretIndex = index;
                     LostFocus += OnLostFocus;
                     break;
             }
@@ -219,7 +172,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         private void CommitSelectionAndMoveFocus()
         {
             Commit(SelectedItem);
-            TargetLocationSearchTextBox.Focus();
+            SearchTextBox.Focus();
         }
 
         private void OnLostFocus(object sender, RoutedEventArgs e)
@@ -227,30 +180,30 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             if (SelectedItem != null && !Options.IsKeyboardFocusWithin)
             {
                 Commit(SelectedItem);
-                TargetLocationSearchTextBox.ScrollToEnd();
+                SearchTextBox.ScrollToEnd();
             }
         }
 
-        private void PositionCompletions(int index)
+        private void PositionCompletionPopup(int index)
         {
-            Rect r = TargetLocationSearchTextBox.GetRectFromCharacterIndex(index);
+            Rect r = SearchTextBox.GetRectFromCharacterIndex(index);
             Flyout.HorizontalOffset = r.Left - 7;
             Options.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             Flyout.Width = Options.DesiredSize.Width;
         }
 
-        private void TargetLocationSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextChange textChange = e.Changes.Last();
 
             // We will invoke completion on text insertion and not deletion.
             // Also, we don't want to invoke completion on dialog load as we pre populate the target
             // location textbox with name of the folder when dialog is initially loaded.
-            if (textChange.AddedLength > 0 && TargetLocationSearchTextBox.CaretIndex > 0)
+            if (textChange.AddedLength > 0 && SearchTextBox.CaretIndex > 0)
             {
                 VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    CompletionSet completionSet = await SearchService?.Invoke(Text, TargetLocationSearchTextBox.CaretIndex);
+                    CompletionSet completionSet = await ViewModel.GetCompletionSetAsync(SearchTextBox.CaretIndex);
 
                     if (completionSet.Equals(null) || !completionSet.Completions.Any())
                     {
@@ -258,71 +211,68 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                         return;
                     }
 
+                    // repopulate the completion list
                     CompletionEntries.Clear();
-
                     foreach (CompletionItem entry in completionSet.Completions)
                     {
                         CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
                     }
 
-                    PositionCompletions(completionSet.Length);
+                    PositionCompletionPopup(completionSet.Length);
 
                     if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
                     {
-                        string lastSelected = SelectedItem?.CompletionItem.InsertionText;
-                        SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == lastSelected) ?? CompletionEntries[0];
+                        CompletionItem selectionCandidate = await ViewModel.GetRecommendedSelectedCompletionAsync(
+                            completionSet: completionSet,
+                            lastSelected: SelectedItem?.CompletionItem);
+                        SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == selectionCandidate.InsertionText) ?? CompletionEntries[0];
                         Options.ScrollIntoView(SelectedItem);
                     }
 
                     Flyout.IsOpen = true;
                 });
             }
-
-            InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
         }
 
-        private void TargetLocation_LostFocus(object sender, RoutedEventArgs e)
+        private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (!Options.IsKeyboardFocusWithin && !TargetLocationSearchTextBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
+            if (!Options.IsKeyboardFocusWithin && !SearchTextBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
             {
                 Flyout.IsOpen = false;
             }
         }
 
-        private void LibraryNameChanged(object sender, PropertyChangedEventArgs e)
-        {
-            string targetLibrary = _libraryNameChange.LibraryName;
-
-            if (!string.IsNullOrEmpty(targetLibrary))
-            {
-                this.Dispatcher.Invoke(() =>
-                {
-                    if (TargetLocationSearchTextBox.Text.Equals(_lastSuggestedTargetLocation, StringComparison.Ordinal))
-                    {
-                        if (targetLibrary.Length > 0 && targetLibrary[targetLibrary.Length - 1] == '/')
-                        {
-                            targetLibrary = targetLibrary.Substring(0, targetLibrary.Length - 1);
-                        }
-
-                        TargetLocationSearchTextBox.Text = _baseFolder + targetLibrary + '/';
-                        InstallationFolder.DestinationFolder = TargetLocationSearchTextBox.Text;
-                        _lastSuggestedTargetLocation = TargetLocationSearchTextBox.Text;
-                    }
-                });
-            }
-        }
-
         protected override void OnAccessKey(AccessKeyEventArgs e)
         {
-            TargetLocationSearchTextBox.Focus();
+            SearchTextBox.Focus();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape && Flyout.IsOpen)
             {
-                TargetLocationSearchTextBox.Focus();
+                SearchTextBox.Focus();
             }
         }
+
+        private void SearchTextBox_GotKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            // If the library search box is empty, the watermark text will be visible. We'll make sure that narrator reads it.
+            if (string.IsNullOrEmpty(SearchTextBox.Text))
+            {
+                var removeCharacterExtension = new RemoveCharacterExtension(ViewModel.WatermarkText, "<>");
+                string watermarkText = (string)removeCharacterExtension.ProvideValue(ServiceProvider.GlobalProvider);
+
+                SearchTextBox.SetValue(AutomationProperties.HelpTextProperty, watermarkText);
+            }
+            else
+            {
+                SearchTextBox.ClearValue(AutomationProperties.HelpTextProperty);
+            }
+
+            e.Handled = true;
+        }
+
+        private SearchTextBoxViewModel ViewModel => DataContext as SearchTextBoxViewModel;
     }
 }

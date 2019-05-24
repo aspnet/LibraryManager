@@ -33,6 +33,8 @@
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+    <!-- Live Unit Testing workarounds -->
+    <CreateVsixContainer Condition="'$(BuildingForLiveUnitTesting)' == 'true'">false</CreateVsixContainer>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,23 +57,26 @@
     <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="Contracts\DependenciesFactory.cs" />
     <Compile Include="Contracts\IDependenciesFactory.cs" />
+    <Compile Include="Search\ISearchService.cs" />
+    <Compile Include="Search\LocationSearchService.cs" />
+    <Compile Include="Search\ProviderCatalogSearchService.cs" />
     <Compile Include="Shared\DefaultSolutionEvents.cs" />
     <Compile Include="UI\Converters\CheckBoxAutomationNameConverter.cs" />
+    <Compile Include="UI\Converters\WatermarkVisibilityConverter.cs" />
     <Compile Include="UI\Extensions\RemoveCharacterExtension.cs" />
     <Compile Include="UI\InstallDialogProvider.cs" />
     <Compile Include="UI\Controls\BindingProxy.cs" />
-    <Compile Include="UI\Controls\BindLibraryNameToTargetLocation.cs" />
-    <Compile Include="UI\Controls\LibraryAutomationPeer.cs" />
+    <Compile Include="UI\Models\LibraryNameBinding.cs" />
     <Compile Include="UI\Controls\PackageContentsTreeView.xaml.cs">
       <DependentUpon>PackageContentsTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\PackageContentsTreeViewAutomationPeer.cs" />
     <Compile Include="UI\Controls\Search\LogicalOrConverter.cs" />
     <Compile Include="UI\Controls\Search\Wrapper.cs" />
-    <Compile Include="UI\Controls\Library.xaml.cs">
-      <DependentUpon>Library.xaml</DependentUpon>
+    <Compile Include="UI\Controls\TextBoxWithSearch.xaml.cs">
+      <DependentUpon>TextBoxWithSearch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\TargetLocationAutomationPeer.cs" />
+    <Compile Include="UI\Controls\AutomationPeers\TextControlTypeAutomationPeer.cs" />
     <Compile Include="UI\Controls\ThemedWindow.cs" />
     <Compile Include="UI\Converters\BoldingConverter.cs" />
     <Compile Include="UI\Converters\NotConverter.cs" />
@@ -84,8 +89,12 @@
     <Compile Include="UI\Models\ActionCommand.cs" />
     <Compile Include="UI\Models\BindableBase.cs" />
     <Compile Include="UI\Models\InstallDialogViewModel.cs" />
+    <Compile Include="UI\Models\LibraryIdViewModel.cs" />
     <Compile Include="UI\Models\PackageItem.cs" />
     <Compile Include="UI\Models\PackageItemType.cs" />
+    <Compile Include="UI\Models\SearchTextBoxViewModel.cs" />
+    <Compile Include="UI\Models\SelectedProviderBinding.cs" />
+    <Compile Include="UI\Models\TargetLocationViewModel.cs" />
     <Compile Include="UI\Theme.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +122,6 @@
     <Compile Include="Json\SuggestedActions\UpdateSuggestedActionSet.cs" />
     <Compile Include="Json\SuggestedActions\UninstallSuggestedActions.cs" />
     <Compile Include="Json\SuggestedActions\SuggestedActionProvider.cs" />
-    <Compile Include="UI\Controls\TargetLocation.xaml.cs">
-      <DependentUpon>TargetLocation.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\Converters\EnumToBoolConverter.cs" />
     <Compile Include="UI\Converters\HintTextConverter.cs" />
     <Compile Include="Shared\ILibraryCommandService.cs" />
@@ -152,7 +158,6 @@
     <Compile Include="Shared\WpfUtil.cs" />
     <Compile Include="UI\Models\FileSelection.cs" />
     <Compile Include="UI\Models\FileSelectionType.cs" />
-    <Compile Include="UI\Models\InstallationFolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">
@@ -391,10 +396,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Controls\TargetLocation.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI\Controls\PackageContentsTreeView.xaml">
@@ -405,7 +406,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Controls\Library.xaml">
+    <Page Include="UI\Controls\TextBoxWithSearch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

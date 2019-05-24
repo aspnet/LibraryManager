@@ -15,6 +15,8 @@ using Moq;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Test.Shared
 {
+    using Mocks = LibraryManager.Mocks;
+
     [TestClass]
     public class LibraryCommandServiceTest
     {
