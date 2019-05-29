@@ -107,6 +107,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 case Key.Escape:
                     Flyout.IsOpen = false;
                     SearchTextBox.ScrollToEnd();
+                    SelectedItem = null;
                     e.Handled = true;
                     break;
                 case Key.Down:
@@ -146,6 +147,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 case Key.Escape:
                     Flyout.IsOpen = false;
                     SearchTextBox.ScrollToEnd();
+                    SelectedItem = null;
                     e.Handled = true;
                     break;
                 case Key.Down:
