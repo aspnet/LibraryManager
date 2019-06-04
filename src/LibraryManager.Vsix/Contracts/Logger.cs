@@ -13,11 +13,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal static class Logger
     {
-        private static Guid _outputPaneGuid = new Guid("cce35aef-ace6-4371-b1e1-8efa3cdc8324");
-        private static IVsOutputWindowPane _outputWindowPane;
-        private static IVsOutputWindow _outputWindow;
-        private static IVsActivityLog _activityLog;
-        private static IVsStatusbar _statusbar;
+        private static Guid OutputPaneGuid = new Guid("cce35aef-ace6-4371-b1e1-8efa3cdc8324");
+        private static IVsOutputWindowPane OutputWindowPaneValue;
+        private static IVsOutputWindow OutputWindowValue;
+        private static IVsActivityLog ActivityLogValue;
+        private static IVsStatusbar StatusbarValue;
 
         public static void LogEvent(string message, LogLevel level)
         {
@@ -123,7 +123,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void ClearOutputWindow()
         {
             // Don't access _outputWindowPane through the property here so that we don't force creation
-            ThreadHelper.Generic.BeginInvoke(() => _outputWindowPane?.Clear());
+            ThreadHelper.Generic.BeginInvoke(() => OutputWindowPaneValue?.Clear());
         }
 
         private static IVsOutputWindowPane OutputWindowPane
@@ -132,12 +132,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 ThreadHelper.ThrowIfNotOnUIThread(nameof(OutputWindowPane));
 
-                if (_outputWindowPane == null)
+                if (OutputWindowPaneValue == null)
                 {
                     EnsurePane();
                 }
 
-                return _outputWindowPane;
+                return OutputWindowPaneValue;
             }
         }
 
@@ -147,12 +147,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 ThreadHelper.ThrowIfNotOnUIThread(nameof(OutputWindow));
 
-                if (_outputWindow == null)
+                if (OutputWindowValue == null)
                 {
-                    _outputWindow = VsHelpers.GetService<SVsOutputWindow, IVsOutputWindow>();
+                    OutputWindowValue = VsHelpers.GetService<SVsOutputWindow, IVsOutputWindow>();
                 }
 
-                return _outputWindow;
+                return OutputWindowValue;
             }
         }
 
@@ -162,12 +162,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 ThreadHelper.ThrowIfNotOnUIThread(nameof(ActivityLog));
 
-                if (_activityLog == null)
+                if (ActivityLogValue == null)
                 {
-                    _activityLog = VsHelpers.GetService<SVsActivityLog, IVsActivityLog>();
+                    ActivityLogValue = VsHelpers.GetService<SVsActivityLog, IVsActivityLog>();
                 }
 
-                return _activityLog;
+                return ActivityLogValue;
             }
         }
 
@@ -177,12 +177,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 ThreadHelper.ThrowIfNotOnUIThread(nameof(Statusbar));
 
-                if (_statusbar == null)
+                if (StatusbarValue == null)
                 {
-                    _statusbar = VsHelpers.GetService<SVsStatusbar, IVsStatusbar>();
+                    StatusbarValue = VsHelpers.GetService<SVsStatusbar, IVsStatusbar>();
                 }
 
-                return _statusbar;
+                return StatusbarValue;
             }
         }
 
@@ -210,22 +210,22 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             ThreadHelper.ThrowIfNotOnUIThread(nameof(EnsurePane));
 
-            if (_outputWindowPane == null)
+            if (OutputWindowPaneValue == null)
             {
                 if (OutputWindow != null)
                 {
-                    if (ErrorHandler.Failed(OutputWindow.GetPane(ref _outputPaneGuid, out _outputWindowPane)) &&
-                        ErrorHandler.Succeeded(OutputWindow.CreatePane(ref _outputPaneGuid, Resources.Text.OutputWindowTitle, 0, 0)))
+                    if (ErrorHandler.Failed(OutputWindow.GetPane(ref OutputPaneGuid, out OutputWindowPaneValue)) &&
+                        ErrorHandler.Succeeded(OutputWindow.CreatePane(ref OutputPaneGuid, Resources.Text.OutputWindowTitle, 0, 0)))
                     {
-                        if (ErrorHandler.Succeeded(OutputWindow.GetPane(ref _outputPaneGuid, out _outputWindowPane)))
+                        if (ErrorHandler.Succeeded(OutputWindow.GetPane(ref OutputPaneGuid, out OutputWindowPaneValue)))
                         {
-                            _outputWindowPane.Activate();
+                            OutputWindowPaneValue.Activate();
                         }
                     }
                 }
             }
 
-            return _outputWindowPane != null;
+            return OutputWindowPaneValue != null;
         }
 
         private static void LogOperationSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation, TimeSpan elapsedTime)

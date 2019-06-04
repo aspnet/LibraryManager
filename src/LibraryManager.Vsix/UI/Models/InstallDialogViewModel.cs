@@ -1,12 +1,15 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -18,7 +21,6 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Json;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
-using Microsoft.Web.LibraryManager.Vsix.UI.Controls;
 using Microsoft.WebTools.Languages.Json.Editor.Document;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
@@ -35,11 +37,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
     {
         private readonly ILibraryCommandService _libraryCommandService;
 
-        private readonly Action<bool> _closeDialog;
         private readonly string _configFileName;
         private readonly IDependencies _deps;
-        private readonly Dispatcher _dispatcher;
+        private readonly Project _project;
+        private readonly SelectedProviderBinding _selectedProviderBinding;
         private readonly string _targetPath;
+        private readonly TaskFactory _taskFactory;
+
         private IProvider _activeProvider;
         private IReadOnlyList<ILibraryGroup> _availablePackages;
         private ILibraryCatalog _catalog;
@@ -51,23 +55,33 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private bool _anyFileSelected;
         private bool _isTreeViewEmpty;
         private string _errorMessage;
-        private BindLibraryNameToTargetLocation _libraryNameChange;
-        private Project _project;
+        private LibraryNameBinding _libraryNameChange;
 
-        public InstallDialogViewModel(Dispatcher dispatcher, ILibraryCommandService libraryCommandService, string configFileName, IDependencies deps, string targetPath, Action<bool> closeDialog, Project project)
+        public InstallDialogViewModel(ILibraryCommandService libraryCommandService,
+                                      string configFileName,
+                                      IDependencies deps,
+                                      LibraryIdViewModel libraryIdViewModel,
+                                      TargetLocationViewModel targetLocationViewModel,
+                                      SelectedProviderBinding selectedProviderBinding,
+                                      LibraryNameBinding bindLibraryNameToTargetLocation,
+                                      string targetPath,
+                                      Project project)
         {
             _libraryCommandService = libraryCommandService;
             _configFileName = configFileName;
             _targetPath = targetPath;
             _deps = deps;
-            _dispatcher = dispatcher;
-            _closeDialog = closeDialog;
             _anyFileSelected = false;
             _isTreeViewEmpty = true;
-            _libraryNameChange = new BindLibraryNameToTargetLocation();
+            _selectedProviderBinding = selectedProviderBinding;
+            _libraryNameChange = bindLibraryNameToTargetLocation;
             _project = project;
+            _taskFactory = new TaskFactory(TaskScheduler.FromCurrentSynchronizationContext());
 
-            List<IProvider> providers = new List<IProvider>();
+            LibraryIdViewModel = libraryIdViewModel;
+            TargetLocationViewModel = targetLocationViewModel;
+
+            var providers = new List<IProvider>();
             foreach (IProvider provider in deps.Providers.OrderBy(x => x.Id))
             {
                 ILibraryCatalog catalog = provider.GetCatalog();
@@ -80,6 +94,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 if (_catalog == null)
                 {
                     _activeProvider = provider;
+                    _selectedProviderBinding.SelectedProvider = SelectedProvider;
                     _catalog = catalog;
                 }
 
@@ -89,6 +104,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             Providers = providers;
             InstallPackageCommand = ActionCommand.Create(InstallPackage, CanInstallPackage, false);
             Task t = LoadPackagesAsync();
+
+            LibraryIdViewModel.PropertyChanged += LibraryIdViewModel_PropertyChanged;
         }
 
         public IReadOnlyList<ILibraryGroup> AvailablePackages
@@ -113,7 +130,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
             set
             {
-                if (String.IsNullOrEmpty(PackageId))
+                if (String.IsNullOrEmpty(LibraryId))
                 {
                     Set(ref _displayRoots, null);
                 }
@@ -138,7 +155,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
         }
 
-        public string PackageId
+        public string LibraryId
         {
             get { return _packageId; }
             set
@@ -161,11 +178,19 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
         }
 
+        private void LibraryIdViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(LibraryIdViewModel.SearchText))
+            {
+                LibraryId = LibraryIdViewModel.SearchText;
+            }
+        }
+
         public IReadOnlyList<IProvider> Providers { get; }
 
         public HashSet<string> SelectedFiles { get; private set; }
 
-        internal BindLibraryNameToTargetLocation LibraryNameChange
+        internal LibraryNameBinding LibraryNameChange
         {
             get { return _libraryNameChange; }
             set { Set(ref _libraryNameChange, value); }
@@ -277,17 +302,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         }
                     }
 
-                    _dispatcher.Invoke(() =>
+                    _ = _taskFactory.StartNew(() =>
                     {
                         canUpdateInstallStatusValue = true;
                         SetNodeOpenStates(root);
                         DisplayRoots = new[] { root };
                         SelectedFiles = selectedFiles;
                         InstallPackageCommand.CanExecute(null);
-                    });
+                    }, CancellationToken.None, TaskCreationOptions.None, _taskFactory.Scheduler);
                 }
             }
         }
+
+        public string TargetInstallLocation { get; set; }
+        public LibraryIdViewModel LibraryIdViewModel { get; }
+        public TargetLocationViewModel TargetLocationViewModel { get; }
 
         private void RefreshFileSelections()
         {
@@ -327,6 +356,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             {
                 if (Set(ref _activeProvider, value))
                 {
+                    _selectedProviderBinding.SelectedProvider = value;
                     _catalog = value.GetCatalog();
                     Task t = LoadPackagesAsync();
                 }
@@ -370,13 +400,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public async Task<bool> IsLibraryInstallationStateValidAsync()
         {
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(PackageId, SelectedProvider.Id);
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(LibraryId, SelectedProvider.Id);
             LibraryInstallationState libraryInstallationState = new LibraryInstallationState
             {
                 Name = name,
                 Version = version,
                 ProviderId = SelectedProvider.Id,
-                DestinationPath = InstallationFolder.DestinationFolder,
+                DestinationPath = TargetInstallLocation,
                 Files = SelectedFiles?.ToList()
             };
 
@@ -426,7 +456,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private void InstallPackage()
         {
-            Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async() => await InstallPackageAsync()).Task.ConfigureAwait(false);
+            Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async () => await InstallPackageAsync()).Task.ConfigureAwait(false);
         }
 
         private async Task InstallPackageAsync()
@@ -454,13 +484,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         manifest.Version = Manifest.SupportedVersions.Max().ToString();
                     }
 
-                    (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(PackageId, SelectedProvider.Id);
+                    (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(LibraryId, SelectedProvider.Id);
                     LibraryInstallationState libraryInstallationState = new LibraryInstallationState
                     {
                         Name = name,
                         Version = version,
                         ProviderId = selectedPackage.ProviderId,
-                        DestinationPath = InstallationFolder.DestinationFolder,
+                        DestinationPath = TargetInstallLocation,
                     };
 
                     _isInstalling = true;
@@ -490,11 +520,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     string configFilePath = Path.GetFullPath(_configFileName);
 
                     IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
-
-                    _dispatcher.Invoke(() =>
-                    {
-                        _closeDialog(true);
-                    });
 
                     // The file isn't open. So we'll write to disk directly
                     if (textBuffer == null)

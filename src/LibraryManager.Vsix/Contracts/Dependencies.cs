@@ -11,7 +11,6 @@ namespace Microsoft.Web.LibraryManager.Vsix
     internal class Dependencies : IDependencies
     {
         private readonly IHostInteraction _hostInteraction;
-        private static readonly Dictionary<string, Dependencies> _cache = new Dictionary<string, Dependencies>();
 
         internal Dependencies(IHostInteraction hostInteraction, IReadOnlyList<IProvider> providers)
         {

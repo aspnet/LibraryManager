@@ -9,18 +9,18 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void FileSaveRestore_AddDeleteLibrary()
         {
-            string projectPath = Path.Combine(SolutionRootPath, _projectName);
+            string projectPath = Path.Combine(SolutionRootPath, ProjectName);
 
             _libmanConfig.Delete();
-            Helpers.FileIO.WaitForDeletedFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false, timeout: 1000);
+            Helpers.FileIO.WaitForDeletedFile(projectPath, Path.Combine(projectPath, LibManManifestFile), caseInsensitive: false, timeout: 1000);
 
             VisualStudio.ObjectModel.Commanding.ExecuteCommand("Project.ManageClientSideLibraries");
-            Helpers.FileIO.WaitForRestoredFile(projectPath, Path.Combine(projectPath, _libman), caseInsensitive: false, timeout: 1000);
+            Helpers.FileIO.WaitForRestoredFile(projectPath, Path.Combine(projectPath, LibManManifestFile), caseInsensitive: false, timeout: 1000);
 
-            _libmanConfig = _webProject[_libman];
+            _libmanConfig = _webProject[LibManManifestFile];
             _libmanConfig.Open();
 
-            string pathToLibrary = Path.Combine(SolutionRootPath, _projectName, "wwwroot", "lib", "jquery-validate");
+            string pathToLibrary = Path.Combine(SolutionRootPath, ProjectName, "wwwroot", "lib", "jquery-validate");
             string[] expectedFiles = new[]
             {
                 Path.Combine(pathToLibrary, "jquery.validate.js"),

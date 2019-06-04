@@ -13,13 +13,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class UpdateSuggestedAction : SuggestedActionBase
     {
-        private static readonly Guid _guid = new Guid("b3b43e69-7d0a-4acf-99ea-015526f76d84");
+        private static readonly Guid Guid = new Guid("b3b43e69-7d0a-4acf-99ea-015526f76d84");
         private readonly SuggestedActionProvider _provider;
         private readonly string _updatedLibraryId;
         private readonly bool _disabled;
 
         public UpdateSuggestedAction(SuggestedActionProvider provider, string libraryId, string displayText, bool disabled = false)
-            : base(provider.TextBuffer, provider.TextView, displayText, _guid)
+            : base(provider.TextBuffer, provider.TextView, displayText, Guid)
         {
             _provider = provider;
             _updatedLibraryId = libraryId;

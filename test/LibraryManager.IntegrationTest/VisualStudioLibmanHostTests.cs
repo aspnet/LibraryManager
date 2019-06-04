@@ -14,22 +14,23 @@ using Microsoft.Web.LibraryManager.IntegrationTest.Helpers;
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(_rootDirectoryName, _rootDirectoryName)]
+    [DeploymentItem(RootDirectoryName, RootDirectoryName)]
     public class VisualStudioLibmanHostTest : VisualStudioHostTest
     {
         // Solution consts
-        protected const string _libman = "libman.json";
-        protected const string _projectName = @"TestProjectCore20";
-        private const string _rootDirectoryName = @"TestSolution";
-        private const string _testSolutionName = @"TestSolution.sln";
+        protected const string LibManManifestFile = "libman.json";
+        protected const string ProjectName = @"TestProjectCore20";
+        private const string RootDirectoryName = @"TestSolution";
+        private const string TestSolutionName = @"TestSolution.sln";
+
+        private static VisualStudioHost VsHost;
+        private static string ResultPath;
+        private static string SolutionPath;
 
         protected ProjectItemTestExtension _libmanConfig;
         protected string _pathToLibmanFile;
         protected ProjectTestExtension _webProject;
         private string _initialLibmanFileContent;
-        private static VisualStudioLibmanHostTest _instance;
-        private static string _resultPath;
-        private static string _solutionPath;
 
         public static string SolutionRootPath { get; private set; }
 
@@ -37,25 +38,24 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
 
         protected override void DoHostTestInitialize()
         {
-            _instance = this;
-
             base.DoHostTestInitialize();
 
+            VsHost = VisualStudio;
             Helpers = new HelperWrapper(VisualStudio);
 
-            Solution.Open(_solutionPath);
+            Solution.Open(SolutionPath);
             Solution.WaitForFullyLoaded(); // This will get modified after bug 627108 get fixed
 
-            _webProject = Solution[_projectName];
-            _libmanConfig = _webProject[_libman];
-            _pathToLibmanFile = Path.Combine(SolutionRootPath, _projectName, _libman);
+            _webProject = Solution[ProjectName];
+            _libmanConfig = _webProject[LibManManifestFile];
+            _pathToLibmanFile = Path.Combine(SolutionRootPath, ProjectName, LibManManifestFile);
             _initialLibmanFileContent = File.ReadAllText(_pathToLibmanFile);
         }
 
         protected override void DoHostTestCleanup()
         {
-            ProjectTestExtension webProject = Solution[_projectName];
-            ProjectItemTestExtension libmanConfig = webProject[_libman];
+            ProjectTestExtension webProject = Solution[ProjectName];
+            ProjectItemTestExtension libmanConfig = webProject[LibManManifestFile];
 
             if (libmanConfig != null)
             {
@@ -76,7 +76,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             Guid guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
             uint commandId = 0x0200;
-            SolutionExplorerItemTestExtension libmanConfigNode = SolutionExplorer.FindItemRecursive(_libman);
+            SolutionExplorerItemTestExtension libmanConfigNode = SolutionExplorer.FindItemRecursive(LibManManifestFile);
 
             if (libmanConfigNode != null)
             {
@@ -141,9 +141,9 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
         {
-            _resultPath = context.DeploymentDirectory;
-            SolutionRootPath = Path.Combine(_resultPath, _rootDirectoryName);
-            _solutionPath = Path.Combine(SolutionRootPath, _testSolutionName);
+            ResultPath = context.DeploymentDirectory;
+            SolutionRootPath = Path.Combine(ResultPath, RootDirectoryName);
+            SolutionPath = Path.Combine(SolutionRootPath, TestSolutionName);
         }
 
         [AssemblyCleanup()]
@@ -151,16 +151,16 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         {
             try
             {
-                if (_instance != null)
+                if (VsHost != null)
                 {
-                    Process visualStudioProcess = _instance.VisualStudio.HostProcess;
+                    Process visualStudioProcess = VsHost.HostProcess;
 
-                    if (_instance.VisualStudio.ObjectModel.Solution.IsOpen)
+                    if (VsHost.ObjectModel.Solution.IsOpen)
                     {
-                        _instance.VisualStudio.ObjectModel.Solution.Close();
+                        VsHost.ObjectModel.Solution.Close();
                     }
 
-                    PostMessage(_instance.VisualStudio.MainWindowHandle, 0x10, IntPtr.Zero, IntPtr.Zero); // WM_CLOSE
+                    PostMessage(VsHost.MainWindowHandle, 0x10, IntPtr.Zero, IntPtr.Zero); // WM_CLOSE
                     visualStudioProcess.WaitForExit(5000);
 
                     if (!visualStudioProcess.HasExited)

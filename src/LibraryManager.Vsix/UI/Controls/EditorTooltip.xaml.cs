@@ -11,7 +11,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
     /// </summary>
     public partial class EditorTooltip : UserControl
     {
-        private const int _iconSize = 32;
+        private const int IconSize = 32;
 
         internal EditorTooltip(SimpleCompletionEntry item)
         {
@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 Description.Text = item.Description;
                 Description.SetResourceReference(TextBlock.ForegroundProperty, EnvironmentColors.SystemMenuTextBrushKey);
 
-                Glyph.Source = WpfUtil.GetIconForImageMoniker(item.IconMoniker, _iconSize, _iconSize);
+                Glyph.Source = WpfUtil.GetIconForImageMoniker(item.IconMoniker, IconSize, IconSize);
             };
         }
     }

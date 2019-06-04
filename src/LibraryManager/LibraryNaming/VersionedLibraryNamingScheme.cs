@@ -6,7 +6,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
     /// <inheritDoc />
     class VersionedLibraryNamingScheme : ILibraryNamingScheme
     {
-        private const char _separator = '@';
+        private const char Separator = '@';
 
         /// <summary>
         /// Splits libraryId into name and version using '@' as the split char.
@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
                 return (name, version);
             }
 
-            int indexOfAt = libraryId.LastIndexOf(_separator);
+            int indexOfAt = libraryId.LastIndexOf(Separator);
 
             name = libraryId;
             version = string.Empty;
@@ -55,7 +55,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
 
             return string.IsNullOrWhiteSpace(version)
                 ? name
-                : $"{name}{_separator}{version}";
+                : $"{name}{Separator}{version}";
 
         }
     }

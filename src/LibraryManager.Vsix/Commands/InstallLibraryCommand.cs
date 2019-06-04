@@ -1,9 +1,11 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Interop;
 using EnvDTE;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
@@ -13,6 +15,8 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Search;
+using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -146,12 +150,46 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     }
                 }
 
-                UI.InstallDialog dialog = new UI.InstallDialog(dependencies, _libraryCommandService, configFilePath, target, rootFolder, project);
+                string initialTargetLocation = CalculateSuggestedInstallPath(target, rootFolder);
 
+
+                var selectedProviderBinding = new SelectedProviderBinding();
+                var libraryIdViewModel = new LibraryIdViewModel(new ProviderCatalogSearchService(() => selectedProviderBinding.SelectedProvider),
+                                                                string.Empty);
+
+                var libraryNameBinding = new LibraryNameBinding();
+                var targetLocationViewModel = new TargetLocationViewModel(initialTargetLocation,
+                                                                          libraryNameBinding,
+                                                                          new LocationSearchService(dependencies.GetHostInteractions()));
+
+                var dialogViewModel = new InstallDialogViewModel(
+                    _libraryCommandService,
+                    configFilePath,
+                    dependencies,
+                    libraryIdViewModel,
+                    targetLocationViewModel,
+                    selectedProviderBinding,
+                    libraryNameBinding,
+                    target,
+                    project);
+
+                var dialog = new UI.InstallDialog(dialogViewModel);
                 dialog.ShowModal();
 
                 Telemetry.TrackUserTask("Open-InstallDialog");
             }
+        }
+
+        private string CalculateSuggestedInstallPath(string targetPath, string rootFolder)
+        {
+            if (!targetPath.StartsWith(rootFolder, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("Target installation path must be under the root folder.");
+            }
+
+            string destinationFolder = targetPath.Substring(rootFolder.Length);
+            destinationFolder = destinationFolder.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            return destinationFolder.Replace('\\', '/');
         }
 
         private async Task<Manifest> GetManifestAsync(string configFilePath, IDependencies dependencies)

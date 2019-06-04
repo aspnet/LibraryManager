@@ -1,52 +1,51 @@
-﻿<UserControl x:Class="Microsoft.Web.LibraryManager.Vsix.UI.Controls.Library"
+﻿<UserControl x:Class="Microsoft.Web.LibraryManager.Vsix.UI.Controls.TextBoxWithSearch"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
-             xmlns:res="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
-             xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
              xmlns:search="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls.Search"
              xmlns:controls="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Controls"
-             xmlns:extensions="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Extensions"
+             xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
              x:Name="ThisControl"
              Focusable="True"
-             LostFocus="Library_LostFocus">
+             LostFocus="SearchTextBox_LostFocus">
     <UserControl.Resources>
         <search:LogicalOrConverter x:Key="LogicalOr" />
-        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:WatermarkVisibilityConverter x:Key="WatermarkVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <!-- Text Entry -->
-        <TextBox x:Name="LibrarySearchBox"
-                 AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.Library}, _}"
-                 Text="{Binding ElementName=ThisControl,
-                                Path=Text,
-                                Mode=TwoWay,
-                                UpdateSourceTrigger=PropertyChanged,
-                                IsAsync=True}"
-                 TextChanged="LibrarySearchBox_TextChanged"
+        <TextBox x:Name="SearchTextBox"
+                 AutomationProperties.Name="{Binding AutomationName}"
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                 TextChanged="SearchTextBox_TextChanged"
                  PreviewKeyDown="HandleKeyPress"
-                 GotKeyboardFocus="LibrarySearchBox_GotKeyboardForcus"
-                 Padding="2 2 20 2" />
+                 GotKeyboardFocus="SearchTextBox_GotKeyboardForcus"
+                 Padding="2 2 20 2"
+                 />
+        
         <!-- Watermark -->
         <Label Opacity=".5"
-               Target="{Binding ElementName=LibrarySearchBox}"
-               Visibility="{Binding ElementName=ThisControl, Path=IsTextEntryEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+               Target="{Binding ElementName=SearchTextBox}"
+               Visibility="{Binding Path=SearchText,
+                                    Mode=OneWay,
+                                    Converter={StaticResource WatermarkVisibilityConverter}}"
                VerticalAlignment="Top"
                IsHitTestVisible="False">
-            <TextBlock Text="{x:Static res:Text.TypeToSearch}"
-                       AutomationProperties.Name="{x:Static resources:Text.TypeToSearch}" />
+            <TextBlock Text="{Binding WatermarkText}"
+                       AutomationProperties.Name="{Binding WatermarkText}" />
         </Label>
 
         <!-- Expand Grip -->
         <Border BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" IsHitTestVisible="False">
-            <Path Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{Binding ElementName=ThisControl, Path=GlyphStyle}" />
+            <Path Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{Binding ElementName=ThisControl}" />
         </Border>
+
         <controls:BindingProxy x:Name="AllOrs">
             <MultiBinding Mode="OneWay" Converter="{StaticResource LogicalOr}">
-                <Binding ElementName="LibrarySearchBox" Path="IsKeyboardFocusWithin" />
-                <Binding ElementName="LibrarySearchBox" Path="IsFocused" />
+                <Binding ElementName="SearchTextBox" Path="IsKeyboardFocusWithin" />
+                <Binding ElementName="SearchTextBox" Path="IsFocused" />
                 <Binding ElementName="Options" Path="IsKeyboardFocusWithin" />
                 <Binding ElementName="Options" Path="IsFocused" />
             </MultiBinding>
@@ -56,7 +55,7 @@
         <Popup x:Name="Flyout"
                Placement="Bottom"
                StaysOpen="False"
-               PlacementTarget="{Binding ElementName=LibrarySearchBox}">
+               PlacementTarget="{Binding ElementName=SearchTextBox}">
             <ListBox x:Name="Options"
                 SelectionMode="Single"
                 PreviewKeyDown="HandleListBoxKeyPress"
@@ -64,8 +63,9 @@
                 SelectedItem="{Binding ElementName=ThisControl, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ItemsSource="{Binding ElementName=ThisControl, Path=CompletionEntries, Mode=OneWay}"
                 MaxHeight="300" MinWidth="150"
-                AutomationProperties.LabeledBy="{Binding ElementName=LibrarySearchBox}"
-                AutomationProperties.Name="{x:Static res:Text.Library}">
+                AutomationProperties.LabeledBy="{Binding ElementName=SearchTextBox}"
+                AutomationProperties.Name="{Binding AutomationName}"
+                >
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type controls:CompletionEntry}">
                         <Label ToolTip="{Binding Path=Description, Mode=OneWay}" Padding="0">

@@ -17,20 +17,20 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
     internal class CdnjsCatalog : ILibraryCatalog
     {
         // TO DO: These should become Provider properties to be passed to CacheService
-        private const string _fileName = "cache.json";
-        private const string _remoteApiUrl = "https://aka.ms/g8irvu";
-        private const string _metaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}"; // https://aka.ms/goycwu/{0}
+        private const string FileName = "cache.json";
+        private const string RemoteApiUrl = "https://aka.ms/g8irvu";
+        private const string MetaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}"; // https://aka.ms/goycwu/{0}
 
         private readonly string _cacheFile;
         private readonly CdnjsProvider _provider;
+        private readonly CacheService _cacheService;
         private IEnumerable<CdnjsLibraryGroup> _libraryGroups;
-        private CacheService _cacheService;
 
         public CdnjsCatalog(CdnjsProvider provider)
         {
             _provider = provider;
             _cacheService = new CacheService(WebRequestHandler.Instance);
-            _cacheFile = Path.Combine(provider.CacheFolder, _fileName);
+            _cacheFile = Path.Combine(provider.CacheFolder, FileName);
         }
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
@@ -242,7 +242,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await _cacheService.GetCatalogAsync(_remoteApiUrl, _cacheFile, cancellationToken).ConfigureAwait(false);
+                string json = await _cacheService.GetCatalogAsync(RemoteApiUrl, _cacheFile, cancellationToken).ConfigureAwait(false);
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
@@ -276,7 +276,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             var assets = new List<Asset>();
             string localFile = Path.Combine(_provider.CacheFolder, groupName, "metadata.json");
-            string url = string.Format(_metaPackageUrlFormat, groupName);
+            string url = string.Format(MetaPackageUrlFormat, groupName);
 
             try
             {

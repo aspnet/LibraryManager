@@ -17,13 +17,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class UninstallSuggestedAction : SuggestedActionBase
     {
-        private static readonly Guid _guid = new Guid("2975f71b-809d-4ed6-a170-6bbc04058424");
+        private static readonly Guid Guid = new Guid("2975f71b-809d-4ed6-a170-6bbc04058424");
+        private const int MaxLength = 40;
+
         private readonly SuggestedActionProvider _provider;
         private readonly ILibraryCommandService _libraryCommandService;
-        private const int _maxlength = 40;
 
         public UninstallSuggestedAction(SuggestedActionProvider provider, ILibraryCommandService libraryCommandService)
-            : base(provider.TextBuffer, provider.TextView, GetDisplayText(provider), _guid)
+            : base(provider.TextBuffer, provider.TextView, GetDisplayText(provider), Guid)
         {
             _libraryCommandService = libraryCommandService;
             _provider = provider;
@@ -35,9 +36,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             ILibraryInstallationState state = provider.InstallationState;
             string cleanId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, state.ProviderId);
 
-            if (cleanId.Length > _maxlength + 10)
+            if (cleanId.Length > MaxLength + 10)
             {
-                cleanId = $"...{cleanId.Substring(cleanId.Length - _maxlength)}";
+                cleanId = $"...{cleanId.Substring(cleanId.Length - MaxLength)}";
             }
 
             return string.Format(Resources.Text.UninstallLibrary, cleanId);

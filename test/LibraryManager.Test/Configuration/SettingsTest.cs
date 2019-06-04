@@ -146,6 +146,8 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
         [TestMethod]
         public void SetValue_ConfigSectionDoesNotExist_CreateSectionWithValue()
         {
+            File.WriteAllText(TestFilePath, "");
+
             new TestSettings(TestFilePath).SetValue("testKey", "testValue");
 
             string contents = File.ReadAllText(TestFilePath);
@@ -249,7 +251,6 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
   }
 }";
             Assert.AreEqual(StringUtility.NormalizeNewLines(expected), StringUtility.NormalizeNewLines(contents));
-
         }
 
     }

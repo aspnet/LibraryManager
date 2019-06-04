@@ -153,9 +153,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         [DataTestMethod]
         [DataRow("test/file.txt", 5, 2)]
         [DataRow("test/file.txt", 4, 1)]
-        [DataRow("test/file.txt", 4, 1)]
         public async Task GetLibraryCompletionSetAsync_RelativePath(string path, int caretPos, int completions)
         {
+            if (Directory.Exists(_projectFolder))
+            {
+                Directory.Delete(_projectFolder, true);
+            }
             Directory.CreateDirectory(Path.Combine(_projectFolder, "test"));
             File.WriteAllText(Path.Combine(_projectFolder, "test", "file1.txt"), "");
             File.WriteAllText(Path.Combine(_projectFolder, "test", "file2.txt"), "");

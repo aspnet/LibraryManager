@@ -17,10 +17,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
     internal class CdnjsProvider : IProvider
     {
         // TO DO: This should become Provider properties to be passed to CacheService
-        private const string _downloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
+        private const string DownloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
 
         private CdnjsCatalog _catalog;
-        private CacheService _cacheService;
+        private readonly CacheService _cacheService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CdnjsProvider"/> class.
@@ -280,7 +280,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     foreach (string sourceFile in state.Files)
                     {
                         string cacheFile = Path.Combine(libraryDir, state.Version, sourceFile);
-                        string url = string.Format(_downloadUrlFormat, state.Name, state.Version, sourceFile);
+                        string url = string.Format(DownloadUrlFormat, state.Name, state.Version, sourceFile);
 
                         CacheFileMetadata newEntry = new CacheFileMetadata(url, cacheFile);
                         if (!librariesMetadata.Contains(newEntry))

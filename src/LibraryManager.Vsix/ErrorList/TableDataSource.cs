@@ -13,9 +13,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class TableDataSource : ITableDataSource
     {
-        private static TableDataSource _instance;
+        private static TableDataSource CachedInstance;
+        private static readonly Dictionary<string, TableEntriesSnapshot> Snapshots = new Dictionary<string, TableEntriesSnapshot>();
         private readonly List<SinkManager> _managers = new List<SinkManager>();
-        private static readonly Dictionary<string, TableEntriesSnapshot> _snapshots = new Dictionary<string, TableEntriesSnapshot>();
 
         [Import]
         public ITableManagerProvider TableManagerProvider { get; set; }
@@ -35,12 +35,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public static TableDataSource Instance
         {
-            get { return _instance ?? (_instance = new TableDataSource()); }
+            get { return CachedInstance ?? (CachedInstance = new TableDataSource()); }
         }
 
         public bool HasErrors
         {
-            get { return _snapshots.Count > 0; }
+            get { return Snapshots.Count > 0; }
         }
 
         #region ITableDataSource members
@@ -91,7 +91,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             {
                 foreach (SinkManager manager in _managers)
                 {
-                    manager.UpdateSink(_snapshots.Values);
+                    manager.UpdateSink(Snapshots.Values);
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public void AddErrors(IEnumerable<DisplayError> result, string projectName, string fileName)
         {
             var snapshot = new TableEntriesSnapshot(result, projectName, fileName);
-            _snapshots[fileName] = snapshot;
+            Snapshots[fileName] = snapshot;
 
             UpdateAllSinks();
         }
@@ -108,10 +108,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             foreach (string url in urls)
             {
-                if (_snapshots.ContainsKey(url))
+                if (Snapshots.ContainsKey(url))
                 {
-                    _snapshots[url].Dispose();
-                    _snapshots.Remove(url);
+                    Snapshots[url].Dispose();
+                    Snapshots.Remove(url);
                 }
             }
 
@@ -128,13 +128,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public void CleanAllErrors()
         {
-            foreach (string url in _snapshots.Keys)
+            foreach (string url in Snapshots.Keys)
             {
-                TableEntriesSnapshot snapshot = _snapshots[url];
+                TableEntriesSnapshot snapshot = Snapshots[url];
                 snapshot?.Dispose();
             }
 
-            _snapshots.Clear();
+            Snapshots.Clear();
 
             lock (_managers)
             {
