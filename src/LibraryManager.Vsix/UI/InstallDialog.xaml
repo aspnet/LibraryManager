@@ -119,14 +119,12 @@
                          Margin="0 0 0 9"
                          GroupName="FilesToInstall"
                          Content="{x:Static resources:Text.IncludeAllLibraryFiles}"
-                         Checked="IncludeAllLibraryFilesRb_Checked"
                          IsChecked="{Binding LibraryFilesToInstall,
                                              Mode=TwoWay,
                                              Converter={StaticResource EnumToBoolConverter},
                                              ConverterParameter=InstallAllLibraryFiles}" />
             <RadioButton Content="{x:Static resources:Text.ChooseSpecificFiles}"
                          GroupName="FilesToInstall"
-                         Checked="ChooseSpecificFilesRb_Checked"
                          IsChecked="{Binding LibraryFilesToInstall,
                                              Mode=TwoWay,
                                              Converter={StaticResource EnumToBoolConverter},
