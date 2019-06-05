@@ -101,7 +101,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery", 0);
 
             Assert.AreEqual(0, result.Start);
@@ -115,7 +114,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         [Ignore] // Enable it after version completion sorting is committed.
         public async Task GetLibraryCompletionSetAsync_Versions()
         {
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery@", 7);
 
             Assert.AreEqual(7, result.Start);
@@ -153,6 +151,17 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             {
                 Assert.AreNotEqual(existing[1], result);
             }
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_WithNullNpmPackageInfoVersions_ReturnsNoCompletions()
+        {
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@", 1);
+
+            Assert.AreEqual(1, result.Start);
+            Assert.AreEqual(0, result.Length);
+            Assert.AreEqual(0, result.Completions.Count());
+            Assert.AreEqual(CompletionSortOrder.Version, result.CompletionType);
         }
     }
 }
