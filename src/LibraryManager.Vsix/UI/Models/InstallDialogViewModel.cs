@@ -314,7 +314,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
         }
 
-        public string TargetInstallLocation { get; set; }
         public LibraryIdViewModel LibraryIdViewModel { get; }
         public TargetLocationViewModel TargetLocationViewModel { get; }
 
@@ -406,7 +405,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 Name = name,
                 Version = version,
                 ProviderId = SelectedProvider.Id,
-                DestinationPath = TargetInstallLocation,
+                DestinationPath = TargetLocationViewModel.SearchText,
                 Files = SelectedFiles?.ToList()
             };
 
@@ -490,7 +489,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         Name = name,
                         Version = version,
                         ProviderId = selectedPackage.ProviderId,
-                        DestinationPath = TargetInstallLocation,
+                        DestinationPath = TargetLocationViewModel.SearchText,
                     };
 
                     _isInstalling = true;
