@@ -33,6 +33,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     e.Handled = true;
                 }
             }
+            else if (e.Key == Key.Tab)
+            {
+                TreeView treeView = (TreeView)sender;
+                TreeViewItem topTreeViewItem = treeView.ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItem;
+
+                if (topTreeViewItem != null)
+                {
+                    topTreeViewItem.IsSelected = true;
+                    e.Handled = true;
+                }
+            }
         }
     }
 }
