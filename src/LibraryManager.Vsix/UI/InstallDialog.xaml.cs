@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void IncludeAllLibraryFilesRb_Checked(object sender, RoutedEventArgs e)
         {
-            LibraryFilesToInstallTreeView.IsEnabled = false;
+            LibraryFilesToInstallTreeView.Visibility = Visibility.Visible;
         }
 
         private void ChooseSpecificFilesRb_Checked(object sender, RoutedEventArgs e)
