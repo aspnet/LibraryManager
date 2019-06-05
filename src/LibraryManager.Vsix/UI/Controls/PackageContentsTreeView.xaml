@@ -16,7 +16,7 @@
     </UserControl.Resources>
     <TreeView ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
               VirtualizingPanel.IsVirtualizing="True"
-               BorderThickness="0"
+              BorderThickness="0"
               PreviewKeyUp="OnPreviewKeyUp">
         <TreeView.ItemContainerStyle>
             <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
