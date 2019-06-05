@@ -38,6 +38,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     targetLibrary = targetLibrary.TrimEnd('/');
 
                     SearchText = _lastSuggestedTargetLocation = _baseFolder + targetLibrary + '/';
+                    OnExternalTextChange();
                 }
             }
         }
