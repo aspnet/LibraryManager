@@ -154,7 +154,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         }
 
         [TestMethod]
-        public async Task GetLibraryCompletionSetAsync_WithNullNpmPackageInfoVersions()
+        public async Task GetLibraryCompletionSetAsync_WithNullNpmPackageInfoVersions_ReturnsNoCompletions()
         {
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@", 1);
 
