@@ -17,6 +17,7 @@
     <Grid>
         <!-- Text Entry -->
         <TextBox x:Name="SearchTextBox"
+                 AutomationProperties.LiveSetting="Assertive"
                  AutomationProperties.Name="{Binding AutomationName}"
                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                  TextChanged="SearchTextBox_TextChanged"

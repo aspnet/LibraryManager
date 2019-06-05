@@ -28,6 +28,20 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             InitializeComponent();
 
             Loaded += HandleLoaded;
+            DataContextChanged += HandleDataContextChanged;
+        }
+
+        private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is SearchTextBoxViewModel old)
+            {
+                old.ExternalTextChange -= NotifyScreenReaderOfTextChanged;
+            }
+
+            if (e.NewValue is SearchTextBoxViewModel vm)
+            {
+                vm.ExternalTextChange += NotifyScreenReaderOfTextChanged;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -35,6 +49,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         protected override AutomationPeer OnCreateAutomationPeer()
         {
             return new TextControlTypeAutomationPeer(this);
+        }
+
+        private void NotifyScreenReaderOfTextChanged(object sender, EventArgs e)
+        {
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                UIElementAutomationPeer.FromElement(SearchTextBox).RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
+            });
         }
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
@@ -85,6 +108,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
 
             ViewModel.SearchText = completion.CompletionItem.InsertionText;
+            ViewModel.OnExternalTextChange();
             SearchTextBox.CaretIndex = ViewModel.SearchText.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
             Flyout.IsOpen = false;
             SelectedItem = null;
@@ -107,6 +131,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 case Key.Escape:
                     Flyout.IsOpen = false;
                     SearchTextBox.ScrollToEnd();
+                    SelectedItem = null;
                     e.Handled = true;
                     break;
                 case Key.Down:
@@ -146,6 +171,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 case Key.Escape:
                     Flyout.IsOpen = false;
                     SearchTextBox.ScrollToEnd();
+                    SelectedItem = null;
                     e.Handled = true;
                     break;
                 case Key.Down:

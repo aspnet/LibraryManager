@@ -33,6 +33,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             WatermarkText = watermarkText ?? string.Empty;
         }
 
+        /// <summary>
+        /// Event to trigger to notify screen readers when the text has been changed.
+        /// </summary>
+        /// <remarks>
+        /// This is for cases where the text value is changed by a user operation other than an edit.
+        /// For example, changes due to commiting a completion item, or when influenced by changes in another control.
+        /// </remarks>
+        public event EventHandler ExternalTextChange;
+
         public ISearchService SearchService { get; private set; }
         public string SearchText
         {
@@ -75,6 +84,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             }
 
             return Task.FromResult(selectedItem);
+        }
+
+        /// <summary>
+        /// Fire an event to announce to screen readers that the text has been changed.
+        /// </summary>
+        /// <remarks>
+        /// This should be used for non-editing events that modify the value of the text
+        /// </remarks>
+        public void OnExternalTextChange()
+        {
+            ExternalTextChange?.Invoke(this, EventArgs.Empty);
         }
     }
 }
