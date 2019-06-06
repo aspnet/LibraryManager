@@ -9,9 +9,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values == null || values.Length != 2 || !(values[0] is string) || !(values[1] is bool))
+            if (values == null || values.Length != 2 || !(values[0] is string))
             {
                 return null;
+            }
+
+            if (values[1] == null)
+            {
+                return string.Format(Text.Indeterminate, (string)values[0]);
             }
 
             bool isChecked = (bool)values[1];

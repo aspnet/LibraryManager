@@ -178,6 +178,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indeterminate {0}.
+        /// </summary>
+        public static string Indeterminate {
+            get {
+                return ResourceManager.GetString("Indeterminate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Install.
         /// </summary>
         public static string Install {
