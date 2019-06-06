@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Web.LibraryManager.Vsix.Resources;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
@@ -104,6 +105,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         {
             get { return _itemType; }
             set { Set(ref _itemType, value); }
+        }
+
+        public string ItemTypeInFileDirectoryView
+        {
+            get
+            {
+                if (ItemType == PackageItemType.Folder)
+                {
+                    return Text.Folder;
+                }
+                else
+                {
+                    return Text.File;
+                }
+            }
         }
 
         public string Name

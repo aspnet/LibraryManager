@@ -24,6 +24,7 @@
                 <Setter Property="AutomationProperties.Name">
                     <Setter.Value>
                         <MultiBinding Converter="{StaticResource CheckBoxAutomationNameConverter}">
+                            <Binding Path="ItemTypeInFileDirectoryView"/>
                             <Binding Path="Name"/>
                             <Binding Path="IsChecked"/>
                         </MultiBinding>

@@ -9,25 +9,25 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values == null || values.Length != 2 || !(values[0] is string))
+            if (values == null || values.Length != 3 || !(values[0] is string))
             {
                 return null;
             }
 
-            if (values[1] == null)
+            if (values[2] == null)
             {
-                return string.Format(Text.Indeterminate, (string)values[0]);
+                return string.Format(Text.Indeterminate, (string)values[0], (string)values[1]);
             }
 
-            bool isChecked = (bool)values[1];
+            bool isChecked = (bool)values[2];
 
             if (isChecked)
             {
-                return string.Format(Text.Checked, (string)values[0]);
+                return string.Format(Text.Checked, (string)values[0], (string)values[1]);
             }
             else
             {
-                return string.Format(Text.UnChecked, (string)values[0]);
+                return string.Format(Text.UnChecked, (string)values[0], (string)values[1]);
             }
         }
 

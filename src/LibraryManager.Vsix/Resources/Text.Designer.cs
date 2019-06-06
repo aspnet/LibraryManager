@@ -79,7 +79,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Checked {0}.
+        ///   Looks up a localized string similar to Checked {0} {1}.
         /// </summary>
         public static string Checked {
             get {
@@ -160,11 +160,29 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string File {
+            get {
+                return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files:.
         /// </summary>
         public static string Files {
             get {
                 return ResourceManager.GetString("Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder.
+        /// </summary>
+        public static string Folder {
+            get {
+                return ResourceManager.GetString("Folder", resourceCulture);
             }
         }
         
@@ -178,7 +196,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indeterminate {0}.
+        ///   Looks up a localized string similar to Indeterminate {0} {1}.
         /// </summary>
         public static string Indeterminate {
             get {
@@ -416,7 +434,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UnChecked {0}.
+        ///   Looks up a localized string similar to UnChecked {0} {1}.
         /// </summary>
         public static string UnChecked {
             get {

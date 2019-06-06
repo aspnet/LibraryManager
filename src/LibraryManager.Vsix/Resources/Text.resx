@@ -236,10 +236,10 @@ Do you want to continue?</value>
     <value>_Install</value>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>Checked {0}</value>
+    <value>Checked {0} {1}</value>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>UnChecked {0}</value>
+    <value>UnChecked {0} {1}</value>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Pre-release: {0}</value>
@@ -252,6 +252,12 @@ Do you want to continue?</value>
     <comment>Title for SuggestedAction set</comment>
   </data>
   <data name="Indeterminate" xml:space="preserve">
-    <value>Indeterminate {0}</value>
+    <value>Indeterminate {0} {1}</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Folder</value>
   </data>
 </root>
