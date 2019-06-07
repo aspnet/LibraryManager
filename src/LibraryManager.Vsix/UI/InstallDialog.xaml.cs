@@ -59,7 +59,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            FocusManager.SetFocusedElement(LibrarySearchBox, LibrarySearchBox);
+            FocusManager.SetFocusedElement(ProviderComboBox, ProviderComboBox);
         }
 
         private void IncludeAllLibraryFilesRb_Checked(object sender, RoutedEventArgs e)
