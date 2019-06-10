@@ -237,9 +237,11 @@ Do you want to continue?</value>
   </data>
   <data name="Checked" xml:space="preserve">
     <value>Checked {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
     <value>UnChecked {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Pre-release: {0}</value>
@@ -253,6 +255,7 @@ Do you want to continue?</value>
   </data>
   <data name="Indeterminate" xml:space="preserve">
     <value>Indeterminate {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
