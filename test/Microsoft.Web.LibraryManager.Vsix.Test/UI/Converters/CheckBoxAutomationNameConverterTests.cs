@@ -21,6 +21,30 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Converters
         }
 
         [TestMethod]
+        public void Convert_WithInputsLessThanThree_ReturnsNull()
+        {
+            CheckBoxAutomationNameConverter checkBoxAutomationNameConverter = new CheckBoxAutomationNameConverter();
+
+            object[] values = new object[] { Text.File };
+
+            object result = checkBoxAutomationNameConverter.Convert(values, null, null, null);
+
+            Assert.AreEqual(null, result);
+        }
+
+        [TestMethod]
+        public void Convert_WithNonStringFirstValue_ReturnsNull()
+        {
+            CheckBoxAutomationNameConverter checkBoxAutomationNameConverter = new CheckBoxAutomationNameConverter();
+
+            object[] values = new object[] { 2 , "jquery.min.js" , null};
+
+            object result = checkBoxAutomationNameConverter.Convert(values, null, null, null);
+
+            Assert.AreEqual(null, result);
+        }
+
+        [TestMethod]
         public void Convert_WithNulIsCheckedValue_ReturnsStringWithIndeterminateText()
         {
             CheckBoxAutomationNameConverter checkBoxAutomationNameConverter = new CheckBoxAutomationNameConverter();
