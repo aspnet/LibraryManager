@@ -62,16 +62,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             FocusManager.SetFocusedElement(ProviderComboBox, ProviderComboBox);
         }
 
-        private void IncludeAllLibraryFilesRb_Checked(object sender, RoutedEventArgs e)
-        {
-            LibraryFilesToInstallTreeView.IsEnabled = false;
-        }
-
-        private void ChooseSpecificFilesRb_Checked(object sender, RoutedEventArgs e)
-        {
-            LibraryFilesToInstallTreeView.IsEnabled = true;
-        }
-
         private void ProviderComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // User chose to reset provider. So we need to reset all controls to initial state.

@@ -16,15 +16,15 @@
     </UserControl.Resources>
     <TreeView ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
               VirtualizingPanel.IsVirtualizing="True"
-              KeyboardNavigation.TabNavigation="Continue"
+              BorderThickness="0"
               PreviewKeyUp="OnPreviewKeyUp">
         <TreeView.ItemContainerStyle>
             <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
-                <Setter Property="KeyboardNavigation.TabNavigation" Value="Once"/>
                 <Setter Property="AutomationProperties.Name">
                     <Setter.Value>
                         <MultiBinding Converter="{StaticResource CheckBoxAutomationNameConverter}">
+                            <Binding Path="ItemTypeInFileDirectoryView"/>
                             <Binding Path="Name"/>
                             <Binding Path="IsChecked"/>
                         </MultiBinding>
