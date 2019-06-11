@@ -9,10 +9,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values == null || values.Length != 3 || !(values[0] is string))
-            {
-                return null;
-            }
+            ValidateInputs(values);
 
             if (values[2] == null)
             {
@@ -28,6 +25,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters
             else
             {
                 return string.Format(Text.UnChecked, (string)values[0], (string)values[1]);
+            }
+        }
+
+        private void ValidateInputs(object[] values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            if (values.Length != 3)
+            {
+                throw new ArgumentOutOfRangeException(nameof(values), $"{nameof(values)} length must be 3");
+            }
+
+            if (!(values[0] is string))
+            {
+                throw new ArgumentException(string.Format("{0} is not a string", values[0]));
             }
         }
 
