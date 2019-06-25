@@ -231,7 +231,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 {
                     CompletionSet completionSet = await ViewModel.GetCompletionSetAsync(SearchTextBox.CaretIndex);
 
-                    if (completionSet.Equals(null) || !completionSet.Completions.Any())
+                    if (completionSet.Completions == null || !completionSet.Completions.Any())
                     {
                         Flyout.IsOpen = false;
                         return;
