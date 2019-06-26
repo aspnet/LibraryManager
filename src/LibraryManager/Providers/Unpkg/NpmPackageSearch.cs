@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
     internal class NpmPackageSearch
     {
         public const string NpmPackageInfoUrl = "https://registry.npmjs.org/{0}";
-        public const string NpmPackageSearchUrl = "https://skimdb.npmjs.com/registry/_design/app/_view/browseAll?group_level=1&limit=10&start_key=%5B%22{0}%22%5D&end_key=%5B%22{0}z%22,%7B%7D%5D";
+        private const string NpmPackageSearchUrl = "https://registry.npmjs.org/-/v1/search?text={0}&size=100"; // API doc at https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md
         public const string NpmLatestPackgeInfoUrl = "https://registry.npmjs.org/{0}/latest";
         public const string NpmsPackageSearchUrl = "https://api.npms.io/v2/search?q={1}+scope:{0}";
 
@@ -96,52 +97,91 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private static async Task<IEnumerable<string>> GetPackageNamesFromSimpleQueryAsync(string searchTerm, CancellationToken cancellationToken)
         {
+            string packageListUrl = string.Format(CultureInfo.InvariantCulture, NpmPackageSearchUrl, searchTerm);
             List<string> packageNames = new List<string>();
-
-            string searchUrl = GetCustomNpmRegistryUrl() ?? NpmPackageSearchUrl;
-            string packageListUrl = string.Format(searchUrl, searchTerm);
 
             try
             {
-                JObject packageListJsonObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(packageListUrl, cancellationToken).ConfigureAwait(false);
+                JObject topLevelObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(packageListUrl, cancellationToken).ConfigureAwait(false);
 
-                if (packageListJsonObject != null)
+                if (topLevelObject != null)
                 {
-
                     // We get back something like this:
                     //
-                    //{ "rows":[
-                    //    {"key":["ang-google-maps"],"value":1},
-                    //    {"key":["ang-google-services"],"value":1},
-                    //    {"key":["ang-tangle"],"value":1},
-                    //    {"key":["ang-validator"],"value":1},
-                    //    {"key":["angcli"],"value":1},
-                    //    {"key":["angel"],"value":1},
-                    //    {"key":["angel.co"],"value":1},
-                    //    {"key":["angela"],"value":1},
-                    //    {"key":["angelabilities"],"value":1},
-                    //    {"key":["angelabilities-exec"],"value":1}
-                    //]}
+                    //{
+                    //  "objects": [
+                    //    {
+                    //      "package": {
+                    //        "name": "yargs",
+                    //        "version": "6.6.0",
+                    //        "description": "yargs the modern, pirate-themed, successor to optimist.",
+                    //        "keywords": [
+                    //          "argument",
+                    //          "args",
+                    //          "option",
+                    //          "parser",
+                    //          "parsing",
+                    //          "cli",
+                    //          "command"
+                    //        ],
+                    //        "date": "2016-12-30T16:53:16.023Z",
+                    //        "links": {
+                    //          "npm": "https://www.npmjs.com/package/yargs",
+                    //          "homepage": "http://yargs.js.org/",
+                    //          "repository": "https://github.com/yargs/yargs",
+                    //          "bugs": "https://github.com/yargs/yargs/issues"
+                    //        },
+                    //        "publisher": {
+                    //          "username": "bcoe",
+                    //          "email": "ben@npmjs.com"
+                    //        },
+                    //        "maintainers": [
+                    //          {
+                    //            "username": "bcoe",
+                    //            "email": "ben@npmjs.com"
+                    //          },
+                    //          {
+                    //            "username": "chevex",
+                    //            "email": "alex.ford@codetunnel.com"
+                    //          },
+                    //          {
+                    //            "username": "nexdrew",
+                    //            "email": "andrew@npmjs.com"
+                    //          },
+                    //          {
+                    //            "username": "nylen",
+                    //            "email": "jnylen@gmail.com"
+                    //          }
+                    //        ]
+                    //      },
+                    //      "score": {
+                    //        "final": 0.9237841281241451,
+                    //        "detail": {
+                    //          "quality": 0.9270640902288084,
+                    //          "popularity": 0.8484861649808381,
+                    //          "maintenance": 0.9962706951777409
+                    //        }
+                    //      },
+                    //      "searchScore": 100000.914
+                    //    }
+                    //  ],
+                    //  "total": 1,
+                    //  "time": "Wed Jan 25 2017 19:23:35 GMT+0000 (UTC)"
+                    //}
 
-                    JArray packageListJSON = packageListJsonObject["rows"] as JArray;
+                    JArray searchResultList = topLevelObject["objects"] as JArray;
 
-                    if (packageListJSON != null)
+                    if (searchResultList != null)
                     {
-                        foreach (JObject packageEntry in packageListJSON.Children())
+                        foreach (JObject searchResultObject in searchResultList.Children())
                         {
+                            JObject packageEntry = searchResultObject["package"] as JObject;
                             if (packageEntry != null)
                             {
-                                JArray keysArray = packageEntry["key"] as JArray;
-                                if (keysArray != null)
+                                string currentPackageName = packageEntry["name"].ToString();
+                                if (!String.IsNullOrWhiteSpace(currentPackageName))
                                 {
-                                    foreach (JToken key in keysArray.Children())
-                                    {
-                                        string currentPackageName = key.ToString();
-                                        if (!String.IsNullOrWhiteSpace(currentPackageName))
-                                        {
-                                            packageNames.Add(currentPackageName);
-                                        }
-                                    }
+                                    packageNames.Add(currentPackageName);
                                 }
                             }
                         }
@@ -155,28 +195,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             return packageNames;
-        }
-
-        private static string GetCustomNpmRegistryUrl()
-        {
-            string searchUrl = null;
-
-            // TODO: {alexgav} - Get this working for Preview 4
-
-            //RegistryKey registryRoot = VSRegistry.RegistryRoot(ServiceProvider.GlobalProvider, __VsLocalRegistryType.RegType_UserSettings, true);
-
-            //if (registryRoot != null)
-            //{
-            //    using (RegistryKey snippetPathsKey = registryRoot.OpenSubKey(@"Languages\Language Services\JSON"))
-            //    {
-            //        if (snippetPathsKey != null)
-            //        {
-            //            searchUrl = (snippetPathsKey.GetValue("NPMPackageSearchUrl") as string);
-            //        }
-            //    }
-            //}
-
-            return searchUrl;
         }
 
         public static async Task<NpmPackageInfo> GetPackageInfoAsync(string packageName, CancellationToken cancellationToken)
