@@ -97,14 +97,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         private static async Task<IEnumerable<string>> GetPackageNamesFromSimpleQueryAsync(string searchTerm, CancellationToken cancellationToken)
         {
-            string searchUrlFormat = GetCustomNpmRegistryUrl() ?? NpmPackageSearchUrl;
-
-            string packageListUrl = string.Format(CultureInfo.InvariantCulture, searchUrlFormat, searchTerm);
-            return await GetSimplePackageNamesFromNpmRegistryAsync(packageListUrl, cancellationToken);
-        }
-
-        private static async Task<IEnumerable<string>> GetSimplePackageNamesFromNpmRegistryAsync(string packageListUrl, CancellationToken cancellationToken)
-        {
+            string packageListUrl = string.Format(CultureInfo.InvariantCulture, NpmPackageSearchUrl, searchTerm);
             List<string> packageNames = new List<string>();
 
             try
@@ -202,28 +195,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             return packageNames;
-        }
-
-        private static string GetCustomNpmRegistryUrl()
-        {
-            string searchUrl = null;
-
-            // TODO: {alexgav} - Get this working for Preview 4
-
-            //RegistryKey registryRoot = VSRegistry.RegistryRoot(ServiceProvider.GlobalProvider, __VsLocalRegistryType.RegType_UserSettings, true);
-
-            //if (registryRoot != null)
-            //{
-            //    using (RegistryKey snippetPathsKey = registryRoot.OpenSubKey(@"Languages\Language Services\JSON"))
-            //    {
-            //        if (snippetPathsKey != null)
-            //        {
-            //            searchUrl = (snippetPathsKey.GetValue("NPMPackageSearchUrl") as string);
-            //        }
-            //    }
-            //}
-
-            return searchUrl;
         }
 
         public static async Task<NpmPackageInfo> GetPackageInfoAsync(string packageName, CancellationToken cancellationToken)
