@@ -50,7 +50,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
                     // Temp files created on Linux and MacOS by Path.GetTempFileName() will have 600 permissions.
                     // We want 664 permissions (read permission for all). So rather than using the orignial temp file,
                     // we will append suffix to its name, which in practical terms still guarantees a unique temp file but
-                    // will have the default 644 permissions when we write to that file.
+                    // will have the default 664 permissions when we write to that file.
                     // See issue https://github.com/aspnet/LibraryManager/issues/475
                     tempFileName += ".temp";
                 }
