@@ -52,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
                     // we will append suffix to its name, which in practical terms still guarantees a unique temp file but
                     // will have the default 644 permissions when we write to that file.
                     // See issue https://github.com/aspnet/LibraryManager/issues/475
-                    tempFileName += ".txt";
+                    tempFileName += ".temp";
                 }
 
                 result = await WriteToFileAsync(tempFileName, sourceStream, cancellationToken).ConfigureAwait(false);
@@ -65,29 +65,16 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 // Clean up temp file if we didn't move it to the desination file successfully
                 if (!result)
                 {
-                    SafeDeleteTempFile(tempFileName);
+                    DeleteFileFromDisk(tempFileName);
                 }
 
                 if (tempFileName != originalTempFileName)
                 {
-                    SafeDeleteTempFile(originalTempFileName);
+                    DeleteFileFromDisk(originalTempFileName);
                 }
             }
 
             return result;
-        }
-
-        private static void SafeDeleteTempFile(string tempFileName)
-        {
-            try
-            {
-                DeleteFiles(new string[] { tempFileName });
-            }
-            catch
-            {
-                Debug.Fail($"Could not clean up temporary file {tempFileName}");
-                // Don't fail the operation if we couldn't clean up temporary file
-            }
         }
 
         /// <summary>
