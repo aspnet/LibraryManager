@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,6 +43,18 @@ namespace Microsoft.Web.LibraryManager.Contracts
             }
             else
             {
+                string originalTempFileName = tempFileName;
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    // Temp files created on Linux and MacOS by Path.GetTempFileName() will have 600 permissions.
+                    // We want 664 permissions (read permission for all). So rather than using the orignial temp file,
+                    // we will append suffix to its name, which in practical terms still guarantees a unique temp file but
+                    // will have the default 664 permissions when we write to that file.
+                    // See issue https://github.com/aspnet/LibraryManager/issues/475
+                    tempFileName += ".temp";
+                }
+
                 result = await WriteToFileAsync(tempFileName, sourceStream, cancellationToken).ConfigureAwait(false);
 
                 if (result)
@@ -52,15 +65,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 // Clean up temp file if we didn't move it to the desination file successfully
                 if (!result)
                 {
-                    try
-                    {
-                        DeleteFiles(new string[] { tempFileName });
-                    }
-                    catch
-                    {
-                        Debug.Fail($"Could not clean up temporary file {tempFileName}");
-                        // Don't fail the operation if we couldn't clean up temporary file
-                    }
+                    DeleteFileFromDisk(tempFileName);
+                }
+
+                if (tempFileName != originalTempFileName)
+                {
+                    DeleteFileFromDisk(originalTempFileName);
                 }
             }
 
