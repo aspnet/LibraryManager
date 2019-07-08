@@ -111,6 +111,30 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         }
 
         [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesNoName()
+        {
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/", 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(7, result.Length);
+            Assert.AreEqual(25, result.Completions.Count());
+            Assert.AreEqual("@types/node", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithName()
+        {
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/node", 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(11, result.Length);
+            Assert.AreEqual(25, result.Completions.Count());
+            Assert.AreEqual("@types/node", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+        }
+
+        [TestMethod]
         [Ignore] // Enable it after version completion sorting is committed.
         public async Task GetLibraryCompletionSetAsync_Versions()
         {

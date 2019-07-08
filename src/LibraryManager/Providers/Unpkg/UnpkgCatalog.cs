@@ -175,7 +175,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             try
             {
                 // library name completion
-                if (caretPosition < name.Length + 1)
+                if (caretPosition < name.Length + 1 || string.IsNullOrEmpty(name) && libraryNameStart.StartsWith("@", StringComparison.Ordinal))
                 {
                     IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
