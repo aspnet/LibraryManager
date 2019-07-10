@@ -11,7 +11,10 @@ namespace Microsoft.Web.LibraryManager.Test
     {
         [DataTestMethod]
         [DataRow("jquery@3.3.1", "jquery", "3.3.1")]
-        [DataRow("@angular/cli@1.0.0", "@angular/cli", "1.0.0")]
+        [DataRow("@angular/cli@1.0.0", "cli", "1.0.0")]
+        [DataRow("@angular/cli@", "cli@", "")]
+        [DataRow("@angular/cli", "cli", "")]
+        [DataRow("@angular/", "", "")]
         [DataRow("My@Random@Library@1.0.0-preview3-final", "My@Random@Library", "1.0.0-preview3-final")]
         [DataRow("@MyLibraryWithoutVersion", "@MyLibraryWithoutVersion", "")]
         [DataRow("Library@Version", "Library", "Version")]

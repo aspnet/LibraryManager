@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Test
 
         [DataTestMethod]
         [DataRow("jquery@3.3.1", "cdnjs" ,"jquery", "3.3.1")]
-        [DataRow("@angular/cli@1.0.0", "unpkg","@angular/cli", "1.0.0")]
+        [DataRow("@angular/cli@1.0.0", "unpkg","cli", "1.0.0")]
         [DataRow("@MyLibraryWithoutVersion", "cdnjs", "@MyLibraryWithoutVersion", "")]
         [DataRow("Library@Version", "filesystem", "Library@Version", "")]
         [DataRow("Partial@", "cdnjs", "Partial@", "")]

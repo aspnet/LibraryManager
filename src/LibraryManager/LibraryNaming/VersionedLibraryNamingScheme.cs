@@ -1,19 +1,20 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+
 namespace Microsoft.Web.LibraryManager.LibraryNaming
 {
     /// <inheritDoc />
-    class VersionedLibraryNamingScheme : ILibraryNamingScheme
+    internal sealed class VersionedLibraryNamingScheme : ILibraryNamingScheme
     {
         private const char Separator = '@';
 
         /// <summary>
         /// Splits libraryId into name and version using '@' as the split char.
         /// Only the last appearance of '@' is used to split the libraryId.
-        /// Note: If libraryId starts with '@' and has no other occurences of '@',
-        /// the entire libraryId is considered to be the name and version is considered to be
-        /// empty.
+        /// Note: If libraryId starts with '@', a (name + version) substring will be split after the first '/',
+        /// then the name and version will be split by the last '@' in that substring
         /// </summary>
         /// <param name="libraryId"></param>
         /// <returns></returns>
@@ -24,6 +25,12 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
             if (string.IsNullOrEmpty(libraryId))
             {
                 return (name, version);
+            }
+
+            int indexOfFirstSlash = libraryId.IndexOf('/');
+            if (libraryId.StartsWith("@", StringComparison.Ordinal) && indexOfFirstSlash > 0)
+            {
+                libraryId = libraryId.Substring(indexOfFirstSlash + 1);
             }
 
             int indexOfAt = libraryId.LastIndexOf(Separator);

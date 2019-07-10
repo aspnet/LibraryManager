@@ -118,6 +118,52 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         }
 
         [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesNoName()
+        {
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/", 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(7, result.Length);
+            Assert.AreEqual(25, result.Completions.Count());
+            Assert.AreEqual("@types/node", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithName()
+        {
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/node", 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(11, result.Length);
+            Assert.AreEqual(25, result.Completions.Count());
+            Assert.AreEqual("@types/node", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndVersions_CursorInVersionsSubstring()
+        {
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/react@", 13);
+
+            Assert.AreEqual(13, result.Start);
+            Assert.AreEqual(0, result.Length);
+            Assert.IsTrue(result.Completions.Count() > 0);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/react"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndVersions_CursorInNameSubstring()
+        {
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/node@1.0.2", 8);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(17, result.Length);
+            Assert.AreEqual(1, result.Completions.Count());
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+        }
+
+        [TestMethod]
         [Ignore] // Enable it after version completion sorting is committed.
         public async Task GetLibraryCompletionSetAsync_Versions()
         {

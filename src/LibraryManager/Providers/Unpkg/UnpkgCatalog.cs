@@ -175,7 +175,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             try
             {
                 // library name completion
-                if (caretPosition < name.Length + 1 || string.IsNullOrEmpty(name) && libraryNameStart.StartsWith("@", StringComparison.Ordinal))
+                if (caretPosition < name.Length + 1 ||
+                    libraryNameStart.StartsWith("@", StringComparison.Ordinal) &&
+                    at < 0 || caretPosition < at) 
                 {
                     IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
@@ -194,9 +196,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 }
 
                 // library version completion
-                else
+                else if(caretPosition > at)
                 {
-                    completionSet.Start = name.Length + 1;
+                    completionSet.Start = libraryNameStart.StartsWith("@", StringComparison.Ordinal) ? libraryNameStart.IndexOf('/') +  name.Length + 2 : name.Length + 1;
                     completionSet.Length = version.Length;
 
                     NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
@@ -208,10 +210,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                         foreach (SemanticVersion semVersion in versions)
                         {
                             string versionText = semVersion.ToString();
+
+                            int indexOfFirstSlash = libraryNameStart.IndexOf('/');
+                            string scope = indexOfFirstSlash > 0 ? libraryNameStart.Substring(0, indexOfFirstSlash + 1) : string.Empty;
                             CompletionItem completionItem = new CompletionItem
                             {
                                 DisplayText = versionText,
-                                InsertionText = name + "@" + versionText
+                                InsertionText = scope + name + "@" + versionText
                             };
 
                             completions.Add(completionItem);
