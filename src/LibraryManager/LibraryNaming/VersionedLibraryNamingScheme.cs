@@ -27,21 +27,16 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
                 return (name, version);
             }
 
-            int indexOfFirstSlash = libraryId.IndexOf('/');
-            if (libraryId.StartsWith("@", StringComparison.Ordinal) && indexOfFirstSlash > 0)
-            {
-                libraryId = libraryId.Substring(indexOfFirstSlash + 1);
-            }
-
-            int indexOfAt = libraryId.LastIndexOf(Separator);
+            int indexOfLastAt = libraryId.LastIndexOf(Separator);
+            int indexOfAtToSplitNameAndVersion = libraryId.StartsWith("@", StringComparison.Ordinal) && indexOfLastAt == 0 ? -1 : indexOfLastAt;
 
             name = libraryId;
             version = string.Empty;
 
-            if (indexOfAt > 0 && indexOfAt < libraryId.TrimEnd().Length - 1)
+            if (indexOfAtToSplitNameAndVersion > 0 && indexOfAtToSplitNameAndVersion < libraryId.TrimEnd().Length - 1)
             {
-                name = libraryId.Substring(0, indexOfAt);
-                version = libraryId.Substring(indexOfAt + 1);
+                name = libraryId.Substring(0, indexOfAtToSplitNameAndVersion);
+                version = libraryId.Substring(indexOfAtToSplitNameAndVersion + 1);
             }
 
             return (name, version);

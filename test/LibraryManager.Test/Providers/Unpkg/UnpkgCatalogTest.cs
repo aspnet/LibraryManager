@@ -200,14 +200,14 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         }
 
         [TestMethod]
-        public async Task GetLibraryCompletionSetAsync_WithNullNpmPackageInfoVersions_ReturnsNoCompletions()
+        public async Task GetLibraryCompletionSetAsync_ScopedPackageNameisSingleAt_ReturnsNoCompletions()
         {
             CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@", 1);
 
-            Assert.AreEqual(1, result.Start);
-            Assert.AreEqual(0, result.Length);
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(1, result.Length);
             Assert.AreEqual(0, result.Completions.Count());
-            Assert.AreEqual(CompletionSortOrder.Version, result.CompletionType);
+            Assert.AreEqual(CompletionSortOrder.AsSpecified, result.CompletionType);
         }
     }
 }

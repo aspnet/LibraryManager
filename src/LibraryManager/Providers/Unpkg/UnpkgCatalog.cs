@@ -170,7 +170,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             // Typing '@' after the library name should have version completion.
             int at = name.LastIndexOf('@');
-            name = at > -1 ? name.Substring(0, at) : name;
+            bool isScopedName = libraryNameStart.StartsWith("@", StringComparison.Ordinal);
+            name = isScopedName && at > 0 || !isScopedName && at > -1 ? name.Substring(0, at) : name;
 
             try
             {
@@ -198,7 +199,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 // library version completion
                 else if(caretPosition > at)
                 {
-                    completionSet.Start = libraryNameStart.StartsWith("@", StringComparison.Ordinal) ? libraryNameStart.IndexOf('/') +  name.Length + 2 : name.Length + 1;
+                    completionSet.Start = name.Length + 1;
+
                     completionSet.Length = version.Length;
 
                     NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
@@ -211,12 +213,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                         {
                             string versionText = semVersion.ToString();
 
-                            int indexOfFirstSlash = libraryNameStart.IndexOf('/');
-                            string scope = indexOfFirstSlash > 0 ? libraryNameStart.Substring(0, indexOfFirstSlash + 1) : string.Empty;
                             CompletionItem completionItem = new CompletionItem
                             {
                                 DisplayText = versionText,
-                                InsertionText = scope + name + "@" + versionText
+                                InsertionText = name + "@" + versionText
                             };
 
                             completions.Add(completionItem);

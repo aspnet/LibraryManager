@@ -105,6 +105,16 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         }
 
         [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopedPackageNameisSingleAt_ReturnsNoCompletions()
+        {
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@", 1);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(0, result.Completions.Count());
+        }
+
+        [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
             CancellationToken token = CancellationToken.None;

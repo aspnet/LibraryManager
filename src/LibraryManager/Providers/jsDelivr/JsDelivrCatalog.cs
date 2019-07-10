@@ -166,7 +166,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
 
             int at = name.LastIndexOf('@');
-            name = at > -1 ? name.Substring(0, at) : name;
+            bool isScopedName = libraryNameStart.StartsWith("@", StringComparison.Ordinal);
+            name = isScopedName && at > 0 || !isScopedName && at > -1 ? name.Substring(0, at) : name;
 
             try
             {
@@ -199,7 +200,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 {
                     name = name[name.Length - 1] == '@' ? name.Remove(name.Length - 1) : name;
 
-                    completionSet.Start = libraryNameStart.StartsWith("@", StringComparison.Ordinal) ? libraryNameStart.IndexOf('/') + name.Length + 2 : name.Length + 1;
+                    completionSet.Start = name.Length + 1;
+
                     completionSet.Length = version.Length;
 
                     IEnumerable<string> versions;
@@ -216,13 +218,10 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
                     foreach (string v in versions)
                     {
-                        int indexOfFirstSlash = libraryNameStart.IndexOf('/');
-                        string scope = indexOfFirstSlash > 0 ? libraryNameStart.Substring(0, indexOfFirstSlash + 1) : string.Empty;
-
                         CompletionItem completionItem = new CompletionItem
                         {
                             DisplayText = v,
-                            InsertionText = scope + LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, v, _provider.Id)
+                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, v, _provider.Id)
                         };
 
                         completions.Add(completionItem);
