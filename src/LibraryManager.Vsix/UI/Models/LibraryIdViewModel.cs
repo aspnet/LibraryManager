@@ -23,7 +23,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         protected override Task<CompletionSet> FilterCompletions(CompletionSet input)
         {
             CompletionSet result = input;
-            int atIndex = SearchText.IndexOf('@');
+            int atIndex = SearchText.LastIndexOf('@');
+
+            //For scoped packages
+            if (SearchText.StartsWith("@", StringComparison.Ordinal))
+            {
+                int indexOfFirstSlash = SearchText.IndexOf('/');
+                atIndex = indexOfFirstSlash > 0 && SearchText.LastIndexOf('@') > indexOfFirstSlash ?
+                          SearchText.LastIndexOf('@') : -1;
+            }
 
             if (atIndex >= 0)
             {
