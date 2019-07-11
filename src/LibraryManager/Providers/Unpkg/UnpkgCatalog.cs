@@ -180,14 +180,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     libraryNameStart.StartsWith("@", StringComparison.Ordinal) &&
                     at < 0 || caretPosition < at) 
                 {
-                    IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<Tuple<string, string>> packageNamesAndCurrentVersions = await NpmPackageSearch.GetPackageNamesAndCurrentVersionsAsync(libraryNameStart, CancellationToken.None);
 
-                    foreach (string packageName in packageNames)
+                    foreach (Tuple<string, string> nameAndCurrentVersion in packageNamesAndCurrentVersions)
                     {
                         CompletionItem completionItem = new CompletionItem
                         {
-                            DisplayText = packageName,
-                            InsertionText = packageName,
+                            DisplayText = nameAndCurrentVersion.Item1,
+                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(nameAndCurrentVersion.Item1, nameAndCurrentVersion.Item2, _provider.Id),
                         };
 
                         completions.Add(completionItem);
@@ -242,8 +242,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(term, CancellationToken.None);
-                libraryGroups = packageNames.Select(packageName => new UnpkgLibraryGroup(packageName)).ToList<ILibraryGroup>();
+                IEnumerable<Tuple<string, string>> packageNamesAndCurrentVersions = await NpmPackageSearch.GetPackageNamesAndCurrentVersionsAsync(term, CancellationToken.None);
+                libraryGroups = packageNamesAndCurrentVersions.Select(nameAndVersion => new UnpkgLibraryGroup(nameAndVersion.Item1)).ToList<ILibraryGroup>();
             }
             catch (Exception ex)
             {

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
@@ -181,14 +182,14 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                         return completionSet;
                     }
 
-                    IEnumerable<string> packageNames = await Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<Tuple<string, string>> packageNamesAndCurrentVersions = await NpmPackageSearch.GetPackageNamesAndCurrentVersionsAsync(libraryNameStart, CancellationToken.None);
 
-                    foreach (string packageName in packageNames)
+                    foreach (Tuple<string, string> nameAndCurrentVersion in packageNamesAndCurrentVersions)
                     {
                         CompletionItem completionItem = new CompletionItem
                         {
-                            DisplayText = packageName,
-                            InsertionText = packageName
+                            DisplayText = nameAndCurrentVersion.Item1,
+                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(nameAndCurrentVersion.Item1, nameAndCurrentVersion.Item2, _provider.Id),
                         };
 
                         completions.Add(completionItem);
@@ -249,8 +250,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
             try
             {
-                IEnumerable<string> packageNames = await Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageSearch.GetPackageNamesAsync(term, CancellationToken.None);
-                libraryGroups = packageNames.Select(packageName => new JsDelivrLibraryGroup(packageName)).ToList<ILibraryGroup>();
+                IEnumerable<Tuple<string, string>> packageNamesAndCurrentVersions = await NpmPackageSearch.GetPackageNamesAndCurrentVersionsAsync(term, CancellationToken.None);
+                libraryGroups = packageNamesAndCurrentVersions.Select(nameAndVersion => new JsDelivrLibraryGroup(nameAndVersion.Item1)).ToList<ILibraryGroup>();
             }
             catch (Exception ex)
             {

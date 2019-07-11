@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json.Linq;
+using NameAndCurrentVersion = System.Tuple<string, string>;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
@@ -17,15 +18,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public const string NpmLatestPackgeInfoUrl = "https://registry.npmjs.org/{0}/latest";
         public const string NpmsPackageSearchUrl = "https://api.npms.io/v2/search?q={1}+scope:{0}";
 
-        public static async Task<IEnumerable<string>> GetPackageNamesAsync(string searchTerm, CancellationToken cancellationToken)
+        public static async Task<IEnumerable<NameAndCurrentVersion>> GetPackageNamesAndCurrentVersionsAsync(string searchTerm, CancellationToken cancellationToken)
         {
             if (searchTerm == null)
             {
-                return Array.Empty<string>();
+                return Array.Empty<NameAndCurrentVersion>();
             }
             else if (searchTerm.StartsWith("@", StringComparison.Ordinal))
             {
-                return await GetPackageNamesWithScopeAsync(searchTerm, cancellationToken).ConfigureAwait(false);
+                return await GetPackageNamesAndCurrentVersionsWithScopeAsync(searchTerm, cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -33,10 +34,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
         }
 
-        private static async Task<IEnumerable<string>> GetPackageNamesWithScopeAsync(string searchTerm, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<NameAndCurrentVersion>> GetPackageNamesAndCurrentVersionsWithScopeAsync(string searchTerm, CancellationToken cancellationToken)
         {
             Debug.Assert(searchTerm.StartsWith("@", StringComparison.Ordinal));
-            List<string> packageNames = new List<string>();
+            List<NameAndCurrentVersion> packageNames = new List<NameAndCurrentVersion>();
 
             int slash = searchTerm.IndexOf("/", StringComparison.Ordinal);
             if (slash > 0)
@@ -81,9 +82,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                                 if (packageDetails != null)
                                 {
                                     string currentPackageName = packageDetails.GetJObjectMemberStringValue("name");
-                                    if (!String.IsNullOrWhiteSpace(currentPackageName))
+                                    string currentPackageVersion = packageDetails.GetJObjectMemberStringValue("version");
+                                    if (!string.IsNullOrWhiteSpace(currentPackageName) && !string.IsNullOrWhiteSpace(currentPackageVersion))
                                     {
-                                        packageNames.Add(currentPackageName);
+                                        packageNames.Add(new Tuple<string, string>(currentPackageName, currentPackageVersion));
                                     }
                                 }
                             }
@@ -95,10 +97,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return packageNames;
         }
 
-        private static async Task<IEnumerable<string>> GetPackageNamesFromSimpleQueryAsync(string searchTerm, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<NameAndCurrentVersion>> GetPackageNamesFromSimpleQueryAsync(string searchTerm, CancellationToken cancellationToken)
         {
             string packageListUrl = string.Format(CultureInfo.InvariantCulture, NpmPackageSearchUrl, searchTerm);
-            List<string> packageNames = new List<string>();
+            List<NameAndCurrentVersion> packageNames = new List<NameAndCurrentVersion>();
 
             try
             {
@@ -179,9 +181,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                             if (packageEntry != null)
                             {
                                 string currentPackageName = packageEntry["name"].ToString();
-                                if (!String.IsNullOrWhiteSpace(currentPackageName))
+                                string currentPackageVersion = packageEntry["version"].ToString();
+
+                                if (!string.IsNullOrWhiteSpace(currentPackageName) && !string.IsNullOrWhiteSpace(currentPackageVersion))
                                 {
-                                    packageNames.Add(currentPackageName);
+                                    packageNames.Add(new Tuple<string, string>(currentPackageName, currentPackageVersion));
                                 }
                             }
                         }
