@@ -156,6 +156,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string libraryNameStart, int caretPosition)
         {
+            libraryNameStart = libraryNameStart == null ? string.Empty : libraryNameStart.Trim();
+
             CompletionSet completionSet = new CompletionSet
             {
                 Start = 0,

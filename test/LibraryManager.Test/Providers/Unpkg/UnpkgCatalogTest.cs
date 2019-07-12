@@ -156,6 +156,40 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
         }
 
+        public async Task GetLibraryCompletionSetAsync_LibraryNameWithLeadingAndTrailingWhitespace()
+        {
+            CancellationToken token = CancellationToken.None;
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("    jquery ", 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(6, result.Length);
+            Assert.AreEqual(100, result.Completions.Count());
+            Assert.AreEqual("jquery", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("jquery"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_NullValue()
+        {
+            CancellationToken token = CancellationToken.None;
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync(null, 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(0, result.Length);
+            Assert.AreEqual(0, result.Completions.Count());
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_EmptyString()
+        {
+            CancellationToken token = CancellationToken.None;
+            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync(string.Empty, 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(0, result.Length);
+            Assert.AreEqual(0, result.Completions.Count());
+        }
+
         [TestMethod]
         [Ignore] // Enable it after version completion sorting is committed.
         public async Task GetLibraryCompletionSetAsync_Versions()
