@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             CancellationToken token = CancellationToken.None;
 
             IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
-            Assert.AreEqual(10, absolute.Count);
+            Assert.AreEqual(100, absolute.Count);
             IEnumerable<string> libraryVersions = await absolute[0].GetLibraryVersions(token);
             Assert.IsTrue(libraryVersions.Any());
 
@@ -59,17 +59,20 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         public async Task SearchAsync_NoHits()
         {
             CancellationToken token = CancellationToken.None;
+            // The search service is surprisingly flexible for finding full-text matches, so this
+            // gibberish string was determined manually.
+            string searchTerm = "*9(_-zv_"; 
 
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(@"*9)_-", 1, token);
+            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
             Assert.AreEqual(0, absolute.Count);
         }
 
         [TestMethod]
-        public async Task SearchAsync_EmptyString()
+        public async Task SearchAsync_EmptyString_DoesNotPerformSearch()
         {
             CancellationToken token = CancellationToken.None;
             IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync("", 1, token);
-            Assert.AreEqual(10, absolute.Count);
+            Assert.AreEqual(0, absolute.Count);
         }
 
         [TestMethod]
@@ -105,7 +108,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(6, result.Length);
-            Assert.AreEqual(10, result.Completions.Count());
+            Assert.AreEqual(100, result.Completions.Count());
             Assert.AreEqual("jquery", result.Completions.First().DisplayText);
             Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("jquery"));
         }

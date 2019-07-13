@@ -12,7 +12,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
     {
         [DataTestMethod]
         [DataRow(null, 0)]
-        [DataRow("", 10)]
+        [DataRow("", 0)]
         [DataRow("poiuytrewq", 0)]
         public async Task NpmPackageSearch_GetPackageNamesAsync_NullOrEmptyOrUnmatchedPackage(string searchItem, int expectedCount)
         {
@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             IEnumerable<string> packages = await NpmPackageSearch.GetPackageNamesAsync(searchItem, token);
 
-            Assert.AreEqual(10, packages.Count());
+            Assert.AreEqual(100, packages.Count());
             Assert.AreEqual("jquery", packages.FirstOrDefault());
         }
 
