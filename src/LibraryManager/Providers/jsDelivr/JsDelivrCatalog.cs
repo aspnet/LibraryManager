@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,16 +19,12 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         public const string LatestLibraryVersionUrl = "https://data.jsdelivr.com/v1/package/npm/{0}";
         public const string LibraryFileListUrlFormatGH = "https://data.jsdelivr.com/v1/package/gh/{0}/flat";
         public const string LatestLibraryVersionUrlGH = "https://data.jsdelivr.com/v1/package/gh/{0}";
-        private JsDelivrProvider _provider;
-        private CacheService _cacheService;
-        private string _cacheFile;
 
+        private readonly JsDelivrProvider _provider;
 
         public JsDelivrCatalog(JsDelivrProvider provider)
         {
             _provider = provider;
-            _cacheService = new CacheService(WebRequestHandler.Instance);
-            _cacheFile = Path.Combine(provider.CacheFolder, CacheFileName);
         }
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
@@ -45,8 +40,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
                 if (packageObject != null)
                 {
-                    JObject versions = packageObject["tags"] as JObject;
-                    JValue versionValue = versions["latest"] as JValue;
+                    var versions = packageObject["tags"] as JObject;
+                    var versionValue = versions["latest"] as JValue;
                     latestVersion = versionValue?.Value as string;
                 }
             }
@@ -80,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         private async Task<IEnumerable<string>> GetLibraryFilesAsync(string libraryId, CancellationToken cancellationToken)
         {
-            List<string> result = new List<string>();
+            var result = new List<string>();
 
             string libraryFileListUrl = string.Format(IsGitHub(libraryId) ? LibraryFileListUrlFormatGH : LibraryFileListUrlFormat, libraryId);
             JObject fileListObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(libraryFileListUrl, cancellationToken).ConfigureAwait(false);
@@ -115,17 +110,16 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 }
              */
 
-            List<string> files = new List<string>();
+            var files = new List<string>();
 
             if (fileObject != null)
             {
-                JArray fileArray = fileObject["files"] as JArray;
+                var fileArray = fileObject["files"] as JArray;
                 foreach (JToken file in fileArray)
                 {
-                    JValue pathValue = file["name"] as JValue;
-                    string path = pathValue?.Value as string;
-                    
-                    if (path != null && path.Length > 0)
+                    var pathValue = file["name"] as JValue;
+
+                    if (pathValue?.Value is string path && path.Length > 0)
                     {
                         // Don't include the leading "/" in the file paths, so you get dist/jquery.js rather than /dist/jquery.js
                         // We will want the user to always specify a relative path in the "Files" array of the library entry
@@ -155,13 +149,13 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string libraryNameStart, int caretPosition)
         {
-            CompletionSet completionSet = new CompletionSet
+            var completionSet = new CompletionSet
             {
                 Start = 0,
                 Length = libraryNameStart.Length
             };
 
-            List<CompletionItem> completions = new List<CompletionItem>();
+            var completions = new List<CompletionItem>();
 
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
 
@@ -179,7 +173,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
                     foreach (string packageName in packageNames)
                     {
-                        CompletionItem completionItem = new CompletionItem
+                        var completionItem = new CompletionItem
                         {
                             DisplayText = packageName,
                             InsertionText = packageName
@@ -205,13 +199,13 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                     }
                     else
                     {
-                        JsDelivrLibraryGroup libGroup = new JsDelivrLibraryGroup(name);
+                        var libGroup = new JsDelivrLibraryGroup(name);
                         versions = await libGroup.GetLibraryVersions(CancellationToken.None);
                     }
 
                     foreach (string v in versions)
                     {
-                        CompletionItem completionItem = new CompletionItem
+                        var completionItem = new CompletionItem
                         {
                             DisplayText = v,
                             InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, v, _provider.Id)
@@ -233,7 +227,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public async Task<IReadOnlyList<ILibraryGroup>> SearchAsync(string term, int maxHits, CancellationToken cancellationToken)
         {
-            List<ILibraryGroup> libraryGroups = new List<ILibraryGroup>();
+            var libraryGroups = new List<ILibraryGroup>();
 
             if (IsGitHub(term))
             {
@@ -255,9 +249,9 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         private async Task<IEnumerable<string>> GetGithubLibraryVersionsAsync(string name)
         {
-            List<string> versions = new List<string>();
+            var versions = new List<string>();
             JObject versionsObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(string.Format(LatestLibraryVersionUrlGH, name), CancellationToken.None).ConfigureAwait(false);
-            JArray versionsArray = versionsObject["versions"] as JArray;
+            var versionsArray = versionsObject["versions"] as JArray;
 
             foreach (string version in versionsArray)
             {
