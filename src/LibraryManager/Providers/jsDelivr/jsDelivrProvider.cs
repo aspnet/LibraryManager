@@ -18,6 +18,9 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         public const string DownloadUrlFormat = "https://cdn.jsdelivr.net/npm/{0}@{1}/{2}";
         public const string DownloadUrlFormatGH = "https://cdn.jsdelivr.net/gh/{0}@{1}/{2}";
 
+        private readonly CacheService _cacheService;
+        private ILibraryCatalog _catalog;
+
         public JsDelivrProvider(IHostInteraction hostInteraction)
         {
             HostInteraction = hostInteraction;
@@ -30,12 +33,11 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public IHostInteraction HostInteraction { get; }
 
-        private CacheService _cacheService;
-        private ILibraryCatalog _catalog;
+        private ILibraryNamingScheme LibraryNamingScheme { get; } = new VersionedLibraryNamingScheme();
 
         public ILibraryCatalog GetCatalog()
         {
-            return _catalog ?? (_catalog = new JsDelivrCatalog(this));
+            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance));
         }
         
         internal string CacheFolder

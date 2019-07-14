@@ -18,21 +18,15 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
     [TestClass]
     public class JsDelivrCatalogTest
     {
-        private ILibraryCatalog _catalog;
-        private IProvider _provider;
+        private JsDelivrCatalog _catalog;
 
         [TestInitialize]
         public void Setup()
         {
-            string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
-            string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
-            var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
-            var dependencies = new Dependencies(hostInteraction, new JsDelivrProviderFactory());
-
-            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);
-
-            _provider = dependencies.GetProvider("jsdelivr");
-            _catalog = _provider.GetCatalog();
+            _catalog = new JsDelivrCatalog(JsDelivrProvider.IdText,
+                                           new VersionedLibraryNamingScheme(),
+                                           new Mocks.Logger(),
+                                           new Mocks.WebRequestHandler());
         }
 
         [TestMethod]
@@ -52,7 +46,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             Assert.AreEqual(0, library.Files.Count(f => f.Value));
             Assert.IsNotNull(library.Name);
             Assert.IsNotNull(library.Version);
-            Assert.AreEqual(_provider.Id, library.ProviderId);
+            Assert.AreEqual(JsDelivrProvider.IdText, library.ProviderId);
         }
 
         [TestMethod]
