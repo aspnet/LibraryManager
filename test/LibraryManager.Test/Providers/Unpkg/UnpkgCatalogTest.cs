@@ -1,16 +1,13 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
-using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
@@ -18,93 +15,86 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
     [TestClass]
     public class UnpkgCatalogTest
     {
-        private ILibraryCatalog _catalog;
-        private IProvider _provider;
-
-        [TestInitialize]
-        public void Setup()
+        private UnpkgCatalog SetupCatalog(IWebRequestHandler handler = null)
         {
-            string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
-            string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
-            var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
-            var dependencies = new Dependencies(hostInteraction, new UnpkgProviderFactory());
-
-            LibraryIdToNameAndVersionConverter.Instance.EnsureInitialized(dependencies);
-
-            _provider = dependencies.GetProvider("unpkg");
-            _catalog = _provider.GetCatalog();
+            return new UnpkgCatalog(UnpkgProvider.IdText,
+                                    new VersionedLibraryNamingScheme(),
+                                    new Mocks.Logger(),
+                                    handler ?? new Mocks.WebRequestHandler());
         }
 
         [TestMethod]
         public async Task SearchAsync_Success()
         {
             string searchTerm = "jquery";
-            CancellationToken token = CancellationToken.None;
+            UnpkgCatalog sut = SetupCatalog();
 
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(searchTerm, 1, CancellationToken.None);
             Assert.AreEqual(100, absolute.Count);
-            IEnumerable<string> libraryVersions = await absolute[0].GetLibraryVersions(token);
+            IEnumerable<string> libraryVersions = await absolute[0].GetLibraryVersions(CancellationToken.None);
             Assert.IsTrue(libraryVersions.Any());
-
-            ILibrary library = await _catalog.GetLibraryAsync(absolute[0].DisplayName, libraryVersions.First(), token);
-            Assert.IsTrue(library.Files.Count > 0);
-            Assert.AreEqual("jquery", library.Name);
-            Assert.AreEqual(0, library.Files.Count(f => f.Value));
-            Assert.IsNotNull(library.Name);
-            Assert.IsNotNull(library.Version);
-            Assert.AreEqual(_provider.Id, library.ProviderId);
         }
 
         [TestMethod]
         public async Task SearchAsync_NoHits()
         {
-            CancellationToken token = CancellationToken.None;
             // The search service is surprisingly flexible for finding full-text matches, so this
             // gibberish string was determined manually.
-            string searchTerm = "*9(_-zv_"; 
+            string searchTerm = "*9(_-zv_";
+            UnpkgCatalog sut = SetupCatalog();
 
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(searchTerm, 1, CancellationToken.None);
+
             Assert.AreEqual(0, absolute.Count);
         }
 
         [TestMethod]
         public async Task SearchAsync_EmptyString_DoesNotPerformSearch()
         {
-            CancellationToken token = CancellationToken.None;
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync("", 1, token);
+            UnpkgCatalog sut = SetupCatalog();
+
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync("", 1, CancellationToken.None);
+
             Assert.AreEqual(0, absolute.Count);
         }
 
         [TestMethod]
         public async Task SearchAsync_NullString()
         {
-            CancellationToken token = CancellationToken.None;
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(null, 1, token);
+            UnpkgCatalog sut = SetupCatalog();
+
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(null, 1, CancellationToken.None);
+
             Assert.AreEqual(0, absolute.Count);
         }
 
         [TestMethod]
         public async Task GetLibraryAsync_Success()
         {
-            CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("jquery", "3.3.1", token);
+            Mocks.WebRequestHandler handler = new Mocks.WebRequestHandler().SetupFiles("fakeLib@1.0.0");
+            UnpkgCatalog sut = SetupCatalog(handler);
+
+            ILibrary library = await sut.GetLibraryAsync("fakeLib", "1.0.0", CancellationToken.None);
 
             Assert.IsNotNull(library);
-            Assert.AreEqual("jquery", library.Name);
-            Assert.AreEqual("3.3.1", library.Version);
+            Assert.AreEqual("fakeLib", library.Name);
+            Assert.AreEqual("1.0.0", library.Version);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidLibraryException))]
+        [TestMethod]
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
-            CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", "invalid_version", token);
+            UnpkgCatalog sut = SetupCatalog();
+
+            await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () => await sut.GetLibraryAsync("invalid_id", "invalid_version", CancellationToken.None));
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery", 0);
+            UnpkgCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("jquery", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(6, result.Length);
@@ -117,7 +107,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         [Ignore] // Enable it after version completion sorting is committed.
         public async Task GetLibraryCompletionSetAsync_Versions()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery@", 7);
+            UnpkgCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("jquery@", 7);
 
             Assert.AreEqual(7, result.Start);
             Assert.AreEqual(0, result.Length);
@@ -129,37 +121,34 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         [TestMethod]
         public async Task GetLatestVersion_LatestExist()
         {
-            CancellationToken token = CancellationToken.None;
-            const string libraryId = "bootstrap@3.3.0";
-            string[] existing = libraryId.Split('@');
-            string result = await _catalog.GetLatestVersion(existing[0], false, token);
+            const string libraryName = "fakeLibrary";
+            Mocks.WebRequestHandler handler = new Mocks.WebRequestHandler().SetupVersions("fakeLibrary");
+            UnpkgCatalog sut = SetupCatalog(handler);
 
-            // It can return null value.
-            if (result != null)
-            {
-                Assert.AreNotEqual(existing[1], result);
-            }
+            string result = await sut.GetLatestVersion(libraryName, false, CancellationToken.None);
+
+            Assert.AreEqual("1.0.0", result);
         }
 
         [TestMethod]
+        [Ignore] // TODO: GetLatestVersion currently doesn't distinguish stable and pre-release versions
         public async Task GetLatestVersion_PreRelease()
         {
-            CancellationToken token = CancellationToken.None;
-            const string libraryId = "bootstrap@3.3.0";
-            string[] existing = libraryId.Split('@');
-            string result = await _catalog.GetLatestVersion(existing[0], true, token);
+            const string libraryName = "fakeLibrary";
+            Mocks.WebRequestHandler handler = new Mocks.WebRequestHandler().SetupVersions("fakeLibrary");
+            UnpkgCatalog sut = SetupCatalog(handler);
 
-            // It can return null value.
-            if (result != null)
-            {
-                Assert.AreNotEqual(existing[1], result);
-            }
+            string result = await sut.GetLatestVersion(libraryName, true, CancellationToken.None);
+
+            Assert.AreEqual("2.0.0-beta", result);
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_WithNullNpmPackageInfoVersions_ReturnsNoCompletions()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@", 1);
+            UnpkgCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@", 1);
 
             Assert.AreEqual(1, result.Start);
             Assert.AreEqual(0, result.Length);
@@ -167,4 +156,34 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             Assert.AreEqual(CompletionSortOrder.Version, result.CompletionType);
         }
     }
+
+    internal static class UnpkgCatalogSetups
+    {
+        public static Mocks.WebRequestHandler SetupFiles(this Mocks.WebRequestHandler h, string libraryId)
+        {
+            string files = @"{
+  ""type"": ""directory"",
+  ""files"": [
+    {
+      ""path"": ""testFile.js"",
+      ""type"": ""file""
+    }
+  ]
+}";
+
+            (string name, string version) = new VersionedLibraryNamingScheme().GetLibraryNameAndVersion(libraryId);
+
+            return h.ArrangeResponse(string.Format(UnpkgCatalog.LibraryFileListUrlFormat, name, version), files);
+        }
+
+        public static Mocks.WebRequestHandler SetupVersions(this Mocks.WebRequestHandler h, string libraryName)
+        {
+            string packageData = @"{
+  ""version"": ""1.0.0""
+}";
+
+            return h.ArrangeResponse(string.Format(UnpkgCatalog.LatestLibraryVersonUrl, libraryName), packageData);
+        }
+    }
+
 }

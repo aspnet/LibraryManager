@@ -18,11 +18,17 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public const string LibraryFileListUrlFormat = "https://unpkg.com/{0}@{1}/?meta"; // e.g. https://unpkg.com/jquery@3.3.1/?meta
         public const string LatestLibraryVersonUrl = "https://unpkg.com/{0}/package.json"; // e.g. https://unpkg.com/jquery/package.json
 
-        private readonly UnpkgProvider _provider;
+        private readonly string _providerId;
+        private readonly ILibraryNamingScheme _libraryNamingScheme;
+        private readonly ILogger _logger;
+        private readonly IWebRequestHandler _webRequestHandler;
 
-        public UnpkgCatalog(UnpkgProvider provider)
+        public UnpkgCatalog(string providerId, ILibraryNamingScheme namingScheme, ILogger logger, IWebRequestHandler webRequestHandler)
         {
-            _provider = provider;
+            _providerId = providerId;
+            _libraryNamingScheme = namingScheme;
+            _logger = logger;
+            _webRequestHandler = webRequestHandler;
         }
 
         public async Task<string> GetLatestVersion(string libraryName, bool includePreReleases, CancellationToken cancellationToken)
@@ -33,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             {
                 string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, libraryName);
 
-                JObject packageObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
+                JObject packageObject = await _webRequestHandler.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
 
                 if (packageObject != null)
                 {
@@ -43,7 +49,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
             catch(Exception ex)
             {
-                _provider.HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                _logger.Log(ex.ToString(), LogLevel.Error);
             }
 
             return latestVersion;
@@ -53,10 +59,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             if (string.IsNullOrEmpty(libraryName) || string.IsNullOrEmpty(version))
             {
-                throw new InvalidLibraryException(libraryName, _provider.Id);
+                throw new InvalidLibraryException(libraryName, _providerId);
             }
 
-            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryName, version, _provider.Id);
+            string libraryId = _libraryNamingScheme.GetLibraryId(libraryName, version);
             try
             {
                 IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryName, version, cancellationToken);
@@ -66,12 +72,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     Version = version,
                     Files = libraryFiles.ToDictionary(k => k, b => false),
                     Name = libraryName,
-                    ProviderId = _provider.Id,
+                    ProviderId = _providerId,
                 };
             }
             catch
             {
-                throw new InvalidLibraryException(libraryId, _provider.Id);
+                throw new InvalidLibraryException(libraryId, _providerId);
             }
         }
 
@@ -80,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             var result = new List<string>();
 
             string libraryFileListUrl = string.Format(LibraryFileListUrlFormat, libraryName, version);
-            JObject fileListObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(libraryFileListUrl, cancellationToken).ConfigureAwait(false);
+            JObject fileListObject = await _webRequestHandler.GetJsonObjectViaGetAsync(libraryFileListUrl, cancellationToken).ConfigureAwait(false);
 
             if (fileListObject != null)
             {
@@ -161,7 +167,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             var completions = new List<CompletionItem>();
 
-            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
+            (string name, string version) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryNameStart);
 
             // Typing '@' after the library name should have version completion.
             int at = name.LastIndexOf('@');
@@ -220,7 +226,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
             catch (Exception ex)
             {
-                _provider.HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                _logger.Log(ex.ToString(), LogLevel.Error);
             }
 
             return completionSet;
@@ -237,7 +243,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
             catch (Exception ex)
             {
-                _provider.HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                _logger.Log(ex.ToString(), LogLevel.Error);
             }
 
             return libraryGroups;
