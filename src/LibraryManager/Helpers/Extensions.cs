@@ -133,7 +133,7 @@ namespace Microsoft.Web.LibraryManager
         {
             JObject result = null;
 
-            using (Stream stream = await WebRequestHandler.Instance.GetStreamAsync(url, cancellationToken))
+            using (Stream stream = await webRequestHandler.GetStreamAsync(url, cancellationToken))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {

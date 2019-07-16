@@ -17,6 +17,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public const string IdText = "unpkg";
         public const string DownloadUrlFormat = "https://unpkg.com/{0}@{1}/{2}";
 
+        private CacheService _cacheService;
+        private ILibraryCatalog _catalog;
+
         public UnpkgProvider(IHostInteraction hostInteraction)
         {
             HostInteraction = hostInteraction;
@@ -30,12 +33,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public IHostInteraction HostInteraction { get; }
 
-        private CacheService _cacheService;
-        private ILibraryCatalog _catalog;
+        private ILibraryNamingScheme LibraryNamingScheme { get; } = new VersionedLibraryNamingScheme();
 
         public ILibraryCatalog GetCatalog()
         {
-            return _catalog ?? (_catalog = new UnpkgCatalog(this));
+            return _catalog ?? (_catalog = new UnpkgCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance));
         }
 
         // TODO: {alexgav} Could got to a command provider base class
