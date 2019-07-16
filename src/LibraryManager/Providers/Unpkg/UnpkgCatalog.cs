@@ -158,19 +158,19 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string libraryNameStart, int caretPosition)
         {
-            CompletionSet completionSet = new CompletionSet
+            libraryNameStart = libraryNameStart == null ? string.Empty : libraryNameStart;
+
+            var completionSet = new CompletionSet
             {
                 Start = 0,
                 Length = libraryNameStart.Length
             };
 
-            List<CompletionItem> completions = new List<CompletionItem>();
+            var completions = new List<CompletionItem>();
 
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
 
             // Typing '@' after the library name should have version completion.
-            int at = name.LastIndexOf('@');
-            name = at > -1 ? name.Substring(0, at) : name;
 
             try
             {
@@ -181,7 +181,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                     foreach (string packageName in packageNames)
                     {
-                        CompletionItem completionItem = new CompletionItem
+                        var completionItem = new CompletionItem
                         {
                             DisplayText = packageName,
                             InsertionText = packageName,
@@ -208,7 +208,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                         foreach (SemanticVersion semVersion in versions)
                         {
                             string versionText = semVersion.ToString();
-                            CompletionItem completionItem = new CompletionItem
+                            var completionItem = new CompletionItem
                             {
                                 DisplayText = versionText,
                                 InsertionText = name + "@" + versionText

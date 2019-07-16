@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
@@ -155,31 +156,33 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string libraryNameStart, int caretPosition)
         {
-            CompletionSet completionSet = new CompletionSet
+            libraryNameStart = libraryNameStart == null ? string.Empty : libraryNameStart;
+
+            var completionSet = new CompletionSet
             {
                 Start = 0,
                 Length = libraryNameStart.Length
             };
 
-            List<CompletionItem> completions = new List<CompletionItem>();
+            var completions = new List<CompletionItem>();
 
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
 
             try
             {
                 // library name completion
-                if (caretPosition < name.Length + 1 && name[name.Length - 1] != '@')
+                if (caretPosition < name.Length + 1)
                 {
                     if (IsGitHub(libraryNameStart))
                     {
                         return completionSet;
                     }
 
-                    IEnumerable<string> packageNames = await Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
                     foreach (string packageName in packageNames)
                     {
-                        CompletionItem completionItem = new CompletionItem
+                        var completionItem = new CompletionItem
                         {
                             DisplayText = packageName,
                             InsertionText = packageName
@@ -192,8 +195,6 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 // library version completion
                 else
                 {
-                    name = name[name.Length - 1] == '@' ? name.Remove(name.Length - 1) : name;
-
                     completionSet.Start = name.Length + 1;
                     completionSet.Length = version.Length;
 
@@ -205,13 +206,13 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                     }
                     else
                     {
-                        JsDelivrLibraryGroup libGroup = new JsDelivrLibraryGroup(name);
+                        var libGroup = new JsDelivrLibraryGroup(name);
                         versions = await libGroup.GetLibraryVersions(CancellationToken.None);
                     }
 
                     foreach (string v in versions)
                     {
-                        CompletionItem completionItem = new CompletionItem
+                        var completionItem = new CompletionItem
                         {
                             DisplayText = v,
                             InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, v, _provider.Id)

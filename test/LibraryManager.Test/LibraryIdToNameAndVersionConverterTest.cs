@@ -39,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow("@angular/cli@1.0.0", "unpkg","@angular/cli", "1.0.0")]
         [DataRow("@MyLibraryWithoutVersion", "cdnjs", "@MyLibraryWithoutVersion", "")]
         [DataRow("Library@Version", "filesystem", "Library@Version", "")]
-        [DataRow("Partial@", "cdnjs", "Partial@", "")]
+        [DataRow("Partial@", "cdnjs", "Partial", "")]
         [DataRow("Partial@Version", "unknown", "Partial@Version", "")]  // Default is simple naming scheme
         public void GetLibraryNameAndVersion(string libraryId, string providerId, string name, string version)
         {
