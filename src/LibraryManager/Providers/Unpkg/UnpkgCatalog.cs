@@ -170,8 +170,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             (string name, string version) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryNameStart);
 
             // Typing '@' after the library name should have version completion.
-            int at = name.LastIndexOf('@');
-            name = at > -1 ? name.Substring(0, at) : name;
 
             try
             {
