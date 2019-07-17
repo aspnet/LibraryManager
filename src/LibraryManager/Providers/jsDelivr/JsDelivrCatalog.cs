@@ -156,15 +156,22 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string libraryNameStart, int caretPosition)
         {
-            libraryNameStart = libraryNameStart == null ? string.Empty : libraryNameStart;
+            var completions = new List<CompletionItem>();
 
             var completionSet = new CompletionSet
             {
                 Start = 0,
-                Length = libraryNameStart.Length
+                Length = 0,
+                Completions = completions
             };
 
-            var completions = new List<CompletionItem>();
+            if (string.IsNullOrEmpty(libraryNameStart))
+            {
+                // no point in doing the rest of the work, we know it's going to be an empty completion set anyway
+                return completionSet;
+            }
+
+            completionSet.Length = libraryNameStart.Length;
 
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(libraryNameStart, _provider.Id);
 
@@ -221,8 +228,6 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                         completions.Add(completionItem);
                     }
                 }
-
-                completionSet.Completions = completions;
             }
             catch (Exception ex)
             {
