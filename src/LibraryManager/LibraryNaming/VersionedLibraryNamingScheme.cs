@@ -23,21 +23,26 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
         {
             string name = string.Empty;
             string version = string.Empty;
+
             if (string.IsNullOrEmpty(libraryId))
             {
                 return (name, version);
             }
-
-            int indexOfLastAt = libraryId.LastIndexOf(Separator);
-            int indexOfAtToSplitNameAndVersion = libraryId.StartsWith("@", StringComparison.Ordinal) && indexOfLastAt == 0 ? -1 : indexOfLastAt;
-
-            name = indexOfLastAt > 0 ? libraryId.TrimEnd('@') : libraryId;
-            version = string.Empty;
-
-            if (indexOfAtToSplitNameAndVersion > 0 && indexOfAtToSplitNameAndVersion < libraryId.TrimEnd().Length - 1)
+            else if(libraryId.Length == 1)
             {
-                name = libraryId.Substring(0, indexOfAtToSplitNameAndVersion);
-                version = libraryId.Substring(indexOfAtToSplitNameAndVersion + 1);
+                return (libraryId, version);
+            }
+
+            int indexOfAt = libraryId.Substring(1).LastIndexOf(Separator) + 1;
+
+            if (indexOfAt > 0)
+            {
+                name = libraryId.Substring(0, indexOfAt);
+                version = libraryId.Substring(indexOfAt + 1);
+            }
+            else
+            {
+                name = libraryId;
             }
 
             return (name, version);
