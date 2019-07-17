@@ -99,7 +99,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopedPackageNameisSingleAt_ReturnsNoCompletions()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@", 1);
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@", 1);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(1, result.Length);
@@ -123,7 +125,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesNoName()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/", 0);
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(7, result.Length);
@@ -135,7 +139,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithName()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/node", 0);
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/node", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(11, result.Length);
@@ -147,7 +153,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndTrailingAt_CursorAtVersions()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/react@", 13);
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@", 13);
 
             Assert.AreEqual(13, result.Start);
             Assert.AreEqual(0, result.Length);
@@ -158,7 +166,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndTrailingAt_CursorAtName()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/react@", 6);
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@", 6);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(13, result.Length);
@@ -169,7 +179,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndVersions_CursorInVersionsSubstring()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/react@1", 14);
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@1", 14);
 
             Assert.AreEqual(13, result.Start);
             Assert.AreEqual(1, result.Length);
@@ -180,7 +192,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndVersions_CursorInNameSubstring()
         {
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("@types/node@1.0.2", 8);
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/node@1.0.2", 8);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(17, result.Length);
@@ -191,8 +205,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_LibraryNameWithLeadingAndTrailingWhitespace()
         {
+            JsDelivrCatalog sut = SetupCatalog();
+
             CancellationToken token = CancellationToken.None;
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("    jquery ", 0);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("    jquery ", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(11, result.Length);
@@ -204,8 +220,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_NullValue()
         {
+            JsDelivrCatalog sut = SetupCatalog();
+
             CancellationToken token = CancellationToken.None;
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync(null, 0);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(null, 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
@@ -215,8 +233,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_EmptyString()
         {
+            JsDelivrCatalog sut = SetupCatalog();
+
             CancellationToken token = CancellationToken.None;
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync(string.Empty, 0);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(string.Empty, 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
