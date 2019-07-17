@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
@@ -155,27 +156,36 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string libraryNameStart, int caretPosition)
         {
+            var completions = new List<CompletionItem>();
+
             var completionSet = new CompletionSet
             {
                 Start = 0,
-                Length = libraryNameStart.Length
+                Length = 0,
+                Completions = completions
             };
 
-            var completions = new List<CompletionItem>();
+            if (string.IsNullOrEmpty(libraryNameStart))
+            {
+                // no point in doing the rest of the work, we know it's going to be an empty completion set anyway
+                return completionSet;
+            }
+
+            completionSet.Length = libraryNameStart.Length;
 
             (string name, string version) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryNameStart);
 
             try
             {
                 // library name completion
-                if (caretPosition < name.Length + 1 && name[name.Length - 1] != '@')
+                if (caretPosition < name.Length + 1)
                 {
                     if (IsGitHub(libraryNameStart))
                     {
                         return completionSet;
                     }
 
-                    IEnumerable<string> packageNames = await Microsoft.Web.LibraryManager.Providers.Unpkg.NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
                     foreach (string packageName in packageNames)
                     {
@@ -192,8 +202,6 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 // library version completion
                 else
                 {
-                    name = name[name.Length - 1] == '@' ? name.Remove(name.Length - 1) : name;
-
                     completionSet.Start = name.Length + 1;
                     completionSet.Length = version.Length;
 
@@ -220,8 +228,6 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                         completions.Add(completionItem);
                     }
                 }
-
-                completionSet.Completions = completions;
             }
             catch (Exception ex)
             {

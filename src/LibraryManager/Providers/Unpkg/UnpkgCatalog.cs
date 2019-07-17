@@ -159,19 +159,26 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string libraryNameStart, int caretPosition)
         {
+            var completions = new List<CompletionItem>();
+
             var completionSet = new CompletionSet
             {
                 Start = 0,
-                Length = libraryNameStart.Length
+                Length = 0,
+                Completions = completions
             };
 
-            var completions = new List<CompletionItem>();
+            if (string.IsNullOrEmpty(libraryNameStart))
+            {
+                // no point in doing the rest of the work, we know it's going to be an empty completion set anyway
+                return completionSet;
+            }
+
+            completionSet.Length = libraryNameStart.Length;
 
             (string name, string version) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryNameStart);
 
             // Typing '@' after the library name should have version completion.
-            int at = name.LastIndexOf('@');
-            name = at > -1 ? name.Substring(0, at) : name;
 
             try
             {
@@ -221,8 +228,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                     completionSet.CompletionType = CompletionSortOrder.Version;
                 }
-
-                completionSet.Completions = completions;
             }
             catch (Exception ex)
             {

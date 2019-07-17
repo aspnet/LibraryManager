@@ -97,6 +97,18 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         }
 
         [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopedPackageNameisSingleAt_ReturnsNoCompletions()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@", 1);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(0, result.Completions.Count());
+        }
+
+        [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
             JsDelivrCatalog sut = SetupCatalog();
@@ -108,6 +120,127 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             Assert.AreEqual(100, result.Completions.Count());
             Assert.AreEqual("jquery", result.Completions.First().DisplayText);
             Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("jquery"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesNoName()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/", 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(7, result.Length);
+            Assert.AreEqual(25, result.Completions.Count());
+            Assert.AreEqual("@types/node", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithName()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/node", 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(11, result.Length);
+            Assert.AreEqual(25, result.Completions.Count());
+            Assert.AreEqual("@types/node", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndTrailingAt_CursorAtVersions()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@", 13);
+
+            Assert.AreEqual(13, result.Start);
+            Assert.AreEqual(0, result.Length);
+            Assert.IsTrue(result.Completions.Count() > 0);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/react"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndTrailingAt_CursorAtName()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@", 6);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(13, result.Length);
+            Assert.IsTrue(result.Completions.Count() > 0);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/react"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndVersions_CursorInVersionsSubstring()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@1", 14);
+
+            Assert.AreEqual(13, result.Start);
+            Assert.AreEqual(1, result.Length);
+            Assert.IsTrue(result.Completions.Count() > 0);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/react"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndVersions_CursorInNameSubstring()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/node@1.0.2", 8);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(17, result.Length);
+            Assert.AreEqual(1, result.Completions.Count());
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_LibraryNameWithLeadingAndTrailingWhitespace()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CancellationToken token = CancellationToken.None;
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("    jquery ", 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(11, result.Length);
+            Assert.AreEqual(100, result.Completions.Count());
+            Assert.AreEqual("jquery", result.Completions.First().DisplayText);
+            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("jquery"));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_NullValue()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CancellationToken token = CancellationToken.None;
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(null, 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(0, result.Length);
+            Assert.AreEqual(0, result.Completions.Count());
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_EmptyString()
+        {
+            JsDelivrCatalog sut = SetupCatalog();
+
+            CancellationToken token = CancellationToken.None;
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(string.Empty, 0);
+
+            Assert.AreEqual(0, result.Start);
+            Assert.AreEqual(0, result.Length);
+            Assert.AreEqual(0, result.Completions.Count());
         }
 
         [TestMethod]
