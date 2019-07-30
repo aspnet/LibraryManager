@@ -18,7 +18,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
         private readonly ILibraryCatalog _testCatalog = new LibraryCatalog()
             .AddLibrary(new Library { Name = "test", Version = "1.0" })
             .AddLibrary(new Library { Name = "test", Version = "1.2" })
-            .AddLibrary(new Library { Name = "test", Version = "2.0" });
+            .AddLibrary(new Library { Name = "test", Version = "2.0" })
+            .AddLibrary(new Library { Name = "@types/node", Version = "1.0" })
+            .AddLibrary(new Library { Name = "@types/node", Version = "1.2" })
+            .AddLibrary(new Library { Name = "@types/node", Version = "2.0" })
+
+            //Add garbage data 
+            .AddLibrary(new Library { Name = "@Bad@Package@", Version = "abc/2.junk" })
+            .AddLibrary(new Library { Name = "", Version = "2.0" })
+            .AddLibrary(new Library { Name = "Blah", Version = "" })
+            .AddLibrary(new Library { Name = "", Version = "" });
+
 
         private IProvider GetTestProvider()
         {
@@ -41,7 +51,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
         {
             var testObj = new LibraryIdViewModel(GetTestSearchService(), "test");
 
-            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 0);
+            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 3);
 
             Assert.AreEqual(3, result.Completions.Count());
         }
@@ -51,10 +61,41 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
         {
             var testObj = new LibraryIdViewModel(GetTestSearchService(), "test@");
 
-            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 0);
+            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 5);
 
             // the version segment is "", which matches all versions
             Assert.AreEqual(3, result.Completions.Count());
+        }
+
+        [TestMethod]
+        public async Task FilterCompletions_ScopedPackageWithoutTrailingAt_ReturnAllMatchingCompletions()
+        {
+            var testObj = new LibraryIdViewModel(GetTestSearchService(), "@types/node");
+
+            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 11);
+
+            Assert.AreEqual(3, result.Completions.Count());
+        }
+
+        [TestMethod]
+        public async Task FilterCompletions_ScopedPackageEndsWithAt_ReturnAllMatchingCompletions()
+        {
+            var testObj = new LibraryIdViewModel(GetTestSearchService(), "@types/node@");
+
+            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 12);
+
+            // the version segment is "", which matches all versions
+            Assert.AreEqual(3, result.Completions.Count());
+        }
+
+        [TestMethod]
+        public async Task FilterCompletions_ScopedPackageEndsWithAfterAt_ReturnAllMatchingCompletions()
+        {
+            var testObj = new LibraryIdViewModel(GetTestSearchService(), "@types/node@2");
+
+            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 13);
+
+            Assert.AreEqual(1, result.Completions.Count());
         }
 
         [TestMethod]
@@ -62,7 +103,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
         {
             var testObj = new LibraryIdViewModel(GetTestSearchService(), "test@2");
 
-            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 0);
+            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 5);
 
             // This will match both 1.2 and 2.0
             Assert.AreEqual(2, result.Completions.Count());
