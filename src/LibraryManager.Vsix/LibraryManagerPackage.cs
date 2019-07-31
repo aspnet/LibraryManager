@@ -15,7 +15,10 @@ namespace Microsoft.Web.LibraryManager.Vsix
 {
     [Guid(PackageGuids.guidPackageString)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
+#pragma warning disable CS0436 // Type conflicts with imported type
+                               // Justification: Compiler will pick the one in this assembly first.  Either way, they should have the same version.
+    [InstalledProductRegistration("#110", "#112", ThisAssembly.AssemblyInformationalVersion, IconResourceID = 400)]
+#pragma warning restore CS0436 // Type conflicts with imported type
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideUIContextRule(PackageGuids.guidUiContextConfigFileString,
         name: "ConfigFile",
