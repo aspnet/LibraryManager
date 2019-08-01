@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 {
@@ -296,6 +298,46 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             string result = await sut.GetLatestVersion(libraryId, true, CancellationToken.None);
 
             Assert.AreEqual("2.0.0-beta", result);
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ReturnsCompletionWithLatestVersion()
+        {
+            //Arrange
+            var dependencies = new Dependencies(null);
+            var provider = new Provider(null) { Id = JsDelivrProvider.IdText, SupportsLibraryVersions = true };
+
+            dependencies.AllProviders = new List<IProvider>() { provider };
+
+            //Reinitialize is necessary because any other tests could have already initialized before
+            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);
+
+            var packageSearch = new Mock<INpmPackageSearch>();
+
+            var packages = new List<string>() { "testPkg" };
+            packageSearch.Setup(p => p.GetPackageNamesAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult((IEnumerable<string>)packages));
+
+            var testPkgInfo = new NpmPackageInfo(name: "testPkg", description: "description", latestVersion: "1.2.3", author: "brzh", homepage: "https://testPkg.com", license: "MIT");
+            packageSearch.Setup(p => p.GetPackageInfoAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(testPkgInfo));
+
+            var infoCache = new NpmPackageInfoCache(packageSearch.Object);
+
+            var sut = new JsDelivrCatalog(JsDelivrProvider.IdText,
+                            new VersionedLibraryNamingScheme(),
+                            new Logger(),
+                            new Mocks.WebRequestHandler(),
+                            infoCache,
+                            packageSearch.Object);
+
+            //Act
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("testPkg", 7);
+
+            //Assert
+            Assert.AreEqual(1, result.Completions.Count());
+            Assert.AreEqual("testPkg", result.Completions.First().DisplayText);
+            Assert.AreEqual("testPkg@1.2.3", result.Completions.First().InsertionText);
         }
     }
 
