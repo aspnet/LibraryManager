@@ -23,7 +23,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         protected override Task<CompletionSet> FilterCompletions(CompletionSet input)
         {
             CompletionSet result = input;
-            int atIndex = SearchText.IndexOf('@');
+            int atIndex = SearchText.IndexOf('@', 1);
 
             if (atIndex >= 0)
             {
