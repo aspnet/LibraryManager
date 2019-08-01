@@ -100,7 +100,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
 
             var testObj = new LibraryIdViewModel(GetTestSearchService(testCatalog), "@types/test@2");
 
-            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 13);
+            CompletionSet result = await testObj.GetCompletionSetAsync(caretIndex: 12);
 
             Assert.AreEqual(2, result.Completions.Count());
         }
