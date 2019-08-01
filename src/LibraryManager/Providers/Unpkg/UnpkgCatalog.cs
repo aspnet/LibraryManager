@@ -189,10 +189,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                     foreach (string packageName in packageNames)
                     {
+                        NpmPackageInfo packageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(packageName, CancellationToken.None);
+
                         var completionItem = new CompletionItem
                         {
                             DisplayText = packageName,
-                            InsertionText = packageName,
+                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(packageName, packageInfo.LatestVersion, _providerId)
                         };
 
                         completions.Add(completionItem);
