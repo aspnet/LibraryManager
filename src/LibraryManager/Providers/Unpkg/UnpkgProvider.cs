@@ -37,7 +37,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public ILibraryCatalog GetCatalog()
         {
-            return _catalog ?? (_catalog = new UnpkgCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance));
+            var packageSearch = new NpmPackageSearch();
+            var infoCache = new NpmPackageInfoCache(packageSearch);
+            return _catalog ?? (_catalog = new UnpkgCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, infoCache, packageSearch));
         }
 
         // TODO: {alexgav} Could got to a command provider base class

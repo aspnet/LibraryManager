@@ -4,21 +4,25 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-    internal static class NpmPackageInfoCache
+    internal sealed class NpmPackageInfoCache : INpmPackageInfoCache
     {
-        private static readonly Dictionary<string, NpmPackageInfo> CachedPackages = new Dictionary<string, NpmPackageInfo>();
+        private readonly Dictionary<string, NpmPackageInfo> _cachedPackages = new Dictionary<string, NpmPackageInfo>();
+        private readonly INpmPackageSearch _npmPackageSearch;
 
-        internal static async Task<NpmPackageInfo> GetPackageInfoAsync(string packageName, CancellationToken cancellationToken)
+        public NpmPackageInfoCache(INpmPackageSearch npmPackageSearch)
         {
-            NpmPackageInfo packageInfo = null;
+            _npmPackageSearch = npmPackageSearch;
+        }
 
-            if (!CachedPackages.TryGetValue(packageName, out packageInfo))
+        public async Task<NpmPackageInfo> GetPackageInfoAsync(string packageName, CancellationToken cancellationToken)
+        {
+            if (!_cachedPackages.TryGetValue(packageName, out NpmPackageInfo packageInfo))
             {
-                packageInfo = await NpmPackageSearch.GetPackageInfoAsync(packageName, cancellationToken).ConfigureAwait(false);
+                packageInfo = await _npmPackageSearch.GetPackageInfoAsync(packageName, cancellationToken).ConfigureAwait(false);
 
                 if (packageInfo != null)
                 {
-                    CachedPackages[packageName] = packageInfo;
+                    _cachedPackages[packageName] = packageInfo;
                 }
             }
 

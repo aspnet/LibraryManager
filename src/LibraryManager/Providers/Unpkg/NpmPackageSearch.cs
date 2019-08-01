@@ -10,14 +10,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-    internal class NpmPackageSearch
+    internal sealed class NpmPackageSearch : INpmPackageSearch
     {
         public const string NpmPackageInfoUrl = "https://registry.npmjs.org/{0}";
         private const string NpmPackageSearchUrl = "https://registry.npmjs.org/-/v1/search?text={0}&size=100"; // API doc at https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md
         public const string NpmLatestPackgeInfoUrl = "https://registry.npmjs.org/{0}/latest";
         public const string NpmsPackageSearchUrl = "https://api.npms.io/v2/search?q={1}+scope:{0}";
 
-        public static async Task<IEnumerable<string>> GetPackageNamesAsync(string searchTerm, CancellationToken cancellationToken)
+        public async Task<IEnumerable<string>> GetPackageNamesAsync(string searchTerm, CancellationToken cancellationToken)
         {
             if (searchTerm == null)
             {
@@ -197,7 +197,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return packageNames;
         }
 
-        public static async Task<NpmPackageInfo> GetPackageInfoAsync(string packageName, CancellationToken cancellationToken)
+        public async Task<NpmPackageInfo> GetPackageInfoAsync(string packageName, CancellationToken cancellationToken)
         {
             NpmPackageInfo packageInfo = null;
 

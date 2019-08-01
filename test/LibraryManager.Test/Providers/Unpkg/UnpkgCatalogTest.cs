@@ -17,10 +17,14 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
     {
         private UnpkgCatalog SetupCatalog(IWebRequestHandler handler = null)
         {
+            var packageSearch = new NpmPackageSearch();
+            var infoCache = new NpmPackageInfoCache(packageSearch);
             return new UnpkgCatalog(UnpkgProvider.IdText,
                                     new VersionedLibraryNamingScheme(),
                                     new Mocks.Logger(),
-                                    handler ?? new Mocks.WebRequestHandler());
+                                    handler ?? new Mocks.WebRequestHandler(),
+                                    infoCache,
+                                    packageSearch);
         }
 
         [TestMethod]

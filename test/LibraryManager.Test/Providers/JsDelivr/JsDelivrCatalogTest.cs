@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 {
@@ -17,10 +18,15 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
     {
         private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null)
         {
+            var packageSearch = new NpmPackageSearch();
+            var infoCache = new NpmPackageInfoCache(packageSearch);
+
             return new JsDelivrCatalog(JsDelivrProvider.IdText,
                                        new VersionedLibraryNamingScheme(),
                                        new Mocks.Logger(),
-                                       webRequestHandler ?? new Mocks.WebRequestHandler());
+                                       webRequestHandler ?? new Mocks.WebRequestHandler(),
+                                       infoCache,
+                                       packageSearch);
         }
 
         [TestMethod]

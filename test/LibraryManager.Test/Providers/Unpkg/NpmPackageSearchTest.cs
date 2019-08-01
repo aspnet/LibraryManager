@@ -18,7 +18,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         {
             CancellationToken token = CancellationToken.None;
 
-            IEnumerable<string> packages = await NpmPackageSearch.GetPackageNamesAsync(searchItem, token);
+            var sut = new NpmPackageSearch();
+            IEnumerable<string> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.AreEqual(expectedCount, packages.Count());
         }
@@ -29,7 +30,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             string searchItem = "jquery";
             CancellationToken token = CancellationToken.None;
 
-            IEnumerable<string> packages = await NpmPackageSearch.GetPackageNamesAsync(searchItem, token);
+            var sut = new NpmPackageSearch();
+            IEnumerable<string> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.AreEqual(100, packages.Count());
             Assert.AreEqual("jquery", packages.FirstOrDefault());
@@ -41,7 +43,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             string searchItem = "@angular/";
             CancellationToken token = CancellationToken.None;
 
-            IEnumerable<string> packages = await NpmPackageSearch.GetPackageNamesAsync(searchItem, token);
+            var sut = new NpmPackageSearch();
+            IEnumerable<string> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.IsTrue(packages.Count() > 0);
         }
@@ -52,7 +55,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             string searchItem = "jquery";
             CancellationToken token = CancellationToken.None;
 
-            NpmPackageInfo packageInfo = await NpmPackageSearch.GetPackageInfoAsync(searchItem, token);
+            var sut = new NpmPackageSearch();
+            NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, token);
 
             Assert.IsTrue(packageInfo.Versions != null);
             Assert.IsTrue(packageInfo.Versions.Count() > 0);
@@ -64,7 +68,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             string searchItem = "@angular/cli";
             CancellationToken token = CancellationToken.None;
 
-            NpmPackageInfo packageInfo = await NpmPackageSearch.GetPackageInfoAsync(searchItem, token);
+            var sut = new NpmPackageSearch();
+            NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, token);
 
             Assert.IsTrue(packageInfo.Versions != null);
             Assert.IsTrue(packageInfo.Versions.Count() > 0);

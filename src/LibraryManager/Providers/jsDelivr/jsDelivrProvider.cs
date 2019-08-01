@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 {
@@ -37,7 +38,9 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public ILibraryCatalog GetCatalog()
         {
-            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance));
+            var packageSearch = new NpmPackageSearch();
+            var infoCache = new NpmPackageInfoCache(packageSearch);
+            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, infoCache, packageSearch));
         }
         
         internal string CacheFolder
