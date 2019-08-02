@@ -2,21 +2,42 @@
 
 namespace Microsoft.Web.LibraryManager
 {
-    internal class SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>
+    /// <summary>
+    /// Represents a semantic version
+    /// </summary>
+    public class SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>
     {
         private readonly int _hashCode;
 
-        internal int Major { get; private set; }
+        /// <summary>
+        /// The major version value
+        /// </summary>
+        public int Major { get; private set; }
 
-        internal int Minor { get; private set; }
+        /// <summary>
+        /// The minor version value
+        /// </summary>
+        public int Minor { get; private set; }
 
-        internal int Patch { get; private set; }
+        /// <summary>
+        /// The patch version value
+        /// </summary>
+        public int Patch { get; private set; }
 
-        internal string BuildMetadata { get; private set; }
+        /// <summary>
+        /// The build metadata for the version
+        /// </summary>
+        public string BuildMetadata { get; private set; }
 
-        internal string PrereleaseVersion { get; private set; }
+        /// <summary>
+        /// The prerelease version
+        /// </summary>
+        public string PrereleaseVersion { get; private set; }
 
-        internal string OriginalText { get; private set; }
+        /// <summary>
+        /// The complete and original value of the semantic version
+        /// </summary>
+        public string OriginalText { get; private set; }
 
         private SemanticVersion(string originalText)
         {

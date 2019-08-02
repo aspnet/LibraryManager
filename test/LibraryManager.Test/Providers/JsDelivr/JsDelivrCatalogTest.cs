@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null)
         {
             var packageSearch = new NpmPackageSearch();
-            var infoCache = new NpmPackageInfoCache(packageSearch);
+            var infoCache = new NpmPackageInfoFactory();
 
             return new JsDelivrCatalog(JsDelivrProvider.IdText,
                                        new VersionedLibraryNamingScheme(),
@@ -305,22 +305,22 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         {
             //Arrange
             var packageSearch = new Mock<INpmPackageSearch>();
+            var infoFactory = new Mock<INpmPackageInfoFactory>();
 
             var packages = new List<string>() { "testPkg" };
             packageSearch.Setup(p => p.GetPackageNamesAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult((IEnumerable<string>)packages));
 
             var testPkgInfo = new NpmPackageInfo(name: "testPkg", description: "description", latestVersion: "1.2.3", author: "brzh", homepage: "https://testPkg.com", license: "MIT");
-            packageSearch.Setup(p => p.GetPackageInfoAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
+            infoFactory.Setup(p => p.GetPackageInfoAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(testPkgInfo));
 
-            var infoCache = new NpmPackageInfoCache(packageSearch.Object);
 
             var sut = new JsDelivrCatalog(JsDelivrProvider.IdText,
                             new VersionedLibraryNamingScheme(),
                             new Logger(),
                             new Mocks.WebRequestHandler(),
-                            infoCache,
+                            infoFactory.Object,
                             packageSearch.Object);
 
             //Act

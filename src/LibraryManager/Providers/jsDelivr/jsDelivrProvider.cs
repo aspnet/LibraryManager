@@ -39,8 +39,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         public ILibraryCatalog GetCatalog()
         {
             var packageSearch = new NpmPackageSearch();
-            var infoCache = new NpmPackageInfoCache(packageSearch);
-            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, infoCache, packageSearch));
+            var infoFactory = new NpmPackageInfoFactory();
+            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, infoFactory, packageSearch));
         }
         
         internal string CacheFolder

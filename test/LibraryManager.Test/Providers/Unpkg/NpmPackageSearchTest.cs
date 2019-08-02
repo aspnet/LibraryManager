@@ -48,31 +48,5 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             Assert.IsTrue(packages.Count() > 0);
         }
-
-        [TestMethod]
-        public async Task NpmPackageSearch_GetPackageInfoAsync_UnScopedPackage()
-        {
-            string searchItem = "jquery";
-            CancellationToken token = CancellationToken.None;
-
-            var sut = new NpmPackageSearch();
-            NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, token);
-
-            Assert.IsTrue(packageInfo.Versions != null);
-            Assert.IsTrue(packageInfo.Versions.Count() > 0);
-        }
-
-        [TestMethod]
-        public async Task NpmPackageSearch_GetPackageInfoAsync_ScopedPackage()
-        {
-            string searchItem = "@angular/cli";
-            CancellationToken token = CancellationToken.None;
-
-            var sut = new NpmPackageSearch();
-            NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, token);
-
-            Assert.IsTrue(packageInfo.Versions != null);
-            Assert.IsTrue(packageInfo.Versions.Count() > 0);
-        }
     }
 }

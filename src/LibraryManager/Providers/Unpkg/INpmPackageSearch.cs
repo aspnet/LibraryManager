@@ -4,10 +4,17 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-    internal interface INpmPackageSearch
+    /// <summary>
+    /// A utility to help retrieve all related package names from a given search term
+    /// </summary>
+    public interface INpmPackageSearch
     {
+        /// <summary>
+        /// Retrieve all related package names given a search term
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task<IEnumerable<string>> GetPackageNamesAsync(string searchTerm, CancellationToken cancellationToken);
-
-        Task<NpmPackageInfo> GetPackageInfoAsync(string packageName, CancellationToken cancellationToken);
     }
 }

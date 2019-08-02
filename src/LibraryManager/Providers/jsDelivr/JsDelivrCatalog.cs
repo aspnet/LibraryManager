@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         public const string LatestLibraryVersionUrl = "https://data.jsdelivr.com/v1/package/npm/{0}";
         public const string LibraryFileListUrlFormatGH = "https://data.jsdelivr.com/v1/package/gh/{0}/flat";
         public const string LatestLibraryVersionUrlGH = "https://data.jsdelivr.com/v1/package/gh/{0}";
-        private readonly INpmPackageInfoCache _packageInfoCache;
+        private readonly INpmPackageInfoFactory _packageInfoFactory;
         private readonly INpmPackageSearch _packageSearch;
 
         private readonly string _providerId;
@@ -28,9 +28,9 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         private readonly ILogger _logger;
         private readonly IWebRequestHandler _webRequestHandler;
 
-        public JsDelivrCatalog(string providerId, ILibraryNamingScheme namingScheme, ILogger logger, IWebRequestHandler webRequestHandler, INpmPackageInfoCache packageInfoCache, INpmPackageSearch packageSearch)
+        public JsDelivrCatalog(string providerId, ILibraryNamingScheme namingScheme, ILogger logger, IWebRequestHandler webRequestHandler, INpmPackageInfoFactory packageInfoFactory, INpmPackageSearch packageSearch)
         {
-            _packageInfoCache = packageInfoCache;
+            _packageInfoFactory = packageInfoFactory;
             _packageSearch = packageSearch;
             _providerId = providerId;
             _libraryNamingScheme = namingScheme;
@@ -193,7 +193,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
                     foreach (string packageName in packageNames)
                     {
-                        NpmPackageInfo packageInfo = await _packageInfoCache.GetPackageInfoAsync(packageName, CancellationToken.None);
+                        NpmPackageInfo packageInfo = await _packageInfoFactory.GetPackageInfoAsync(packageName, CancellationToken.None);
 
                         var completionItem = new CompletionItem
                         {
@@ -219,7 +219,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                     }
                     else
                     {
-                        var libGroup = new JsDelivrLibraryGroup(_packageInfoCache, name);
+                        var libGroup = new JsDelivrLibraryGroup(_packageInfoFactory, name);
                         versions = await libGroup.GetLibraryVersions(CancellationToken.None);
                     }
 
@@ -255,7 +255,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             try
             {
                 IEnumerable<string> packageNames = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None);
-                libraryGroups = packageNames.Select(packageName => new JsDelivrLibraryGroup(_packageInfoCache, packageName)).ToList<ILibraryGroup>();
+                libraryGroups = packageNames.Select(packageName => new JsDelivrLibraryGroup(_packageInfoFactory, packageName)).ToList<ILibraryGroup>();
             }
             catch (Exception ex)
             {

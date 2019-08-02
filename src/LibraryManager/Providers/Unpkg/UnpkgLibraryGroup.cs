@@ -11,11 +11,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
     internal class UnpkgLibraryGroup : ILibraryGroup
     {
-        private readonly INpmPackageInfoCache _infoCache;
+        private readonly INpmPackageInfoFactory _infoFactory;
 
-        public UnpkgLibraryGroup(INpmPackageInfoCache infoCache, string displayName, string description = null)
+        public UnpkgLibraryGroup(INpmPackageInfoFactory infoFactory, string displayName, string description = null)
         {
-            _infoCache = infoCache;
+            _infoFactory = infoFactory;
             DisplayName = displayName;
             Description = description;
         }
@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<IEnumerable<string>> GetLibraryVersions(CancellationToken cancellationToken)
         {
-            NpmPackageInfo npmPackageInfo = await _infoCache.GetPackageInfoAsync(DisplayName, CancellationToken.None);
+            NpmPackageInfo npmPackageInfo = await _infoFactory.GetPackageInfoAsync(DisplayName, CancellationToken.None);
 
             if (npmPackageInfo != null)
             {

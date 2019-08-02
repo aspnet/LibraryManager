@@ -3,15 +3,45 @@ using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-    internal class NpmPackageInfo
+    /// <summary>
+    /// Encapsulates information for an NPM package
+    /// </summary>
+    public sealed class NpmPackageInfo
     {
-        internal string Author { get; private set; }
-        internal string Description { get; private set; }
-        internal string LatestVersion { get; private set; }
-        internal string Homepage { get; private set; }
-        internal string License { get; private set; }
-        internal string Name { get; private set; }
-        internal IList<SemanticVersion> Versions { get; private set; }
+        /// <summary>
+        /// The name, email, url of author listed in package.json
+        /// </summary>
+        public string Author { get; private set; }
+
+        /// <summary>
+        /// The description from the package.json
+        /// </summary>
+        public string Description { get; private set; }
+
+        /// <summary>
+        /// The latest version of the package
+        /// </summary>
+        public string LatestVersion { get; private set; }
+
+        /// <summary>
+        /// The homepage listed in the package.json
+        /// </summary>
+        public string Homepage { get; private set; }
+
+        /// <summary>
+        /// License as listed in package.json
+        /// </summary>
+        public string License { get; private set; }
+
+        /// <summary>
+        /// The package name
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// All versions for the package
+        /// </summary>
+        public IList<SemanticVersion> Versions { get; private set; }
 
         internal NpmPackageInfo(string name, string description, string latestVersion, string author, string homepage, string license)
         {

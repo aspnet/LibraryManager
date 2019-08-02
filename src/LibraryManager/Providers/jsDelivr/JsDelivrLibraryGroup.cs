@@ -12,9 +12,9 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 {
     internal class JsDelivrLibraryGroup : ILibraryGroup
     {
-        private readonly INpmPackageInfoCache _infoCache;
+        private readonly INpmPackageInfoFactory _infoCache;
 
-        public JsDelivrLibraryGroup(INpmPackageInfoCache infoCache, string displayName, string description = null)
+        public JsDelivrLibraryGroup(INpmPackageInfoFactory infoCache, string displayName, string description = null)
         {
             _infoCache = infoCache;
             DisplayName = displayName;

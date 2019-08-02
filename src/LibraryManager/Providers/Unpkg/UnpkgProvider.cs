@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public ILibraryCatalog GetCatalog()
         {
             var packageSearch = new NpmPackageSearch();
-            var infoCache = new NpmPackageInfoCache(packageSearch);
+            var infoCache = new NpmPackageInfoFactory();
             return _catalog ?? (_catalog = new UnpkgCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, infoCache, packageSearch));
         }
 
