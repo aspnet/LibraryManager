@@ -198,7 +198,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                         var completionItem = new CompletionItem
                         {
                             DisplayText = packageName,
-                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(packageName, packageInfo.LatestVersion, _providerId)
+                            InsertionText = _libraryNamingScheme.GetLibraryId(packageName, packageInfo.LatestVersion)
                         };
 
                         completions.Add(completionItem);

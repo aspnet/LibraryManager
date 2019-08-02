@@ -304,14 +304,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         public async Task GetLibraryCompletionSetAsync_ReturnsCompletionWithLatestVersion()
         {
             //Arrange
-            var dependencies = new Dependencies(null);
-            var provider = new Provider(null) { Id = JsDelivrProvider.IdText, SupportsLibraryVersions = true };
-
-            dependencies.AllProviders = new List<IProvider>() { provider };
-
-            //Reinitialize is necessary because any other tests could have already initialized before
-            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);
-
             var packageSearch = new Mock<INpmPackageSearch>();
 
             var packages = new List<string>() { "testPkg" };
