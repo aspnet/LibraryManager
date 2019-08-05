@@ -9,11 +9,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
     public sealed class NpmPackageInfo
     {
         /// <summary>
-        /// The name, email, url of author listed in package.json
-        /// </summary>
-        public string Author { get; private set; }
-
-        /// <summary>
         /// The description from the package.json
         /// </summary>
         public string Description { get; private set; }
@@ -22,16 +17,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         /// The latest version of the package
         /// </summary>
         public string LatestVersion { get; private set; }
-
-        /// <summary>
-        /// The homepage listed in the package.json
-        /// </summary>
-        public string Homepage { get; private set; }
-
-        /// <summary>
-        /// License as listed in package.json
-        /// </summary>
-        public string License { get; private set; }
 
         /// <summary>
         /// The package name
@@ -43,24 +28,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         /// </summary>
         public IList<SemanticVersion> Versions { get; private set; }
 
-        internal NpmPackageInfo(string name, string description, string latestVersion, string author, string homepage, string license)
+        internal NpmPackageInfo(string name, string description, string latestVersion)
         {
             Name = name;
             Description = description;
             LatestVersion = latestVersion;
-            Author = author;
-            Homepage = homepage;
-            License = license;
         }
 
-        internal NpmPackageInfo(string name, string description, string latestVersion, string author, string homepage, string license, IList<SemanticVersion> versions)
+        internal NpmPackageInfo(string name, string description, string latestVersion, IList<SemanticVersion> versions)
         {
             Name = name;
             Description = description;
             LatestVersion = latestVersion;
-            Author = author;
-            Homepage = homepage;
-            License = license;
             Versions = versions;
         }
 
@@ -69,17 +48,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             string name = packageInfo.GetJObjectMemberStringValue("name");
             string description = packageInfo.GetJObjectMemberStringValue("description");
             string version = packageInfo.GetJObjectMemberStringValue("version");
-            string homepage = packageInfo.GetJObjectMemberStringValue("homepage");
-            string license = packageInfo.GetJObjectMemberStringValue("license");
 
-            string author = string.Empty;
-            JObject authorObject = packageInfo["author"] as JObject;
-            if (authorObject != null)
-            {
-                author = authorObject.GetJObjectMemberStringValue("name");
-            }
-
-            return new NpmPackageInfo(name, description, version, author, homepage, license);
+            return new NpmPackageInfo(name, description, version);
         }
     }
 }

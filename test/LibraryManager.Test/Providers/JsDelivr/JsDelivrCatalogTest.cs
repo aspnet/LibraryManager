@@ -311,7 +311,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             packageSearch.Setup(p => p.GetPackageNamesAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult((IEnumerable<string>)packages));
 
-            var testPkgInfo = new NpmPackageInfo(name: "testPkg", description: "description", latestVersion: "1.2.3", author: "brzh", homepage: "https://testPkg.com", license: "MIT");
+            var testPkgInfo = new NpmPackageInfo(name: "testPkg", description: "description", latestVersion: "1.2.3");
             infoFactory.Setup(p => p.GetPackageInfoAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(testPkgInfo));
 

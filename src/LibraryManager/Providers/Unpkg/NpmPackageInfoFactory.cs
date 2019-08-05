@@ -75,9 +75,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 packageInfo = new NpmPackageInfo(
                     packageName,
                     Resources.Text.LibraryDetail_Unavailable,
-                    Resources.Text.LibraryDetail_Unavailable,
-                    Resources.Text.LibraryDetail_Unavailable,
-                    Resources.Text.LibraryDetail_Unavailable,
                     Resources.Text.LibraryDetail_Unavailable);
             }
 
@@ -103,16 +100,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     string latestVersion = semanticVersions.Max().OriginalText;
                     IList<SemanticVersion> filteredSemanticVersions = FilterOldPrereleaseVersions(semanticVersions);
 
-                    packageInfo = new NpmPackageInfo(packageInfo.Name, packageInfo.Description, latestVersion, packageInfo.Author, packageInfo.Homepage, packageInfo.License, filteredSemanticVersions);
+                    packageInfo = new NpmPackageInfo(packageInfo.Name, packageInfo.Description, latestVersion, filteredSemanticVersions);
                 }
             }
             catch (Exception)
             {
                 packageInfo = new NpmPackageInfo(
                     packageName,
-                    Resources.Text.LibraryDetail_Unavailable,
-                    Resources.Text.LibraryDetail_Unavailable,
-                    Resources.Text.LibraryDetail_Unavailable,
                     Resources.Text.LibraryDetail_Unavailable,
                     Resources.Text.LibraryDetail_Unavailable);
             }
