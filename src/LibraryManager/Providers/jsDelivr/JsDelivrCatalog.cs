@@ -189,16 +189,14 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                         return completionSet;
                     }
 
-                    IEnumerable<string> packageNames = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
-                    foreach (string packageName in packageNames)
+                    foreach (NpmPackageInfo package in packages)
                     {
-                        NpmPackageInfo packageInfo = await _packageInfoFactory.GetPackageInfoAsync(packageName, CancellationToken.None);
-
                         var completionItem = new CompletionItem
                         {
-                            DisplayText = packageName,
-                            InsertionText = _libraryNamingScheme.GetLibraryId(packageName, packageInfo.LatestVersion)
+                            DisplayText = package.Name,
+                            InsertionText = _libraryNamingScheme.GetLibraryId(package.Name, package.LatestVersion)
                         };
 
                         completions.Add(completionItem);
@@ -254,7 +252,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
             try
             {
-                IEnumerable<string> packageNames = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None);
+                IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None);
+                IEnumerable<string> packageNames = packages.Select(p => p.Name);
                 libraryGroups = packageNames.Select(packageName => new JsDelivrLibraryGroup(_packageInfoFactory, packageName)).ToList<ILibraryGroup>();
             }
             catch (Exception ex)

@@ -188,16 +188,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 // library name completion
                 if (caretPosition < name.Length + 1)
                 {
-                    IEnumerable<string> packageNames = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
-                    foreach (string packageName in packageNames)
+                    foreach (NpmPackageInfo packageInfo in packages)
                     {
-                        NpmPackageInfo packageInfo = await _packageInfoFactory.GetPackageInfoAsync(packageName, CancellationToken.None);
-
                         var completionItem = new CompletionItem
                         {
-                            DisplayText = packageName,
-                            InsertionText = _libraryNamingScheme.GetLibraryId(packageName, packageInfo.LatestVersion)
+                            DisplayText = packageInfo.Name,
+                            InsertionText = _libraryNamingScheme.GetLibraryId(packageInfo.Name, packageInfo.LatestVersion)
                         };
 
                         completions.Add(completionItem);
@@ -248,7 +246,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                IEnumerable<string> packageNames = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None);
+                IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None);
+                IEnumerable<string> packageNames = packages.Select(p => p.Name);
                 libraryGroups = packageNames.Select(packageName => new UnpkgLibraryGroup(_packageInfoFactory, packageName)).ToList<ILibraryGroup>();
             }
             catch (Exception ex)

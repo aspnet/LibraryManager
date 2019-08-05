@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
     /// <summary>
-    /// A utility to help retrieve all related package names from a given search term
+    /// A utility to help retrieve the info for all related packages from a given search term
     /// </summary>
     public interface INpmPackageSearch
     {
         /// <summary>
-        /// Retrieve all related package names given a search term
+        /// Retrieves info for all related packages given a search term
         /// </summary>
         /// <param name="searchTerm"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IEnumerable<string>> GetPackageNamesAsync(string searchTerm, CancellationToken cancellationToken);
+        Task<IEnumerable<NpmPackageInfo>> GetPackageNamesAsync(string searchTerm, CancellationToken cancellationToken);
     }
 }

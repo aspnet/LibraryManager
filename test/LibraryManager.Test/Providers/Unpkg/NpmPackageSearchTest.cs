@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             CancellationToken token = CancellationToken.None;
 
             var sut = new NpmPackageSearch();
-            IEnumerable<string> packages = await sut.GetPackageNamesAsync(searchItem, token);
+            IEnumerable<NpmPackageInfo> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.AreEqual(expectedCount, packages.Count());
         }
@@ -31,10 +31,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             CancellationToken token = CancellationToken.None;
 
             var sut = new NpmPackageSearch();
-            IEnumerable<string> packages = await sut.GetPackageNamesAsync(searchItem, token);
+            IEnumerable<NpmPackageInfo> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.AreEqual(100, packages.Count());
-            Assert.AreEqual("jquery", packages.FirstOrDefault());
+            Assert.AreEqual("jquery", packages.FirstOrDefault().Name);
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             CancellationToken token = CancellationToken.None;
 
             var sut = new NpmPackageSearch();
-            IEnumerable<string> packages = await sut.GetPackageNamesAsync(searchItem, token);
+            IEnumerable<NpmPackageInfo> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.IsTrue(packages.Count() > 0);
         }
