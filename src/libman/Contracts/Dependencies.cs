@@ -3,9 +3,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Contracts
@@ -15,6 +18,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
     {
         private readonly IHostInteraction _hostInteraction;
         private readonly List<IProvider> _providers = new List<IProvider>();
+
+        [ImportMany]
+        private IEnumerable<IProviderFactory> _providerFactories;
+
         private readonly IEnumerable<string> _assemblyPaths;
 
         public Dependencies(IHostEnvironment environment)
@@ -51,9 +58,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             if (_providers.Count > 0)
                 return;
 
-            IEnumerable<IProviderFactory> factories = GetProvidersFromReflection();
+            AggregateCatalog aggregateCatalog = new AggregateCatalog();
 
-            foreach (IProviderFactory factory in factories)
+            foreach (string assemblyPath in _assemblyPaths)
+            {
+                Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+                aggregateCatalog.Catalogs.Add(new AssemblyCatalog(assembly));
+            }
+
+            CompositionContainer container = new CompositionContainer(aggregateCatalog);
+            container.SatisfyImportsOnce(this);
+
+            foreach (IProviderFactory factory in _providerFactories)
             {
                 if (factory != null)
                 {
@@ -64,26 +80,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
                     }
                 }
             }
-        }
-
-        private IEnumerable<IProviderFactory> GetProvidersFromReflection()
-        {
-            var list = new List<IProviderFactory>();
-
-            foreach (string path in _assemblyPaths)
-            {
-                Assembly assembly;
-                assembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-
-                IEnumerable<IProviderFactory> factories = assembly
-                    .DefinedTypes
-                    .Where(p => p.ImplementedInterfaces.Any(i => i.FullName == typeof(IProviderFactory).FullName))
-                    .Select(fac => Activator.CreateInstance(assembly.GetType(fac.FullName)) as IProviderFactory);
-
-                list.AddRange(factories);
-            }
-
-            return list;
         }
     }
 }

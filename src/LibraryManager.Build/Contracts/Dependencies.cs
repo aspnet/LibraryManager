@@ -1,12 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Web.LibraryManager.Contracts;
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Linq;
-using System.IO;
+using System.Reflection;
+using System.Runtime.Loader;
+using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Build
 {
@@ -15,6 +17,9 @@ namespace Microsoft.Web.LibraryManager.Build
         private readonly IHostInteraction _hostInteraction;
         private readonly List<IProvider> _providers = new List<IProvider>();
         private readonly IEnumerable<string> _assemblyPaths;
+
+        [ImportMany]
+        private IEnumerable<IProviderFactory> _providerFactories;
 
         private Dependencies(IHostInteraction hostInteraction, IEnumerable<string> assemblyPaths)
         {
@@ -40,43 +45,24 @@ namespace Microsoft.Web.LibraryManager.Build
 
         private void Initialize()
         {
-            if (_providers.Count > 0)
-                return;
+            AggregateCatalog aggregateCatalog = new AggregateCatalog();
 
-            IEnumerable<IProviderFactory> factories = GetProvidersFromReflection();
+            foreach (string assemblyPath in _assemblyPaths)
+            {
+                Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+                aggregateCatalog.Catalogs.Add(new AssemblyCatalog(assembly));
+            }
 
-            foreach (IProviderFactory factory in factories)
+            CompositionContainer container = new CompositionContainer(aggregateCatalog);
+            container.SatisfyImportsOnce(this);
+
+            foreach (IProviderFactory factory in _providerFactories)
             {
                 if (factory != null)
                 {
                     _providers.Add(factory.CreateProvider(_hostInteraction));
                 }
             }
-        }
-
-        private IEnumerable<IProviderFactory> GetProvidersFromReflection()
-        {
-            var list = new List<IProviderFactory>();
-
-            foreach (string path in _assemblyPaths)
-            {
-                Assembly assembly;
-#if NET472
-                assembly = Assembly.LoadFrom(path);
-#else
-                assembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-
-#endif
-
-                IEnumerable<IProviderFactory> factories = assembly
-                    .DefinedTypes
-                    .Where(p => p.ImplementedInterfaces.Any(i => i.FullName == typeof(IProviderFactory).FullName))
-                    .Select(fac => Activator.CreateInstance(assembly.GetType(fac.FullName)) as IProviderFactory);
-
-                list.AddRange(factories);
-            }
-
-            return list;
         }
     }
 }
