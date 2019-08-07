@@ -3,12 +3,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.Composition;
 using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Tools.Contracts
@@ -18,9 +16,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
     {
         private readonly IHostInteraction _hostInteraction;
         private readonly List<IProvider> _providers = new List<IProvider>();
-
-        [ImportMany]
-        private IEnumerable<IProviderFactory> _providerFactories;
 
         private readonly IEnumerable<string> _assemblyPaths;
 
@@ -58,18 +53,33 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             if (_providers.Count > 0)
                 return;
 
-            AggregateCatalog aggregateCatalog = new AggregateCatalog();
+            // Prepare part discovery to support both flavors of MEF attributes.
+            PartDiscovery discovery = PartDiscovery.Combine(
+                new AttributedPartDiscovery(Resolver.DefaultInstance), // "NuGet MEF" attributes (Microsoft.Composition)
+                new AttributedPartDiscoveryV1(Resolver.DefaultInstance)); // ".NET MEF" attributes (System.ComponentModel.Composition)
 
-            foreach (string assemblyPath in _assemblyPaths)
-            {
-                Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
-                aggregateCatalog.Catalogs.Add(new AssemblyCatalog(assembly));
-            }
+            Task<DiscoveredParts> t = discovery.CreatePartsAsync(_assemblyPaths);
+            t.Wait();
 
-            CompositionContainer container = new CompositionContainer(aggregateCatalog);
-            container.SatisfyImportsOnce(this);
+            // Build up a catalog of MEF parts
+            ComposableCatalog catalog = ComposableCatalog.Create(Resolver.DefaultInstance).AddParts(t.Result);
 
-            foreach (IProviderFactory factory in _providerFactories)
+            // Assemble the parts into a valid graph.
+            CompositionConfiguration config = CompositionConfiguration.Create(catalog);
+
+            // Prepare an ExportProvider factory based on this graph.
+            IExportProviderFactory epf = config.CreateExportProviderFactory();
+
+            // Create an export provider, which represents a unique container of values.
+            // You can create as many of these as you want, but typically an app needs just one.
+            ExportProvider vsExportProvider = epf.CreateExportProvider();
+
+            // Obtain .NET shim for the export provider to keep the rest of the editors code the same
+            System.ComponentModel.Composition.Hosting.ExportProvider exportProvider = vsExportProvider.AsExportProvider();
+
+            IEnumerable<IProviderFactory> providerFactories = exportProvider.GetExportedValues<IProviderFactory>();
+
+            foreach (IProviderFactory factory in providerFactories)
             {
                 if (factory != null)
                 {
