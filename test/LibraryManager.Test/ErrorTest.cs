@@ -26,7 +26,8 @@ namespace Microsoft.Web.LibraryManager.Test
             TestError(PredefinedErrors.ProviderUnknown("_prov_"), "LIB001", "_prov_");
             TestError(PredefinedErrors.UnableToResolveSource("_libid_", "_prov_"), "LIB002", "_libid_", "_prov_");
             TestError(PredefinedErrors.CouldNotWriteFile("file.js"), "LIB003", "file.js");
-            TestError(PredefinedErrors.ManifestMalformed(), "LIB004");
+            TestError(PredefinedErrors.ManifestMalformed(null), "LIB004");
+            TestError(PredefinedErrors.ManifestMalformed("diagnostics"), "LIB004", "diagnostics");
             TestError(PredefinedErrors.PathIsUndefined(), "LIB005");
             TestError(PredefinedErrors.LibraryIdIsUndefined(), "LIB006");
             TestError(PredefinedErrors.ProviderIsUndefined(), "LIB007");

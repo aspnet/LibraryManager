@@ -41,9 +41,9 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB016";
             string expectedErrorMessage = "Conflicting file \"lib\\package.json\" found in more than one library: jquery, d3";
-            var manifest = Manifest.FromJson(_docDifferentLibraries_SameFiles_SameLocation, _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson(_docDifferentLibraries_SameFiles_SameLocation, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, additionalErrorInfo: null, _dependencies, CancellationToken.None);
             var conflictsList = conflicts.ToList();
 
             Assert.AreEqual(1, conflictsList.Count);
@@ -55,9 +55,9 @@ namespace Microsoft.Web.LibraryManager.Test
         [TestMethod]
         public async Task DetectConflictsAsync_ConflictingFiles_DifferentDestinations()
         {
-            var manifest = Manifest.FromJson(_docDifferentLibraries_SameFiles_DifferentLocation, _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson(_docDifferentLibraries_SameFiles_DifferentLocation, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> conflicts = await LibrariesValidator.GetManifestErrorsAsync(manifest, additionalErrorInfo: null, _dependencies, CancellationToken.None);
 
             Assert.IsTrue(conflicts.All(c => c.Success));
         }
@@ -67,9 +67,9 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB019";
             string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
-            var manifest = Manifest.FromJson(_docSameLibrary_DifferentDestination, _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson(_docSameLibrary_DifferentDestination, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, additionalErrorInfo: null, _dependencies, CancellationToken.None);
 
             var conflictsList = results.ToList();
             Assert.AreEqual(1, conflictsList.Count);
@@ -83,9 +83,9 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB019";
             string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
-            var manifest = Manifest.FromJson(_docSameLibrary_DifferentProviders, _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson(_docSameLibrary_DifferentProviders, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, additionalErrorInfo: null, _dependencies, CancellationToken.None);
 
             var conflictsList = results.ToList();
             Assert.AreEqual(1, conflictsList.Count);
@@ -99,9 +99,9 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             string expectedErrorCode = "LIB019";
             string expectedErrorMessage = "Cannot restore. Multiple definitions for libraries: jquery";
-            var manifest = Manifest.FromJson(_docSameLibrary_DifferentVersions_DifferentFiles, _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson(_docSameLibrary_DifferentVersions_DifferentFiles, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, additionalErrorInfo: null, _dependencies, CancellationToken.None);
 
             var conflictsList = results.ToList();
             Assert.AreEqual(1, conflictsList.Count);
@@ -116,7 +116,7 @@ namespace Microsoft.Web.LibraryManager.Test
             string expectedErrorCode = "LIB004";
             Manifest manifest = null;
 
-            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, additionalErrorInfo: null, _dependencies, CancellationToken.None);
 
             var resultsList = results.ToList();
             Assert.AreEqual(1, resultsList.Count);
@@ -128,9 +128,9 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task GetManifestErrors_ManifestHasUnsupportedVersion()
         {
             string expectedErrorCode = "LIB009";
-            var manifest = Manifest.FromJson(_docUnsupportedVersion, _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson(_docUnsupportedVersion, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, additionalErrorInfo: null, _dependencies, CancellationToken.None);
 
             var resultsList = results.ToList();
             Assert.AreEqual(1, resultsList.Count);
@@ -142,9 +142,9 @@ namespace Microsoft.Web.LibraryManager.Test
         public async Task GetLibrariesErrors_LibrariesNoProvider()
         {
             string expectedErrorCode = "LIB007";
-            var manifest = Manifest.FromJson(_docNoProvider, _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson(_docNoProvider, _dependencies);
 
-            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, _dependencies, CancellationToken.None);
+            IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, additionalErrorInfo: null, _dependencies, CancellationToken.None);
 
             var resultsList = results.ToList();
             Assert.AreEqual(1, resultsList.Count);

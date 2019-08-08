@@ -3,15 +3,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Json;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+
 using Newtonsoft.Json;
 
 namespace Microsoft.Web.LibraryManager
@@ -72,7 +74,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="dependencies">The host provided dependencies.</param>
         /// <param name="cancellationToken">A token that allows for cancellation of the operation.</param>
         /// <returns>An instance of the <see cref="Manifest"/> class.</returns>
-        public static async Task<Manifest> FromFileAsync(string fileName, IDependencies dependencies, CancellationToken cancellationToken)
+        public static async Task<(Manifest manifest, string diagnostics)> FromFileAsync(string fileName, IDependencies dependencies, CancellationToken cancellationToken)
         {
             if (File.Exists(fileName))
             {
@@ -83,6 +85,7 @@ namespace Microsoft.Web.LibraryManager
             return FromJson("{}", dependencies);
         }
 
+
         /// <summary>
         /// Creates an instance of the <see cref="Manifest"/> class based on
         /// the provided JSON string.
@@ -90,7 +93,8 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="json">A string of JSON in the correct format.</param>
         /// <param name="dependencies">The host provided dependencies.</param>
         /// <returns></returns>
-        internal static Manifest FromJson(string json, IDependencies dependencies)
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Capturing exception detail")]
+        internal static (Manifest manifest, string diagnostics) FromJson(string json, IDependencies dependencies)
         {
             try
             {
@@ -102,11 +106,21 @@ namespace Microsoft.Web.LibraryManager
 
                 manifest._hostInteraction = dependencies.GetHostInteractions();
 
-                return manifest;
+                return (manifest, null);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return null;
+                string fullDiagnostics = e.ToString() + Environment.NewLine +
+                    "---" + Environment.NewLine +
+                    Thread.CurrentThread.Name + Environment.NewLine +
+                    "---" + Environment.NewLine +
+                    Environment.StackTrace + Environment.NewLine +
+                    "---" + Environment.NewLine +
+                    json;
+                string logText = PredefinedErrors.ManifestMalformed(fullDiagnostics).Code + " " + PredefinedErrors.ManifestMalformed(fullDiagnostics).Message;
+                dependencies.GetHostInteractions().Logger.Log(logText, LogLevel.Error);
+
+                return (null, e.Message);
             }
         }
 
@@ -323,7 +337,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="cancellationToken">A token that allows for cancellation of the operation.</param>
         public async Task<IEnumerable<ILibraryOperationResult>> GetValidationResultsAsync(CancellationToken cancellationToken)
         {
-            IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(this, _dependencies, cancellationToken).ConfigureAwait(false);
+            IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(this, additionalErrorInfo: null, _dependencies, cancellationToken).ConfigureAwait(false);
 
             return validationResults;
         }

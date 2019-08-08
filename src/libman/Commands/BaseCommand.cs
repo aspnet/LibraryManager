@@ -156,11 +156,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new InvalidOperationException(string.Format(Resources.Text.LibmanJsonNotFound, Settings.ManifestFileName));
             }
 
-            Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, ManifestDependencies, CancellationToken.None);
+            (Manifest manifest, string diagnostics) = await Manifest.FromFileAsync(Settings.ManifestFileName, ManifestDependencies, CancellationToken.None);
 
             if (manifest == null)
             {
-                Logger.Log(PredefinedErrors.ManifestMalformed().Message, LogLevel.Error);
+                Logger.Log(PredefinedErrors.ManifestMalformed(diagnostics).Message, LogLevel.Error);
                 throw new InvalidOperationException(Resources.Text.FixManifestFile);
             }
 
@@ -178,7 +178,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 throw new InvalidOperationException(Resources.Text.InitFailedLibmanJsonFileExists);
             }
 
-            Manifest manifest = await Manifest.FromFileAsync(Settings.ManifestFileName, ManifestDependencies, cancellationToken);
+            (Manifest manifest, string diagnostics) = await Manifest.FromFileAsync(Settings.ManifestFileName, ManifestDependencies, cancellationToken);
             manifest.AddVersion(Manifest.SupportedVersions.Last().ToString());
             manifest.DefaultDestination = string.IsNullOrEmpty(defaultDestination) ? null : defaultDestination;
 

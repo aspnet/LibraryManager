@@ -66,7 +66,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             new CompletionController(textViewAdapter, textView, CompletionBroker);
 
             _dependencies = DependenciesFactory.FromConfigFile(doc.FilePath);
-            _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
+            string diagnostics;
+            (_manifest, diagnostics) = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
             _manifestPath = doc.FilePath;
             _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);
 
@@ -75,7 +76,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             Task.Run(async () =>
             {
-                IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, diagnostics, _dependencies, CancellationToken.None).ConfigureAwait(false);
                 if (!results.All(r => r.Success))
                 {
                     AddErrorsToList(results);
@@ -99,8 +100,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 {
                     try
                     {
-                        var newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
-                        IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                        (Manifest newManifest, string diagnostics) = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
+                        IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, diagnostics, _dependencies, CancellationToken.None).ConfigureAwait(false);
 
                         if (!results.All(r => r.Success))
                         {

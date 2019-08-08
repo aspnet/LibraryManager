@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
             Assert.IsTrue(File.Exists(copiedFile), "File1 wasn't copied");
 
-            var manifest = Manifest.FromJson("{}", _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson("{}", _dependencies);
             manifest.AddLibrary(desiredState);
             await manifest.SaveAsync(_configFilePath, CancellationToken.None);
 
@@ -102,7 +102,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             Assert.AreSame(desiredState, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);
 
-            var manifest = Manifest.FromJson("{}", _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson("{}", _dependencies);
             manifest.AddLibrary(desiredState);
             await manifest.SaveAsync(_configFilePath, CancellationToken.None);
 
@@ -197,7 +197,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
             Assert.IsTrue(File.Exists(copiedFile), "File wasn't copied");
 
-            var manifest = Manifest.FromJson("{}", _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson("{}", _dependencies);
             manifest.AddLibrary(desiredState);
             await manifest.SaveAsync(_configFilePath, CancellationToken.None);
 
@@ -298,7 +298,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         {
             IProvider provider = _dependencies.GetProvider("filesystem");
             string config = GetConfig();
-            var manifest = Manifest.FromJson(config, _dependencies);
+            (Manifest manifest, string diagnostics) = Manifest.FromJson(config, _dependencies);
             IEnumerable<ILibraryOperationResult> result = await manifest.RestoreAsync(CancellationToken.None);
 
             Assert.IsTrue(result.Count() == 2, "Didn't install");

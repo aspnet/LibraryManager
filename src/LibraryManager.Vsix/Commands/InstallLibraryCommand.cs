@@ -100,7 +100,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 string configFilePath = Path.Combine(rootFolder, Constants.ConfigFileName);
                 IDependencies dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
 
-                Manifest manifest = await GetManifestAsync(configFilePath, dependencies).ConfigureAwait(false);
+                (Manifest manifest, string diagnostics) = await GetManifestAsync(configFilePath, dependencies).ConfigureAwait(false);
 
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
@@ -114,7 +114,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     shell.ShowMessageBox(dwCompRole: 0,
                                          rclsidComp: Guid.Empty,
                                          pszTitle: null,
-                                         pszText: PredefinedErrors.ManifestMalformed().Message,
+                                         pszText: PredefinedErrors.ManifestMalformed(diagnostics).Message,
                                          pszHelpFile: null,
                                          dwHelpContextID: 0,
                                          msgbtn: OLEMSGBUTTON.OLEMSGBUTTON_OK,
@@ -192,12 +192,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return destinationFolder.Replace('\\', '/');
         }
 
-        private async Task<Manifest> GetManifestAsync(string configFilePath, IDependencies dependencies)
+        private async Task<(Manifest manifest, string diagnostics)> GetManifestAsync(string configFilePath, IDependencies dependencies)
         {
             RunningDocumentTable rdt = new RunningDocumentTable(ServiceProvider.GlobalProvider);
             IVsTextBuffer textBuffer = rdt.FindDocument(configFilePath) as IVsTextBuffer;
             ITextBuffer documentBuffer = null;
             Manifest manifest = null;
+            string diagnostics = null;
 
             if (textBuffer != null)
             {
@@ -211,14 +212,14 @@ namespace Microsoft.Web.LibraryManager.Vsix
             // If documentBuffer is not null, then libman.json file is open and could be dirty. So we'll get the contents for the manifest from the buffer.
             if (documentBuffer != null)
             {
-                manifest = Manifest.FromJson(documentBuffer.CurrentSnapshot.GetText(), dependencies);
+                (manifest, diagnostics) = Manifest.FromJson(documentBuffer.CurrentSnapshot.GetText(), dependencies);
             }
             else
             {
-                manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None).ConfigureAwait(false);
+                (manifest, diagnostics) = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None).ConfigureAwait(false);
             }
 
-            return manifest;
+            return (manifest, diagnostics);
         }
     }
 }

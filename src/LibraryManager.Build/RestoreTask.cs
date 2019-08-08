@@ -50,13 +50,13 @@ namespace Microsoft.Web.LibraryManager.Build
             Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.Restore_OperationStarted);
 
             var dependencies = Dependencies.FromTask(ProjectDirectory, ProviderAssemblies.Select(pa => new FileInfo(pa.ItemSpec).FullName));
-            Manifest manifest = Manifest.FromFileAsync(configFilePath.FullName, dependencies, token).Result;
+            (Manifest manifest, string diagnostics) = Manifest.FromFileAsync(configFilePath.FullName, dependencies, token).Result;
             var logger = dependencies.GetHostInteractions().Logger as Logger;
 
             if (manifest == null)
             {
                 sw.Stop();
-                LogErrors(new[] { PredefinedErrors.ManifestMalformed() });
+                LogErrors(new[] { PredefinedErrors.ManifestMalformed(diagnostics) });
                 FlushLogger(logger);
 
                 return false;

@@ -29,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
             File.WriteAllText(libmanjsonPath, _manifestContents);
 
-            Manifest manifest = await Manifest.FromFileAsync(
+            (Manifest manifest, string diagnostics) = await Manifest.FromFileAsync(
                 libmanjsonPath,
                 _dependencies,
                 CancellationToken.None);
@@ -103,7 +103,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
             File.WriteAllText(libmanjsonPath, _manifestContents);
 
-            Manifest manifest = await Manifest.FromFileAsync(
+            (Manifest manifest, string diagnostics) = await Manifest.FromFileAsync(
                 libmanjsonPath,
                 _dependencies,
                 CancellationToken.None);

@@ -468,7 +468,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 {
                     ILibrary selectedPackage = SelectedPackage;
                     InstallPackageCommand.CanExecute(null);
-                    Manifest manifest = await Manifest.FromFileAsync(_configFileName, _deps, CancellationToken.None).ConfigureAwait(false);
+                    (Manifest manifest, string diagnostics) = await Manifest.FromFileAsync(_configFileName, _deps, CancellationToken.None).ConfigureAwait(false);
                     string targetPath = _targetPath;
 
                     if (!string.IsNullOrEmpty(_configFileName))

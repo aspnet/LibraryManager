@@ -68,9 +68,18 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// The manifest JSON file is malformed.
         /// </summary>
+        /// <param name="additionalInformation">Additional information as to why the manifest file is malformed.</param>
         /// <returns>The error code LIB004</returns>
-        public static IError ManifestMalformed()
-           => new Error("LIB004", string.Format(Text.ErrorManifestMalformed));
+        public static IError ManifestMalformed(string additionalInformation)
+        {
+            string errorText = Text.ErrorManifestMalformed;
+            if (!string.IsNullOrEmpty(additionalInformation))
+            {
+                errorText += $" ({additionalInformation})";
+            }
+
+            return new Error("LIB004", errorText);
+        }
 
         /// <summary>
         /// The relative path is undefined.

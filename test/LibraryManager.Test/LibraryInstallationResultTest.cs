@@ -21,7 +21,7 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.IsTrue(ctor1.Success);
             Assert.IsFalse(ctor1.Cancelled);
 
-            var ctor2 = new LibraryOperationResult(state, PredefinedErrors.ManifestMalformed());
+            var ctor2 = new LibraryOperationResult(state, PredefinedErrors.ManifestMalformed(null));
             Assert.AreEqual(state, ctor2.InstallationState);
             Assert.AreEqual(1, ctor2.Errors.Count);
             Assert.IsFalse(ctor2.Success);

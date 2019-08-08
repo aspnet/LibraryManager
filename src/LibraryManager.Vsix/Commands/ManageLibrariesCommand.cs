@@ -76,7 +76,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 else
                 {
                     var dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
-                    Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None);
+                    (Manifest manifest, string diagnostics) = await Manifest.FromFileAsync(configFilePath, dependencies, CancellationToken.None);
                     manifest.DefaultProvider = "cdnjs";
                     manifest.Version = Manifest.SupportedVersions.Max().ToString();
 

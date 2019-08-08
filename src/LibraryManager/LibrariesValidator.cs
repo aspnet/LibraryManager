@@ -67,11 +67,13 @@ namespace Microsoft.Web.LibraryManager
         /// Returns a collection of <see cref="ILibraryOperationResult"/> that represents the status for validation of the Manifest and its libraries
         /// </summary>
         /// <param name="manifest">The <see cref="Manifest"/> to be validated</param>
+        /// <param name="additionalErrorInfo">Any additional information known about issues in the manifest</param>
         /// <param name="dependencies"><see cref="IDependencies"/>used to validate the libraries</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task<IEnumerable<ILibraryOperationResult>> GetManifestErrorsAsync(
             Manifest manifest,
+            string additionalErrorInfo,
             IDependencies dependencies,
             CancellationToken cancellationToken)
         {
@@ -79,7 +81,7 @@ namespace Microsoft.Web.LibraryManager
 
             if (manifest == null)
             {
-                return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.ManifestMalformed()) };
+                return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.ManifestMalformed(additionalErrorInfo)) };
             }
 
             if (!IsValidManifestVersion(manifest.Version))
