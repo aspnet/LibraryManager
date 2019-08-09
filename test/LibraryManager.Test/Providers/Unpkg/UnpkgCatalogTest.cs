@@ -17,16 +17,14 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
     [TestClass]
     public class UnpkgCatalogTest
     {
-        private UnpkgCatalog SetupCatalog(IWebRequestHandler handler = null)
+        private UnpkgCatalog SetupCatalog(IWebRequestHandler handler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null)
         {
-            var packageSearch = new NpmPackageSearch();
-            var infoCache = new NpmPackageInfoFactory();
             return new UnpkgCatalog(UnpkgProvider.IdText,
                                     new VersionedLibraryNamingScheme(),
                                     new Logger(),
                                     handler ?? new Mocks.WebRequestHandler(),
-                                    infoCache,
-                                    packageSearch);
+                                    infoFactory ?? new NpmPackageInfoFactory(),
+                                    packageSearch ?? new NpmPackageSearch());
         }
 
         [TestMethod]
@@ -287,12 +285,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             infoFactory.Setup(p => p.GetPackageInfoAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(testPkgInfo));
 
-            var sut = new UnpkgCatalog(UnpkgProvider.IdText,
-                            new VersionedLibraryNamingScheme(),
-                            new Logger(),
-                            new Mocks.WebRequestHandler(),
-                            infoFactory.Object,
-                            packageSearch.Object);
+            UnpkgCatalog sut = SetupCatalog(packageSearch: packageSearch.Object, infoFactory: infoFactory.Object);
 
             //Act
             CompletionSet result = await sut.GetLibraryCompletionSetAsync("testPkg", 7);

@@ -18,17 +18,14 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
     [TestClass]
     public class JsDelivrCatalogTest
     {
-        private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null)
+        private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null)
         {
-            var packageSearch = new NpmPackageSearch();
-            var infoCache = new NpmPackageInfoFactory();
-
             return new JsDelivrCatalog(JsDelivrProvider.IdText,
                                        new VersionedLibraryNamingScheme(),
                                        new Mocks.Logger(),
                                        webRequestHandler ?? new Mocks.WebRequestHandler(),
-                                       infoCache,
-                                       packageSearch);
+                                       infoFactory ?? new NpmPackageInfoFactory(),
+                                       packageSearch ?? new NpmPackageSearch());
         }
 
         [TestMethod]
@@ -316,12 +313,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
                 .Returns(Task.FromResult(testPkgInfo));
 
 
-            var sut = new JsDelivrCatalog(JsDelivrProvider.IdText,
-                            new VersionedLibraryNamingScheme(),
-                            new Logger(),
-                            new Mocks.WebRequestHandler(),
-                            infoFactory.Object,
-                            packageSearch.Object);
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: packageSearch.Object, infoFactory: infoFactory.Object);
 
             //Act
             CompletionSet result = await sut.GetLibraryCompletionSetAsync("testPkg", 7);
