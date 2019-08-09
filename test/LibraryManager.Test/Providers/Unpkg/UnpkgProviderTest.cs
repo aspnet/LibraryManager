@@ -12,6 +12,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 {
@@ -28,7 +29,11 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
 
             var hostInteraction = new HostInteraction(_projectFolder, cacheFolder);
-            var dependencies = new Dependencies(hostInteraction, new UnpkgProviderFactory());
+
+            var npmPackageSearch = new NpmPackageSearch();
+            var packageInfoFactory = new NpmPackageInfoFactory();
+
+            var dependencies = new Dependencies(hostInteraction, new UnpkgProviderFactory(npmPackageSearch, packageInfoFactory));
             _provider = dependencies.GetProvider("unpkg");
 
             LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);

@@ -12,6 +12,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 {
@@ -28,7 +29,11 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
 
             var hostInteraction = new HostInteraction(_projectFolder, cacheFolder);
-            var dependencies = new Dependencies(hostInteraction, new JsDelivrProviderFactory());
+
+            var npmPackageSearch = new NpmPackageSearch();
+            var packageInfoFactory = new NpmPackageInfoFactory();
+
+            var dependencies = new Dependencies(hostInteraction, new JsDelivrProviderFactory(npmPackageSearch, packageInfoFactory));
             _provider = dependencies.GetProvider("jsdelivr");
 
             LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);

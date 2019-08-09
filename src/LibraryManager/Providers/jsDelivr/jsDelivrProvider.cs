@@ -15,6 +15,9 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 {
     internal class JsDelivrProvider : IProvider
     {
+        private readonly INpmPackageSearch _packageSearch;
+        private readonly INpmPackageInfoFactory _infoFactory;
+
         public const string IdText = "jsdelivr";
         public const string DownloadUrlFormat = "https://cdn.jsdelivr.net/npm/{0}@{1}/{2}";
         public const string DownloadUrlFormatGH = "https://cdn.jsdelivr.net/gh/{0}@{1}/{2}";
@@ -22,8 +25,11 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         private readonly CacheService _cacheService;
         private ILibraryCatalog _catalog;
 
-        public JsDelivrProvider(IHostInteraction hostInteraction)
+        public JsDelivrProvider(IHostInteraction hostInteraction, INpmPackageSearch packageSearch, INpmPackageInfoFactory infoFactory)
         {
+            _packageSearch = packageSearch;
+            _infoFactory = infoFactory;
+
             HostInteraction = hostInteraction;
             _cacheService = new CacheService(WebRequestHandler.Instance);
         }
@@ -38,9 +44,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public ILibraryCatalog GetCatalog()
         {
-            var packageSearch = new NpmPackageSearch();
-            var infoFactory = new NpmPackageInfoFactory();
-            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, infoFactory, packageSearch));
+            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, _infoFactory, _packageSearch));
         }
         
         internal string CacheFolder
