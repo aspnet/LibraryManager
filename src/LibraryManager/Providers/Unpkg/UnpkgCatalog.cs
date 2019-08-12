@@ -17,14 +17,17 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public const string CacheFileName = "cache.json";
         public const string LibraryFileListUrlFormat = "https://unpkg.com/{0}@{1}/?meta"; // e.g. https://unpkg.com/jquery@3.3.1/?meta
         public const string LatestLibraryVersonUrl = "https://unpkg.com/{0}/package.json"; // e.g. https://unpkg.com/jquery/package.json
-
+        private readonly INpmPackageInfoFactory _packageInfoFactory;
+        private readonly INpmPackageSearch _packageSearch;
         private readonly string _providerId;
         private readonly ILibraryNamingScheme _libraryNamingScheme;
         private readonly ILogger _logger;
         private readonly IWebRequestHandler _webRequestHandler;
 
-        public UnpkgCatalog(string providerId, ILibraryNamingScheme namingScheme, ILogger logger, IWebRequestHandler webRequestHandler)
+        public UnpkgCatalog(string providerId, ILibraryNamingScheme namingScheme, ILogger logger, IWebRequestHandler webRequestHandler, INpmPackageInfoFactory packageInfoFactory, INpmPackageSearch packageSearch)
         {
+            _packageInfoFactory = packageInfoFactory;
+            _packageSearch = packageSearch;
             _providerId = providerId;
             _libraryNamingScheme = namingScheme;
             _logger = logger;
@@ -185,14 +188,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 // library name completion
                 if (caretPosition < name.Length + 1)
                 {
-                    IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
 
-                    foreach (string packageName in packageNames)
+                    foreach (NpmPackageInfo packageInfo in packages)
                     {
                         var completionItem = new CompletionItem
                         {
-                            DisplayText = packageName,
-                            InsertionText = packageName,
+                            DisplayText = packageInfo.Name,
+                            InsertionText = _libraryNamingScheme.GetLibraryId(packageInfo.Name, packageInfo.LatestVersion)
                         };
 
                         completions.Add(completionItem);
@@ -207,7 +210,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     completionSet.Start = name.Length + 1;
                     completionSet.Length = version.Length;
 
-                    NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
+                    NpmPackageInfo npmPackageInfo = await _packageInfoFactory.GetPackageInfoAsync(name, CancellationToken.None);
 
                     IList<SemanticVersion> versions = npmPackageInfo.Versions;
 
@@ -243,8 +246,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                IEnumerable<string> packageNames = await NpmPackageSearch.GetPackageNamesAsync(term, CancellationToken.None);
-                libraryGroups = packageNames.Select(packageName => new UnpkgLibraryGroup(packageName)).ToList<ILibraryGroup>();
+                IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None);
+                IEnumerable<string> packageNames = packages.Select(p => p.Name);
+                libraryGroups = packageNames.Select(packageName => new UnpkgLibraryGroup(_packageInfoFactory, packageName)).ToList<ILibraryGroup>();
             }
             catch (Exception ex)
             {

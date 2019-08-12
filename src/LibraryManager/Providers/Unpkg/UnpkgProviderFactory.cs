@@ -12,6 +12,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 #endif
     internal class UnpkgProviderFactory : IProviderFactory
     {
+        private readonly INpmPackageSearch _packageSearch;
+        private readonly INpmPackageInfoFactory _packageInfoFactory;
+
+#if NET472
+        [ImportingConstructor]
+#endif
+        public UnpkgProviderFactory(INpmPackageSearch packageSearch, INpmPackageInfoFactory packageInfoFactory)
+        {
+            _packageSearch = packageSearch;
+            _packageInfoFactory = packageInfoFactory;
+        }
+
         public IProvider CreateProvider(IHostInteraction hostInteraction)
         {
             if (hostInteraction == null)
@@ -19,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 throw new ArgumentNullException(nameof(hostInteraction));
             }
 
-            return new UnpkgProvider(hostInteraction);
+            return new UnpkgProvider(hostInteraction, _packageSearch, _packageInfoFactory);
         }
     }
 }

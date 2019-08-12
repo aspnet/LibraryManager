@@ -16,12 +16,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
     {
         public const string IdText = "unpkg";
         public const string DownloadUrlFormat = "https://unpkg.com/{0}@{1}/{2}";
-
+        private readonly INpmPackageSearch _packageSearch;
+        private readonly INpmPackageInfoFactory _infoFactory;
         private CacheService _cacheService;
         private ILibraryCatalog _catalog;
 
-        public UnpkgProvider(IHostInteraction hostInteraction)
+        public UnpkgProvider(IHostInteraction hostInteraction, INpmPackageSearch packageSearch, INpmPackageInfoFactory infoFactory)
         {
+            _packageSearch = packageSearch;
+            _infoFactory = infoFactory;
+
             HostInteraction = hostInteraction;
             // TODO: {alexgav} Do we need multiple instances of CacheService?
             _cacheService = new CacheService(WebRequestHandler.Instance);
@@ -37,7 +41,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public ILibraryCatalog GetCatalog()
         {
-            return _catalog ?? (_catalog = new UnpkgCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance));
+            return _catalog ?? (_catalog = new UnpkgCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, _infoFactory, _packageSearch));
         }
 
         // TODO: {alexgav} Could got to a command provider base class

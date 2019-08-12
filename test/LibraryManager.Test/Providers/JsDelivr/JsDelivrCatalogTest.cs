@@ -8,19 +8,24 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 {
     [TestClass]
     public class JsDelivrCatalogTest
     {
-        private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null)
+        private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null)
         {
             return new JsDelivrCatalog(JsDelivrProvider.IdText,
                                        new VersionedLibraryNamingScheme(),
                                        new Mocks.Logger(),
-                                       webRequestHandler ?? new Mocks.WebRequestHandler());
+                                       webRequestHandler ?? new Mocks.WebRequestHandler(),
+                                       infoFactory ?? new NpmPackageInfoFactory(),
+                                       packageSearch ?? new NpmPackageSearch());
         }
 
         [TestMethod]
@@ -290,6 +295,33 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             string result = await sut.GetLatestVersion(libraryId, true, CancellationToken.None);
 
             Assert.AreEqual("2.0.0-beta", result);
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionSetAsync_ReturnsCompletionWithLatestVersion()
+        {
+            //Arrange
+            var packageSearch = new Mock<INpmPackageSearch>();
+            var infoFactory = new Mock<INpmPackageInfoFactory>();
+            var testPkgInfo = new NpmPackageInfo(name: "testPkg", description: "description", latestVersion: "1.2.3");
+
+            var packages = new List<NpmPackageInfo>() { testPkgInfo };
+            packageSearch.Setup(p => p.GetPackageNamesAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult((IEnumerable<NpmPackageInfo>)packages));
+
+            infoFactory.Setup(p => p.GetPackageInfoAsync(It.Is<string>(s => string.Equals(s, "testPkg")), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(testPkgInfo));
+
+
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: packageSearch.Object, infoFactory: infoFactory.Object);
+
+            //Act
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("testPkg", 7);
+
+            //Assert
+            Assert.AreEqual(1, result.Completions.Count());
+            Assert.AreEqual("testPkg", result.Completions.First().DisplayText);
+            Assert.AreEqual("testPkg@1.2.3", result.Completions.First().InsertionText);
         }
     }
 

@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 {
@@ -26,7 +28,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod]
         public void CreateProvider_Success()
         {
-            var factory = new JsDelivrProviderFactory();
+            var npmPackageSearch = new Mock<INpmPackageSearch>();
+            var packageInfoFactory = new Mock<INpmPackageInfoFactory>();
+
+            var factory = new JsDelivrProviderFactory(npmPackageSearch.Object, packageInfoFactory.Object);
             IProvider provider = factory.CreateProvider(_hostInteraction);
 
             Assert.AreSame(_hostInteraction.WorkingDirectory, provider.HostInteraction.WorkingDirectory);
@@ -37,7 +42,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void CreateProvider_NullParameter()
         {
-            var factory = new JsDelivrProviderFactory();
+            var npmPackageSearch = new Mock<INpmPackageSearch>();
+            var packageInfoFactory = new Mock<INpmPackageInfoFactory>();
+
+            var factory = new JsDelivrProviderFactory(npmPackageSearch.Object, packageInfoFactory.Object);
             IProvider provider = factory.CreateProvider(null);
         }
     }

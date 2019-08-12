@@ -15,6 +15,7 @@ using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 using Microsoft.Web.LibraryManager.Providers.FileSystem;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -32,7 +33,11 @@ namespace Microsoft.Web.LibraryManager.Test
             _cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
-            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory(), new JsDelivrProviderFactory());
+            var npmPackageSearch = new Mock<INpmPackageSearch>();
+            var packageInfoFactory = new Mock<INpmPackageInfoFactory>();
+
+            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(),
+                new UnpkgProviderFactory(npmPackageSearch.Object, packageInfoFactory.Object), new JsDelivrProviderFactory(npmPackageSearch.Object, packageInfoFactory.Object));
             LibraryIdToNameAndVersionConverter.Instance.Reinitialize(_dependencies);
         }
 

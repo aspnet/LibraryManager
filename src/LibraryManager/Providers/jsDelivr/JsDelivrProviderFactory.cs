@@ -3,6 +3,7 @@
 
 using System;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 #if NET472
 using System.ComponentModel.Composition;
@@ -16,6 +17,18 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 #endif
     internal class JsDelivrProviderFactory : IProviderFactory
     {
+        private readonly INpmPackageSearch _packageSearch;
+        private readonly INpmPackageInfoFactory _packageInfoFactory;
+
+#if NET472
+        [ImportingConstructor]
+#endif
+        public JsDelivrProviderFactory(INpmPackageSearch packageSearch, INpmPackageInfoFactory packageInfoFactory)
+        {
+            _packageSearch = packageSearch;
+            _packageInfoFactory = packageInfoFactory;
+        }
+
         public IProvider CreateProvider(IHostInteraction hostInteraction)
         {
             if (hostInteraction == null)
@@ -23,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 throw new ArgumentNullException(nameof(hostInteraction));
             }
 
-            return new JsDelivrProvider(hostInteraction);
+            return new JsDelivrProvider(hostInteraction, _packageSearch, _packageInfoFactory);
         }
     }
 }

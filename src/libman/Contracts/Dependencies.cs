@@ -5,8 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.Cdnjs;
+using Microsoft.Web.LibraryManager.Providers.FileSystem;
+using Microsoft.Web.LibraryManager.Providers.jsDelivr;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Tools.Contracts
 {
@@ -51,7 +54,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             if (_providers.Count > 0)
                 return;
 
-            IEnumerable<IProviderFactory> factories = GetProvidersFromReflection();
+            var packageInfoFactory = new NpmPackageInfoFactory();
+            var packageSearch = new NpmPackageSearch();
+
+            IEnumerable<IProviderFactory> factories = new IProviderFactory[] {
+                new UnpkgProviderFactory(packageSearch, packageInfoFactory),
+                new JsDelivrProviderFactory(packageSearch, packageInfoFactory),
+                new FileSystemProviderFactory(),
+                new CdnjsProviderFactory(),
+            };
 
             foreach (IProviderFactory factory in factories)
             {
@@ -64,26 +75,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
                     }
                 }
             }
-        }
-
-        private IEnumerable<IProviderFactory> GetProvidersFromReflection()
-        {
-            var list = new List<IProviderFactory>();
-
-            foreach (string path in _assemblyPaths)
-            {
-                Assembly assembly;
-                assembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-
-                IEnumerable<IProviderFactory> factories = assembly
-                    .DefinedTypes
-                    .Where(p => p.ImplementedInterfaces.Any(i => i.FullName == typeof(IProviderFactory).FullName))
-                    .Select(fac => Activator.CreateInstance(assembly.GetType(fac.FullName)) as IProviderFactory);
-
-                list.AddRange(factories);
-            }
-
-            return list;
         }
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 using Microsoft.Web.LibraryManager.Providers.FileSystem;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -30,7 +31,10 @@ namespace Microsoft.Web.LibraryManager.Test
             _filePath = Path.Combine(_projectFolder, "libman.json");
 
             _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
-            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory());
+            var npmPackageSearch = new Mock<INpmPackageSearch>();
+            var packageInfoFactory = new Mock<INpmPackageInfoFactory>();
+
+            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory(), new UnpkgProviderFactory(npmPackageSearch.Object, packageInfoFactory.Object));
             LibraryIdToNameAndVersionConverter.Instance.Reinitialize(_dependencies);
         }
 
@@ -48,8 +52,6 @@ namespace Microsoft.Web.LibraryManager.Test
             Assert.AreEqual(name, actualName);
             Assert.AreEqual(version, actualVersion);
         }
-
-
 
         [DataTestMethod]
         [DataRow("jquery@3.3.1", "cdnjs", "jquery", "3.3.1")]

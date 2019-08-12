@@ -38,9 +38,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             Assert.AreEqual("jquery", packageInfo.Name);
             Assert.AreEqual("JavaScript library for DOM operations", packageInfo.Description);
             Assert.AreEqual("3.3.1", packageInfo.LatestVersion);
-            Assert.AreEqual("JS Foundation and other contributors", packageInfo.Author);
-            Assert.AreEqual("https://jquery.com", packageInfo.Homepage);
-            Assert.AreEqual("MIT", packageInfo.License);
         }
 
         [TestMethod]
@@ -56,9 +53,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             Assert.AreEqual(string.Empty, packageInfo.Name);
             Assert.AreEqual(string.Empty, packageInfo.Description);
             Assert.AreEqual(string.Empty, packageInfo.LatestVersion);
-            Assert.AreEqual(string.Empty, packageInfo.Author);
-            Assert.AreEqual(string.Empty, packageInfo.Homepage);
-            Assert.AreEqual(string.Empty, packageInfo.License);
         }
     }
 }

@@ -3,34 +3,43 @@ using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-    internal class NpmPackageInfo
+    /// <summary>
+    /// Encapsulates information for an NPM package
+    /// </summary>
+    public sealed class NpmPackageInfo
     {
-        internal string Author { get; private set; }
-        internal string Description { get; private set; }
-        internal string LatestVersion { get; private set; }
-        internal string Homepage { get; private set; }
-        internal string License { get; private set; }
-        internal string Name { get; private set; }
-        internal IList<SemanticVersion> Versions { get; private set; }
+        /// <summary>
+        /// The description from the package.json
+        /// </summary>
+        public string Description { get; private set; }
 
-        internal NpmPackageInfo(string name, string description, string latestVersion, string author, string homepage, string license)
+        /// <summary>
+        /// The latest version of the package
+        /// </summary>
+        public string LatestVersion { get; private set; }
+
+        /// <summary>
+        /// The package name
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// All versions for the package
+        /// </summary>
+        public IList<SemanticVersion> Versions { get; private set; }
+
+        internal NpmPackageInfo(string name, string description, string latestVersion)
         {
             Name = name;
             Description = description;
             LatestVersion = latestVersion;
-            Author = author;
-            Homepage = homepage;
-            License = license;
         }
 
-        internal NpmPackageInfo(string name, string description, string latestVersion, string author, string homepage, string license, IList<SemanticVersion> versions)
+        internal NpmPackageInfo(string name, string description, string latestVersion, IList<SemanticVersion> versions)
         {
             Name = name;
             Description = description;
             LatestVersion = latestVersion;
-            Author = author;
-            Homepage = homepage;
-            License = license;
             Versions = versions;
         }
 
@@ -39,17 +48,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             string name = packageInfo.GetJObjectMemberStringValue("name");
             string description = packageInfo.GetJObjectMemberStringValue("description");
             string version = packageInfo.GetJObjectMemberStringValue("version");
-            string homepage = packageInfo.GetJObjectMemberStringValue("homepage");
-            string license = packageInfo.GetJObjectMemberStringValue("license");
 
-            string author = string.Empty;
-            JObject authorObject = packageInfo["author"] as JObject;
-            if (authorObject != null)
-            {
-                author = authorObject.GetJObjectMemberStringValue("name");
-            }
-
-            return new NpmPackageInfo(name, description, version, author, homepage, license);
+            return new NpmPackageInfo(name, description, version);
         }
     }
 }
