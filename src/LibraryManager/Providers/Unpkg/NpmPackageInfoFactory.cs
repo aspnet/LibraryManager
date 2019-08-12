@@ -57,6 +57,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         private static async Task<NpmPackageInfo> GetPackageInfoForScopedPackageAsync(string packageName, CancellationToken cancellationToken)
         {
             Debug.Assert(packageName.StartsWith("@", StringComparison.Ordinal));
+            //We do string.Substring(1) to avoid encoding the leading '@' sign
             string searchName = "@" + HttpUtility.UrlEncode(packageName.Substring(1));
             NpmPackageInfo packageInfo = null;
 
