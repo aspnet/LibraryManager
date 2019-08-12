@@ -58,10 +58,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             var packageSearch = new NpmPackageSearch();
 
             IEnumerable<IProviderFactory> factories = new IProviderFactory[] {
-                new FileSystemProviderFactory(),
-                new CdnjsProviderFactory(),
                 new UnpkgProviderFactory(packageSearch, packageInfoFactory),
                 new JsDelivrProviderFactory(packageSearch, packageInfoFactory),
+                new FileSystemProviderFactory(),
+                new CdnjsProviderFactory(),
             };
 
             foreach (IProviderFactory factory in factories)
