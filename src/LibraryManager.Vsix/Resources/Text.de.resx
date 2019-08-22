@@ -131,11 +131,11 @@ Möchten Sie den Vorgang fortsetzen?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>"{0}" aktiviert</value>
+    <value>{0} "{1}" aktiviert</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>"{0}" deaktiviert</value>
+    <value>{0} "{1}" deaktiviert</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
@@ -147,5 +147,15 @@ Möchten Sie den Vorgang fortsetzen?</value>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Bibliothek aktualisieren</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{0} "{1}" nicht festgelegt</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Datei</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Ordner</value>
   </data>
 </root>

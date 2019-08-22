@@ -131,11 +131,11 @@
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>チェック済み {0}</value>
+    <value>確認済みの{0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>未チェック {0}</value>
+    <value>未確認の{0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
@@ -147,5 +147,15 @@
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>ライブラリの更新</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>不確定の{0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>フォルダー</value>
   </data>
 </root>

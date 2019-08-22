@@ -131,11 +131,11 @@ Deseja continuar?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>Verificado {0}</value>
+    <value>{0} {1} Marcado(a)</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>Não Verificado {0}</value>
+    <value>{0} {1} Desmarcado(a)</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
@@ -147,5 +147,15 @@ Deseja continuar?</value>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Atualizar Biblioteca</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{0} {1} Indeterminado(a)</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Pasta</value>
   </data>
 </root>

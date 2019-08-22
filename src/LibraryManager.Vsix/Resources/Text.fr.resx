@@ -131,11 +131,11 @@ Voulez-vous continuer ?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>Archivé {0}</value>
+    <value>{0} {1} archivé</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>Non archivé {0}</value>
+    <value>{0} {1} non archivé</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
@@ -147,5 +147,15 @@ Voulez-vous continuer ?</value>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Mettre à jour la bibliothèque</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{0} {1} indéterminé</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Fichier</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Dossier</value>
   </data>
 </root>

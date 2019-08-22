@@ -131,11 +131,11 @@ Devam etmek istiyor musunuz?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>{0} işaretlendi</value>
+    <value>{1} {0} denetlendi</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>{0} işareti kaldırıldı</value>
+    <value>{1} {0} denetlenmedi</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
@@ -147,5 +147,15 @@ Devam etmek istiyor musunuz?</value>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Kitaplığı Güncelleştir</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{1} {0} belirsiz</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Dosya</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Klasör</value>
   </data>
 </root>

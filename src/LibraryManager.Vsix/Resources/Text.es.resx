@@ -131,11 +131,11 @@ Puede que se requiera una conexión a Internet.
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>{0} activado</value>
+    <value>Se ha activado {0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>{0} desactivado</value>
+    <value>Se ha anulado la selección de {0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
@@ -147,5 +147,15 @@ Puede que se requiera una conexión a Internet.
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Actualizar biblioteca</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{0} {1} sin determinar</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Archivo</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Carpeta</value>
   </data>
 </root>

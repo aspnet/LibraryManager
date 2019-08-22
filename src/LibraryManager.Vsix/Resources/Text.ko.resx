@@ -131,11 +131,11 @@
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>{0}을(를) 확인함</value>
+    <value>선택한 {0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>{0}을(를) 선택 취소함</value>
+    <value>선택하지 않은 {0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
@@ -147,5 +147,15 @@
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>라이브러리 업데이트</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>확정되지 않은 {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>파일</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>폴더</value>
   </data>
 </root>
