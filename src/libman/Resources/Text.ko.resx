@@ -51,10 +51,11 @@
     <value>설치할 라이브러리</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS 라이브러리는 라이브러리 ID 형식이 “&lt;libraryName&gt;@&lt;libraryVersion&gt;”입니다. CDNJS 라이브러리의 경우 라이브러리 ID에 버전을 지정하지 않으면 사용 가능한 가장 높은 버전이 사용됩니다.</value>
+    <value>    CDNJS 라이브러리의 라이브러리 ID 형식은 "&lt;라이브러리 이름&gt;@&lt;라이브러리 버전&gt;"입니다.
+    CDNJS 라이브러리의 경우 라이브러리 ID에 버전을 지정하지 않으면 사용 가능한 최고 버전이 사용됩니다.</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
-    <value>없으면 libman.json을 초기화합니다.
+    <value>    없으면 libman.json을 초기화합니다.
     기본 공급자가 없으면 --provider 옵션이 필요합니다.
     기본 대상이 없으면 --destination 옵션이 필요합니다.
     파일을 지정하지 않은 경우 전체 라이브러리가 포함됩니다.</value>
@@ -86,7 +87,8 @@
     <value>지정한 라이브러리의 모든 파일을 지정된 대상에서 삭제한 다음 지정된 라이브러리 정의를 libman.json에서 제거합니다.</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>libman uninstall jquery libman uninstall jquery@3.3.1</value>
+    <value>    libman uninstall jquery
+    libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
     <value>제거할 라이브러리</value>
@@ -95,8 +97,8 @@
     <value>제거할 라이브러리의 공급자</value>
   </data>
   <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS 라이브러리는 라이브러리 ID 형식이 “&lt;libraryName&gt;@&lt;libraryVersion&gt;”입니다.
-    라이브러리 ID에 버전을 지정하지 않은 경우 이 명령은 libraryName이 지정된 libraryId와 일치하는 모든 라이브러리에 적용됩니다.</value>
+    <value>    CDNJS 라이브러리의 라이브러리 ID 형식은 "&lt;라이브러리 이름&gt;@&lt;라이브러리 버전&gt;"입니다.
+    라이브러리 ID에 버전을 지정하지 않으면 지정된 라이브러리 ID와 일치하는 라이브러리 이름이 있는 모든 라이브러리에 이 명령이 실행됩니다.</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
     <value>현재 폴더에 libman.json이 없으면 오류가 발생합니다.
@@ -170,9 +172,10 @@
     <value>지정한 라이브러리를 업데이트합니다.</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>libman update jquery
+    <value>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</value>
+    libman update jquery -pre
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
     <value>현재 폴더에 libman.json이 없으면 오류가 발생합니다.
@@ -288,5 +291,33 @@
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>'--{1}' 옵션을 사용하여 '{0}'을(를) 지정하세요.</value>
+  </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>구성 설정을 가져오거나 설정합니다.</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>검색할 설정의 이름</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>{0} 키를 찾을 수 없습니다.</value>
+  </data>
+  <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
+    <value>같은 작업에서 설정을 읽고 쓸 수 없습니다.</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_Set" xml:space="preserve">
+    <value>구성 저장소에 키-값 쌍을 설정합니다. 이 옵션은 key=value 형식이어야 합니다.</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_SetEncrypted" xml:space="preserve">
+    <value>구성 저장소에 암호화된 값으로 키를 설정합니다. 이 옵션은 key=plaintext 형식이어야 합니다.</value>
+  </data>
+  <data name="ConfigCommand_Remarks" xml:space="preserve">
+    <value>    같은 작업에서 설정을 읽고 저장할 수 없습니다.
+    설정을 제거하려면 빈 문자열(--set key=)로 설정합니다.
+    암호화된 설정의 암호 해독된 값 검색은 지원되지 않습니다.</value>
   </data>
 </root>

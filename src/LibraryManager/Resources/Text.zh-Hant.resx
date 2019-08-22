@@ -134,13 +134,13 @@
     <value>正在還原專案 {0} 的程式庫</value>
   </data>
   <data name="CdnjsLibraryIdHintText" xml:space="preserve">
-    <value>範例: &lt;library&gt;@&lt;version&gt;</value>
+    <value>範例: &lt;程式庫&gt;@&lt;版本&gt;</value>
   </data>
   <data name="FileSystemLibraryIdHintText" xml:space="preserve">
     <value>必須為有效的 filesystem 路徑。</value>
   </data>
   <data name="UnpkgProviderHintText" xml:space="preserve">
-    <value>範例: &lt;library&gt;@&lt;version&gt;</value>
+    <value>範例: &lt;程式庫&gt;@&lt;版本&gt;</value>
   </data>
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>無法使用</value>
@@ -167,6 +167,6 @@
     <value>升級作業已完成</value>
   </data>
   <data name="JsDelivrProviderHintText" xml:space="preserve">
-    <value>範例: &lt;library&gt;@&lt;version&gt;</value>
+    <value>範例: &lt;程式庫&gt;@&lt;版本&gt;</value>
   </data>
 </root>

@@ -1,23 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
   <file original="C:\Users\bhsubra\Desktop\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" target-language="fr" datatype="xml">
     <body>
       <group id="C:\Users\bhsubra\Desktop\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
           <source xml:lang="en">Client-Side &amp;Library...</source>
-          <target state="translated">&amp;Bibliothèque côté client...</target>
+          <target state="translated">Bib&amp;liothèque côté client...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
           <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
-          <target state="translated">Restaurer les &amp;bibliothèques côté client</target>
+          <target state="translated">Restaurer les bib&amp;liothèques côté client</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
           <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
-          <target state="translated">&amp;Nettoyer les bibliothèques côté client</target>
+          <target state="translated">Nettoyer les bibliothèques &amp;côté client</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
           <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">Activer la restauration des bibliothèques côté client sur la build...</target>
+          <target state="translated">Activer les bibliothèques côté client de restauration lors de la build...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
           <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>

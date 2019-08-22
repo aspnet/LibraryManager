@@ -51,11 +51,11 @@
     <value>Biblioteka do zainstalowania</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>Biblioteki CDNJS mają identyfikator biblioteki w formacie „&lt;nazwaBiblioteki&gt;@&lt;wersjaBiblioteki&gt;”
+    <value>    Biblioteki CDNJS mają identyfikator biblioteki w formacie „&lt;nazwaBiblioteki&gt;@&lt;wersjaBiblioteki&gt;”
     Jeśli w przypadku bibliotek CDNJS w identyfikatorze biblioteki nie zostanie określona wersja, zostanie użyta najwyższa dostępna wersja.</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
-    <value>Inicjuje plik libman.json, jeśli nie istnieje
+    <value>    Inicjuje plik libman.json, jeśli nie istnieje
     Jeśli nie istnieje domyślny dostawca, opcja --provider jest wymagana
     Jeśli nie istnieje domyślne miejsce docelowe, opcja --destination jest wymagana
     Jeśli nie są określone pliki, uwzględniana jest cała biblioteka</value>
@@ -87,7 +87,7 @@
     <value>Usuwa wszystkie pliki określonej biblioteki z określonego miejsca docelowego, a następnie usuwa określoną definicję biblioteki z pliku libman.json</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>libman uninstall jquery
+    <value>    libman uninstall jquery
     libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
@@ -97,8 +97,8 @@
     <value>Dostawca biblioteki do odinstalowania</value>
   </data>
   <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>Biblioteki CDNJS mają identyfikator biblioteki w formacie „&lt;nazwaBiblioteki&gt;@&lt;wersjaBiblioteki&gt;”
-    Jeśli w identyfikatorze biblioteki nie zostanie podana wersja, to polecenie zostanie wykonane względem dowolnej biblioteki, której nazwa jest zgodna z identyfikatorem biblioteki</value>
+    <value>    Biblioteki CDNJS mają identyfikator biblioteki w formacie „&lt;nazwaBiblioteki&gt;@&lt;wersjaBiblioteki&gt;”
+    Jeśli w identyfikatorze biblioteki nie zostanie określona wersja, to polecenie zostanie wykonane względem dowolnej biblioteki, której nazwa jest zgodna z identyfikatorem biblioteki</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
     <value>Błąd, jeśli w bieżącym folderze nie ma pliku libman.json
@@ -172,9 +172,10 @@
     <value>Aktualizuje określoną bibliotekę</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>libman update jquery
+    <value>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</value>
+    libman update jquery -pre
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
     <value>Błąd, jeśli w bieżącym folderze nie ma pliku libman.json
@@ -290,5 +291,33 @@ Określ inną lokalizację docelową.</value>
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>Określ wartość „{0}” za pomocą opcji „--{1}”.</value>
+  </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>Pobiera lub ustawia ustawienia konfiguracji</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>Nazwa ustawienia do pobrania</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>Nie znaleziono klucza {0}.</value>
+  </data>
+  <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
+    <value>Nie można odczytać i zapisać ustawień w tej samej operacji</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_Set" xml:space="preserve">
+    <value>Ustawia parę klucz-wartość w magazynie konfiguracji. Opcja powinna mieć postać klucz=wartość</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_SetEncrypted" xml:space="preserve">
+    <value>Ustawia klucz z zaszyfrowaną wartością w magazynie konfiguracji. Opcja powinna mieć postać klucz=zwykły tekst</value>
+  </data>
+  <data name="ConfigCommand_Remarks" xml:space="preserve">
+    <value>    Nie można odczytać i zapisać ustawień w tej samej operacji.
+    Aby usunąć ustawienie, należy ustawić je na pusty ciąg (--set key=).
+    Pobieranie odszyfrowanych wartości dla ustawień szyfrowanych nie jest obsługiwane.</value>
   </data>
 </root>

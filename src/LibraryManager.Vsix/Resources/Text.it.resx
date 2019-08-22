@@ -132,9 +132,11 @@ Continuare?</value>
   </data>
   <data name="Checked" xml:space="preserve">
     <value>{0} selezionato</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
     <value>{0} deselezionato</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Versione preliminare: {0}</value>

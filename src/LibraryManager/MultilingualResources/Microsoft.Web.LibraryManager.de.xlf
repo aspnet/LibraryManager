@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="de" original="MICROSOFT.WEB.LIBRARYMANAGER/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
@@ -167,7 +167,7 @@
         </trans-unit>
         <trans-unit id="CdnjsLibraryIdHintText" translate="yes" xml:space="preserve">
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
-          <target state="translated">Beispiel: <it id="1" pos="open">&lt;Bibliothek&gt;</it>@<it id="2" pos="open">&lt;Version&gt;</it></target>
+          <target state="translated">Beispiel: &lt;bibliothek&gt;@&lt;version&gt;</target>
         </trans-unit>
         <trans-unit id="FileSystemLibraryIdHintText" translate="yes" xml:space="preserve">
           <source>Must be a valid filesystem path.</source>
@@ -175,7 +175,7 @@
         </trans-unit>
         <trans-unit id="UnpkgProviderHintText" translate="yes" xml:space="preserve">
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
-          <target state="translated">Beispiel: <it id="1" pos="open">&lt;Bibliothek&gt;</it>@<it id="2" pos="open">&lt;Version&gt;</it></target>
+          <target state="translated">Beispiel: &lt;bibliothek&gt;@&lt;version&gt;</target>
         </trans-unit>
         <trans-unit id="LibraryDetail_Unavailable" translate="yes" xml:space="preserve">
           <source>Unavailable</source>
@@ -211,7 +211,7 @@
         </trans-unit>
         <trans-unit id="JsDelivrProviderHintText" translate="yes" xml:space="preserve">
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
-          <target state="translated">Beispiel: <it id="1" pos="open">&lt;Bibliothek&gt;</it>@<it id="2" pos="open">&lt;Version&gt;</it></target>
+          <target state="translated">Beispiel: &lt;bibliothek&gt;@&lt;version&gt;</target>
         </trans-unit>
       </group>
     </body>

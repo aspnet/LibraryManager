@@ -164,12 +164,16 @@ Continuare?</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
         </trans-unit>
         <trans-unit id="Checked" translate="yes" xml:space="preserve">
-          <source>Checked {0}</source>
-          <target state="translated">{0} selezionato</target>
+          <source>Checked {0} {1}</source>
+          <target state="needs-review-translation">{0} selezionato</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="UnChecked" translate="yes" xml:space="preserve">
-          <source>UnChecked {0}</source>
-          <target state="translated">{0} deselezionato</target>
+          <source>UnChecked {0} {1}</source>
+          <target state="needs-review-translation">{0} deselezionato</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Prerelease" translate="yes" xml:space="preserve">
           <source>Pre-release: {0}</source>
@@ -183,6 +187,19 @@ Continuare?</target>
           <source>Update Library</source>
           <target state="translated">Aggiorna libreria</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Title for SuggestedAction set</note>
+        </trans-unit>
+        <trans-unit id="Indeterminate" translate="yes" xml:space="preserve">
+          <source>Indeterminate {0} {1}</source>
+          <target state="new">Indeterminate {0} {1}</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
+        </trans-unit>
+        <trans-unit id="File" translate="yes" xml:space="preserve">
+          <source>File</source>
+          <target state="new">File</target>
+        </trans-unit>
+        <trans-unit id="Folder" translate="yes" xml:space="preserve">
+          <source>Folder</source>
+          <target state="new">Folder</target>
         </trans-unit>
       </group>
     </body>

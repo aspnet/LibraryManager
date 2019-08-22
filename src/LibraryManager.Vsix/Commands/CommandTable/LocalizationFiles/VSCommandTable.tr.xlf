@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
   <file original="C:\Users\bhsubra\Desktop\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" target-language="tr" datatype="xml">
     <body>
       <group id="C:\Users\bhsubra\Desktop\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
           <source xml:lang="en">Client-Side &amp;Library...</source>
-          <target state="translated">İstemci Tarafı &amp;Kitaplık...</target>
+          <target state="translated">İstemci Tarafı &amp;Kitaplığı...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
           <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
@@ -13,19 +13,19 @@
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
           <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
-          <target state="translated">İstemci Tarafı Kitaplıkları &amp;Temizle</target>
+          <target state="translated">&amp;İstemci Tarafı Kitaplıkları Temizle</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
           <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">Derleme Sırasında İstemci Tarafı Kitaplıkların Geri Yüklenmesini Etkinleştir...</target>
+          <target state="translated">Derleme Sırasında İstemci Tarafı Kitaplıkları Geri Yüklemeyi Etkinleştir...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
           <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>
-          <target state="translated">İstemci Tarafı Kitaplıkları &amp;Yönet...</target>
+          <target state="translated">&amp;İstemci Tarafı Kitaplıkları Yönet...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
           <source xml:lang="en">&amp;Restore Client-Side Libraries</source>
-          <target state="translated">İstemci Tarafı Kitaplıkları &amp;Geri Yükle</target>
+          <target state="translated">&amp;İstemci Tarafı Kitaplıkları Geri Yükle</target>
         </trans-unit>
       </group>
     </body>

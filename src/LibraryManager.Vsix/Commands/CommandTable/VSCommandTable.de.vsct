@@ -16,7 +16,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>&amp;Clientseitige Bibliothek...</ButtonText>
+          <ButtonText>Clientseitige &amp;Bibliothek...</ButtonText>
         </Strings>
       </Button>
       <!-- Config file -->
@@ -27,7 +27,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Clientseitige &amp;Bibliotheken wiederherstellen</ButtonText>
+          <ButtonText>C&amp;lientseitige Bibliotheken wiederherstellen</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
@@ -35,7 +35,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Clientseitige Bibliotheken &amp;bereinigen</ButtonText>
+          <ButtonText>&amp;Clientseitige Bibliotheken bereinigen</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">
@@ -56,7 +56,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Clientseitige Bibliotheken &amp;verwalten...</ButtonText>
+          <ButtonText>Clie&amp;ntseitige Bibliotheken verwalten...</ButtonText>
           <CanonicalName>ManageClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
@@ -68,7 +68,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Clientseitige Bibliotheken &amp;wiederherstellen</ButtonText>
+          <ButtonText>Clientseitige Bibliotheken wiede&amp;rherstellen</ButtonText>
           <CanonicalName>RestoreClientSideLibraries</CanonicalName>
         </Strings>
       </Button>

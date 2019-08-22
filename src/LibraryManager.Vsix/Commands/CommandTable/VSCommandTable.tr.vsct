@@ -35,7 +35,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>İstemci Tarafı Kitaplıkları &amp;Temizle</ButtonText>
+          <ButtonText>&amp;İstemci Tarafı Kitaplıkları Temizle</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">
@@ -56,7 +56,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>İstemci Tarafı Kitaplıkları &amp;Yönet...</ButtonText>
+          <ButtonText>&amp;İstemci Tarafı Kitaplıkları Yönet...</ButtonText>
           <CanonicalName>ManageClientSideLibraries</CanonicalName>
         </Strings>
       </Button>
@@ -68,7 +68,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>İstemci Tarafı Kitaplıkları &amp;Geri Yükle</ButtonText>
+          <ButtonText>&amp;İstemci Tarafı Kitaplıkları Geri Yükle</ButtonText>
           <CanonicalName>RestoreClientSideLibraries</CanonicalName>
         </Strings>
       </Button>

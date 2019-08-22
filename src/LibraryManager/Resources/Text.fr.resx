@@ -134,13 +134,13 @@
     <value>Restauration des bibliothèques du projet {0}</value>
   </data>
   <data name="CdnjsLibraryIdHintText" xml:space="preserve">
-    <value>Exemple : &lt;library&gt;@&lt;version&gt;</value>
+    <value>Exemple : &lt;bibliothèque&gt;@&lt;version&gt;</value>
   </data>
   <data name="FileSystemLibraryIdHintText" xml:space="preserve">
     <value>Doit être un chemin de système de fichiers valide.</value>
   </data>
   <data name="UnpkgProviderHintText" xml:space="preserve">
-    <value>Exemple : &lt;library&gt;@&lt;version&gt;</value>
+    <value>Exemple : &lt;bibliothèque&gt;@&lt;version&gt;</value>
   </data>
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>Non disponible</value>
@@ -167,6 +167,6 @@
     <value>Opération de mise à niveau terminée</value>
   </data>
   <data name="JsDelivrProviderHintText" xml:space="preserve">
-    <value>Exemple : &lt;library&gt;@&lt;version&gt;</value>
+    <value>Exemple : &lt;bibliothèque&gt;@&lt;version&gt;</value>
   </data>
 </root>

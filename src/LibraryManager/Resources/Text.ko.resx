@@ -134,13 +134,13 @@
     <value>{0} 프로젝트에 대한 라이브러리를 복원하는 중</value>
   </data>
   <data name="CdnjsLibraryIdHintText" xml:space="preserve">
-    <value>예: &lt;library&gt;@&lt;version&gt;</value>
+    <value>예: &lt;라이브러리&gt;@&lt;버전&gt;</value>
   </data>
   <data name="FileSystemLibraryIdHintText" xml:space="preserve">
     <value>유효한 파일 시스템 경로여야 합니다.</value>
   </data>
   <data name="UnpkgProviderHintText" xml:space="preserve">
-    <value>예: &lt;library&gt;@&lt;version&gt;</value>
+    <value>예: &lt;라이브러리&gt;@&lt;버전&gt;</value>
   </data>
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>사용할 수 없음</value>
@@ -167,6 +167,6 @@
     <value>업그레이드 작업이 완료됨</value>
   </data>
   <data name="JsDelivrProviderHintText" xml:space="preserve">
-    <value>예: &lt;library&gt;@&lt;version&gt;</value>
+    <value>예: &lt;라이브러리&gt;@&lt;버전&gt;</value>
   </data>
 </root>

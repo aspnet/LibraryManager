@@ -27,7 +27,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Restaurer les &amp;bibliothèques côté client</ButtonText>
+          <ButtonText>Restaurer les bib&amp;liothèques côté client</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
@@ -35,7 +35,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>&amp;Nettoyer les bibliothèques côté client</ButtonText>
+          <ButtonText>Nettoyer les bibliothèques &amp;côté client</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="RestoreOnBuild" priority="0x0300" type="Button">

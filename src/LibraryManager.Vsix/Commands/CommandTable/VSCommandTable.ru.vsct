@@ -16,7 +16,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Клиентская &amp;библиотека…</ButtonText>
+          <ButtonText>&amp;Клиентская библиотека...</ButtonText>
         </Strings>
       </Button>
       <!-- Config file -->
@@ -27,7 +27,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Восстановить клиентские &amp;библиотеки</ButtonText>
+          <ButtonText>Восстановить &amp;клиентские библиотеки</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLibraryManagerPackageCmdSet" id="Clean" priority="0x0200" type="Button">
@@ -56,7 +56,7 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>&amp;Управлять клиентскими библиотеками…</ButtonText>
+          <ButtonText>&amp;Управление клиентскими библиотеками...</ButtonText>
           <CanonicalName>ManageClientSideLibraries</CanonicalName>
         </Strings>
       </Button>

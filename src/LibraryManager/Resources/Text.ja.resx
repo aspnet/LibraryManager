@@ -134,13 +134,13 @@
     <value>プロジェクト {0} のライブラリを復元しています</value>
   </data>
   <data name="CdnjsLibraryIdHintText" xml:space="preserve">
-    <value>例: &lt;library&gt;@&lt;version&gt;</value>
+    <value>例: &lt;ライブラリ&gt;@&lt;バージョン&gt;</value>
   </data>
   <data name="FileSystemLibraryIdHintText" xml:space="preserve">
     <value>有効なファイル システムのパスを指定する必要があります。</value>
   </data>
   <data name="UnpkgProviderHintText" xml:space="preserve">
-    <value>例: &lt;library&gt;@&lt;version&gt;</value>
+    <value>例: &lt;ライブラリ&gt;@&lt;バージョン&gt;</value>
   </data>
   <data name="LibraryDetail_Unavailable" xml:space="preserve">
     <value>使用不可</value>
@@ -167,6 +167,6 @@
     <value>アップグレード操作が完了しました</value>
   </data>
   <data name="JsDelivrProviderHintText" xml:space="preserve">
-    <value>例: &lt;library&gt;@&lt;version&gt;</value>
+    <value>例: &lt;ライブラリ&gt;@&lt;バージョン&gt;</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="fr" original="LIBMAN/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
@@ -61,15 +61,18 @@
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="translated">Les bibliothèques CDNJS ont un ID de bibliothèque au format “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-    Pour les bibliothèques CDNJS, si aucune version n'est spécifiée dans l'ID de bibliothèque, la version la plus haute disponible est utilisée.</target>
+          <target state="translated">    Les bibliothèques CDNJS ont le format d'ID de bibliothèque "&lt;nomBibliothèque&gt;@&lt;versionBibliothèque&gt;"
+    Pour les bibliothèques CDNJS, si aucune version n'est spécifiée dans l'ID de bibliothèque, la version la plus récente disponible est utilisée.</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
     If no default provider exists, --provider option is required
     If no default destination exists, --destination option is required
     If no files are specified, the entire library is included</source>
-          <target state="translated">Initialise un fichier libman.json s'il n’existe pas. S'il n'existe aucun fournisseur par défaut, l'option --provider est obligatoire. S'il n'existe aucune destination par défaut, l'option --destination est obligatoire. Si aucun fichier n'est spécifié, l'intégralité de la bibliothèque est incluse</target>
+          <target state="translated">    Initialise un fichier libman.json s'il n’existe pas.
+    S'il n'existe aucun fournisseur par défaut, l'option --provider est obligatoire.
+    S'il n'existe aucune destination par défaut, l'option --destination est obligatoire.
+    Si aucun fichier n'est spécifié, l'intégralité de la bibliothèque est incluse</target>
         </trans-unit>
         <trans-unit id="InvalidArgumentsMessage" translate="yes" xml:space="preserve">
           <source>Invalid arguments for command: {0}</source>
@@ -99,7 +102,9 @@
           <source>    Error if no libman.json in current folder
     If a library specifies a provider, it will override the defaultProvider
     If a library specifies a destination, it will override the defaultDestination</source>
-          <target state="translated">Une erreur se produit si le dossier actif ne contient aucun fichier libman.json. Si une bibliothèque spécifie un fournisseur, celui-ci remplace le fournisseur par défaut. Si une bibliothèque spécifie une destination, celle-ci remplace la destination par défaut.</target>
+          <target state="translated">Une erreur se produit si le dossier actif ne contient aucun fichier libman.json.
+    Si une bibliothèque spécifie un fournisseur, celui-ci remplace le fournisseur par défaut.
+    Si une bibliothèque spécifie une destination, celle-ci remplace la destination par défaut.</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</source>
@@ -108,7 +113,8 @@
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
     libman uninstall jquery@3.3.1</source>
-          <target state="translated">libman uninstall jquery libman uninstall jquery@3.3.1</target>
+          <target state="translated">    libman uninstall jquery
+    libman uninstall jquery@3.3.1</target>
         </trans-unit>
         <trans-unit id="UninstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
           <source>Library to uninstall</source>
@@ -121,8 +127,8 @@
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="translated">Les bibliothèques CDNJS ont un ID de bibliothèque au format “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-    Si aucune version n'est spécifiée dans l'ID de bibliothèque, cette commande s'applique à toutes les bibliothèques pour lesquelles libraryName correspond au libraryId donné</target>
+          <target state="translated">    Les bibliothèques CDNJS ont le format d'ID de bibliothèque "&lt;nomBibliothèque&gt;@&lt;versionBibliothèque&gt;"
+    Si aucune version n'est spécifiée dans l'ID de bibliothèque, cette commande agit sur toutes les bibliothèques où nomBibliothèque correspond à l'idBibliothèque indiqué</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -223,9 +229,10 @@
     libman update jquery --to 3.3.1
     libman update jquery -pre
 </source>
-          <target state="translated">libman update jquery
+          <target state="translated">    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</target>
+    libman update jquery -pre
+</target>
         </trans-unit>
         <trans-unit id="UpdateCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -280,7 +287,8 @@
         <trans-unit id="NoLibraryFoundToUpdate" translate="yes" xml:space="preserve">
           <source>No library found with name "{0}" to update.
 Please specify a library name without the version information to update.</source>
-          <target state="translated">Il n'y a aucune bibliothèque portant le nom "{0}" à mettre à jour. Spécifiez un nom de bibliothèque sans les informations de version.</target>
+          <target state="translated">Il n'y a aucune bibliothèque portant le nom "{0}" à mettre à jour.
+Spécifiez un nom de bibliothèque sans les informations de version.</target>
         </trans-unit>
         <trans-unit id="InstallLibraryFailed" translate="yes" xml:space="preserve">
           <source>Failed to install library "{0}"</source>
@@ -333,7 +341,8 @@ Please specify a library name without the version information to update.</source
         <trans-unit id="LibraryCannotBeInstalledDueToConflictingLibraries" translate="yes" xml:space="preserve">
           <source>Library "{0}" cannot be installed. "{1}" is already installed at "{2}".
 Please specify a different destination.</source>
-          <target state="translated">Impossible d'installer la bibliothèque "{0}". "{1}" est déjà installé à l'emplacement "{2}". Spécifiez une destination différente.</target>
+          <target state="translated">Impossible d'installer la bibliothèque "{0}". "{1}" est déjà installé à l'emplacement "{2}".
+Spécifiez une destination différente.</target>
         </trans-unit>
         <trans-unit id="LibraryIdRequiredForUpdate" translate="yes" xml:space="preserve">
           <source>LibraryId is required for update</source>
@@ -378,6 +387,46 @@ Please specify a different destination.</source>
         <trans-unit id="SpecifyFieldUsingOption" translate="yes" xml:space="preserve">
           <source>Please specify '{0}' using the '--{1}' option.</source>
           <target state="translated">Spécifiez '{0}' à l'aide de l'option '--{1}'.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Description" translate="yes" xml:space="preserve">
+          <source>Gets or sets configuration settings</source>
+          <target state="translated">Obtient ou définit les paramètres de configuration</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Examples" translate="yes" xml:space="preserve">
+          <source>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</source>
+          <target state="translated">    libman config http_proxy
+    libman config --set http_proxy=http://exemple
+    libman config --setEncrypted http_proxy.password=texteMotdepasse</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_ArgumentDescription" translate="yes" xml:space="preserve">
+          <source>Name of the setting to retrieve</source>
+          <target state="translated">Nom du paramètre à récupérer</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_KeyNotFound" translate="yes" xml:space="preserve">
+          <source>Key {0} not found.</source>
+          <target state="translated">Clé {0} introuvable.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_ConflictingParameters" translate="yes" xml:space="preserve">
+          <source>Cannot read and write settings in the same operation</source>
+          <target state="translated">Impossible de lire et d'écrire des paramètres dans la même opération</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_Set" translate="yes" xml:space="preserve">
+          <source>Sets a key-value pair in the configuration store.  The option should be in the form key=value</source>
+          <target state="translated">Définit une paire clé-valeur dans le magasin de configurations. L'option doit se présenter sous la forme clé=valeur</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_SetEncrypted" translate="yes" xml:space="preserve">
+          <source>Sets a key with an encrypted value in the configuraiton store.  The option should be in the form key=plaintext</source>
+          <target state="translated">Définit une clé avec une valeur chiffrée dans le magasin de configurations. L'option doit se présenter sous la forme clé=texteenclair</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Remarks" translate="yes" xml:space="preserve">
+          <source>    Settings cannot be read and stored in the same operation.
+    To remove a setting, set it to an empty string (--set key=).
+    Retrieving decrypted values for encrypted settings is not supported.</source>
+          <target state="translated">    Impossible de lire et de stocker les paramètres dans la même opération.
+    Pour supprimer un paramètre, affectez-lui une chaîne vide (--set key=).
+    La récupération des valeurs déchiffrées pour les paramètres chiffrés n'est pas prise en charge.</target>
         </trans-unit>
       </group>
     </body>

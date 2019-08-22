@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ja" original="LIBMAN/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
@@ -61,8 +61,8 @@
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="translated">CDNJS ライブラリには、次の形式のライブラリ ID があります: “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-    CDNJS ライブラリでは、ライブラリ ID でバージョンが指定されていない場合、使用可能な最新のバージョンが使用されます。</target>
+          <target state="translated">    CDNJS ライブラリのライブラリ ID の形式は "&lt;ライブラリ名&gt;@&lt;ライブラリバージョン&gt;" です
+    CDNJS ライブラリで、ライブラリ ID にバージョンが指定されていない場合、使用可能な最新のバージョンが使用されます。</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
@@ -102,7 +102,9 @@
           <source>    Error if no libman.json in current folder
     If a library specifies a provider, it will override the defaultProvider
     If a library specifies a destination, it will override the defaultDestination</source>
-          <target state="translated">現在のフォルダーに libman.json がない場合は、エラーになります。ライブラリでプロバイダーを指定している場合は、defaultProvider がオーバーライドされます。ライブラリで宛先を指定している場合は、defaultDestination がオーバーライドされます。</target>
+          <target state="translated">現在のフォルダーに libman.json がない場合は、エラーになります。
+    ライブラリでプロバイダーを指定している場合は、defaultProvider がオーバーライドされます。
+    ライブラリで宛先を指定している場合は、defaultDestination がオーバーライドされます。</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</source>
@@ -111,7 +113,7 @@
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
     libman uninstall jquery@3.3.1</source>
-          <target state="translated">libman uninstall jquery
+          <target state="translated">    libman uninstall jquery
     libman uninstall jquery@3.3.1</target>
         </trans-unit>
         <trans-unit id="UninstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
@@ -125,8 +127,8 @@
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="translated">CDNJS ライブラリには、次の形式のライブラリ ID があります: “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-    ライブラリ ID にバージョンが指定されていない場合、このコマンドは、所定の libraryId に一致する libraryName を持つすべてのライブラリに作用します。</target>
+          <target state="translated">    CDNJS ライブラリのライブラリ ID の形式は "&lt;ライブラリ名&gt;@&lt;ライブラリバージョン&gt;" です
+    ライブラリ ID にバージョンが指定されていない場合、このコマンドは、指定されたライブラリID に一致するライブラリ名を持つ任意のライブラリで動作します</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -229,15 +231,18 @@
     libman update jquery --to 3.3.1
     libman update jquery -pre
 </source>
-          <target state="translated">libman update jquery
+          <target state="translated">    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</target>
+    libman update jquery -pre
+</target>
         </trans-unit>
         <trans-unit id="UpdateCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     Error if specified library doesn't exist
     If there's more than one library with the same libraryId, you'll be prompted to choose.</source>
-          <target state="translated">現在のフォルダーに libman.json がない場合はエラーになります 指定されたライブラリが存在しない場合はエラーになります 同じ libraryId のライブラリが複数ある場合は選択するようメッセージが表示されます。</target>
+          <target state="translated">現在のフォルダーに libman.json がない場合は、エラーになります
+    指定したライブラリが存在しな場合は、エラーになります
+    同じ libraryId のライブラリが複数ある場合は、選択するようにとのプロンプトが出ます。</target>
         </trans-unit>
         <trans-unit id="UpdateCommandLibraryArgumentDesc" translate="yes" xml:space="preserve">
           <source>Name of the library to update (without the version).</source>
@@ -386,6 +391,46 @@ Please specify a different destination.</source>
         <trans-unit id="SpecifyFieldUsingOption" translate="yes" xml:space="preserve">
           <source>Please specify '{0}' using the '--{1}' option.</source>
           <target state="translated">'--{1}' オプションを使って '{0}' を指定してください。</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Description" translate="yes" xml:space="preserve">
+          <source>Gets or sets configuration settings</source>
+          <target state="translated">構成設定を取得または設定します</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Examples" translate="yes" xml:space="preserve">
+          <source>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</source>
+          <target state="translated">    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_ArgumentDescription" translate="yes" xml:space="preserve">
+          <source>Name of the setting to retrieve</source>
+          <target state="translated">取得する設定の名前</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_KeyNotFound" translate="yes" xml:space="preserve">
+          <source>Key {0} not found.</source>
+          <target state="translated">キー {0} が見つかりません。</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_ConflictingParameters" translate="yes" xml:space="preserve">
+          <source>Cannot read and write settings in the same operation</source>
+          <target state="translated">同じ操作で設定の読み取りと書き込みを行うことはできません</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_Set" translate="yes" xml:space="preserve">
+          <source>Sets a key-value pair in the configuration store.  The option should be in the form key=value</source>
+          <target state="translated">キーと値のペアを構成ストアに設定します。オプションは、key=value の形式にする必要があります</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_SetEncrypted" translate="yes" xml:space="preserve">
+          <source>Sets a key with an encrypted value in the configuraiton store.  The option should be in the form key=plaintext</source>
+          <target state="translated">暗号化された値を含むキーを構成ストアに設定します。オプションは、key=plaintext の形式にする必要があります</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Remarks" translate="yes" xml:space="preserve">
+          <source>    Settings cannot be read and stored in the same operation.
+    To remove a setting, set it to an empty string (--set key=).
+    Retrieving decrypted values for encrypted settings is not supported.</source>
+          <target state="translated">    設定を同じ操作で読み取り、保存することはできません。
+    設定を削除するには、空の文字列 (--set key=) に設定します。
+    暗号化された設定の暗号化解除された値の取得はサポートされていません。</target>
         </trans-unit>
       </group>
     </body>
