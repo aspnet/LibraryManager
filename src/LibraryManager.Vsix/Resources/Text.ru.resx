@@ -41,11 +41,11 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Будет установлен пакет NuGet для дополнения процесса MSBuild, но файлы не будут добавлены в проект.
+    <value>Будет установлен пакет NuGet, чтобы дополнить процесс MSBuild, однако файлы в проект добавлены не будут.
 
 Возможно, потребуется подключение к Интернету.
 
-Вы действительно хотите продолжить?</value>
+Вы хотите продолжить?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Введите текст для поиска&gt;</value>
@@ -55,13 +55,13 @@
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Укажите библиотеку, чтобы выбрать файлы для установки&gt;</value>
+    <value>&lt;Выберите библиотеку, чтобы выбрать файлы для установки&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Отклю&amp;чить клиентские библиотеки при сборке</value>
+    <value>Отк&amp;лючить клиентские библиотеки при сборке</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Включить восстановление клиентских библиотек при сборке...</value>
+    <value>&amp;Включить восстановление клиентских библиотек при сборке…</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Установка пакета NuGet, содержащего целевой объект MSBuild...</value>
@@ -131,10 +131,12 @@
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>Отмечено: {0}</value>
+    <value>Выбрано: {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>Неотмечено: {0}</value>
+    <value>Не выбрано: {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Предварительный выпуск: {0}</value>
@@ -145,5 +147,15 @@
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Обновление библиотеки</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>Не определено: {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Папка</value>
   </data>
 </root>

@@ -70,7 +70,8 @@
     <value>Die Bibliothek "{0}" konnte nicht auf "{1}" aktualisiert werden. Die folgenden Dateien sind für "{1}" nicht gültig: {2}</value>
   </data>
   <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
-    <value>Folgende Elemente sind in "{0}" nicht enthalten: {1}. Gültige Dateien: {2}</value>
+    <value>Folgende Elemente sind in "{0}" nicht enthalten: {1}.
+Gültige Dateien: {2}</value>
   </data>
   <data name="ErrorUnknownError" xml:space="preserve">
     <value>Unbekannter Fehler.</value>

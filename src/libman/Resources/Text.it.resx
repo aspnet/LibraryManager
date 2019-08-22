@@ -51,11 +51,11 @@
     <value>Libreria da installare</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>Il formato dell'ID libreria delle librerie CDNJS è “&lt;nomeLibreria&gt;@&lt;versioneLibreria&gt;”
+    <value>    Il formato dell'ID libreria delle librerie CDNJS è “&lt;nomeLibreria&gt;@&lt;versioneLibreria&gt;”
     Per le librerie CDNJS viene usata la versione massima disponibile se non viene specificata alcuna versione nell'ID libreria.</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
-    <value>Inizializza un file libman.json se non ne esiste uno
+    <value>    Inizializza un file libman.json se non ne esiste uno
     Se non esiste alcun provider predefinito, è richiesta l'opzione --provider
     Se non esiste alcuna destinazione predefinita, è richiesta l'opzione --destination
     Se non si specifica alcun file, viene inclusa l'intera libreria</value>
@@ -87,7 +87,7 @@
     <value>Elimina tutti i file della libreria specificata dalla destinazione specificata, quindi rimuove la definizione di libreria specificata da libman.json</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>libman uninstall jquery
+    <value>    libman uninstall jquery
     libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
@@ -97,7 +97,7 @@
     <value>Provider della libreria da disinstallare</value>
   </data>
   <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>Il formato dell'ID libreria delle librerie CDNJS è “&lt;nomeLibreria&gt;@&lt;versioneLibreria&gt;”
+    <value>    Il formato dell'ID libreria delle librerie CDNJS è “&lt;nomeLibreria&gt;@&lt;versioneLibreria&gt;”
     Se non viene specificata alcuna versione nell'ID libreria, questo comando avrà effetto su qualsiasi libreria il cui nome libreria corrisponde all'ID libreria specificato</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
@@ -172,9 +172,10 @@
     <value>Aggiorna la libreria specificata</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>libman update jquery
+    <value>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</value>
+    libman update jquery -pre
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
     <value>Errore se non esiste alcun file libman.json nella cartella corrente
@@ -290,5 +291,33 @@ Specificare una destinazione diversa.</value>
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>Specificare '{0}' con l'opzione '--{1}'.</value>
+  </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>Ottiene o imposta le impostazioni di configurazione</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>Nome dell'impostazione da recuperare</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>La chiave {0} non è stata trovata.</value>
+  </data>
+  <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
+    <value>Non è possibile leggere e scrivere impostazioni nella stessa operazione</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_Set" xml:space="preserve">
+    <value>Imposta una coppia chiave-valore nell'archivio di configurazione. L'opzione deve essere specificata nel formato chiave=valore</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_SetEncrypted" xml:space="preserve">
+    <value>Imposta una chiave con un valore crittografato nell'archivio di configurazione. L'opzione deve essere specificata nel formato chiave=testo non crittografato</value>
+  </data>
+  <data name="ConfigCommand_Remarks" xml:space="preserve">
+    <value>    Non è possibile leggere e archiviare impostazioni nella stessa operazione.
+    Per rimuovere un'impostazione, impostarla su una stringa vuota (--set key=).
+    Il recupero dei valori decrittografati per le impostazioni crittografate non è supportato.</value>
   </data>
 </root>

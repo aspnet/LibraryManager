@@ -85,7 +85,8 @@
         <trans-unit id="ErrorLibraryHasInvalidFiles" translate="yes" xml:space="preserve">
           <source>"{0}" does not contain the following: {1}
 Valid files are {2}</source>
-          <target state="translated">"{0}" 未包含以下項目: {1} 有效的檔案為 {2}</target>
+          <target state="translated">"{0}" 未包含以下項目: {1}
+有效的檔案為 {2}</target>
         </trans-unit>
         <trans-unit id="ErrorUnknownError" translate="yes" xml:space="preserve">
           <source>An unknown error occurred</source>

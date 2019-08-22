@@ -41,9 +41,9 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>NuGet 패키지가 설치되어 MSBuild 프로세스가 확대되지만, 프로젝트에 파일이 추가되지 않습니다.
+    <value>MSBuild 프로세스를 확대하기 위해 NuGet 패키지가 설치되지만, 파일이 프로젝트에 추가되지 않습니다.
 
-이 작업에는 인터넷 연결이 필요할 수 있습니다.
+이 작업에는 인터넷 연결이 필요합니다.
 
 계속하시겠습니까?</value>
   </data>
@@ -55,13 +55,13 @@
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;라이브러리를 선택하여 설치할 파일 선택&gt;</value>
+    <value>&lt;설치 하기 위해 파일을 선택 하는 라이브러리를 선택 합니다&gt; </value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>빌드에 클라이언트 쪽 라이브러리 사용하지 않음(&amp;E)</value>
+    <value>빌드 시 클라이언트 쪽 라이브러리 사용 안 함(&amp;E)</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>빌드에 클라이언트 쪽 라이브러리 복원 사용(&amp;E)...</value>
+    <value>빌드 시 클라이언트 쪽 라이브러리 복원 사용(&amp;E)...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>MSBuild 대상이 포함된 NuGet 패키지를 설치하는 중...</value>
@@ -131,10 +131,12 @@
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>{0}을(를) 확인함</value>
+    <value>선택한 {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>{0}을(를) 선택 취소함</value>
+    <value>선택하지 않은 {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>시험판: {0}</value>
@@ -145,5 +147,15 @@
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>라이브러리 업데이트</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>확정되지 않은 {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>파일</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>폴더</value>
   </data>
 </root>

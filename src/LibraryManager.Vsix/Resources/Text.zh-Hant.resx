@@ -41,27 +41,27 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>將安裝 NuGet 套件以改善 MSBuild 處理序，但不會將任何檔案新增至專案。
+    <value>將會安裝 NuGet 套件，以擴大 MSBuild 處理序，但不會新增任何檔案到專案中。
 
-這需要網路際網路連線。
+這需要連線到網際網路。
 
-確定要繼續嗎?</value>
+要繼續嗎?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;輸入以搜尋&gt;</value>
+    <value>&lt;鍵入以搜尋&gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>新增用戶端程式庫</value>
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;請選擇程式庫以選取要安裝的檔案&gt;</value>
+    <value>&lt;請選擇程式庫，以選取要安裝的檔案&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>在建置時停用用戶端程式庫(&amp;E)</value>
+    <value>建置時停用用戶端程式庫(&amp;E)</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>在建置時啟用還原用戶端程式庫(&amp;E)...</value>
+    <value>允許在建置時還原用戶端程式庫(&amp;E)...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>正在安裝包含 MSBuild 目標的 NuGet 套件...</value>
@@ -131,19 +131,31 @@
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>已選取 {0}</value>
+    <value>已選取 {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>已取消選取 {0}</value>
+    <value>已取消選取 {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>發行前版本: {0}</value>
   </data>
   <data name="SuggestedAction_Update_Stable" xml:space="preserve">
-    <value>穩定版本: {0}</value>
+    <value>穩定: {0}</value>
   </data>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>更新程式庫</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>不確定 {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>檔案</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>資料夾</value>
   </data>
 </root>

@@ -51,14 +51,14 @@
     <value>要安裝的程式庫</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS 程式庫的程式庫識別碼格式為 “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
-對於 CDNJS 程式庫，若未在程式庫識別碼中指定任何版本，就會使用可用的最高版本。</value>
+    <value>    CDNJS 程式庫的程式庫識別碼格式為 “&lt;程式庫名稱&gt;@&lt;程式庫版本&gt;”
+    對於 CDNJS 程式庫來說，若在程式庫識別碼中未指定任何版本，則將會使用提供的最高版本。</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
-    <value>如果沒有 libman.json，就加以初始化
-如果沒有預設提供者，就需要 --provider 選項
-如果沒有預設目的地，就需要 --destination 選項
-如果未指定檔案，會包含整個程式庫</value>
+    <value>    如果沒有 libman.json，就加以初始化
+    如果沒有預設提供者，就需要 --provider 選項
+    如果沒有預設目的地，就需要 --destination 選項
+    如果未指定檔案，會包含整個程式庫</value>
   </data>
   <data name="InvalidArgumentsMessage" xml:space="preserve">
     <value>命令的引數無效: {0}</value>
@@ -87,7 +87,8 @@
     <value>從指定的目的地刪除指定程式庫的所有檔案，然後從 libman.json 移除指定的程式庫定義</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>libman uninstall jquery libman uninstall jquery@3.3.1</value>
+    <value>    libman uninstall jquery
+    libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
     <value>要解除安裝的程式庫</value>
@@ -96,13 +97,13 @@
     <value>要解除安裝的程式庫提供者</value>
   </data>
   <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS 程式庫的程式庫識別碼格式為 “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
-若未在程式庫識別碼中指定任何版本，就會對 libraryName 符合指定 libraryId 的任何程式庫執行這項命令</value>
+    <value>    CDNJS 程式庫的程式庫識別碼格式為 “&lt;程式庫名稱&gt;@&lt;程式庫版本&gt;”
+    若程式庫識別碼中未指定任何版本，此命令將會對其程式庫名稱符合指定程式庫識別碼的程式庫，進行動作</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
     <value>若目前的資料夾沒有 libman.json，會發生錯誤
-若指定的程式庫不存在，會發生錯誤
-若有多個 libraryId 相同的程式庫，系統會提示您選擇。</value>
+    若指定的程式庫不存在，會發生錯誤
+    若有多個 libraryId 相同的程式庫，系統會提示您選擇。</value>
   </data>
   <data name="VerbosityOptionDesc" xml:space="preserve">
     <value>設定輸出的詳細資訊層級 (例如「正常」、「詳細」、「安靜」)</value>
@@ -171,14 +172,15 @@
     <value>更新指定的程式庫</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>libman update jquery
+    <value>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</value>
+    libman update jquery -pre
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
-    <value>若目前的資料庫沒有 libman.json，會發生錯誤
-若指定的程式庫不存在，會發生錯誤
-若有多個 libraryId 相同的程式庫，系統會提示您選擇。</value>
+    <value>若目前的資料夾沒有 libman.json，會發生錯誤
+    若指定的程式庫不存在，會發生錯誤
+    若有多個 libraryId 相同的程式庫，系統會提示您選擇。</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
     <value>要更新的程式庫名稱 (不含版本)。</value>
@@ -289,5 +291,33 @@
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>請使用 '--{1}' 選項指定 '{0}'。</value>
+  </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>取得或進行組態設定</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>要擷取的設定名稱</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>找不到機碼 {0}。</value>
+  </data>
+  <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
+    <value>無法在相同作業中讀取及寫入設定</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_Set" xml:space="preserve">
+    <value>在組態存放區中設定機碼值組。選項的格式應為「機碼=值」</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_SetEncrypted" xml:space="preserve">
+    <value>在組態存放區中使用加密的值設定機碼。選項的格式應為「機碼=純文字」</value>
+  </data>
+  <data name="ConfigCommand_Remarks" xml:space="preserve">
+    <value>    無法在相同的作業中讀取及儲存設定。
+    若要移除設定，請將其設為空字串 (--set key=)。
+    不支援擷取加密設定的解密值。</value>
   </data>
 </root>

@@ -41,14 +41,14 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Um pacote NuGet será instalado para aumentar o processo do MSBuild, mas nenhum arquivo será adicionado ao projeto.
+    <value>Será instalado um pacote NuGet para aumentar o processo do MSBuild, mas não será adicionado nenhum arquivo ao projeto.
 
-Isso pode exigir uma conexão com a Internet.
+Isso pode exigir uma conexão de Internet.
 
 Deseja continuar?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;Type to search&gt;</value>
+    <value>&lt;Digite para pesquisar&gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>Adicionar Biblioteca do Lado do Cliente</value>
@@ -58,10 +58,10 @@ Deseja continuar?</value>
     <value>&lt;Escolha uma biblioteca para selecionar os arquivos a serem instalados&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Desabi&amp;litar Bibliotecas do Lado do Cliente no Build</value>
+    <value>D&amp;esabilitar as Bibliotecas do Lado do Cliente no Build</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Habilitar Restauração de Bibliotecas do Lado do Cliente no Build...</value>
+    <value>&amp;Habilitar a Restauração de Bibliotecas do Lado do Cliente no Build...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Instalando o pacote NuGet que contém o destino do MSBuild...</value>
@@ -131,10 +131,12 @@ Deseja continuar?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>Verificado {0}</value>
+    <value>{0} {1} Marcado(a)</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>Não Verificado {0}</value>
+    <value>{0} {1} Desmarcado(a)</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Pré-lançamento: {0}</value>
@@ -145,5 +147,15 @@ Deseja continuar?</value>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Atualizar Biblioteca</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{0} {1} Indeterminado(a)</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Pasta</value>
   </data>
 </root>

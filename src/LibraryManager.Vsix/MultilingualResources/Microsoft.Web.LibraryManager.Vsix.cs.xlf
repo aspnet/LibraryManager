@@ -47,7 +47,7 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">Bude nainstalován balíček NuGet pro rozšíření procesu MSBuild, ale do projektu nebudou přidány žádné soubory.
+          <target state="translated">Nainstaluje se balíček NuGet, který upraví proces MSBuildu, ale do projektu se nepřidají žádné soubory.
 
 Může to vyžadovat připojení k internetu.
 
@@ -55,7 +55,7 @@ Chcete pokračovat?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;Zadejte, co chcete vyhledat.&gt;</it></target>
+          <target state="translated">&lt;Zadejte hledaný text.&gt;</target>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
@@ -64,15 +64,15 @@ Chcete pokračovat?</target>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;Zvolte knihovnu a vyberte soubory k instalaci.&gt;</it></target>
+          <target state="translated">&lt;Pokud chcete vybrat soubory, které se mají nainstalovat, zvolte knihovnu.&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">Při s&amp;estavení zakázat knihovny na straně klienta</target>
+          <target state="translated">Při s&amp;estavování zakázat knihovny na straně klienta</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">Při s&amp;estavení povolit obnovení knihoven na straně klienta...</target>
+          <target state="translated">Při s&amp;estavování povolit obnovení knihoven na straně klienta...</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
@@ -164,12 +164,16 @@ Chcete pokračovat?</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
         </trans-unit>
         <trans-unit id="Checked" translate="yes" xml:space="preserve">
-          <source>Checked {0}</source>
-          <target state="translated">Zaškrtnuto: {0}</target>
+          <source>Checked {0} {1}</source>
+          <target state="translated">Zaškrtnuto – {0} {1}</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="UnChecked" translate="yes" xml:space="preserve">
-          <source>UnChecked {0}</source>
-          <target state="translated">Nezaškrtnuto: {0}</target>
+          <source>UnChecked {0} {1}</source>
+          <target state="translated">Nezaškrtnuto – {0} {1}</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Prerelease" translate="yes" xml:space="preserve">
           <source>Pre-release: {0}</source>
@@ -183,6 +187,19 @@ Chcete pokračovat?</target>
           <source>Update Library</source>
           <target state="translated">Aktualizovat knihovnu</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Title for SuggestedAction set</note>
+        </trans-unit>
+        <trans-unit id="Indeterminate" translate="yes" xml:space="preserve">
+          <source>Indeterminate {0} {1}</source>
+          <target state="translated">Neurčité – {0} {1}</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
+        </trans-unit>
+        <trans-unit id="File" translate="yes" xml:space="preserve">
+          <source>File</source>
+          <target state="translated">Soubor</target>
+        </trans-unit>
+        <trans-unit id="Folder" translate="yes" xml:space="preserve">
+          <source>Folder</source>
+          <target state="translated">Složka</target>
         </trans-unit>
       </group>
     </body>

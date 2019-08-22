@@ -41,27 +41,27 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>MSBuild プロセスを強化するために NuGet パッケージがインストールされますが、プロジェクトにはファイルは追加されません。
+    <value>NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、プロジェクトにはファイルは追加されません。
 
-これにはインターネット接続が必要です。
+これにはインターネット接続が必要な場合があります。
 
-続行しますか。</value>
+続行しますか?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt; 検索するタイプ &gt;</value>
+    <value>&lt;検索するテキストを入力&gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>クライアント側のライブラリを追加します</value>
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;ライブラリを選択して、インストールするファイルを選ぶ&gt;</value>
+    <value>&lt;ライブラリを選択して、インストールするファイルを選択してください&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>ビルドの際にクライアント側ライブラリを無効にする(&amp;E)</value>
+    <value>ビルド時にクライアント側のライブラリを無効にする(&amp;E)</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>ビルドの際にクライアント側ライブラリの復元を有効にする(&amp;E)...</value>
+    <value>ビルド時にクライアント側のライブラリの復元を有効にする(&amp;E)...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>MSBuild ターゲットを含む NuGet パッケージをインストールしています...</value>
@@ -131,10 +131,12 @@
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>チェック済み {0}</value>
+    <value>確認済みの{0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>未チェック {0}</value>
+    <value>未確認の{0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>プレリリース: {0}</value>
@@ -145,5 +147,15 @@
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>ライブラリの更新</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>不確定の{0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>フォルダー</value>
   </data>
 </root>

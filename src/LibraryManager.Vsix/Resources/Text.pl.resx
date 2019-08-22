@@ -58,10 +58,10 @@ Czy chcesz kontynuować?</value>
     <value>&lt;Wybierz bibliotekę, aby wybrać pliki do zainstalowania&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Wyłącz biblioteki po stronie klienta przy kompilowaniu</value>
+    <value>&amp;Wyłącz biblioteki po stronie klienta podczas kompilacji</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Włącz przywracanie bibliotek po stronie klienta przy kompilacji...</value>
+    <value>&amp;Włącz przywracanie bibliotek po stronie klienta podczas kompilacji...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Trwa instalowanie pakietu NuGet zawierającego element docelowy programu MSBuild...</value>
@@ -131,19 +131,31 @@ Czy chcesz kontynuować?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>Zaznaczone: {0}</value>
+    <value>Zaznaczono: {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>Niezaznaczone: {0}</value>
+    <value>Nie zaznaczono: {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Wersja wstępna: {0}</value>
   </data>
   <data name="SuggestedAction_Update_Stable" xml:space="preserve">
-    <value>Stabilne: {0}</value>
+    <value>Wersja stabilna: {0}</value>
   </data>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Aktualizowanie biblioteki</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>Nieokreślone: {0} {1}</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Plik</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Folder</value>
   </data>
 </root>

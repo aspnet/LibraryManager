@@ -47,7 +47,7 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">将安装 NuGet 包以扩充 MSBuild 进程，但不向项目添加任何文件。
+          <target state="translated">将安装 NuGet 包以扩充 MSBuild 进程，但不会将任何文件添加到项目。
 
 这可能需要 Internet 连接。
 
@@ -64,15 +64,15 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;选择库以选择要安装的文件&gt;</it></target>
+          <target state="translated">&lt;选择一个库以选择要安装文件&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">在生成时禁用客户端库(&amp;E)</target>
+          <target state="translated">生成时禁用客户端库(&amp;E)</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">在生成时启用“还原客户端库”(&amp;E)</target>
+          <target state="translated">生成时启用还原客户端库(&amp;E)...</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
@@ -164,12 +164,16 @@ Do you want to continue?</source>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
         </trans-unit>
         <trans-unit id="Checked" translate="yes" xml:space="preserve">
-          <source>Checked {0}</source>
-          <target state="translated">已勾选 {0}</target>
+          <source>Checked {0} {1}</source>
+          <target state="translated">已选中 {0} {1}</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="UnChecked" translate="yes" xml:space="preserve">
-          <source>UnChecked {0}</source>
-          <target state="translated">已取消勾选 {0}</target>
+          <source>UnChecked {0} {1}</source>
+          <target state="translated">未选中 {0} {1}</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Prerelease" translate="yes" xml:space="preserve">
           <source>Pre-release: {0}</source>
@@ -183,6 +187,19 @@ Do you want to continue?</source>
           <source>Update Library</source>
           <target state="translated">更新库</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Title for SuggestedAction set</note>
+        </trans-unit>
+        <trans-unit id="Indeterminate" translate="yes" xml:space="preserve">
+          <source>Indeterminate {0} {1}</source>
+          <target state="translated">不确定的 {0} {1}</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
+        </trans-unit>
+        <trans-unit id="File" translate="yes" xml:space="preserve">
+          <source>File</source>
+          <target state="translated">文件</target>
+        </trans-unit>
+        <trans-unit id="Folder" translate="yes" xml:space="preserve">
+          <source>Folder</source>
+          <target state="translated">文件夹</target>
         </trans-unit>
       </group>
     </body>

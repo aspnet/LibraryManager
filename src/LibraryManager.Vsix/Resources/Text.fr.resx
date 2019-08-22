@@ -41,14 +41,14 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Un package NuGet sera installé pour augmenter le processus MSBuild, mais aucun fichier ne sera ajouté au projet.
+    <value>Un package NuGet va être installé pour augmenter le processus MSBuild, mais aucun fichier ne sera ajouté au projet.
 
-Cette opération risque de nécessiter une connexion Internet.
+Cela nécessite peut-être une connexion à Internet.
 
 Voulez-vous continuer ?</value>
   </data>
   <data name="TypeToSearch" xml:space="preserve">
-    <value>&lt;Taper pour rechercher&gt;</value>
+    <value>&lt;Tapez pour rechercher&gt;</value>
   </data>
   <data name="AddClientSideLibrary" xml:space="preserve">
     <value>Ajouter une bibliothèque côté client</value>
@@ -58,10 +58,10 @@ Voulez-vous continuer ?</value>
     <value>&lt;Choisir une bibliothèque pour sélectionner les fichiers à installer&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Désactiv&amp;er les bibliothèques côté client pendant la génération</value>
+    <value>Désactiv&amp;er les bibliothèques côté client au moment de la génération</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Activez la restauration des bibliothèques côté client pendant la génération...</value>
+    <value>Activ&amp;er les bibliothèques côté client au moment de la génération...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>Installation du package NuGet contenant la cible MSBuild...</value>
@@ -131,10 +131,12 @@ Voulez-vous continuer ?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>Archivé {0}</value>
+    <value>{0} {1} archivé</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>Non archivé {0}</value>
+    <value>{0} {1} non archivé</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Préversion : {0}</value>
@@ -145,5 +147,15 @@ Voulez-vous continuer ?</value>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Mettre à jour la bibliothèque</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{0} {1} indéterminé</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Fichier</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Dossier</value>
   </data>
 </root>

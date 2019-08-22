@@ -47,15 +47,15 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">Un package NuGet sera installé pour augmenter le processus MSBuild, mais aucun fichier ne sera ajouté au projet.
+          <target state="translated">Un package NuGet va être installé pour augmenter le processus MSBuild, mais aucun fichier ne sera ajouté au projet.
 
-Cette opération risque de nécessiter une connexion Internet.
+Cela nécessite peut-être une connexion à Internet.
 
 Voulez-vous continuer ?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;Taper pour rechercher&gt;</it></target>
+          <target state="translated">&lt;Tapez pour rechercher&gt;</target>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
@@ -68,11 +68,11 @@ Voulez-vous continuer ?</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">Désactiv&amp;er les bibliothèques côté client pendant la génération</target>
+          <target state="translated">Désactiv&amp;er les bibliothèques côté client au moment de la génération</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">&amp;Activez la restauration des bibliothèques côté client pendant la génération...</target>
+          <target state="translated">Activ&amp;er les bibliothèques côté client au moment de la génération...</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
@@ -164,12 +164,16 @@ Voulez-vous continuer ?</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
         </trans-unit>
         <trans-unit id="Checked" translate="yes" xml:space="preserve">
-          <source>Checked {0}</source>
-          <target state="translated">Archivé {0}</target>
+          <source>Checked {0} {1}</source>
+          <target state="translated">{0} {1} archivé</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="UnChecked" translate="yes" xml:space="preserve">
-          <source>UnChecked {0}</source>
-          <target state="translated">Non archivé {0}</target>
+          <source>UnChecked {0} {1}</source>
+          <target state="translated">{0} {1} non archivé</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Prerelease" translate="yes" xml:space="preserve">
           <source>Pre-release: {0}</source>
@@ -183,6 +187,19 @@ Voulez-vous continuer ?</target>
           <source>Update Library</source>
           <target state="translated">Mettre à jour la bibliothèque</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Title for SuggestedAction set</note>
+        </trans-unit>
+        <trans-unit id="Indeterminate" translate="yes" xml:space="preserve">
+          <source>Indeterminate {0} {1}</source>
+          <target state="translated">{0} {1} indéterminé</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
+        </trans-unit>
+        <trans-unit id="File" translate="yes" xml:space="preserve">
+          <source>File</source>
+          <target state="translated">Fichier</target>
+        </trans-unit>
+        <trans-unit id="Folder" translate="yes" xml:space="preserve">
+          <source>Folder</source>
+          <target state="translated">Dossier</target>
         </trans-unit>
       </group>
     </body>

@@ -51,11 +51,14 @@
     <value>Yüklenecek kitaplık</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS kitaplıklarının, “&lt;kitaplıkAdı&gt;@&lt;kitaplıkSürümü&gt;” biçiminde bir kitaplık kimliği olur.
-    CDNJS kitaplıklarında, kitaplık kimliğinde sürüm belirtilmediğinde mümkün olan en yüksek sürüm kullanılır.</value>
+    <value>    CDNJS kitaplıklarının kitaplık kimliği biçimi: “&lt;kitaplıkAdı&gt;@&lt;kitaplıkSürümü&gt;”
+    CDNJS kitaplıkları için kitaplık kimliğinde sürüm belirtilmediyse, mevcut en yüksek sürüm kullanılır.</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
-    <value>Bir libman.json yoksa bir tane başlatır Varsayılan sağlayıcı yoksa sağlayıcı seçeneği gereklidir Varsayılan hedef yoksa hedef seçeneği gereklidir Belirtilen dosya yoksa kitaplığın tamamı dahil edilir</value>
+    <value>    Bir libman.json yoksa bir tane başlatır
+    Varsayılan sağlayıcı yoksa sağlayıcı seçeneği gereklidir
+    Varsayılan hedef yoksa hedef seçeneği gereklidir
+    Belirtilen dosya yoksa kitaplığın tamamı dahil edilir</value>
   </data>
   <data name="InvalidArgumentsMessage" xml:space="preserve">
     <value>Komut için geçersiz bağımsız değişkenler: {0}</value>
@@ -76,13 +79,16 @@
     <value>Sağlayıcıdan tüm dosyaları indirir ve belirtilen hedefe kaydeder</value>
   </data>
   <data name="RestoreCommandRemarks" xml:space="preserve">
-    <value>Geçerli klasörde libman.json olmadığında gösterilen hata Kitaplık bir sağlayıcı belirtiyorsa, bu varsayılan defaultProvider değerini geçersiz kılar Kitaplık bir hedef belirtiyorsa, bu defaultDestination değerini geçersiz kılar</value>
+    <value>Geçerli klasörde libman.json olmadığında gösterilen hata
+    Kitaplık bir sağlayıcı belirtiyorsa, bu varsayılan defaultProvider değerini geçersiz kılar
+    Kitaplık bir hedef belirtiyorsa, bu defaultDestination değerini geçersiz kılar</value>
   </data>
   <data name="UnInstallCommandDesc" xml:space="preserve">
     <value>Belirtilen kitaplığa ilişkin tüm dosyaları belirtilen konumdan siler, ardından belirtilen kitaplık tanımını libman.json dosyasından kaldırır</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>libman uninstall jquery libman uninstall jquery@3.3.1</value>
+    <value>    libman uninstall jquery
+    libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
     <value>Kaldırılacak kitaplık</value>
@@ -91,11 +97,13 @@
     <value>Kaldırılacak kitaplığın sağlayıcısı</value>
   </data>
   <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS kitaplıklarının, “&lt;kitaplıkAdı&gt;@&lt;kitaplıkSürümü&gt;” biçiminde bir kitaplık kimliği olur.
-    Kitaplık kimliğinde sürüm belirtilmediğinde bu komut, verilen kitaplıkKimliği ile eşleşen kitaplıkAdına sahip olan tüm kitaplıklarda işlem yapar</value>
+    <value>    CDNJS kitaplıklarının kitaplık kimliği biçimi: “&lt;kitaplıkAdı&gt;@&lt;kitaplıkSürümü&gt;”
+    Kitaplık kimliğinde sürüm belirtilmediyse, bu komut kitaplıkAdı değeri ilgili kitaplıkKimliği ile eşleşen tüm kitaplıkları etkiler</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
-    <value>Geçerli klasörde libman.json olmadığında gösterilen hata Belirtilen kitaplık mevcut olmadığında gösterilen hata Aynı kitaplıkKimliği ile birden fazla kitaplık varsa seçim yapmanız istenir.</value>
+    <value>Geçerli klasörde libman.json olmadığında gösterilecek hata
+    Belirtilen kitaplık mevcut olmadığında gösterilecek hata
+    Aynı libraryId ile birden fazla kitaplık varsa seçim yapmanız istenir.</value>
   </data>
   <data name="VerbosityOptionDesc" xml:space="preserve">
     <value>Çıktı ayrıntılarını belirleyin (örneğin, "normal", "ayrıntılı", "sessiz")</value>
@@ -164,12 +172,15 @@
     <value>Belirtilen kitaplığı güncelleştirir</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>libman güncelleştirme jquery
-    libman güncelleştirme jquery --to 3.3.1
-    libman güncelleştirme jquery -pre</value>
+    <value>    libman update jquery
+    libman update jquery --to 3.3.1
+    libman update jquery -pre
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
-    <value>Geçerli klasörde libman.json olmadığında gösterilecek hata Belirtilen kitaplık mevcut olmadığında gösterilecek hata Aynı libraryId ile birden fazla kitaplık varsa seçim yapmanız istenir.</value>
+    <value>Geçerli klasörde libman.json olmadığında gösterilecek hata
+    Belirtilen kitaplık mevcut olmadığında gösterilecek hata
+    Aynı libraryId ile birden fazla kitaplık varsa seçim yapmanız istenir.</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
     <value>Güncelleştirilecek kitaplığın adı (sürüm bilgisi olmadan).</value>
@@ -205,7 +216,8 @@
     <value>Güncelleştirilecek kitaplık yok. Kitaplık yüklemek için lütfen yükleme komutlarını kullanın</value>
   </data>
   <data name="NoLibraryFoundToUpdate" xml:space="preserve">
-    <value>Güncelleştirilmek üzere "{0}" adında bir kitaplık bulunamadı. Lütfen güncelleştirilmesi için sürüm bilgilerini içermeyen bir kitaplık adı belirtin.</value>
+    <value>Güncelleştirilmek üzere "{0}" adında bir kitaplık bulunamadı.
+Lütfen güncelleştirilmesi için sürüm bilgilerini içermeyen bir kitaplık adı belirtin.</value>
   </data>
   <data name="InstallLibraryFailed" xml:space="preserve">
     <value>"{0}" kitaplığı yüklenemedi</value>
@@ -244,7 +256,8 @@
     <value>"{0}" kitaplığı şu dosyaları içermiyor: {1}</value>
   </data>
   <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
-    <value>"{0}" kitaplığı yüklenemiyor. "{1}", "{2}" üzerinde zaten yüklü durumda. Lütfen farklı bir hedef belirtin.</value>
+    <value>"{0}" kitaplığı yüklenemiyor. "{1}", "{2}" üzerinde zaten yüklü durumda.
+Lütfen farklı bir hedef belirtin.</value>
   </data>
   <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
     <value>Güncelleştirme için LibraryId gereklidir</value>
@@ -278,5 +291,33 @@
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>Lütfen '--{1}' seçeneğini kullanarak '{0}' öğesini belirtin.</value>
+  </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>Yapılandırma ayarlarını alır veya ayarlar</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>Alınacak ayarın adı</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>{0} anahtarı bulunamadı.</value>
+  </data>
+  <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
+    <value>Ayarlar aynı işlemde okunup yazılamaz</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_Set" xml:space="preserve">
+    <value>Yapılandırma deposunda bir anahtar-değer çifti ayarlar. Bu seçenek, key=value biçiminde olmalıdır</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_SetEncrypted" xml:space="preserve">
+    <value>Yapılandırma deposunda şifrelenmiş bir değeri olan bir anahtar ayarlar. Bu seçenek, key=plaintext biçiminde olmalıdır.</value>
+  </data>
+  <data name="ConfigCommand_Remarks" xml:space="preserve">
+    <value>    Ayarlar, aynı işlemde okunamaz ve depolanamaz.
+    Bir ayarı kaldırmak için, boş bir dizeye ayarlayın (--set key=).
+    Şifrelenmiş ayarlar için şifresi çözülmüş değerlerin alınması desteklenmiyor.</value>
   </data>
 </root>

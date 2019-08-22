@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="tr" original="LIBMAN/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
@@ -61,15 +61,18 @@
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="translated">CDNJS kitaplıklarının, “<it id="1" pos="open">&lt;kitaplıkAdı&gt;</it>@<it id="2" pos="open">&lt;kitaplıkSürümü&gt;</it>” biçiminde bir kitaplık kimliği olur.
-    CDNJS kitaplıklarında, kitaplık kimliğinde sürüm belirtilmediğinde mümkün olan en yüksek sürüm kullanılır.</target>
+          <target state="translated">    CDNJS kitaplıklarının kitaplık kimliği biçimi: “&lt;kitaplıkAdı&gt;@&lt;kitaplıkSürümü&gt;”
+    CDNJS kitaplıkları için kitaplık kimliğinde sürüm belirtilmediyse, mevcut en yüksek sürüm kullanılır.</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
     If no default provider exists, --provider option is required
     If no default destination exists, --destination option is required
     If no files are specified, the entire library is included</source>
-          <target state="translated">Bir libman.json yoksa bir tane başlatır Varsayılan sağlayıcı yoksa sağlayıcı seçeneği gereklidir Varsayılan hedef yoksa hedef seçeneği gereklidir Belirtilen dosya yoksa kitaplığın tamamı dahil edilir</target>
+          <target state="translated">    Bir libman.json yoksa bir tane başlatır
+    Varsayılan sağlayıcı yoksa sağlayıcı seçeneği gereklidir
+    Varsayılan hedef yoksa hedef seçeneği gereklidir
+    Belirtilen dosya yoksa kitaplığın tamamı dahil edilir</target>
         </trans-unit>
         <trans-unit id="InvalidArgumentsMessage" translate="yes" xml:space="preserve">
           <source>Invalid arguments for command: {0}</source>
@@ -99,7 +102,9 @@
           <source>    Error if no libman.json in current folder
     If a library specifies a provider, it will override the defaultProvider
     If a library specifies a destination, it will override the defaultDestination</source>
-          <target state="translated">Geçerli klasörde libman.json olmadığında gösterilen hata Kitaplık bir sağlayıcı belirtiyorsa, bu varsayılan defaultProvider değerini geçersiz kılar Kitaplık bir hedef belirtiyorsa, bu defaultDestination değerini geçersiz kılar</target>
+          <target state="translated">Geçerli klasörde libman.json olmadığında gösterilen hata
+    Kitaplık bir sağlayıcı belirtiyorsa, bu varsayılan defaultProvider değerini geçersiz kılar
+    Kitaplık bir hedef belirtiyorsa, bu defaultDestination değerini geçersiz kılar</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandDesc" translate="yes" xml:space="preserve">
           <source>Deletes all files for the specified library from their specified destination, then removes the specified library definition from libman.json</source>
@@ -108,7 +113,8 @@
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
     libman uninstall jquery@3.3.1</source>
-          <target state="translated">libman uninstall jquery libman uninstall jquery@3.3.1</target>
+          <target state="translated">    libman uninstall jquery
+    libman uninstall jquery@3.3.1</target>
         </trans-unit>
         <trans-unit id="UninstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
           <source>Library to uninstall</source>
@@ -121,14 +127,16 @@
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="translated">CDNJS kitaplıklarının, “<it id="1" pos="open">&lt;kitaplıkAdı&gt;</it>@<it id="2" pos="open">&lt;kitaplıkSürümü&gt;</it>” biçiminde bir kitaplık kimliği olur.
-    Kitaplık kimliğinde sürüm belirtilmediğinde bu komut, verilen kitaplıkKimliği ile eşleşen kitaplıkAdına sahip olan tüm kitaplıklarda işlem yapar</target>
+          <target state="translated">    CDNJS kitaplıklarının kitaplık kimliği biçimi: “&lt;kitaplıkAdı&gt;@&lt;kitaplıkSürümü&gt;”
+    Kitaplık kimliğinde sürüm belirtilmediyse, bu komut kitaplıkAdı değeri ilgili kitaplıkKimliği ile eşleşen tüm kitaplıkları etkiler</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     Error if specified library doesn't exist
     If there's more than one library with the same libraryId, you'll be prompted to choose.</source>
-          <target state="translated">Geçerli klasörde libman.json olmadığında gösterilen hata Belirtilen kitaplık mevcut olmadığında gösterilen hata Aynı kitaplıkKimliği ile birden fazla kitaplık varsa seçim yapmanız istenir.</target>
+          <target state="translated">Geçerli klasörde libman.json olmadığında gösterilecek hata
+    Belirtilen kitaplık mevcut olmadığında gösterilecek hata
+    Aynı libraryId ile birden fazla kitaplık varsa seçim yapmanız istenir.</target>
         </trans-unit>
         <trans-unit id="VerbosityOptionDesc" translate="yes" xml:space="preserve">
           <source>Set the verbosity of output (eg. "normal", "detailed", "quiet")</source>
@@ -223,15 +231,18 @@
     libman update jquery --to 3.3.1
     libman update jquery -pre
 </source>
-          <target state="translated">libman güncelleştirme jquery
-    libman güncelleştirme jquery --to 3.3.1
-    libman güncelleştirme jquery -pre</target>
+          <target state="translated">    libman update jquery
+    libman update jquery --to 3.3.1
+    libman update jquery -pre
+</target>
         </trans-unit>
         <trans-unit id="UpdateCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     Error if specified library doesn't exist
     If there's more than one library with the same libraryId, you'll be prompted to choose.</source>
-          <target state="translated">Geçerli klasörde libman.json olmadığında gösterilecek hata Belirtilen kitaplık mevcut olmadığında gösterilecek hata Aynı libraryId ile birden fazla kitaplık varsa seçim yapmanız istenir.</target>
+          <target state="translated">Geçerli klasörde libman.json olmadığında gösterilecek hata
+    Belirtilen kitaplık mevcut olmadığında gösterilecek hata
+    Aynı libraryId ile birden fazla kitaplık varsa seçim yapmanız istenir.</target>
         </trans-unit>
         <trans-unit id="UpdateCommandLibraryArgumentDesc" translate="yes" xml:space="preserve">
           <source>Name of the library to update (without the version).</source>
@@ -280,7 +291,8 @@
         <trans-unit id="NoLibraryFoundToUpdate" translate="yes" xml:space="preserve">
           <source>No library found with name "{0}" to update.
 Please specify a library name without the version information to update.</source>
-          <target state="translated">Güncelleştirilmek üzere "{0}" adında bir kitaplık bulunamadı. Lütfen güncelleştirilmesi için sürüm bilgilerini içermeyen bir kitaplık adı belirtin.</target>
+          <target state="translated">Güncelleştirilmek üzere "{0}" adında bir kitaplık bulunamadı.
+Lütfen güncelleştirilmesi için sürüm bilgilerini içermeyen bir kitaplık adı belirtin.</target>
         </trans-unit>
         <trans-unit id="InstallLibraryFailed" translate="yes" xml:space="preserve">
           <source>Failed to install library "{0}"</source>
@@ -333,7 +345,8 @@ Please specify a library name without the version information to update.</source
         <trans-unit id="LibraryCannotBeInstalledDueToConflictingLibraries" translate="yes" xml:space="preserve">
           <source>Library "{0}" cannot be installed. "{1}" is already installed at "{2}".
 Please specify a different destination.</source>
-          <target state="translated">"{0}" kitaplığı yüklenemiyor. "{1}", "{2}" üzerinde zaten yüklü durumda. Lütfen farklı bir hedef belirtin.</target>
+          <target state="translated">"{0}" kitaplığı yüklenemiyor. "{1}", "{2}" üzerinde zaten yüklü durumda.
+Lütfen farklı bir hedef belirtin.</target>
         </trans-unit>
         <trans-unit id="LibraryIdRequiredForUpdate" translate="yes" xml:space="preserve">
           <source>LibraryId is required for update</source>
@@ -378,6 +391,46 @@ Please specify a different destination.</source>
         <trans-unit id="SpecifyFieldUsingOption" translate="yes" xml:space="preserve">
           <source>Please specify '{0}' using the '--{1}' option.</source>
           <target state="translated">Lütfen '--{1}' seçeneğini kullanarak '{0}' öğesini belirtin.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Description" translate="yes" xml:space="preserve">
+          <source>Gets or sets configuration settings</source>
+          <target state="translated">Yapılandırma ayarlarını alır veya ayarlar</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Examples" translate="yes" xml:space="preserve">
+          <source>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</source>
+          <target state="translated">    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_ArgumentDescription" translate="yes" xml:space="preserve">
+          <source>Name of the setting to retrieve</source>
+          <target state="translated">Alınacak ayarın adı</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_KeyNotFound" translate="yes" xml:space="preserve">
+          <source>Key {0} not found.</source>
+          <target state="translated">{0} anahtarı bulunamadı.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_ConflictingParameters" translate="yes" xml:space="preserve">
+          <source>Cannot read and write settings in the same operation</source>
+          <target state="translated">Ayarlar aynı işlemde okunup yazılamaz</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_Set" translate="yes" xml:space="preserve">
+          <source>Sets a key-value pair in the configuration store.  The option should be in the form key=value</source>
+          <target state="translated">Yapılandırma deposunda bir anahtar-değer çifti ayarlar. Bu seçenek, key=value biçiminde olmalıdır</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_SetEncrypted" translate="yes" xml:space="preserve">
+          <source>Sets a key with an encrypted value in the configuraiton store.  The option should be in the form key=plaintext</source>
+          <target state="translated">Yapılandırma deposunda şifrelenmiş bir değeri olan bir anahtar ayarlar. Bu seçenek, key=plaintext biçiminde olmalıdır.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Remarks" translate="yes" xml:space="preserve">
+          <source>    Settings cannot be read and stored in the same operation.
+    To remove a setting, set it to an empty string (--set key=).
+    Retrieving decrypted values for encrypted settings is not supported.</source>
+          <target state="translated">    Ayarlar, aynı işlemde okunamaz ve depolanamaz.
+    Bir ayarı kaldırmak için, boş bir dizeye ayarlayın (--set key=).
+    Şifrelenmiş ayarlar için şifresi çözülmüş değerlerin alınması desteklenmiyor.</target>
         </trans-unit>
       </group>
     </body>

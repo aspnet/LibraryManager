@@ -51,11 +51,14 @@
     <value>Biblioteca que se va a instalar</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>Las bibliotecas de CDNJS tienen un formato de identificador de “&lt;nombreBiblioteca&gt;@&lt;versiónBiblioteca&gt;”.
-En el caso de las bibliotecas de CDNJS, si no se especifica ninguna versión en el identificador de biblioteca, se utiliza la versión más alta disponible.</value>
+    <value>    Las bibliotecas CDNJS tienen el formato de identificador de biblioteca “&lt;nombreBiblioteca&gt;@&lt;versiónBiblioteca&gt;”
+    En estas bibliotecas, si no se especifica ninguna versión en el identificador correspondiente, se usa la última versión disponible.</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
-    <value>Inicializa un archivo libman.json si no existe ninguno. Si no hay un proveedor predeterminado, se requiere la opción --provider. Si no hay un destino predeterminado, se requiere la opción --destination. Si no se especifica ningún archivo, se incluye toda la biblioteca</value>
+    <value>    Inicializa un archivo libman.json si no existe ninguno.
+    Si no hay un proveedor predeterminado, se requiere la opción --provider.
+    Si no hay un destino predeterminado, se requiere la opción --destination.
+    Si no se especifica ningún archivo, se incluye toda la biblioteca</value>
   </data>
   <data name="InvalidArgumentsMessage" xml:space="preserve">
     <value>Argumentos no válidos para el comando: {0}</value>
@@ -76,13 +79,16 @@ En el caso de las bibliotecas de CDNJS, si no se especifica ninguna versión en 
     <value>Descarga todos los archivos del proveedor y los guarda en el destino especificado</value>
   </data>
   <data name="RestoreCommandRemarks" xml:space="preserve">
-    <value>Error si no hay ningún archivo libman.json en la carpeta actual. Si se especifica un proveedor en una biblioteca, este reemplazará al valor defaultProvider. Si se especifica un destino en una biblioteca, este reemplazará al valor defaultDestination.</value>
+    <value>Error si no hay ningún archivo libman.json en la carpeta actual.
+    Si se especifica un proveedor en una biblioteca, este reemplazará al valor defaultProvider.
+    Si se especifica un destino en una biblioteca, este reemplazará al valor defaultDestination.</value>
   </data>
   <data name="UnInstallCommandDesc" xml:space="preserve">
     <value>Elimina todos los archivos de la biblioteca especificada del destino especificado, y luego elimina la definición de biblioteca especificada de libman.json</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>libman uninstall jquery libman uninstall jquery@3.3.1</value>
+    <value>    libman uninstall jquery
+    libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
     <value>Biblioteca que se va a desinstalar</value>
@@ -91,11 +97,13 @@ En el caso de las bibliotecas de CDNJS, si no se especifica ninguna versión en 
     <value>El proveedor de la biblioteca que se va a desinstalar</value>
   </data>
   <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>Las bibliotecas de CDNJS libraries tienen un formato de identificador de “&lt;nombreBiblioteca&gt;@&lt;versiónBiblioteca&gt;”
- Si no se especifica ninguna versión en el identificador de biblioteca, este comando actuará en todas las bibliotecas que tengan un valor nombreBiblioteca que coincida con el identificador de biblioteca proporcionado.</value>
+    <value>    Las bibliotecas CDNJS tienen el formato de identificador de biblioteca “&lt;nombreBiblioteca&gt;@&lt;versiónBiblioteca&gt;”
+    Si no se especifica ninguna versión en el identificador correspondiente, este comando se aplicará a cualquier biblioteca cuyo valor nombreBiblioteca coincida con el identificador de biblioteca proporcionado.</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
-    <value>Error si no hay ningún archivo libman.json en la carpeta actual. Error si la biblioteca especificada no existe. Si hay más de una biblioteca con el mismo libraryId, se le pedirá que elija uno.</value>
+    <value>Error si no hay ningún archivo libman.json en la carpeta actual.
+    Error si la biblioteca especificada no existe.
+    Si hay más de una biblioteca con el mismo libraryId, se le pedirá que elija uno.</value>
   </data>
   <data name="VerbosityOptionDesc" xml:space="preserve">
     <value>Establece el nivel de detalle de la salida (por ejemplo, "normal", "detallado", "silencioso")</value>
@@ -164,12 +172,15 @@ En el caso de las bibliotecas de CDNJS, si no se especifica ninguna versión en 
     <value>Actualiza la biblioteca especificada</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>libman update jquery
+    <value>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</value>
+    libman update jquery -pre
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
-    <value>Error si no hay ningún archivo libman.json en la carpeta actual. Error si la biblioteca especificada no existe. Si hay más de una biblioteca con el mismo libraryId, se le pedirá que elija uno.</value>
+    <value>Error si no hay ningún archivo libman.json en la carpeta actual.
+    Error si la biblioteca especificada no existe.
+    Si hay más de una biblioteca con el mismo libraryId, se le pedirá que elija uno.</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
     <value>Nombre de la biblioteca que se va a actualizar (sin la versión).</value>
@@ -205,7 +216,8 @@ En el caso de las bibliotecas de CDNJS, si no se especifica ninguna versión en 
     <value>No hay ninguna biblioteca para actualizar. Use el comando de instalación para instalar bibliotecas</value>
   </data>
   <data name="NoLibraryFoundToUpdate" xml:space="preserve">
-    <value>No se encontró ninguna biblioteca con el nombre "{0}" para actualizar. Especifique un nombre de biblioteca sin la información de versión para actualizar.</value>
+    <value>No se encontró ninguna biblioteca con el nombre "{0}" para actualizar.
+Especifique un nombre de biblioteca sin la información de versión para actualizar.</value>
   </data>
   <data name="InstallLibraryFailed" xml:space="preserve">
     <value>Error al instalar biblioteca "{0}"</value>
@@ -238,13 +250,14 @@ En el caso de las bibliotecas de CDNJS, si no se especifica ninguna versión en 
     <value>La biblioteca "{0}" se instaló en "{1}"</value>
   </data>
   <data name="UninstalledLibrary" xml:space="preserve">
-    <value>Biblioteca desinstalada  "{0}"</value>
+    <value>Biblioteca desinstalada "{0}"</value>
   </data>
   <data name="InvalidFilesForLibrary" xml:space="preserve">
     <value>La biblioteca "{0}" no contiene los archivos siguientes: {1}</value>
   </data>
   <data name="LibraryCannotBeInstalledDueToConflictingLibraries" xml:space="preserve">
-    <value>No se puede instalar la biblioteca "{0}". "{1}" ya se ha instalado en "{2}". Especifique otro destino.</value>
+    <value>No se puede instalar la biblioteca "{0}". "{1}" ya se ha instalado en "{2}".
+Especifique otro destino.</value>
   </data>
   <data name="LibraryIdRequiredForUpdate" xml:space="preserve">
     <value>Para actualizar, se requiere el valor LibraryId</value>
@@ -278,5 +291,33 @@ En el caso de las bibliotecas de CDNJS, si no se especifica ninguna versión en 
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>Especifique "{0}" con la opción "--{1}".</value>
+  </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>Obtiene o establece los valores de configuración.</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>Nombre del valor que se va a recuperar.</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>No se encuentra la clave {0}.</value>
+  </data>
+  <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
+    <value>No se puede leer y escribir valores en la misma operación.</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_Set" xml:space="preserve">
+    <value>Establece un par clave-valor en el almacén de configuración. La opción debe tener el formato clave = valor.</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_SetEncrypted" xml:space="preserve">
+    <value>Establece una clave con un valor cifrado en el almacén de configuración. La opción debe tener el formato clave = texto sin formato.</value>
+  </data>
+  <data name="ConfigCommand_Remarks" xml:space="preserve">
+    <value>    La configuración no se puede leer y almacenar en la misma operación.
+    Para quitar un valor, establézcalo en una cadena vacía (--set key=).
+    No se admite la recuperación de valores descifrados para configuraciones cifradas.</value>
   </data>
 </root>

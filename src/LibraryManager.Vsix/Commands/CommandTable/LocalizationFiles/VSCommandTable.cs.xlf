@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd" version="1.2">
   <file original="C:\Users\bhsubra\Desktop\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct" source-language="en" target-language="cs" datatype="xml">
     <body>
       <group id="C:\Users\bhsubra\Desktop\LibraryManager\src\LibraryManager.Vsix\Commands\CommandTable\VSCommandTable.en.vsct">
         <trans-unit id="InstallPackage|ButtonText">
           <source xml:lang="en">Client-Side &amp;Library...</source>
-          <target state="translated">&amp;Knihovna na straně klienta...</target>
+          <target state="translated">Knihovna na straně k&amp;lienta...</target>
         </trans-unit>
         <trans-unit id="Restore|ButtonText">
           <source xml:lang="en">Restore Client-Side &amp;Libraries</source>
-          <target state="translated">O&amp;bnovit knihovny na straně klienta</target>
+          <target state="translated">Obnovit knihovny na straně k&amp;lienta</target>
         </trans-unit>
         <trans-unit id="Clean|ButtonText">
           <source xml:lang="en">&amp;Clean Client-Side Libraries</source>
-          <target state="translated">Vyč&amp;istit knihovny na straně klienta</target>
+          <target state="translated">Vymazat &amp;knihovny na straně klienta</target>
         </trans-unit>
         <trans-unit id="RestoreOnBuild|ButtonText">
           <source xml:lang="en">Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">Povolit obnovení knihoven na straně klienta při sestavení...</target>
+          <target state="translated">Při sestavování povolit obnovení knihoven na straně klienta...</target>
         </trans-unit>
         <trans-unit id="ManageLibraries|ButtonText">
           <source xml:lang="en">&amp;Manage Client-Side Libraries...</source>
-          <target state="translated">&amp;Spravovat knihovny na straně klienta...</target>
+          <target state="translated">Spravovat k&amp;nihovny na straně klienta...</target>
         </trans-unit>
         <trans-unit id="RestoreSolution|ButtonText">
           <source xml:lang="en">&amp;Restore Client-Side Libraries</source>
-          <target state="translated">&amp;Obnovit knihovny na straně klienta</target>
+          <target state="translated">Obnovit knihovny na st&amp;raně klienta</target>
         </trans-unit>
       </group>
     </body>

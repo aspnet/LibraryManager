@@ -47,9 +47,9 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">MSBuild işlemini desteklemek için bir NuGet paketi yüklenecek ancak projeye dosya eklenmeyecek.
+          <target state="translated">MSBuild işlemini artırmak için bir NuGet paketi yüklenecek, ancak projeye dosya eklenmeyecek.
 
-Bu işlem İnternet bağlantısı gerektirebilir.
+Bunun için internet bağlantısı gerekebilir.
 
 Devam etmek istiyor musunuz?</target>
         </trans-unit>
@@ -64,11 +64,11 @@ Devam etmek istiyor musunuz?</target>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;Yüklenecek dosyaları belirlemek için bir kitaplık seçinChoose a library to select files to install&gt;</it></target>
+          <target state="translated">&lt;Yüklenecek dosyaları seçmek için bir kitaplık belirleyin&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">Derlemede İstemci Tarafı Kitaplıkları Devre Dışı Bıra&amp;k</target>
+          <target state="translated">Derlemede İstemci Tarafı Kitaplıkları Devr&amp;e Dışı Bırak</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
@@ -164,12 +164,16 @@ Devam etmek istiyor musunuz?</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
         </trans-unit>
         <trans-unit id="Checked" translate="yes" xml:space="preserve">
-          <source>Checked {0}</source>
-          <target state="translated">{0} işaretlendi</target>
+          <source>Checked {0} {1}</source>
+          <target state="translated">{1} {0} denetlendi</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="UnChecked" translate="yes" xml:space="preserve">
-          <source>UnChecked {0}</source>
-          <target state="translated">{0} işareti kaldırıldı</target>
+          <source>UnChecked {0} {1}</source>
+          <target state="translated">{1} {0} denetlenmedi</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Prerelease" translate="yes" xml:space="preserve">
           <source>Pre-release: {0}</source>
@@ -183,6 +187,19 @@ Devam etmek istiyor musunuz?</target>
           <source>Update Library</source>
           <target state="translated">Kitaplığı Güncelleştir</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Title for SuggestedAction set</note>
+        </trans-unit>
+        <trans-unit id="Indeterminate" translate="yes" xml:space="preserve">
+          <source>Indeterminate {0} {1}</source>
+          <target state="translated">{1} {0} belirsiz</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
+        </trans-unit>
+        <trans-unit id="File" translate="yes" xml:space="preserve">
+          <source>File</source>
+          <target state="translated">Dosya</target>
+        </trans-unit>
+        <trans-unit id="Folder" translate="yes" xml:space="preserve">
+          <source>Folder</source>
+          <target state="translated">Klasör</target>
         </trans-unit>
       </group>
     </body>

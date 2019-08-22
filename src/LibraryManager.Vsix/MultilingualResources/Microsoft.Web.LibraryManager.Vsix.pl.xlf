@@ -68,11 +68,11 @@ Czy chcesz kontynuować?</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">&amp;Wyłącz biblioteki po stronie klienta przy kompilowaniu</target>
+          <target state="translated">&amp;Wyłącz biblioteki po stronie klienta podczas kompilacji</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">&amp;Włącz przywracanie bibliotek po stronie klienta przy kompilacji...</target>
+          <target state="translated">&amp;Włącz przywracanie bibliotek po stronie klienta podczas kompilacji...</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
@@ -164,12 +164,16 @@ Czy chcesz kontynuować?</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
         </trans-unit>
         <trans-unit id="Checked" translate="yes" xml:space="preserve">
-          <source>Checked {0}</source>
-          <target state="translated">Zaznaczone: {0}</target>
+          <source>Checked {0} {1}</source>
+          <target state="translated">Zaznaczono: {0} {1}</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="UnChecked" translate="yes" xml:space="preserve">
-          <source>UnChecked {0}</source>
-          <target state="translated">Niezaznaczone: {0}</target>
+          <source>UnChecked {0} {1}</source>
+          <target state="translated">Nie zaznaczono: {0} {1}</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Prerelease" translate="yes" xml:space="preserve">
           <source>Pre-release: {0}</source>
@@ -177,12 +181,25 @@ Czy chcesz kontynuować?</target>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Stable" translate="yes" xml:space="preserve">
           <source>Stable: {0}</source>
-          <target state="translated">Stabilne: {0}</target>
+          <target state="translated">Wersja stabilna: {0}</target>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Title" translate="yes" xml:space="preserve">
           <source>Update Library</source>
           <target state="translated">Aktualizowanie biblioteki</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Title for SuggestedAction set</note>
+        </trans-unit>
+        <trans-unit id="Indeterminate" translate="yes" xml:space="preserve">
+          <source>Indeterminate {0} {1}</source>
+          <target state="translated">Nieokreślone: {0} {1}</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
+        </trans-unit>
+        <trans-unit id="File" translate="yes" xml:space="preserve">
+          <source>File</source>
+          <target state="translated">Plik</target>
+        </trans-unit>
+        <trans-unit id="Folder" translate="yes" xml:space="preserve">
+          <source>Folder</source>
+          <target state="translated">Folder</target>
         </trans-unit>
       </group>
     </body>

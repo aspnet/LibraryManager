@@ -41,9 +41,9 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>MSBuild işlemini desteklemek için bir NuGet paketi yüklenecek ancak projeye dosya eklenmeyecek.
+    <value>MSBuild işlemini artırmak için bir NuGet paketi yüklenecek, ancak projeye dosya eklenmeyecek.
 
-Bu işlem İnternet bağlantısı gerektirebilir.
+Bunun için internet bağlantısı gerekebilir.
 
 Devam etmek istiyor musunuz?</value>
   </data>
@@ -55,10 +55,10 @@ Devam etmek istiyor musunuz?</value>
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Yüklenecek dosyaları belirlemek için bir kitaplık seçinChoose a library to select files to install&gt;</value>
+    <value>&lt;Yüklenecek dosyaları seçmek için bir kitaplık belirleyin&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Derlemede İstemci Tarafı Kitaplıkları Devre Dışı Bıra&amp;k</value>
+    <value>Derlemede İstemci Tarafı Kitaplıkları Devr&amp;e Dışı Bırak</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
     <value>&amp;Derlemede İstemci Tarafı Kitaplıkları Geri Yüklemeyi Etkinleştir...</value>
@@ -131,10 +131,12 @@ Devam etmek istiyor musunuz?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>{0} işaretlendi</value>
+    <value>{1} {0} denetlendi</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>{0} işareti kaldırıldı</value>
+    <value>{1} {0} denetlenmedi</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Yayın öncesi sürüm: {0}</value>
@@ -145,5 +147,15 @@ Devam etmek istiyor musunuz?</value>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Kitaplığı Güncelleştir</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{1} {0} belirsiz</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Dosya</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Klasör</value>
   </data>
 </root>

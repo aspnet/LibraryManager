@@ -43,7 +43,7 @@
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>Zur Verbesserung des MSBuild-Prozesses wird ein NuGet-Paket installiert, aber dem Projekt werden keine Dateien hinzugefügt.
 
-Dazu ist möglicherweise eine Internetverbindung erforderlich.
+Möglicherweise ist eine Internetverbindung erforderlich.
 
 Möchten Sie den Vorgang fortsetzen?</value>
   </data>
@@ -55,13 +55,13 @@ Möchten Sie den Vorgang fortsetzen?</value>
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
-    <value>&lt;Wählen Sie eine Bibliothek, um Dateien auszuwählen, die installiert werden sollen&gt;</value>
+    <value>&lt;Zur Auswahl der zu installierenden Dateien Bibliothek auswählen&gt;</value>
   </data>
   <data name="DisableRestoreOnBuild" xml:space="preserve">
-    <value>Clienseitige Bibliotheken im Build deaktiviere&amp;n</value>
+    <value>Cli&amp;entseitige Bibliotheken bei Builderstellung deaktivieren</value>
   </data>
   <data name="EnableRestoreOnBuild" xml:space="preserve">
-    <value>&amp;Wiederherstellen von clienseitigen Bibliotheken im Build aktivieren...</value>
+    <value>Wi&amp;ederherstellung clientseitiger Bibliotheken bei Builderstellung aktivieren...</value>
   </data>
   <data name="Nuget_InstallingPackage" xml:space="preserve">
     <value>NuGet-Paket mit MSBuild-Ziel wird installiert...</value>
@@ -131,10 +131,12 @@ Möchten Sie den Vorgang fortsetzen?</value>
     <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="Checked" xml:space="preserve">
-    <value>"{0}" aktiviert</value>
+    <value>{0} "{1}" aktiviert</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
-    <value>"{0}" deaktiviert</value>
+    <value>{0} "{1}" deaktiviert</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="SuggestedAction_Update_Prerelease" xml:space="preserve">
     <value>Vorabversion: {0}</value>
@@ -145,5 +147,15 @@ Möchten Sie den Vorgang fortsetzen?</value>
   <data name="SuggestedAction_Update_Title" xml:space="preserve">
     <value>Bibliothek aktualisieren</value>
     <comment>Title for SuggestedAction set</comment>
+  </data>
+  <data name="Indeterminate" xml:space="preserve">
+    <value>{0} "{1}" nicht festgelegt</value>
+    <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Datei</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Ordner</value>
   </data>
 </root>

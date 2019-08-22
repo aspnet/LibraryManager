@@ -70,7 +70,8 @@
     <value>无法将库 "{0}" 更新为 "{1}"。以下文件对 "{1}" 无效: {2}</value>
   </data>
   <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
-    <value>"{0}" 不包含以下内容: {1} 有效文件为 {2}</value>
+    <value>"{0}" 不包含以下内容: {1}
+有效文件为 {2}</value>
   </data>
   <data name="ErrorUnknownError" xml:space="preserve">
     <value>发生未知错误</value>

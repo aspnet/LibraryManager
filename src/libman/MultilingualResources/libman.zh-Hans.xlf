@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="zh-Hans" original="LIBMAN/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
@@ -61,14 +61,15 @@
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="translated">CDNJS 库的库 ID 格式为“<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>” 对于 CDNJS 库，如果库 ID 中未指定版本，则使用可用的最高版本。</target>
+          <target state="translated">CDNJS 库的库 ID 格式为“&lt;库名称&gt;@&lt;库版本&gt;”
+    对于 CDNJS 库，如果库 ID 中没有指定版本，则使用最高可用版本。</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
     If no default provider exists, --provider option is required
     If no default destination exists, --destination option is required
     If no files are specified, the entire library is included</source>
-          <target state="translated">如果不存在 libman.json 则初始化它 如果不存在默认提供程序，则需要 --provider 选项，如果不存在默认目标，则需要 --destination 选项 如果未指定文件，则包括整个库</target>
+          <target state="translated">    如果不存在 libman.json 则初始化它 如果不存在默认提供程序，则需要 --provider 选项，如果不存在默认目标，则需要 --destination 选项 如果未指定文件，则包括整个库</target>
         </trans-unit>
         <trans-unit id="InvalidArgumentsMessage" translate="yes" xml:space="preserve">
           <source>Invalid arguments for command: {0}</source>
@@ -88,7 +89,7 @@
         </trans-unit>
         <trans-unit id="RemarksHeader" translate="yes" xml:space="preserve">
           <source>Remarks:</source>
-          <target state="translated">言论：</target>
+          <target state="translated">言论:</target>
         </trans-unit>
         <trans-unit id="RestoreCommandDesc" translate="yes" xml:space="preserve">
           <source>Downloads all files from provider and saves them to specified destination</source>
@@ -109,7 +110,7 @@
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
     libman uninstall jquery@3.3.1</source>
-          <target state="translated">libman uninstall jquery
+          <target state="translated">    libman uninstall jquery
     libman uninstall jquery@3.3.1</target>
         </trans-unit>
         <trans-unit id="UninstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
@@ -123,8 +124,8 @@
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="translated">CDNJS 库的库 ID 格式为“<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
-   如果库 ID 中未指定版本，此命令将应用于 libraryName 与给定 libraryId 匹配的任何库</target>
+          <target state="translated">CDNJS 库的库 ID 格式为“&lt;库名称&gt;@&lt;库版本&gt;”
+    如果库 ID 中没有指定版本，此命令将作用于库名称与给定库 ID 匹配的任何库</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -227,15 +228,18 @@
     libman update jquery --to 3.3.1
     libman update jquery -pre
 </source>
-          <target state="translated">libman update jquery
+          <target state="translated">    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</target>
+    libman update jquery -pre
+</target>
         </trans-unit>
         <trans-unit id="UpdateCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
     Error if specified library doesn't exist
     If there's more than one library with the same libraryId, you'll be prompted to choose.</source>
-          <target state="translated">若当前文件夹中没有 libman.json 则出错 若指定的库不存在则出错 若存在多个具有相同 libraryId 的库，将提示你进行选择。</target>
+          <target state="translated">若当前文件夹中不存在 libman.json 则出错
+    若指定的库不存在则出错
+    若有多个具有相同 libraryId 的库，则提示你进行选择。</target>
         </trans-unit>
         <trans-unit id="UpdateCommandLibraryArgumentDesc" translate="yes" xml:space="preserve">
           <source>Name of the library to update (without the version).</source>
@@ -384,6 +388,46 @@ Please specify a different destination.</source>
         <trans-unit id="SpecifyFieldUsingOption" translate="yes" xml:space="preserve">
           <source>Please specify '{0}' using the '--{1}' option.</source>
           <target state="translated">请使用 “--{1}” 选项指定“{0}”。</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Description" translate="yes" xml:space="preserve">
+          <source>Gets or sets configuration settings</source>
+          <target state="translated">获取或设置配置设置</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Examples" translate="yes" xml:space="preserve">
+          <source>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</source>
+          <target state="translated">    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_ArgumentDescription" translate="yes" xml:space="preserve">
+          <source>Name of the setting to retrieve</source>
+          <target state="translated">要检索的设置的名称</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_KeyNotFound" translate="yes" xml:space="preserve">
+          <source>Key {0} not found.</source>
+          <target state="translated">未找到密钥 {0}</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_ConflictingParameters" translate="yes" xml:space="preserve">
+          <source>Cannot read and write settings in the same operation</source>
+          <target state="translated">无法在同一操作中读取和写入设置</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_Set" translate="yes" xml:space="preserve">
+          <source>Sets a key-value pair in the configuration store.  The option should be in the form key=value</source>
+          <target state="translated">在配置存储区中设置键值对。 此选项应采用 "键=值" 格式</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_SetEncrypted" translate="yes" xml:space="preserve">
+          <source>Sets a key with an encrypted value in the configuraiton store.  The option should be in the form key=plaintext</source>
+          <target state="translated">在配置存储区中设置具有加密值的键。 此选项应采用 "键=纯文本" 格式</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Remarks" translate="yes" xml:space="preserve">
+          <source>    Settings cannot be read and stored in the same operation.
+    To remove a setting, set it to an empty string (--set key=).
+    Retrieving decrypted values for encrypted settings is not supported.</source>
+          <target state="translated">    无法在同一操作中读取和保存设置。
+    要删除某个设置，请将其设置为空字符串(--set key=)。
+    不支持检索已加密设置的解密值。</target>
         </trans-unit>
       </group>
     </body>

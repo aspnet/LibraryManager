@@ -51,10 +51,11 @@
     <value>要安装的库</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS 库的库 ID 格式为“&lt;libraryName&gt;@&lt;libraryVersion&gt;” 对于 CDNJS 库，如果库 ID 中未指定版本，则使用可用的最高版本。</value>
+    <value>CDNJS 库的库 ID 格式为“&lt;库名称&gt;@&lt;库版本&gt;”
+    对于 CDNJS 库，如果库 ID 中没有指定版本，则使用最高可用版本。</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
-    <value>如果不存在 libman.json 则初始化它 如果不存在默认提供程序，则需要 --provider 选项，如果不存在默认目标，则需要 --destination 选项 如果未指定文件，则包括整个库</value>
+    <value>    如果不存在 libman.json 则初始化它 如果不存在默认提供程序，则需要 --provider 选项，如果不存在默认目标，则需要 --destination 选项 如果未指定文件，则包括整个库</value>
   </data>
   <data name="InvalidArgumentsMessage" xml:space="preserve">
     <value>命令的参数无效: {0}</value>
@@ -69,7 +70,7 @@
     <value>特定于提供程序的逻辑:</value>
   </data>
   <data name="RemarksHeader" xml:space="preserve">
-    <value>言论：</value>
+    <value>言论:</value>
   </data>
   <data name="RestoreCommandDesc" xml:space="preserve">
     <value>从提供程序下载所有文件并将其保存到指定的目标</value>
@@ -83,7 +84,7 @@
     <value>从指定的目标删除指定库的所有文件, 然后从 libman.json 删除指定的库定义</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>libman uninstall jquery
+    <value>    libman uninstall jquery
     libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
@@ -93,8 +94,8 @@
     <value>要卸载的库的提供程序</value>
   </data>
   <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS 库的库 ID 格式为“&lt;libraryName&gt;@&lt;libraryVersion&gt;”
-   如果库 ID 中未指定版本，此命令将应用于 libraryName 与给定 libraryId 匹配的任何库</value>
+    <value>CDNJS 库的库 ID 格式为“&lt;库名称&gt;@&lt;库版本&gt;”
+    如果库 ID 中没有指定版本，此命令将作用于库名称与给定库 ID 匹配的任何库</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
     <value>若当前文件夹中不存在 libman.json 则出错
@@ -168,12 +169,15 @@
     <value>更新指定的库</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>libman update jquery
+    <value>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</value>
+    libman update jquery -pre
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
-    <value>若当前文件夹中没有 libman.json 则出错 若指定的库不存在则出错 若存在多个具有相同 libraryId 的库，将提示你进行选择。</value>
+    <value>若当前文件夹中不存在 libman.json 则出错
+    若指定的库不存在则出错
+    若有多个具有相同 libraryId 的库，则提示你进行选择。</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
     <value>要更新的库的名称 (不带版本)。</value>
@@ -284,5 +288,33 @@
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>请使用 “--{1}” 选项指定“{0}”。</value>
+  </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>获取或设置配置设置</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>要检索的设置的名称</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>未找到密钥 {0}</value>
+  </data>
+  <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
+    <value>无法在同一操作中读取和写入设置</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_Set" xml:space="preserve">
+    <value>在配置存储区中设置键值对。 此选项应采用 "键=值" 格式</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_SetEncrypted" xml:space="preserve">
+    <value>在配置存储区中设置具有加密值的键。 此选项应采用 "键=纯文本" 格式</value>
+  </data>
+  <data name="ConfigCommand_Remarks" xml:space="preserve">
+    <value>    无法在同一操作中读取和保存设置。
+    要删除某个设置，请将其设置为空字符串(--set key=)。
+    不支持检索已加密设置的解密值。</value>
   </data>
 </root>

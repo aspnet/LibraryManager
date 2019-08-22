@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ko" original="LIBMAN/RESOURCES/TEXT.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
@@ -61,14 +61,15 @@
         <trans-unit id="InstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     For CDNJS libraries, if no version is specified in the library ID, the highest version available is used.</source>
-          <target state="translated">CDNJS 라이브러리는 라이브러리 ID 형식이 “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”입니다. CDNJS 라이브러리의 경우 라이브러리 ID에 버전을 지정하지 않으면 사용 가능한 가장 높은 버전이 사용됩니다.</target>
+          <target state="translated">    CDNJS 라이브러리의 라이브러리 ID 형식은 "&lt;라이브러리 이름&gt;@&lt;라이브러리 버전&gt;"입니다.
+    CDNJS 라이브러리의 경우 라이브러리 ID에 버전을 지정하지 않으면 사용 가능한 최고 버전이 사용됩니다.</target>
         </trans-unit>
         <trans-unit id="InstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Initializes a libman.json if one does not exist
     If no default provider exists, --provider option is required
     If no default destination exists, --destination option is required
     If no files are specified, the entire library is included</source>
-          <target state="translated">없으면 libman.json을 초기화합니다.
+          <target state="translated">    없으면 libman.json을 초기화합니다.
     기본 공급자가 없으면 --provider 옵션이 필요합니다.
     기본 대상이 없으면 --destination 옵션이 필요합니다.
     파일을 지정하지 않은 경우 전체 라이브러리가 포함됩니다.</target>
@@ -112,7 +113,8 @@
         <trans-unit id="UnInstallCommandExamples" translate="yes" xml:space="preserve">
           <source>    libman uninstall jquery
     libman uninstall jquery@3.3.1</source>
-          <target state="translated">libman uninstall jquery libman uninstall jquery@3.3.1</target>
+          <target state="translated">    libman uninstall jquery
+    libman uninstall jquery@3.3.1</target>
         </trans-unit>
         <trans-unit id="UninstallCommandLibraryIdArgumentDesc" translate="yes" xml:space="preserve">
           <source>Library to uninstall</source>
@@ -125,8 +127,8 @@
         <trans-unit id="UnInstallCommandProviderSpecificLogic" translate="yes" xml:space="preserve">
           <source>    CDNJS libraries have a library ID format of “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”
     If no version is specified in the library ID, this command will act on any library with libraryName matching the given libraryId</source>
-          <target state="translated">CDNJS 라이브러리는 라이브러리 ID 형식이 “<it id="1" pos="open">&lt;libraryName&gt;</it>@<it id="2" pos="open">&lt;libraryVersion&gt;</it>”입니다.
-    라이브러리 ID에 버전을 지정하지 않은 경우 이 명령은 libraryName이 지정된 libraryId와 일치하는 모든 라이브러리에 적용됩니다.</target>
+          <target state="translated">    CDNJS 라이브러리의 라이브러리 ID 형식은 "&lt;라이브러리 이름&gt;@&lt;라이브러리 버전&gt;"입니다.
+    라이브러리 ID에 버전을 지정하지 않으면 지정된 라이브러리 ID와 일치하는 라이브러리 이름이 있는 모든 라이브러리에 이 명령이 실행됩니다.</target>
         </trans-unit>
         <trans-unit id="UnInstallCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -229,9 +231,10 @@
     libman update jquery --to 3.3.1
     libman update jquery -pre
 </source>
-          <target state="translated">libman update jquery
+          <target state="translated">    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</target>
+    libman update jquery -pre
+</target>
         </trans-unit>
         <trans-unit id="UpdateCommandRemarks" translate="yes" xml:space="preserve">
           <source>    Error if no libman.json in current folder
@@ -388,6 +391,46 @@ Please specify a different destination.</source>
         <trans-unit id="SpecifyFieldUsingOption" translate="yes" xml:space="preserve">
           <source>Please specify '{0}' using the '--{1}' option.</source>
           <target state="translated">'--{1}' 옵션을 사용하여 '{0}'을(를) 지정하세요.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Description" translate="yes" xml:space="preserve">
+          <source>Gets or sets configuration settings</source>
+          <target state="translated">구성 설정을 가져오거나 설정합니다.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Examples" translate="yes" xml:space="preserve">
+          <source>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</source>
+          <target state="translated">    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_ArgumentDescription" translate="yes" xml:space="preserve">
+          <source>Name of the setting to retrieve</source>
+          <target state="translated">검색할 설정의 이름</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_KeyNotFound" translate="yes" xml:space="preserve">
+          <source>Key {0} not found.</source>
+          <target state="translated">{0} 키를 찾을 수 없습니다.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Error_ConflictingParameters" translate="yes" xml:space="preserve">
+          <source>Cannot read and write settings in the same operation</source>
+          <target state="translated">같은 작업에서 설정을 읽고 쓸 수 없습니다.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_Set" translate="yes" xml:space="preserve">
+          <source>Sets a key-value pair in the configuration store.  The option should be in the form key=value</source>
+          <target state="translated">구성 저장소에 키-값 쌍을 설정합니다. 이 옵션은 key=value 형식이어야 합니다.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_OptionDescription_SetEncrypted" translate="yes" xml:space="preserve">
+          <source>Sets a key with an encrypted value in the configuraiton store.  The option should be in the form key=plaintext</source>
+          <target state="translated">구성 저장소에 암호화된 값으로 키를 설정합니다. 이 옵션은 key=plaintext 형식이어야 합니다.</target>
+        </trans-unit>
+        <trans-unit id="ConfigCommand_Remarks" translate="yes" xml:space="preserve">
+          <source>    Settings cannot be read and stored in the same operation.
+    To remove a setting, set it to an empty string (--set key=).
+    Retrieving decrypted values for encrypted settings is not supported.</source>
+          <target state="translated">    같은 작업에서 설정을 읽고 저장할 수 없습니다.
+    설정을 제거하려면 빈 문자열(--set key=)로 설정합니다.
+    암호화된 설정의 암호 해독된 값 검색은 지원되지 않습니다.</target>
         </trans-unit>
       </group>
     </body>

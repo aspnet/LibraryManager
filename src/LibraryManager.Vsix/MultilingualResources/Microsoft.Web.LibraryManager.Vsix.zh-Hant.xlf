@@ -47,15 +47,15 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">將安裝 NuGet 套件以改善 MSBuild 處理序，但不會將任何檔案新增至專案。
+          <target state="translated">將會安裝 NuGet 套件，以擴大 MSBuild 處理序，但不會新增任何檔案到專案中。
 
-這需要網路際網路連線。
+這需要連線到網際網路。
 
-確定要繼續嗎?</target>
+要繼續嗎?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;輸入以搜尋&gt;</it></target>
+          <target state="translated">&lt;鍵入以搜尋&gt;</target>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
@@ -64,15 +64,15 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;請選擇程式庫以選取要安裝的檔案&gt;</it></target>
+          <target state="translated">&lt;請選擇程式庫，以選取要安裝的檔案&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
-          <target state="translated">在建置時停用用戶端程式庫(&amp;E)</target>
+          <target state="translated">建置時停用用戶端程式庫(&amp;E)</target>
         </trans-unit>
         <trans-unit id="EnableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>&amp;Enable Restore Client-Side Libraries on Build...</source>
-          <target state="translated">在建置時啟用還原用戶端程式庫(&amp;E)...</target>
+          <target state="translated">允許在建置時還原用戶端程式庫(&amp;E)...</target>
         </trans-unit>
         <trans-unit id="Nuget_InstallingPackage" translate="yes" xml:space="preserve">
           <source>Installing NuGet package containing MSBuild target...</source>
@@ -164,12 +164,16 @@ Do you want to continue?</source>
           <note from="MultilingualBuild" annotates="source" priority="2">Used in message box when light bulb found no updates</note>
         </trans-unit>
         <trans-unit id="Checked" translate="yes" xml:space="preserve">
-          <source>Checked {0}</source>
-          <target state="translated">已選取 {0}</target>
+          <source>Checked {0} {1}</source>
+          <target state="translated">已選取 {0} {1}</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="UnChecked" translate="yes" xml:space="preserve">
-          <source>UnChecked {0}</source>
-          <target state="translated">已取消選取 {0}</target>
+          <source>UnChecked {0} {1}</source>
+          <target state="translated">已取消選取 {0} {1}</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Prerelease" translate="yes" xml:space="preserve">
           <source>Pre-release: {0}</source>
@@ -177,12 +181,25 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Stable" translate="yes" xml:space="preserve">
           <source>Stable: {0}</source>
-          <target state="translated">穩定版本: {0}</target>
+          <target state="translated">穩定: {0}</target>
         </trans-unit>
         <trans-unit id="SuggestedAction_Update_Title" translate="yes" xml:space="preserve">
           <source>Update Library</source>
           <target state="translated">更新程式庫</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Title for SuggestedAction set</note>
+        </trans-unit>
+        <trans-unit id="Indeterminate" translate="yes" xml:space="preserve">
+          <source>Indeterminate {0} {1}</source>
+          <target state="translated">不確定 {0} {1}</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</note>
+        </trans-unit>
+        <trans-unit id="File" translate="yes" xml:space="preserve">
+          <source>File</source>
+          <target state="translated">檔案</target>
+        </trans-unit>
+        <trans-unit id="Folder" translate="yes" xml:space="preserve">
+          <source>Folder</source>
+          <target state="translated">資料夾</target>
         </trans-unit>
       </group>
     </body>

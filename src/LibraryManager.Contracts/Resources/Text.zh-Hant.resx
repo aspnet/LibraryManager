@@ -70,7 +70,8 @@
     <value>程式庫 "{0}" 無法更新為 "{1}"。下列檔案對 "{1}" 無效: {2}</value>
   </data>
   <data name="ErrorLibraryHasInvalidFiles" xml:space="preserve">
-    <value>"{0}" 未包含以下項目: {1} 有效的檔案為 {2}</value>
+    <value>"{0}" 未包含以下項目: {1}
+有效的檔案為 {2}</value>
   </data>
   <data name="ErrorUnknownError" xml:space="preserve">
     <value>發生未知錯誤</value>

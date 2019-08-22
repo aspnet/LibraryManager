@@ -51,8 +51,8 @@
     <value>インストールするライブラリ</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS ライブラリには、次の形式のライブラリ ID があります: “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
-    CDNJS ライブラリでは、ライブラリ ID でバージョンが指定されていない場合、使用可能な最新のバージョンが使用されます。</value>
+    <value>    CDNJS ライブラリのライブラリ ID の形式は "&lt;ライブラリ名&gt;@&lt;ライブラリバージョン&gt;" です
+    CDNJS ライブラリで、ライブラリ ID にバージョンが指定されていない場合、使用可能な最新のバージョンが使用されます。</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
     <value>libman.json が存在しない場合は、初期化されます
@@ -79,13 +79,15 @@
     <value>プロバイダーからすべてのファイルをダウンロードし、指定した宛先に保存します</value>
   </data>
   <data name="RestoreCommandRemarks" xml:space="preserve">
-    <value>現在のフォルダーに libman.json がない場合は、エラーになります。ライブラリでプロバイダーを指定している場合は、defaultProvider がオーバーライドされます。ライブラリで宛先を指定している場合は、defaultDestination がオーバーライドされます。</value>
+    <value>現在のフォルダーに libman.json がない場合は、エラーになります。
+    ライブラリでプロバイダーを指定している場合は、defaultProvider がオーバーライドされます。
+    ライブラリで宛先を指定している場合は、defaultDestination がオーバーライドされます。</value>
   </data>
   <data name="UnInstallCommandDesc" xml:space="preserve">
     <value>指定したターゲットから指定したライブラリのすべてのファイルを削除し、libman.json から指定したライブラリの定義を削除します</value>
   </data>
   <data name="UnInstallCommandExamples" xml:space="preserve">
-    <value>libman uninstall jquery
+    <value>    libman uninstall jquery
     libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
@@ -95,8 +97,8 @@
     <value>アンインストールするライブラリのプロバイダー</value>
   </data>
   <data name="UnInstallCommandProviderSpecificLogic" xml:space="preserve">
-    <value>CDNJS ライブラリには、次の形式のライブラリ ID があります: “&lt;libraryName&gt;@&lt;libraryVersion&gt;”
-    ライブラリ ID にバージョンが指定されていない場合、このコマンドは、所定の libraryId に一致する libraryName を持つすべてのライブラリに作用します。</value>
+    <value>    CDNJS ライブラリのライブラリ ID の形式は "&lt;ライブラリ名&gt;@&lt;ライブラリバージョン&gt;" です
+    ライブラリ ID にバージョンが指定されていない場合、このコマンドは、指定されたライブラリID に一致するライブラリ名を持つ任意のライブラリで動作します</value>
   </data>
   <data name="UnInstallCommandRemarks" xml:space="preserve">
     <value>現在のフォルダーに libman.json がない場合は、エラーになります
@@ -170,12 +172,15 @@
     <value>指定したライブラリを更新します</value>
   </data>
   <data name="UpdateCommandExamples" xml:space="preserve">
-    <value>libman update jquery
+    <value>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre</value>
+    libman update jquery -pre
+</value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
-    <value>現在のフォルダーに libman.json がない場合はエラーになります 指定されたライブラリが存在しない場合はエラーになります 同じ libraryId のライブラリが複数ある場合は選択するようメッセージが表示されます。</value>
+    <value>現在のフォルダーに libman.json がない場合は、エラーになります
+    指定したライブラリが存在しな場合は、エラーになります
+    同じ libraryId のライブラリが複数ある場合は、選択するようにとのプロンプトが出ます。</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
     <value>更新するライブラリの名前 (バージョンを含めない)。</value>
@@ -286,5 +291,33 @@
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>'--{1}' オプションを使って '{0}' を指定してください。</value>
+  </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>構成設定を取得または設定します</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>取得する設定の名前</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>キー {0} が見つかりません。</value>
+  </data>
+  <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
+    <value>同じ操作で設定の読み取りと書き込みを行うことはできません</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_Set" xml:space="preserve">
+    <value>キーと値のペアを構成ストアに設定します。オプションは、key=value の形式にする必要があります</value>
+  </data>
+  <data name="ConfigCommand_OptionDescription_SetEncrypted" xml:space="preserve">
+    <value>暗号化された値を含むキーを構成ストアに設定します。オプションは、key=plaintext の形式にする必要があります</value>
+  </data>
+  <data name="ConfigCommand_Remarks" xml:space="preserve">
+    <value>    設定を同じ操作で読み取り、保存することはできません。
+    設定を削除するには、空の文字列 (--set key=) に設定します。
+    暗号化された設定の暗号化解除された値の取得はサポートされていません。</value>
   </data>
 </root>
