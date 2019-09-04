@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             try
             {
-                var dependencies = _provider.DependenciesFactory.FromConfigFile(_provider.ConfigFilePath);
+                IDependencies dependencies = _provider.DependenciesFactory.FromConfigFile(_provider.ConfigFilePath);
                 IProvider provider = dependencies.GetProvider(_provider.InstallationState.ProviderId);
                 ILibraryCatalog catalog = provider?.GetCatalog();
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Test.Apex.Services;
 using Microsoft.Test.Apex.VisualStudio;
@@ -36,7 +37,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
                 {
                     CommandingService.ExecuteCommand(guid, commandId, null);
                 });
-            });
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default );
         }
 
         private InstallDialogTestExtension GetInstallDialogTestExtension()

@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         ICompletionBroker CompletionBroker { get; set; }
 
         [Import]
-        ILibraryCommandService libraryCommandService { get; set; }
+        ILibraryCommandService LibraryCommandService { get; set; }
 
         [Import]
         private IDependenciesFactory DependenciesFactory { get; set; }
@@ -66,14 +66,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             new CompletionController(textViewAdapter, textView, CompletionBroker);
 
             _dependencies = DependenciesFactory.FromConfigFile(doc.FilePath);
+#pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
+                                  // Justification: Manifest is free-threaded, don't need to use JTF here
             _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
+#pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
             _manifestPath = doc.FilePath;
             _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);
 
             doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
 
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
                 if (!results.All(r => r.Success))
@@ -86,7 +89,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private void OnFileSaved(object sender, TextDocumentFileActionEventArgs e)
         {
-            if (libraryCommandService.IsOperationInProgress)
+            if (LibraryCommandService.IsOperationInProgress)
             {
                 Logger.LogEvent(Resources.Text.OperationInProgress, LogLevel.Operation);
             }
@@ -95,7 +98,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             if (e.FileActionType == FileActionTypes.ContentSavedToDisk && textDocument != null)
             {
-                Task.Run(async () =>
+                _ = Task.Run(async () =>
                 {
                     try
                     {
@@ -114,7 +117,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                             {
                                 _manifest = newManifest;
 
-                                await libraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                await LibraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
                                 Telemetry.TrackUserTask("Invoke-RestoreOnSave");
                             }
                             else
