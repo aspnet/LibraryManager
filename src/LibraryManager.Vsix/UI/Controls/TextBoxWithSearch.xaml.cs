@@ -5,12 +5,14 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Threading;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.UI.Controls.AutomationPeers;
 using Microsoft.Web.LibraryManager.Vsix.UI.Extensions;
@@ -227,9 +229,27 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // location textbox with name of the folder when dialog is initially loaded.
             if (textChange.AddedLength > 0 && SearchTextBox.CaretIndex > 0)
             {
-                VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
+                ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
-                    CompletionSet completionSet = await ViewModel.GetCompletionSetAsync(SearchTextBox.CaretIndex);
+                    // grab these WPF dependant things while we're still on the UI thread
+                    int caretIndex = SearchTextBox.CaretIndex;
+                    SearchTextBoxViewModel viewModel = ViewModel;
+
+                    string textBeforeGetCompletion = SearchTextBox.Text;
+
+                    // Switch to a background thread to not block the UI thread, as this operation can take
+                    // a while for slow network connections
+                    await TaskScheduler.Default;
+                    CompletionSet completionSet = await viewModel.GetCompletionSetAsync(caretIndex);
+
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                    // If the value has changed then this request is out of date.
+                    // If focus is elsewhere the work below won't be used anyway
+                    if (textBeforeGetCompletion != SearchTextBox.Text || !SearchTextBox.IsFocused)
+                    {
+                        return;
+                    }
 
                     if (completionSet.Completions == null || !completionSet.Completions.Any())
                     {
