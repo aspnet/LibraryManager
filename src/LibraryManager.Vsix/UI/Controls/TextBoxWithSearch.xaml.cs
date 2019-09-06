@@ -229,7 +229,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // location textbox with name of the folder when dialog is initially loaded.
             if (textChange.AddedLength > 0 && SearchTextBox.CaretIndex > 0)
             {
-
                 ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
                     // grab these WPF dependant things while we're still on the UI thread
@@ -270,8 +269,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
                     {
                         CompletionItem selectionCandidate = await ViewModel.GetRecommendedSelectedCompletionAsync(
-                                    completionSet: completionSet,
-                                    lastSelected: SelectedItem?.CompletionItem);
+                            completionSet: completionSet,
+                            lastSelected: SelectedItem?.CompletionItem);
                         SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == selectionCandidate.InsertionText) ?? CompletionEntries[0];
                         Options.ScrollIntoView(SelectedItem);
                     }
