@@ -60,3 +60,7 @@ See the [CHANGELOG](CHANGELOG.md) for road map and release notes
 # Feedback
 
 Check out the [contributing](.github/CONTRIBUTING.md) page to see the best places to log issues and start discussions.
+
+# Reporting Security Issues
+
+Please refer to [SECURITY.md](SECURITY.md)
