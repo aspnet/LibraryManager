@@ -102,7 +102,7 @@ Build the test projects.
   <Target Name="BuildTestProjects">
     <ItemGroup>
       <TestProjects Include="$(RepoRoot)\test\**\*.csproj" />
-      <TestProjects Remove="$(RepoRoot)\test\LibraryManager.IntegrationTest\TestSolution\**\*.csproj" />
+      <TestProjects Remove="$(RepoRoot)\test\LibraryManager.IntegrationTest\**\TestSolution\**\*.csproj" />
     </ItemGroup>
     <MSBuild Targets="Build"
              Projects="@(TestProjects)"
