@@ -6,3 +6,8 @@
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Custom exception types require multiple parameters to be useful")]
 
+// Suppress issues in code from external sources
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1064:Exceptions should be public", Justification = "<Pending>", Scope = "type", Target = "~T:Microsoft.Extensions.CommandLineUtils.CommandParsingException")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "<Pending>", Scope = "member", Target = "~M:Microsoft.Extensions.CommandLineUtils.CommandOption.#ctor(System.String,Microsoft.Extensions.CommandLineUtils.CommandOptionType)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "<Pending>", Scope = "member", Target = "~M:Microsoft.Extensions.CommandLineUtils.AnsiConsole.WriteLine(System.String)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "<Pending>", Scope = "member", Target = "~M:Microsoft.Extensions.CommandLineUtils.CommandLineApplication.Execute(System.String[])~System.Int32")]
