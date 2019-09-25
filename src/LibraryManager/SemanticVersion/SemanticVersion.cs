@@ -233,9 +233,9 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         public static bool operator ==(SemanticVersion left, SemanticVersion right)
         {
-            if (ReferenceEquals(left, null))
+            if (left is null)
             {
-                return ReferenceEquals(right, null);
+                return right is null;
             }
 
             return left.Equals(right);
@@ -254,7 +254,7 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         public static bool operator <(SemanticVersion left, SemanticVersion right)
         {
-            return ReferenceEquals(left, null) ? !ReferenceEquals(right, null) : left.CompareTo(right) < 0;
+            return left is null ? !(right is null) : left.CompareTo(right) < 0;
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         public static bool operator <=(SemanticVersion left, SemanticVersion right)
         {
-            return ReferenceEquals(left, null) || left.CompareTo(right) <= 0;
+            return left is null || left.CompareTo(right) <= 0;
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         public static bool operator >(SemanticVersion left, SemanticVersion right)
         {
-            return !ReferenceEquals(left, null) && left.CompareTo(right) > 0;
+            return !(left is null) && left.CompareTo(right) > 0;
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         public static bool operator >=(SemanticVersion left, SemanticVersion right)
         {
-            return ReferenceEquals(left, null) ? ReferenceEquals(right, null) : left.CompareTo(right) >= 0;
+            return left is null ? right is null : left.CompareTo(right) >= 0;
         }
     }
 }
