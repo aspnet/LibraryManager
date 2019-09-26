@@ -123,7 +123,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
         public static void ClearOutputWindow()
         {
             // Don't access _outputWindowPane through the property here so that we don't force creation
-            ThreadHelper.Generic.BeginInvoke(() => OutputWindowPaneValue?.Clear());
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                OutputWindowPaneValue?.Clear();
+            });
         }
 
         private static IVsOutputWindowPane OutputWindowPane
@@ -188,13 +192,18 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static void LogToActivityLog(string message, __ACTIVITYLOG_ENTRYTYPE type)
         {
-            ThreadHelper.Generic.BeginInvoke(() => ActivityLog.LogEntry((uint)type, Vsix.Name, message));
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                ActivityLog.LogEntry((uint)type, Vsix.Name, message);
+            });
         }
 
         private static void LogToStatusBar(string message)
         {
-            ThreadHelper.Generic.BeginInvoke(() =>
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 Statusbar.FreezeOutput(0);
                 Statusbar.SetText(message);
                 Statusbar.FreezeOutput(1);
@@ -203,7 +212,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         private static void LogToOutputWindow(object message)
         {
-            ThreadHelper.Generic.BeginInvoke(() => OutputWindowPane?.OutputString(message + Environment.NewLine));
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                OutputWindowPane?.OutputString(message + Environment.NewLine);
+            });
         }
 
         private static bool EnsurePane()

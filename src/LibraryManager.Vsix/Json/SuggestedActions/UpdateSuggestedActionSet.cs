@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Language.Intellisense;
@@ -24,11 +25,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
             _provider = provider;
         }
 
+        [SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "Checked for task completion before calling .Result")]
         public override bool HasActionSets
         {
             get
             {
-                var dependencies = _provider.DependenciesFactory.FromConfigFile(_provider.ConfigFilePath);
+                IDependencies dependencies = _provider.DependenciesFactory.FromConfigFile(_provider.ConfigFilePath);
                 IProvider provider = dependencies.GetProvider(_provider.InstallationState.ProviderId);
                 ILibraryCatalog catalog = provider?.GetCatalog();
 
@@ -40,7 +42,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 _actions = GetListOfActionsAsync(catalog, CancellationToken.None);
 
                 if (_actions.IsCompleted && _actions.Result.Count == 0)
+                {
                     return false;
+                }
 
                 return true;
             }

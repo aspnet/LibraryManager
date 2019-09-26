@@ -136,6 +136,13 @@ namespace Microsoft.Web.LibraryManager
             return ver;
         }
 
+        /// <summary>
+        /// Compares this object to the other and returns a result indicating sort order.
+        /// </summary>
+        /// <remarks>
+        /// This comparison does take build metadata into account for the comparison.
+        /// </remarks>
+        /// <returns>-1 if this version is lower than other; 0 if they are equal; 1 otherwise.</returns>
         public int CompareTo(SemanticVersion other)
         {
             if (other == null)
@@ -186,24 +193,92 @@ namespace Microsoft.Web.LibraryManager
             return StringComparer.OrdinalIgnoreCase.Compare(OriginalText, other.OriginalText);
         }
 
+        /// <summary>
+        /// Returns whether the semantic verisons are equal.  This includes comparing the build metadata, and does not provide semantic equivalence.
+        /// </summary>
         public bool Equals(SemanticVersion other)
         {
             return other != null && string.Equals(OriginalText, other.OriginalText, StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Returns whether the other object is equal to this SemanticVersion.
+        /// </summary>
         public override bool Equals(object obj)
         {
             return Equals(obj as SemanticVersion);
         }
 
+        /// <summary>
+        /// Returns a hash code to uniquely identify this version.
+        /// </summary>
+        /// <remarks>
+        /// This is aware of build metadata, and should not be relied on as a semantic equality comparison.
+        /// </remarks>
         public override int GetHashCode()
         {
             return _hashCode;
         }
 
+        /// <summary>
+        /// Get a string representation of this SemanticVersion
+        /// </summary>
         public override string ToString()
         {
             return OriginalText;
+        }
+
+        /// <summary>
+        /// Equality operator
+        /// </summary>
+        public static bool operator ==(SemanticVersion left, SemanticVersion right)
+        {
+            if (left is null)
+            {
+                return right is null;
+            }
+
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Inequality operator
+        /// </summary>
+        public static bool operator !=(SemanticVersion left, SemanticVersion right)
+        {
+            return !(left == right);
+        }
+
+        /// <summary>
+        /// Less-than operator
+        /// </summary>
+        public static bool operator <(SemanticVersion left, SemanticVersion right)
+        {
+            return left is null ? !(right is null) : left.CompareTo(right) < 0;
+        }
+
+        /// <summary>
+        /// Less-than-or-equal operator
+        /// </summary>
+        public static bool operator <=(SemanticVersion left, SemanticVersion right)
+        {
+            return left is null || left.CompareTo(right) <= 0;
+        }
+
+        /// <summary>
+        /// Greater-than operator
+        /// </summary>
+        public static bool operator >(SemanticVersion left, SemanticVersion right)
+        {
+            return !(left is null) && left.CompareTo(right) > 0;
+        }
+
+        /// <summary>
+        /// Greater-than-or-equal operator
+        /// </summary>
+        public static bool operator >=(SemanticVersion left, SemanticVersion right)
+        {
+            return left is null ? right is null : left.CompareTo(right) >= 0;
         }
     }
 }

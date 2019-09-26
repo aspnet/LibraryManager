@@ -13,6 +13,8 @@ using Microsoft.WebTools.Languages.Shared.Editor.SuggestedActions;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Utility;
 
+using Task = System.Threading.Tasks.Task;
+
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class UninstallSuggestedAction : SuggestedActionBase
@@ -44,12 +46,20 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return string.Format(Resources.Text.UninstallLibrary, cleanId);
         }
 
-        public override async void Invoke(CancellationToken cancellationToken)
+        public override void Invoke(CancellationToken cancellationToken)
+        {
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await InvokeAsync(cancellationToken);
+            });
+        }
+
+        private async Task InvokeAsync(CancellationToken cancellationToken)
         {
             try
             {
                 Telemetry.TrackUserTask("Invoke-UninstallFromSuggestedAction");
-                var state = _provider.InstallationState;
+                ILibraryInstallationState state = _provider.InstallationState;
                 await _libraryCommandService.UninstallAsync(_provider.ConfigFilePath, state.Name, state.Version, state.ProviderId, cancellationToken)
                     .ConfigureAwait(false);
 
@@ -75,7 +85,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             }
             catch (Exception ex)
             {
-                Logger.LogEvent(ex.ToString(), LibraryManager.Contracts.LogLevel.Error);
+                Logger.LogEvent(ex.ToString(), LogLevel.Error);
                 Telemetry.TrackException("UninstallFromSuggestedActionFailed", ex);
             }
         }

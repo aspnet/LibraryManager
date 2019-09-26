@@ -15,6 +15,8 @@ using Microsoft.WebTools.Languages.Json.Editor.Document;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 
+using Task = System.Threading.Tasks.Task;
+
 namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class CompletionController : IOleCommandTarget
@@ -43,24 +45,25 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
                 if (char.IsLetterOrDigit(typedChar) && _broker.IsCompletionActive(_textView))
                 {
-                    RetriggerAsync(false);
+                    _ = RetriggerAsync(false);
                 }
                 else if (typedChar == '/' || typedChar == '\\' && !_broker.IsCompletionActive(_textView))
                 {
-                    RetriggerAsync(false);
+                    _ = RetriggerAsync(false);
                 }
                 else if (typedChar == '@')
                 {
-                    RetriggerAsync(true);
+                    _ = RetriggerAsync(true);
                 }
             }
             else if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.BACKSPACE)
             {
-                RetriggerAsync(true);
+                _ = RetriggerAsync(true);
             }
 
-            ThreadHelper.Generic.BeginInvoke(() =>
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 if (_currentSession == null && _broker.IsCompletionActive(_textView))
                 {
                     _currentSession = _broker.GetSessions(_textView)[0];
@@ -86,11 +89,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (text.EndsWith("/", StringComparison.Ordinal) || text.EndsWith("\\", StringComparison.Ordinal))
             {
                 System.Windows.Forms.SendKeys.Send("{LEFT}");
-                RetriggerAsync(true);
+                _ = RetriggerAsync(true);
             }
         }
 
-        private async void RetriggerAsync(bool force)
+        private async Task RetriggerAsync(bool force)
         {
             _lastTyped = DateTime.Now;
             int delay = force ? 50 : _delay;

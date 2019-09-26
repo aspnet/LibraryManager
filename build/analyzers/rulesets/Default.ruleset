@@ -36,6 +36,7 @@
     <Rule Id="CA1023" Action="Warning" />                     <!-- Indexers should not be multidimensional. -->
     <Rule Id="CA1026" Action="Info" />                        <!-- Default parameters should not be used. An externally visible type contains an externally visible method that uses a default parameter. -->
     <Rule Id="CA1027" Action="Info" />                        <!-- Mark enums with FlagsAttribute. -->
+    <Rule Id="CA1031" Action="None" />                        <!-- Do not catch general exception types. -->
     <Rule Id="CA1034" Action="Info" />                        <!-- Nested types should not be visible. -->
     <Rule Id="CA1035" Action="Warning" />                     <!-- ICollection implementations have strongly typed members. A public or protected type implements System.Collections.ICollection but does not provide a strongly typed method for ICollection.CopyTo. -->
     <Rule Id="CA1038" Action="Warning" />                     <!-- Enumerators should be strongly typed. A public or protected type implements System.Collections.IEnumerator but does not provide a strongly typed version of the IEnumerator.Current property. -->

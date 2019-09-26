@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             get { return JsonCompletionContextType.ArrayElement; }
         }
 
+        [SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "Checked for task completion before calling .Result")]
         protected override IEnumerable<JsonCompletionEntry> GetEntries(JsonCompletionContext context)
         {
             MemberNode member = context.ContextNode.FindType<MemberNode>();
@@ -52,7 +54,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             if (string.IsNullOrEmpty(state.Name))
                 yield break;
 
-            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
+            IDependencies dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
             IProvider provider = dependencies.GetProvider(state.ProviderId);
             ILibraryCatalog catalog = provider?.GetCatalog();
 

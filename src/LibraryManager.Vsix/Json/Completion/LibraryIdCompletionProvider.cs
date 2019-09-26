@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
@@ -36,6 +37,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             get { return JsonCompletionContextType.PropertyValue; }
         }
 
+        [SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "Checked for task completion before calling .Result")]
         protected override IEnumerable<JsonCompletionEntry> GetEntries(JsonCompletionContext context)
         {
             var member = context.ContextNode as MemberNode;
@@ -52,7 +54,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 yield break;
             }
 
-            var dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
+            IDependencies dependencies = _dependenciesFactory.FromConfigFile(ConfigFilePath);
             IProvider provider = dependencies.GetProvider(state.ProviderId);
             ILibraryCatalog catalog = provider?.GetCatalog();
 
