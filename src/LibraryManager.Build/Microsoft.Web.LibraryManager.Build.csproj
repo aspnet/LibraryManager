@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" />
     <PackageReference Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'netstandard2.0'"/>
   </ItemGroup>
 
