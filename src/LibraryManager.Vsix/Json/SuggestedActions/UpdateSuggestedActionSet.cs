@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.WebTools.Languages.Shared.Editor.SuggestedActions;
+using Microsoft.VisualStudio.Threading;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -17,7 +18,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         private static readonly Guid Guid = new Guid("2975f71b-809a-4ed6-a170-6bbc04058424");
         private readonly SuggestedActionProvider _provider;
-        private Task<List<ISuggestedAction>> _actions;
+        private JoinableTask<List<ISuggestedAction>> _actions;
 
         public UpdateSuggestedActionSet(SuggestedActionProvider provider)
             : base(provider.TextBuffer, provider.TextView, Resources.Text.CheckForUpdates, Guid)
@@ -39,9 +40,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
                     return false;
                 }
 
-                _actions = GetListOfActionsAsync(catalog, CancellationToken.None);
+                _actions = VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.RunAsync(() => GetListOfActionsAsync(catalog, CancellationToken.None));
 
-                if (_actions.IsCompleted && _actions.Result.Count == 0)
+                if (_actions.IsCompleted && _actions.Task.Result.Count == 0)
                 {
                     return false;
                 }

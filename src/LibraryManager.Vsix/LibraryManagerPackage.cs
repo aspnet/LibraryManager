@@ -59,14 +59,15 @@ namespace Microsoft.Web.LibraryManager.Vsix
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            IComponentModel componentModel = GetService(typeof(SComponentModel)) as IComponentModel;
+            var componentModel = GetService(typeof(SComponentModel)) as IComponentModel;
+            Assumes.Present(componentModel);
             componentModel.DefaultCompositionService.SatisfyImportsOnce(this);
 
-            OleMenuCommandService commandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            var commandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
 
             if (commandService != null && LibraryCommandService != null)
             {
-                InstallLibraryCommand.Initialize(commandService, LibraryCommandService, DependenciesFactory);
+                InstallLibraryCommand.Initialize(this, commandService, LibraryCommandService, DependenciesFactory);
                 CleanCommand.Initialize(this, commandService, LibraryCommandService);
                 RestoreCommand.Initialize(this, commandService, LibraryCommandService);
                 RestoreSolutionCommand.Initialize(this, commandService, LibraryCommandService);
