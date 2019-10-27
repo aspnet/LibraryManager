@@ -42,14 +42,8 @@ namespace Microsoft.Web.LibraryManager
             {
                 if (string.IsNullOrEmpty(CacheFolderValue))
                 {
-                    string envVar = "%HOME%";
-
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        envVar = "%USERPROFILE%";
-                    }
-
-                    CacheFolderValue = Path.Combine(Environment.ExpandEnvironmentVariables(envVar), ".librarymanager", "cache");
+                    string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    CacheFolderValue = Path.Combine(localAppData, ".librarymanager", "cache");
                 }
 
                 return CacheFolderValue;
