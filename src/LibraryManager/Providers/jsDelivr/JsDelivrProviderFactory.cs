@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 throw new ArgumentNullException(nameof(hostInteraction));
             }
 
-            return new JsDelivrProvider(hostInteraction, _packageSearch, _packageInfoFactory);
+            return new JsDelivrProvider(hostInteraction, new CacheService(WebRequestHandler.Instance), _packageSearch, _packageInfoFactory);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 throw new ArgumentNullException(nameof(hostInteraction));
             }
 
-            return new UnpkgProvider(hostInteraction, _packageSearch, _packageInfoFactory);
+            return new UnpkgProvider(hostInteraction, new CacheService(WebRequestHandler.Instance), _packageSearch, _packageInfoFactory);
         }
     }
 }

@@ -8,54 +8,44 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Resources;
 
 namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 {
     /// <summary>Internal use only</summary>
-    internal class FileSystemProvider : IProvider
+    internal sealed class FileSystemProvider : BaseProvider
     {
+        private FileSystemCatalog _catalog;
+
         /// <summary>Internal use only</summary>
         public FileSystemProvider(IHostInteraction hostInteraction)
+            :base(hostInteraction, null)
         {
-            HostInteraction = hostInteraction;
         }
 
         /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
-        public string Id { get; } = "filesystem";
-
-        /// <summary>
-        /// The NuGet Package id for the package including the provider for use by MSBuild.
-        /// </summary>
-        /// <remarks>
-        /// If the provider doesn't have a NuGet package, then return <code>null</code>.
-        /// </remarks>
-        public string NuGetPackageId { get; } = "Microsoft.Web.LibraryManager.Build";
-
-        /// <summary>
-        /// An object specified by the host to interact with the file system etc.
-        /// </summary>
-        public IHostInteraction HostInteraction { get; }
+        public override string Id => "filesystem";
 
         /// <summary>
         /// Hint text for the library id.
         /// </summary>
-        public string LibraryIdHintText { get; } = Text.FileSystemLibraryIdHintText;
+        public override string LibraryIdHintText => Text.FileSystemLibraryIdHintText;
 
         /// <summary>
         /// Does not support libraries with versions.
         /// </summary>
-        public bool SupportsLibraryVersions => false;
+        public override bool SupportsLibraryVersions => false;
 
         /// <summary>
         /// Gets the <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryCatalog" /> for the <see cref="Microsoft.Web.LibraryManager.Contracts.IProvider" />. May be <code>null</code> if no catalog is supported.
         /// </summary>
         /// <returns></returns>
-        public ILibraryCatalog GetCatalog()
+        public override ILibraryCatalog GetCatalog()
         {
-            return new FileSystemCatalog(this);
+            return _catalog ?? (_catalog = new FileSystemCatalog(this));
         }
 
         /// <summary>
@@ -66,7 +56,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <returns>
         /// The <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult" /> from the installation process.
         /// </returns>
-        public async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        public override async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -123,58 +113,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             return LibraryOperationResult.FromSuccess(desiredState);
         }
 
-        /// <summary>
-        /// Updates file set on the passed in ILibraryInstallationState in case user selected to have all files included
-        /// </summary>
-        /// <param name="desiredState"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<ILibraryOperationResult> UpdateStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        protected override ILibraryOperationResult CheckForInvalidFiles(ILibraryInstallationState desiredState, string libraryId, ILibrary library)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return LibraryOperationResult.FromCancelled(desiredState);
-            }
-
-            try
-            {
-                ILibraryCatalog catalog = GetCatalog();
-                ILibrary library = await catalog.GetLibraryAsync(desiredState.Name, desiredState.Version, cancellationToken).ConfigureAwait(false);
-
-                if (library == null)
-                {
-                    return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.Name, Id));
-                }
-
-                if (desiredState.Files != null && desiredState.Files.Count > 0)
-                {
-                    return LibraryOperationResult.FromSuccess(desiredState);
-                }
-
-                desiredState = new LibraryInstallationState
-                {
-                    ProviderId = Id,
-                    Name = desiredState.Name,
-                    DestinationPath = desiredState.DestinationPath,
-                    Files = library.Files.Keys.ToList(),
-                    IsUsingDefaultDestination = desiredState.IsUsingDefaultDestination,
-                    IsUsingDefaultProvider = desiredState.IsUsingDefaultProvider
-                };
-            }
-            catch (InvalidLibraryException)
-            {
-                return new LibraryOperationResult(desiredState, PredefinedErrors.UnableToResolveSource(desiredState.Name, desiredState.ProviderId));
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return new LibraryOperationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
-            }
-            catch (Exception ex)
-            {
-                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
-                return new LibraryOperationResult(desiredState, PredefinedErrors.UnknownException());
-            }
-
             return LibraryOperationResult.FromSuccess(desiredState);
         }
 
@@ -183,7 +123,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// </summary>
         /// <param name="library"></param>
         /// <returns></returns>
-        public string GetSuggestedDestination(ILibrary library)
+        public override string GetSuggestedDestination(ILibrary library)
         {
             if (library != null && library is FileSystemLibrary fileSystemLibrary)
             {
@@ -256,6 +196,13 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             {
                 throw new ResourceDownloadException(sourceUrl);
             }
+        }
+
+        protected override ILibraryNamingScheme LibraryNamingScheme { get; } = new SimpleLibraryNamingScheme();
+
+        protected override string GetDownloadUrl(ILibraryInstallationState state, string sourceFile)
+        {
+            throw new NotSupportedException();
         }
     }
 }
