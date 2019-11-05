@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net472</TargetFrameworks>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -8,6 +10,7 @@
     <PackageReference Include="Moq" />
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.3"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj" />
