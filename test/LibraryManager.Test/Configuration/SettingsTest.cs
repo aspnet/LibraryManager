@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Configuration;
-using Microsoft.Web.LibraryManager.Test.Utilities;
+using Microsoft.Web.LibraryManager.Test.TestUtilities;
 
 namespace Microsoft.Web.LibraryManager.Test.Configuration
 {

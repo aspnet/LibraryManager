@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.Web.LibraryManager.Test.Utilities
+namespace Microsoft.Web.LibraryManager.Test.TestUtilities
 {
     internal static class StringUtility
     {
