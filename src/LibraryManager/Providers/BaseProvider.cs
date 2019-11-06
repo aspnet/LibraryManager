@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Utilities;
 
 namespace Microsoft.Web.LibraryManager.Providers
 {
@@ -90,7 +91,7 @@ namespace Microsoft.Web.LibraryManager.Providers
             {
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
-            
+
             string libraryId = LibraryNamingScheme.GetLibraryId(desiredState.Name, desiredState.Version);
             try
             {
@@ -104,7 +105,20 @@ namespace Microsoft.Web.LibraryManager.Providers
 
                 if (desiredState.Files != null && desiredState.Files.Count > 0)
                 {
-                    return CheckForInvalidFiles(desiredState, libraryId, library);
+                    // expand any potential file patterns
+                    IEnumerable<string> updatedFiles = FileGlobbingUtility.ExpandFileGlobs(desiredState.Files, library.Files.Keys);
+                    var processedState = new LibraryInstallationState
+                    {
+                        Name = desiredState.Name,
+                        Version = desiredState.Version,
+                        ProviderId = desiredState.ProviderId,
+                        DestinationPath = desiredState.DestinationPath,
+                        IsUsingDefaultDestination = desiredState.IsUsingDefaultDestination,
+                        IsUsingDefaultProvider = desiredState.IsUsingDefaultProvider,
+                        Files = updatedFiles.ToList(),
+                    };
+
+                    return CheckForInvalidFiles(processedState, libraryId, library);
                 }
 
                 desiredState = new LibraryInstallationState

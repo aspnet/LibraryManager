@@ -99,7 +99,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             string copiedFile = Path.Combine(_projectFolder, desiredState.DestinationPath, desiredState.Files[0]);
             Assert.IsTrue(File.Exists(copiedFile), "File1 wasn't copied");
             Assert.IsFalse(result.Cancelled);
-            Assert.AreSame(desiredState, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);
 
             var manifest = Manifest.FromJson("{}", _dependencies);
@@ -138,7 +137,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             Assert.IsTrue(File.Exists(file2), "File2 wasn't copied");
 
             Assert.IsFalse(result.Cancelled);
-            Assert.AreSame(desiredState, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);
         }
 
@@ -174,7 +172,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             Assert.IsTrue(File.Exists(file2), "File1 wasn't copied");
 
             Assert.IsFalse(result.Cancelled);
-            Assert.AreSame(desiredState, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);
         }
 

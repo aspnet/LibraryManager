@@ -12,7 +12,6 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
-using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 {
@@ -87,7 +86,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             Assert.IsTrue(result.Success);
             Assert.IsFalse(result.Cancelled);
-            Assert.AreSame(desiredState, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);
         }
 
@@ -179,6 +177,23 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB018", result.Errors[0].Code);
+        }
+
+        [TestMethod]
+        public async Task InstallAsync_WithGlobPatterns_CorrectlyInstallsAllMatchingFiles()
+        {
+            var desiredState = new LibraryInstallationState
+            {
+                Name = "jquery",
+                Version = "3.3.1",
+                DestinationPath = "lib",
+                Files = new[] { "dist/*.js", "!dist/*min*" },
+            };
+
+            // Install library
+            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            Assert.IsTrue(result.Success);
+            CollectionAssert.AreEquivalent(new[] { "dist/core.js", "dist/jquery.js", "dist/jquery.slim.js" }, result.InstallationState.Files.ToList());
         }
 
         [TestMethod]
