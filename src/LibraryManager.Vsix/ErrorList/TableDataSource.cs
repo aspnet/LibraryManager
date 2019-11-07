@@ -23,6 +23,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private TableDataSource()
         {
             var compositionService = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+            Assumes.Present(compositionService);
             compositionService.DefaultCompositionService.SatisfyImportsOnce(this);
 
             ITableManager manager = TableManagerProvider.GetTableManager(StandardTables.ErrorsTable);

@@ -19,6 +19,7 @@
     <PackageReference Update="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" Version="15.0.25726-Preview5" />
     <PackageReference Update="Microsoft.VisualStudio.Language.Intellisense" Version="16.2.45" />
     <PackageReference Update="Microsoft.VisualStudio.SDK" Version="16.0.200" />
+    <PackageReference Update="Microsoft.VisualStudio.SDK.Analyzers" Version="16.3.14" PrivateAssets="all" />
     <PackageReference Update="Microsoft.VisualStudio.SDK.EmbedInteropTypes" Version="15.0.27" />
     <PackageReference Update="Microsoft.VisualStudio.Settings.15.0" Version="16.2.29122.156" />
     <PackageReference Update="Microsoft.VisualStudio.Shell.15.0" Version="16.2.29122.156" />
@@ -27,7 +28,7 @@
     <PackageReference Update="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" Version="15.0.25726-Preview5" />
     <PackageReference Update="Microsoft.VisualStudio.Telemetry" Version="15.7.942-master669188BE" />
     <PackageReference Update="Microsoft.VisualStudio.Threading" Version="16.3.52" />
-    <PackageReference Update="Microsoft.VSSDK.BuildTools" Version="16.2.3073" PrivateAssets="All" />
+    <PackageReference Update="Microsoft.VSSDK.BuildTools" Version="16.3.2099" PrivateAssets="All" />
     <PackageReference Update="Moq" Version="4.10.1" PrivateAssets="All" />
     <PackageReference Update="NerdBank.GitVersioning" Version="2.1.23" PrivateAssets="All" />
     <PackageReference Update="Newtonsoft.Json" Version="9.0.1" />

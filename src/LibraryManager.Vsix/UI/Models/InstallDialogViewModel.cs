@@ -672,7 +672,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         private ITextBuffer GetTextBuffer(IVsTextBuffer document)
         {
-            IComponentModel componentModel = Shell.ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+            var componentModel = Shell.ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+            Assumes.Present(componentModel);
             IVsEditorAdaptersFactoryService adapterService = componentModel.GetService<IVsEditorAdaptersFactoryService>();
 
             return adapterService.GetDocumentBuffer(document);

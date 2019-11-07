@@ -1,18 +1,18 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
 using EnvDTE;
-using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using NuGet.VisualStudio;
-using System;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Collections.Generic;
-using Task = System.Threading.Tasks.Task;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using NuGet.VisualStudio;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {
@@ -20,18 +20,19 @@ namespace Microsoft.Web.LibraryManager.Vsix
     {
         private bool _isPackageInstalled;
         private readonly IComponentModel _componentModel;
-        private readonly Package _package;
+        private readonly AsyncPackage _package;
         private readonly IDependenciesFactory _dependenciesFactory;
 
-        private RestoreOnBuildCommand(Package package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
+        private RestoreOnBuildCommand(AsyncPackage package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
         {
             _package = package;
             _componentModel = VsHelpers.GetService<SComponentModel, IComponentModel>();
             _dependenciesFactory = dependenciesFactory;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.RestoreOnBuild);
-            var cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
-            cmd.BeforeQueryStatus += BeforeQueryStatusHandlerAsync;
+            var cmd = new OleMenuCommand((s, e) => _package.JoinableTaskFactory.RunAsync(() => ExecuteAsync(s, e)),
+                                         cmdId);
+            cmd.BeforeQueryStatus += (s, e) => _package.JoinableTaskFactory.RunAsync(() => BeforeQueryStatusAsync(s, e));
             commandService.AddCommand(cmd);
         }
 
@@ -42,27 +43,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             get { return _package; }
         }
 
-        public static void Initialize(Package package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
+        public static void Initialize(AsyncPackage package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
         {
             Instance = new RestoreOnBuildCommand(package, commandService, dependenciesFactory);
-        }
-
-        private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)
-        {
-            try
-            {
-                await BeforeQueryStatusAsync(sender, e);
-            }
-            catch { }
-        }
-
-        private async void ExecuteHandlerAsync(object sender, EventArgs e)
-        {
-            try
-            {
-                await ExecuteAsync(sender, e);
-            }
-            catch { }
         }
 
         private async Task BeforeQueryStatusAsync(object sender, EventArgs e)

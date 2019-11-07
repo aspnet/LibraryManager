@@ -209,6 +209,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Imaging" />
     <PackageReference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" />
     <PackageReference Include="Microsoft.VisualStudio.Language.Intellisense" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK.Analyzers" />
     <PackageReference Include="Microsoft.VisualStudio.SDK.EmbedInteropTypes" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.10.0" />

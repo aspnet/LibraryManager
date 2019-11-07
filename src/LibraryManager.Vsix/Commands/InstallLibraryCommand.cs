@@ -26,11 +26,12 @@ namespace Microsoft.Web.LibraryManager.Vsix
         private readonly ILibraryCommandService _libraryCommandService;
         private readonly IDependenciesFactory _dependenciesFactory;
 
-        private InstallLibraryCommand(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
+        private InstallLibraryCommand(AsyncPackage package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
             CommandID cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.InstallPackage);
-            OleMenuCommand cmd = new OleMenuCommand(ExecuteHandlerAsync, cmdId);
-            cmd.BeforeQueryStatus += BeforeQueryStatusHandlerAsync;
+            OleMenuCommand cmd = new OleMenuCommand((s, e) => package.JoinableTaskFactory.RunAsync(() => ExecuteAsync(s, e)),
+                                                    cmdId);
+            cmd.BeforeQueryStatus += (s, e) => package.JoinableTaskFactory.RunAsync(() => BeforeQueryStatusAsync(s, e));
             commandService.AddCommand(cmd);
 
             _libraryCommandService = libraryCommandService;
@@ -43,27 +44,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
             private set;
         }
 
-        public static void Initialize(OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
+        public static void Initialize(AsyncPackage package, OleMenuCommandService commandService, ILibraryCommandService libraryCommandService, IDependenciesFactory dependenciesFactory)
         {
-            Instance = new InstallLibraryCommand(commandService, libraryCommandService, dependenciesFactory);
-        }
-
-        private async void BeforeQueryStatusHandlerAsync(object sender, EventArgs e)
-        {
-            try
-            {
-                await BeforeQueryStatusAsync(sender, e);
-            }
-            catch { }
-        }
-
-        private async void ExecuteHandlerAsync(object sender, EventArgs e)
-        {
-            try
-            {
-                await ExecuteAsync(sender, e);
-            }
-            catch { }
+            Instance = new InstallLibraryCommand(package, commandService, libraryCommandService, dependenciesFactory);
         }
 
         private async Task BeforeQueryStatusAsync(object sender, EventArgs e)
@@ -201,7 +184,8 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
             if (textBuffer != null)
             {
-                IComponentModel componentModel = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+                var componentModel = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+                Assumes.Present(componentModel);
                 IVsEditorAdaptersFactoryService editorAdapterService = componentModel.GetService<IVsEditorAdaptersFactoryService>();
 
                 documentBuffer = editorAdapterService.GetDocumentBuffer(textBuffer);
