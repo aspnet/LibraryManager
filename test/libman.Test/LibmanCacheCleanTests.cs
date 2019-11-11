@@ -107,7 +107,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsFalse(File.Exists(Path.Combine(CacheDir, "cdnjs", "jquery", "3.2.1", "jquery.min.js")));
             Assert.IsFalse(File.Exists(Path.Combine(CacheDir, "cdnjs", "jquery", "3.2.1", "core.js")));
 
-            Assert.IsTrue(File.Exists(Path.Combine(CacheDir, "fileSystem", "abc.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(CacheDir, "filesystem", "abc.js")));
         }
     }
 }
