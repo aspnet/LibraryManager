@@ -1,5 +1,5 @@
 {
-  "version": "2.0",
+  "version": "2.1",
   "publicRefSpec": [
     "^refs/tags/v\\d+\\.\\d+" // we release tags starting with vN.N
   ]

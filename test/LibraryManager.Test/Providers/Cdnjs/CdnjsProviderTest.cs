@@ -86,7 +86,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 
             Assert.IsTrue(result.Success);
             Assert.IsFalse(result.Cancelled);
-            Assert.AreSame(desiredState, result.InstallationState);
             Assert.AreEqual(0, result.Errors.Count);
         }
 
@@ -181,6 +180,24 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         }
 
         [TestMethod]
+        public async Task InstallAsync_WithGlobPatterns_CorrectlyInstallsAllMatchingFiles()
+        {
+            var desiredState = new LibraryInstallationState
+            {
+                Name = "jquery",
+                Version = "1.2.3",
+                DestinationPath = "lib",
+                Files = new[] { "*.js", "!*.min.js" },
+            };
+
+            // Install library
+            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            Assert.IsTrue(result.Success);
+            Assert.IsTrue(result.InstallationState.Files.Count == 1); // jquery.min.js file was excluded
+            Assert.AreEqual("jquery.js", result.InstallationState.Files.First());
+        }
+
+        [TestMethod]
         public void GetSuggestedDestination()
         {
             Assert.AreEqual(string.Empty, _provider.GetSuggestedDestination(null));
@@ -196,7 +213,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        private void GetCatalog()
+        public void GetCatalog()
         {
             ILibraryCatalog catalog = _provider.GetCatalog();
 

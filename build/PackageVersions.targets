@@ -29,6 +29,7 @@
     <PackageReference Update="Microsoft.VisualStudio.Telemetry" Version="15.7.942-master669188BE" />
     <PackageReference Update="Microsoft.VisualStudio.Threading" Version="16.3.52" />
     <PackageReference Update="Microsoft.VSSDK.BuildTools" Version="16.3.2099" PrivateAssets="All" />
+    <PackageReference Update="MiniMatch" Version="2.0.0" NoWarn="NU1603" />
     <PackageReference Update="Moq" Version="4.10.1" PrivateAssets="All" />
     <PackageReference Update="NerdBank.GitVersioning" Version="2.1.23" PrivateAssets="All" />
     <PackageReference Update="Newtonsoft.Json" Version="9.0.1" />
@@ -52,5 +53,10 @@
     <PackageReference Update="Microsoft.NETCore.DotnetAppHost" Version="2.1.0" />
 
   </ItemGroup>
+
+  <PropertyGroup>
+    <!-- adding as a workaround for numerous warnings from the Minimatch package, until https://github.com/SLaks/Minimatch/issues/12 is addressed -->
+    <NoWarn>$(NoWarn);NU1603</NoWarn>
+  </PropertyGroup>
 
 </Project>

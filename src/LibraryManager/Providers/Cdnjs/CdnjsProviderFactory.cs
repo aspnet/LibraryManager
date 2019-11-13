@@ -31,7 +31,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 throw new ArgumentNullException(nameof(hostInteraction));
             }
 
-            return new CdnjsProvider(hostInteraction);
+            return new CdnjsProvider(hostInteraction, new CacheService(WebRequestHandler.Instance));
         }
     }
 }
