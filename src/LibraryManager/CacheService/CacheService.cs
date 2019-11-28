@@ -140,7 +140,6 @@ namespace Microsoft.Web.LibraryManager
                 if (!File.Exists(metadata.DestinationPath) || File.GetLastWriteTime(metadata.DestinationPath) < DateTime.Now.AddDays(-_libraryExpiresAfterDays))
                 {
                     Task readFileTask = DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
-                    await readFileTask;
                     refreshTasks.Add(readFileTask);
                 }
             }
