@@ -109,45 +109,42 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(OperationCanceledException))]
         public async Task HydrateCache_Throws_OperationCanceled_WhenCancelled()
         {
-            TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            var logger = new Logger();
+            var tokenSource = new CancellationTokenSource();
             string libraryFile1_Path = Path.Combine(_cacheFolder, "Library1", "file1.txt");
             string libraryFile2_Path = Path.Combine(_cacheFolder, "Library1", "file2.txt");
             string validUrl = "";
-            string destinationFile = _cacheFolder;
 
-            List<CacheFileMetadata> desiredCasheFiles = new List<CacheFileMetadata>()
+            var desiredCacheFiles = new List<CacheFileMetadata>()
             {
                 new CacheFileMetadata(validUrl, libraryFile1_Path),
                 new CacheFileMetadata(validUrl, libraryFile2_Path)
             };
 
             tokenSource.Cancel();
-            await _cacheService.RefreshCacheAsync(desiredCasheFiles, tokenSource.Token);
+            await Assert.ThrowsExceptionAsync<OperationCanceledException>(async () =>
+                await _cacheService.RefreshCacheAsync(desiredCacheFiles, logger, tokenSource.Token));
 
         }
 
         [TestMethod]
         public async Task HydrateCache_WriteLibraryFilesToCacheFolder()
         {
-            TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            var logger = new Logger();
             string libraryFile1_Path = Path.Combine(_cacheFolder, "Library1", "file1.txt");
             string libraryFile2_Path = Path.Combine(_cacheFolder, "Library1", "file2.txt");
             string validUrl = "";
-            string destinationFile = _cacheFolder;
 
-            List<CacheFileMetadata> desiredCasheFiles = new List<CacheFileMetadata>()
+            var desiredCasheFiles = new List<CacheFileMetadata>()
             {
                 new CacheFileMetadata(validUrl, libraryFile1_Path),
                 new CacheFileMetadata(validUrl, libraryFile2_Path)
             };
 
             // act 
-            await _cacheService.RefreshCacheAsync(desiredCasheFiles, CancellationToken.None);
+            await _cacheService.RefreshCacheAsync(desiredCasheFiles, logger, CancellationToken.None);
 
             // verify
             Assert.IsTrue(File.Exists(libraryFile1_Path));

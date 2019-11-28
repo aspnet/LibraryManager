@@ -274,4 +274,7 @@
   <data name="JsDelivrProviderHintText" xml:space="preserve">
     <value>Example: &lt;library&gt;@&lt;version&gt;</value>
   </data>
+  <data name="DownloadingFile" xml:space="preserve">
+    <value>Downloading file {0}...</value>
+  </data>
 </root>

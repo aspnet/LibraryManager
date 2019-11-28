@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -16,7 +17,7 @@ namespace Microsoft.Web.LibraryManager
     /// </summary>
     public class CacheService
     {
-        // TO DO: Move these expirations to the provider 
+        // TO DO: Move these expirations to the provider
         private readonly int _catalogExpiresAfterDays = 1;
         private readonly int _metadataExpiresAfterDays = 1;
         private readonly int _libraryExpiresAfterDays = 30;
@@ -34,7 +35,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Defines the root cache directory.  This should be consistent across all LibMan tools. 
+        /// Defines the root cache directory.  This should be consistent across all LibMan tools.
         /// </summary>
         public static string CacheFolder
         {
@@ -124,12 +125,9 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Refreshes the cache for the given set of files if expired 
+        /// Refreshes the cache for the given set of files if expired
         /// </summary>
-        /// <param name="librariesCacheMetadata"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task RefreshCacheAsync(IEnumerable<CacheFileMetadata> librariesCacheMetadata, CancellationToken cancellationToken)
+        public async Task RefreshCacheAsync(IEnumerable<CacheFileMetadata> librariesCacheMetadata, ILogger logger, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -139,7 +137,12 @@ namespace Microsoft.Web.LibraryManager
             {
                 if (!File.Exists(metadata.DestinationPath) || File.GetLastWriteTime(metadata.DestinationPath) < DateTime.Now.AddDays(-_libraryExpiresAfterDays))
                 {
-                    Task readFileTask = DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
+                    var readFileTask = Task.Run(async () =>
+                    {
+                        logger.Log(string.Format(Resources.Text.DownloadingFile, metadata.Source), LogLevel.Operation);
+                        await DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
+                    });
+
                     refreshTasks.Add(readFileTask);
                 }
             }
