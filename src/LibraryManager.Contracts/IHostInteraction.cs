@@ -65,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         Task<Stream> ReadFileAsync(string filePath, CancellationToken cancellationToken);
 
         /// <summary>
-        /// 
+        /// Copies a file
         /// </summary>
         /// <param name="sourcePath"></param>
         /// <param name="destinationPath"></param>

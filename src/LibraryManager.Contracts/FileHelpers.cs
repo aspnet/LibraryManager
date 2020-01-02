@@ -140,6 +140,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         {
             try
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(destinationFile));
                 File.Copy(sourceFile, destinationFile, true);
 
                 return true;

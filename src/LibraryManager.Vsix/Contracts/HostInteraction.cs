@@ -109,7 +109,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
 
         public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
-            return System.Threading.Tasks.Task.Run(() =>
+            return Task.Run(() =>
             {
                 cancellationToken.ThrowIfCancellationRequested();
 

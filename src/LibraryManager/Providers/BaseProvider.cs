@@ -172,6 +172,10 @@ namespace Microsoft.Web.LibraryManager.Providers
             get { return _cacheFolder ?? (_cacheFolder = Path.Combine(HostInteraction.CacheDirectory, Id)); }
         }
 
+        /// <summary>
+        /// Copy files from the download cache to the desired installation state
+        /// </summary>
+        /// <remarks>Precondition: all files must already exist in the cache</remarks>
         protected async Task<ILibraryOperationResult> WriteToFilesAsync(ILibraryInstallationState state, CancellationToken cancellationToken)
         {
             if (state.Files != null)
@@ -190,9 +194,9 @@ namespace Microsoft.Web.LibraryManager.Providers
                             return new LibraryOperationResult(state, PredefinedErrors.CouldNotWriteFile(file));
                         }
 
+                        string sourcePath = GetCachedFileLocalPath(state, file);
                         string destinationPath = Path.Combine(state.DestinationPath, file);
-                        var sourceStream = new Func<Stream>(() => GetStreamAsync(state, file, cancellationToken).Result);
-                        bool writeOk = await HostInteraction.WriteFileAsync(destinationPath, sourceStream, state, cancellationToken).ConfigureAwait(false);
+                        bool writeOk = await HostInteraction.CopyFile(sourcePath, destinationPath, cancellationToken);
 
                         if (!writeOk)
                         {
@@ -214,19 +218,13 @@ namespace Microsoft.Web.LibraryManager.Providers
             return LibraryOperationResult.FromSuccess(state);
         }
 
-        private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string sourceFile, CancellationToken cancellationToken)
+        /// <summary>
+        /// Gets the expected local path for a file from the file cache
+        /// </summary>
+        /// <returns></returns>
+        private string GetCachedFileLocalPath(ILibraryInstallationState state, string sourceFile)
         {
-            if (!string.IsNullOrEmpty(state.Name) && !string.IsNullOrEmpty(state.Version))
-            {
-                string absolute = Path.Combine(CacheFolder, state.Name, state.Version, sourceFile);
-
-                if (File.Exists(absolute))
-                {
-                    return await HostInteraction.ReadFileAsync(absolute, cancellationToken).ConfigureAwait(false);
-                }
-            }
-
-            return null;
+            return Path.Combine(CacheFolder, state.Name, state.Version, sourceFile);
         }
 
         private bool IsLibraryUpToDate(ILibraryInstallationState state)
