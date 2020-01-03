@@ -196,7 +196,7 @@ namespace Microsoft.Web.LibraryManager.Providers
 
                         string sourcePath = GetCachedFileLocalPath(state, file);
                         string destinationPath = Path.Combine(state.DestinationPath, file);
-                        bool writeOk = await HostInteraction.CopyFile(sourcePath, destinationPath, cancellationToken);
+                        bool writeOk = await HostInteraction.CopyFileAsync(sourcePath, destinationPath, cancellationToken);
 
                         if (!writeOk)
                         {

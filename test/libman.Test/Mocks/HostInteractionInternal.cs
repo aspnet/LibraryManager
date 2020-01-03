@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test.Mocks
 
         public ISettings Settings { get; set; }
 
-        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        public Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
             if (File.Exists(sourcePath))
             {

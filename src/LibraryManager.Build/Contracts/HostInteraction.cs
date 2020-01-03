@@ -71,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Build
             return FileHelpers.ReadFileAsStreamAsync(relativeFilePath, cancellationToken);
         }
 
-        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        public Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
             {

@@ -142,7 +142,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <param name="destinationPath"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        public Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

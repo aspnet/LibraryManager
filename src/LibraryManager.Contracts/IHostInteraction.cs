@@ -71,6 +71,6 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="destinationPath"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken);
+        Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken);
     }
 }
