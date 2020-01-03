@@ -19,7 +19,6 @@ namespace Microsoft.Web.LibraryManager
         // TO DO: Move these expirations to the provider
         private const int CatalogExpiresAfterDays = 1;
         private const int MetadataExpiresAfterDays = 1;
-        private const int LibraryExpiresAfterDays = 30;
         private const int MaxConcurrentDownloads = 10;
 
         private readonly IWebRequestHandler _requestHandler;
@@ -134,7 +133,7 @@ namespace Microsoft.Web.LibraryManager
 
             async Task DownloadFileIfNecessaryAsync(CacheFileMetadata metadata)
             {
-                if (!File.Exists(metadata.DestinationPath) || File.GetLastWriteTime(metadata.DestinationPath) < DateTime.Now.AddDays(-LibraryExpiresAfterDays))
+                if (!File.Exists(metadata.DestinationPath))
                 {
                     logger.Log(string.Format(Resources.Text.DownloadingFile, metadata.Source), LogLevel.Operation);
                     await DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
