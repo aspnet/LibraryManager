@@ -103,8 +103,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             cancellationToken.ThrowIfCancellationRequested();
 
             string absoluteDestinationPath = Path.Combine(WorkingDirectory, destinationPath);
-            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
+            if (!FileHelpers.IsUnderRootDirectory(absoluteDestinationPath, WorkingDirectory))
+            {
+                throw new UnauthorizedAccessException();
+            }
 
+            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
             if(result)
             {
                 Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, destinationPath.Replace('\\', '/')), LogLevel.Operation);

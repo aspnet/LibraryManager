@@ -113,6 +113,11 @@ namespace Microsoft.Web.LibraryManager.Vsix
             cancellationToken.ThrowIfCancellationRequested();
 
             string absoluteDestinationPath = Path.Combine(WorkingDirectory, destinationPath);
+            if (!FileHelpers.IsUnderRootDirectory(absoluteDestinationPath, WorkingDirectory))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
             await VsHelpers.CheckFileOutOfSourceControlAsync(absoluteDestinationPath);
             bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
 

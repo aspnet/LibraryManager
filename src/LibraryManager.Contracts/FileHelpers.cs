@@ -357,7 +357,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
             return new Uri(rootPath).IsUnc;
         }
 
-        internal static bool IsUnderRootDirectory(string filePath, string rootDirectory)
+        /// <summary>
+        /// Returns whether <paramref name="filePath"/> is under <paramref name="rootDirectory"/>
+        /// </summary>
+        /// <param name="filePath">File path</param>
+        /// <param name="rootDirectory">Ancestor directory</param>
+        /// <returns>Whether <paramref name="filePath"/> is under <paramref name="rootDirectory"/></returns>
+        public static bool IsUnderRootDirectory(string filePath, string rootDirectory)
         {
             string normalizedFilePath = NormalizePath(filePath);
             string normalizedRootDirectory = NormalizePath(rootDirectory);

@@ -142,9 +142,19 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// <param name="destinationPath"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        public async Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            string absoluteDestinationPath = Path.Combine(WorkingDirectory, destinationPath);
+            if (!FileHelpers.IsUnderRootDirectory(absoluteDestinationPath, WorkingDirectory))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
+
+            return result;
         }
     }
 }
