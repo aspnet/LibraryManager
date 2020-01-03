@@ -67,10 +67,10 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// Copies a file
         /// </summary>
-        /// <param name="sourcePath"></param>
-        /// <param name="destinationPath"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="sourcePath">The absolute path to the source file</param>
+        /// <param name="destinationPath">The relative path to the destination file</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A boolean indicating if the copy was successful</returns>
         Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken);
     }
 }

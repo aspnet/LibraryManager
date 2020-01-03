@@ -97,14 +97,20 @@ namespace Microsoft.Web.LibraryManager.Tools.Contracts
             return FileHelpers.ReadFileAsStreamAsync(relativeFilePath, cancellationToken);
         }
 
-        public Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        /// <inheritdoc />
+        public async Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            bool writeSuccessful = FileHelpers.CopyFile(sourcePath, destinationPath);
-            Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, destinationPath.Replace('\\', '/')), LogLevel.Operation);
+            string absoluteDestinationPath = Path.Combine(WorkingDirectory, destinationPath);
+            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
 
-            return Task.FromResult(writeSuccessful);
+            if(result)
+            {
+                Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, destinationPath.Replace('\\', '/')), LogLevel.Operation);
+            }
+
+            return result;
         }
     }
 }
