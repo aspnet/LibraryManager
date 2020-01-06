@@ -107,14 +107,26 @@ namespace Microsoft.Web.LibraryManager.Vsix
             return FileHelpers.ReadFileAsStreamAsync(filePath, cancellationToken);
         }
 
-        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        /// <inheritdoc />
+        public async Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
-            return System.Threading.Tasks.Task.Run(() =>
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
-                return FileHelpers.CopyFile(sourcePath, destinationPath);
-            }, cancellationToken);
+            string absoluteDestinationPath = Path.Combine(WorkingDirectory, destinationPath);
+            if (!FileHelpers.IsUnderRootDirectory(absoluteDestinationPath, WorkingDirectory))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            await VsHelpers.CheckFileOutOfSourceControlAsync(absoluteDestinationPath);
+            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
+
+            if (result)
+            {
+                Logger.Log(string.Format(LibraryManager.Resources.Text.FileWrittenToDisk, destinationPath.Replace(Path.DirectorySeparatorChar, '/')), LogLevel.Operation);
+            }
+
+            return result;
         }
 
         private Task<bool> DeleteFilesFromDisk(IEnumerable<string> filePaths, CancellationToken cancellationToken)

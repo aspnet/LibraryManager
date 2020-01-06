@@ -34,9 +34,21 @@ namespace Microsoft.Web.LibraryManager.Tools.Test.Mocks
 
         public ISettings Settings { get; set; }
 
-        public Task<bool> CopyFile(string sourcePath, string destinationPath, CancellationToken cancellationToken)
+        public Task<bool> CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (File.Exists(sourcePath))
+            {
+                if (!Path.IsPathRooted(destinationPath))
+                {
+                    destinationPath = Path.Combine(WorkingDirectory, destinationPath);
+                }
+
+                Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
+                File.Copy(sourcePath, destinationPath, overwrite: true);
+                return Task.FromResult(true);
+            }
+
+            return Task.FromResult(false);
         }
 
         public Task<bool> DeleteFilesAsync(IEnumerable<string> filePaths, CancellationToken cancellationToken)

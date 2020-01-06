@@ -133,14 +133,18 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// Copies a file from source to destination
         /// </summary>
-        /// <param name="sourceFile"></param>
-        /// <param name="destinationFile"></param>
-        /// <returns></returns>
-        public static bool CopyFile(string sourceFile, string destinationFile)
+        /// <param name="sourceFile">Full path to the source file</param>
+        /// <param name="destinationFile">Full path to the destination file</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A boolean indicating whether the file was copied successfully</returns>
+        public static async Task<bool> CopyFileAsync(string sourceFile, string destinationFile, CancellationToken cancellationToken)
         {
             try
             {
-                File.Copy(sourceFile, destinationFile, true);
+                using (FileStream sourceStream = File.Open(sourceFile, FileMode.Open))
+                {
+                    await WriteToFileAsync(destinationFile, sourceStream, cancellationToken);
+                }
 
                 return true;
             }
@@ -353,7 +357,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
             return new Uri(rootPath).IsUnc;
         }
 
-        internal static bool IsUnderRootDirectory(string filePath, string rootDirectory)
+        /// <summary>
+        /// Returns whether <paramref name="filePath"/> is under <paramref name="rootDirectory"/>
+        /// </summary>
+        /// <param name="filePath">File path</param>
+        /// <param name="rootDirectory">Ancestor directory</param>
+        /// <returns>Whether <paramref name="filePath"/> is under <paramref name="rootDirectory"/></returns>
+        public static bool IsUnderRootDirectory(string filePath, string rootDirectory)
         {
             string normalizedFilePath = NormalizePath(filePath);
             string normalizedRootDirectory = NormalizePath(rootDirectory);
