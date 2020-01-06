@@ -273,17 +273,14 @@ namespace Microsoft.Web.LibraryManager.Providers
 
             try
             {
-                var librariesMetadata = new List<CacheFileMetadata>();
+                var librariesMetadata = new HashSet<CacheFileMetadata>();
                 foreach (string sourceFile in state.Files)
                 {
                     string cacheFile = Path.Combine(libraryDir, sourceFile);
                     string url = GetDownloadUrl(state, sourceFile);
 
                     var newEntry = new CacheFileMetadata(url, cacheFile);
-                    if (!librariesMetadata.Contains(newEntry))
-                    {
-                        librariesMetadata.Add(new CacheFileMetadata(url, cacheFile));
-                    }
+                    librariesMetadata.Add(newEntry);
                 }
                 await _cacheService.RefreshCacheAsync(librariesMetadata, HostInteraction.Logger, cancellationToken);
             }
