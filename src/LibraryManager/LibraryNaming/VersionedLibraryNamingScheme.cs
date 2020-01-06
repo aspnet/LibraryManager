@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
         /// <summary>
         /// Splits libraryId into name and version using '@' as the split char.
         /// Only the last appearance of '@' that's not at the libraryId start is used to split the libraryId.
-        /// Note: If libraryId starts with '@' and has no other occurences of '@',
+        /// Note: If libraryId starts with '@' and has no other occurrences of '@',
         /// the entire libraryId is considered to be the name and version is considered to be
         /// empty.
         /// </summary>
