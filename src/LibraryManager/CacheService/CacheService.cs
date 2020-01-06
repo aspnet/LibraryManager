@@ -4,10 +4,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Utilities;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -16,10 +16,11 @@ namespace Microsoft.Web.LibraryManager
     /// </summary>
     public class CacheService
     {
-        // TO DO: Move these expirations to the provider 
-        private readonly int _catalogExpiresAfterDays = 1;
-        private readonly int _metadataExpiresAfterDays = 1;
-        private readonly int _libraryExpiresAfterDays = 30;
+        // TO DO: Move these expirations to the provider
+        private const int CatalogExpiresAfterDays = 1;
+        private const int MetadataExpiresAfterDays = 1;
+        private const int MaxConcurrentDownloads = 10;
+
         private readonly IWebRequestHandler _requestHandler;
 
         private static string CacheFolderValue;
@@ -34,7 +35,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Defines the root cache directory.  This should be consistent across all LibMan tools. 
+        /// Defines the root cache directory.  This should be consistent across all LibMan tools.
         /// </summary>
         public static string CacheFolder
         {
@@ -59,7 +60,7 @@ namespace Microsoft.Web.LibraryManager
         /// <returns></returns>
         public async Task<string> GetCatalogAsync(string url, string cacheFile, CancellationToken cancellationToken)
         {
-            return await GetResourceAsync(url, cacheFile, _catalogExpiresAfterDays, cancellationToken);
+            return await GetResourceAsync(url, cacheFile, CatalogExpiresAfterDays, cancellationToken);
         }
 
         /// <summary>
@@ -71,7 +72,7 @@ namespace Microsoft.Web.LibraryManager
         /// <returns></returns>
         public async Task<string> GetMetadataAsync(string url, string cacheFile, CancellationToken cancellationToken)
         {
-            return await GetResourceAsync(url, cacheFile, _metadataExpiresAfterDays, cancellationToken);
+            return await GetResourceAsync(url, cacheFile, MetadataExpiresAfterDays, cancellationToken);
         }
 
         /// <summary>
@@ -124,28 +125,20 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Refreshes the cache for the given set of files if expired 
+        /// Refreshes the cache for the given set of files if expired
         /// </summary>
-        /// <param name="librariesCacheMetadata"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task RefreshCacheAsync(IEnumerable<CacheFileMetadata> librariesCacheMetadata, CancellationToken cancellationToken)
+        public async Task RefreshCacheAsync(IEnumerable<CacheFileMetadata> librariesCacheMetadata, ILogger logger, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            await ParallelUtility.ForEachAsync(DownloadFileIfNecessaryAsync, MaxConcurrentDownloads, librariesCacheMetadata, cancellationToken);
 
-            List<Task> refreshTasks = new List<Task>();
-
-            foreach (CacheFileMetadata metadata in librariesCacheMetadata)
+            async Task DownloadFileIfNecessaryAsync(CacheFileMetadata metadata)
             {
-                if (!File.Exists(metadata.DestinationPath) || File.GetLastWriteTime(metadata.DestinationPath) < DateTime.Now.AddDays(-_libraryExpiresAfterDays))
+                if (!File.Exists(metadata.DestinationPath))
                 {
-                    Task readFileTask = DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
-                    await readFileTask;
-                    refreshTasks.Add(readFileTask);
+                    logger.Log(string.Format(Resources.Text.DownloadingFile, metadata.Source), LogLevel.Operation);
+                    await DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
                 }
             }
-
-            await Task.WhenAll(refreshTasks).ConfigureAwait(false);
         }
     }
 }

@@ -287,7 +287,7 @@ namespace Microsoft.Web.LibraryManager.Providers
                         librariesMetadata.Add(new CacheFileMetadata(url, cacheFile));
                     }
                 }
-                await _cacheService.RefreshCacheAsync(librariesMetadata, cancellationToken);
+                await _cacheService.RefreshCacheAsync(librariesMetadata, HostInteraction.Logger, cancellationToken);
             }
             catch (ResourceDownloadException ex)
             {
