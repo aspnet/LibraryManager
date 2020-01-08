@@ -1,12 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+
 namespace Microsoft.Web.LibraryManager
 {
     /// <summary>
     /// Holds information for pair: source, destination for a resource to be cached
     /// </summary>
-    public class CacheFileMetadata
+    public class CacheFileMetadata : IEquatable<CacheFileMetadata>
     {
         /// <summary>
         /// Create a new CacheFileMetadata
@@ -28,5 +30,23 @@ namespace Microsoft.Web.LibraryManager
         /// Source for the cache's contents  
         /// </summary>
         public string Source { get; private set; }
+
+        /// <inheritdoc />
+        public bool Equals(CacheFileMetadata other)
+        {
+            return DestinationPath == other.DestinationPath && Source == other.Source;
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as CacheFileMetadata);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            return DestinationPath.GetHashCode(); // this should be a unique identifier
+        }
     }
 }
