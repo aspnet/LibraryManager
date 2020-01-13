@@ -10,6 +10,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
     internal sealed class CdnjsProvider : BaseProvider
     {
         private const string DownloadUrlFormat = "https://cdnjs.cloudflare.com/ajax/libs/{0}/{1}/{2}"; // https://aka.ms/ezcd7o/{0}/{1}/{2}
+        public const string IdText = "cdnjs";
 
         private CdnjsCatalog _catalog;
 
@@ -17,13 +18,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// Initializes a new instance of the <see cref="CdnjsProvider"/> class.
         /// </summary>
         /// <param name="hostInteraction">The host interaction.</param>
+        /// <param name="cacheService">The instance of a <see cref="CacheService"/> to use.</param>
         public CdnjsProvider(IHostInteraction hostInteraction, CacheService cacheService)
             :base(hostInteraction, cacheService)
         {
         }
 
         /// <inheritdoc />
-        public override string Id => "cdnjs";
+        public override string Id => IdText;
 
         /// <inheritdoc />
         public override string LibraryIdHintText => Text.CdnjsLibraryIdHintText;
@@ -31,7 +33,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <inheritdoc />
         public override ILibraryCatalog GetCatalog()
         {
-            return _catalog ?? (_catalog = new CdnjsCatalog(this));
+            return _catalog ?? (_catalog = new CdnjsCatalog(this, _cacheService, LibraryNamingScheme));
         }
 
         /// <summary>

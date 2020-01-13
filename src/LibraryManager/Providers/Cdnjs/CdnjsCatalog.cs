@@ -24,13 +24,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         private readonly string _cacheFile;
         private readonly CdnjsProvider _provider;
         private readonly CacheService _cacheService;
+        private readonly ILibraryNamingScheme _libraryNamingScheme;
         private IEnumerable<CdnjsLibraryGroup> _libraryGroups;
 
-        public CdnjsCatalog(CdnjsProvider provider)
+        public CdnjsCatalog(CdnjsProvider provider, CacheService cacheService, ILibraryNamingScheme libraryNamingScheme)
         {
             _provider = provider;
-            _cacheService = new CacheService(WebRequestHandler.Instance);
+            _cacheService = cacheService;
             _cacheFile = Path.Combine(provider.CacheFolder, FileName);
+            _libraryNamingScheme = libraryNamingScheme;
         }
 
         public async Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
@@ -61,7 +63,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     var completion = new CompletionItem
                     {
                         DisplayText = group.DisplayName,
-                        InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(group.DisplayName, group.Version, _provider.Id),
+                        InsertionText = _libraryNamingScheme.GetLibraryId(group.DisplayName, group.Version),
                         Description = group.Description,
                     };
 
@@ -88,7 +90,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         var completion = new CompletionItem
                         {
                             DisplayText = version,
-                            InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, version, _provider.Id),
+                            InsertionText = _libraryNamingScheme.GetLibraryId(name, version),
                         };
 
                         completions.Add(completion);
@@ -139,7 +141,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         /// <returns></returns>
         public async Task<ILibrary> GetLibraryAsync(string libraryName, string version, CancellationToken cancellationToken)
         {
-            string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryName, version, _provider.Id);
+            string libraryId = _libraryNamingScheme.GetLibraryId(libraryName, version);
 
             if (string.IsNullOrEmpty(libraryName) || string.IsNullOrEmpty(version))
             {

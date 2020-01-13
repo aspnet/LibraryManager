@@ -18,21 +18,15 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
     [TestClass]
     public class CdnjsCatalogTest
     {
-        private ILibraryCatalog _catalog;
-        private IProvider _provider;
-
-        [TestInitialize]
-        public void Setup()
+        private CdnjsCatalog Initialize()
         {
             string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
-            var dependencies = new Dependencies(hostInteraction, new CdnjsProviderFactory());
+            var cacheService = new CacheService(WebRequestHandler.Instance);
 
-            LibraryIdToNameAndVersionConverter.Instance.Reinitialize(dependencies);
-
-            _provider = dependencies.GetProvider("cdnjs");
-            _catalog = _provider.GetCatalog();
+            var provider = new CdnjsProvider(hostInteraction, cacheService);
+            return new CdnjsCatalog(provider, cacheService, new VersionedLibraryNamingScheme());
         }
 
         [DataTestMethod]
@@ -41,70 +35,80 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [DataRow("backbone", "backbone.js")]
         public async Task SearchAsync_Success(string searchTerm, string expectedId)
         {
-            CancellationToken token = CancellationToken.None;
+            CdnjsCatalog sut = Initialize();
 
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(searchTerm, 1, token);
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(searchTerm, 1, CancellationToken.None);
             Assert.AreEqual(1, absolute.Count);
-            IEnumerable<string> versions = await absolute[0].GetLibraryVersions(token);
+
+            IEnumerable<string> versions = await absolute[0].GetLibraryVersions(CancellationToken.None);
             Assert.IsTrue(versions.Any());
 
-            ILibrary library = await _catalog.GetLibraryAsync(absolute[0].DisplayName, versions.First(), token);
+            ILibrary library = await sut.GetLibraryAsync(absolute[0].DisplayName, versions.First(), CancellationToken.None);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual(expectedId, library.Name);
             Assert.AreEqual(1, library.Files.Count(f => f.Value));
             Assert.IsNotNull(library.Name);
             Assert.IsNotNull(library.Version);
-            Assert.AreEqual(_provider.Id, library.ProviderId);
+            Assert.AreEqual(CdnjsProvider.IdText, library.ProviderId);
         }
 
         [TestMethod]
         public async Task SearchAsync_NoHits()
         {
-            CancellationToken token = CancellationToken.None;
+            CdnjsCatalog sut = Initialize();
 
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(@"*9)_-", 1, token);
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(@"*9)_-", 1, CancellationToken.None);
+
             Assert.AreEqual(0, absolute.Count);
         }
 
         [TestMethod]
         public async Task SearchAsync_EmptyString()
         {
-            CancellationToken token = CancellationToken.None;
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync("", 1, token);
+            CdnjsCatalog sut = Initialize();
+
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync("", 1, CancellationToken.None);
+
             Assert.AreEqual(1, absolute.Count);
         }
 
         [TestMethod]
         public async Task SearchAsync_NullString()
         {
-            CancellationToken token = CancellationToken.None;
-            IReadOnlyList<ILibraryGroup> absolute = await _catalog.SearchAsync(null, 1, token);
+            CdnjsCatalog sut = Initialize();
+
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(null, 1, CancellationToken.None);
+
             Assert.AreEqual(1, absolute.Count);
         }
 
         [TestMethod]
         public async Task GetLibraryAsync_Success()
         {
-            CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("jquery", "3.1.1", token);
+            CdnjsCatalog sut = Initialize();
+
+            ILibrary library = await sut.GetLibraryAsync("jquery", "3.1.1", CancellationToken.None);
 
             Assert.IsNotNull(library);
             Assert.AreEqual("jquery", library.Name);
             Assert.AreEqual("3.1.1", library.Version);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidLibraryException))]
+        [TestMethod]
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
-            CancellationToken token = CancellationToken.None;
-            ILibrary library = await _catalog.GetLibraryAsync("invalid_id", "invalid_version" , token);
+            CdnjsCatalog sut = Initialize();
+
+            await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () =>
+                await sut.GetLibraryAsync("invalid_id", "invalid_version", CancellationToken.None));
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
-            CancellationToken token = CancellationToken.None;
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery", 0);
+            CdnjsCatalog sut = Initialize();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("jquery", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(6, result.Length);
@@ -117,8 +121,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Versions()
         {
-            CancellationToken token = CancellationToken.None;
-            CompletionSet result = await _catalog.GetLibraryCompletionSetAsync("jquery@", 7);
+            CdnjsCatalog sut = Initialize();
+
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("jquery@", 7);
 
             Assert.AreEqual(7, result.Start);
             Assert.AreEqual(0, result.Length);
@@ -130,11 +135,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLatestVersion_LatestExist()
         {
-            CancellationToken token = CancellationToken.None;
+            CdnjsCatalog sut = Initialize();
+
             // "twitter-bootstrap@3.3.0"
             const string libraryName = "twitter-bootstrap";
             const string oldVersion = "3.3.0";
-            string result = await _catalog.GetLatestVersion(libraryName, false, token);
+            string result = await sut.GetLatestVersion(libraryName, false, CancellationToken.None);
 
             Assert.IsNotNull(result);
 
@@ -144,11 +150,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLatestVersion_PreRelease()
         {
-            CancellationToken token = CancellationToken.None;
+            CdnjsCatalog sut = Initialize();
+
             // "twitter-bootstrap@3.3.0"
             const string libraryName = "twitter-bootstrap";
             const string oldVersion = "3.3.0";
-            string result = await _catalog.GetLatestVersion(libraryName, true, token);
+            string result = await sut.GetLatestVersion(libraryName, true, CancellationToken.None);
 
             Assert.IsNotNull(result);
 
@@ -158,13 +165,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public void ConvertToLibraryGroup_ValidJsonCatalog()
         {
+            CdnjsCatalog sut = Initialize();
             string json = @"{""results"":[{""name"":""1140"",""latest"":""https://cdnjs.cloudflare.com/ajax/libs/1140/2.0/1140.min.css"",
 ""description"":""The 1140 grid fits perfectly into a 1280 monitor. On smaller monitors it becomes fluid and adapts to the width of the browser.""
 ,""version"":""2.0""}],""total"":1}";
 
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
-
-            IEnumerable<CdnjsLibraryGroup> libraryGroup = cdnjsCatalog.ConvertToLibraryGroups(json);
+            IEnumerable<CdnjsLibraryGroup> libraryGroup = sut.ConvertToLibraryGroups(json);
 
             Assert.AreEqual(1, libraryGroup.Count());
             CdnjsLibraryGroup library = libraryGroup.First();
@@ -179,9 +185,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [DataRow(@"{""results"":[12}")]
         public void ConvertToLibraryGroup_InvalidJsonCatalog(string json)
         {
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
+            CdnjsCatalog sut = Initialize();
 
-            IEnumerable<CdnjsLibraryGroup> libraryGroup = cdnjsCatalog.ConvertToLibraryGroups(json);
+            IEnumerable<CdnjsLibraryGroup> libraryGroup = sut.ConvertToLibraryGroups(json);
 
             Assert.IsNull(libraryGroup);
         }
@@ -189,6 +195,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public void ConvertToAssets_ValidAsset()
         {
+            CdnjsCatalog sut = Initialize();
             string json = @"{""name"":""jquery"",""filename"":""jquery.min.js"",""version"":""3.3.1"",""description"":""JavaScript library for DOM operations"",
 ""homepage"":""http://jquery.com/"",""keywords"":[""jquery"",""library"",""ajax"",""framework"",""toolkit"",""popular""],""namespace"":""jQuery"",
 ""repository"":{""type"":""git"",""url"":""https://github.com/jquery/jquery.git""},""license"":""MIT"",
@@ -196,9 +203,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 ""autoupdate"":{""type"":""npm"",""target"":""jquery""},
 ""assets"":[{""version"":""3.3.1"",""files"":[""core.js"",""jquery.js"",""jquery.min.js"",""jquery.min.map"",""jquery.slim.js"",""jquery.slim.min.js"",""jquery.slim.min.map""]}]}";
 
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
-
-            List<Asset> list = cdnjsCatalog.ConvertToAssets(json);
+            List<Asset> list = sut.ConvertToAssets(json);
 
             Assert.AreEqual(1, list.Count());
             Asset asset = list[0];
@@ -218,10 +223,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public void ConvertToAssets_InvalidAsset()
         {
             string json = "abcd";
+            CdnjsCatalog sut = Initialize();
 
-            CdnjsCatalog cdnjsCatalog = _catalog as CdnjsCatalog;
-
-            List<Asset> list = cdnjsCatalog.ConvertToAssets(json);
+            List<Asset> list = sut.ConvertToAssets(json);
 
             Assert.IsNull(list);
         }
