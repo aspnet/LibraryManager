@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
+using Microsoft.Web.LibraryManager.Mocks.CacheServices;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
@@ -23,16 +24,16 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
-            var cacheService = new CacheService(WebRequestHandler.Instance);
+            var cacheService = new FakeCdnjsCacheService();
 
-            var provider = new CdnjsProvider(hostInteraction, cacheService);
+            var provider = new CdnjsProvider(hostInteraction, cacheService:null);
             return new CdnjsCatalog(provider, cacheService, new VersionedLibraryNamingScheme());
         }
 
         [DataTestMethod]
-        [DataRow("jquery", "jquery")]
-        [DataRow("knockout", "knockout")]
-        [DataRow("backbone", "backbone.js")]
+        [DataRow("sample", "sampleLibrary")]
+        [DataRow("test", "test-library")]
+        [DataRow("test-library2", "test-library2")]
         public async Task SearchAsync_Success(string searchTerm, string expectedId)
         {
             CdnjsCatalog sut = Initialize();
@@ -50,6 +51,18 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             Assert.IsNotNull(library.Name);
             Assert.IsNotNull(library.Version);
             Assert.AreEqual(CdnjsProvider.IdText, library.ProviderId);
+        }
+
+        [TestMethod]
+        public async Task SearchAsync_MultipleMatches()
+        {
+            CdnjsCatalog sut = Initialize();
+
+            IReadOnlyList<ILibraryGroup> result = await sut.SearchAsync(term:"test", 5, CancellationToken.None);
+
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual("test-library", result.First().DisplayName);
+            Assert.AreEqual("test-library2", result.Last().DisplayName);
         }
 
         [TestMethod]
@@ -87,11 +100,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             CdnjsCatalog sut = Initialize();
 
-            ILibrary library = await sut.GetLibraryAsync("jquery", "3.1.1", CancellationToken.None);
+            ILibrary library = await sut.GetLibraryAsync("sampleLibrary", "3.1.4", CancellationToken.None);
 
             Assert.IsNotNull(library);
-            Assert.AreEqual("jquery", library.Name);
-            Assert.AreEqual("3.1.1", library.Version);
+            Assert.AreEqual("sampleLibrary", library.Name);
+            Assert.AreEqual("3.1.4", library.Version);
+            Assert.IsNotNull(library.Files);
         }
 
         [TestMethod]
@@ -108,14 +122,13 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             CdnjsCatalog sut = Initialize();
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("jquery", 0);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("test", 0);
 
             Assert.AreEqual(0, result.Start);
-            Assert.AreEqual(6, result.Length);
-            Assert.IsTrue(result.Completions.Count() > 300);
-            Assert.AreEqual("jquery", result.Completions.First().DisplayText);
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("jquery@"));
-            Assert.IsTrue(result.Completions.First().InsertionText.Length >= 10);
+            Assert.AreEqual(4, result.Length);
+            Assert.AreEqual(2, result.Completions.Count());
+            Assert.AreEqual("test-library", result.Completions.First().DisplayText);
+            Assert.AreEqual("test-library@1.0.0", result.Completions.First().InsertionText);
         }
 
         [TestMethod]
@@ -123,13 +136,13 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             CdnjsCatalog sut = Initialize();
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("jquery@", 7);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("sampleLibrary@", 14);
 
-            Assert.AreEqual(7, result.Start);
+            Assert.AreEqual("sampleLibrary@".Length, result.Start);
             Assert.AreEqual(0, result.Length);
-            Assert.IsTrue(result.Completions.Count() >= 69);
-            Assert.AreEqual("1.2.3", result.Completions.Last().DisplayText);
-            Assert.AreEqual("jquery@1.2.3", result.Completions.Last().InsertionText);
+            Assert.AreEqual(5, result.Completions.Count());
+            Assert.AreEqual("2.0.0", result.Completions.Last().DisplayText);
+            Assert.AreEqual("sampleLibrary@2.0.0", result.Completions.Last().InsertionText);
         }
 
         [TestMethod]
@@ -137,14 +150,11 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         {
             CdnjsCatalog sut = Initialize();
 
-            // "twitter-bootstrap@3.3.0"
-            const string libraryName = "twitter-bootstrap";
-            const string oldVersion = "3.3.0";
+            const string libraryName = "sampleLibrary";
+            const string expectedVersion = "3.1.4";
             string result = await sut.GetLatestVersion(libraryName, false, CancellationToken.None);
 
-            Assert.IsNotNull(result);
-
-            Assert.AreNotEqual(oldVersion, result);
+            Assert.AreEqual(expectedVersion, result);
         }
 
         [TestMethod]
@@ -153,13 +163,11 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             CdnjsCatalog sut = Initialize();
 
             // "twitter-bootstrap@3.3.0"
-            const string libraryName = "twitter-bootstrap";
-            const string oldVersion = "3.3.0";
+            const string libraryName = "sampleLibrary";
+            const string oldVersion = "4.0.0-beta.1";
             string result = await sut.GetLatestVersion(libraryName, true, CancellationToken.None);
 
-            Assert.IsNotNull(result);
-
-            Assert.AreNotEqual(oldVersion, result);
+            Assert.AreEqual(oldVersion, result);
         }
 
         [TestMethod]

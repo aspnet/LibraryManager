@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Caching;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -23,11 +24,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private readonly string _cacheFile;
         private readonly CdnjsProvider _provider;
-        private readonly CacheService _cacheService;
+        private readonly ICacheService _cacheService;
         private readonly ILibraryNamingScheme _libraryNamingScheme;
         private IEnumerable<CdnjsLibraryGroup> _libraryGroups;
 
-        public CdnjsCatalog(CdnjsProvider provider, CacheService cacheService, ILibraryNamingScheme libraryNamingScheme)
+        public CdnjsCatalog(CdnjsProvider provider, ICacheService cacheService, ILibraryNamingScheme libraryNamingScheme)
         {
             _provider = provider;
             _cacheService = cacheService;
@@ -39,7 +40,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             if (!await EnsureCatalogAsync(CancellationToken.None).ConfigureAwait(false))
             {
-                return default(CompletionSet);
+                return default;
             }
 
             var completionSet = new CompletionSet
@@ -326,7 +327,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         {
             try
             {
-                List<Asset> assets = new List<Asset>();
+                var assets = new List<Asset>();
 
                 var root = JObject.Parse(json);
                 if (root["assets"] != null)
