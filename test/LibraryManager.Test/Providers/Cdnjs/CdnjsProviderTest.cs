@@ -44,52 +44,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public async Task InstallAsync_FullEndToEnd()
-        {
-            ILibraryCatalog catalog = _provider.GetCatalog();
-
-            // Search for libraries to display in search result
-            IReadOnlyList<ILibraryGroup> groups = await catalog.SearchAsync("jquery", 4, CancellationToken.None);
-            Assert.AreEqual(4, groups.Count);
-
-            // Show details for selected library
-            ILibraryGroup group = groups.FirstOrDefault();
-            Assert.AreEqual("jquery", group.DisplayName);
-            Assert.IsNotNull(group.Description);
-
-            // Get all libraries in group to display version list
-            IEnumerable<string> versions = await group.GetLibraryVersions(CancellationToken.None);
-            Assert.IsTrue(versions.Count() >= 67);
-            Assert.AreEqual("1.2.3", versions.Last(), "Library version mismatch");
-
-            // Get the library to install
-            ILibrary library = await catalog.GetLibraryAsync(group.DisplayName, versions.First(), CancellationToken.None);
-            Assert.AreEqual(group.DisplayName, library.Name);
-
-            var desiredState = new LibraryInstallationState
-            {
-                Name = "jquery",
-                Version = "3.1.1",
-                ProviderId = "cdnjs",
-                DestinationPath = "lib",
-                Files = new[] { "jquery.js", "jquery.min.js" }
-            };
-
-            // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
-
-            foreach (string file in desiredState.Files)
-            {
-                string absolute = Path.Combine(_projectFolder, desiredState.DestinationPath, file);
-                Assert.IsTrue(File.Exists(absolute));
-            }
-
-            Assert.IsTrue(result.Success);
-            Assert.IsFalse(result.Cancelled);
-            Assert.AreEqual(0, result.Errors.Count);
-        }
-
-        [TestMethod]
         public async Task InstallAsync_InvalidState()
         {
             var desiredState = new LibraryInstallationState
