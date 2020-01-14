@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Text {
@@ -102,6 +102,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         internal static string ErrorDuplicateLibraries {
             get {
                 return ResourceManager.GetString("ErrorDuplicateLibraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The library &quot;{0}&quot; cannot specify a file with an empty name.
+        /// </summary>
+        internal static string ErrorFilePathIsEmpty {
+            get {
+                return ResourceManager.GetString("ErrorFilePathIsEmpty", resourceCulture);
             }
         }
         

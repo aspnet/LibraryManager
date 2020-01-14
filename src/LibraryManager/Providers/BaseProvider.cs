@@ -191,7 +191,8 @@ namespace Microsoft.Web.LibraryManager.Providers
 
                         if (string.IsNullOrEmpty(file))
                         {
-                            return new LibraryOperationResult(state, PredefinedErrors.CouldNotWriteFile(file));
+                            string id = LibraryNamingScheme.GetLibraryId(state.Name, state.Version);
+                            return new LibraryOperationResult(state, PredefinedErrors.FileNameMustNotBeEmpty(id));
                         }
 
                         string sourcePath = GetCachedFileLocalPath(state, file);

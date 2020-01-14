@@ -190,7 +190,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <param name="duplicateLibrary"></param>
         /// <returns></returns>
         public static IError DuplicateLibrariesInManifest(string duplicateLibrary)
-        => new Error("LIB019", string.Format(Text.ErrorDuplicateLibraries, duplicateLibrary));
+            => new Error("LIB019", string.Format(Text.ErrorDuplicateLibraries, duplicateLibrary));
+
+        /// <summary>
+        /// There is a file specified with an empty name
+        /// </summary>
+        public static IError FileNameMustNotBeEmpty(string libraryId)
+            => new Error("LIB020", string.Format(Text.ErrorFilePathIsEmpty, libraryId));
 
         /// <summary>
         /// Unknown error occurred
