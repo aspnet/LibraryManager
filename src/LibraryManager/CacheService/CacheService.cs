@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Caching;
 using Microsoft.Web.LibraryManager.Utilities;
 
 namespace Microsoft.Web.LibraryManager
@@ -14,7 +15,7 @@ namespace Microsoft.Web.LibraryManager
     /// <summary>
     /// Service to manage basic operations on libraries cache
     /// </summary>
-    public class CacheService
+    public class CacheService : ICacheService
     {
         // TO DO: Move these expirations to the provider
         private const int CatalogExpiresAfterDays = 1;

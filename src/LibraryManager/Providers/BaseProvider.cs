@@ -18,7 +18,7 @@ namespace Microsoft.Web.LibraryManager.Providers
     /// </summary>
     internal abstract class BaseProvider : IProvider
     {
-        private readonly CacheService _cacheService;
+        protected readonly CacheService _cacheService;
         private string _cacheFolder;
 
         public BaseProvider(IHostInteraction hostInteraction, CacheService cacheService)
