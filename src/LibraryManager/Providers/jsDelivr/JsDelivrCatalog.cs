@@ -20,6 +20,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         public const string LatestLibraryVersionUrl = "https://data.jsdelivr.com/v1/package/npm/{0}";
         public const string LibraryFileListUrlFormatGH = "https://data.jsdelivr.com/v1/package/gh/{0}/flat";
         public const string LatestLibraryVersionUrlGH = "https://data.jsdelivr.com/v1/package/gh/{0}";
+        public const string LatestVersionTag = "latest";
+
         private readonly INpmPackageInfoFactory _packageInfoFactory;
         private readonly INpmPackageSearch _packageSearch;
 
@@ -44,7 +46,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
             try
             {
-                (string name, string version) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+                (string name, string _) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryId);
                 string latestLibraryVersionUrl = string.Format(IsGitHub(libraryId) ? LatestLibraryVersionUrlGH : LatestLibraryVersionUrl, name);
 
                 JObject packageObject = await _webRequestHandler.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
@@ -72,6 +74,11 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             }
 
             string libraryId = _libraryNamingScheme.GetLibraryId(name, version);
+            if(string.Equals(version, LatestVersionTag, StringComparison.Ordinal))
+            {
+                string latestVersion = await GetLatestVersion(libraryId, includePreReleases: false, cancellationToken);
+                libraryId = _libraryNamingScheme.GetLibraryId(name, latestVersion);
+            }
 
             try
             {
@@ -89,6 +96,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             var result = new List<string>();
 
             string libraryFileListUrl = string.Format(IsGitHub(libraryId) ? LibraryFileListUrlFormatGH : LibraryFileListUrlFormat, libraryId);
+
             JObject fileListObject = await _webRequestHandler.GetJsonObjectViaGetAsync(libraryFileListUrl, cancellationToken).ConfigureAwait(false);
 
             if (fileListObject != null)
@@ -231,6 +239,13 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
                         completions.Add(completionItem);
                     }
+
+                    // support @latest version
+                    completions.Add(new CompletionItem
+                    {
+                        DisplayText = "latest",
+                        InsertionText = _libraryNamingScheme.GetLibraryId(name, "latest"),
+                    });
                 }
             }
             catch (Exception ex)
