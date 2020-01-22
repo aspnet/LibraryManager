@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             Name = name;
             Description = description;
             LatestVersion = latestVersion;
-            Versions = versions;
+            Versions = versions ?? new List<SemanticVersion>();
         }
 
         internal static NpmPackageInfo Parse(JObject packageInfo)

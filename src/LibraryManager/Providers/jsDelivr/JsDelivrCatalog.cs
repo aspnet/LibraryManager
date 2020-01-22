@@ -243,8 +243,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                     // support @latest version
                     completions.Add(new CompletionItem
                     {
-                        DisplayText = "latest",
-                        InsertionText = _libraryNamingScheme.GetLibraryId(name, "latest"),
+                        DisplayText = LatestVersionTag,
+                        InsertionText = _libraryNamingScheme.GetLibraryId(name, LatestVersionTag),
                     });
                 }
             }
