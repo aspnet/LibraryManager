@@ -70,6 +70,31 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Assert.AreEqual(manifestContents, File.ReadAllText(_pathToLibmanFile));
         }
 
+        /*
+         * This test verifies that we load valid metadata (namely, list of files) when using the form library@latest.
+         * Even though "latest" isn't a real version (hence it normally wouldn't show any files), the wizard should
+         * still fetch the correct data and show a list of files.
+         */
+        [DataTestMethod]
+        [DataRow("unpkg")]
+        [DataRow("jsdelivr")]
+        public void NpmPackageWithLatestTag_LoadsFileMetadata(string provider)
+        {
+            InstallDialogTestExtension installDialogTestExtenstion = OpenWizardFromSolutionExplorerItem("wwwroot");
+
+            try
+            {
+                installDialogTestExtenstion.Provider = provider;
+                installDialogTestExtenstion.Library = "jquery@latest";
+
+                installDialogTestExtenstion.WaitForFileSelectionsAvailable();
+            }
+            finally
+            {
+                installDialogTestExtenstion.Close();
+            }
+        }
+
         private void RemoveExistingManifest()
         {
             string libmanConfigFullPath = _libmanConfig.FullPath;

@@ -119,6 +119,26 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Helpers.Completion.WaitForCompletionEntries(Editor, new string[] { }, caseInsensitive: true);
         }
 
+        [DataTestMethod]
+        [DataRow("jsdelivr")]
+        [DataRow("unpkg")]
+        public void ManifestCompletion_NpmProviders_SupportLatestAsVersion(string providerName)
+        {
+            _libmanConfig.Open();
+
+            Editor.Caret.MoveToExpression("\"libraries\"");
+            Editor.Caret.MoveDown(1);
+            Editor.KeyboardCommands.Type("{");
+            Editor.KeyboardCommands.Enter();
+            Editor.KeyboardCommands.Type("\"provider\":");
+            Editor.KeyboardCommands.Type(providerName + "\","); // auto-format will put the space and opening quote
+            Editor.KeyboardCommands.Enter();
+
+            Editor.KeyboardCommands.Type("\"library\":");
+            Editor.KeyboardCommands.Type("jquery@"); //auto-format will put the space and open quote)
+            Helpers.Completion.WaitForCompletionEntry(Editor, "latest", caseInsensitive: true, timeout: 5000);
+        }
+
         [TestMethod]
         public void LibmanCompletion_LibraryForFilesystem()
         {
