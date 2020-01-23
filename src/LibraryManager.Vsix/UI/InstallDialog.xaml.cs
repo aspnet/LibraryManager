@@ -2,12 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 using Shell = Microsoft.VisualStudio.Shell;
 
@@ -113,6 +115,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             }
         }
 
+        string IInstallDialog.Provider
+        {
+            get
+            {
+                return ViewModel.SelectedProvider.Id;
+            }
+            set
+            {
+                IProvider intendedProvider = ViewModel.Providers.SingleOrDefault(p => p.Id == value);
+                if (intendedProvider == null)
+                {
+                    throw new InvalidOperationException($"A provider named {value} could not be selected");
+                }
+
+                ViewModel.SelectedProvider = intendedProvider;
+            }
+        }
+
         string IInstallDialog.Library
         {
             get
@@ -128,6 +148,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
         async Task IInstallDialog.ClickInstallAsync()
         {
             await ClickInstallButtonAsync();
+        }
+
+        void IInstallDialog.CloseDialog()
+        {
+            CloseDialog(false);
         }
 
         bool IInstallDialog.IsAnyFileSelected

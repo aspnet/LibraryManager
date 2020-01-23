@@ -19,17 +19,37 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             }
         }
 
-        public void SetLibrary(string library)
+        public string Provider
         {
-            UIInvoke(() =>
+            get
             {
-                InstallDialog.Library = library;
-            });
-
-            WaitForFileSelections();
+                return UIInvoke(() => InstallDialog.Provider);
+            }
+            set
+            {
+                UIInvoke(() =>
+                {
+                    InstallDialog.Provider = value;
+                });
+            }
         }
 
-        private void WaitForFileSelections()
+        public string Library
+        {
+            get
+            {
+                return UIInvoke(() => InstallDialog.Library);
+            }
+            set
+            {
+                UIInvoke(() =>
+                {
+                    InstallDialog.Library = value;
+                });
+            }
+        }
+
+        public void WaitForFileSelectionsAvailable()
         {
             WaitFor.IsTrue(() =>
             {
@@ -45,6 +65,14 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             UIInvoke(() =>
             {
                 ThreadHelper.JoinableTaskFactory.RunAsync(async () => await this.InstallDialog.ClickInstallAsync()).Task.ConfigureAwait(false);
+            });
+        }
+
+        public void Close()
+        {
+            UIInvoke(() =>
+            {
+                InstallDialog.CloseDialog();
             });
         }
     }
