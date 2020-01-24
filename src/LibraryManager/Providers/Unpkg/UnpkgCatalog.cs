@@ -17,6 +17,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public const string CacheFileName = "cache.json";
         public const string LibraryFileListUrlFormat = "https://unpkg.com/{0}@{1}/?meta"; // e.g. https://unpkg.com/jquery@3.3.1/?meta
         public const string LatestLibraryVersonUrl = "https://unpkg.com/{0}/package.json"; // e.g. https://unpkg.com/jquery/package.json
+        public const string LatestVersionTag = "latest";
+
         private readonly INpmPackageInfoFactory _packageInfoFactory;
         private readonly INpmPackageSearch _packageSearch;
         private readonly string _providerId;
@@ -66,6 +68,12 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             string libraryId = _libraryNamingScheme.GetLibraryId(libraryName, version);
+            if (string.Equals(version, LatestVersionTag, StringComparison.Ordinal))
+            {
+                string latestVersion = await GetLatestVersion(libraryId, includePreReleases: false, cancellationToken);
+                libraryId = _libraryNamingScheme.GetLibraryId(libraryName, latestVersion);
+            }
+
             try
             {
                 IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryName, version, cancellationToken);
@@ -200,7 +208,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                         completions.Add(completionItem);
                     }
-                    
+
                     completionSet.CompletionType = CompletionSortOrder.AsSpecified;
                 }
 
@@ -214,20 +222,24 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                     IList<SemanticVersion> versions = npmPackageInfo.Versions;
 
-                    if ( versions!= null)
+                    foreach (SemanticVersion semVersion in versions)
                     {
-                        foreach (SemanticVersion semVersion in versions)
+                        string versionText = semVersion.ToString();
+                        var completionItem = new CompletionItem
                         {
-                            string versionText = semVersion.ToString();
-                            var completionItem = new CompletionItem
-                            {
-                                DisplayText = versionText,
-                                InsertionText = name + "@" + versionText
-                            };
+                            DisplayText = versionText,
+                            InsertionText = name + "@" + versionText
+                        };
 
-                            completions.Add(completionItem);
-                        }
+                        completions.Add(completionItem);
                     }
+
+                    // support @latest version
+                    completions.Add(new CompletionItem
+                    {
+                        DisplayText = LatestVersionTag,
+                        InsertionText = _libraryNamingScheme.GetLibraryId(name, LatestVersionTag),
+                    });
 
                     completionSet.CompletionType = CompletionSortOrder.Version;
                 }

@@ -7,9 +7,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
     /// </summary>
     public interface IInstallDialog
     {
+        string Provider { get; set; }
+
         string Library { get; set; }
 
         Task ClickInstallAsync();
+
+        void CloseDialog();
 
         bool IsAnyFileSelected { get; }
     }

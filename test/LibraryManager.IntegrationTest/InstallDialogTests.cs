@@ -6,26 +6,17 @@ using Microsoft.Web.LibraryManager.IntegrationTest.Services;
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
     [TestClass]
-    public class AddClientSideLibrariesFromUITests : VisualStudioLibmanHostTest
+    public class InstallDialogTests : VisualStudioLibmanHostTest
     {
-        protected override void DoHostTestInitialize()
-        {
-            base.DoHostTestInitialize();
-
-            string libmanConfigFullPath = _libmanConfig.FullPath;
-
-            if (File.Exists(libmanConfigFullPath))
-            {
-                string projectPath = Path.Combine(SolutionRootPath, ProjectName);
-                _libmanConfig.Delete();
-                Helpers.FileIO.WaitForDeletedFile(projectPath, libmanConfigFullPath, caseInsensitive: false);
-            }
-        }
-
         [TestMethod]
         public void InstallClientSideLibraries_FromProjectRoot_SmokeTest()
         {
-            SetLibraryAndClickInstall(ProjectName, "jquery-validate@1.17.0");
+            RemoveExistingManifest();
+
+            InstallDialogTestExtension installDialogTestExtension = OpenWizardFromSolutionExplorerItem(ProjectName);
+            installDialogTestExtension.Library = "jquery-validate@1.17.0";
+            installDialogTestExtension.WaitForFileSelectionsAvailable();
+            installDialogTestExtension.ClickInstall();
 
             string pathToLibrary = Path.Combine(SolutionRootPath, ProjectName, "wwwroot", "lib", "jquery-validate");
             string[] expectedFiles = new[]
@@ -51,7 +42,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
         [TestMethod]
         public void InstallClientSideLibraries_FromFolder_SmokeTest()
         {
-            SetLibraryAndClickInstall("wwwroot", "jquery-validate@1.17.0");
+            RemoveExistingManifest();
+
+            InstallDialogTestExtension installDialogTestExtension = OpenWizardFromSolutionExplorerItem("wwwroot");
+            installDialogTestExtension.Library = "jquery-validate@1.17.0";
+            installDialogTestExtension.WaitForFileSelectionsAvailable();
+            installDialogTestExtension.ClickInstall();
 
             string pathToLibrary = Path.Combine(SolutionRootPath, ProjectName, "wwwroot", "jquery-validate");
             string[] expectedFiles = new[]
@@ -74,16 +70,51 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Assert.AreEqual(manifestContents, File.ReadAllText(_pathToLibmanFile));
         }
 
-        private void SetLibraryAndClickInstall(string nodeName, string library)
+        /*
+         * This test verifies that we load valid metadata (namely, list of files) when using the form library@latest.
+         * Even though "latest" isn't a real version (hence it normally wouldn't show any files), the wizard should
+         * still fetch the correct data and show a list of files.
+         */
+        [DataTestMethod]
+        [DataRow("unpkg")]
+        [DataRow("jsdelivr")]
+        public void NpmPackageWithLatestTag_LoadsFileMetadata(string provider)
+        {
+            InstallDialogTestExtension installDialogTestExtenstion = OpenWizardFromSolutionExplorerItem("wwwroot");
+
+            try
+            {
+                installDialogTestExtenstion.Provider = provider;
+                installDialogTestExtenstion.Library = "jquery@latest";
+
+                installDialogTestExtenstion.WaitForFileSelectionsAvailable();
+            }
+            finally
+            {
+                installDialogTestExtenstion.Close();
+            }
+        }
+
+        private void RemoveExistingManifest()
+        {
+            string libmanConfigFullPath = _libmanConfig.FullPath;
+
+            if (File.Exists(libmanConfigFullPath))
+            {
+                string projectPath = Path.Combine(SolutionRootPath, ProjectName);
+                _libmanConfig.Delete();
+                Helpers.FileIO.WaitForDeletedFile(projectPath, libmanConfigFullPath, caseInsensitive: false);
+            }
+        }
+
+        private InstallDialogTestExtension OpenWizardFromSolutionExplorerItem(string nodeName)
         {
             SolutionExplorerItemTestExtension solutionExplorerItemTestExtension = SolutionExplorer.FindItemRecursive(nodeName);
             solutionExplorerItemTestExtension.Select();
 
             InstallDialogTestService installDialogTestService = VisualStudio.Get<InstallDialogTestService>();
             InstallDialogTestExtension installDialogTestExtenstion = installDialogTestService.OpenDialog();
-
-            installDialogTestExtenstion.SetLibrary(library);
-            installDialogTestExtenstion.ClickInstall();
+            return installDialogTestExtenstion;
         }
     }
 }
