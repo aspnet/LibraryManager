@@ -52,6 +52,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             string cacheRoot = HostEnvironment.EnvironmentSettings.CacheDirectory;
 
+            var suppressedFiles = new HashSet<string>
+            {
+                "metadata.json"
+            };
+
             foreach (IProvider provider in ManifestDependencies.Providers)
             {
                 outputStr.AppendLine(provider.Id+":");
@@ -69,13 +74,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                             IEnumerable<string> files = Directory.EnumerateFiles(library, "*", SearchOption.AllDirectories);
                             foreach(string file in files)
                             {
-                                outputStr.Append(' ', 8);
                                 string fileStr = file.Substring(library.Length);
                                 if (fileStr.StartsWith(Path.DirectorySeparatorChar) || fileStr.StartsWith(Path.AltDirectorySeparatorChar))
                                 {
                                     fileStr = fileStr.Substring(1);
                                 }
 
+                                if (suppressedFiles.Contains(fileStr))
+                                {
+                                    continue;
+                                }
+
+                                outputStr.Append(' ', 8);
                                 outputStr.AppendLine(fileStr);
                             }
                         }
