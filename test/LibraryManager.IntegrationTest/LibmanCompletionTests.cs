@@ -93,7 +93,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.Caret.MoveDown(1);
             Editor.KeyboardCommands.Type("{");
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
+            Editor.KeyboardCommands.Type("\"provider\":");
+            Editor.KeyboardCommands.Type("cdnjs\","); // auto-format will put the space & quote after the colon
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
@@ -109,7 +110,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.Caret.MoveDown(1);
             Editor.KeyboardCommands.Type("{");
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
+            Editor.KeyboardCommands.Type("\"provider\":");
+            Editor.KeyboardCommands.Type("cdnjs\","); // auto-format will put the space & quote after the colon
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
@@ -152,7 +154,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.Caret.MoveDown(1);
             Editor.KeyboardCommands.Type("{");
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"provider\": \"filesystem\",");
+            Editor.KeyboardCommands.Type("\"provider\":");
+            Editor.KeyboardCommands.Type("filesystem\","); // auto-format will put the space & quote after the colon
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
@@ -169,7 +172,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.Caret.MoveDown(1);
             Editor.KeyboardCommands.Type("{");
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"provider\": \"unpkg\",");
+            Editor.KeyboardCommands.Type("\"provider\":");
+            Editor.KeyboardCommands.Type("unpkg\","); // auto-format will put the space & quote after the colon
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
@@ -177,7 +181,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Helpers.Completion.WaitForCompletionEntries(Editor, new[] { "bootstrap" }, caseInsensitive: true, timeout: 5000);
 
             Editor.KeyboardCommands.Backspace(7);
-            Editor.KeyboardCommands.Type("jqu");
+            Editor.KeyboardCommands.Type("jque");
             Helpers.Completion.WaitForCompletionEntries(Editor, new[] { "jquery" }, caseInsensitive: true, timeout: 5000);
         }
 
@@ -190,7 +194,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.Caret.MoveDown(1);
             Editor.KeyboardCommands.Type("{");
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"provider\": \"cdnjs\",");
+            Editor.KeyboardCommands.Type("\"provider\":");
+            Editor.KeyboardCommands.Type("cdnjs\","); // auto-format will put the space & quote after the colon
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
@@ -209,7 +214,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.Caret.MoveDown(1);
             Editor.KeyboardCommands.Type("{");
             Editor.KeyboardCommands.Enter();
-            Editor.KeyboardCommands.Type("\"provider\": \"unpkg\",");
+            Editor.KeyboardCommands.Type("\"provider\":");
+            Editor.KeyboardCommands.Type("unpkg\","); // auto-format will put the space & quote after the colon
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
@@ -218,9 +224,8 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             CompletionList items = Helpers.Completion.WaitForCompletionItems(Editor, 5000);
             Assert.IsNotNull(items, "Time out waiting for the version completion list");
 
-            List<SemanticVersion> semanticVersions = new List<SemanticVersion>();
+            var semanticVersions = new List<SemanticVersion>();
 
-            // CompletionList implements the List, so foreach can guarentee its iteration order as original.
             foreach (CompletionItem item in items)
             {
                 semanticVersions.Add(SemanticVersion.Parse(item.Text));
