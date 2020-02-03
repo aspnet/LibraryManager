@@ -140,7 +140,7 @@
         </trans-unit>
         <trans-unit id="VerbosityOptionDesc" translate="yes" xml:space="preserve">
           <source>Set the verbosity of output (eg. "normal", "detailed", "quiet")</source>
-          <target state="translated">Definir os detalhes de saída (ex.: "normal", "detalhada", "silenciosa")</target>
+          <target state="translated">Definir o detalhamento de saída (ex.: "normal", "detalhada", "silenciosa")</target>
         </trans-unit>
         <trans-unit id="ProjectPathOptionDesc" translate="yes" xml:space="preserve">
           <source>Path to the project (Current directory is used as default)</source>

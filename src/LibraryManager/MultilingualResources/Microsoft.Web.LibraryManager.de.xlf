@@ -213,6 +213,10 @@
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
           <target state="translated">Beispiel: &lt;bibliothek&gt;@&lt;version&gt;</target>
         </trans-unit>
+        <trans-unit id="DownloadingFile" translate="yes" xml:space="preserve">
+          <source>Downloading file {0}...</source>
+          <target state="translated">Die Datei "{0}" wird heruntergeladen...</target>
+        </trans-unit>
       </group>
     </body>
   </file>
