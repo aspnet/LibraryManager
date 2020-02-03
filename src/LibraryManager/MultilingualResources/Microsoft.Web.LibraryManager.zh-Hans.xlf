@@ -213,6 +213,10 @@
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
           <target state="translated">示例: &lt;库&gt;@&lt;版本&gt;</target>
         </trans-unit>
+        <trans-unit id="DownloadingFile" translate="yes" xml:space="preserve">
+          <source>Downloading file {0}...</source>
+          <target state="translated">正在下载文件 {0}...</target>
+        </trans-unit>
       </group>
     </body>
   </file>

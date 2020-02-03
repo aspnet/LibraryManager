@@ -175,7 +175,7 @@
         </trans-unit>
         <trans-unit id="UnpkgProviderHintText" translate="yes" xml:space="preserve">
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
-          <target state="translated">Ejemplo: <it id="1" pos="open">&lt;biblioteca&gt;</it>@<it id="2" pos="open">&lt;versión&gt;</it></target>
+          <target state="translated">Ejemplo: &lt;biblioteca&gt;@&lt;versión&gt;</target>
         </trans-unit>
         <trans-unit id="LibraryDetail_Unavailable" translate="yes" xml:space="preserve">
           <source>Unavailable</source>
@@ -211,7 +211,11 @@
         </trans-unit>
         <trans-unit id="JsDelivrProviderHintText" translate="yes" xml:space="preserve">
           <source>Example: <it id="1" pos="open">&lt;library&gt;</it>@<it id="2" pos="open">&lt;version&gt;</it></source>
-          <target state="translated">Ejemplo: <it id="1" pos="open">&lt;biblioteca&gt;</it>@<it id="2" pos="open">&lt;versión&gt;</it></target>
+          <target state="translated">Ejemplo: &lt;biblioteca&gt;@&lt;versión&gt;</target>
+        </trans-unit>
+        <trans-unit id="DownloadingFile" translate="yes" xml:space="preserve">
+          <source>Downloading file {0}...</source>
+          <target state="translated">Descargando el archivo {0}...</target>
         </trans-unit>
       </group>
     </body>
