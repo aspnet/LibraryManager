@@ -20,7 +20,7 @@ Install and consume 3rd-party client-side libraries with ease.
 
 ## Features
 
-- Add any library from [cdnjs.com](https://cdnjs.com/)
+- Add any library from [cdnjs.com](https://cdnjs.com/), [jsdelivr.com](https://www.jsdelivr.com/), or [unpkg.com](https://unpkg.com/)
 - Add any file from file system, network share or remote URL
 - Only add the file(s) you need
 - Can install any file into any folder in your project/solution
