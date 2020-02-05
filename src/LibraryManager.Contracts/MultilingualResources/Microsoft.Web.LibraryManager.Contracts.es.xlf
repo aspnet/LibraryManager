@@ -96,6 +96,10 @@ Los archivos válidos son {2}</target>
           <source>Cannot restore. Multiple definitions for libraries: {0}</source>
           <target state="translated">No se puede restaurar. Varias definiciones para bibliotecas: {0}</target>
         </trans-unit>
+        <trans-unit id="ErrorFilePathIsEmpty" translate="yes" xml:space="preserve">
+          <source>The library "{0}" cannot specify a file with an empty name</source>
+          <target state="new">The library "{0}" cannot specify a file with an empty name</target>
+        </trans-unit>
       </group>
     </body>
   </file>
