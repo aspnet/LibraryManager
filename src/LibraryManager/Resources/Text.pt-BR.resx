@@ -169,4 +169,7 @@
   <data name="JsDelivrProviderHintText" xml:space="preserve">
     <value>Exemplo: &lt;biblioteca&gt;@&lt;versão&gt;</value>
   </data>
+  <data name="DownloadingFile" xml:space="preserve">
+    <value>Baixando arquivo {0}...</value>
+  </data>
 </root>

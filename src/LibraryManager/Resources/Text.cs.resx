@@ -169,4 +169,7 @@
   <data name="JsDelivrProviderHintText" xml:space="preserve">
     <value>Příklad: &lt;knihovna&gt;@&lt;verze&gt;</value>
   </data>
+  <data name="DownloadingFile" xml:space="preserve">
+    <value>Stahuje se soubor {0}...</value>
+  </data>
 </root>

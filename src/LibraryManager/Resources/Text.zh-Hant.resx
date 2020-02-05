@@ -169,4 +169,7 @@
   <data name="JsDelivrProviderHintText" xml:space="preserve">
     <value>範例: &lt;程式庫&gt;@&lt;版本&gt;</value>
   </data>
+  <data name="DownloadingFile" xml:space="preserve">
+    <value>正在下載檔案 {0}...</value>
+  </data>
 </root>

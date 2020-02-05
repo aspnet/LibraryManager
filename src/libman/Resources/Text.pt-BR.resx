@@ -106,7 +106,7 @@
     Se houver mais de uma biblioteca com o mesmo libraryId, você será solicitado a escolher uma.</value>
   </data>
   <data name="VerbosityOptionDesc" xml:space="preserve">
-    <value>Definir os detalhes de saída (ex.: "normal", "detalhada", "silenciosa")</value>
+    <value>Definir o detalhamento de saída (ex.: "normal", "detalhada", "silenciosa")</value>
   </data>
   <data name="ProjectPathOptionDesc" xml:space="preserve">
     <value>Caminho para o projeto (o diretório atual é usado como padrão)</value>
