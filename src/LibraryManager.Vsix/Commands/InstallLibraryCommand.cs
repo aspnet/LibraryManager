@@ -20,7 +20,7 @@ using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 using Task = System.Threading.Tasks.Task;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Commands
 {
     internal sealed class InstallLibraryCommand
     {

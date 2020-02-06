@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Task = System.Threading.Tasks.Task;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Commands
 {
     internal sealed class RestoreSolutionCommand
     {

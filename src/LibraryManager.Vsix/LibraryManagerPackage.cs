@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Web.LibraryManager.Vsix.Commands;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Tasks = System.Threading.Tasks;
