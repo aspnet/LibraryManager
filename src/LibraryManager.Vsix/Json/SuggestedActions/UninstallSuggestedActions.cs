@@ -17,7 +17,7 @@ using Microsoft.WebTools.Languages.Shared.Utility;
 
 using Task = System.Threading.Tasks.Task;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.SuggestedActions
 {
     internal class UninstallSuggestedAction : SuggestedActionBase
     {

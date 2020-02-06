@@ -13,7 +13,7 @@ using Microsoft.WebTools.Languages.Shared.Editor.SuggestedActions;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.SuggestedActions
 {
     internal class UpdateSuggestedActionSet : SuggestedActionBase
     {
