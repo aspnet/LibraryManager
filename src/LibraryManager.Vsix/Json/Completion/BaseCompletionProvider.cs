@@ -12,7 +12,7 @@ using Microsoft.WebTools.Languages.Json.Editor.Completion;
 using Microsoft.WebTools.Languages.Shared.Editor.Completion;
 using Microsoft.WebTools.Languages.Shared.Editor.Host;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
 {
     internal abstract class BaseCompletionProvider : IJsonCompletionListProvider
     {

@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.WebTools.Languages.Shared.Editor.Completion;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
 {
     internal class VersionCompletionEntry : SimpleCompletionEntry
     {

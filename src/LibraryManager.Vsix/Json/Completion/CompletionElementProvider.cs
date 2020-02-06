@@ -6,14 +6,14 @@ using Microsoft.VisualStudio.Utilities;
 using System.ComponentModel.Composition;
 using System.Windows;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
 {
-    [Export(typeof(IUIElementProvider<Completion, ICompletionSession>))]
+    [Export(typeof(IUIElementProvider<VisualStudio.Language.Intellisense.Completion, ICompletionSession>))]
     [Name(nameof(CompletionElementProvider))]
     [ContentType("JSON")]
-    internal class CompletionElementProvider : IUIElementProvider<Completion, ICompletionSession>
+    internal class CompletionElementProvider : IUIElementProvider<VisualStudio.Language.Intellisense.Completion, ICompletionSession>
     {
-        public UIElement GetUIElement(Completion itemToRender, ICompletionSession context, UIElementType elementType)
+        public UIElement GetUIElement(VisualStudio.Language.Intellisense.Completion itemToRender, ICompletionSession context, UIElementType elementType)
         {
             if (elementType == UIElementType.Tooltip && itemToRender is SimpleCompletionEntry entry)
             {
