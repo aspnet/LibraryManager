@@ -11,6 +11,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.WebTools.Languages.Shared.Editor.SuggestedActions;
 using Microsoft.VisualStudio.Threading;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {

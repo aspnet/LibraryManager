@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Logging;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 
 namespace Microsoft.Web.LibraryManager.Vsix
 {

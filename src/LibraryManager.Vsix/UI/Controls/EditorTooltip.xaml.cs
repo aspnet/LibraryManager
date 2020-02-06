@@ -3,6 +3,7 @@
 
 using System.Windows.Controls;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {

@@ -9,7 +9,7 @@ using System.Text;
 using Microsoft.VisualStudio.Telemetry;
 using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Shared
 {
     internal static class Telemetry
     {

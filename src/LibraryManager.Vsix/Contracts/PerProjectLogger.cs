@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 {

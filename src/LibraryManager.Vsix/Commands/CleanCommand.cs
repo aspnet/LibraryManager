@@ -6,6 +6,7 @@ using System.ComponentModel.Design;
 using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix
