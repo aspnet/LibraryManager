@@ -12,7 +12,7 @@ using Microsoft.Web.LibraryManager.Contracts.Configuration;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Task = System.Threading.Tasks.Task;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 {
     internal class HostInteraction : IHostInteraction
     {
