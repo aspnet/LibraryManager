@@ -3,9 +3,9 @@
 
 using System.Collections.Generic;
 
-namespace Microsoft.Web.LibraryManager.Build
+namespace Microsoft.Web.LibraryManager.Build.Contracts
 {
-    internal class Logger : Contracts.ILogger
+    internal class Logger : LibraryManager.Contracts.ILogger
     {
         private Logger()
         {
@@ -21,16 +21,16 @@ namespace Microsoft.Web.LibraryManager.Build
             Errors.Clear();
         }
 
-        public void Log(string message, Contracts.LogLevel level)
+        public void Log(string message, LibraryManager.Contracts.LogLevel level)
         {
             switch (level)
             {
-                case Contracts.LogLevel.Error:
+                case LibraryManager.Contracts.LogLevel.Error:
                     Errors.Add(message);
                     break;
-                case Contracts.LogLevel.Operation:
-                case Contracts.LogLevel.Task:
-                case Contracts.LogLevel.Status:
+                case LibraryManager.Contracts.LogLevel.Operation:
+                case LibraryManager.Contracts.LogLevel.Task:
+                case LibraryManager.Contracts.LogLevel.Status:
                     Messages.Add(message);
                     break;
             }

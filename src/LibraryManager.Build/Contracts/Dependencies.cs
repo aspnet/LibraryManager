@@ -10,7 +10,7 @@ using Microsoft.Web.LibraryManager.Providers.FileSystem;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
-namespace Microsoft.Web.LibraryManager.Build
+namespace Microsoft.Web.LibraryManager.Build.Contracts
 {
     internal class Dependencies : IDependencies
     {

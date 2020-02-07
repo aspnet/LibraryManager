@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Microsoft.Web.LibraryManager.Build.Contracts;
+using Logger = Microsoft.Web.LibraryManager.Build.Contracts.Logger;
 
 namespace Microsoft.Web.LibraryManager.Build
 {
