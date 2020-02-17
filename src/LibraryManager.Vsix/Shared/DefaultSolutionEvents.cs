@@ -6,7 +6,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Shared
 {
     // EventArgs helper class that can hold various event arg information
     internal class ParamEventArgs : EventArgs

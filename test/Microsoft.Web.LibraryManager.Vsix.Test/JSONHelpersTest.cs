@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Vsix;
+using Microsoft.Web.LibraryManager.Vsix.Json;
 using Microsoft.WebTools.Languages.Json.Parser;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Parser;

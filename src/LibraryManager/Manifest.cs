@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 using Microsoft.Web.LibraryManager.Json;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Newtonsoft.Json;

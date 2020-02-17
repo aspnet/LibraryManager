@@ -9,7 +9,7 @@ using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Utility;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json
 {
     internal static class JsonHelpers
     {

@@ -11,7 +11,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Microsoft.Web.LibraryManager
+namespace Microsoft.Web.LibraryManager.Helpers
 {
     /// <summary>
     /// A collection of extension methods.

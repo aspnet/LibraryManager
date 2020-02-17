@@ -16,10 +16,11 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Search;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 using Task = System.Threading.Tasks.Task;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Commands
 {
     internal sealed class InstallLibraryCommand
     {

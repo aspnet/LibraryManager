@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using LogLevel = Microsoft.Web.LibraryManager.Contracts.LogLevel;
 
-namespace Microsoft.Web.LibraryManager.Build
+namespace Microsoft.Web.LibraryManager.Build.Contracts
 {
-    internal class Logger : Contracts.ILogger
+    internal class Logger : LibraryManager.Contracts.ILogger
     {
         private Logger()
         {
@@ -21,16 +22,16 @@ namespace Microsoft.Web.LibraryManager.Build
             Errors.Clear();
         }
 
-        public void Log(string message, Contracts.LogLevel level)
+        public void Log(string message, LogLevel level)
         {
             switch (level)
             {
-                case Contracts.LogLevel.Error:
+                case LogLevel.Error:
                     Errors.Add(message);
                     break;
-                case Contracts.LogLevel.Operation:
-                case Contracts.LogLevel.Task:
-                case Contracts.LogLevel.Status:
+                case LogLevel.Operation:
+                case LogLevel.Task:
+                case LogLevel.Status:
                     Messages.Add(message);
                     break;
             }

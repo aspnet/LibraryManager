@@ -15,7 +15,7 @@ using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.WebTools.Languages.Json.Editor.Completion;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
 {
     [Export(typeof(IJsonCompletionListProvider))]
     [Name(nameof(LibraryIdCompletionProvider))]

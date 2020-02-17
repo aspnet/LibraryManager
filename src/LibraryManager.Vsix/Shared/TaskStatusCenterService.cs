@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TaskStatusCenter;
 /// <summary>
 /// Implementation of the TaskStatusCenterService allowing backaground tasks to be registered to IVsTaskStatusCenterService.
 /// </summary>
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Shared
 {
     using Package = Microsoft.VisualStudio.Shell.Package;
 

@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Web.LibraryManager
+namespace Microsoft.Web.LibraryManager.Helpers
 {
     internal class LibraryStateTypeConverter : JsonConverter
     {

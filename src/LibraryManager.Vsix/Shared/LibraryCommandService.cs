@@ -16,7 +16,7 @@ using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Task = System.Threading.Tasks.Task;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Shared
 {
     [Export(typeof(ILibraryCommandService))]
     internal class LibraryCommandService : ILibraryCommandService, IDisposable

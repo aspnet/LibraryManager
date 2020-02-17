@@ -6,9 +6,11 @@ using System.ComponentModel.Design;
 using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Task = System.Threading.Tasks.Task;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Commands
 {
     internal sealed class CleanCommand
     {

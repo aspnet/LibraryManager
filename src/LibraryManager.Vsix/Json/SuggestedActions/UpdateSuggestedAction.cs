@@ -4,12 +4,14 @@ using System.Threading;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Editor.SuggestedActions;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Utility;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.SuggestedActions
 {
     internal class UpdateSuggestedAction : SuggestedActionBase
     {

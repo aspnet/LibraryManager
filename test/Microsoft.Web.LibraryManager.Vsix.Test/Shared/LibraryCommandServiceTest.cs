@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Moq;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Test.Shared

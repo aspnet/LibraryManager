@@ -9,11 +9,13 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Json;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Json.VS.SuggestedActions;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.SuggestedActions
 {
     [Export(typeof(IJsonSuggestedActionProvider))]
     [Name(nameof(SuggestedActionProvider))]

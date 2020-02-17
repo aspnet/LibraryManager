@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Shared
 {
     /// <summary>
     /// Contains wrapper methods for Manifest operations calls.

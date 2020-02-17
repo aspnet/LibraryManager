@@ -11,13 +11,14 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Microsoft.WebTools.Languages.Json.Editor.Document;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 
 using Task = System.Threading.Tasks.Task;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
 {
     internal class CompletionController : IOleCommandTarget
     {

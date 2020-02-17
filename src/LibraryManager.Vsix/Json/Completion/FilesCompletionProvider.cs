@@ -15,11 +15,12 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Microsoft.WebTools.Languages.Json.Editor.Completion;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
 {
     [Export(typeof(IJsonCompletionListProvider))]
     [Name(nameof(FilesCompletionProvider))]

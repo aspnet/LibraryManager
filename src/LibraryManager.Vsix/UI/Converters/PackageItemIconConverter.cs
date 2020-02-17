@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Converters

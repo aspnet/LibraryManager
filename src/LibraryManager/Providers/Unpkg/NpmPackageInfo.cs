@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Web.LibraryManager.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg

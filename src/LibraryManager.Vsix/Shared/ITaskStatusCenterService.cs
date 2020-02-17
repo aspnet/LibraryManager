@@ -4,7 +4,7 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TaskStatusCenter;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Shared
 {
     /// <summary>
     /// Provides an interface for a Task Status Center Service
