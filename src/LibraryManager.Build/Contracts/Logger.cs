@@ -26,12 +26,12 @@ namespace Microsoft.Web.LibraryManager.Build.Contracts
         {
             switch (level)
             {
-                case LibraryManager.Contracts.LogLevel.Error:
+                case LogLevel.Error:
                     Errors.Add(message);
                     break;
-                case LibraryManager.Contracts.LogLevel.Operation:
-                case LibraryManager.Contracts.LogLevel.Task:
-                case LibraryManager.Contracts.LogLevel.Status:
+                case LogLevel.Operation:
+                case LogLevel.Task:
+                case LogLevel.Status:
                     Messages.Add(message);
                     break;
             }
