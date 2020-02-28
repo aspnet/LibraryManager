@@ -104,7 +104,7 @@
     <value>Une erreur se produit si le dossier actif ne contient aucun fichier libman.json ou si la bibliothèque spécifiée n’existe pas. Si plusieurs bibliothèques ont le même libraryId, vous êtes invité à en choisir une.</value>
   </data>
   <data name="VerbosityOptionDesc" xml:space="preserve">
-    <value>Définissez le niveau de détail de la sortie (par exemple : "normal", "detailed", "quiet")</value>
+    <value>Définissez la verbosité de la sortie (par exemple : "normal", "detailed", "quiet")</value>
   </data>
   <data name="ProjectPathOptionDesc" xml:space="preserve">
     <value>Chemin au projet (répertoire actif utilisé par défaut)</value>

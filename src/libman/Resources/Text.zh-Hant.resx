@@ -106,7 +106,7 @@
     若有多個 libraryId 相同的程式庫，系統會提示您選擇。</value>
   </data>
   <data name="VerbosityOptionDesc" xml:space="preserve">
-    <value>設定輸出的詳細資訊層級 (例如「正常」、「詳細」、「安靜」)</value>
+    <value>設定輸出的詳細程度層級 (例如「正常」、「詳細」、「安靜」)</value>
   </data>
   <data name="ProjectPathOptionDesc" xml:space="preserve">
     <value>專案的路徑 (預設會使用目前目錄)</value>

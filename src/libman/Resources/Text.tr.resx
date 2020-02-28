@@ -106,7 +106,7 @@
     Aynı libraryId ile birden fazla kitaplık varsa seçim yapmanız istenir.</value>
   </data>
   <data name="VerbosityOptionDesc" xml:space="preserve">
-    <value>Çıktı ayrıntılarını belirleyin (örneğin, "normal", "ayrıntılı", "sessiz")</value>
+    <value>Çıktının ayrıntı düzeyini belirleyin (örneğin, "normal", "ayrıntılı", "sessiz")</value>
   </data>
   <data name="ProjectPathOptionDesc" xml:space="preserve">
     <value>Proje yolu (geçerli dizin varsayılan kullanılır)</value>
