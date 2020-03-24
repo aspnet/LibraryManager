@@ -13,7 +13,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         [DataTestMethod]
         [DataRow(null, 0)]
         [DataRow("", 0)]
-        [DataRow("poiuytrewq", 0)]
+        [DataRow("plajsfdlkjsfoiuytrewq", 0)]
         public async Task NpmPackageSearch_GetPackageNamesAsync_NullOrEmptyOrUnmatchedPackage(string searchItem, int expectedCount)
         {
             CancellationToken token = CancellationToken.None;
