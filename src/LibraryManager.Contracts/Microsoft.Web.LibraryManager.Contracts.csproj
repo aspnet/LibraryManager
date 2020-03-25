@@ -14,7 +14,7 @@
   <Target Name="GetCopyToOutputDirectoryItems" />
   <Target Name="SatelliteDllsProjectOutputGroup" />
   <Target Name="DebugSymbolsProjectOutputGroup" />
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Reference Include="System.Runtime" />
   </ItemGroup>
   <!-- Needed for Multilingual App Toolkit-->
