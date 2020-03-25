@@ -94,7 +94,7 @@ namespace Microsoft.Web.LibraryManager.Build
         {
             foreach (string message in logger.Messages)
             {
-                Log.LogMessage(MessageImportance.High, message);
+                Log.LogMessage(message);
             }
 
             foreach (string error in logger.Errors)
