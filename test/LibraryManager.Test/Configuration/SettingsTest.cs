@@ -144,6 +144,23 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
         }
 
         [TestMethod]
+        public void TryGetValue_IfSettingPresentAmongEnvironmentVariables_UseEnvironmentValue()
+        {
+            string fileText = @"{ ""config"": { ""testKey"": ""fileValue"" } }";
+            File.WriteAllText(TestFilePath, fileText);
+
+            Environment.SetEnvironmentVariable("testKey", "envValue");
+
+            bool success = new TestSettings(TestFilePath).TryGetValue("testKey", out string value);
+
+            // cleanup before we assert
+            Environment.SetEnvironmentVariable("testKey", null);
+
+            Assert.IsTrue(success);
+            Assert.AreEqual("envValue", value);
+        }
+
+        [TestMethod]
         public void SetValue_ConfigSectionDoesNotExist_CreateSectionWithValue()
         {
             File.WriteAllText(TestFilePath, "");

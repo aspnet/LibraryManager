@@ -45,7 +45,8 @@ namespace Microsoft.Web.LibraryManager.Configuration
             if (_bypassUris == null)
             {
                 _bypassUris = new List<Uri>();
-                if (_settings.TryGetValue(Constants.HttpProxyBypass, out string bypassValue))
+                if (_settings.TryGetValue(Constants.HttpsProxyBypass, out string bypassValue)
+                    || _settings.TryGetValue(Constants.HttpProxyBypass, out bypassValue))
                 {
                     string[] bypasses = bypassValue.Split(';');
                     foreach (string bypass in bypasses)
@@ -68,14 +69,22 @@ namespace Microsoft.Web.LibraryManager.Configuration
 
         private IWebProxy GetUserConfiguredProxy()
         {
+            IWebProxy configuredProxy = TryConfigureProxy(Constants.HttpsProxy, Constants.HttpsProxyUser, Constants.HttpsProxyPassword)
+                                     ?? TryConfigureProxy(Constants.HttpProxy, Constants.HttpProxyUser, Constants.HttpProxyPassword);
+
+            return configuredProxy;
+        }
+
+        private IWebProxy TryConfigureProxy(string proxySettingName, string proxyUserSettingName, string proxyPasswordSettingName)
+        {
             IWebProxy configuredProxy = null;
 
-            if (_settings.TryGetValue(Constants.HttpProxy, out string proxyAddress))
+            if (_settings.TryGetValue(proxySettingName, out string proxyAddress))
             {
                 configuredProxy = new WebProxy(proxyAddress);
 
-                if (_settings.TryGetValue(Constants.HttpProxyUser, out string proxyUser)
-                    && _settings.TryGetEncryptedValue(Constants.HttpProxyPassword, out string proxyPassword))
+                if (_settings.TryGetValue(proxyUserSettingName, out string proxyUser)
+                    && _settings.TryGetEncryptedValue(proxyPasswordSettingName, out string proxyPassword))
                 {
                     configuredProxy.Credentials = new NetworkCredential(proxyUser, proxyPassword);
                 }
