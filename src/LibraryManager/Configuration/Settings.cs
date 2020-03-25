@@ -102,9 +102,16 @@ namespace Microsoft.Web.LibraryManager.Configuration
         public bool TryGetValue(string settingName, out string value)
         {
             value = string.Empty;
-            JToken setting = _configObject[settingName];
 
-            if (setting != null && setting.Type == JTokenType.String)
+            string envValue = Environment.GetEnvironmentVariable(settingName);
+            if(!string.IsNullOrEmpty(envValue))
+            {
+                value = envValue;
+                return true;
+            }
+
+            JToken setting = _configObject[settingName];
+            if (setting?.Type == JTokenType.String)
             {
                 value = setting.ToString();
                 return true;
