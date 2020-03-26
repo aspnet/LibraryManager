@@ -30,6 +30,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NerdBank.GitVersioning" />
+    <PackageReference Include="NerdBank.GitVersioning" PrivateAssets="All" />
+    <PackageReference Include="MicroBuild" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 </Project>
