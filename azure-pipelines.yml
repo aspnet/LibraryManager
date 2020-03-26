@@ -12,5 +12,7 @@ variables:
 
 jobs:
   - job: Windows
+    pool:
+      vmImage: windows-latest
     steps:
       - template: azure-pipelines/build.yml
