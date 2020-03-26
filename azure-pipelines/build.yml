@@ -50,10 +50,11 @@ steps:
 
 - task: CopyFiles@1
   inputs:
-    Contents: |
+    contents: |
       artifacts/**/*.nupkg
       src/LibraryManager.Vsix/bin/**/*.vsix
-    TargetFolder: $(Build.ArtifactStagingDirectory)/artifacts
+    targetFolder: $(Build.ArtifactStagingDirectory)/artifacts
+    flattenFolders: true
   displayName: Collecting build artifacts
 
 - task: PublishBuildArtifacts@1
