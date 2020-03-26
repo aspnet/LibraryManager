@@ -1,0 +1,16 @@
+trigger:
+  branches:
+    include: ["master", "rel/*"]
+  paths:
+    exclude: ["*.md"]
+
+variables:
+  TreatWarningsAsErrors: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  BuildConfiguration: Release
+  BuildPlatform: Any CPU
+
+jobs:
+  - job: Windows
+    steps:
+      - template: azure-pipelines/build.yml
