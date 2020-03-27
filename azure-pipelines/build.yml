@@ -1,0 +1,65 @@
+steps:
+- checkout: self
+  clean: true
+
+- task: UseDotNet@2
+  displayName: Install .NET Core SDK
+
+- ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
+  - template: azure-pipeline.microbuild.before.yml
+
+- script: dotnet --info
+  displayName: Show dotnet SDK info
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    verbosityRestore: normal # detailed, normal, minimal
+    projects: LibraryManager.sln
+    feedsToUse: config
+    nugetConfigPath: nuget.config
+
+- task: MSBuild@1
+  inputs:
+    solution: LibraryManager.msbuild
+    msbuildArguments: >
+      /t:BuildAll
+      /p:Configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal
+      /v:m
+      /bl:"$(Build.ArtifactStagingDirectory)/build_logs/msbuild.binlog"
+
+- task: DotNetCoreCLI@2
+  displayName: Run tests
+  inputs:
+    command: test
+    projects: "**/*.Test.csproj"
+    arguments: --configuration $(BuildConfiguration) --no-build --filter "TestCategory!=FailsInCloudTest" -v n
+  condition: and(succeeded(), ne(variables['SignType'], 'real'))
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)/build_logs
+    ArtifactName: build_logs
+    ArtifactType: Container
+  displayName: Publish build_logs artifacts
+  condition: succeededOrFailed()
+
+- ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
+  - template: azure-pipeline.microbuild.after.yml
+
+- task: CopyFiles@1
+  inputs:
+    contents: |
+      artifacts/**/*.nupkg
+      src/LibraryManager.Vsix/bin/**/*.vsix
+    targetFolder: $(Build.ArtifactStagingDirectory)/artifacts
+    flattenFolders: true
+  displayName: Collecting build artifacts
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)/artifacts
+    ArtifactName: artifacts
+    ArtifactType: Container
+  displayName: Publish artifacts

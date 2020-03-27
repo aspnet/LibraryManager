@@ -40,7 +40,6 @@
     <PackageReference Update="MSTest.TestAdapter" Version="1.2.1" />
     <PackageReference Update="MSTest.TestFramework" Version="1.2.1" />
 
-
     <!-- CommandLine utils -->
     <!-- This version should be kept in sync with the value of RuntimeFrameworkVersion where this package is consumed -->
     <PackageReference Update="Microsoft.Extensions.CommandLineUtils.Sources" Version="2.1.0" PrivateAssets="All" />
