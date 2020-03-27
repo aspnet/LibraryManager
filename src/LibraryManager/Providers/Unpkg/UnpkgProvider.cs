@@ -37,9 +37,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         /// <returns></returns>
         public override string GetSuggestedDestination(ILibrary library)
         {
-            if (library != null && library is UnpkgLibrary unpkgLibrary)
+            if (library is UnpkgLibrary unpkgLibrary)
             {
-                return unpkgLibrary.Name;
+                return unpkgLibrary.Name?.TrimStart('@');
             }
 
             return string.Empty;

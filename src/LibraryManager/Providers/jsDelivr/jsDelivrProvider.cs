@@ -1,14 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
@@ -47,9 +40,9 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         /// <returns></returns>
         public override string GetSuggestedDestination(ILibrary library)
         {
-            if (library != null && library is JsDelivrLibrary jsDelivrLibrary)
+            if (library is JsDelivrLibrary jsDelivrLibrary)
             {
-                return jsDelivrLibrary.Name;
+                return jsDelivrLibrary.Name?.TrimStart('@');
             }
 
             return string.Empty;

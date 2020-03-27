@@ -197,23 +197,24 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         }
 
         [TestMethod]
-        public void GetSuggestedDestination()
+        public void GetSuggestedDestination_NullLibrary_ReturnsEmptyString()
         {
-
             Assert.AreEqual(string.Empty, _provider.GetSuggestedDestination(null));
+        }
 
+        [DataTestMethod]
+        [DataRow("jquery", "jquery")]
+        [DataRow("@angular/cli", "angular/cli")]
+        public void GetSuggestedDestination(string libraryName, string expected)
+        {
             var library = new UnpkgLibrary()
             {
-                Name = "jquery",
+                Name = libraryName,
                 Version = "3.3.1",
                 Files = null
             };
 
-            Assert.AreEqual(library.Name, _provider.GetSuggestedDestination(library));
-
-            library.Name = @"@angular/cli";
-
-            Assert.AreEqual("@angular/cli", _provider.GetSuggestedDestination(library));
+            Assert.AreEqual(expected, _provider.GetSuggestedDestination(library));
         }
     }
 }
