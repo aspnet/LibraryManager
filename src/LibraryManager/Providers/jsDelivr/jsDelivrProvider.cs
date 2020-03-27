@@ -40,9 +40,9 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         /// <returns></returns>
         public override string GetSuggestedDestination(ILibrary library)
         {
-            if (library != null && library is JsDelivrLibrary jsDelivrLibrary)
+            if (library is JsDelivrLibrary jsDelivrLibrary)
             {
-                return jsDelivrLibrary.Name.TrimStart('@');
+                return jsDelivrLibrary.Name?.TrimStart('@');
             }
 
             return string.Empty;
