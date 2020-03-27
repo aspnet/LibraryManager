@@ -39,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         {
             if (library != null && library is UnpkgLibrary unpkgLibrary)
             {
-                return unpkgLibrary.Name;
+                return unpkgLibrary.Name.TrimStart('@');
             }
 
             return string.Empty;
