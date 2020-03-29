@@ -67,7 +67,7 @@
       <DependentUpon>TextBoxWithSearch.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\AutomationPeers\TextControlTypeAutomationPeer.cs" />
-    <Compile Include="UI\Controls\ThemedWindow.cs" />
+    <Compile Include="UI\Theming\ThemedWindow.cs" />
     <Compile Include="UI\Converters\BoldingConverter.cs" />
     <Compile Include="UI\Converters\NotConverter.cs" />
     <Compile Include="UI\Converters\PackageItemIconConverter.cs" />
@@ -85,7 +85,7 @@
     <Compile Include="UI\Models\SearchTextBoxViewModel.cs" />
     <Compile Include="UI\Models\SelectedProviderBinding.cs" />
     <Compile Include="UI\Models\TargetLocationViewModel.cs" />
-    <Compile Include="UI\Theme.cs" />
+    <Compile Include="UI\Theming\Theme.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ManageLibrariesCommand.cs" />
@@ -382,13 +382,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="UI\Controls\PackageContentsTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Controls\Shared.xaml">
+    <Page Include="UI\Theming\Shared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -396,7 +394,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Controls\VsThemedComboBox.xaml">
+    <Page Include="UI\Theming\VsThemedComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Theming\VsThemedTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Theming\VsThemedToolTip.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
              xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
-             xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
              mc:Ignorable="d" x:Name="ThisControl"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}">
     <UserControl.Resources>
@@ -19,7 +18,7 @@
               BorderThickness="0"
               PreviewKeyUp="OnPreviewKeyUp">
         <TreeView.ItemContainerStyle>
-            <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
+            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource ThemedTreeViewItemStyle}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                 <Setter Property="AutomationProperties.Name">
                     <Setter.Value>
@@ -45,7 +44,7 @@
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
-            <Style TargetType="TreeView">
+            <Style TargetType="TreeView" BasedOn="{StaticResource ThemedTreeViewStyle}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=IsTreeViewEmpty}" Value="True">
                         <Setter Property="Visibility" Value="Hidden" />

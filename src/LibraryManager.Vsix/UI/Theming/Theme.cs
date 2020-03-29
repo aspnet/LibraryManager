@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.VisualStudio.Shell;
 
-namespace Microsoft.Web.LibraryManager.Vsix.UI
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Theming
 {
     internal static class Theme
     {
@@ -30,12 +30,16 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             ResourceDictionary allResources = new ResourceDictionary();
             ResourceDictionary shellResources = (ResourceDictionary) Application.LoadComponent(new Uri("Microsoft.VisualStudio.Platform.WindowManagement;component/Themes/ThemedDialogDefaultStyles.xaml", UriKind.Relative));
             ResourceDictionary scrollStyleContainer = (ResourceDictionary) Application.LoadComponent(new Uri("Microsoft.VisualStudio.Shell.UI.Internal;component/Styles/ScrollBarStyle.xaml", UriKind.Relative));
-            ResourceDictionary localThemingContainer = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Controls/Shared.xaml", UriKind.Relative));
-            ResourceDictionary comboTheme = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Controls/VsThemedComboBox.xaml", UriKind.Relative));
+            ResourceDictionary localThemingContainer = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Theming/Shared.xaml", UriKind.Relative));
+            ResourceDictionary comboTheme = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Theming/VsThemedComboBox.xaml", UriKind.Relative));
+            ResourceDictionary tooltipTheme = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Theming/VsThemedToolTip.xaml", UriKind.Relative));
+            ResourceDictionary treeViewTheme = (ResourceDictionary)Application.LoadComponent(new Uri("Microsoft.Web.LibraryManager.Vsix;component/UI/Theming/VsThemedTreeView.xaml", UriKind.Relative));
             allResources.MergedDictionaries.Add(shellResources);
             allResources.MergedDictionaries.Add(scrollStyleContainer);
             allResources.MergedDictionaries.Add(localThemingContainer);
             allResources.MergedDictionaries.Add(comboTheme);
+            allResources.MergedDictionaries.Add(tooltipTheme);
+            allResources.MergedDictionaries.Add(treeViewTheme);
             allResources[typeof (ScrollViewer)] = new Style
             {
                 TargetType = typeof (ScrollViewer),

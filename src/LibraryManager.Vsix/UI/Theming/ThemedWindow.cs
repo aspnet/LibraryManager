@@ -12,9 +12,9 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
+namespace Microsoft.Web.LibraryManager.Vsix.UI.Theming
 {
-    internal class ThemedWindow : System.Windows.Window
+    internal class ThemedWindow : DialogWindow
     {
         public new static readonly DependencyProperty ContentProperty = DependencyProperty.Register(
             "Content", typeof(FrameworkElement), typeof(ThemedWindow), new PropertyMetadata(default(FrameworkElement)));
