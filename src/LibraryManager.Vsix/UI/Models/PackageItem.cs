@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.Web.LibraryManager.Vsix.Resources;
+using Microsoft.Web.LibraryManager.Vsix.Shared;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 {
@@ -14,6 +17,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         private bool _isUpdatingParentCheckedStates;
         private PackageItemType _itemType;
         private string _name;
+        private ImageMoniker _moniker;
 
         public PackageItem(InstallDialogViewModel parent, PackageItem parentNode, HashSet<string> selectedFiles)
         {
@@ -86,7 +90,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         public bool IsExpanded
         {
             get { return _isExpanded; }
-            set { Set(ref _isExpanded, value); }
+            set
+            {
+                if(Set(ref _isExpanded, value))
+                {
+                    Icon = default; // reset the moniker too
+                }
+            }
         }
 
         public bool IsMain
@@ -126,6 +136,28 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
         {
             get { return _name; }
             set { Set(ref _name, value, StringComparer.Ordinal); }
+        }
+
+        public ImageMoniker Icon
+        {
+            get
+            {
+                if (_moniker.IsNullImage())
+                {
+                    _moniker = (ItemType == PackageItemType.Folder)
+                        ? (IsExpanded ? KnownMonikers.FolderOpened : KnownMonikers.FolderClosed)
+                        : WpfUtil.GetImageMonikerForFile(Name);
+                }
+                return _moniker;
+            }
+            set
+            {
+                // doesn't matter what value is passed in, this is the logic to set it
+                ImageMoniker newMoniker = (ItemType == PackageItemType.Folder)
+                    ? (IsExpanded ? KnownMonikers.FolderOpened : KnownMonikers.FolderClosed)
+                    : WpfUtil.GetImageMonikerForFile(Name);
+                Set(ref _moniker, newMoniker);
+            }
         }
 
         public PackageItem Parent { get; }

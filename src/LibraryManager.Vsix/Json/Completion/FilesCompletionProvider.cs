@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -75,7 +76,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
                 {
                     if (!usedFiles.Contains(file))
                     {
-                        ImageSource glyph = WpfUtil.GetIconForFile(presenter, file, out bool isThemeIcon);
+                        ImageMoniker glyph = WpfUtil.GetImageMonikerForFile(file);
                         yield return new SimpleCompletionEntry(file, glyph, context.Session);
                     }
                 }
@@ -99,7 +100,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
                         {
                             if (!usedFiles.Contains(file))
                             {
-                                ImageSource glyph = WpfUtil.GetIconForFile(presenter, file, out bool isThemeIcon);
+                                ImageMoniker glyph = WpfUtil.GetImageMonikerForFile(file);
                                 results.Add(new SimpleCompletionEntry(file, glyph, context.Session));
                             }
                         }

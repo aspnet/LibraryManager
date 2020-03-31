@@ -70,7 +70,6 @@
     <Compile Include="UI\Theming\ThemedWindow.cs" />
     <Compile Include="UI\Converters\BoldingConverter.cs" />
     <Compile Include="UI\Converters\NotConverter.cs" />
-    <Compile Include="UI\Converters\PackageItemIconConverter.cs" />
     <Compile Include="UI\Converters\VisibleIfNonNullConverter.cs" />
     <Compile Include="UI\IInstallDialog.cs" />
     <Compile Include="UI\InstallDialog.xaml.cs">
@@ -270,9 +269,6 @@
     <Content Include="source.extension.ico">
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Content>
-    <Resource Include="Resources\StatusInfoTip.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <EmbeddedResource Include="Resources\Text.cs.resx" />
     <EmbeddedResource Include="Resources\Text.de.resx" />
     <EmbeddedResource Include="Resources\Text.es.resx" />

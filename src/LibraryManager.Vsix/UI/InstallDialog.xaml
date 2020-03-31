@@ -93,15 +93,11 @@
                                     Focusable="True"
                                     AutomationProperties.Name="{Binding Converter={StaticResource HintTextConverter}}"
                                     DataContext="{Binding ElementName=ProviderComboBox, Path=SelectedItem}"
-                                    KeyboardNavigation.TabIndex="2">
-                    <imaging:CrispImage.Style>
-                        <Style TargetType="{x:Type imaging:CrispImage}">
-                            <Setter Property="Source" Value="../Resources/StatusInfoTip.png" />
-                        </Style>
-                    </imaging:CrispImage.Style>
+                                    KeyboardNavigation.TabIndex="2"
+                                    Moniker="{x:Static catalog:KnownMonikers.StatusInformationNoColor}">
                     <imaging:CrispImage.ToolTip>
                         <ToolTip>
-                            <Label Content="{Binding Converter={StaticResource HintTextConverter}}"  />
+                            <Label Content="{Binding Converter={StaticResource HintTextConverter}}" />
                         </ToolTip>
                     </imaging:CrispImage.ToolTip>
                 </imaging:CrispImage>

@@ -4,7 +4,6 @@
 using System.Windows.Controls;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.Web.LibraryManager.Vsix.Json.Completion;
-using Microsoft.Web.LibraryManager.Vsix.Shared;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
@@ -13,8 +12,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
     /// </summary>
     public partial class EditorTooltip : UserControl
     {
-        private const int IconSize = 32;
-
         internal EditorTooltip(SimpleCompletionEntry item)
         {
             InitializeComponent();
@@ -27,7 +24,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 Description.Text = item.Description;
                 Description.SetResourceReference(TextBlock.ForegroundProperty, EnvironmentColors.SystemMenuTextBrushKey);
 
-                Glyph.Source = WpfUtil.GetIconForImageMoniker(item.IconMoniker, IconSize, IconSize);
+                Glyph.Moniker = item.IconMoniker;
             };
         }
     }

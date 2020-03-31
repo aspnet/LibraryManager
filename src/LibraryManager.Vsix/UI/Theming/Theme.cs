@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Theming
@@ -23,6 +24,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Theming
                 control.Resources = null;
                 control.Resources = d;
             }
+
+            // This makes sure that the ImageMonikers are rendered with the correct background color
+            control.SetResourceReference(ImageThemingUtilities.ImageBackgroundColorProperty, "VsColor.Window");
         }
 
         private static ResourceDictionary BuildThemeResources()
