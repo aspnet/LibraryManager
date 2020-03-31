@@ -7,15 +7,6 @@ steps:
   displayName: Component Detection
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    searchPatternPush: '$(Build.SourcesDirectory)\bin\**\$(BuildConfiguration)\**\*.nupkg;!**\*.symbols.nupkg;!**/VS.*.nupkg'
-    publishVstsFeed: $(feedGuid)
-    allowPackageConflicts: true
-  displayName: Push packages to VSTS feed
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-
 # The Convert-PDB.ps1 script uses nuget.exe at the cmdline, so make sure it's on our PATH
 - task: NuGetToolInstaller@0
   inputs:
