@@ -2,6 +2,7 @@
   <Import Project="build\dependencies.props" />
   <PropertyGroup>
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+    <MicroBuild_DoNotStrongNameSign>true</MicroBuild_DoNotStrongNameSign>
 
     <Authors>Microsoft</Authors>
     <Company>Microsoft Corp.</Company>
