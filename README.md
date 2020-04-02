@@ -45,7 +45,7 @@ Edit the libman.json file to install libraries. Every time the file is saved, Vi
 
 ![libman.json](art/library.json%20typing.gif)
 
-See [libman.json reference](https://github.com/aspnet/LibraryManager/wiki/library.json-reference) for more information.
+See [libman.json reference](https://github.com/aspnet/LibraryManager/wiki/libman.json-reference) for more information.
 
 ### Light bulbs
 Inside libman.json there are light bulbs that show up with helpful commands.
