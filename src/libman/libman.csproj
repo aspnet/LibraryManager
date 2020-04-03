@@ -4,8 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Microsoft.Web.LibraryManager.Tools</RootNamespace>
-    <NuspecFile>libman.nuspec</NuspecFile>
-    <PackageType>DotNetTool</PackageType>
+    <PackAsTool>true</PackAsTool>
+    <PackAsToolShimRuntimeIdentifiers>win-x64;win-x86;osx-x64</PackAsToolShimRuntimeIdentifiers>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Command line tool for Library Manager</Description>
   </PropertyGroup>
   <ItemGroup>
@@ -31,30 +32,4 @@
   <ItemGroup>
     <XliffResource Include="MultilingualResources\*.xlf" />
   </ItemGroup>
-  <!--
-  **********************************************************
-    For packing global tools we need to use the nuspec file
-    as the required directory structure is not created by
-    `dotnet pack`
-  **********************************************************
-   -->
-  <Target Name="SetGlobalToolProperties" BeforeTargets="GenerateNuspec">
-    <PropertyGroup>
-      <NuspecProperties>
-        publishDir=$(PublishDir);
-        version=$(PackageVersion);
-        licenseUrl=$(PackageLicenseUrl);
-        projectUrl=$(PackageProjectUrl);
-        serviceable=$(Serviceable);
-        copyright=$(Copyright);
-        description=$(Description);
-        repositoryUrl=$(RepositoryUrl);
-        targetframework=$(TargetFramework);
-        repositoryCommit=$(RepositoryCommit);
-      </NuspecProperties>
-      <!--
-        packageIconUrl=$(PackageIconUrl);
-        -->
-    </PropertyGroup>
-  </Target>
 </Project>
