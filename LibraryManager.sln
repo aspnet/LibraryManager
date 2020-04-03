@@ -11,7 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 		CHANGELOG.md = CHANGELOG.md
 		Directory.Build.props = Directory.Build.props
-		LibraryManager.msbuild = LibraryManager.msbuild
 		LibraryManager.Settings.targets = LibraryManager.Settings.targets
 		README.md = README.md
 		version.json = version.json
@@ -30,21 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E67307E3
 		build\PackageVersions.targets = build\PackageVersions.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{E559F6DC-25C6-4077-B2C5-D5A06357D1BC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepoTasks", "RepoTasks", "{A4AE1634-B049-4506-A299-FD0A9F034031}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShimGenerator", "ShimGenerator", "{6B1811F7-5E4B-462E-A86D-BCFCEA190A38}"
-	ProjectSection(SolutionItems) = preProject
-		tools\ShimGenerator\ShimGenerator.targets = tools\ShimGenerator\ShimGenerator.targets
-		tools\ShimGenerator\ShimGeneratorInner.targets = tools\ShimGenerator\ShimGeneratorInner.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppHostRestorerProject", "AppHostRestorerProject", "{E9F67355-871B-4104-B887-0BC6D0A04B65}"
-	ProjectSection(SolutionItems) = preProject
-		tools\ShimGenerator\AppHostRestorerProject\AppHostRestorerProject.csproj = tools\ShimGenerator\AppHostRestorerProject\AppHostRestorerProject.csproj
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager", "src\LibraryManager\Microsoft.Web.LibraryManager.csproj", "{707356DD-96B9-49F6-AF2A-9D23B857A1E2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FF466454-426B-4AD7-8B00-D50011BE716F} = {FF466454-426B-4AD7-8B00-D50011BE716F}
@@ -61,8 +45,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Build", "src\LibraryManager.Build\Microsoft.Web.LibraryManager.Build.csproj", "{7536DF26-B808-4AC2-A9DA-58E408A1E05B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Build.Test", "test\Microsoft.Web.LibraryManager.Build.Test\Microsoft.Web.LibraryManager.Build.Test.csproj", "{E6AAC5E4-91A3-40D7-9917-B50CB16F0B34}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepoTasks", "build\tasks\RepoTasks.csproj", "{6F8BD284-7043-4B09-B79E-0B81D8290CAD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libman", "src\libman\libman.csproj", "{E98B5AB3-E58F-482A-8A81-829CFEA63E31}"
 EndProject
@@ -166,18 +148,6 @@ Global
 		{E6AAC5E4-91A3-40D7-9917-B50CB16F0B34}.Release|x64.Build.0 = Release|Any CPU
 		{E6AAC5E4-91A3-40D7-9917-B50CB16F0B34}.Release|x86.ActiveCfg = Release|Any CPU
 		{E6AAC5E4-91A3-40D7-9917-B50CB16F0B34}.Release|x86.Build.0 = Release|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Debug|x64.Build.0 = Debug|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Debug|x86.Build.0 = Debug|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Release|x64.ActiveCfg = Release|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Release|x64.Build.0 = Release|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Release|x86.ActiveCfg = Release|Any CPU
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD}.Release|x86.Build.0 = Release|Any CPU
 		{E98B5AB3-E58F-482A-8A81-829CFEA63E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E98B5AB3-E58F-482A-8A81-829CFEA63E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E98B5AB3-E58F-482A-8A81-829CFEA63E31}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -231,9 +201,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A4AE1634-B049-4506-A299-FD0A9F034031} = {E67307E3-04FF-498B-97C7-4F508299DF4D}
-		{6B1811F7-5E4B-462E-A86D-BCFCEA190A38} = {E559F6DC-25C6-4077-B2C5-D5A06357D1BC}
-		{E9F67355-871B-4104-B887-0BC6D0A04B65} = {6B1811F7-5E4B-462E-A86D-BCFCEA190A38}
 		{707356DD-96B9-49F6-AF2A-9D23B857A1E2} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
 		{08C91CC3-4057-4D76-8B9A-B6A0557B64EB} = {FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}
 		{FF466454-426B-4AD7-8B00-D50011BE716F} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
@@ -241,7 +208,6 @@ Global
 		{EDA2179C-D952-449F-9A3D-8B3A152D6E5A} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
 		{7536DF26-B808-4AC2-A9DA-58E408A1E05B} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
 		{E6AAC5E4-91A3-40D7-9917-B50CB16F0B34} = {FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}
-		{6F8BD284-7043-4B09-B79E-0B81D8290CAD} = {A4AE1634-B049-4506-A299-FD0A9F034031}
 		{E98B5AB3-E58F-482A-8A81-829CFEA63E31} = {A72570B1-99EF-4BDD-B629-321CD56C9F7F}
 		{AD605AA7-6E43-47F1-A096-1ACDF67BF1DB} = {FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}
 		{E9BE3307-5F07-4757-BB06-3460813D7B9D} = {FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}

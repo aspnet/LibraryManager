@@ -22,9 +22,9 @@ steps:
 
 - task: MSBuild@1
   inputs:
-    solution: LibraryManager.msbuild
+    solution: LibraryManager.sln
     msbuildArguments: >
-      /t:BuildAll
+      /r
       /p:Configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal
       /v:m
       /bl:"$(Build.ArtifactStagingDirectory)/build_logs/msbuild.binlog"
