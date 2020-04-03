@@ -1,1 +1,1 @@
-msbuild LibraryManager.msbuild /t:BuildAll /clp:Verbosity=Minimal;Summary;ForceNoAlign
+msbuild /r LibraryManager.sln /clp:Verbosity=Minimal;Summary;ForceNoAlign

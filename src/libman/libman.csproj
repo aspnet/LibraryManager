@@ -7,6 +7,7 @@
     <PackAsTool>true</PackAsTool>
     <PackAsToolShimRuntimeIdentifiers>win-x64;win-x86;osx-x64</PackAsToolShimRuntimeIdentifiers>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Microsoft.Web.LibraryManager.Cli</PackageId>
     <Description>Command line tool for Library Manager</Description>
   </PropertyGroup>
   <ItemGroup>
