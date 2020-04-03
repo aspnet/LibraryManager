@@ -2,19 +2,6 @@
   <Import Project="build\dependencies.props" />
   <PropertyGroup>
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
-    <!-- Repo Tasks Properties -->
-    <RepoTasksDir>$(RepoRoot)\build\tasks\</RepoTasksDir>
-    <RepoTasksPublishDir>$(RepoTasksDir)\Publish\</RepoTasksPublishDir>
-
-    <!-- Shim Generation properties -->
-    <AppTargetFramework>netcoreapp2.1</AppTargetFramework>
-    <ShimOutputDirectoryBase>$(RepoRoot)\src\libman\bin\shims\</ShimOutputDirectoryBase>
-    <IntermediateDirectoryForShimsBase>$(RepoRoot)\src\libman\obj\shims\</IntermediateDirectoryForShimsBase>
-    <ShimTargetName>libman</ShimTargetName>
-    <ShimTargetFileName>libman.dll</ShimTargetFileName>
-
-    <!-- General properties -->
-    <ToolPublishDir>$(RepoRoot)\src\libman\bin\Publish\</ToolPublishDir>
 
     <Authors>Microsoft</Authors>
     <Company>Microsoft Corp.</Company>
