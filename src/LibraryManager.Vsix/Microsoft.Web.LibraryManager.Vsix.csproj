@@ -412,6 +412,11 @@
   <ItemGroup>
     <XliffResource Include="MultilingualResources\*.xlf" />
   </ItemGroup>
+  <ItemGroup>
+    <FilesToSign Include="$(OutputPath)\Minimatch.dll;$(OutputPath)\Nerdbank.Streams.dll">
+      <Authenticode>3PartySHA2</Authenticode>
+    </FilesToSign>
+  </ItemGroup>
   <Target Name="PreCreateVsixContainer" BeforeTargets="CreateVsixContainer">
     <ItemGroup>
       <VSIXSourceItem Include="$(OutputPath)%(DstLocales.Identity)\Microsoft.Web.LibraryManager.resources.dll" Condition="Exists('$(OutputPath)\%(DstLocales.Identity)\Microsoft.Web.LibraryManager.resources.dll')">
@@ -488,6 +493,18 @@
            or '%(FileName)' == 'stdole'">
         <EmbedInteropTypes>false</EmbedInteropTypes>
       </ReferencePath>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="ResolveNuGetVsixSourceItemFromOutputPath" AfterTargets="GetVsixSourceItems">
+    <ItemGroup>
+      <_VsixSourceItemsFromNuGet Include="@(VSIXSourceItem)"
+                                 Condition="'%(VSIXSourceItem.NuGetSourceType)' == 'Package'">
+      </_VsixSourceItemsFromNuGet>
+      <!-- Replace the existing VSIX source items as they are picked up before any signing can occur on them -->
+      <VSIXSourceItem Remove="@(_VsixSourceItemsFromNuGet)" />
+      <VSIXSourceItem Include="$(OutputPath)\%(_VsixSourceItemsFromNuGet.FileName)%(_VsixSourceItemsFromNuGet.Extension)"
+                      Condition="Exists('$(OutputPath)\%(_VsixSourceItemsFromNuGet.FileName)%(_VsixSourceItemsFromNuGet.Extension)')" />
     </ItemGroup>
   </Target>
 
