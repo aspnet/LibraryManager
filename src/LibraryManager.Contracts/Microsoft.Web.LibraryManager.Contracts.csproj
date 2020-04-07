@@ -34,7 +34,30 @@
       <LastGenOutput>Text.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+
+  <!-- The WinFX target SatelliteDllsProjectOutputGroup does not set the FinalOutputPath metadata, so we end up
+        signing these files in their projects' $(IntermedateOutputPath), but then we include the usnigned copies
+        in the package from their $(OutputPath). -->
+  <Target Name="FixWinFXSatelliteDllsProjectOutputGroup"
+          AfterTargets="SatelliteDllsProjectOutputGroup"
+          Condition="'$(TargetFramework)'=='net472'">
+    <ItemGroup>
+      <SatelliteDllsProjectOutputGroupOutput Condition="'%(SatelliteDllsProjectOutputGroupOutput.FinalOutputPath)'==''">
+        <FinalOutputPath>$(TargetDir)%(SatelliteDllsProjectOutputGroupOutput.TargetPath)</FinalOutputPath>
+      </SatelliteDllsProjectOutputGroupOutput>
+    </ItemGroup>
+  </Target>
+
+  <!-- The resource assemblies from this project are consumed by different projects both from bin/ and obj/
+       so sign the files in both locations to ensure consuming projects can pick up a signed copy. -->
+  <Target Name="SignBinAndObjResourceAssemblies"
+          AfterTargets="SatelliteDllsProjectOutputGroup">
+    <!-- The Microbuild targets will add the FinalOutputPath (bin) as a sign item for each of these files.
+         So we'll add the Identity (obj) here.  See CollectFilesToSign target for details.  -->
+    <ItemGroup>
+      <_SatelliteDllsProjectOutputGroupOutputFinalOutputPath
+        Include="@(SatelliteDllsProjectOutputGroupOutput->'%(Identity)')"
+        Condition=" '%(SatelliteDllsProjectOutputGroupOutput.FinalOutputPath)' != '' " />
+    </ItemGroup>
+  </Target>
 </Project>
