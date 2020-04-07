@@ -3,6 +3,8 @@
   <PropertyGroup>
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
     <MicroBuild_DoNotStrongNameSign>true</MicroBuild_DoNotStrongNameSign>
+    <BaseOutputPath>$(RepoRoot)\bin\$(MSBuildProjectName)</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(RepoRoot)\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
 
     <Authors>Microsoft</Authors>
     <Company>Microsoft Corp.</Company>

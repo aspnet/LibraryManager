@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <PackageTags>library, package, client-side</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Microsoft.Web.LibraryManager.Contracts.xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The contracts assembly for authoring Library Manager extensions</Description>
     <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
     <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
