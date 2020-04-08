@@ -7,15 +7,6 @@ steps:
   displayName: Component Detection
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    searchPatternPush: '$(Build.SourcesDirectory)\bin\**\$(BuildConfiguration)\**\*.nupkg;!**\*.symbols.nupkg;!**/VS.*.nupkg'
-    publishVstsFeed: $(feedGuid)
-    allowPackageConflicts: true
-  displayName: Push packages to VSTS feed
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-
 # The Convert-PDB.ps1 script uses nuget.exe at the cmdline, so make sure it's on our PATH
 - task: NuGetToolInstaller@0
   inputs:
@@ -24,11 +15,10 @@ steps:
 
 - powershell: |
     $DllPaths = @(
-        ,"src\libman.dll"
-        ,"src\Microsoft.Web.LibraryManager.dll"
-        ,"src\Microsoft.Web.LibraryManager.Build.dll"
-        ,"src\Microsoft.Web.LibraryManager.Contracts.dll"
-        ,"src\Microsoft.Web.LibraryManager.Vsix.dll"
+        ,"bin\libman.dll"
+        ,"bin\Microsoft.Web.LibraryManager.dll"
+        ,"bin\Microsoft.Web.LibraryManager.Build.dll"
+        ,"bin\Microsoft.Web.LibraryManager.Contracts.dll"
     )
     Get-ChildItem $DllPaths -rec |? { !$_.Directory.FullName.Contains('Tests') } |% {
         $OutputDir = "$($_.Directory.FullName)\symstore"
@@ -40,18 +30,17 @@ steps:
 
 - task: CopyFiles@1
   inputs:
-    SourceFolder: src
     Contents: |
-      libman/bin/$(BuildConfiguration)/**/libman.dll
-      libman/bin/$(BuildConfiguration)/**/symstore/libman.pdb
-      LibraryManager/bin/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.dll
-      LibraryManager/bin/$(BuildConfiguration)/**/symstore/Microsoft.Web.LibraryManager.pdb
-      LibraryManager.Build/bin/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.Build.dll
-      LibraryManager.Build/bin/$(BuildConfiguration)/**/symstore/Microsoft.Web.LibraryManager.Build.pdb
-      LibraryManager.Contracts/bin/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.Contracts.dll
-      LibraryManager.Contracts/bin/$(BuildConfiguration)/**/symstore/Microsoft.Web.LibraryManager.Contracts.pdb
-      LibraryManager.Vsix/bin/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.Vsix.dll
-      LibraryManager.Vsix/bin/$(BuildConfiguration)/**/symstore/Microsoft.Web.LibraryManager.Vsix.pdb
+      bin/libman/$(BuildConfiguration)/**/libman.dll
+      bin/libman/$(BuildConfiguration)/**/symstore/libman.pdb
+      bin/Microsoft.Web.LibraryManager/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.dll
+      bin/Microsoft.Web.LibraryManager/$(BuildConfiguration)/**/symstore/Microsoft.Web.LibraryManager.pdb
+      bin/Microsoft.Web.LibraryManager.Build/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.Build.dll
+      bin/Microsoft.Web.LibraryManager.Build/$(BuildConfiguration)/**/symstore/Microsoft.Web.LibraryManager.Build.pdb
+      bin/Microsoft.Web.LibraryManager.Contracts/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.Contracts.dll
+      bin/Microsoft.Web.LibraryManager.Contracts/$(BuildConfiguration)/**/symstore/Microsoft.Web.LibraryManager.Contracts.pdb
+      bin/Microsoft.Web.LibraryManager.Vsix/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.Vsix.dll
+      bin/Microsoft.Web.LibraryManager.Vsix/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.Vsix.pdb
     TargetFolder: $(Build.ArtifactStagingDirectory)/symbols
   displayName: Collecting symbols artifacts
 
