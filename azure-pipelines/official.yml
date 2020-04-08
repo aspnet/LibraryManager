@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include: ["master", "rel/*"]
+  paths:
+    exclude: ["*.md"]
+
+variables:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  BuildConfiguration: Release
+  BuildPlatform: Any CPU
+  DisableMAT: true
+
+jobs:
+  - job: Windows
+    pool: VSEng-MicroBuildVS2019
+    steps:
+      - template: build.yml
