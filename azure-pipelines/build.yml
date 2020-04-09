@@ -52,7 +52,7 @@ steps:
   inputs:
     contents: |
       artifacts/**/*.nupkg
-      src/LibraryManager.Vsix/bin/**/*.vsix
+      bin/**/*.vsix
     targetFolder: $(Build.ArtifactStagingDirectory)/artifacts
     flattenFolders: true
   displayName: Collecting build artifacts
