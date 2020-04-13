@@ -39,7 +39,11 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestCleanup]
         public void Cleanup()
         {
-            File.Delete(Path.Combine(_dependencies.GetHostInteractions().CacheDirectory, "cdnjs", "cache.json"));
+            string cacheFile = Path.Combine(_dependencies.GetHostInteractions().CacheDirectory, "cdnjs", "cache.json");
+            if (File.Exists(cacheFile))
+            {
+                File.Delete(cacheFile);
+            }
             TestUtils.DeleteDirectoryWithRetries(_projectFolder);
         }
 
