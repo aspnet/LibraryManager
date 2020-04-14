@@ -1,0 +1,24 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)'))" />
+  <Import Project="..\build\MicroBuild.Plugins.props" />
+
+  <PropertyGroup>
+    <TargetType>build-manifest</TargetType>
+    <FinalizeManifest>true</FinalizeManifest>
+    <FinalizeSkipLayout>true</FinalizeSkipLayout>
+    <ProductName>LibraryManagerPackagesManifest</ProductName>
+    <ProductFamily>vs</ProductFamily>
+    <ProductFamilyVersion>2016</ProductFamilyVersion>
+    <ComputeRelativeUrls>true</ComputeRelativeUrls>
+    <OutputPath>$(BaseOutputPath)\setup</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <MergeManifest Include="$(ManifestOutputPath)\*.json">
+      <RelativeUrl>/</RelativeUrl>
+    </MergeManifest>
+  </ItemGroup>
+
+  <Import Project="$(MicroBuildPluginDirectory)\MicroBuild.Plugins.SwixBuild.*\build\MicroBuild.Plugins.SwixBuild.targets"/>
+
+</Project>
