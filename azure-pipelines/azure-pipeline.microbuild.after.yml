@@ -1,4 +1,13 @@
 steps:
+- task: MSBuild@1
+  displayName: Build VS Installer Manifest
+  inputs:
+    solution: setup/Microsoft.Web.LibraryManager.vsmanproj
+    msbuildArguments: >
+      /r
+      /p:Configuration=Release
+      /bl:"$(Build.ArtifactStagingDirectory)/build_logs/vsmanproj.binlog"
+
 - task: MicroBuildCleanup@1
   condition: succeededOrFailed()
   displayName: MicroBuild Cleanup
