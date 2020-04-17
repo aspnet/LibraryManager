@@ -8,6 +8,7 @@
     <PackageId>Microsoft.Web.LibraryManager.Build</PackageId>
     <Title>$(PackageId)</Title>
     <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,10 +40,10 @@
   <Target Name="AddAdditionalFilesToSign" AfterTargets="CollectFilesToSign">
     <ItemGroup>
       <!-- Sign 3rd party assemblies -->
-      <FilesToSign Include="$(OutputPath)\Minimatch.dll" Condition="Exists('$(OutputPath)\Minimatch.dll')">
+      <FilesToSign Include="$(OutputPath)\Minimatch.dll">
         <Authenticode>3PartySHA2</Authenticode>
       </FilesToSign>
-      <FilesToSign Include="$(OutputPath)\Newtonsoft.Json.dll" Condition="Exists('$(OutputPath)\Newtonsoft.Json.dll')">
+      <FilesToSign Include="$(OutputPath)\Newtonsoft.Json.dll">
         <Authenticode>3PartySHA2</Authenticode>
       </FilesToSign>
     </ItemGroup>
@@ -54,7 +55,7 @@
         but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
         -->
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\**\*.dll" Exclude="$(OutputPath)\**\Microsoft.Build.*.dll">
+      <_PackageFiles Include="$(OutputPath)\**\Microsoft.Web.LibraryManager*.dll;$(OutputPath)\**\Minimatch.dll;$(OutputPath)\**\Newtonsoft.Json.dll">
         <PackagePath>tools\%(RecursiveDir)</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
