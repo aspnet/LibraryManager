@@ -8,6 +8,28 @@ steps:
       /p:Configuration=Release
       /bl:"$(Build.ArtifactStagingDirectory)/build_logs/vsmanproj.binlog"
 
+- task: CopyFiles@1
+  inputs:
+    contents: |
+      bin/**/*.vsman
+      bin/**/*.vsix
+    targetFolder: $(Build.ArtifactStagingDirectory)/insertion
+    flattenFolders: true
+  displayName: Collecting VS Insertion artifacts
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)/insertion
+    ArtifactName: VSInsertion
+    ArtifactType: Container
+  displayName: Publish insertion artifacts
+
+- task: MicroBuildUploadVstsDropFolder@1
+  displayName: Upload artifacts to VSTS Drop
+  inputs:
+    DropFolder: '$(Build.ArtifactStagingDirectory)/insertion'
+    condition: and(succeeded(), eq(variables['SignType'], 'Real'))
+
 - task: MicroBuildCleanup@1
   condition: succeededOrFailed()
   displayName: MicroBuild Cleanup
