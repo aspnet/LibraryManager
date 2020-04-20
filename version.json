@@ -1,6 +1,7 @@
 {
   "version": "2.1",
   "publicRefSpec": [
+    "^refs/heads/master$",
     "^refs/tags/v\\d+\\.\\d+" // we release tags starting with vN.N
   ]
 }
