@@ -8,11 +8,18 @@ steps:
       /p:Configuration=Release
       /bl:"$(Build.ArtifactStagingDirectory)/build_logs/vsmanproj.binlog"
 
+- task: MSBuild@1
+  displayName: Generate parameters for VS Insertion
+  inputs:
+    solution: build/CreateInsertionMetadata.proj
+    msbuildArguments: /r
+
 - task: CopyFiles@1
   inputs:
     contents: |
       bin/**/*.vsman
       bin/**/*.vsix
+      bin/InsertionParameters.txt
     targetFolder: $(Build.ArtifactStagingDirectory)/insertion
     flattenFolders: true
   displayName: Collecting VS Insertion artifacts
