@@ -1,4 +1,42 @@
 steps:
+- task: MSBuild@1
+  displayName: Build VS Installer Manifest
+  inputs:
+    solution: setup/Microsoft.Web.LibraryManager.vsmanproj
+    msbuildArguments: >
+      /r
+      /p:Configuration=Release
+      /bl:"$(Build.ArtifactStagingDirectory)/build_logs/vsmanproj.binlog"
+
+- task: MSBuild@1
+  displayName: Generate parameters for VS Insertion
+  inputs:
+    solution: build/CreateInsertionMetadata.proj
+    msbuildArguments: /r
+
+- task: CopyFiles@1
+  inputs:
+    contents: |
+      bin/**/*.vsman
+      bin/**/*.vsix
+      bin/InsertionParameters.txt
+    targetFolder: $(Build.ArtifactStagingDirectory)/insertion
+    flattenFolders: true
+  displayName: Collecting VS Insertion artifacts
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)/insertion
+    ArtifactName: VSInsertion
+    ArtifactType: Container
+  displayName: Publish insertion artifacts
+
+- task: MicroBuildUploadVstsDropFolder@1
+  displayName: Upload artifacts to VSTS Drop
+  inputs:
+    DropFolder: '$(Build.ArtifactStagingDirectory)/insertion'
+    condition: and(succeeded(), eq(variables['SignType'], 'Real'))
+
 - task: MicroBuildCleanup@1
   condition: succeededOrFailed()
   displayName: MicroBuild Cleanup

@@ -37,14 +37,6 @@ steps:
     arguments: --configuration $(BuildConfiguration) --no-build --filter "TestCategory!=FailsInCloudTest" -v n
   condition: and(succeeded(), ne(variables['SignType'], 'real'))
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: $(Build.ArtifactStagingDirectory)/build_logs
-    ArtifactName: build_logs
-    ArtifactType: Container
-  displayName: Publish build_logs artifacts
-  condition: succeededOrFailed()
-
 - ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
   - template: azure-pipeline.microbuild.after.yml
 
@@ -63,3 +55,11 @@ steps:
     ArtifactName: artifacts
     ArtifactType: Container
   displayName: Publish artifacts
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)/build_logs
+    ArtifactName: build_logs
+    ArtifactType: Container
+  displayName: Publish build_logs artifacts
+  condition: succeededOrFailed()

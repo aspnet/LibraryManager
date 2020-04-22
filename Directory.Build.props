@@ -5,6 +5,7 @@
     <MicroBuild_DoNotStrongNameSign>true</MicroBuild_DoNotStrongNameSign>
     <BaseOutputPath>$(RepoRoot)\bin\$(MSBuildProjectName)</BaseOutputPath>
     <BaseIntermediateOutputPath>$(RepoRoot)\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <ManifestOutputPath>$(RepoRoot)\bin\Microsoft.Web.LibraryManager.Vsix\$(Configuration)</ManifestOutputPath>
 
     <Authors>Microsoft</Authors>
     <Company>Microsoft Corp.</Company>
