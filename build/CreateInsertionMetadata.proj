@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.Build.NoTargets/1.0.94" DefaultTargets="GenerateInsertionParameters">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <InsertionParamsFile>$(RepoRoot)\bin\InsertionParameters.txt</InsertionParamsFile>
+  </PropertyGroup>
+
+  <Target Name="GenerateInsertionParameters" DependsOnTargets="GetBuildVersion" AfterTargets="Build">
+    <ItemGroup>
+      <DropManifests Include="$(RepoRoot)\bin\**\*.vsman" />
+    </ItemGroup>
+    <PropertyGroup>
+      <ManifestName>@(DropManifests->'$(ManifestPublishUrl)%(Filename)%(Extension)')</ManifestName>
+    </PropertyGroup>
+
+    <WriteLinesToFile Overwrite="True" File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=InsertPayloadName]LibraryManager build $(BuildVersion)" />
+    <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=InsertDescription]Commit: $(GitCommitId)" />
+    <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=InsertJsonValues]Microsoft.VisualStudio.WebToolsExtensions.vsman=$([MSBuild]::Escape($(ManifestName)))" />
+    <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=VstsDropNames]$(MicroBuild_ManifestDropName)" />
+    <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=BuildVersion]$(BuildVersion)" />
+
+    <Message Text="$(MSBuildThisFile) -> $(InsertionParamsFile)" Importance="High" />
+  </Target>
+</Project>
