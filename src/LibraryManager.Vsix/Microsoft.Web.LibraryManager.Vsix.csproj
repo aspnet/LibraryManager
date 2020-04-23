@@ -25,7 +25,6 @@
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
-    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <!-- Live Unit Testing workarounds -->
     <CreateVsixContainer Condition="'$(BuildingForLiveUnitTesting)' == 'true'">false</CreateVsixContainer>
   </PropertyGroup>
