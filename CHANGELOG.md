@@ -1,5 +1,25 @@
 # Change log
 
+## 2.1.76
+Commit: 3cafd794c1068ee7d8bcade05ddf087f503075a3
+- Packages updated on NuGet
+- Fix an issue in 2.1.50 where runtime depenencies were not included in the Microsoft.Web.LibraryManager.Build package for .NET Core
+- Engineering work to move to new Azure Pipelines for builds
+
+## 2.1.50
+Commit: 25aae5a24a0fb2b8b916e33f4269b9690725f02b
+- Packages updated on NuGet
+- Moved download cache to %LocalAppData% to avoid synchronizing with roaming Windows user profiles
+- Add support for file glob patterns
+- Make downloads happen in parallel (up to 10 at once)
+- Remove 30-day expiration for cached content files (assume library contents are immutable)
+- Made some improvements to file copy speed
+- Add support for @latest tag for JSDelivr and unpkg providers
+- Read settings from environment variables
+- Add support for setting proxy via HTTPS_PROXY
+- Don't add '@' to the suggested install path for scoped packages
+- Lots of miscellaneous refactoring and test fixes
+
 ## 2.0.96
 Commit: 65c9be8001a08748466e30ccdcc8fd8ac2168834
 - Packages updated on NuGet
