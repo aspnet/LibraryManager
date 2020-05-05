@@ -425,4 +425,7 @@ Please specify a different destination.</value>
     To remove a setting, set it to an empty string (--set key=).
     Retrieving decrypted values for encrypted settings is not supported.</value>
   </data>
+  <data name="CacheLocationMessage" xml:space="preserve">
+    <value>Cache root directory:</value>
+  </data>
 </root>

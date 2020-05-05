@@ -160,6 +160,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cache root directory:.
+        /// </summary>
+        internal static string CacheLocationMessage {
+            get {
+                return ResourceManager.GetString("CacheLocationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select an option:.
         /// </summary>
         internal static string ChooseAnOption {

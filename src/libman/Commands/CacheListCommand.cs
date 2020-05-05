@@ -45,8 +45,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
         protected override Task<int> ExecuteInternalAsync()
         {
-            var outputStr = new StringBuilder(Resources.Text.CacheContentMessage);
+            var outputStr = new StringBuilder();
+            outputStr.AppendLine(Resources.Text.CacheLocationMessage);
+            outputStr.Append('-', Resources.Text.CacheLocationMessage.Length);
             outputStr.Append(Environment.NewLine);
+            outputStr.AppendLine(HostEnvironment.HostInteraction.CacheDirectory);
+            outputStr.Append(Environment.NewLine);
+            outputStr.AppendLine(Resources.Text.CacheContentMessage);
             outputStr.Append('-', Resources.Text.CacheContentMessage.Length);
             outputStr.Append(Environment.NewLine);
 
