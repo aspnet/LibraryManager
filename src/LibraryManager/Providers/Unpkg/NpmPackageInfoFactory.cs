@@ -8,15 +8,8 @@ using System.Web;
 using Microsoft.Web.LibraryManager.Helpers;
 using Newtonsoft.Json.Linq;
 
-#if NET472
-using System.ComponentModel.Composition;
-#endif
-
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-#if NET472
-    [Export(typeof(INpmPackageInfoFactory))]
-#endif
     internal sealed class NpmPackageInfoFactory : INpmPackageInfoFactory
     {
         public const string NpmPackageInfoUrl = "https://registry.npmjs.org/{0}";

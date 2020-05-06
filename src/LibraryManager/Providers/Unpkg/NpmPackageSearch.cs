@@ -8,15 +8,8 @@ using System.Web;
 using Microsoft.Web.LibraryManager.Helpers;
 using Newtonsoft.Json.Linq;
 
-#if NET472
-using System.ComponentModel.Composition;
-#endif
-
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-#if NET472
-    [Export(typeof(INpmPackageSearch))]
-#endif
     internal sealed class NpmPackageSearch : INpmPackageSearch
     {
         private const string NpmPackageSearchUrl = "https://registry.npmjs.org/-/v1/search?text={0}&size=100"; // API doc at https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md

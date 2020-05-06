@@ -3,6 +3,10 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Providers.Cdnjs;
+using Microsoft.Web.LibraryManager.Providers.FileSystem;
+using Microsoft.Web.LibraryManager.Providers.jsDelivr;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 {
@@ -12,10 +16,23 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
     [Export(typeof(IDependenciesFactory))]
     internal class DependenciesFactory : IDependenciesFactory
     {
-        [ImportMany(typeof(IProviderFactory), AllowRecomposition = true)]
         private IEnumerable<IProviderFactory> ProviderFactories { get; set; }
 
         private static Dictionary<string, Dependencies> Cache { get; } = new Dictionary<string, Dependencies>();
+
+        [ImportingConstructor]
+        public DependenciesFactory()
+        {
+            var packageSearch = new NpmPackageSearch();
+            var packageInfoFactory = new NpmPackageInfoFactory();
+
+            ProviderFactories = new IProviderFactory[] {
+                new FileSystemProviderFactory(),
+                new CdnjsProviderFactory(),
+                new UnpkgProviderFactory(packageSearch, packageInfoFactory),
+                new JsDelivrProviderFactory(packageSearch, packageInfoFactory),
+            };
+        }
 
         /// <summary>
         /// Creates or re-uses a cached Dependencies for the given path

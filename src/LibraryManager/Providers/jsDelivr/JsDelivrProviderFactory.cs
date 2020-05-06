@@ -5,24 +5,13 @@ using System;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 
-#if NET472
-using System.ComponentModel.Composition;
-#endif
-
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 {
-
-#if NET472
-    [Export(typeof(IProviderFactory))]
-#endif
     internal class JsDelivrProviderFactory : IProviderFactory
     {
         private readonly INpmPackageSearch _packageSearch;
         private readonly INpmPackageInfoFactory _packageInfoFactory;
 
-#if NET472
-        [ImportingConstructor]
-#endif
         public JsDelivrProviderFactory(INpmPackageSearch packageSearch, INpmPackageInfoFactory packageInfoFactory)
         {
             _packageSearch = packageSearch;
