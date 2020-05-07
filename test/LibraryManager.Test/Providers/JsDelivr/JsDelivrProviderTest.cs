@@ -30,8 +30,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 
             var hostInteraction = new HostInteraction(_projectFolder, cacheFolder);
 
-            var npmPackageSearch = new NpmPackageSearch();
-            var packageInfoFactory = new NpmPackageInfoFactory();
+            var npmPackageSearch = new NpmPackageSearch(WebRequestHandler.Instance);
+            var packageInfoFactory = new NpmPackageInfoFactory(WebRequestHandler.Instance);
 
             var dependencies = new Dependencies(hostInteraction, new JsDelivrProviderFactory(npmPackageSearch, packageInfoFactory));
             _provider = dependencies.GetProvider("jsdelivr");

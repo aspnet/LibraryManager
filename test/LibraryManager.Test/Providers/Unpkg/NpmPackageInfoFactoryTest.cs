@@ -15,7 +15,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             string searchItem = "jquery";
             CancellationToken token = CancellationToken.None;
 
-            var sut = new NpmPackageInfoFactory();
+            var sut = new NpmPackageInfoFactory(WebRequestHandler.Instance);
             NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, token);
 
             Assert.IsTrue(packageInfo.Versions != null);
@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             string searchItem = "@angular/cli";
             CancellationToken token = CancellationToken.None;
 
-            var sut = new NpmPackageInfoFactory();
+            var sut = new NpmPackageInfoFactory(WebRequestHandler.Instance);
             NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, token);
 
             Assert.IsTrue(packageInfo.Versions != null);

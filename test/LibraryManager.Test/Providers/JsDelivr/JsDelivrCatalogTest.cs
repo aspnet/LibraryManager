@@ -20,12 +20,13 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
     {
         private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null)
         {
+            webRequestHandler = webRequestHandler ?? WebRequestHandler.Instance;
             return new JsDelivrCatalog(JsDelivrProvider.IdText,
                                        new VersionedLibraryNamingScheme(),
                                        new Mocks.Logger(),
-                                       webRequestHandler ?? new Mocks.WebRequestHandler(),
-                                       infoFactory ?? new NpmPackageInfoFactory(),
-                                       packageSearch ?? new NpmPackageSearch());
+                                       webRequestHandler,
+                                       infoFactory ?? new NpmPackageInfoFactory(webRequestHandler),
+                                       packageSearch ?? new NpmPackageSearch(webRequestHandler));
         }
 
         [TestMethod]

@@ -18,7 +18,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         {
             CancellationToken token = CancellationToken.None;
 
-            var sut = new NpmPackageSearch();
+            var sut = new NpmPackageSearch(WebRequestHandler.Instance);
             IEnumerable<NpmPackageInfo> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.AreEqual(expectedCount, packages.Count());
@@ -30,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             string searchItem = "jquery";
             CancellationToken token = CancellationToken.None;
 
-            var sut = new NpmPackageSearch();
+            var sut = new NpmPackageSearch(WebRequestHandler.Instance);
             IEnumerable<NpmPackageInfo> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.AreEqual(100, packages.Count());
@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             string searchItem = "@angular/";
             CancellationToken token = CancellationToken.None;
 
-            var sut = new NpmPackageSearch();
+            var sut = new NpmPackageSearch(WebRequestHandler.Instance);
             IEnumerable<NpmPackageInfo> packages = await sut.GetPackageNamesAsync(searchItem, token);
 
             Assert.IsTrue(packages.Count() > 0);

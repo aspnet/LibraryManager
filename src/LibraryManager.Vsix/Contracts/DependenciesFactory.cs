@@ -23,8 +23,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         [ImportingConstructor]
         public DependenciesFactory()
         {
-            var packageSearch = new NpmPackageSearch();
-            var packageInfoFactory = new NpmPackageInfoFactory();
+            var packageSearch = new NpmPackageSearch(WebRequestHandler.Instance);
+            var packageInfoFactory = new NpmPackageInfoFactory(WebRequestHandler.Instance);
 
             ProviderFactories = new IProviderFactory[] {
                 new FileSystemProviderFactory(),
