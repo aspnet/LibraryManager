@@ -54,7 +54,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
 
-            int result = command.Execute("jquery");
+            int result = command.Execute("jquery", "--to", "3.5.0");
 
             Assert.AreEqual(0, result);
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
@@ -138,20 +138,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ""defaultProvider"": ""cdnjs"",
   ""defaultDestination"": ""wwwroot"",
   ""libraries"": [
-    {
-      ""library"": ""jquery@3.5.0"",
-      ""files"": [ ""jquery.min.js"", ""jquery.js"" ]
-    }
   ]
 }";
 
             string libmanjsonPath = Path.Combine(WorkingDir, "libman.json");
             File.WriteAllText(libmanjsonPath, contents);
 
-            var restoreCommand = new RestoreCommand(HostEnvironment);
-            restoreCommand.Configure(null);
-
-            restoreCommand.Execute();
+            var installCommand = new InstallCommand(HostEnvironment);
+            installCommand.Configure(null);
+            installCommand.Execute("jquery --files jquery.min.js --files jquery.js".Split(' '));
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
@@ -161,10 +156,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.AreEqual(0, result);
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
-
-            string actualText = File.ReadAllText(libmanjsonPath);
-
-            Assert.AreEqual(StringHelper.NormalizeNewLines(contents), StringHelper.NormalizeNewLines(actualText));
 
             var logger = HostEnvironment.Logger as TestLogger;
 
@@ -196,8 +187,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             restoreCommand.Configure(null);
 
             restoreCommand.Execute();
-
-            int result = command.Execute("jqu");
+            _ = command.Execute("jqu");
 
             string actualText = File.ReadAllText(libmanjsonPath);
 
