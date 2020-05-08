@@ -3,13 +3,26 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 {
     [TestClass]
     public class NpmPackageSearchTest
     {
+        [TestMethod]
+        public async Task NpmPackageSearch_GetPackageNamesAsync_NullSearchItem_DoesNotMakeWebRequest()
+        {
+            var mockRequestHandler = new Mock<IWebRequestHandler>();
+            var sut = new NpmPackageSearch(mockRequestHandler.Object);
+
+            IEnumerable<NpmPackageInfo> packages = await sut.GetPackageNamesAsync(null, CancellationToken.None);
+
+            mockRequestHandler.Verify(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
         [DataTestMethod]
         [DataRow(null, 0)]
         [DataRow("", 0)]

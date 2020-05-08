@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
-using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
 using Moq;
+using static Microsoft.Web.LibraryManager.Test.TestUtilities.StringUtility;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 {
@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
     {
         private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null)
         {
-            webRequestHandler = webRequestHandler ?? WebRequestHandler.Instance;
+            webRequestHandler = webRequestHandler ?? new Mocks.WebRequestHandler();
             return new JsDelivrCatalog(JsDelivrProvider.IdText,
                                        new VersionedLibraryNamingScheme(),
                                        new Mocks.Logger(),
@@ -33,45 +33,16 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         public async Task SearchAsync_Success()
         {
             string searchTerm = "jquery";
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockSearch = new Mock<INpmPackageSearch>();
+            NpmPackageInfo[] expectedResult = new[] { new NpmPackageInfo("fakepackage", "", "1.0.0") };
+            mockSearch.Setup(m => m.GetPackageNamesAsync("jquery", It.IsAny<CancellationToken>()))
+                      .Returns(Task.FromResult(expectedResult.AsEnumerable()));
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: mockSearch.Object);
 
-            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(searchTerm, 1, CancellationToken.None);
-            Assert.AreEqual(100, absolute.Count);
-            IEnumerable<string> libraryVersions = await absolute[0].GetLibraryVersions(CancellationToken.None);
-            CollectionAssert.Contains(libraryVersions.ToList(), "3.4.1");
-        }
+            IReadOnlyList<ILibraryGroup> result = await sut.SearchAsync(searchTerm, 1, CancellationToken.None);
 
-        [TestMethod]
-        public async Task SearchAsync_NoHits()
-        {
-            // The search service is surprisingly flexible for finding full-text matches, so this
-            // gibberish string was determined manually.
-            string searchTerm = "*9(_-zv_";
-            JsDelivrCatalog sut = SetupCatalog();
-
-            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(searchTerm, 1, CancellationToken.None);
-
-            Assert.AreEqual(0, absolute.Count);
-        }
-
-        [TestMethod]
-        public async Task SearchAsync_EmptyString()
-        {
-            JsDelivrCatalog sut = SetupCatalog();
-
-            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync("", 1, CancellationToken.None);
-
-            Assert.AreEqual(0, absolute.Count);
-        }
-
-        [TestMethod]
-        public async Task SearchAsync_NullString()
-        {
-            JsDelivrCatalog sut = SetupCatalog();
-
-            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(null, 1, CancellationToken.None);
-
-            Assert.AreEqual(0, absolute.Count);
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("fakepackage", result[0].DisplayName);
         }
 
         [TestMethod]
@@ -103,150 +74,185 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         }
 
         [TestMethod]
-        public async Task GetLibraryCompletionSetAsync_ScopedPackageNameisSingleAt_ReturnsNoCompletions()
+        public async Task GetLibraryCompletionSetAsync_ScopedPackageNameisSingleAt_ReturnsNoCompletions_MakesNoWebRequest()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockRequestHandler = new Mock<IWebRequestHandler>();
+            JsDelivrCatalog sut = SetupCatalog(mockRequestHandler.Object);
+            (string nameStart, int caretPos) = ExtractCaret("@|");
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@", 1);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(nameStart, caretPos);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual(0, result.Completions.Count());
+            mockRequestHandler.Verify(m => m.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockSearch = new Mock<INpmPackageSearch>();
+            mockSearch.Setup(m => m.GetPackageNamesAsync("jquery", It.IsAny<CancellationToken>()))
+                      .Returns(Task.FromResult(new[] { new NpmPackageInfo("fakePackage1", "", "1.0.0") }.AsEnumerable()));
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: mockSearch.Object);
+            (string nameStart, int caretPos) = ExtractCaret("|jquery");
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("jquery", 0);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(nameStart, caretPos);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(6, result.Length);
-            Assert.AreEqual(100, result.Completions.Count());
-            Assert.AreEqual("jquery", result.Completions.First().DisplayText);
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("jquery"));
+            CollectionAssert.AreEquivalent(new[] { "fakePackage1" },
+                                           result.Completions.Select(c => c.DisplayText).ToList());
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesNoName()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockSearch = new Mock<INpmPackageSearch>();
+            mockSearch.Setup(m => m.GetPackageNamesAsync("@testscope", It.IsAny<CancellationToken>()))
+                      .Returns(Task.FromResult(new[] { new NpmPackageInfo("fakePackage1", "", "1.0.0") }.AsEnumerable()));
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: mockSearch.Object);
+            (string nameStart, int caretPos) = ExtractCaret("|@testscope");
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/", 0);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(nameStart, caretPos);
 
             Assert.AreEqual(0, result.Start);
-            Assert.AreEqual(7, result.Length);
-            Assert.AreEqual(25, result.Completions.Count());
-            Assert.AreEqual("@types/node", result.Completions.First().DisplayText);
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+            Assert.AreEqual(10, result.Length);
+            CollectionAssert.AreEquivalent(new[] { "fakePackage1" },
+                                           result.Completions.Select(c => c.DisplayText).ToList());
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithName()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockSearch = new Mock<INpmPackageSearch>();
+            mockSearch.Setup(m => m.GetPackageNamesAsync("@testscope/package", It.IsAny<CancellationToken>()))
+                      .Returns(Task.FromResult(new[] { new NpmPackageInfo("fakePackage1", "", "1.0.0") }.AsEnumerable()));
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: mockSearch.Object);
+            (string nameStart, int caretPos) = ExtractCaret("|@testscope/package");
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/node", 0);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(nameStart, caretPos);
 
             Assert.AreEqual(0, result.Start);
-            Assert.AreEqual(11, result.Length);
-            Assert.AreEqual(25, result.Completions.Count());
-            Assert.AreEqual("@types/node", result.Completions.First().DisplayText);
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+            Assert.AreEqual(18, result.Length);
+            CollectionAssert.AreEquivalent(new[] { "fakePackage1" },
+                                           result.Completions.Select(c => c.DisplayText).ToList());
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndTrailingAt_CursorAtVersions()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockPackageInfoFactory = new Mock<INpmPackageInfoFactory>();
+            mockPackageInfoFactory.Setup(m => m.GetPackageInfoAsync("@types/react", It.IsAny<CancellationToken>()))
+                                  .Returns(Task.FromResult(new NpmPackageInfo("fakepackage", "", "2.0.0", new List<SemanticVersion> { SemanticVersion.Parse("1.0.0"), SemanticVersion.Parse("2.0.0") })));
+            JsDelivrCatalog sut = SetupCatalog(infoFactory: mockPackageInfoFactory.Object);
+            (string nameStart, int caretPos) = ExtractCaret("@types/react@|");
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@", 13);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(nameStart, caretPos);
 
             Assert.AreEqual(13, result.Start);
             Assert.AreEqual(0, result.Length);
-            Assert.IsTrue(result.Completions.Count() > 0);
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/react"));
+            Assert.AreEqual(CompletionSortOrder.Version, result.CompletionType);
+            CollectionAssert.AreEqual(new[] { "2.0.0", "1.0.0", "latest" },
+                                      result.Completions.Select(c => c.DisplayText).ToList());
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndTrailingAt_CursorAtName()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockSearch = new Mock<INpmPackageSearch>();
+            // TODO: we should strip the trailing @ from the name
+            mockSearch.Setup(m => m.GetPackageNamesAsync("@types/react@", It.IsAny<CancellationToken>()))
+                      .Returns(Task.FromResult(new[] { new NpmPackageInfo("fakePackage1", "", "1.0.0") }.AsEnumerable()));
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: mockSearch.Object);
+            (string nameStart, int caretPos) = ExtractCaret("@types/r|eact@");
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@", 6);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(nameStart, caretPos);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(13, result.Length);
-            Assert.IsTrue(result.Completions.Count() > 0);
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/react"));
+            CollectionAssert.AreEquivalent(new[] { "fakePackage1" },
+                                           result.Completions.Select(c => c.DisplayText).ToList());
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndVersions_CursorInVersionsSubstring()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockPackageInfoFactory = new Mock<INpmPackageInfoFactory>();
+            mockPackageInfoFactory.Setup(m => m.GetPackageInfoAsync("@types/react", It.IsAny<CancellationToken>()))
+                                  .Returns(Task.FromResult(new NpmPackageInfo("fakepackage", "", "2.0.0", new List<SemanticVersion> { SemanticVersion.Parse("1.0.0"), SemanticVersion.Parse("2.0.0") })));
+            JsDelivrCatalog sut = SetupCatalog(infoFactory: mockPackageInfoFactory.Object);
+            (string nameStart, int caretPos) = ExtractCaret("@types/react@1|");
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/react@1", 14);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(nameStart, caretPos);
 
             Assert.AreEqual(13, result.Start);
             Assert.AreEqual(1, result.Length);
-            Assert.IsTrue(result.Completions.Count() > 0);
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/react"));
+            Assert.AreEqual(CompletionSortOrder.Version, result.CompletionType);
+            CollectionAssert.AreEqual(new[] { "2.0.0", "1.0.0", "latest" },
+                                      result.Completions.Select(c => c.DisplayText).ToList());
         }
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopesWithNameAndVersions_CursorInNameSubstring()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockSearch = new Mock<INpmPackageSearch>();
+            // TODO: do we really not strip the version out here?  Seems like we should...
+            mockSearch.Setup(m => m.GetPackageNamesAsync("@types/node@1.0.0", It.IsAny<CancellationToken>()))
+                      .Returns(Task.FromResult(new[] { new NpmPackageInfo("fakePackage1", "", "1.0.0") }.AsEnumerable()));
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: mockSearch.Object);
+            (string nameStart, int caretPos) = ExtractCaret("@types/no|de@1.0.0");
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("@types/node@1.0.2", 8);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(nameStart, caretPos);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(17, result.Length);
-            Assert.AreEqual(1, result.Completions.Count());
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("@types/node"));
+            CollectionAssert.AreEquivalent(new[] { "fakePackage1" },
+                                           result.Completions.Select(c => c.DisplayText).ToList());
         }
 
         [TestMethod]
-        public async Task GetLibraryCompletionSetAsync_LibraryNameWithLeadingAndTrailingWhitespace()
+        public async Task GetLibraryCompletionSetAsync_LibraryNameWithLeadingAndTrailingWhitespace_WhitespaceIncludedInSearchTerm()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockSearch = new Mock<INpmPackageSearch>();
+            mockSearch.Setup(m => m.GetPackageNamesAsync("    jquery ", It.IsAny<CancellationToken>()))
+                      .Returns(Task.FromResult(new[] { new NpmPackageInfo("fakePackage1", "", "1.0.0") }.AsEnumerable()));
+            JsDelivrCatalog sut = SetupCatalog(packageSearch: mockSearch.Object);
 
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await sut.GetLibraryCompletionSetAsync("    jquery ", 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(11, result.Length);
-            Assert.AreEqual(100, result.Completions.Count());
-            Assert.AreEqual("jquery", result.Completions.First().DisplayText);
-            Assert.IsTrue(result.Completions.First().InsertionText.StartsWith("jquery"));
+            CollectionAssert.AreEquivalent(new[] { "fakePackage1" },
+                                           result.Completions.Select(c => c.DisplayText).ToList());
         }
 
         [TestMethod]
-        public async Task GetLibraryCompletionSetAsync_NullValue()
+        public async Task GetLibraryCompletionSetAsync_NullValue_MakesNoWebRequest()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockRequestHandler = new Mock<IWebRequestHandler>();
+            JsDelivrCatalog sut = SetupCatalog(mockRequestHandler.Object);
 
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await sut.GetLibraryCompletionSetAsync(null, 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.AreEqual(0, result.Completions.Count());
+            mockRequestHandler.Verify(m => m.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [TestMethod]
-        public async Task GetLibraryCompletionSetAsync_EmptyString()
+        public async Task GetLibraryCompletionSetAsync_EmptyString_MakesNoWebRequest()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            var mockRequestHandler = new Mock<IWebRequestHandler>();
+            JsDelivrCatalog sut = SetupCatalog(mockRequestHandler.Object);
 
-            CancellationToken token = CancellationToken.None;
             CompletionSet result = await sut.GetLibraryCompletionSetAsync(string.Empty, 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.AreEqual(0, result.Completions.Count());
+            mockRequestHandler.Verify(m => m.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [TestMethod]

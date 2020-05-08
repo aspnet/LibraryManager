@@ -221,7 +221,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                     NpmPackageInfo npmPackageInfo = await _packageInfoFactory.GetPackageInfoAsync(name, CancellationToken.None);
 
-                    IList<SemanticVersion> versions = npmPackageInfo.Versions;
+                    IList<SemanticVersion> versions = npmPackageInfo.Versions.OrderByDescending(v => v).ToList();
 
                     foreach (SemanticVersion semVersion in versions)
                     {
