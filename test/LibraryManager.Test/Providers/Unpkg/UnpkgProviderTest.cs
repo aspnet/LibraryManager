@@ -29,8 +29,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             var hostInteraction = new HostInteraction(_projectFolder, cacheFolder);
 
-            var npmPackageSearch = new NpmPackageSearch(WebRequestHandler.Instance);
-            var packageInfoFactory = new NpmPackageInfoFactory(WebRequestHandler.Instance);
+            var requestHandler = new Mocks.WebRequestHandler();
+            var npmPackageSearch = new NpmPackageSearch(requestHandler);
+            var packageInfoFactory = new NpmPackageInfoFactory(requestHandler);
 
             var dependencies = new Dependencies(hostInteraction, new UnpkgProviderFactory(npmPackageSearch, packageInfoFactory));
             _provider = dependencies.GetProvider("unpkg");

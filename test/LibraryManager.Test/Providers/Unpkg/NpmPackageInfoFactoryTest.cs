@@ -13,26 +13,58 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         public async Task NpmPackageSearch_GetPackageInfoAsync_UnScopedPackage()
         {
             string searchItem = "jquery";
-            CancellationToken token = CancellationToken.None;
+            var expectedVersions = (new[] { "1.0.1", "2.1.7", "3.1.4-pi" })
+                                            .Select(x => SemanticVersion.Parse(x))
+                                            .ToList();
+            string packageLatestRequest = "https://registry.npmjs.org/jquery/latest";
+            string packageInfoRequest = "https://registry.npmjs.org/jquery";
+            var requestHandler = new Mocks.WebRequestHandler();
+            requestHandler.ArrangeResponse(packageLatestRequest, FakeResponses.FakeLibraryLatest)
+                          .ArrangeResponse(packageInfoRequest, FakeResponses.FakeLibraryWithVersions);
+            var sut = new NpmPackageInfoFactory(requestHandler);
 
-            var sut = new NpmPackageInfoFactory(WebRequestHandler.Instance);
-            NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, token);
+            NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, CancellationToken.None);
 
-            Assert.IsTrue(packageInfo.Versions != null);
-            Assert.IsTrue(packageInfo.Versions.Count() > 0);
+            Assert.AreEqual("fakelibrary", packageInfo.Name);
+            Assert.AreEqual("fake description", packageInfo.Description);
+            CollectionAssert.AreEquivalent(expectedVersions, packageInfo.Versions.ToList());
         }
 
         [TestMethod]
         public async Task NpmPackageSearch_GetPackageInfoAsync_ScopedPackage()
         {
             string searchItem = "@angular/cli";
-            CancellationToken token = CancellationToken.None;
+            var expectedVersions = (new[] { "1.0.1", "2.1.7", "3.1.4-pi" })
+                                            .Select(x => SemanticVersion.Parse(x))
+                                            .ToList();
+            string packageInfoRequest = "https://registry.npmjs.org/@angular%2fcli";
+            var requestHandler = new Mocks.WebRequestHandler();
+            requestHandler.ArrangeResponse(packageInfoRequest, FakeResponses.FakeLibraryWithVersions);
+            var sut = new NpmPackageInfoFactory(requestHandler);
 
-            var sut = new NpmPackageInfoFactory(WebRequestHandler.Instance);
-            NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, token);
+            NpmPackageInfo packageInfo = await sut.GetPackageInfoAsync(searchItem, CancellationToken.None);
 
-            Assert.IsTrue(packageInfo.Versions != null);
-            Assert.IsTrue(packageInfo.Versions.Count() > 0);
+            Assert.AreEqual("fakelibrary", packageInfo.Name);
+            Assert.AreEqual("fake description", packageInfo.Description);
+            CollectionAssert.AreEquivalent(expectedVersions, packageInfo.Versions.ToList());
+        }
+
+        private class FakeResponses
+        {
+            public const string FakeLibraryLatest = @"{
+    ""name"": ""fakelibrary"",
+    ""description"": ""fake description"",
+    ""versions"": ""2.1.7""
+}";
+            public const string FakeLibraryWithVersions = @"{
+    ""name"": ""fakelibrary"",
+    ""description"": ""fake description"",
+    ""versions"": {
+        ""1.0.1"": null,
+        ""2.1.7"": null,
+        ""3.1.4-pi"": null
+    }
+}";
         }
     }
 }
