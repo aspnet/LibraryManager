@@ -42,7 +42,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            string expectedString = @"Cache contents:
+            string expectedString = $@"Cache root directory:
+---------------------
+{CacheDir}
+
+Cache contents:
 ---------------
 unpkg:
     (empty)
@@ -76,7 +80,11 @@ cdnjs:
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            var expectedString = @"Cache contents:
+            var expectedString = $@"Cache root directory:
+---------------------
+{CacheDir}
+
+Cache contents:
 ---------------
 unpkg:
     (empty)
