@@ -30,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var command = new InstallCommand(HostEnvironment);
             command.Configure(null);
 
-            _ = command.Execute("jquery@3.2.1", "--provider", "cdnjs", "--destination", "wwwroot");
+            command.Execute("jquery@3.2.1", "--provider", "cdnjs", "--destination", "wwwroot");
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
@@ -58,7 +58,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var command = new InstallCommand(HostEnvironment);
             command.Configure(null);
 
-            _ = command.Execute("jquery@3.2.1", "--destination", "wwwroot");
+            command.Execute("jquery@3.2.1", "--destination", "wwwroot");
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
@@ -93,7 +93,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var command = new InstallCommand(HostEnvironment);
             command.Configure(null);
 
-            _ = command.Execute("jquery@3.2.1", "--destination", "wwwroot");
+            command.Execute("jquery@3.2.1", "--destination", "wwwroot");
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
@@ -128,7 +128,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
 
-            _ = command.Execute("jquery@3.2.1");
+            command.Execute("jquery@3.2.1");
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
@@ -165,7 +165,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
 
-            _ = command.Execute("jquery@3.2.1", "--provider", "cdnjs");
+            command.Execute("jquery@3.2.1", "--provider", "cdnjs");
 
             var testLogger = HostEnvironment.Logger as TestLogger;
             Assert.AreEqual("[LIB019]: Cannot restore. Multiple definitions for libraries: jquery", testLogger.Messages.Last().Value);
@@ -186,7 +186,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 }";
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
-            _ = command.Execute("jquery@3.2.1", "--files", "jquery.min.js");
+            command.Execute("jquery@3.2.1", "--files", "jquery.min.js");
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
