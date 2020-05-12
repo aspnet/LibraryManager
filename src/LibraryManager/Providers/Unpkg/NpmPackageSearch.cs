@@ -5,22 +5,23 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Helpers;
 using Newtonsoft.Json.Linq;
 
-#if NET472
-using System.ComponentModel.Composition;
-#endif
-
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 {
-#if NET472
-    [Export(typeof(INpmPackageSearch))]
-#endif
     internal sealed class NpmPackageSearch : INpmPackageSearch
     {
         private const string NpmPackageSearchUrl = "https://registry.npmjs.org/-/v1/search?text={0}&size=100"; // API doc at https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md
         public const string NpmsPackageSearchUrl = "https://api.npms.io/v2/search?q={1}+scope:{0}";
+
+        private readonly IWebRequestHandler _requestHandler;
+
+        public NpmPackageSearch(IWebRequestHandler webRequestHandler)
+        {
+            _requestHandler = webRequestHandler;
+        }
 
         public async Task<IEnumerable<NpmPackageInfo>> GetPackageNamesAsync(string searchTerm, CancellationToken cancellationToken)
         {
@@ -38,10 +39,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
         }
 
-        private static async Task<IEnumerable<NpmPackageInfo>> GetPackageNamesWithScopeAsync(string searchTerm, CancellationToken cancellationToken)
+        private async Task<IEnumerable<NpmPackageInfo>> GetPackageNamesWithScopeAsync(string searchTerm, CancellationToken cancellationToken)
         {
             Debug.Assert(searchTerm.StartsWith("@", StringComparison.Ordinal));
-            List<NpmPackageInfo> packages = new List<NpmPackageInfo>();
+            var packages = new List<NpmPackageInfo>();
 
             int slash = searchTerm.IndexOf("/", StringComparison.Ordinal);
             if (slash > 0)
@@ -55,7 +56,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                 string searchUrl = string.Format(NpmsPackageSearchUrl, scope, packageName);
 
-                JObject packageListJsonObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(searchUrl, cancellationToken);
+                JObject packageListJsonObject = await _requestHandler.GetJsonObjectViaGetAsync(searchUrl, cancellationToken);
 
                 if (packageListJsonObject != null)
                 {
@@ -75,17 +76,15 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     //          }
                     //      }, ...
 
-                    JArray resultsValues =  packageListJsonObject["results"] as JArray;
-                    if (resultsValues != null)
+                    if (packageListJsonObject["results"] is JArray resultsValues)
                     {
                         foreach (JObject packageEntry in resultsValues.Children())
                         {
                             if (packageEntry != null)
                             {
-                                JObject packageDetails = packageEntry["package"] as JObject;
-                                if (packageDetails != null)
+                                if (packageEntry["package"] is JObject packageDetails)
                                 {
-                                    NpmPackageInfo packageInfo = NpmPackageInfo.Parse(packageDetails);
+                                    var packageInfo = NpmPackageInfo.Parse(packageDetails);
                                     packages.Add(packageInfo);
                                 }
                             }
@@ -97,14 +96,14 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             return packages;
         }
 
-        private static async Task<IEnumerable<NpmPackageInfo>> GetPackageNamesFromSimpleQueryAsync(string searchTerm, CancellationToken cancellationToken)
+        private async Task<IEnumerable<NpmPackageInfo>> GetPackageNamesFromSimpleQueryAsync(string searchTerm, CancellationToken cancellationToken)
         {
             string packageListUrl = string.Format(CultureInfo.InvariantCulture, NpmPackageSearchUrl, searchTerm);
-            List<NpmPackageInfo> packages = new List<NpmPackageInfo>();
+            var packages = new List<NpmPackageInfo>();
 
             try
             {
-                JObject topLevelObject = await WebRequestHandler.Instance.GetJsonObjectViaGetAsync(packageListUrl, cancellationToken).ConfigureAwait(false);
+                JObject topLevelObject = await _requestHandler.GetJsonObjectViaGetAsync(packageListUrl, cancellationToken).ConfigureAwait(false);
 
                 if (topLevelObject != null)
                 {
@@ -171,16 +170,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     //  "time": "Wed Jan 25 2017 19:23:35 GMT+0000 (UTC)"
                     //}
 
-                    JArray searchResultList = topLevelObject["objects"] as JArray;
-
-                    if (searchResultList != null)
+                    if (topLevelObject["objects"] is JArray searchResultList)
                     {
                         foreach (JObject searchResultObject in searchResultList.Children())
                         {
-                            JObject packageEntry = searchResultObject["package"] as JObject;
-                            if (packageEntry != null)
+                            if (searchResultObject["package"] is JObject packageEntry)
                             {
-                                NpmPackageInfo packageInfo = NpmPackageInfo.Parse(packageEntry);
+                                var packageInfo = NpmPackageInfo.Parse(packageEntry);
                                 packages.Add(packageInfo);
                             }
                         }

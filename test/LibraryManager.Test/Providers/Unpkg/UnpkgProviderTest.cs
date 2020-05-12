@@ -29,8 +29,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             var hostInteraction = new HostInteraction(_projectFolder, cacheFolder);
 
-            var npmPackageSearch = new NpmPackageSearch();
-            var packageInfoFactory = new NpmPackageInfoFactory();
+            var requestHandler = new Mocks.WebRequestHandler();
+            var npmPackageSearch = new NpmPackageSearch(requestHandler);
+            var packageInfoFactory = new NpmPackageInfoFactory(requestHandler);
 
             var dependencies = new Dependencies(hostInteraction, new UnpkgProviderFactory(npmPackageSearch, packageInfoFactory));
             _provider = dependencies.GetProvider("unpkg");
@@ -43,50 +44,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         public void Cleanup()
         {
             TestUtils.DeleteDirectoryWithRetries(_projectFolder);
-        }
-
-        [TestMethod]
-        public async Task InstallAsync_FullEndToEnd()
-        {
-            ILibraryCatalog catalog = _provider.GetCatalog();
-
-            // Search for libraries to display in search result
-            IReadOnlyList<ILibraryGroup> groups = await catalog.SearchAsync("jquery", 4, CancellationToken.None);
-            Assert.IsTrue(groups.Count > 0);
-
-            // Show details for selected library
-            ILibraryGroup group = groups.FirstOrDefault();
-            Assert.AreEqual("jquery", group.DisplayName);
-
-            // Get all libraries in group to display version list
-            IEnumerable<string> libraryVersions = await group.GetLibraryVersions(CancellationToken.None);
-            Assert.IsTrue(libraryVersions.Count() >= 0);
-
-            // Get the library to install
-            ILibrary library = await catalog.GetLibraryAsync(group.DisplayName, libraryVersions.First(), CancellationToken.None);
-            Assert.AreEqual(group.DisplayName, library.Name);
-
-            var desiredState = new LibraryInstallationState
-            {
-                Name = "jquery",
-                Version="3.3.1",
-                ProviderId = "unpkg",
-                DestinationPath = "lib",
-                Files = new[] { "dist/jquery.js", "dist/jquery.min.js" }
-            };
-
-            // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
-
-            foreach (string file in desiredState.Files)
-            {
-                string absolute = Path.Combine(_projectFolder, desiredState.DestinationPath, file);
-                Assert.IsTrue(File.Exists(absolute));
-            }
-
-            Assert.IsTrue(result.Success);
-            Assert.IsFalse(result.Cancelled);
-            Assert.AreEqual(0, result.Errors.Count);
         }
 
         [TestMethod]

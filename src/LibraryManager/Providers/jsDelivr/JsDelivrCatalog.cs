@@ -247,6 +247,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                         DisplayText = LatestVersionTag,
                         InsertionText = _libraryNamingScheme.GetLibraryId(name, LatestVersionTag),
                     });
+
+                    completionSet.CompletionType = CompletionSortOrder.Version;
                 }
             }
             catch (Exception ex)

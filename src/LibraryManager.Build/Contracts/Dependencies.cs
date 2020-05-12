@@ -45,8 +45,8 @@ namespace Microsoft.Web.LibraryManager.Build.Contracts
             if (_providers.Count > 0)
                 return;
 
-            var packageInfoFactory = new NpmPackageInfoFactory();
-            var packageSearch = new NpmPackageSearch();
+            var packageInfoFactory = new NpmPackageInfoFactory(WebRequestHandler.Instance);
+            var packageSearch = new NpmPackageSearch(WebRequestHandler.Instance);
 
             IEnumerable<IProviderFactory> factories = new IProviderFactory[] {
                 new FileSystemProviderFactory(),

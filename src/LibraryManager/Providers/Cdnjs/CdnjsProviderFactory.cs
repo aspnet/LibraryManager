@@ -4,16 +4,8 @@
 using System;
 using Microsoft.Web.LibraryManager.Contracts;
 
-#if NET472
-using System.ComponentModel.Composition;
-#endif
-
 namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 {
-    /// <summary>Internal use only</summary>
-#if NET472
-    [Export(typeof(IProviderFactory))]
-#endif
     internal class CdnjsProviderFactory : IProviderFactory
     {
         /// <summary>
