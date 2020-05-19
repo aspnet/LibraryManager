@@ -13,12 +13,17 @@
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
 
     <Product>Microsoft.Web.LibraryManager</Product>
-    <PackageIconUrl>https://aka.ms/vsextensibilityicon</PackageIconUrl>
     <PackageProjectUrl>https://github.com/aspnet/LibraryManager</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/aspnet/LibraryManager/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageIcon>PackageIcon.png</PackageIcon>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
     <PackageOutputPath>$(RepoRoot)\artifacts\$(Configuration)</PackageOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\License.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
+    <None Include="$(MSBuildThisFileDirectory)\src\PackageIcon.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NerdBank.GitVersioning" PrivateAssets="All" />

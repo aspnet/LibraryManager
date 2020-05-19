@@ -6,7 +6,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The contracts assembly for authoring Library Manager extensions</Description>
     <PackageId>Microsoft.Web.LibraryManager.Contracts</PackageId>
-    <PackageLicenseUrl>https://aka.ms/pexunj</PackageLicenseUrl>
   </PropertyGroup>
 
   <Target Name="BuiltProjectOutputGroup" />
