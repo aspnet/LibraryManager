@@ -1,346 +1,162 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using EnvDTE;
+using System.Windows.Markup;
+using System.Windows.Shell;
 using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Web.LibraryManager.Vsix.Resources;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Theming
 {
-    internal class ThemedWindow : DialogWindow
+    [ContentProperty(nameof(Body))]
+    public class ThemedWindow : DialogWindow
     {
-        public new static readonly DependencyProperty ContentProperty = DependencyProperty.Register(
-            "Content", typeof(FrameworkElement), typeof(ThemedWindow), new PropertyMetadata(default(FrameworkElement)));
+        public static readonly DependencyProperty BodyProperty = DependencyProperty.Register(nameof(Body), typeof(object), typeof(ThemedWindow), new PropertyMetadata(null, OnBodyChanged));
+        public static readonly DependencyProperty SupportsCloseGestureProperty = DependencyProperty.Register(nameof(SupportsCloseGesture), typeof(bool), typeof(ThemedWindow), new PropertyMetadata(true, OnSupportsCloseGestureChanged));
 
-        private bool _isShowingAsDialog;
+        private static void OnSupportsCloseGestureChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is ThemedWindow win) || !(e.NewValue is bool newValue))
+            {
+                return;
+            }
+
+            win._closeButton.Visibility = newValue ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        private readonly DockPanel _dockPanel;
+        private readonly Button _closeButton;
+        private FrameworkElement _body;
+
+        public event EventHandler DialogDismissed;
 
         public ThemedWindow()
         {
-            this.ShouldBeThemed();
-
-            WindowStyle = WindowStyle.None;
-            ResizeMode = ResizeMode.CanResizeWithGrip;
-            Background = Brushes.Transparent;
             AllowsTransparency = true;
+            WindowStyle = WindowStyle.None;
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             ShowInTaskbar = false;
+            ResizeMode = ResizeMode.CanResize;
+            PreviewKeyDown += HandlePreviewKeyDown;
 
-            Grid host = new Grid();
-            //Header
-            host.RowDefinitions.Add(new RowDefinition
+            //WindowChrome, needed to resize when transparent without a gripper
+            WindowChrome chrome = new WindowChrome()
             {
-                Height = GridLength.Auto
-            });
-            //Body
-            host.RowDefinitions.Add(new RowDefinition());
-
-            FrameworkElement header = BuildHeaderArea();
-            header.SetValue(Grid.RowProperty, 0);
-            host.Children.Add(header);
-
-            ContentPresenter contentPresenter = new ContentPresenter();
-            contentPresenter.SetValue(Grid.RowProperty, 1);
-            contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding
-            {
-                Mode = BindingMode.OneWay,
-                RelativeSource = new RelativeSource
-                {
-                    Mode = RelativeSourceMode.FindAncestor,
-                    AncestorType = typeof(ThemedWindow)
-                },
-                Path = new PropertyPath("Content")
-            });
-            contentPresenter.Resources = Resources;
-            host.Children.Add(contentPresenter);
-
-            host.SetResourceReference(BackgroundProperty, EnvironmentColors.ToolWindowBackgroundBrushKey);
-
-            Border hostContainer = new Border
-            {
-                Child = host,
-                //Margin = new Thickness(1, 1, 5, 5),
-                BorderThickness = new Thickness(1)
+                ResizeBorderThickness = new Thickness(4),
+                CaptionHeight = 0,
+                UseAeroCaptionButtons = false
             };
-            hostContainer.SetResourceReference(BorderBrushProperty, EnvironmentColors.MainWindowActiveDefaultBorderBrushKey);
-            //hostContainer.Effect = new DropShadowEffect
-            //{
-            //    Direction = -75,
-            //    ShadowDepth = 2,
-            //    BlurRadius = 2,
-            //    Color = Colors.Azure
-            //};
+            SetValue(WindowChrome.WindowChromeProperty, chrome);
 
-            base.Content = hostContainer;
-        }
+            //Close button
+            _closeButton = new Button();
+            _closeButton.SetValue(AutomationProperties.NameProperty, Text.CloseButtonText);
+            _closeButton.Click += OnCloseWindow;
+            _closeButton.ToolTip = Text.CloseButtonText;
+            _closeButton.SetValue(Grid.ColumnProperty, 1);
 
-        public new FrameworkElement Content
-        {
-            get { return (FrameworkElement)GetValue(ContentProperty); }
-            set { SetValue(ContentProperty, value); }
-        }
+            // set up header
+            Grid titlebar = new Grid();
+            titlebar.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            titlebar.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            titlebar.SetValue(DockPanel.DockProperty, Dock.Top);
+            titlebar.SetResourceReference(Border.BackgroundProperty, EnvironmentColors.MainWindowActiveCaptionBrushKey);
+            titlebar.MouseDown += WindowGripMouseDown;
 
-        public new void Show()
-        {
-            new WindowInteropHelper(this)
-            {
-                Owner = new IntPtr((Package.GetGlobalService(typeof(SDTE)) as DTE)?.MainWindow.HWnd ?? 0)
-            };
-            _isShowingAsDialog = false;
-            base.Show();
-        }
-
-        public new bool? ShowDialog()
-        {
-            new WindowInteropHelper(this)
-            {
-                Owner = new IntPtr((Package.GetGlobalService(typeof(SDTE)) as DTE)?.MainWindow.HWnd ?? 0)
-            };
-            _isShowingAsDialog = true;
-            return base.ShowDialog();
-        }
-
-        protected virtual void HandleSystemButtonClick()
-        {
-            if (OnCloseButtonClicked())
-            {
-                try
-                {
-                    if (_isShowingAsDialog)
-                    {
-                        DialogResult = false;
-                        return;
-                    }
-                }
-                catch
-                {
-                }
-
-                Close();
-            }
-        }
-
-        protected virtual bool OnCloseButtonClicked()
-        {
-            return true;
-        }
-
-        protected override void OnPreviewKeyDown(KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Escape:
-                    HandleSystemButtonClick();
-                    e.Handled = true;
-                    return;
-            }
-
-            base.OnPreviewKeyDown(e);
-        }
-
-        private FrameworkElement BuildHeaderArea()
-        {
-            Grid header = new Grid();
-            header.ColumnDefinitions.Add(new ColumnDefinition());
-            header.ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
-            header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-
-            //Move grip containing the icon and title
-            Grid moveGrip = new Grid();
-            moveGrip.ColumnDefinitions.Add(new ColumnDefinition
-            {
-                Width = GridLength.Auto
-            });
-            moveGrip.ColumnDefinitions.Add(new ColumnDefinition());
-            moveGrip.SetResourceReference(Border.BackgroundProperty, EnvironmentColors.ToolWindowBackgroundBrushKey);
-            moveGrip.SetValue(Grid.ColumnProperty, 0);
-            moveGrip.MouseLeftButtonDown += TitleBarLeftMouseButtonDown;
-
-            Image icon = new Image
-            {
-                VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(10, 5, 4, 0)
-            };
-            icon.SetBinding(Image.SourceProperty, new Binding
-            {
-                Source = this,
-                Path = new PropertyPath("Icon"),
-                Mode = BindingMode.OneWay
-            });
-            moveGrip.Children.Add(icon);
-
-            Label label = new Label
-            {
-                VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 2, 0, 0)
-            };
-            label.SetValue(Grid.ColumnProperty, 1);
-            label.SetBinding(ContentControl.ContentProperty, new Binding
+            Label titleText = new Label();
+            titleText.SetBinding(ContentControl.ContentProperty, new Binding
             {
                 Source = this,
                 Path = new PropertyPath("Title"),
                 Mode = BindingMode.OneWay
             });
-            label.SetResourceReference(ForegroundProperty, EnvironmentColors.MainWindowActiveCaptionTextBrushKey);
-            moveGrip.Children.Add(label);
-            header.Children.Add(moveGrip);
+            titleText.SetValue(Grid.ColumnProperty, 0);
 
-            //Close button
-            FrameworkElement closeGlyph;
-            Path buttonPath;
-            GenerateCloseGlyph(out closeGlyph, out buttonPath);
+            titlebar.Children.Add(titleText);
+            titlebar.Children.Add(_closeButton);
 
-            Style closeButtonStyle = new Style(typeof(Button));
-            closeButtonStyle.Setters.Add(new Setter(HeightProperty, (double)25));
-            closeButtonStyle.Setters.Add(new Setter(WidthProperty, (double)25));
-            closeButtonStyle.Setters.Add(new Setter(FocusVisualStyleProperty, null));
-            closeButtonStyle.Setters.Add(new Setter(ForegroundProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonActiveGlyphBrushKey)));
-            closeButtonStyle.Setters.Add(new Setter(BackgroundProperty, null));
-            closeButtonStyle.Setters.Add(new Setter(BorderBrushProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonActiveBorderBrushKey)));
-            closeButtonStyle.Setters.Add(new Setter(TemplateProperty, FindResource("FlatButton")));
-
-            Trigger closeButtonHoverTrigger = new Trigger
+            _dockPanel = new DockPanel()
             {
-                Property = IsMouseOverProperty,
-                Value = true
+                LastChildFill = true,
             };
+            _dockPanel.SetResourceReference(Border.BorderBrushProperty, EnvironmentColors.MainWindowActiveDefaultBorderBrushKey);
+            _dockPanel.SetResourceReference(Border.BackgroundProperty, EnvironmentColors.StartPageTabBackgroundBrushKey);
 
-            closeButtonHoverTrigger.Setters.Add(new Setter(ForegroundProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonHoverActiveGlyphBrushKey)));
-            closeButtonHoverTrigger.Setters.Add(new Setter(BackgroundProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonHoverActiveBrushKey)));
-            closeButtonHoverTrigger.Setters.Add(new Setter(BorderBrushProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonHoverActiveBorderBrushKey)));
-            closeButtonStyle.Triggers.Add(closeButtonHoverTrigger);
+            _dockPanel.Children.Add(titlebar);
 
-            Trigger closeButtonPressTrigger = new Trigger
-            {
-                Property = ButtonBase.IsPressedProperty,
-                Value = true
-            };
+            Content = _dockPanel;
 
-            closeButtonPressTrigger.Setters.Add(new Setter(ForegroundProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonDownGlyphBrushKey)));
-            closeButtonPressTrigger.Setters.Add(new Setter(BackgroundProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonDownBrushKey)));
-            closeButtonPressTrigger.Setters.Add(new Setter(BorderBrushProperty, new DynamicResourceExtension(EnvironmentColors.MainWindowButtonDownBorderBrushKey)));
-            closeButtonStyle.Triggers.Add(closeButtonPressTrigger);
-
-            Button closeButton = new Button
-            {
-                Style = closeButtonStyle,
-                Name = "closeButton",
-                Content = closeGlyph,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                VerticalContentAlignment = VerticalAlignment.Center
-            };
-
-            closeButton.SetValue(Grid.ColumnProperty, 2);
-            header.Children.Add(closeButton);
-            buttonPath.SetBinding(Shape.FillProperty, new Binding
-            {
-                Path = new PropertyPath("Foreground"),
-                Source = closeButton,
-                Mode = BindingMode.OneWay
-            });
-
-            closeButton.Click += CloseButtonClick;
-
-            return header;
+            // merge resource dictionaries before applying styles
+            this.ShouldBeThemed();
+            _closeButton.Style = (Style)Resources["WindowCloseButtonStyle"];
+            titleText.Style = (Style)Resources["WindowTitleStyle"];
         }
 
-        private void CloseButtonClick(object sender, RoutedEventArgs e)
+        private void HandlePreviewKeyDown(object sender, KeyEventArgs e)
         {
-            HandleSystemButtonClick();
+            if (e.Key == Key.Escape && Keyboard.Modifiers == ModifierKeys.None && IsCloseButtonEnabled)
+            {
+                e.Handled = true;
+                DialogDismissed?.Invoke(this, EventArgs.Empty);
+                Close();
+            }
         }
 
-        private void GenerateCloseGlyph(out FrameworkElement container, out Path path)
+        public object Body
         {
-            Path buttonPath = new Path();
-            PathGeometry geometry = new PathGeometry();
-            PathFigure figure = new PathFigure
-            {
-                StartPoint = new Point(0, 0)
-            };
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(2, 0)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(5, 3)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(8, 0)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(10, 0)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(6, 4)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(10, 8)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(8, 8)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(5, 5)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(2, 8)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(0, 8)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(4, 4)
-            });
-
-            figure.Segments.Add(new LineSegment
-            {
-                Point = new Point(0, 0)
-            });
-
-            geometry.Figures.Add(figure);
-            buttonPath.Data = geometry;
-
-            Canvas closeGlyphCanvas = new Canvas
-            {
-                Width = 10,
-                Height = 8
-            };
-
-            closeGlyphCanvas.Children.Add(buttonPath);
-            container = closeGlyphCanvas;
-            path = buttonPath;
+            get => GetValue(BodyProperty);
+            set => SetValue(BodyProperty, value);
         }
 
-        private void TitleBarLeftMouseButtonDown(object sender, MouseButtonEventArgs e)
+        public bool SupportsCloseGesture
         {
-            DragMove();
+            get => (bool)GetValue(SupportsCloseGestureProperty);
+            set => SetValue(SupportsCloseGestureProperty, value);
+        }
+
+        protected virtual void OnCloseWindow(object sender, RoutedEventArgs e)
+        {
+            DialogDismissed?.Invoke(this, EventArgs.Empty);
+            Close();
+        }
+
+        private static void OnBodyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is ThemedWindow win))
+            {
+                return;
+            }
+
+            if (!(e.NewValue is FrameworkElement element))
+            {
+                element = new ContentPresenter
+                {
+                    Content = e.NewValue
+                };
+            }
+
+            element.SetValue(Grid.RowProperty, 1);
+
+            if (!(win._body is null))
+            {
+                win._dockPanel.Children.Remove(win._body);
+            }
+
+            element.ShouldBeThemed();
+            win._dockPanel.Children.Add(element);
+            win._body = element;
+        }
+
+        private void WindowGripMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+                e.Handled = true;
+            }
         }
     }
 }
