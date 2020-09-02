@@ -23,7 +23,7 @@
         <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
         <converters:HintTextConverter x:Key="HintTextConverter"/>
     </Window.Resources>
-    <Grid Margin="12 12 12 12">
+    <Grid Margin="8, 12, 12, 12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition />
@@ -115,7 +115,7 @@
                     Grid.ColumnSpan="4"
                     Margin="0 0 0 9">
             <RadioButton x:Name="IncludeAllLibraryFilesRb"
-                         Margin="0 0 0 9"
+                         Margin="4 0 0 9"
                          GroupName="FilesToInstall"
                          Content="{x:Static resources:Text.IncludeAllLibraryFiles}"
                          IsChecked="{Binding LibraryFilesToInstall,
@@ -123,6 +123,7 @@
                                              Converter={StaticResource EnumToBoolConverter},
                                              ConverterParameter=InstallAllLibraryFiles}" />
             <RadioButton Content="{x:Static resources:Text.ChooseSpecificFiles}"
+                         Margin="4 0 0 0"
                          GroupName="FilesToInstall"
                          IsChecked="{Binding LibraryFilesToInstall,
                                              Mode=TwoWay,
@@ -132,7 +133,7 @@
 
         <Border Grid.Row="2"
                 Grid.ColumnSpan="4"
-                Margin="0 0 0 9"
+                Margin="6 0 0 9"
                 Style="{StaticResource GroupBoxBorderStyle}"
                 BorderThickness="1"
                 KeyboardNavigation.TabNavigation="Once">
