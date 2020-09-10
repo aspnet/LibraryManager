@@ -245,7 +245,24 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await _cacheService.GetCatalogAsync(RemoteApiUrl, _cacheFile, cancellationToken).ConfigureAwait(false);
+                string json;
+                try
+                {
+                    json = await _cacheService.GetCatalogAsync(RemoteApiUrl, _cacheFile, cancellationToken).ConfigureAwait(false);
+                }
+                catch (ResourceDownloadException)
+                {
+                    // TODO: add telemetry
+                    _provider.HostInteraction.Logger.Log(string.Format(Resources.Text.FailedToDownloadCatalog, _provider.Id), LogLevel.Operation);
+                    if (File.Exists(_cacheFile))
+                    {
+                        json = await FileHelpers.ReadFileAsTextAsync(_cacheFile, cancellationToken);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
@@ -255,11 +272,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 _libraryGroups = ConvertToLibraryGroups(json);
 
                 return _libraryGroups != null;
-            }
-            catch (ResourceDownloadException)
-            {
-                _provider.HostInteraction.Logger.Log(string.Format(Resources.Text.FailedToDownloadCatalog, _provider.Id), LogLevel.Operation);
-                return false;
             }
             catch (Exception ex)
             {
@@ -283,7 +295,23 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await _cacheService.GetMetadataAsync(url, localFile, cancellationToken).ConfigureAwait(false);
+                string json;
+                try
+                {
+                    json = await _cacheService.GetMetadataAsync(url, localFile, cancellationToken).ConfigureAwait(false);
+                }
+                catch (ResourceDownloadException)
+                {
+                    // TODO: Log telemetry
+                    if (File.Exists(localFile))
+                    {
+                        json = await FileHelpers.ReadFileAsTextAsync(localFile, cancellationToken);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -294,10 +322,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         throw new Exception();
                     }
                 }
-            }
-            catch (ResourceDownloadException)
-            {
-                throw;
             }
             catch (Exception)
             {

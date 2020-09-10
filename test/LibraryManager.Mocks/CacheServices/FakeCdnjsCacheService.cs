@@ -14,7 +14,18 @@ namespace Microsoft.Web.LibraryManager.Mocks.CacheServices
     {
         Task<string> ICacheService.GetCatalogAsync(string url, string cacheFile, CancellationToken cancellationToken)
         {
-            return Task.FromResult(@"{
+            return Task.FromResult(FakeCatalogContents);
+        }
+
+        Task<string> ICacheService.GetMetadataAsync(string url, string cacheFile, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(FakeLibraryMetadata);
+        }
+
+        /// <summary>
+        /// Mock contents containing multiple libraries with different versions
+        /// </summary>
+        public const string FakeCatalogContents = @"{
     ""results"": [
         {
                 ""name"": ""sampleLibrary"",
@@ -36,12 +47,12 @@ namespace Microsoft.Web.LibraryManager.Mocks.CacheServices
         }
     ],
     ""total"": 3
-}");
-        }
+}";
 
-        Task<string> ICacheService.GetMetadataAsync(string url, string cacheFile, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(@"{
+        /// <summary>
+        /// Single library metadata, containing multiple releases including preview releases
+        /// </summary>
+        public const string FakeLibraryMetadata = @"{
     ""name"": ""sampleLibrary"",
     ""filename"": ""sample/js/sampleLibrary.min.js"",
     ""version"": ""3.1.4"",
@@ -87,7 +98,6 @@ namespace Microsoft.Web.LibraryManager.Mocks.CacheServices
             ]
         }
     ]
-}");
-        }
+}";
     }
 }

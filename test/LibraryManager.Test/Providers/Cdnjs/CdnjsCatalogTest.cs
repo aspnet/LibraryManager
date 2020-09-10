@@ -9,25 +9,51 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Caching;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Mocks.CacheServices;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 {
     [TestClass]
     public class CdnjsCatalogTest
     {
-        private CdnjsCatalog Initialize()
+        private readonly List<string> _prepopulatedFiles = new List<string>();
+
+        private CdnjsCatalog SetupCatalog(ICacheService testCacheService = null, Dictionary<string, string> prepopulateCacheFiles = null)
         {
             string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
-            var cacheService = new FakeCdnjsCacheService();
+            ICacheService cacheService = testCacheService ?? new FakeCdnjsCacheService();
+
+            if (prepopulateCacheFiles != null)
+            {
+                foreach (KeyValuePair<string, string> item in prepopulateCacheFiles)
+                {
+                    // put the provider IdText into the path to mimic the provider implementation
+                    string filePath = Path.Combine(cacheFolder, CdnjsProvider.IdText, item.Key);
+                    string directoryPath = Path.GetDirectoryName(filePath);
+                    Directory.CreateDirectory(directoryPath);
+                    File.WriteAllText(filePath, item.Value);
+                    _prepopulatedFiles.Add(filePath);
+                }
+            }
 
             var provider = new CdnjsProvider(hostInteraction, cacheService:null);
             return new CdnjsCatalog(provider, cacheService, new VersionedLibraryNamingScheme());
+        }
+
+        [TestCleanup]
+        public void CleanupPrepopulatedFiles()
+        {
+            foreach (string file in _prepopulatedFiles)
+            {
+                File.Delete(file);
+            }
         }
 
         [DataTestMethod]
@@ -36,7 +62,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [DataRow("test-library2", "test-library2")]
         public async Task SearchAsync_Success(string searchTerm, string expectedId)
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(searchTerm, 1, CancellationToken.None);
             Assert.AreEqual(1, absolute.Count);
@@ -56,7 +82,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task SearchAsync_MultipleMatches()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> result = await sut.SearchAsync(term:"test", 5, CancellationToken.None);
 
@@ -68,7 +94,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task SearchAsync_NoHits()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(@"*9)_-", 1, CancellationToken.None);
 
@@ -78,7 +104,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task SearchAsync_EmptyString()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync("", 1, CancellationToken.None);
 
@@ -88,7 +114,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task SearchAsync_NullString()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(null, 1, CancellationToken.None);
 
@@ -98,7 +124,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryAsync_Success()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             ILibrary library = await sut.GetLibraryAsync("sampleLibrary", "3.1.4", CancellationToken.None);
 
@@ -111,16 +137,48 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () =>
                 await sut.GetLibraryAsync("invalid_id", "invalid_version", CancellationToken.None));
         }
 
         [TestMethod]
+        public async Task GetLibraryAsync_WebRequestFailsAndNoCachedMetadata_ThrowsInvalidLibraryId()
+        {
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetCatalogAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                            .Throws(new ResourceDownloadException("Cache download failed."));
+            CdnjsCatalog sut = SetupCatalog(fakeCacheService.Object);
+
+            await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () =>
+                await sut.GetLibraryAsync("invalid_id", "invalid_version", CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_WebRequestFailsAndHasCachedMetadata_UseCachedLibraryMetadata()
+        {
+            var prepopulateFiles = new Dictionary<string, string>
+            {
+                { @"sampleLibrary\metadata.json", FakeCdnjsCacheService.FakeLibraryMetadata }
+            };
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetMetadataAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                            .Throws(new ResourceDownloadException("Cache download failed."));
+            CdnjsCatalog sut = SetupCatalog(fakeCacheService.Object, prepopulateFiles);
+
+            ILibrary library = await sut.GetLibraryAsync("sampleLibrary", "3.1.4", CancellationToken.None);
+
+            Assert.IsNotNull(library);
+            Assert.AreEqual("sampleLibrary", library.Name);
+            Assert.AreEqual("3.1.4", library.Version);
+            Assert.IsNotNull(library.Files);
+        }
+
+        [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             CompletionSet result = await sut.GetLibraryCompletionSetAsync("test", 0);
 
@@ -134,7 +192,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Versions()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             CompletionSet result = await sut.GetLibraryCompletionSetAsync("sampleLibrary@", 14);
 
@@ -148,7 +206,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLatestVersion_LatestExist()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             const string libraryName = "sampleLibrary";
             const string expectedVersion = "3.1.4";
@@ -160,7 +218,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLatestVersion_PreRelease()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             // "twitter-bootstrap@3.3.0"
             const string libraryName = "sampleLibrary";
@@ -173,7 +231,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public void ConvertToLibraryGroup_ValidJsonCatalog()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
             string json = @"{""results"":[{""name"":""1140"",""latest"":""https://cdnjs.cloudflare.com/ajax/libs/1140/2.0/1140.min.css"",
 ""description"":""The 1140 grid fits perfectly into a 1280 monitor. On smaller monitors it becomes fluid and adapts to the width of the browser.""
 ,""version"":""2.0""}],""total"":1}";
@@ -193,7 +251,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [DataRow(@"{""results"":[12}")]
         public void ConvertToLibraryGroup_InvalidJsonCatalog(string json)
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IEnumerable<CdnjsLibraryGroup> libraryGroup = sut.ConvertToLibraryGroups(json);
 
@@ -203,7 +261,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public void ConvertToAssets_ValidAsset()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
             string json = @"{""name"":""jquery"",""filename"":""jquery.min.js"",""version"":""3.3.1"",""description"":""JavaScript library for DOM operations"",
 ""homepage"":""http://jquery.com/"",""keywords"":[""jquery"",""library"",""ajax"",""framework"",""toolkit"",""popular""],""namespace"":""jQuery"",
 ""repository"":{""type"":""git"",""url"":""https://github.com/jquery/jquery.git""},""license"":""MIT"",
@@ -231,11 +289,41 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public void ConvertToAssets_InvalidAsset()
         {
             string json = "abcd";
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             List<Asset> list = sut.ConvertToAssets(json);
 
             Assert.IsNull(list);
+        }
+
+        [TestMethod]
+        public async Task SearchAsync_CacheDownloadFailsWhenCacheFileExists_UseExistingCachedContents()
+        {
+            var prepopulatedCacheFiles = new Dictionary<string, string>
+            {
+                {"cache.json", FakeCdnjsCacheService.FakeCatalogContents },
+            };
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetCatalogAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                            .Throws(new ResourceDownloadException("Cache download failed."));
+            CdnjsCatalog sut = SetupCatalog(fakeCacheService.Object, prepopulatedCacheFiles);
+
+            IReadOnlyList<ILibraryGroup> result = await sut.SearchAsync("test", 5, CancellationToken.None);
+
+            Assert.AreEqual(2, result.Count);
+        }
+
+        [TestMethod]
+        public async Task SearchAsync_CacheDownloadFailsWhenNoCacheFileExists_FindsNoMatches()
+        {
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetCatalogAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                            .Throws(new ResourceDownloadException("Cache download failed."));
+            CdnjsCatalog sut = SetupCatalog(fakeCacheService.Object);
+
+            IReadOnlyList<ILibraryGroup> result = await sut.SearchAsync("test", 5, CancellationToken.None);
+
+            Assert.AreEqual(0, result.Count);
         }
     }
 }
