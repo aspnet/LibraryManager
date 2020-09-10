@@ -4,14 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Converters"
+             xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
              xmlns:models="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Models"
-             xmlns:resources="clr-namespace:Microsoft.Web.LibraryManager.Vsix.Resources"
              mc:Ignorable="d" x:Name="ThisControl"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}">
     <UserControl.Resources>
         <converters:BoldingConverter x:Key="BoldingConverter" />
         <converters:CheckBoxAutomationNameConverter x:Key="CheckBoxAutomationNameConverter" />
-        <converters:PackageItemIconConverter x:Key="IconConverter" />
         <converters:VisibleIfNonNullConverter x:Key="VisibleIfNonNullConverter" />
     </UserControl.Resources>
     <TreeView ItemsSource="{Binding Path=DisplayRoots, Mode=OneWay}"
@@ -19,7 +18,7 @@
               BorderThickness="0"
               PreviewKeyUp="OnPreviewKeyUp">
         <TreeView.ItemContainerStyle>
-            <Style TargetType="{x:Type TreeViewItem}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
+            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource ThemedTreeViewItemStyle}" d:DataContext="{d:DesignInstance Type=TreeViewItem, IsDesignTimeCreatable=False}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                 <Setter Property="AutomationProperties.Name">
                     <Setter.Value>
@@ -45,7 +44,7 @@
             </Style>
         </TreeView.ItemContainerStyle>
         <TreeView.Resources>
-            <Style TargetType="TreeView">
+            <Style TargetType="TreeView" BasedOn="{StaticResource ThemedTreeViewStyle}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=IsTreeViewEmpty}" Value="True">
                         <Setter Property="Visibility" Value="Hidden" />
@@ -64,18 +63,11 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Margin="1 0" Width="16" Height="16" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Source, Converter={StaticResource VisibleIfNonNullConverter}}" VerticalAlignment="Center">
-                            <Image.Source>
-                                <MultiBinding Converter="{StaticResource IconConverter}">
-                                    <Binding Path="ItemType" />
-                                    <Binding Path="Name" />
-                                    <Binding Path="IsExpanded" />
-                                    <Binding RelativeSource="{RelativeSource Self}" Path="ActualWidth" />
-                                    <Binding RelativeSource="{RelativeSource Self}" Path="ActualHeight" />
-                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=TreeView}" />
-                                </MultiBinding>
-                            </Image.Source>
-                        </Image>
+                        <imaging:CrispImage Grid.Column="0" Margin="1 0" Width="16" Height="16"
+                                            Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Source, Converter={StaticResource VisibleIfNonNullConverter}}"
+                                            VerticalAlignment="Center"
+                                            Moniker="{Binding Icon}">
+                        </imaging:CrispImage>
                         <Label
                             Grid.Column="1"
                             Margin="2 0 0 0"

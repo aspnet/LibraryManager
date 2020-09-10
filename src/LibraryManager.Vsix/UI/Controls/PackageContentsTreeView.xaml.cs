@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
+using Microsoft.Web.LibraryManager.Vsix.UI.Theming;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
@@ -12,6 +13,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
     {
         public PackageContentsTreeView()
         {
+            this.ShouldBeThemed();
             InitializeComponent();
         }
 

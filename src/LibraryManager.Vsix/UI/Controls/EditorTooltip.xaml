@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
              mc:Ignorable="d" MaxWidth="400"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -16,7 +17,9 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Image x:Name="Glyph" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Width="32" Height="32" Margin="4 3" VerticalAlignment="Top" />
+        <imaging:CrispImage x:Name="Glyph"
+               Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+               Width="32" Height="32" Margin="4 3" VerticalAlignment="Top" />
         <Label x:Name="ItemName" Grid.Row="0" Grid.Column="1" FontWeight="Bold" />
         <Label Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="0 0 0 3">
             <TextBlock x:Name="Description" TextWrapping="Wrap"  />

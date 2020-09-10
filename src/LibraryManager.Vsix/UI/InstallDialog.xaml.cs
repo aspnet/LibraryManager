@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
+using Microsoft.Web.LibraryManager.Vsix.UI.Theming;
 using Shell = Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI
 {
-    internal partial class InstallDialog : DialogWindow, IInstallDialog
+    internal partial class InstallDialog : ThemedWindow, IInstallDialog
     {
         public InstallDialog(InstallDialogViewModel viewModel)
         {
