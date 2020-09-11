@@ -1,7 +1,9 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,15 +20,44 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
     [TestClass]
     public class UnpkgCatalogTest
     {
-        private UnpkgCatalog SetupCatalog(IWebRequestHandler requestHandler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null)
+        private readonly List<string> _prepopulatedFiles = new List<string>();
+
+        private UnpkgCatalog SetupCatalog(IWebRequestHandler requestHandler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null, Dictionary<string, string> prepopulateFiles = null)
         {
             requestHandler = requestHandler ?? new Mocks.WebRequestHandler();
+
+            string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
+            var cacheService = new CacheService(requestHandler);
+
+            if (prepopulateFiles != null)
+            {
+                foreach (KeyValuePair<string, string> item in prepopulateFiles)
+                {
+                    // put the provider IdText into the path to mimic the provider implementation
+                    string filePath = Path.Combine(cacheFolder, UnpkgProvider.IdText, item.Key);
+                    string directoryPath = Path.GetDirectoryName(filePath);
+                    Directory.CreateDirectory(directoryPath);
+                    File.WriteAllText(filePath, item.Value);
+                    _prepopulatedFiles.Add(filePath);
+                }
+            }
+
             return new UnpkgCatalog(UnpkgProvider.IdText,
                                     new VersionedLibraryNamingScheme(),
                                     new Logger(),
-                                    requestHandler,
                                     infoFactory ?? new NpmPackageInfoFactory(requestHandler),
-                                    packageSearch ?? new NpmPackageSearch(requestHandler));
+                                    packageSearch ?? new NpmPackageSearch(requestHandler),
+                                    cacheService,
+                                    Path.Combine(cacheFolder, UnpkgProvider.IdText));
+        }
+
+        [TestCleanup]
+        public void CleanupPrepopulatedFiles()
+        {
+            foreach (string file in _prepopulatedFiles)
+            {
+                File.Delete(file);
+            }
         }
 
         [TestMethod]
@@ -65,6 +96,36 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () => await sut.GetLibraryAsync("invalid_id", "invalid_version", CancellationToken.None));
         }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_RequestFilesFailsWithNoCache_BlowsUp()
+        {
+            var webRequestHandler = new Mock<IWebRequestHandler>();
+            webRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                             .Throws(new ResourceDownloadException("Cache download blocked."));
+
+            UnpkgCatalog sut = SetupCatalog(webRequestHandler.Object);
+
+            await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () => await sut.GetLibraryAsync("fakeLibrary", "1.1.1", CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_RequestFilesFailsWithFileListCached_UseCachedContents()
+        {
+            var prepopulateFiles = new Dictionary<string, string>
+            {
+                { @"fakeLibrary\1.1.1-filelist.json", UnpkgCatalogSetups.FakeFileList }
+            };
+            var webRequestHandler = new Mock<IWebRequestHandler>();
+            webRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                             .Throws(new ResourceDownloadException("Cache download blocked."));
+            UnpkgCatalog sut = SetupCatalog(webRequestHandler.Object, prepopulateFiles: prepopulateFiles);
+
+            ILibrary result = await sut.GetLibraryAsync("fakeLibrary", "1.1.1", CancellationToken.None);
+
+            Assert.IsNotNull(result);
+        }
+
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
@@ -258,6 +319,39 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         }
 
         [TestMethod]
+        public async Task GetLatestVersion_WebResponseFailedButNoCachedFile_ReturnsNull()
+        {
+            var webRequestHandler = new Mock<IWebRequestHandler>();
+            webRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                             .Throws(new ResourceDownloadException("Cache download blocked."));
+
+            UnpkgCatalog sut = SetupCatalog(webRequestHandler.Object);
+
+            string result = await sut.GetLatestVersion("fakeLibrary", false, CancellationToken.None);
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public async Task GetLatestVersion_WebResponseFailedButHasCachedFile_ReturnsLatestCachedVersion()
+        {
+            var prepopulateFiles = new Dictionary<string, string>
+            {
+                { "fakeLibrary-Latest.json", @"{ ""version"": ""0.9.0"" }" }
+            };
+            var webRequestHandler = new Mock<IWebRequestHandler>();
+            webRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                             .Throws(new ResourceDownloadException("Cache download blocked."));
+
+            UnpkgCatalog sut = SetupCatalog(webRequestHandler.Object, prepopulateFiles: prepopulateFiles);
+
+            string result = await sut.GetLatestVersion("fakeLibrary", false, CancellationToken.None);
+
+            Assert.AreEqual("0.9.0", result);
+        }
+
+
+        [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopedPackageNameisSingleAt_ReturnsNoCompletions()
         {
             UnpkgCatalog sut = SetupCatalog();
@@ -301,19 +395,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
     {
         public static Mocks.WebRequestHandler SetupFiles(this Mocks.WebRequestHandler h, string libraryId)
         {
-            string files = @"{
-  ""type"": ""directory"",
-  ""files"": [
-    {
-      ""path"": ""testFile.js"",
-      ""type"": ""file""
-    }
-  ]
-}";
-
             (string name, string version) = new VersionedLibraryNamingScheme().GetLibraryNameAndVersion(libraryId);
 
-            return h.ArrangeResponse(string.Format(UnpkgCatalog.LibraryFileListUrlFormat, name, version), files);
+            return h.ArrangeResponse(string.Format(UnpkgCatalog.LibraryFileListUrlFormat, name, version), FakeFileList);
         }
 
         public static Mocks.WebRequestHandler SetupVersions(this Mocks.WebRequestHandler h, string libraryName)
@@ -324,6 +408,16 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
             return h.ArrangeResponse(string.Format(UnpkgCatalog.LatestLibraryVersonUrl, libraryName), packageData);
         }
+
+        public const string FakeFileList = @"{
+  ""type"": ""directory"",
+  ""files"": [
+    {
+      ""path"": ""testFile.js"",
+      ""type"": ""file""
+    }
+  ]
+}";
     }
 
 }

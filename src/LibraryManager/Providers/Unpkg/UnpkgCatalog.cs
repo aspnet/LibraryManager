@@ -3,12 +3,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
+using Microsoft.Web.LibraryManager.Contracts.Caching;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg
@@ -25,16 +27,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         private readonly string _providerId;
         private readonly ILibraryNamingScheme _libraryNamingScheme;
         private readonly ILogger _logger;
-        private readonly IWebRequestHandler _webRequestHandler;
+        private readonly ICacheService _cacheService;
+        private readonly string _cacheFolder;
 
-        public UnpkgCatalog(string providerId, ILibraryNamingScheme namingScheme, ILogger logger, IWebRequestHandler webRequestHandler, INpmPackageInfoFactory packageInfoFactory, INpmPackageSearch packageSearch)
+        public UnpkgCatalog(string providerId, ILibraryNamingScheme namingScheme, ILogger logger, INpmPackageInfoFactory packageInfoFactory, INpmPackageSearch packageSearch, ICacheService cacheService, string cacheFolder)
         {
             _packageInfoFactory = packageInfoFactory;
             _packageSearch = packageSearch;
             _providerId = providerId;
             _libraryNamingScheme = namingScheme;
             _logger = logger;
-            _webRequestHandler = webRequestHandler;
+            _cacheService = cacheService;
+            _cacheFolder = cacheFolder;
         }
 
         public async Task<string> GetLatestVersion(string libraryName, bool includePreReleases, CancellationToken cancellationToken)
@@ -44,8 +48,27 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             try
             {
                 string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, libraryName);
+                string latestCacheFile = Path.Combine(_cacheFolder, $"{libraryName}-{LatestVersionTag}.json");
 
-                JObject packageObject = await _webRequestHandler.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
+                string latestJson;
+                try
+                {
+                    latestJson = await _cacheService.GetMetadataAsync(latestLibraryVersionUrl, latestCacheFile, cancellationToken);
+                }
+                catch (ResourceDownloadException)
+                {
+                    // TODO: add telemetry
+                    if (File.Exists(latestCacheFile))
+                    {
+                        latestJson = await FileHelpers.ReadFileAsTextAsync(latestCacheFile, cancellationToken);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                var packageObject = (JObject)JsonConvert.DeserializeObject(latestJson);
 
                 if (packageObject != null)
                 {
@@ -98,7 +121,26 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             var result = new List<string>();
 
             string libraryFileListUrl = string.Format(LibraryFileListUrlFormat, libraryName, version);
-            JObject fileListObject = await _webRequestHandler.GetJsonObjectViaGetAsync(libraryFileListUrl, cancellationToken).ConfigureAwait(false);
+            string libraryFileListCacheFile = Path.Combine(_cacheFolder, libraryName, $"{version}-filelist.json");
+
+            string fileList;
+            try
+            {
+                fileList = await _cacheService.GetMetadataAsync(libraryFileListUrl, libraryFileListCacheFile, cancellationToken);
+            }
+            catch (ResourceDownloadException)
+            {
+                if (File.Exists(libraryFileListCacheFile))
+                {
+                    fileList = await FileHelpers.ReadFileAsTextAsync(libraryFileListCacheFile, cancellationToken);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            var fileListObject = (JObject)JsonConvert.DeserializeObject(fileList);
 
             if (fileListObject != null)
             {
