@@ -1,12 +1,15 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Caching;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Providers.jsDelivr;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
@@ -18,15 +21,50 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
     [TestClass]
     public class JsDelivrCatalogTest
     {
-        private static JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null)
+        private readonly List<string> _prepopulatedFiles = new List<string>();
+
+        private JsDelivrCatalog SetupCatalog(IWebRequestHandler webRequestHandler = null,
+                                                    INpmPackageSearch packageSearch = null,
+                                                    INpmPackageInfoFactory infoFactory = null,
+                                                    ICacheService cacheService = null,
+                                                    Dictionary<string, string> prepopulateFiles = null)
         {
             webRequestHandler = webRequestHandler ?? new Mocks.WebRequestHandler();
+            string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
+            cacheService = cacheService ?? new CacheService(webRequestHandler);
+
+            if (prepopulateFiles != null)
+            {
+                foreach (KeyValuePair<string, string> item in prepopulateFiles)
+                {
+                    // put the provider IdText into the path to mimic the provider implementation
+                    string filePath = Path.Combine(cacheFolder, JsDelivrProvider.IdText, item.Key);
+                    string directoryPath = Path.GetDirectoryName(filePath);
+                    Directory.CreateDirectory(directoryPath);
+                    File.WriteAllText(filePath, item.Value);
+                    _prepopulatedFiles.Add(filePath);
+                }
+            }
+
             return new JsDelivrCatalog(JsDelivrProvider.IdText,
                                        new VersionedLibraryNamingScheme(),
                                        new Mocks.Logger(),
-                                       webRequestHandler,
                                        infoFactory ?? new NpmPackageInfoFactory(webRequestHandler),
-                                       packageSearch ?? new NpmPackageSearch(webRequestHandler));
+                                       packageSearch ?? new NpmPackageSearch(webRequestHandler),
+                                       cacheService,
+                                       Path.Combine(cacheFolder, JsDelivrProvider.IdText));
+        }
+
+        [TestCleanup]
+        public void CleanupPrepopulatedFiles()
+        {
+            foreach (string file in _prepopulatedFiles)
+            {
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                }
+            }
         }
 
         [TestMethod]
@@ -72,6 +110,39 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
 
             await Assert.ThrowsExceptionAsync<InvalidLibraryException>(() => sut.GetLibraryAsync("invalid_id", "", CancellationToken.None));
         }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_HasCachedFileInfo_ShouldNotMakeWebRequest()
+        {
+            var prepopulateFiles = new Dictionary<string, string>
+            {
+                { @"fakeLibrary\2.7.1-filelist.json", JsDelivrCatalogSetups.FakeFileList }
+            };
+            var mockCacheService = new Mock<ICacheService>();
+            JsDelivrCatalog sut = SetupCatalog(cacheService: mockCacheService.Object, prepopulateFiles: prepopulateFiles);
+
+            CancellationToken token = CancellationToken.None;
+            ILibrary library = await sut.GetLibraryAsync("fakeLibrary", "2.7.1", token);
+
+            Assert.IsNotNull(library);
+            Assert.AreEqual("fakeLibrary", library.Name);
+            Assert.AreEqual("2.7.1", library.Version);
+            CollectionAssert.Contains(library.Files.Keys.ToList(), "testFile.js");
+
+            mockCacheService.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_DoesNotHaveCachedFileInfoAndCacheRequestFails_ShouldThrow()
+        {
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetMetadataAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                            .Throws(new ResourceDownloadException("Cache request blocked for testing"));
+            JsDelivrCatalog sut = SetupCatalog(cacheService: fakeCacheService.Object);
+
+            await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () => await sut.GetLibraryAsync("fakeLibrary", "1.1.1", CancellationToken.None));
+        }
+
 
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ScopedPackageNameisSingleAt_ReturnsNoCompletions_MakesNoWebRequest()
@@ -256,19 +327,70 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         }
 
         [TestMethod]
-        [Ignore] // Enable it after version completion sorting is committed.
-                 // TODO: Also add a test for GitHub version completion
-        public async Task GetLibraryCompletionSetAsync_Versions()
+        public async Task GetLibraryCompletionSetAsync_Versions_Npm_ResultsFromWebRequest()
         {
-            JsDelivrCatalog sut = SetupCatalog();
+            Mocks.WebRequestHandler fakeHandler = new Mocks.WebRequestHandler().SetupVersions("fakeLib", "fake/fakeLib");
+            var fakeNpmPackageInfoFactory = new Mock<INpmPackageInfoFactory>();
+            fakeNpmPackageInfoFactory.Setup(x => x.GetPackageInfoAsync("fakeLib", It.IsAny<CancellationToken>()))
+                                     .Returns(Task.FromResult(new NpmPackageInfo("fakeLib", "Fake library", "1.0.0", new[] { SemanticVersion.Parse("1.0.0"), SemanticVersion.Parse("2.0.0-beta") })));
+            JsDelivrCatalog sut = SetupCatalog(infoFactory: fakeNpmPackageInfoFactory.Object);
 
-            CompletionSet result = await sut.GetLibraryCompletionSetAsync("jquery@", 7);
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync("fakeLib@", 8);
 
-            Assert.AreEqual(7, result.Start);
+            Assert.AreEqual(8, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.IsTrue(result.Completions.Count() > 0);
-            Assert.AreEqual("1.5.1", result.Completions.Last().DisplayText);
-            Assert.AreEqual("jquery@1.5.1", result.Completions.Last().InsertionText);
+            CollectionAssert.AreEquivalent(new[] { "1.0.0", "2.0.0-beta", "latest" },
+                                           result.Completions.Select(x => x.DisplayText).ToList());
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionsSetAsync_Versions_GitHub_ResultsFromWebRequest()
+        {
+            var cacheService = new Mock<ICacheService>();
+            cacheService.Setup(x => x.GetMetadataAsync(string.Format(JsDelivrCatalog.LatestLibraryVersionUrlGH, "fake/fakeLib"), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                        .Returns(Task.FromResult(JsDelivrCatalogSetups.FakeGitHubVersions));
+            JsDelivrCatalog sut = SetupCatalog(cacheService: cacheService.Object);
+
+            string fakeLibName = "fake/fakeLib@abcdef";
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(fakeLibName, fakeLibName.IndexOf('c'));
+
+            Assert.IsNotNull(result);
+            CollectionAssert.AreEquivalent(new[] { "0.1.2", "1.2.3", "latest" }, result.Completions.Select(x => x.DisplayText).ToList());
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionsSetAsync_Versions_GitHub_WebRequestFailsButHasCachedResults_ShouldUseCachedResults()
+        {
+            var prepopulateFiles = new Dictionary<string, string>
+            {
+                { @"fake\fakeLib\github-versions-cache.json", JsDelivrCatalogSetups.FakeGitHubVersions }
+            };
+            var cacheService = new Mock<ICacheService>();
+            cacheService.Setup(x => x.GetMetadataAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                        .Throws(new ResourceDownloadException("Cache request blocked for testing."));
+            JsDelivrCatalog sut = SetupCatalog(cacheService: cacheService.Object, prepopulateFiles: prepopulateFiles);
+
+            string fakeLibName = "fake/fakeLib@abcdef";
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(fakeLibName, fakeLibName.IndexOf('c'));
+
+            Assert.IsNotNull(result);
+            CollectionAssert.AreEquivalent(new[] { "0.1.2", "1.2.3", "latest" }, result.Completions.Select(x => x.DisplayText).ToList());
+        }
+
+        [TestMethod]
+        public async Task GetLibraryCompletionsSetAsync_Versions_GitHub_WebRequestFailedAndNoCachedResult_ShouldReturnEmptyList()
+        {
+            var cacheService = new Mock<ICacheService>();
+            cacheService.Setup(x => x.GetMetadataAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                        .Throws(new ResourceDownloadException("Cache request blocked for testing."));
+            JsDelivrCatalog sut = SetupCatalog(cacheService: cacheService.Object);
+
+            string fakeLibName = "fake/fakeLib@abcdef";
+            CompletionSet result = await sut.GetLibraryCompletionSetAsync(fakeLibName, fakeLibName.IndexOf('c'));
+
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.Completions.Any());
         }
 
         [TestMethod]
@@ -305,6 +427,43 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         }
 
         [TestMethod]
+        public async Task GetLatestVersion_WebRequestFailsButNoCachedFile_ReturnsNull()
+        {
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetMetadataAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                     .Throws(new ResourceDownloadException("Cache download blocked"));
+            JsDelivrCatalog sut = SetupCatalog(cacheService: fakeCacheService.Object);
+
+            string result = await sut.GetLatestVersion("fakeLibrary", false, CancellationToken.None);
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        [DataRow(@"fakeLibrary@0.1.0", "fakeLibrary-npm-latest.json", "0.9.0")]
+        [DataRow(@"@fake/fakeLibrary@0.1.0", "@fake_fakeLibrary-npm-latest.json", "0.9.0")]
+        [DataRow(@"fake/fakeLibrary@abcdef", "fake_fakeLibrary-github-latest.json", "0.8.0")]
+        public async Task GetLatestVersion_WebRequestFailsButHasCachedFile_ReturnsCachedValue(string libraryId, string cacheFileName, string expectedVersion)
+        {
+            var prepopulateFiles = new Dictionary<string, string>
+            {
+                { cacheFileName, $@"{{
+    ""tags"": {{
+        ""latest"": ""{expectedVersion}""
+    }}
+}}" }
+            };
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetMetadataAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                     .Throws(new ResourceDownloadException("Cache download blocked"));
+            JsDelivrCatalog sut = SetupCatalog(cacheService: fakeCacheService.Object, prepopulateFiles: prepopulateFiles);
+
+            string result = await sut.GetLatestVersion(libraryId, false, CancellationToken.None);
+
+            Assert.AreEqual(expectedVersion, result);
+        }
+
+        [TestMethod]
         public async Task GetLibraryCompletionSetAsync_ReturnsCompletionWithLatestVersion()
         {
             //Arrange
@@ -336,10 +495,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
     {
         public static Mocks.WebRequestHandler SetupFiles(this Mocks.WebRequestHandler h, string libraryId, string githubLibraryId)
         {
-            string files = @"{ ""files"": [ { ""name"": ""testFile.js"" } ] }";
 
-            return h.ArrangeResponse(string.Format(JsDelivrCatalog.LibraryFileListUrlFormat, libraryId), files)
-                    .ArrangeResponse(string.Format(JsDelivrCatalog.LibraryFileListUrlFormatGH, githubLibraryId), files);
+            return h.ArrangeResponse(string.Format(JsDelivrCatalog.LibraryFileListUrlFormat, libraryId), FakeFileList)
+                    .ArrangeResponse(string.Format(JsDelivrCatalog.LibraryFileListUrlFormatGH, githubLibraryId), FakeFileList);
         }
 
         public static Mocks.WebRequestHandler SetupVersions(this Mocks.WebRequestHandler h, string libraryId, string githubLibraryId)
@@ -354,5 +512,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             return h.ArrangeResponse(string.Format(JsDelivrCatalog.LatestLibraryVersionUrl, libraryId), versions)
                     .ArrangeResponse(string.Format(JsDelivrCatalog.LatestLibraryVersionUrlGH, githubLibraryId), versions);
         }
+
+        public const string FakeFileList = @"{ ""files"": [ { ""name"": ""testFile.js"" } ] }";
+        public const string FakeGitHubVersions = @"{ ""versions"": [ ""0.1.2"", ""1.2.3"" ] }";
     }
 }
