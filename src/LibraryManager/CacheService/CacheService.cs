@@ -17,9 +17,7 @@ namespace Microsoft.Web.LibraryManager
     /// </summary>
     public class CacheService : ICacheService
     {
-        // TO DO: Move these expirations to the provider
-        private const int CatalogExpiresAfterDays = 1;
-        private const int MetadataExpiresAfterDays = 1;
+        private const int DefaultCacheExpiresAfterDays = 1;
         private const int MaxConcurrentDownloads = 10;
 
         private readonly IWebRequestHandler _requestHandler;
@@ -50,30 +48,6 @@ namespace Microsoft.Web.LibraryManager
 
                 return CacheFolderValue;
             }
-        }
-
-        /// <summary>
-        /// Returns the provider's catalog from the provided Url to cacheFile
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="cacheFile"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<string> GetCatalogAsync(string url, string cacheFile, CancellationToken cancellationToken)
-        {
-            return await GetResourceAsync(url, cacheFile, CatalogExpiresAfterDays, cancellationToken);
-        }
-
-        /// <summary>
-        /// Returns library metadata from provided Url to cacheFile
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="cacheFile"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<string> GetMetadataAsync(string url, string cacheFile, CancellationToken cancellationToken)
-        {
-            return await GetResourceAsync(url, cacheFile, MetadataExpiresAfterDays, cancellationToken);
         }
 
         /// <summary>
@@ -140,6 +114,46 @@ namespace Microsoft.Web.LibraryManager
                     await DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
                 }
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<string> GetContentsFromUriWithCacheFallbackAsync(string url, string cacheFile, CancellationToken cancellationToken)
+        {
+            string contents;
+            try
+            {
+                contents = await GetResourceAsync(url, cacheFile, DefaultCacheExpiresAfterDays, cancellationToken);
+            }
+            catch (ResourceDownloadException)
+            {
+                // TODO: Log telemetry
+                if (File.Exists(cacheFile))
+                {
+                    contents = await FileHelpers.ReadFileAsTextAsync(cacheFile, cancellationToken);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return contents;
+        }
+
+        /// <inheritdoc />
+        public async Task<string> GetContentsFromCachedFileWithWebRequestFallbackAsync(string cacheFile, string url, CancellationToken cancellationToken)
+        {
+            string contents;
+            if (File.Exists(cacheFile))
+            {
+                contents = await FileHelpers.ReadFileAsTextAsync(cacheFile, cancellationToken);
+            }
+            else
+            {
+                contents = await GetResourceAsync(url, cacheFile, DefaultCacheExpiresAfterDays, cancellationToken);
+            }
+
+            return contents;
         }
     }
 }

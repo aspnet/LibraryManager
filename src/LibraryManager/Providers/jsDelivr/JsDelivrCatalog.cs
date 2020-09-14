@@ -61,28 +61,13 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 bool isGitHub = IsGitHub(libraryId);
                 string latestLibraryVersionUrl = string.Format(isGitHub ? LatestLibraryVersionUrlGH : LatestLibraryVersionUrl, name);
                 string cacheFileType = isGitHub ? "github" : "npm";
-                string latestLibraryVersionCacheFile = Path.Combine(_cacheFolder, $"{name.Replace("/", "_")}-{cacheFileType}-{LatestVersionTag}.json");
+                string latestLibraryVersionCacheFile = Path.Combine(_cacheFolder, name, $"{cacheFileType}-{LatestVersionTag}.json");
 
-                string latestVersionContent;
-                try
-                {
-                    latestVersionContent = await _cacheService.GetMetadataAsync(latestLibraryVersionUrl, latestLibraryVersionCacheFile, cancellationToken);
-                }
-                catch (ResourceDownloadException)
-                {
-                    // TODO: Log telemetry
-                    if (File.Exists(latestLibraryVersionCacheFile))
-                    {
-                        latestVersionContent = await FileHelpers.ReadFileAsTextAsync(latestLibraryVersionCacheFile, cancellationToken);
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                string latestVersionContent = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(latestLibraryVersionUrl,
+                                                                                                           latestLibraryVersionCacheFile,
+                                                                                                           cancellationToken);
 
                 var packageObject = (JObject)JsonConvert.DeserializeObject(latestVersionContent);
-
                 if (packageObject != null)
                 {
                     var versions = packageObject["tags"] as JObject;
@@ -129,16 +114,10 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
             (string libraryName, string libraryVersion) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryId);
             string libraryFileListCacheFile = Path.Combine(_cacheFolder, libraryName, $"{libraryVersion}-filelist.json");
-            string fileListJson;
-            if (File.Exists(libraryFileListCacheFile))
-            {
-                fileListJson = await FileHelpers.ReadFileAsTextAsync(libraryFileListCacheFile, cancellationToken);
-            }
-            else
-            {
-                string libraryFileListUrl = string.Format(IsGitHub(libraryId) ? LibraryFileListUrlFormatGH : LibraryFileListUrlFormat, libraryId);
-                fileListJson = await _cacheService.GetMetadataAsync(libraryFileListUrl, libraryFileListCacheFile, cancellationToken);
-            }
+            string libraryFileListUrl = string.Format(IsGitHub(libraryId) ? LibraryFileListUrlFormatGH : LibraryFileListUrlFormat, libraryId);
+            string fileListJson = await _cacheService.GetContentsFromCachedFileWithWebRequestFallbackAsync(libraryFileListCacheFile,
+                                                                                                           libraryFileListUrl,
+                                                                                                           cancellationToken);
 
             if ((JObject)JsonConvert.DeserializeObject(fileListJson) is var fileListObject)
             {
@@ -326,22 +305,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         {
             var versions = new List<string>();
             string versionsCacheFile = Path.Combine(_cacheFolder, name, "github-versions-cache.json");
-            string versionsJson;
-            try
-            {
-                versionsJson = await _cacheService.GetMetadataAsync(string.Format(LatestLibraryVersionUrlGH, name), versionsCacheFile, cancellationToken);
-            }
-            catch (ResourceDownloadException)
-            {
-                if (File.Exists(versionsCacheFile))
-                {
-                    versionsJson = await FileHelpers.ReadFileAsTextAsync(versionsCacheFile, cancellationToken);
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            string versionsUrl = string.Format(LatestLibraryVersionUrlGH, name);
+            string versionsJson = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(versionsUrl, versionsCacheFile, cancellationToken);
 
             var versionsObject = (JObject)JsonConvert.DeserializeObject(versionsJson);
             var versionsArray = versionsObject["versions"] as JArray;

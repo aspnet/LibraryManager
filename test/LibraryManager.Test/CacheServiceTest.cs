@@ -4,13 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Mocks;
-using Microsoft.Web.LibraryManager.Providers.Cdnjs;
-using Microsoft.Web.LibraryManager.Providers.FileSystem;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test
 {
@@ -18,24 +18,15 @@ namespace Microsoft.Web.LibraryManager.Test
     public class CacheServiceTest
     {
 
-        private string _filePath;
         private string _cacheFolder;
         private string _projectFolder;
-        private string _catalogCacheFile;
-        private IDependencies _dependencies;
-        private HostInteraction _hostInteraction;
         private CacheService _cacheService;
 
         [TestInitialize]
         public void Setup()
         {
             _cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
-            _catalogCacheFile = Path.Combine(_cacheFolder, "TestCatalog.json");
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
-            _filePath = Path.Combine(_projectFolder, "libman.json");
-
-            _hostInteraction = new HostInteraction(_projectFolder, _cacheFolder);
-            _dependencies = new Dependencies(_hostInteraction, new CdnjsProviderFactory(), new FileSystemProviderFactory());
             _cacheService = new CacheService(new Mocks.WebRequestHandler());
 
             Directory.CreateDirectory(_projectFolder);
@@ -45,67 +36,6 @@ namespace Microsoft.Web.LibraryManager.Test
         public void Cleanup()
         {
             TestUtils.DeleteDirectoryWithRetries(_projectFolder);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(FileNotFoundException))]
-        public async Task GetCatalogAsync_ThrowsForInvalidCacheFilePath()
-        {
-            string validUrl = "Valid Url";
-
-            string content = await _cacheService.GetCatalogAsync(validUrl, "invalid path", CancellationToken.None);
-        }
-
-        [TestMethod]
-        public async Task GetCatalogAsync_WritesToCache()
-        {
-            string validUrl = "Valid Url";
-            string content = await _cacheService.GetCatalogAsync(validUrl, _catalogCacheFile, CancellationToken.None);
-
-            Assert.IsTrue(!string.IsNullOrEmpty(content));
-            Assert.IsTrue(File.Exists(_catalogCacheFile));
-        }
-
-        [TestMethod]
-        public async Task GetCatalogAsync_ReadsFromCache()
-        {
-            string invalidUrl = "Invalid Url";
-            string content = await _cacheService.GetCatalogAsync(invalidUrl, _catalogCacheFile, CancellationToken.None);
-
-            Assert.IsTrue(!string.IsNullOrEmpty(content));
-            Assert.IsTrue(File.Exists(_catalogCacheFile));
-        }
-
-        [TestMethod]
-        public async Task GetCatalogAsync_ReadsFromCache_IfNotExpired()
-        {
-            string validUrl = "Valid Url";
-
-            // setup
-            await _cacheService.GetCatalogAsync(validUrl, _catalogCacheFile, CancellationToken.None);
-            DateTime beforeCacheFileDT = File.GetCreationTime(_catalogCacheFile);
-
-            // act
-            await _cacheService.GetCatalogAsync(validUrl, _catalogCacheFile, CancellationToken.None);
-            DateTime afterCacheFileDT = File.GetCreationTime(_catalogCacheFile);
-
-            // verify
-            Assert.IsTrue(beforeCacheFileDT.Equals(afterCacheFileDT));
-            Assert.IsTrue(File.Exists(_catalogCacheFile));
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(OperationCanceledException))]
-        public async Task GetCatalogAsync_Throws_OperationCanceled_WhenCancelled()
-        {
-            TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
-
-            string invalidUrl = "Invalid Url";
-
-            tokenSource.Cancel();
-            await _cacheService.GetCatalogAsync(invalidUrl, _catalogCacheFile, tokenSource.Token);
-
         }
 
         [TestMethod]
@@ -149,6 +79,125 @@ namespace Microsoft.Web.LibraryManager.Test
             // verify
             Assert.IsTrue(File.Exists(libraryFile1_Path));
             Assert.IsTrue(File.Exists(libraryFile2_Path));
+        }
+
+        [TestMethod]
+        public async Task GetContentsFromCachedFileWithWebRequestFallbackAsync_InvalidCacheFilePath_ShouldThrow()
+        {
+            await Assert.ThrowsExceptionAsync<FileNotFoundException>(async () =>
+                await _cacheService.GetContentsFromCachedFileWithWebRequestFallbackAsync("unrooted path", "http://example.com", CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetContentsFromCachedFileWithWebRequestFallbackAsync_WebRequestFails_ShouldThrow()
+        {
+            string cachePath = Path.Combine(_cacheFolder, "testfile.json");
+            if (File.Exists(cachePath))
+            {
+                File.Delete(cachePath);
+            }
+            var fakeRequestHandler = new Mock<IWebRequestHandler>();
+            fakeRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                              .Throws(new ResourceDownloadException("Request blocked for testing"));
+            var sut = new CacheService(fakeRequestHandler.Object);
+
+            await Assert.ThrowsExceptionAsync<ResourceDownloadException>(async () =>
+                await sut.GetContentsFromCachedFileWithWebRequestFallbackAsync(cachePath, "any url", CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetContentsFromCachedFileWithWebRequestFallbackAsync_CacheFileExists_ShouldReturnFileContentsWithoutWebRequest()
+        {
+            string cachePath = Path.Combine(_cacheFolder, "testfile.json");
+            File.WriteAllText(cachePath, "Test file");
+            var mockRequestHandler = new Mock<IWebRequestHandler>();
+            var sut = new CacheService(mockRequestHandler.Object);
+
+            string result = await sut.GetContentsFromCachedFileWithWebRequestFallbackAsync(cachePath, "http://example.com", CancellationToken.None);
+            File.Delete(cachePath);
+
+            Assert.AreEqual("Test file", result);
+            mockRequestHandler.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        public async Task GetContentsFromCachedFileWithWebRequestFallbackAsync_CacheFileNotExists_ShouldMakeWebRequestAndSaveToFile()
+        {
+            string cachePath = Path.Combine(_cacheFolder, "testfile.json");
+            if (File.Exists(cachePath))
+            {
+                File.Delete(cachePath);
+            }
+            var mockRequestHandler = new Mock<IWebRequestHandler>();
+            mockRequestHandler.Setup(x => x.GetStreamAsync("http://example.com", It.IsAny<CancellationToken>()))
+                              .Returns(Task.FromResult<Stream>(new MemoryStream(Encoding.Default.GetBytes("Test web request"))));
+            var sut = new CacheService(mockRequestHandler.Object);
+
+            string result = await sut.GetContentsFromCachedFileWithWebRequestFallbackAsync(cachePath, "http://example.com", CancellationToken.None);
+
+            Assert.AreEqual("Test web request", result);
+            Assert.IsTrue(File.Exists(cachePath));
+            Assert.AreEqual("Test web request", File.ReadAllText(cachePath));
+        }
+
+        [TestMethod]
+        public async Task GetContentsFromUriWithCacheFallbackAsync_WebRequestFailsAndNoCachedFile_ShouldThrow()
+        {
+            var fakeRequestHandler = new Mock<IWebRequestHandler>();
+            fakeRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                              .Throws(new ResourceDownloadException("Request blocked for testing"));
+            var sut = new CacheService(fakeRequestHandler.Object);
+
+            await Assert.ThrowsExceptionAsync<ResourceDownloadException>(async () =>
+                await sut.GetContentsFromUriWithCacheFallbackAsync("any url", "any file", CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetContentsFromUriWithCacheFallbackAsync_WebRequestFailsAndInvalidFileName_ShouldThrow()
+        {
+            var fakeRequestHandler = new Mock<IWebRequestHandler>();
+            fakeRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                              .Throws(new ResourceDownloadException("Request blocked for testing"));
+            var sut = new CacheService(fakeRequestHandler.Object);
+
+            await Assert.ThrowsExceptionAsync<ResourceDownloadException>(async () =>
+                await sut.GetContentsFromUriWithCacheFallbackAsync("any url", "any file", CancellationToken.None));
+        }
+
+
+        [TestMethod]
+        public async Task GetContentsFromUriWithCacheFallbackAsync_WebRequestFailsAndHasCachedFile_ShouldReturnFileContents()
+        {
+            string cachePath = Path.Combine(_cacheFolder, "testfile.json");
+            File.WriteAllText(cachePath, "Test file");
+            var fakeRequestHandler = new Mock<IWebRequestHandler>();
+            fakeRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                              .Throws(new ResourceDownloadException("Request blocked for testing"));
+            var sut = new CacheService(fakeRequestHandler.Object);
+
+            string result = await sut.GetContentsFromUriWithCacheFallbackAsync("any url", cachePath, CancellationToken.None);
+
+            Assert.AreEqual("Test file", result);
+        }
+
+        [TestMethod]
+        public async Task GetContentsFromUriWithCacheFallbackAsync_WebRequestSuccedsAndNoCachedFile_ShouldSaveContentsToCacheFile()
+        {
+            string cachePath = Path.Combine(_cacheFolder, "testfile.json");
+            if (File.Exists(cachePath))
+            {
+                File.Delete(cachePath);
+            }
+            var fakeRequestHandler = new Mock<IWebRequestHandler>();
+            fakeRequestHandler.Setup(x => x.GetStreamAsync("http://example.com", It.IsAny<CancellationToken>()))
+                              .Returns(Task.FromResult<Stream>(new MemoryStream(Encoding.Default.GetBytes("Test request content"))));
+            var sut = new CacheService(fakeRequestHandler.Object);
+
+            string result = await sut.GetContentsFromUriWithCacheFallbackAsync("http://example.com", cachePath, CancellationToken.None);
+
+            Assert.AreEqual("Test request content", result);
+            Assert.IsTrue(File.Exists(cachePath));
+            Assert.AreEqual("Test request content", File.ReadAllText(cachePath));
         }
     }
 }

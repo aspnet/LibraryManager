@@ -12,21 +12,22 @@ namespace Microsoft.Web.LibraryManager.Contracts.Caching
     public interface ICacheService
     {
         /// <summary>
-        /// Returns the provider's catalog from the provided Url to cacheFile
+        /// Gets the contents from the specified URL, or if the request fails then from a locally cached copy
         /// </summary>
-        /// <param name="url">Url to the provider catalog</param>
-        /// <param name="cacheFile">Where to store the provider catalog within the cache</param>
+        /// <param name="url">The URL to request</param>
+        /// <param name="cacheFile">The locally cached file</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<string> GetCatalogAsync(string url, string cacheFile, CancellationToken cancellationToken);
+        Task<string> GetContentsFromUriWithCacheFallbackAsync(string url, string cacheFile, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Returns library metadata from provided Url to cacheFile
+        /// Gets the contents of a local cache file, or if the file does not exist then requests it from the specified URL
         /// </summary>
-        /// <param name="url">Url to the library metadata</param>
-        /// <param name="cacheFile">Where to store the metadata file within the cache</param>
+        /// <param name="cacheFile">The locally cached file</param>
+        /// <param name="url">The URL to request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task<string> GetMetadataAsync(string url, string cacheFile, CancellationToken cancellationToken);
+        /// <exception cref="ResourceDownloadException">Thrown when the file doesn't exist and the resource download fails</exception>
+        Task<string> GetContentsFromCachedFileWithWebRequestFallbackAsync(string cacheFile, string url, CancellationToken cancellationToken);
     }
 }

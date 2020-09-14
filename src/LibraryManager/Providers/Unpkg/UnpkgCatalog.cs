@@ -48,25 +48,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             try
             {
                 string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, libraryName);
-                string latestCacheFile = Path.Combine(_cacheFolder, $"{libraryName}-{LatestVersionTag}.json");
+                string latestCacheFile = Path.Combine(_cacheFolder, libraryName, $"{LatestVersionTag}.json");
 
-                string latestJson;
-                try
-                {
-                    latestJson = await _cacheService.GetMetadataAsync(latestLibraryVersionUrl, latestCacheFile, cancellationToken);
-                }
-                catch (ResourceDownloadException)
-                {
-                    // TODO: add telemetry
-                    if (File.Exists(latestCacheFile))
-                    {
-                        latestJson = await FileHelpers.ReadFileAsTextAsync(latestCacheFile, cancellationToken);
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                string latestJson = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(latestLibraryVersionUrl,
+                                                                                                 latestCacheFile,
+                                                                                                 cancellationToken);
 
                 var packageObject = (JObject)JsonConvert.DeserializeObject(latestJson);
 
@@ -123,22 +109,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             string libraryFileListUrl = string.Format(LibraryFileListUrlFormat, libraryName, version);
             string libraryFileListCacheFile = Path.Combine(_cacheFolder, libraryName, $"{version}-filelist.json");
 
-            string fileList;
-            try
-            {
-                fileList = await _cacheService.GetMetadataAsync(libraryFileListUrl, libraryFileListCacheFile, cancellationToken);
-            }
-            catch (ResourceDownloadException)
-            {
-                if (File.Exists(libraryFileListCacheFile))
-                {
-                    fileList = await FileHelpers.ReadFileAsTextAsync(libraryFileListCacheFile, cancellationToken);
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            string fileList = await _cacheService.GetContentsFromCachedFileWithWebRequestFallbackAsync(libraryFileListCacheFile,
+                                                                                                       libraryFileListUrl,
+                                                                                                       cancellationToken);
 
             var fileListObject = (JObject)JsonConvert.DeserializeObject(fileList);
 
