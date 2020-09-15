@@ -19,8 +19,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
     {
         // TO DO: These should become Provider properties to be passed to CacheService
         private const string FileName = "cache.json";
-        private const string RemoteApiUrl = "https://aka.ms/g8irvu";
-        private const string MetaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}"; // https://aka.ms/goycwu/{0}
+        public const string CatalogUrl = "https://api.cdnjs.com/libraries?fields=name,description,version";
+        public const string MetaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}"; // https://aka.ms/goycwu/{0}
 
         private readonly string _cacheFile;
         private readonly CdnjsProvider _provider;
@@ -245,7 +245,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await _cacheService.GetCatalogAsync(RemoteApiUrl, _cacheFile, cancellationToken).ConfigureAwait(false);
+                string json = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(CatalogUrl, _cacheFile, cancellationToken).ConfigureAwait(false);
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
@@ -255,11 +255,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 _libraryGroups = ConvertToLibraryGroups(json);
 
                 return _libraryGroups != null;
-            }
-            catch (ResourceDownloadException)
-            {
-                _provider.HostInteraction.Logger.Log(string.Format(Resources.Text.FailedToDownloadCatalog, _provider.Id), LogLevel.Operation);
-                return false;
             }
             catch (Exception ex)
             {
@@ -283,7 +278,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await _cacheService.GetMetadataAsync(url, localFile, cancellationToken).ConfigureAwait(false);
+                string json = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(url, localFile, cancellationToken).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -294,10 +289,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         throw new Exception();
                     }
                 }
-            }
-            catch (ResourceDownloadException)
-            {
-                throw;
             }
             catch (Exception)
             {

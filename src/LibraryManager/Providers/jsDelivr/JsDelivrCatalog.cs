@@ -3,13 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
-using Microsoft.Web.LibraryManager.Helpers;
+using Microsoft.Web.LibraryManager.Contracts.Caching;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
@@ -29,16 +31,24 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         private readonly string _providerId;
         private readonly ILibraryNamingScheme _libraryNamingScheme;
         private readonly ILogger _logger;
-        private readonly IWebRequestHandler _webRequestHandler;
+        private readonly ICacheService _cacheService;
+        private readonly string _cacheFolder;
 
-        public JsDelivrCatalog(string providerId, ILibraryNamingScheme namingScheme, ILogger logger, IWebRequestHandler webRequestHandler, INpmPackageInfoFactory packageInfoFactory, INpmPackageSearch packageSearch)
+        public JsDelivrCatalog(string providerId,
+                               ILibraryNamingScheme namingScheme,
+                               ILogger logger,
+                               INpmPackageInfoFactory packageInfoFactory,
+                               INpmPackageSearch packageSearch,
+                               ICacheService cacheService,
+                               string cacheFolder)
         {
             _packageInfoFactory = packageInfoFactory;
             _packageSearch = packageSearch;
             _providerId = providerId;
             _libraryNamingScheme = namingScheme;
             _logger = logger;
-            _webRequestHandler = webRequestHandler;
+            _cacheService = cacheService;
+            _cacheFolder = cacheFolder;
         }
 
         public async Task<string> GetLatestVersion(string libraryId, bool includePreReleases, CancellationToken cancellationToken)
@@ -48,10 +58,16 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             try
             {
                 (string name, string _) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryId);
-                string latestLibraryVersionUrl = string.Format(IsGitHub(libraryId) ? LatestLibraryVersionUrlGH : LatestLibraryVersionUrl, name);
+                bool isGitHub = IsGitHub(libraryId);
+                string latestLibraryVersionUrl = string.Format(isGitHub ? LatestLibraryVersionUrlGH : LatestLibraryVersionUrl, name);
+                string cacheFileType = isGitHub ? "github" : "npm";
+                string latestLibraryVersionCacheFile = Path.Combine(_cacheFolder, name, $"{cacheFileType}-{LatestVersionTag}.json");
 
-                JObject packageObject = await _webRequestHandler.GetJsonObjectViaGetAsync(latestLibraryVersionUrl, cancellationToken);
+                string latestVersionContent = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(latestLibraryVersionUrl,
+                                                                                                           latestLibraryVersionCacheFile,
+                                                                                                           cancellationToken).ConfigureAwait(false);
 
+                var packageObject = (JObject)JsonConvert.DeserializeObject(latestVersionContent);
                 if (packageObject != null)
                 {
                     var versions = packageObject["tags"] as JObject;
@@ -75,15 +91,15 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             }
 
             string libraryId = _libraryNamingScheme.GetLibraryId(name, version);
-            if(string.Equals(version, LatestVersionTag, StringComparison.Ordinal))
+            if (string.Equals(version, LatestVersionTag, StringComparison.Ordinal))
             {
-                string latestVersion = await GetLatestVersion(libraryId, includePreReleases: false, cancellationToken);
+                string latestVersion = await GetLatestVersion(libraryId, includePreReleases: false, cancellationToken).ConfigureAwait(false);
                 libraryId = _libraryNamingScheme.GetLibraryId(name, latestVersion);
             }
 
             try
             {
-                IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken);
+                IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryId, cancellationToken).ConfigureAwait(false);
                 return new JsDelivrLibrary { Version = version, Files = libraryFiles.ToDictionary(k => k, b => false), Name = name, ProviderId = _providerId };
             }
             catch (Exception)
@@ -96,11 +112,14 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         {
             var result = new List<string>();
 
+            (string libraryName, string libraryVersion) = _libraryNamingScheme.GetLibraryNameAndVersion(libraryId);
+            string libraryFileListCacheFile = Path.Combine(_cacheFolder, libraryName, $"{libraryVersion}-filelist.json");
             string libraryFileListUrl = string.Format(IsGitHub(libraryId) ? LibraryFileListUrlFormatGH : LibraryFileListUrlFormat, libraryId);
+            string fileListJson = await _cacheService.GetContentsFromCachedFileWithWebRequestFallbackAsync(libraryFileListCacheFile,
+                                                                                                           libraryFileListUrl,
+                                                                                                           cancellationToken).ConfigureAwait(false);
 
-            JObject fileListObject = await _webRequestHandler.GetJsonObjectViaGetAsync(libraryFileListUrl, cancellationToken).ConfigureAwait(false);
-
-            if (fileListObject != null)
+            if ((JObject)JsonConvert.DeserializeObject(fileListJson) is var fileListObject)
             {
                 GetFiles(fileListObject, result);
             }
@@ -160,7 +179,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 // Make sure we don't list some minified files twice.
                 files = files.Distinct().ToList();
 
-                foreach(string file in files)
+                foreach (string file in files)
                 {
                     result.Add(file.TrimStart('/'));
                 }
@@ -198,7 +217,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                         return completionSet;
                     }
 
-                    IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None).ConfigureAwait(false);
 
                     foreach (NpmPackageInfo package in packages)
                     {
@@ -222,12 +241,12 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
                     if (IsGitHub(name))
                     {
-                        versions = await GetGithubLibraryVersionsAsync(name);
+                        versions = await GetGithubLibraryVersionsAsync(name, CancellationToken.None).ConfigureAwait(false);
                     }
                     else
                     {
                         var libGroup = new JsDelivrLibraryGroup(_packageInfoFactory, name);
-                        versions = await libGroup.GetLibraryVersions(CancellationToken.None);
+                        versions = await libGroup.GetLibraryVersions(CancellationToken.None).ConfigureAwait(false);
                     }
 
                     foreach (string v in versions)
@@ -270,7 +289,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
             try
             {
-                IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None);
+                IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None).ConfigureAwait(false);
                 IEnumerable<string> packageNames = packages.Select(p => p.Name);
                 libraryGroups = packageNames.Select(packageName => new JsDelivrLibraryGroup(_packageInfoFactory, packageName)).ToList<ILibraryGroup>();
             }
@@ -282,10 +301,14 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             return libraryGroups;
         }
 
-        private async Task<IEnumerable<string>> GetGithubLibraryVersionsAsync(string name)
+        private async Task<IEnumerable<string>> GetGithubLibraryVersionsAsync(string name, CancellationToken cancellationToken)
         {
             var versions = new List<string>();
-            JObject versionsObject = await _webRequestHandler.GetJsonObjectViaGetAsync(string.Format(LatestLibraryVersionUrlGH, name), CancellationToken.None).ConfigureAwait(false);
+            string versionsCacheFile = Path.Combine(_cacheFolder, name, "github-versions-cache.json");
+            string versionsUrl = string.Format(LatestLibraryVersionUrlGH, name);
+            string versionsJson = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(versionsUrl, versionsCacheFile, cancellationToken).ConfigureAwait(false);
+
+            var versionsObject = (JObject)JsonConvert.DeserializeObject(versionsJson);
             var versionsArray = versionsObject["versions"] as JArray;
 
             foreach (string version in versionsArray)

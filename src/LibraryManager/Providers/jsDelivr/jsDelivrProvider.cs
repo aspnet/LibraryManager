@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
 
         public override ILibraryCatalog GetCatalog()
         {
-            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, _infoFactory, _packageSearch));
+            return _catalog ?? (_catalog = new JsDelivrCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, _infoFactory, _packageSearch, _cacheService, CacheFolder));
         }
 
         public override string LibraryIdHintText => Resources.Text.JsDelivrProviderHintText;

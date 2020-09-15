@@ -24,8 +24,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public override ILibraryCatalog GetCatalog()
         {
-            // TODO: sort out the WebRequestHandler dependency
-            return _catalog ?? (_catalog = new UnpkgCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, WebRequestHandler.Instance, _infoFactory, _packageSearch));
+            return _catalog ?? (_catalog = new UnpkgCatalog(Id, LibraryNamingScheme, HostInteraction.Logger, _infoFactory, _packageSearch, _cacheService, CacheFolder));
         }
 
         public override string LibraryIdHintText => Resources.Text.UnpkgProviderHintText;

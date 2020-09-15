@@ -9,36 +9,61 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Caching;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
-using Microsoft.Web.LibraryManager.Mocks.CacheServices;
 using Microsoft.Web.LibraryManager.Providers.Cdnjs;
+using Moq;
 
 namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
 {
     [TestClass]
     public class CdnjsCatalogTest
     {
-        private CdnjsCatalog Initialize()
+        private readonly List<string> _prepopulatedFiles = new List<string>();
+
+        private CdnjsCatalog SetupCatalog(ICacheService testCacheService = null, Dictionary<string, string> prepopulateCacheFiles = null)
         {
             string projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
             string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
             var hostInteraction = new HostInteraction(projectFolder, cacheFolder);
-            var cacheService = new FakeCdnjsCacheService();
+            ICacheService cacheService = testCacheService ?? new Mock<ICacheService>().SetupCatalog()
+                                                                                      .SetupSampleLibrary()
+                                                                                      .Object;
+
+                if (prepopulateCacheFiles != null)
+            {
+                foreach (KeyValuePair<string, string> item in prepopulateCacheFiles)
+                {
+                    // put the provider IdText into the path to mimic the provider implementation
+                    string filePath = Path.Combine(cacheFolder, CdnjsProvider.IdText, item.Key);
+                    string directoryPath = Path.GetDirectoryName(filePath);
+                    Directory.CreateDirectory(directoryPath);
+                    File.WriteAllText(filePath, item.Value);
+                    _prepopulatedFiles.Add(filePath);
+                }
+            }
 
             var provider = new CdnjsProvider(hostInteraction, cacheService:null);
             return new CdnjsCatalog(provider, cacheService, new VersionedLibraryNamingScheme());
         }
 
+        [TestCleanup]
+        public void CleanupPrepopulatedFiles()
+        {
+            foreach (string file in _prepopulatedFiles)
+            {
+                File.Delete(file);
+            }
+        }
+
         [DataTestMethod]
         [DataRow("sample", "sampleLibrary")]
-        [DataRow("test", "test-library")]
-        [DataRow("test-library2", "test-library2")]
-        public async Task SearchAsync_Success(string searchTerm, string expectedId)
+        public async Task SearchAsync_Success_SingleMatch(string searchTerm, string expectedId)
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
-            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(searchTerm, 1, CancellationToken.None);
+            IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(searchTerm, 2, CancellationToken.None);
             Assert.AreEqual(1, absolute.Count);
 
             IEnumerable<string> versions = await absolute[0].GetLibraryVersions(CancellationToken.None);
@@ -56,7 +81,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task SearchAsync_MultipleMatches()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> result = await sut.SearchAsync(term:"test", 5, CancellationToken.None);
 
@@ -68,7 +93,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task SearchAsync_NoHits()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(@"*9)_-", 1, CancellationToken.None);
 
@@ -78,7 +103,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task SearchAsync_EmptyString()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync("", 1, CancellationToken.None);
 
@@ -88,7 +113,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task SearchAsync_NullString()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IReadOnlyList<ILibraryGroup> absolute = await sut.SearchAsync(null, 1, CancellationToken.None);
 
@@ -98,7 +123,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryAsync_Success()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             ILibrary library = await sut.GetLibraryAsync("sampleLibrary", "3.1.4", CancellationToken.None);
 
@@ -111,7 +136,19 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
+
+            await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () =>
+                await sut.GetLibraryAsync("invalid_id", "invalid_version", CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_WebRequestFailsAndNoCachedMetadata_ThrowsInvalidLibraryId()
+        {
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetContentsFromUriWithCacheFallbackAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                            .Throws(new ResourceDownloadException("Cache download failed."));
+            CdnjsCatalog sut = SetupCatalog(fakeCacheService.Object);
 
             await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () =>
                 await sut.GetLibraryAsync("invalid_id", "invalid_version", CancellationToken.None));
@@ -120,7 +157,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Names()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             CompletionSet result = await sut.GetLibraryCompletionSetAsync("test", 0);
 
@@ -134,7 +171,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_Versions()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             CompletionSet result = await sut.GetLibraryCompletionSetAsync("sampleLibrary@", 14);
 
@@ -148,7 +185,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLatestVersion_LatestExist()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             const string libraryName = "sampleLibrary";
             const string expectedVersion = "3.1.4";
@@ -160,9 +197,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public async Task GetLatestVersion_PreRelease()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
-            // "twitter-bootstrap@3.3.0"
             const string libraryName = "sampleLibrary";
             const string oldVersion = "4.0.0-beta.1";
             string result = await sut.GetLatestVersion(libraryName, true, CancellationToken.None);
@@ -173,7 +209,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public void ConvertToLibraryGroup_ValidJsonCatalog()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
             string json = @"{""results"":[{""name"":""1140"",""latest"":""https://cdnjs.cloudflare.com/ajax/libs/1140/2.0/1140.min.css"",
 ""description"":""The 1140 grid fits perfectly into a 1280 monitor. On smaller monitors it becomes fluid and adapts to the width of the browser.""
 ,""version"":""2.0""}],""total"":1}";
@@ -193,7 +229,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [DataRow(@"{""results"":[12}")]
         public void ConvertToLibraryGroup_InvalidJsonCatalog(string json)
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             IEnumerable<CdnjsLibraryGroup> libraryGroup = sut.ConvertToLibraryGroups(json);
 
@@ -203,7 +239,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         [TestMethod]
         public void ConvertToAssets_ValidAsset()
         {
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
             string json = @"{""name"":""jquery"",""filename"":""jquery.min.js"",""version"":""3.3.1"",""description"":""JavaScript library for DOM operations"",
 ""homepage"":""http://jquery.com/"",""keywords"":[""jquery"",""library"",""ajax"",""framework"",""toolkit"",""popular""],""namespace"":""jQuery"",
 ""repository"":{""type"":""git"",""url"":""https://github.com/jquery/jquery.git""},""license"":""MIT"",
@@ -231,11 +267,126 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public void ConvertToAssets_InvalidAsset()
         {
             string json = "abcd";
-            CdnjsCatalog sut = Initialize();
+            CdnjsCatalog sut = SetupCatalog();
 
             List<Asset> list = sut.ConvertToAssets(json);
 
             Assert.IsNull(list);
         }
+
+        [TestMethod]
+        public async Task SearchAsync_CacheDownloadFailsWhenNoCacheFileExists_FindsNoMatches()
+        {
+            var fakeCacheService = new Mock<ICacheService>();
+            fakeCacheService.Setup(x => x.GetContentsFromUriWithCacheFallbackAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                            .Throws(new ResourceDownloadException("Cache download failed."));
+            CdnjsCatalog sut = SetupCatalog(fakeCacheService.Object);
+
+            IReadOnlyList<ILibraryGroup> result = await sut.SearchAsync("test", 5, CancellationToken.None);
+
+            Assert.AreEqual(0, result.Count);
+        }
+    }
+
+    public static class CndjsCatalogTestSetups
+    {
+        public static Mock<ICacheService> SetupCatalog(this Mock<ICacheService> cacheService)
+        {
+            cacheService.Setup(x => x.GetContentsFromUriWithCacheFallbackAsync(It.Is<string>(s => s.Equals(CdnjsCatalog.CatalogUrl, StringComparison.OrdinalIgnoreCase)),
+                                                                               It.IsAny<string>(),
+                                                                               It.IsAny<CancellationToken>()))
+                        .Returns(Task.FromResult(FakeCatalogContents));
+
+            return cacheService;
+        }
+
+        public static Mock<ICacheService> SetupSampleLibrary(this Mock<ICacheService> cacheService)
+        {
+            string metadataUrl = string.Format(CdnjsCatalog.MetaPackageUrlFormat, "sampleLibrary");
+            cacheService.Setup(x => x.GetContentsFromUriWithCacheFallbackAsync(It.Is<string>(s => s.Equals(metadataUrl, StringComparison.OrdinalIgnoreCase)),
+                                                                               It.IsAny<string>(),
+                                                                               It.IsAny<CancellationToken>()))
+                        .Returns(Task.FromResult(FakeLibraryMetadata));
+
+            return cacheService;
+        }
+
+        /// <summary>
+        /// Mock contents containing multiple libraries with different versions
+        /// </summary>
+        public const string FakeCatalogContents = @"{
+    ""results"": [
+        {
+                ""name"": ""sampleLibrary"",
+            ""latest"": ""https://test-library.com/sample/js/sampleLibrary.min.js"",
+            ""description"": ""A sample library for testing"",
+            ""version"": ""3.1.4""
+        },
+        {
+                ""name"": ""test-library"",
+            ""latest"": ""https://test-library.com/test-library.min.js"",
+            ""description"": ""A fake library for testing"",
+            ""version"": ""1.0.0""
+        },
+        {
+                ""name"": ""test-library2"",
+            ""latest"": ""https://test-library.com/test-library2.min.js"",
+            ""description"": ""A second fake library for testing"",
+            ""version"": ""2.0.0""
+        }
+    ],
+    ""total"": 3
+}";
+
+        /// <summary>
+        /// Single library metadata, containing multiple releases including preview releases
+        /// </summary>
+        public const string FakeLibraryMetadata = @"{
+    ""name"": ""sampleLibrary"",
+    ""filename"": ""sample/js/sampleLibrary.min.js"",
+    ""version"": ""3.1.4"",
+    ""description"": ""Sample library for test input"",
+    ""assets"": [
+        {
+                ""version"": ""4.0.0-beta.1"",
+            ""files"": [
+                ""sample/js/sampleLibrary.js"",
+                ""sample/js/sampleLibrary.min.js"",
+                ""sample/betaFile.js""
+            ]
+        },
+        {
+            ""version"": ""4.0.0-beta.2"",
+            ""files"": [
+                ""sample/js/sampleLibrary.js"",
+                ""sample/js/sampleLibrary.min.js"",
+                ""sample/betaFile.js""
+            ]
+        },
+        {
+            ""version"": ""4.0.0-beta.10"",
+            ""files"": [
+                ""sample/js/sampleLibrary.js"",
+                ""sample/js/sampleLibrary.min.js"",
+                ""sample/betaFile.js""
+            ]
+        },
+        {
+            ""version"": ""3.1.4"",
+            ""files"": [
+                ""sample/js/sampleLibrary.js"",
+                ""sample/js/sampleLibrary.min.js""
+            ]
+        },
+        {
+            ""version"": ""2.0.0"",
+            ""files"": [
+                ""sample/js/sampleLibrary.js"",
+                ""sample/js/sampleLibrary.min.js"",
+                ""sample/outdatedFile.js""
+            ]
+        }
+    ]
+}";
     }
 }

@@ -1,12 +1,15 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Caching;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Mocks;
 using Microsoft.Web.LibraryManager.Providers.Unpkg;
@@ -18,15 +21,41 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
     [TestClass]
     public class UnpkgCatalogTest
     {
-        private UnpkgCatalog SetupCatalog(IWebRequestHandler requestHandler = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null)
+        private readonly List<string> _prepopulatedFiles = new List<string>();
+
+        private UnpkgCatalog SetupCatalog(ICacheService cacheService = null, INpmPackageSearch packageSearch = null, INpmPackageInfoFactory infoFactory = null, Dictionary<string, string> prepopulateFiles = null)
         {
-            requestHandler = requestHandler ?? new Mocks.WebRequestHandler();
+            string cacheFolder = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\");
+            if (prepopulateFiles != null)
+            {
+                foreach (KeyValuePair<string, string> item in prepopulateFiles)
+                {
+                    // put the provider IdText into the path to mimic the provider implementation
+                    string filePath = Path.Combine(cacheFolder, UnpkgProvider.IdText, item.Key);
+                    string directoryPath = Path.GetDirectoryName(filePath);
+                    Directory.CreateDirectory(directoryPath);
+                    File.WriteAllText(filePath, item.Value);
+                    _prepopulatedFiles.Add(filePath);
+                }
+            }
+
+            IWebRequestHandler defaultRequestHandler = new Mocks.WebRequestHandler();
             return new UnpkgCatalog(UnpkgProvider.IdText,
                                     new VersionedLibraryNamingScheme(),
                                     new Logger(),
-                                    requestHandler,
-                                    infoFactory ?? new NpmPackageInfoFactory(requestHandler),
-                                    packageSearch ?? new NpmPackageSearch(requestHandler));
+                                    infoFactory ?? new NpmPackageInfoFactory(defaultRequestHandler),
+                                    packageSearch ?? new NpmPackageSearch(defaultRequestHandler),
+                                    cacheService ?? new CacheService(defaultRequestHandler),
+                                    Path.Combine(cacheFolder, UnpkgProvider.IdText));
+        }
+
+        [TestCleanup]
+        public void CleanupPrepopulatedFiles()
+        {
+            foreach (string file in _prepopulatedFiles)
+            {
+                File.Delete(file);
+            }
         }
 
         [TestMethod]
@@ -48,8 +77,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         [TestMethod]
         public async Task GetLibraryAsync_Success()
         {
-            Mocks.WebRequestHandler handler = new Mocks.WebRequestHandler().SetupFiles("fakeLib@1.0.0");
-            UnpkgCatalog sut = SetupCatalog(handler);
+            var fakeCache = new Mock<ICacheService>();
+            fakeCache.SetupLibraryFiles("fakeLib");
+            UnpkgCatalog sut = SetupCatalog(fakeCache.Object);
 
             ILibrary library = await sut.GetLibraryAsync("fakeLib", "1.0.0", CancellationToken.None);
 
@@ -64,6 +94,19 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
             UnpkgCatalog sut = SetupCatalog();
 
             await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () => await sut.GetLibraryAsync("invalid_id", "invalid_version", CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetLibraryAsync_RequestFilesFailsWithNoCache_BlowsUp()
+        {
+            var webRequestHandler = new Mock<IWebRequestHandler>();
+            webRequestHandler.Setup(x => x.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                             .Throws(new ResourceDownloadException("Cache download blocked."));
+            var fakeCache = new Mock<ICacheService>();
+            fakeCache.SetupBlockRequests();
+            UnpkgCatalog sut = SetupCatalog(fakeCache.Object);
+
+            await Assert.ThrowsExceptionAsync<InvalidLibraryException>(async () => await sut.GetLibraryAsync("fakeLibrary", "1.1.1", CancellationToken.None));
         }
 
         [TestMethod]
@@ -191,29 +234,33 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         [TestMethod]
         public async Task GetLibraryCompletionSetAsync_NullValue_MakesNoWebRequest()
         {
-            var mockRequestHandler = new Mock<IWebRequestHandler>();
-            UnpkgCatalog sut = SetupCatalog(mockRequestHandler.Object);
+            var mockPackageSearch = new Mock<INpmPackageSearch>();
+            var mockPackageInfo = new Mock<INpmPackageInfoFactory>();
+            UnpkgCatalog sut = SetupCatalog(packageSearch: mockPackageSearch.Object, infoFactory: mockPackageInfo.Object);
 
             CompletionSet result = await sut.GetLibraryCompletionSetAsync(null, 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.AreEqual(0, result.Completions.Count());
-            mockRequestHandler.Verify(m => m.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            mockPackageInfo.VerifyNoOtherCalls();
+            mockPackageSearch.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public async Task GetLibraryCompletionSetAsync_EmptyString()
+        public async Task GetLibraryCompletionSetAsync_EmptyString_MakesNoWebRequest()
         {
-            var mockRequestHandler = new Mock<IWebRequestHandler>();
-            UnpkgCatalog sut = SetupCatalog(mockRequestHandler.Object);
+            var mockPackageSearch = new Mock<INpmPackageSearch>();
+            var mockPackageInfo = new Mock<INpmPackageInfoFactory>();
+            UnpkgCatalog sut = SetupCatalog(packageSearch: mockPackageSearch.Object, infoFactory: mockPackageInfo.Object);
 
             CompletionSet result = await sut.GetLibraryCompletionSetAsync(string.Empty, 0);
 
             Assert.AreEqual(0, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.AreEqual(0, result.Completions.Count());
-            mockRequestHandler.Verify(m => m.GetStreamAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            mockPackageInfo.VerifyNoOtherCalls();
+            mockPackageSearch.VerifyNoOtherCalls();
         }
 
 
@@ -236,8 +283,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         public async Task GetLatestVersion_LatestExist()
         {
             const string libraryName = "fakeLibrary";
-            Mocks.WebRequestHandler handler = new Mocks.WebRequestHandler().SetupVersions("fakeLibrary");
-            UnpkgCatalog sut = SetupCatalog(handler);
+            var fakeCache = new Mock<ICacheService>();
+            fakeCache.SetupPackageVersions(libraryName);
+            UnpkgCatalog sut = SetupCatalog(fakeCache.Object);
 
             string result = await sut.GetLatestVersion(libraryName, false, CancellationToken.None);
 
@@ -245,16 +293,15 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         }
 
         [TestMethod]
-        [Ignore] // TODO: GetLatestVersion currently doesn't distinguish stable and pre-release versions
-        public async Task GetLatestVersion_PreRelease()
+        public async Task GetLatestVersion_WebResponseFailedButNoCachedFile_ReturnsNull()
         {
-            const string libraryName = "fakeLibrary";
-            Mocks.WebRequestHandler handler = new Mocks.WebRequestHandler().SetupVersions("fakeLibrary");
-            UnpkgCatalog sut = SetupCatalog(handler);
+            var fakeCache = new Mock<ICacheService>();
+            fakeCache.SetupBlockRequests();
+            UnpkgCatalog sut = SetupCatalog(fakeCache.Object);
 
-            string result = await sut.GetLatestVersion(libraryName, true, CancellationToken.None);
+            string result = await sut.GetLatestVersion("fakeLibrary", false, CancellationToken.None);
 
-            Assert.AreEqual("2.0.0-beta", result);
+            Assert.IsNull(result);
         }
 
         [TestMethod]
@@ -299,9 +346,41 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
 
     internal static class UnpkgCatalogSetups
     {
-        public static Mocks.WebRequestHandler SetupFiles(this Mocks.WebRequestHandler h, string libraryId)
+        public static Mock<ICacheService> SetupLibraryFiles(this Mock<ICacheService> cacheService, string name)
         {
-            string files = @"{
+            cacheService.Setup(x => x.GetContentsFromCachedFileWithWebRequestFallbackAsync(It.Is<string>(s => s.Contains(name)),
+                                                                                           It.IsAny<string>(),
+                                                                                           It.IsAny<CancellationToken>()))
+                        .Returns(Task.FromResult(FakeFileList));
+
+            return cacheService;
+        }
+
+        public static Mock<ICacheService> SetupBlockRequests(this Mock<ICacheService> cacheService)
+        {
+            cacheService.Setup(x => x.GetContentsFromCachedFileWithWebRequestFallbackAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                        .Throws(new ResourceDownloadException("Cache requests blocked for testing"));
+            cacheService.Setup(x => x.GetContentsFromUriWithCacheFallbackAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                        .Throws(new ResourceDownloadException("Cache requests blocked for testing"));
+
+            return cacheService;
+        }
+
+        public static Mock<ICacheService> SetupPackageVersions(this Mock<ICacheService> cacheService, string name)
+        {
+            cacheService.Setup(x => x.GetContentsFromUriWithCacheFallbackAsync(It.Is<string>(s => s.Contains(name)),
+                                                                               It.IsAny<string>(),
+                                                                               It.IsAny<CancellationToken>()))
+                        .Returns(Task.FromResult(FakePackageVersions));
+
+            return cacheService;
+        }
+
+        public const string FakePackageVersions = @"{
+  ""version"": ""1.0.0""
+}";
+
+        public const string FakeFileList = @"{
   ""type"": ""directory"",
   ""files"": [
     {
@@ -310,20 +389,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
     }
   ]
 }";
-
-            (string name, string version) = new VersionedLibraryNamingScheme().GetLibraryNameAndVersion(libraryId);
-
-            return h.ArrangeResponse(string.Format(UnpkgCatalog.LibraryFileListUrlFormat, name, version), files);
-        }
-
-        public static Mocks.WebRequestHandler SetupVersions(this Mocks.WebRequestHandler h, string libraryName)
-        {
-            string packageData = @"{
-  ""version"": ""1.0.0""
-}";
-
-            return h.ArrangeResponse(string.Format(UnpkgCatalog.LatestLibraryVersonUrl, libraryName), packageData);
-        }
     }
 
 }
