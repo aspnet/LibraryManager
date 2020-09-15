@@ -68,9 +68,9 @@ namespace Microsoft.Web.LibraryManager
             {
                 try
                 {
-                    using (Stream libraryStream = await _requestHandler.GetStreamAsync(url, cancellationToken))
+                    using (Stream libraryStream = await _requestHandler.GetStreamAsync(url, cancellationToken).ConfigureAwait(false))
                     {
-                        await FileHelpers.SafeWriteToFileAsync(fileName, libraryStream, cancellationToken);
+                        await FileHelpers.SafeWriteToFileAsync(fileName, libraryStream, cancellationToken).ConfigureAwait(false);
                         break;
                     }
                 }
@@ -83,7 +83,7 @@ namespace Microsoft.Web.LibraryManager
                     }
                 }
 
-                await Task.Delay(200);
+                await Task.Delay(200).ConfigureAwait(false);
             }
         }
 
@@ -104,14 +104,14 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         public async Task RefreshCacheAsync(IEnumerable<CacheFileMetadata> librariesCacheMetadata, ILogger logger, CancellationToken cancellationToken)
         {
-            await ParallelUtility.ForEachAsync(DownloadFileIfNecessaryAsync, MaxConcurrentDownloads, librariesCacheMetadata, cancellationToken);
+            await ParallelUtility.ForEachAsync(DownloadFileIfNecessaryAsync, MaxConcurrentDownloads, librariesCacheMetadata, cancellationToken).ConfigureAwait(false);
 
             async Task DownloadFileIfNecessaryAsync(CacheFileMetadata metadata)
             {
                 if (!File.Exists(metadata.DestinationPath))
                 {
                     logger.Log(string.Format(Resources.Text.DownloadingFile, metadata.Source), LogLevel.Operation);
-                    await DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken);
+                    await DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -122,14 +122,14 @@ namespace Microsoft.Web.LibraryManager
             string contents;
             try
             {
-                contents = await GetResourceAsync(url, cacheFile, DefaultCacheExpiresAfterDays, cancellationToken);
+                contents = await GetResourceAsync(url, cacheFile, DefaultCacheExpiresAfterDays, cancellationToken).ConfigureAwait(false);
             }
             catch (ResourceDownloadException)
             {
                 // TODO: Log telemetry
                 if (File.Exists(cacheFile))
                 {
-                    contents = await FileHelpers.ReadFileAsTextAsync(cacheFile, cancellationToken);
+                    contents = await FileHelpers.ReadFileAsTextAsync(cacheFile, cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {
@@ -146,11 +146,11 @@ namespace Microsoft.Web.LibraryManager
             string contents;
             if (File.Exists(cacheFile))
             {
-                contents = await FileHelpers.ReadFileAsTextAsync(cacheFile, cancellationToken);
+                contents = await FileHelpers.ReadFileAsTextAsync(cacheFile, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                contents = await GetResourceAsync(url, cacheFile, DefaultCacheExpiresAfterDays, cancellationToken);
+                contents = await GetResourceAsync(url, cacheFile, DefaultCacheExpiresAfterDays, cancellationToken).ConfigureAwait(false);
             }
 
             return contents;

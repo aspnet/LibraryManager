@@ -52,7 +52,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                 string latestJson = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(latestLibraryVersionUrl,
                                                                                                  latestCacheFile,
-                                                                                                 cancellationToken);
+                                                                                                 cancellationToken).ConfigureAwait(false);
 
                 var packageObject = (JObject)JsonConvert.DeserializeObject(latestJson);
 
@@ -80,13 +80,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             string libraryId = _libraryNamingScheme.GetLibraryId(libraryName, version);
             if (string.Equals(version, LatestVersionTag, StringComparison.Ordinal))
             {
-                string latestVersion = await GetLatestVersion(libraryId, includePreReleases: false, cancellationToken);
+                string latestVersion = await GetLatestVersion(libraryId, includePreReleases: false, cancellationToken).ConfigureAwait(false);
                 libraryId = _libraryNamingScheme.GetLibraryId(libraryName, latestVersion);
             }
 
             try
             {
-                IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryName, version, cancellationToken);
+                IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryName, version, cancellationToken).ConfigureAwait(false);
 
                 return new UnpkgLibrary
                 {
@@ -111,7 +111,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             string fileList = await _cacheService.GetContentsFromCachedFileWithWebRequestFallbackAsync(libraryFileListCacheFile,
                                                                                                        libraryFileListUrl,
-                                                                                                       cancellationToken);
+                                                                                                       cancellationToken).ConfigureAwait(false);
 
             var fileListObject = (JObject)JsonConvert.DeserializeObject(fileList);
 
@@ -212,7 +212,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                 // library name completion
                 if (caretPosition < name.Length + 1)
                 {
-                    IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None);
+                    IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(libraryNameStart, CancellationToken.None).ConfigureAwait(false);
 
                     foreach (NpmPackageInfo packageInfo in packages)
                     {
@@ -234,7 +234,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     completionSet.Start = name.Length + 1;
                     completionSet.Length = version.Length;
 
-                    NpmPackageInfo npmPackageInfo = await _packageInfoFactory.GetPackageInfoAsync(name, CancellationToken.None);
+                    NpmPackageInfo npmPackageInfo = await _packageInfoFactory.GetPackageInfoAsync(name, CancellationToken.None).ConfigureAwait(false);
 
                     IList<SemanticVersion> versions = npmPackageInfo.Versions.OrderByDescending(v => v).ToList();
 
@@ -274,7 +274,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             try
             {
-                IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None);
+                IEnumerable<NpmPackageInfo> packages = await _packageSearch.GetPackageNamesAsync(term, CancellationToken.None).ConfigureAwait(false);
                 IEnumerable<string> packageNames = packages.Select(p => p.Name);
                 libraryGroups = packageNames.Select(packageName => new UnpkgLibraryGroup(_packageInfoFactory, packageName)).ToList<ILibraryGroup>();
             }

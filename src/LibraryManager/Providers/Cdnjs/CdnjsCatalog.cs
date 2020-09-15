@@ -245,7 +245,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(CatalogUrl, _cacheFile, cancellationToken);
+                string json = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(CatalogUrl, _cacheFile, cancellationToken).ConfigureAwait(false);
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
@@ -278,7 +278,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
             try
             {
-                string json = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(url, localFile, cancellationToken);
+                string json = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(url, localFile, cancellationToken).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(json))
                 {
