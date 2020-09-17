@@ -200,7 +200,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             CdnjsCatalog sut = SetupCatalog();
 
             const string libraryName = "sampleLibrary";
-            const string oldVersion = "4.0.0-beta.1";
+            const string oldVersion = "4.0.0-beta.2";
             string result = await sut.GetLatestVersion(libraryName, true, CancellationToken.None);
 
             Assert.AreEqual(oldVersion, result);

@@ -194,7 +194,10 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
 
             string first = includePreReleases
-                ? (await GetLibraryVersionsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false)).First()
+                ? (await GetLibraryVersionsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false))
+                                                                                      .Select(v => SemanticVersion.Parse(v))
+                                                                                      .Max()
+                                                                                      .ToString()
                 : group.Version;
 
             if (!string.IsNullOrEmpty(first))
