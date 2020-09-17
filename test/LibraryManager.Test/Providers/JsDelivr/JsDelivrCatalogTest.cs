@@ -333,7 +333,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             CompletionSet result = await sut.GetLibraryCompletionSetAsync(fakeLibraryId, fakeLibraryId.IndexOf('c'));
 
             Assert.IsNotNull(result);
-            CollectionAssert.AreEquivalent(new[] { "0.1.2", "1.2.3", "latest" }, result.Completions.Select(x => x.DisplayText).ToList());
+            CollectionAssert.AreEquivalent(new[] { "0.1.2", "1.0.0-oldBeta", "1.2.3", "2.0.0-prerelease", "latest" },
+                                           result.Completions.Select(x => x.DisplayText).ToList());
         }
 
         [TestMethod]
@@ -364,37 +365,44 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         }
 
         [TestMethod]
-        [Ignore]
-        // TODO: A new code path needs to be added for when the tags are missing.  Currently the code assumes that
-        //       both NPM and GitHub include tag information, but Github does not; it only returns the versions object
-        //       in the JSON response.
-        //       The original test implementation checked for null and didn't assert anything in that case.
         public async Task GetLatestVersion_GitHub_ParseVersionsList()
         {
             var fakeCache = new Mock<ICacheService>();
-            fakeCache.SetupGitHubLibraryVersions("fakeLib/fakeLib");
+            fakeCache.SetupGitHubLibraryVersions("fake/fakeLib");
             JsDelivrCatalog sut = SetupCatalog(cacheService: fakeCache.Object);
             const string libraryIdGH = "fake/fakeLib@3.3.0";
 
             string resultGH = await sut.GetLatestVersion(libraryIdGH, false, CancellationToken.None);
 
-            Assert.AreEqual("1.0.0", resultGH);
+            Assert.AreEqual("1.2.3", resultGH);
         }
 
         [TestMethod]
-        [Ignore] // TODO: GetLatestVersion currently only looks for the stable tag.
-        public async Task GetLatestVersion_PreRelease()
+        public async Task GetLatestVersion_Npm_Prerelease()
         {
             const string libraryId = "fakeLib@3.3.0";
             var fakeCache = new Mock<ICacheService>();
-            fakeCache.SetupNpmLibraryVersions("fakeLib")
-                     .SetupGitHubLibraryVersions("fakeLib/fakeLib");
+            fakeCache.SetupNpmLibraryVersions("fakeLib");
             JsDelivrCatalog sut = SetupCatalog(cacheService: fakeCache.Object);
 
             string result = await sut.GetLatestVersion(libraryId, true, CancellationToken.None);
 
-            Assert.AreEqual("2.0.0-beta", result);
+            Assert.AreEqual("2.0.0-beta2", result);
         }
+
+        [TestMethod]
+        public async Task GetLatestVersion_Git_Prerelease()
+        {
+            const string libraryId = "fakeLib/fakeLib@3.3.0";
+            var fakeCache = new Mock<ICacheService>();
+            fakeCache.SetupGitHubLibraryVersions("fakeLib/fakeLib");
+            JsDelivrCatalog sut = SetupCatalog(cacheService: fakeCache.Object);
+
+            string result = await sut.GetLatestVersion(libraryId, true, CancellationToken.None);
+
+            Assert.AreEqual("2.0.0-prerelease", result);
+        }
+
 
         [TestMethod]
         public async Task GetLatestVersion_CacheRequestFails_ReturnsNull()
@@ -483,12 +491,16 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
         }
 
         public const string FakeFileList = @"{ ""files"": [ { ""name"": ""testFile.js"" } ] }";
-        public const string FakeGitHubVersions = @"{ ""versions"": [ ""0.1.2"", ""1.2.3"" ] }";
+        public const string FakeGitHubVersions = @"{ ""versions"": [ ""0.1.2"", ""1.0.0-oldBeta"", ""1.2.3"", ""2.0.0-prerelease"" ] }";
         public const string FakeNpmVersions = @"{
   ""tags"": {
-    ""beta"": ""2.0.0-beta"",
     ""latest"": ""1.0.0""
-  }
+  },
+  versions: [
+    ""2.0.0-beta"",
+    ""2.0.0-beta2"",
+    ""1.1.0""
+  ]
 }";
     }
 }
