@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Web.LibraryManager
+namespace Microsoft.Web.LibraryManager.Cache
 {
     /// <summary>
     /// Holds information for pair: source, destination for a resource to be cached

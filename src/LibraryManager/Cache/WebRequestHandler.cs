@@ -11,7 +11,7 @@ using Microsoft.Web.LibraryManager.Configuration;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Helpers;
 
-namespace Microsoft.Web.LibraryManager
+namespace Microsoft.Web.LibraryManager.Cache
 {
     /// <summary>
     /// Helper class to hold the HttpClient instance and send requests to get resources
