@@ -18,6 +18,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Errors;
 using Microsoft.Web.LibraryManager.Vsix.Json.Completion;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 

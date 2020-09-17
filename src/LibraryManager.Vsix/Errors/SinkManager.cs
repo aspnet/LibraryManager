@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Shell.TableManager;
 using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.Errors
 {
     internal class SinkManager : IDisposable
     {

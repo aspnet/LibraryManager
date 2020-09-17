@@ -7,6 +7,7 @@ using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Errors;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Task = System.Threading.Tasks.Task;
 
