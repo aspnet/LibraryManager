@@ -8,7 +8,7 @@ using System.Linq;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 
-namespace Microsoft.Web.LibraryManager.Vsix.Errors
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class ErrorList
     {

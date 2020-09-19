@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 
-namespace Microsoft.Web.LibraryManager.Vsix.Errors
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class TableDataSource : ITableDataSource
     {

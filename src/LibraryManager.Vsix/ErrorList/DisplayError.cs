@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.Web.LibraryManager.Contracts;
 
-namespace Microsoft.Web.LibraryManager.Vsix.Errors
+namespace Microsoft.Web.LibraryManager.Vsix
 {
     internal class DisplayError
     {
