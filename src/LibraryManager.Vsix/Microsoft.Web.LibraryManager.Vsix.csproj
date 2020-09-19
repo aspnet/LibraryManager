@@ -98,7 +98,7 @@
     <Compile Include="Contracts\Logger.cs" />
     <Compile Include="Contracts\PerProjectLogger.cs" />
     <Compile Include="ErrorList\DisplayError.cs" />
-    <Compile Include="ErrorList\ErrorList.cs" />
+    <Compile Include="ErrorList\ErrorListPropagator.cs" />
     <Compile Include="ErrorList\SinkManager.cs" />
     <Compile Include="ErrorList\TableDataSource.cs" />
     <Compile Include="ErrorList\TableEntriesSnapshot.cs" />
