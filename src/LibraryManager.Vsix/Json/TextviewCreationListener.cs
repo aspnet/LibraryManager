@@ -18,6 +18,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.ErrorList;
 using Microsoft.Web.LibraryManager.Vsix.Json.Completion;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 
@@ -31,7 +32,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
         private Manifest _manifest;
         private IDependencies _dependencies;
         private Project _project;
-        private ErrorList _errorList;
+        private ErrorListPropagator _errorList;
         private string _manifestPath;
 
         [Import]
@@ -169,7 +170,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
         private void AddErrorsToList(IEnumerable<ILibraryOperationResult> errors)
         {
-            _errorList = new ErrorList(_project?.Name, _manifestPath);
+            _errorList = new ErrorListPropagator(_project?.Name, _manifestPath);
             _errorList.HandleErrors(errors);
         }
     }

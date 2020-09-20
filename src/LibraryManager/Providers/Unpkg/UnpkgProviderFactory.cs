@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Web.LibraryManager.Cache;
 using Microsoft.Web.LibraryManager.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Providers.Unpkg

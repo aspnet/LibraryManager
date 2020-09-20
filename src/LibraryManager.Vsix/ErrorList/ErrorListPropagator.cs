@@ -8,11 +8,11 @@ using System.Linq;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 
-namespace Microsoft.Web.LibraryManager.Vsix
+namespace Microsoft.Web.LibraryManager.Vsix.ErrorList
 {
-    internal class ErrorList
+    internal class ErrorListPropagator
     {
-        public ErrorList(string projectName, string configFileName)
+        public ErrorListPropagator(string projectName, string configFileName)
         {
             ProjectName = projectName ?? "";
             ConfigFileName = configFileName;

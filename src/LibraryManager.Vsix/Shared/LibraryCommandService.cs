@@ -14,6 +14,7 @@ using Microsoft.VisualStudio.TaskStatusCenter;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.ErrorList;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Shared
@@ -334,7 +335,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
         private void AddErrorsToErrorList(string projectName, string configFile, IEnumerable<ILibraryOperationResult> results)
         {
-            var errorList = new ErrorList(projectName, configFile);
+            var errorList = new ErrorListPropagator(projectName, configFile);
             errorList.HandleErrors(results);
         }
 
