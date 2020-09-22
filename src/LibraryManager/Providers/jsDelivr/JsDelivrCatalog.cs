@@ -68,12 +68,37 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                                                                                                            cancellationToken).ConfigureAwait(false);
 
                 var packageObject = (JObject)JsonConvert.DeserializeObject(latestVersionContent);
-                if (packageObject != null)
+
+                if (includePreReleases)
                 {
-                    var versions = packageObject["tags"] as JObject;
-                    var versionValue = versions["latest"] as JValue;
-                    latestVersion = versionValue?.Value as string;
+                    // there isn't a reliable tag to use for prerelease versions, so we'll have to parse the full list
+                    if (packageObject["versions"] is JArray versions)
+                    {
+                        if (versions.Values() is IEnumerable<JToken> versionValues)
+                        {
+                            latestVersion = versionValues.Select(vv => SemanticVersion.Parse(vv.ToString()))
+                                                         .Max()
+                                                         .ToString();
+                        }
+                    }
                 }
+                else
+                {
+                    if (packageObject["tags"] is JObject tags
+                        && tags["latest"] is JValue latestTag)
+                    {
+                        latestVersion = latestTag.Value as string;
+                    }
+                    else if (packageObject["versions"] is JArray versions
+                             && versions.Values() is IEnumerable<JToken> versionValues)
+                    {
+                        latestVersion = versionValues.Select(vv => SemanticVersion.Parse(vv.ToString()))
+                                                     .Where(semanticVersion => semanticVersion.PrereleaseVersion == null)
+                                                     .Max()
+                                                     .ToString();
+                    }
+                }
+
             }
             catch (Exception ex)
             {
