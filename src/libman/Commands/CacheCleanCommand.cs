@@ -65,12 +65,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                     Logger.Log(string.Format(Resources.Text.CacheCleanFailed, ex.Message), LogLevel.Error);
                 }
             }
-            else
+            else if (!ManifestDependencies.Providers.Any(p => p.Id == Provider.Value))
             {
-                if (!ManifestDependencies.Providers.Any(p => p.Id == Provider.Value))
-                {
-                    throw new InvalidOperationException(string.Format(Resources.Text.ProviderNotInstalled, Provider.Value));
-                }
+                throw new InvalidOperationException(string.Format(Resources.Text.ProviderNotInstalled, Provider.Value));
             }
 
             return Task.FromResult(0);
