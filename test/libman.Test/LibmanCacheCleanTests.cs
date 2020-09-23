@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Tools.Commands;
 
@@ -108,6 +108,16 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsFalse(File.Exists(Path.Combine(CacheDir, "cdnjs", "jquery", "3.2.1", "core.js")));
 
             Assert.IsTrue(File.Exists(Path.Combine(CacheDir, "filesystem", "abc.js")));
+        }
+
+        [TestMethod]
+        public void TestCacheClean_ThrowsIfUnknownProvider()
+        {
+            var cleanCommand = new CacheCleanCommand(HostEnvironment);
+            cleanCommand.Configure();
+
+            var exception = Assert.ThrowsException<AggregateException>(() => cleanCommand.Execute("foo"));
+            Assert.IsInstanceOfType(exception.InnerExceptions.First(), typeof(InvalidOperationException));
         }
     }
 }

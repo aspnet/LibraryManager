@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -63,6 +64,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 {
                     Logger.Log(string.Format(Resources.Text.CacheCleanFailed, ex.Message), LogLevel.Error);
                 }
+            }
+            else if (!ManifestDependencies.Providers.Any(p => p.Id == Provider.Value))
+            {
+                throw new InvalidOperationException(string.Format(Resources.Text.ProviderNotInstalled, Provider.Value));
             }
 
             return Task.FromResult(0);
