@@ -1,5 +1,17 @@
 # Change log
 
+## 2.1.113
+Commit: 422d40002e1fad0412a4bea45850227cf8eefa45
+- Packages updated on NuGet
+- Included in Visual Studio 16.8
+- Added caching for metadata from Cdnjs and jsDelivr providers
+- Fixed detection of latest version for Cdnjs provider
+- Implemented detection of pre-release and GitHub versions for jsDelivr provider
+- Improve CLI error message for unrecognized provider names 
+  - Thanks @RobJohnston!
+- Implement theming support in the VS dialog
+- Various engineering and refactoring changes.
+
 ## 2.1.76
 Commit: 3cafd794c1068ee7d8bcade05ddf087f503075a3
 - Packages updated on NuGet
