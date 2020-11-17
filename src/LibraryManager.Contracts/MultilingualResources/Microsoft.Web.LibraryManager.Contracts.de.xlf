@@ -98,7 +98,7 @@ Gültige Dateien: {2}</target>
         </trans-unit>
         <trans-unit id="ErrorFilePathIsEmpty" translate="yes" xml:space="preserve">
           <source>The library "{0}" cannot specify a file with an empty name</source>
-          <target state="new">The library "{0}" cannot specify a file with an empty name</target>
+          <target state="translated">Die Bibliothek "{0}" kann keine Datei mit einem leeren Namen angeben.</target>
         </trans-unit>
       </group>
     </body>

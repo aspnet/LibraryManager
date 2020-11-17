@@ -47,7 +47,7 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、プロジェクトにはファイルは追加されません。
+          <target state="translated">NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、プロジェクトにファイルは追加されません。
 
 これにはインターネット接続が必要な場合があります。
 
