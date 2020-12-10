@@ -49,7 +49,7 @@ This may require an internet connection.
 Do you want to continue?</source>
           <target state="translated">Se instalará un paquete NuGet para aumentar el proceso de MSBuild, pero no se agregará ningún archivo al proyecto.
 
-Puede que se requiera una conexión a Internet.
+Puede que se requiera una conexión a internet.
 
 ¿Quiere continuar?</target>
         </trans-unit>
