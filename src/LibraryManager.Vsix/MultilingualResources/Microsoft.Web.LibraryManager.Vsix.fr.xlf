@@ -64,7 +64,7 @@ Voulez-vous continuer ?</target>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;Choisir une bibliothèque pour sélectionner les fichiers à installer&gt;</it></target>
+          <target state="translated">&lt;Choisir une bibliothèque pour sélectionner les fichiers à installer&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>

@@ -55,7 +55,7 @@ Do you want to continue?</source>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;입력하여 검색&gt;</it></target>
+          <target state="translated">&lt;입력하여 검색&gt;</target>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>

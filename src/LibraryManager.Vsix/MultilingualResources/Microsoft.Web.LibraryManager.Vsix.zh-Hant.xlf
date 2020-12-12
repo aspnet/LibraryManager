@@ -47,7 +47,7 @@
 This may require an internet connection.
 
 Do you want to continue?</source>
-          <target state="translated">將會安裝 NuGet 套件，以擴大 MSBuild 處理序，但不會新增任何檔案到專案中。
+          <target state="translated">將安裝 NuGet 套件，以擴大 MSBuild 處理序，但不會新增任何檔案到專案中。
 
 這需要連線到網際網路。
 

@@ -69,7 +69,10 @@
     If no default provider exists, --provider option is required
     If no default destination exists, --destination option is required
     If no files are specified, the entire library is included</source>
-          <target state="translated">    如果不存在 libman.json 则初始化它 如果不存在默认提供程序，则需要 --provider 选项，如果不存在默认目标，则需要 --destination 选项 如果未指定文件，则包括整个库</target>
+          <target state="translated">    如果不存在 libman.json 则初始化它
+    如果不存在默认提供程序，则需要 --provider 选项
+    如果不存在默认目标，则需要 --destination 选项
+    如果未指定文件，则包括整个库</target>
         </trans-unit>
         <trans-unit id="InvalidArgumentsMessage" translate="yes" xml:space="preserve">
           <source>Invalid arguments for command: {0}</source>

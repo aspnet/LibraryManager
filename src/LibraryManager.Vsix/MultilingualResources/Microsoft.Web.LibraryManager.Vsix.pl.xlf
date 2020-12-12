@@ -55,7 +55,7 @@ Czy chcesz kontynuować?</target>
         </trans-unit>
         <trans-unit id="TypeToSearch" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Type to search&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;Wpisz, aby wyszukać&gt;</it></target>
+          <target state="translated">&lt;Wpisz, aby wyszukać&gt;</target>
         </trans-unit>
         <trans-unit id="AddClientSideLibrary" translate="yes" xml:space="preserve">
           <source>Add Client-Side Library</source>
@@ -64,7 +64,7 @@ Czy chcesz kontynuować?</target>
         </trans-unit>
         <trans-unit id="SelectLibraryToSelectFilesToInstall" translate="yes" xml:space="preserve">
           <source><it id="1" pos="open">&lt;Choose a library to select files to install&gt;</it></source>
-          <target state="translated"><it id="1" pos="open">&lt;Wybierz bibliotekę, aby wybrać pliki do zainstalowania&gt;</it></target>
+          <target state="translated">&lt;Wybierz bibliotekę, aby wybrać pliki do zainstalowania&gt;</target>
         </trans-unit>
         <trans-unit id="DisableRestoreOnBuild" translate="yes" xml:space="preserve">
           <source>Disabl&amp;e Client-Side Libraries on Build</source>
