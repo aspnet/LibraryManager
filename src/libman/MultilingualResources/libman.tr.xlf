@@ -432,6 +432,10 @@ Lütfen farklı bir hedef belirtin.</target>
     Bir ayarı kaldırmak için, boş bir dizeye ayarlayın (--set key=).
     Şifrelenmiş ayarlar için şifresi çözülmüş değerlerin alınması desteklenmiyor.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

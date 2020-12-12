@@ -79,4 +79,7 @@ Prawidłowe pliki to {2}</value>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Nie można przywrócić. Istnieje wiele definicji dla bibliotek: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>Biblioteka „{0}” nie może określać pliku z pustą nazwą</value>
+  </data>
 </root>

@@ -432,6 +432,10 @@ Specificare una destinazione diversa.</target>
     Per rimuovere un'impostazione, impostarla su una stringa vuota (--set key=).
     Il recupero dei valori decrittografati per le impostazioni crittografate non è supportato.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

@@ -201,6 +201,10 @@ Möchten Sie den Vorgang fortsetzen?</target>
           <source>Folder</source>
           <target state="translated">Ordner</target>
         </trans-unit>
+        <trans-unit id="CloseButtonText" translate="yes" xml:space="preserve">
+          <source>Close</source>
+          <target state="new">Close</target>
+        </trans-unit>
       </group>
     </body>
   </file>

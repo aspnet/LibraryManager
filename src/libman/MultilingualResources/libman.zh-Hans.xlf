@@ -432,6 +432,10 @@ Please specify a different destination.</source>
     要删除某个设置，请将其设置为空字符串(--set key=)。
     不支持检索已加密设置的解密值。</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

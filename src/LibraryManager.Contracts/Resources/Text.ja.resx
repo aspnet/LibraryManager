@@ -79,4 +79,7 @@
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>復元できません。次のライブラリの定義が複数あります: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>ライブラリ "{0}" では空の名前のファイルを指定できません</value>
+  </data>
 </root>

@@ -41,7 +41,7 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、プロジェクトにはファイルは追加されません。
+    <value>NuGet パッケージは MSBuild プロセスを拡張するためにインストールされますが、プロジェクトにファイルは追加されません。
 
 これにはインターネット接続が必要な場合があります。
 

@@ -79,4 +79,7 @@ Os arquivos válidos são {2}</value>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Não é possível restaurar. Várias definições para bibliotecas: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>A biblioteca "{0}" não pode especificar um arquivo com um nome vazio</value>
+  </data>
 </root>

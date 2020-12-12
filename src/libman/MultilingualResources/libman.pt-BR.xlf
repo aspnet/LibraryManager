@@ -432,6 +432,10 @@ Especifique outro destino.</target>
     Para remover uma configuração, defina-a como uma cadeia de caracteres vazia (--set key=).
     Não há suporte para a recuperação de valores descriptografados em configurações criptografadas.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

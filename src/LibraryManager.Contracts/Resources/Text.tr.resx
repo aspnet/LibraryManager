@@ -79,4 +79,7 @@ Geçerli dosyalar: {2}</value>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Geri yüklenemiyor. Kitaplıklara yönelik birden çok tanım: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>"{0}" kitaplığında adı boş bir dosya belirtilemez</value>
+  </data>
 </root>

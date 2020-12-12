@@ -79,4 +79,7 @@ Platné soubory jsou: {2}</value>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Obnovení nejde provést. Je více definic pro knihovny: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>Knihovna {0} nemůže uvádět soubor s prázdným názvem.</value>
+  </data>
 </root>
