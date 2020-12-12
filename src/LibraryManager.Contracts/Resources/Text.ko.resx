@@ -79,4 +79,7 @@
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>복원할 수 없음. 라이브러리에 대한 여러 개의 정의: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>"{0}" 라이브러리는 이름이 비어 있는 파일을 지정할 수 없습니다.</value>
+  </data>
 </root>

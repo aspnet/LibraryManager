@@ -41,9 +41,9 @@
     <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
-    <value>Será instalado um pacote NuGet para aumentar o processo do MSBuild, mas não será adicionado nenhum arquivo ao projeto.
+    <value>Será instalado um pacote NuGet para aumentar o processo do MSBuild, mas nenhum arquivo será adicionado ao projeto.
 
-Isso pode exigir uma conexão de Internet.
+Isso pode exigir uma conexão de internet.
 
 Deseja continuar?</value>
   </data>

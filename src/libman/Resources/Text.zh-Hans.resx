@@ -55,7 +55,10 @@
     对于 CDNJS 库，如果库 ID 中没有指定版本，则使用最高可用版本。</value>
   </data>
   <data name="InstallCommandRemarks" xml:space="preserve">
-    <value>    如果不存在 libman.json 则初始化它 如果不存在默认提供程序，则需要 --provider 选项，如果不存在默认目标，则需要 --destination 选项 如果未指定文件，则包括整个库</value>
+    <value>    如果不存在 libman.json 则初始化它
+    如果不存在默认提供程序，则需要 --provider 选项
+    如果不存在默认目标，则需要 --destination 选项
+    如果未指定文件，则包括整个库</value>
   </data>
   <data name="InvalidArgumentsMessage" xml:space="preserve">
     <value>命令的参数无效: {0}</value>

@@ -79,4 +79,7 @@
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Невозможно восстановить. Присутствует несколько определений библиотек: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>Библиотеке "{0}" не удается указать файл с пустым именем.</value>
+  </data>
 </root>

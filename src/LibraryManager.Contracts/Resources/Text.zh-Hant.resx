@@ -79,4 +79,7 @@
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>無法還原。程式庫有多個定義: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>程式庫 "{0}" 無法指定名稱空白的檔案</value>
+  </data>
 </root>

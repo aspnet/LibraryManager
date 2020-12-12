@@ -79,4 +79,7 @@
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>无法还原。库存在多个定义: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>库“{0}”不能指定名称为空的文件</value>
+  </data>
 </root>

@@ -79,4 +79,7 @@ I file validi sono {2}</value>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Non è possibile eseguire il ripristino. Sono presenti più definizioni per le librerie: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>La libreria "{0}" non può specificare un file con un nome vuoto</value>
+  </data>
 </root>

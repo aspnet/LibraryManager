@@ -79,4 +79,7 @@ Gültige Dateien: {2}</value>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Wiederherstellung nicht möglich. Mehrere Definitionen für Bibliotheken: {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>Die Bibliothek "{0}" kann keine Datei mit einem leeren Namen angeben.</value>
+  </data>
 </root>

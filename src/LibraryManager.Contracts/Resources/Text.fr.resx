@@ -79,4 +79,7 @@ Les fichiers valides sont {2}</value>
   <data name="ErrorDuplicateLibraries" xml:space="preserve">
     <value>Restauration impossible. Plusieurs définitions pour les bibliothèques : {0}</value>
   </data>
+  <data name="ErrorFilePathIsEmpty" xml:space="preserve">
+    <value>La bibliothèque "{0}" ne peut pas spécifier un fichier avec un nom vide</value>
+  </data>
 </root>
