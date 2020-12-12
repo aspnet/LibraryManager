@@ -432,6 +432,10 @@ Geben Sie ein anderes Ziel an.</target>
     Um eine Einstellung zu entfernen, legen Sie sie auf eine leere Zeichenfolge fest (--set key=).
     Das Abrufen entschlüsselter Werte für verschlüsselte Einstellungen wird nicht unterstützt.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

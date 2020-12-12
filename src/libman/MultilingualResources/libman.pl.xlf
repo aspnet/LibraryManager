@@ -432,6 +432,10 @@ Określ inną lokalizację docelową.</target>
     Aby usunąć ustawienie, należy ustawić je na pusty ciąg (--set key=).
     Pobieranie odszyfrowanych wartości dla ustawień szyfrowanych nie jest obsługiwane.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

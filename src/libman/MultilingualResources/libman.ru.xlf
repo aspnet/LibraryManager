@@ -432,6 +432,10 @@ Please specify a different destination.</source>
     Чтобы удалить параметр, установите для него значение, равное пустой строке (--set key=).
     Получение расшифрованных значений для зашифрованных параметров не поддерживается.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

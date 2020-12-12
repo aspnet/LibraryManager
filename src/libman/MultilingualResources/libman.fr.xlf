@@ -428,6 +428,10 @@ Spécifiez une destination différente.</target>
     Pour supprimer un paramètre, affectez-lui une chaîne vide (--set key=).
     La récupération des valeurs déchiffrées pour les paramètres chiffrés n'est pas prise en charge.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

@@ -432,6 +432,10 @@ Zadejte prosím jiný cíl.</target>
     Pokud chcete nastavení odebrat, nastavte je na prázdný řetězec (--set key=).
     Načítání dešifrovaných hodnot pro šifrované nastavení se nepodporuje.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

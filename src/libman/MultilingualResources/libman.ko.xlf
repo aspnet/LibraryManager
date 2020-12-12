@@ -432,6 +432,10 @@ Please specify a different destination.</source>
     설정을 제거하려면 빈 문자열(--set key=)로 설정합니다.
     암호화된 설정의 암호 해독된 값 검색은 지원되지 않습니다.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>

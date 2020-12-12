@@ -432,6 +432,10 @@ Especifique otro destino.</target>
     Para quitar un valor, establézcalo en una cadena vacía (--set key=).
     No se admite la recuperación de valores descifrados para configuraciones cifradas.</target>
         </trans-unit>
+        <trans-unit id="CacheLocationMessage" translate="yes" xml:space="preserve">
+          <source>Cache root directory:</source>
+          <target state="new">Cache root directory:</target>
+        </trans-unit>
       </group>
     </body>
   </file>
