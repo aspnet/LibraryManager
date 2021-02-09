@@ -16,6 +16,12 @@ steps:
       isCreatePrSelected: false
       prSourceBranchPrefix: 'locfiles'
     condition: ne(variables['Build.Reason'], 'PullRequest')
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: $(Build.ArtifactStagingDirectory)
+      ArtifactName: drop
+      ArtifactType: Container
+    displayName: Publish artifacts
 
 - ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
   - template: azure-pipeline.microbuild.before.yml
