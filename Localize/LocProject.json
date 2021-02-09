@@ -1,0 +1,34 @@
+{
+  "Projects": [
+    {
+      "LanguageSet": "VS_Main_Languages",
+      "LocItems": [
+        {
+          "SourceFile": "src\\libman\\Resources\\Text.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\libman\\Resources"
+        },
+        {
+          "SourceFile": "src\\LibraryManager\\Resources\\Text.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\LibraryManager\\Resources"
+        },
+        {
+          "SourceFile": "src\\LibraryManager.Contracts\\Resources\\Text.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\LibraryManager.Contracts\\Resources"
+        },
+        {
+          "SourceFile": "src\\LibraryManager.Vsix\\Resources\\Text.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\Librarymanager.Vsix\\Resources"
+        },
+        {
+          "SourceFile": "src\\LibraryManager.Vsix\\source.extension.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\LibraryManager.Vsix"
+        }
+      ]
+    }
+  ]
+}
