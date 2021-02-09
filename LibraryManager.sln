@@ -25,7 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{FFCD12F4-5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E67307E3-04FF-498B-97C7-4F508299DF4D}"
 	ProjectSection(SolutionItems) = preProject
-		build\dependencies.props = build\dependencies.props
 		build\PackageVersions.targets = build\PackageVersions.targets
 	EndProjectSection
 EndProject
