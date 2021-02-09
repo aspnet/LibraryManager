@@ -1,5 +1,4 @@
 <Project>
-  <Import Project="build\dependencies.props" />
   <PropertyGroup>
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
     <MicroBuild_DoNotStrongNameSign>true</MicroBuild_DoNotStrongNameSign>
@@ -26,8 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NerdBank.GitVersioning" PrivateAssets="All" />
-    <PackageReference Include="MicroBuild" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Internal.MicroBuild" PrivateAssets="All" />
+    <PackageReference Include="NerdBank.GitVersioning" PrivateAssets="All" />
   </ItemGroup>
 </Project>
