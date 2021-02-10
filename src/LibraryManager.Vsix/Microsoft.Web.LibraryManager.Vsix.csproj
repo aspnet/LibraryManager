@@ -411,9 +411,6 @@
     <None Include="Commands\CommandTable\LocalizationFiles\VSCommandTable.*.xlf" />
   </ItemGroup>
   <ItemGroup>
-    <XliffResource Include="MultilingualResources\*.xlf" />
-  </ItemGroup>
-  <ItemGroup>
     <FilesToSign Include="$(OutputPath)\Minimatch.dll;$(OutputPath)\Nerdbank.Streams.dll">
       <Authenticode>3PartySHA2</Authenticode>
     </FilesToSign>

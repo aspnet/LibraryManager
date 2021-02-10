@@ -33,10 +33,6 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <XliffResource Include="MultilingualResources\*.xlf" />
-  </ItemGroup>
-
   <Target Name="AdditionalPublishedFilesToSign" AfterTargets="CopyFilesToPublishDirectory">
     <!-- For NuGet packaging, files get put in $(PublishDir) and should be signed there instead of $(OutputDir) -->
     <!-- Also note, it uses @(PublishedFilesToSign) instead of @(FilesToSign).  See target SignPublishedFiles -->

@@ -16,10 +16,6 @@
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Reference Include="System.Runtime" />
   </ItemGroup>
-  <!-- Needed for Multilingual App Toolkit-->
-  <ItemGroup>
-    <XliffResource Include="MultilingualResources\*.xlf" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Text.Designer.cs">
       <DesignTime>True</DesignTime>
