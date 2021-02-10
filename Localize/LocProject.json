@@ -27,6 +27,12 @@
           "SourceFile": "src\\LibraryManager.Vsix\\source.extension.resx",
           "CopyOption": "LangIdOnName",
           "OutputPath": "src\\LibraryManager.Vsix"
+        },
+        {
+          "$comment": "This is copied from the ENU XLF file by a preceding PowerShell step",
+          "SourceFile": "src\\LibraryManager.Vsix\\Commands\\CommandTable\\LocalizationFiles\\VSCommandTable.xlf",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\LibraryManager.Vsix\\Commands\\CommandTable\\LocalizationFiles"
         }
       ]
     }
