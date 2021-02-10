@@ -12,14 +12,14 @@ steps:
     inputs:
       locProj: 'Localize/LocProject.json'
       outDir: '$(Build.ArtifactStagingDirectory)'
-      # TODO enable this once the new loc builds are verified
-      isCreatePrSelected: false
+      repoType: github
+      gitHubPatVariable: '$(OneLocGitHubPat)'
       prSourceBranchPrefix: 'locfiles'
     condition: ne(variables['Build.Reason'], 'PullRequest')
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: $(Build.ArtifactStagingDirectory)
-      ArtifactName: drop
+      ArtifactName: locAssets
       ArtifactType: Container
     displayName: Publish artifacts
 
