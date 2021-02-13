@@ -152,7 +152,7 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
       <Generator>VsixManifestGenerator</Generator>
-      <LastGenOutput>source.extension.en.resx</LastGenOutput>
+      <LastGenOutput>source.extension.resx</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -347,7 +347,7 @@
       <MergeWithCTO>true</MergeWithCTO>
       <LogicalName>VSPackage.zh-Hant.Resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="source.extension.en.resx">
+    <EmbeddedResource Include="source.extension.resx">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
@@ -409,9 +409,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Commands\CommandTable\LocalizationFiles\VSCommandTable.*.xlf" />
-  </ItemGroup>
-  <ItemGroup>
-    <XliffResource Include="MultilingualResources\*.xlf" />
   </ItemGroup>
   <ItemGroup>
     <FilesToSign Include="$(OutputPath)\Minimatch.dll;$(OutputPath)\Nerdbank.Streams.dll">

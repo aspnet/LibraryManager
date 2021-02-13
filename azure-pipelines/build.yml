@@ -40,6 +40,28 @@ steps:
 - ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
   - template: azure-pipeline.microbuild.after.yml
 
+- ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
+  - powershell: |
+      New-Item -ItemType Directory ${env:Build_ArtifactStagingDirectory}\locAssets
+  - powershell: |
+      Copy-Item src\LibraryManager.Vsix\Commands\CommandTable\LocalizationFiles\VSCommandTable.en.xlf src\LibraryManager.Vsix\Commands\CommandTable\LocalizationFiles\VSCommandTable.xlf
+  - task: OneLocBuild@2
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+    inputs:
+      locProj: 'Localize/LocProject.json'
+      outDir: '$(Build.ArtifactStagingDirectory)\locAssets'
+      repoType: github
+      gitHubPatVariable: '$(OneLocGitHubPat)'
+      prSourceBranchPrefix: 'locfiles'
+    condition: ne(variables['Build.Reason'], 'PullRequest')
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\locAssets'
+      ArtifactName: locAssets
+      ArtifactType: Container
+    displayName: Publish artifacts
+
 - task: CopyFiles@1
   inputs:
     contents: |

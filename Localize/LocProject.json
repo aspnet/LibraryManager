@@ -1,0 +1,46 @@
+{
+  "Projects": [
+    {
+      "LanguageSet": "VS_Main_Languages",
+      "LocItems": [
+        {
+          "SourceFile": "src\\libman\\Resources\\Text.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\libman\\Resources",
+          "LclFile": "src\\libman\\Resources\\loc\\{Lang}\\Resources\\Text.resx.lcl"
+        },
+        {
+          "SourceFile": "src\\LibraryManager\\Resources\\Text.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\LibraryManager\\Resources",
+          "LclFile": "src\\LibraryManager\\Resources\\loc\\{Lang}\\Resources\\Text.resx.lcl"
+        },
+        {
+          "SourceFile": "src\\LibraryManager.Contracts\\Resources\\Text.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\LibraryManager.Contracts\\Resources",
+          "LclFile": "src\\LibraryManager.Contracts\\Resources\\loc\\{Lang}\\Resources\\Text.resx.lcl"
+        },
+        {
+          "SourceFile": "src\\LibraryManager.Vsix\\Resources\\Text.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\Librarymanager.Vsix\\Resources",
+          "LclFile": "src\\LibraryManager.Vsix\\Resources\\loc\\{Lang}\\Resources\\Text.resx.lcl"
+        },
+        {
+          "SourceFile": "src\\LibraryManager.Vsix\\source.extension.resx",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\LibraryManager.Vsix",
+          "LclFile": "src\\LibraryManager.Vsix\\Resources\\loc\\{Lang}\\source.extension.resx.lcl"
+        },
+        {
+          "$comment": "This is copied from the ENU XLF file by a preceding PowerShell step",
+          "SourceFile": "src\\LibraryManager.Vsix\\Commands\\CommandTable\\LocalizationFiles\\VSCommandTable.xlf",
+          "CopyOption": "LangIdOnName",
+          "OutputPath": "src\\LibraryManager.Vsix\\Commands\\CommandTable\\LocalizationFiles",
+          "LclFile": "src\\LibraryManager.Vsix\\Resources\\loc\\{Lang}\\Commands\\CommandTable\\LocalizationFiles\\VSCommandTable.xlf.lcl"
+        }
+      ]
+    }
+  ]
+}
