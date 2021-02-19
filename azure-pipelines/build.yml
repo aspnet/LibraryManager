@@ -54,6 +54,7 @@ steps:
       repoType: github
       gitHubPatVariable: '$(OneLocGitHubPat)'
       prSourceBranchPrefix: 'locfiles'
+      isAutoCompletePrSelected: false
     condition: ne(variables['Build.Reason'], 'PullRequest')
   - task: PublishBuildArtifacts@1
     inputs:
