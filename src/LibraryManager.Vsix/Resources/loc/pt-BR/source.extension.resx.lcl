@@ -19,7 +19,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Microsoft Library Manager]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Gerenciador de biblioteca da Microsoft]]></Val>
+            <Val><![CDATA[Gerenciador de Bibliotecas da Microsoft]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
