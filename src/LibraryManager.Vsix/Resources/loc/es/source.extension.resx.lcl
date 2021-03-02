@@ -28,7 +28,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Install client-side libraries easily to any web project]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Instalar bibliotecas del lado cliente fácilmente en cualquier proyecto web]]></Val>
+            <Val><![CDATA[Instalar bibliotecas del lado cliente de forma fácil en cualquier proyecto web]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
