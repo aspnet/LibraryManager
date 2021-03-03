@@ -19,7 +19,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Microsoft Library Manager]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Microsoft Library 管理員]]></Val>
+            <Val><![CDATA[Microsoft 程式庫管理員]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -28,7 +28,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Install client-side libraries easily to any web project]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將用戶端程式庫輕鬆安裝至任何 Web 專案]]></Val>
+            <Val><![CDATA[輕鬆地將用戶端程式庫安裝至任何 Web 專案]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
