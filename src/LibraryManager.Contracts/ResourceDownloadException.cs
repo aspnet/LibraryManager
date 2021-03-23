@@ -43,7 +43,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Serialization constructor for this exception type.
         /// </summary>
         protected ResourceDownloadException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
-            : this(serializationInfo.GetString(nameof(Url)))
+            : this(serializationInfo?.GetString(nameof(Url)))
         {
         }
     }

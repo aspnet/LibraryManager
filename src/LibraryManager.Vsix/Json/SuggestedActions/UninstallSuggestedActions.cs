@@ -65,7 +65,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.SuggestedActions
                 await _libraryCommandService.UninstallAsync(_provider.ConfigFilePath, state.Name, state.Version, state.ProviderId, cancellationToken)
                     .ConfigureAwait(false);
 
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
                 using (ITextEdit edit = TextBuffer.CreateEdit())
                 {
                     var arrayElement = _provider.LibraryObject.Parent as ArrayElementNode;

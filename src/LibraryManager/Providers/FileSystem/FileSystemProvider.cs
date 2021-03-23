@@ -189,7 +189,9 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         {
             try
             {
+#pragma warning disable CA2000 // Dispose objects before losing scope
                 var client = new HttpClient();
+#pragma warning restore CA2000 // Dispose objects before losing scope
                 return await client.GetStreamAsync(new Uri(sourceUrl)).ConfigureAwait(false);
             }
             catch (Exception)

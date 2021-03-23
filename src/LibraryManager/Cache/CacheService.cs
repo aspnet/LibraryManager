@@ -83,7 +83,7 @@ namespace Microsoft.Web.LibraryManager.Cache
                     }
                 }
 
-                await Task.Delay(200).ConfigureAwait(false);
+                await Task.Delay(200, cancellationToken).ConfigureAwait(false);
             }
         }
 
