@@ -410,7 +410,11 @@
     <None Include="Commands\CommandTable\LocalizationFiles\VSCommandTable.*.xlf" />
   </ItemGroup>
   <ItemGroup>
-    <FilesToSign Include="$(OutputPath)\Minimatch.dll;$(OutputPath)\Nerdbank.Streams.dll">
+    <ThirdPartyAssemblies Include="$(OutputPath)\MessagePack.dll" />
+    <ThirdPartyAssemblies Include="$(OutputPath)\MessagePack.Annotations.dll" />
+    <ThirdPartyAssemblies Include="$(OutputPath)\Minimatch.dll" />
+    <ThirdPartyAssemblies Include="$(OutputPath)\Nerdbank.Streams.dll" />
+    <FilesToSign Include="@(ThirdPartyAssemblies)">
       <Authenticode>3PartySHA2</Authenticode>
     </FilesToSign>
   </ItemGroup>
