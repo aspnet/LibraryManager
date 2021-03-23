@@ -30,7 +30,7 @@
     <PackageVersion Include="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" Version="16.9.30921.310" />
     <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="16.3.104" />
     <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="16.9.51" />
-    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="16.5.2044" />
+    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.0.38-dev17-g08fcf558" />
     <PackageVersion Include="MiniMatch" Version="2.0.0" NoWarn="NU1603" />
     <PackageVersion Include="Moq" Version="4.10.1" />
     <PackageVersion Include="NerdBank.GitVersioning" Version="3.3.37" />
