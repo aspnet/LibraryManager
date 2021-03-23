@@ -58,7 +58,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
 
             if (configProjectItem != null)
             {
-                await _libraryCommandService.RestoreAsync(configProjectItem.FileNames[1], CancellationToken.None);
+                await _libraryCommandService.RestoreAsync(configProjectItem.get_FileNames(1), CancellationToken.None);
             }
         }
     }

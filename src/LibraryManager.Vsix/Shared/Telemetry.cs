@@ -62,7 +62,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
             telResult.Add("LibrariesCount", results.Count());
             telResult.Add($"{operation}_time", elapsedTimeStr);
 
-            if (generalErrorCodes.Count() > 0)
+            if (generalErrorCodes.Count > 0)
             {
                 telResult.Add("ErrorCodes", string.Join(":", generalErrorCodes));
             }

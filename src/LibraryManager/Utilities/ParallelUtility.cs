@@ -34,19 +34,21 @@ namespace Microsoft.Web.LibraryManager.Utilities
             items = items ?? throw new ArgumentNullException(nameof(items));
             cancellationToken.ThrowIfCancellationRequested();
 
-            var semaphore = new SemaphoreSlim(degreeOfParallelism, degreeOfParallelism);
-            var allTasks = new List<Task>();
-
-            foreach (T item in items)
+            using (var semaphore = new SemaphoreSlim(degreeOfParallelism, degreeOfParallelism))
             {
-                await semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
-                cancellationToken.ThrowIfCancellationRequested();
+                var allTasks = new List<Task>();
 
-                Task task = DoActionAndRelease(action, item, semaphore);
-                allTasks.Add(task);
+                foreach (T item in items)
+                {
+                    await semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    Task task = DoActionAndRelease(action, item, semaphore);
+                    allTasks.Add(task);
+                }
+
+                await Task.WhenAll(allTasks).ConfigureAwait(false);
             }
-
-            await Task.WhenAll(allTasks).ConfigureAwait(false);
         }
 
         private static async Task DoActionAndRelease<T>(Func<T, Task> act, T input, SemaphoreSlim s)

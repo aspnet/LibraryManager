@@ -43,16 +43,22 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.SuggestedActions
 
             yield return new UninstallSuggestedAction(this, LibraryCommandService);
 
+#pragma warning disable CA2000 // Dispose objects before losing scope
             var update = new UpdateSuggestedActionSet(this);
+#pragma warning restore CA2000 // Dispose objects before losing scope
 
             if (update.HasActionSets)
+            {
                 yield return update;
+            }
         }
 
         public bool HasSuggestedActions(ITextView textView, ITextBuffer textBuffer, int caretPosition, Node node)
         {
-            if (!DocumentService.TryGetTextDocument(textView.TextBuffer, out var doc))
+            if (!DocumentService.TryGetTextDocument(textView.TextBuffer, out ITextDocument doc))
+            {
                 return false;
+            }
 
             ObjectNode parent = node.FindType<ObjectNode>();
 

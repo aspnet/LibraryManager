@@ -1,0 +1,48 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- This is due to noise caused from the Minimatch package, tracked at https://github.com/SLaks/Minimatch/issues/12 -->
+    <NoWarn>$(NoWarn);NU1603</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Build.Framework" Version="16.9.0" />
+    <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="16.9.0" />
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
+    <PackageVersion Include="Microsoft.VisualStudio.Editor" Version="17.0.82-g2ecf33c7f7" />
+    <PackageVersion Include="Microsoft.VisualStudio.Internal.MicroBuild" Version="2.0.65" />
+    <PackageVersion Include="Microsoft.VisualStudio.Language.Intellisense" Version="17.0.82-g2ecf33c7f7" />
+    <PackageVersion Include="Microsoft.VisualStudio.Settings.15.0" Version="17.0.0-previews-1-31410-258" />
+    <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.0.0-preview-2-31221-277" />
+    <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="16.3.110" />
+    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.0.1600" />
+    <PackageVersion Include="MiniMatch" Version="2.0.0" />
+    <PackageVersion Include="Moq" Version="4.10.1" />
+    <PackageVersion Include="NerdBank.GitVersioning" Version="3.3.37" />
+    <PackageVersion Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageVersion Include="Nuget.VisualStudio" Version="6.0.0-preview.0.2" />
+
+    <PackageVersion Include="System.Net.Http" Version="4.3.1" />
+    <PackageVersion Include="System.Runtime" Version="4.3.0" />
+    <PackageVersion Include="System.Runtime.Loader" Version="4.3.0" />
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="4.5.0" />
+    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4"/>
+    <PackageVersion Include="System.ValueTuple" Version="4.3.0" />
+
+    <!-- Test references -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageVersion Include="Microsoft.Test.Apex.VisualStudio" Version="16.3.29003.189" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="2.2.3" />
+    <PackageVersion Include="MSTest.TestFramework" Version="2.2.3" />
+
+    <!-- CommandLine utils -->
+    <!-- This version should be kept in sync with the value of RuntimeFrameworkVersion where this package is consumed -->
+    <PackageVersion Include="Microsoft.Extensions.CommandLineUtils.Sources" Version="2.1.0" />
+    <PackageVersion Include="Microsoft.NETCore.DotnetAppHost" Version="2.1.0" />
+
+  </ItemGroup>
+
+</Project>

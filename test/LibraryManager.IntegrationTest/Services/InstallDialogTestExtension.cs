@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
         {
             UIInvoke(() =>
             {
-                ThreadHelper.JoinableTaskFactory.RunAsync(async () => await this.InstallDialog.ClickInstallAsync()).Task.ConfigureAwait(false);
+                _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () => await this.InstallDialog.ClickInstallAsync()).Task.ConfigureAwait(false);
             });
         }
 

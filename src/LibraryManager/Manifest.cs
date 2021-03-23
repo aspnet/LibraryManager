@@ -75,6 +75,8 @@ namespace Microsoft.Web.LibraryManager
         /// <returns>An instance of the <see cref="Manifest"/> class.</returns>
         public static async Task<Manifest> FromFileAsync(string fileName, IDependencies dependencies, CancellationToken cancellationToken)
         {
+            _ = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
+
             if (File.Exists(fileName))
             {
                 string json = await FileHelpers.ReadFileAsTextAsync(fileName, cancellationToken).ConfigureAwait(false);

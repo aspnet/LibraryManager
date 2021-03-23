@@ -138,7 +138,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
         public static async Task AddFilesToProjectAsync(Project project, IEnumerable<string> files, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
             {
@@ -258,7 +258,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
         public static async Task<bool> DeleteFilesFromProjectAsync(Project project, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             int batchSize = 10;
 
@@ -280,7 +280,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
                     await System.Threading.Tasks.Task.Yield();
 
-                    int countToDelete = Math.Min(filesToRemove.Count(), batchSize);
+                    int countToDelete = Math.Min(filesToRemove.Count, batchSize);
                     filesToRemove.RemoveRange(0, countToDelete);
                 }
 
@@ -433,7 +433,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
                 await System.Threading.Tasks.Task.Yield();
 
-                int countToDelete = filesToAdd.Count() >= batchSize ? batchSize : filesToAdd.Count();
+                int countToDelete = filesToAdd.Count >= batchSize ? batchSize : filesToAdd.Count;
                 filesToAdd.RemoveRange(0, countToDelete);
             }
 
@@ -442,7 +442,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
         private static async Task<bool> AddProjectItemsInBatchAsync(IVsHierarchy vsHierarchy, List<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             IVsProjectBuildSystem bldSystem = vsHierarchy as IVsProjectBuildSystem;
 
@@ -456,12 +456,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var vsProject = (IVsProject)vsHierarchy;
-                VSADDRESULT[] result = new VSADDRESULT[filePaths.Count()];
+                VSADDRESULT[] result = new VSADDRESULT[filePaths.Count];
 
                 vsProject.AddItem(VSConstants.VSITEMID_ROOT,
                             VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE,
                             string.Empty,
-                            (uint)filePaths.Count(),
+                            (uint)filePaths.Count,
                             filePaths.ToArray(),
                             IntPtr.Zero,
                             result);
@@ -490,7 +490,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
         private static async Task<bool> DeleteProjectItemsInBatchAsync(IVsHierarchy hierarchy, IEnumerable<string> filePaths, Action<string, LogLevel> logAction, CancellationToken cancellationToken)
         {
 
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             IVsProjectBuildSystem bldSystem = hierarchy as IVsProjectBuildSystem;
             HashSet<ProjectItem> folders = new HashSet<ProjectItem>();

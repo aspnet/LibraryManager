@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest.Services
             Guid guid = Guid.Parse("44ee7bda-abda-486e-a5fe-4dd3f4cefac1");
             uint commandId = 0x0100;
 
-            VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ExecuteCommandAsync(guid, commandId);
             });

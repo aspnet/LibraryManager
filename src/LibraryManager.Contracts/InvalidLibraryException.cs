@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Serializable constructor for <see cref="InvalidLibraryException"/>.
         /// </summary>
         protected InvalidLibraryException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
-            :this(serializationInfo.GetString(nameof(LibraryId)), serializationInfo.GetString(nameof(ProviderId)))
+            :this(serializationInfo?.GetString(nameof(LibraryId)), serializationInfo.GetString(nameof(ProviderId)))
         {
         }
 

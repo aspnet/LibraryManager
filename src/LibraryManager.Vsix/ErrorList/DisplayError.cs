@@ -28,10 +28,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.ErrorList
 #pragma warning restore CA1308 // Normalize strings to uppercase
 
         /// <summary>The line number containing the error.</summary>
-        public int Line { get; set; } = 0;
+        public int Line { get; set; }
 
         /// <summary>The column number containing the error.</summary>
-        public int Column { get; set; } = 0;
+        public int Column { get; set; }
 
         public ImageMoniker Moniker => KnownMonikers.StatusWarning;
     }

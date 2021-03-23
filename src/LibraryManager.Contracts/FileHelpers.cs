@@ -27,6 +27,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static async Task<bool> SafeWriteToFileAsync(string fileName, Stream sourceStream, CancellationToken cancellationToken)
         {
+            _ = sourceStream ?? throw new ArgumentNullException(nameof(sourceStream));
             cancellationToken.ThrowIfCancellationRequested();
 
             string tempFileName = Path.GetTempFileName();
@@ -232,6 +233,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         public static bool DeleteFiles(IEnumerable<string> filePaths, string rootDirectory = null)
         {
+            _ = filePaths ?? throw new ArgumentNullException(nameof(filePaths));
             HashSet<string> directories = new HashSet<string>();
 
             try
@@ -285,7 +287,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns></returns>
         private static bool DeleteEmptyFoldersFromDisk(IEnumerable<string> folderPaths, string rootDirectory)
         {
-            if (folderPaths.Count() == 0)
+            if (!folderPaths.Any())
             {
                 return true;
             }

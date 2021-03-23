@@ -86,7 +86,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
 
             try
             {
-                var dependencies = _dependenciesFactory.FromConfigFile(projectItem.FileNames[1]);
+                var dependencies = _dependenciesFactory.FromConfigFile(projectItem.get_FileNames(1));
                 IEnumerable<string> packageIds = dependencies.Providers
                                                              .Where(p => p.NuGetPackageId != null)
                                                              .Select(p => p.NuGetPackageId)

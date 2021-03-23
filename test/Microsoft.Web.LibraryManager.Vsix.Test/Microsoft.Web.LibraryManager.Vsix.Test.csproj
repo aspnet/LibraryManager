@@ -10,7 +10,7 @@
     <PackageReference Include="Moq" />
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.3"/>
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj" />
