@@ -21,6 +21,7 @@
     <ExtensionInstallationFolder>Microsoft\Web Tools\Library Manager</ExtensionInstallationFolder>
     <!-- IsProductComponent should always be true, as the component ships in VS -->
     <IsProductComponent>true</IsProductComponent>
+    <SetupProductArch>neutral</SetupProductArch>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
