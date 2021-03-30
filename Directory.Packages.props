@@ -24,7 +24,8 @@
     <PackageVersion Include="Microsoft.VisualStudio.SDK.EmbedInteropTypes" Version="15.0.34" />
     <PackageVersion Include="Microsoft.VisualStudio.Settings.15.0" Version="16.2.29122.156" />
     <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.0.0-preview-1-30928-1112" />
-    <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="16.3.104" />
+    <PackageVersion Include="Microsoft.VisualStudio.Shell.Framework" Version="17.0.0-preview-1-30928-1112" />
+    <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="16.3.109" />
     <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="16.10.41-alpha" />
     <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.0.38-dev17-g08fcf558" />
     <PackageVersion Include="MiniMatch" Version="2.0.0" NoWarn="NU1603" />
