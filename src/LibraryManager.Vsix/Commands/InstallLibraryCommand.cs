@@ -117,7 +117,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
                 // the command was invoked.
                 if (item != null)
                 {
-                    target = item.FileNames[1];
+                    target = item.get_FileNames(1);
                 }
                 else
                 {

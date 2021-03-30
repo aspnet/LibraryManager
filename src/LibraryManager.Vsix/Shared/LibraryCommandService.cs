@@ -177,7 +177,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-                string configFileName = configProjectItem.FileNames[1];
+                string configFileName = configProjectItem.get_FileNames(1);
                 var dependencies = _dependenciesFactory.FromConfigFile(configFileName);
                 Project project = VsHelpers.GetDTEProjectFromConfig(configFileName);
 
