@@ -34,7 +34,7 @@
 
     <!-- Test references -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageVersion Include="Microsoft.Test.Apex.VisualStudio" Version="16.3.29003.189" />
+    <PackageVersion Include="Microsoft.Test.Apex.VisualStudio" Version="17.0.0-previews-2-31502-208" />
     <PackageVersion Include="MSTest.TestAdapter" Version="2.2.3" />
     <PackageVersion Include="MSTest.TestFramework" Version="2.2.3" />
 
