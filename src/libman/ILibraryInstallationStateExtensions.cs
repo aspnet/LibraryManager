@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Tools
                 sb.Append(", " + libraryInstallationState.DestinationPath);
             }
 
-            sb.Append("}");
+            sb.Append('}');
 
             return sb.ToString();
         }

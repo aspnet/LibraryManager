@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Helpers
                 return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderIsUndefined() });
             }
 
-            IProvider provider = dependencies.GetProvider(state.ProviderId);
+            IProvider provider = dependencies?.GetProvider(state.ProviderId);
             if (provider == null)
             {
                 return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderUnknown(state.ProviderId) });
@@ -60,7 +60,7 @@ namespace Microsoft.Web.LibraryManager.Helpers
 
             if (provider == null)
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderUnknown(provider.Id) });
+                return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderUnknown(string.Empty) });
             }
 
             if (string.IsNullOrEmpty(state.Name))
@@ -131,6 +131,7 @@ namespace Microsoft.Web.LibraryManager.Helpers
         /// <returns></returns>
         public static async Task<JObject> GetJsonObjectViaGetAsync(this IWebRequestHandler webRequestHandler, string url, CancellationToken cancellationToken)
         {
+            _ = webRequestHandler ?? throw new ArgumentNullException(nameof(webRequestHandler));
             JObject result = null;
 
             using (Stream stream = await webRequestHandler.GetStreamAsync(url, cancellationToken))
@@ -157,6 +158,7 @@ namespace Microsoft.Web.LibraryManager.Helpers
         /// <returns></returns>
         public static string GetJObjectMemberStringValue(this JObject jObject, string propertyName, string defaultValue = "")
         {
+            _ = jObject ?? throw new ArgumentNullException(nameof(jObject));
             string propertyValue = defaultValue;
 
             JValue jValue = jObject[propertyName] as JValue;

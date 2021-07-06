@@ -45,6 +45,8 @@ steps:
       New-Item -ItemType Directory ${env:Build_ArtifactStagingDirectory}\locAssets
   - powershell: |
       Copy-Item src\LibraryManager.Vsix\Commands\CommandTable\LocalizationFiles\VSCommandTable.en.xlf src\LibraryManager.Vsix\Commands\CommandTable\LocalizationFiles\VSCommandTable.xlf
+  - powershell: |
+      Copy-Item src\LibraryManager.Vsix\source.extension.en.resx src\LibraryManager.Vsix\source.extension.resx
   - task: OneLocBuild@2
     env:
       SYSTEM_ACCESSTOKEN: $(System.AccessToken)

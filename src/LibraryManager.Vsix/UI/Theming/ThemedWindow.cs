@@ -117,7 +117,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Theming
             set => SetValue(SupportsCloseGestureProperty, value);
         }
 
-        protected virtual void OnCloseWindow(object sender, RoutedEventArgs e)
+        private void OnCloseWindow(object sender, RoutedEventArgs e)
         {
             DialogDismissed?.Invoke(this, EventArgs.Empty);
             Close();

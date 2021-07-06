@@ -48,12 +48,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         /// <summary>
         /// Remarks to be shown with the help text.
         /// </summary>
-        public virtual string Remarks { get; } = null;
+        public virtual string Remarks { get; }
 
         /// <summary>
         /// Examples to be shown with the help text.
         /// </summary>
-        public virtual string Examples { get; } = null;
+        public virtual string Examples { get; }
 
         protected ILogger Logger => HostEnvironment.Logger;
         protected IDependencies ManifestDependencies { get; private set; }

@@ -55,7 +55,9 @@ namespace Microsoft.Web.LibraryManager.Cache
 
         private HttpClient CreateHttpClient(string url)
         {
+#pragma warning disable CA2000 // Dispose objects before losing scope
             var httpMessageHandler = new HttpClientHandler();
+#pragma warning restore CA2000 // Dispose objects before losing scope
             httpMessageHandler.Proxy = _proxySettings.GetProxy(new Uri(url));
             var httpClient = new HttpClient(httpMessageHandler);
 

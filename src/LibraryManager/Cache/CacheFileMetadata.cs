@@ -34,7 +34,7 @@ namespace Microsoft.Web.LibraryManager.Cache
         /// <inheritdoc />
         public bool Equals(CacheFileMetadata other)
         {
-            return DestinationPath == other.DestinationPath && Source == other.Source;
+            return DestinationPath == other?.DestinationPath && Source == other?.Source;
         }
 
         /// <inheritdoc/>

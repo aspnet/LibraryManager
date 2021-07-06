@@ -13,9 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" />
+    <PackageReference Include="Microsoft.Build.Framework" PrivateAssets="all"/>
+    <PackageReference Include="Microsoft.Build.Tasks.Core" PrivateAssets="all"/>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" PrivateAssets="all"/>
     <PackageReference Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'netstandard2.0'"/>
   </ItemGroup>
 

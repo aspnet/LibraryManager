@@ -40,9 +40,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
             _taskStatusCenterService = taskStatusCenterService;
             
             _solutionEvents = solutionEvents ?? new DefaultSolutionEvents();
-            _solutionEvents.BeforeCloseSolution += OnBeforeCloseSolution;
-            _solutionEvents.BeforeCloseProject += OnBeforeCloseProject;
-            _solutionEvents.BeforeUnloadProject += OnBeforeUnloadProject;
+            _solutionEvents.SolutionClosing += OnBeforeCloseSolution;
+            _solutionEvents.ProjectClosing += OnBeforeCloseProject;
+            _solutionEvents.ProjectUnloading += OnBeforeUnloadProject;
         }
 
         private void OnBeforeUnloadProject(object sender, ParamEventArgs e)
@@ -177,7 +177,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-                string configFileName = configProjectItem.FileNames[1];
+                string configFileName = configProjectItem.get_FileNames(1);
                 var dependencies = _dependenciesFactory.FromConfigFile(configFileName);
                 Project project = VsHelpers.GetDTEProjectFromConfig(configFileName);
 

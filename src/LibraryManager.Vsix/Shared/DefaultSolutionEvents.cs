@@ -21,9 +21,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
     internal class DefaultSolutionEvents : IVsSolutionEvents, IDisposable
     {
-        public event EventHandler<ParamEventArgs> BeforeCloseSolution;
-        public event EventHandler<ParamEventArgs> BeforeUnloadProject;
-        public event EventHandler<ParamEventArgs> BeforeCloseProject;
+        public event EventHandler<ParamEventArgs> SolutionClosing;
+        public event EventHandler<ParamEventArgs> ProjectUnloading;
+        public event EventHandler<ParamEventArgs> ProjectClosing;
 
         private IVsSolution _solution;
         private uint _solutionEventsCookie;
@@ -61,21 +61,21 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
         int IVsSolutionEvents.OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
         {
-            BeforeCloseProject?.Invoke(this, new ParamEventArgs(pHierarchy, fRemoved));
+            ProjectClosing?.Invoke(this, new ParamEventArgs(pHierarchy, fRemoved));
 
             return VSConstants.S_OK;
         }
 
         int IVsSolutionEvents.OnBeforeCloseSolution(object pUnkReserved)
         {
-            BeforeCloseSolution?.Invoke(this, new ParamEventArgs(pUnkReserved));
+            SolutionClosing?.Invoke(this, new ParamEventArgs(pUnkReserved));
 
             return VSConstants.S_OK;
         }
 
         int IVsSolutionEvents.OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
         {
-            BeforeUnloadProject?.Invoke(this, new ParamEventArgs(pRealHierarchy, pStubHierarchy));
+            ProjectUnloading?.Invoke(this, new ParamEventArgs(pRealHierarchy, pStubHierarchy));
 
             return VSConstants.S_OK;
         }
