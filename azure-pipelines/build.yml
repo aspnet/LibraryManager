@@ -57,6 +57,8 @@ steps:
       gitHubPatVariable: '$(OneLocGitHubPat)'
       prSourceBranchPrefix: 'locfiles'
       isAutoCompletePrSelected: false
+      packageSourceAuth: patAuth
+      patVariable: '$(OneLocBuildPat)'
     condition: ne(variables['Build.Reason'], 'PullRequest')
   - task: PublishBuildArtifacts@1
     inputs:
