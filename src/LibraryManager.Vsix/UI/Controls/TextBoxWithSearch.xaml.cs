@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -259,7 +260,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
                     // repopulate the completion list
                     CompletionEntries.Clear();
-                    foreach (CompletionItem entry in completionSet.Completions)
+
+                    List<CompletionItem> completions = GetSortedCompletionItems(completionSet);
+
+                    foreach (CompletionItem entry in completions)
                     {
                         CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
                     }
@@ -269,7 +273,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
                     {
                         CompletionItem selectionCandidate = await ViewModel.GetRecommendedSelectedCompletionAsync(
-                            completionSet: completionSet,
+                            completions: completions,
                             lastSelected: SelectedItem?.CompletionItem);
                         SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == selectionCandidate.InsertionText) ?? CompletionEntries[0];
                         Options.ScrollIntoView(SelectedItem);
@@ -278,6 +282,26 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     Flyout.IsOpen = true;
                 });
             }
+        }
+
+        private List<CompletionItem> GetSortedCompletionItems(CompletionSet completionSet)
+        {
+            var completions = completionSet.Completions.ToList();
+
+            switch (completionSet.CompletionType)
+            {
+                case CompletionSortOrder.AsSpecified:
+                    break;
+                case CompletionSortOrder.Alphabetical:
+                    completions.Sort((a, b) => string.Compare(a.DisplayText, b.DisplayText, StringComparison.OrdinalIgnoreCase));
+                    break;
+                case CompletionSortOrder.Version:
+                    // return in descending order, so negate the result of the CompareTo
+                    completions.Sort((a, b) => -SemanticVersion.Parse(a.DisplayText).CompareTo(SemanticVersion.Parse(b.DisplayText)));
+                    break;
+            }
+
+            return completions;
         }
 
         private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)
