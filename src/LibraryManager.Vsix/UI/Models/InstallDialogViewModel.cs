@@ -403,6 +403,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
 
         public async Task<bool> IsLibraryInstallationStateValidAsync()
         {
+            if (!LibraryIdToNameAndVersionConverter.Instance.IsWellFormedLibraryId(LibraryId, SelectedProvider.Id))
+            {
+                ErrorMessage = string.Format(Text.BadLibraryId, LibraryId, SelectedProvider.Id, SelectedProvider.LibraryIdHintText);
+                return false;
+            }
+
             (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(LibraryId, SelectedProvider.Id);
             LibraryInstallationState libraryInstallationState = new LibraryInstallationState
             {

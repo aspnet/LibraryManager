@@ -66,5 +66,18 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
                 : $"{name}{Separator}{version}";
 
         }
+
+        /// <inheritdoc />
+        public bool IsValidLibraryId(string libraryId)
+        {
+            if (string.IsNullOrEmpty(libraryId))
+            {
+                return false;
+            }
+
+            int separator = libraryId.LastIndexOf(Separator);
+
+            return separator > 1 && separator < libraryId.Length;
+        }
     }
 }

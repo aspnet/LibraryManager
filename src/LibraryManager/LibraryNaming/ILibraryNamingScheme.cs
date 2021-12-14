@@ -9,6 +9,14 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
     internal interface ILibraryNamingScheme
     {
         /// <summary>
+        /// Returns whether the given library identifier matches the naming scheme
+        /// </summary>
+        /// <param name="libraryId">The library ID to validate.</param>
+        /// <returns>Returns true if the library ID matches the naming scheme; false otherwise.</returns>
+        /// <remarks>This does not indicate that the library ID is valid, but only that it is well-formed.</remarks>
+        bool IsValidLibraryId(string libraryId);
+
+        /// <summary>
         /// Splits libraryId into name and version.
         /// </summary>
         (string Name, string Version) GetLibraryNameAndVersion(string libraryId);
