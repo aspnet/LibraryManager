@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Text {
@@ -133,7 +133,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean libraries operation started....
+        ///   Looks up a localized string similar to Clean libraries operation started.
         /// </summary>
         public static string Clean_OperationStarted {
             get {
@@ -205,7 +205,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Install library {0} started....
+        ///   Looks up a localized string similar to Install library {0} started.
         /// </summary>
         public static string Install_LibraryStarted {
             get {
@@ -367,7 +367,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore operation started....
+        ///   Looks up a localized string similar to Restore operation started.
         /// </summary>
         public static string Restore_OperationStarted {
             get {
@@ -421,7 +421,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstall of library {0} started....
+        ///   Looks up a localized string similar to Uninstall of library {0} started.
         /// </summary>
         public static string Uninstall_LibraryStarted {
             get {
@@ -484,7 +484,7 @@ namespace Microsoft.Web.LibraryManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update of library {0} started... .
+        ///   Looks up a localized string similar to Update of library {0} started.
         /// </summary>
         public static string Update_LibraryStarted {
             get {
