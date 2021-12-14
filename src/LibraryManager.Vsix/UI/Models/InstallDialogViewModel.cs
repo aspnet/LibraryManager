@@ -68,7 +68,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                                       SelectedProviderBinding selectedProviderBinding,
                                       LibraryNameBinding bindLibraryNameToTargetLocation,
                                       string targetPath,
-                                      Project project)
+                                      Project project,
+                                      string initialProvider)
         {
             _libraryCommandService = libraryCommandService;
             _configFileName = configFileName;
@@ -94,9 +95,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                     continue;
                 }
 
-                if (_catalog == null)
+                if (_catalog == null || provider.Id.Equals(initialProvider, StringComparison.Ordinal))
                 {
-                    _activeProvider = provider;
+                    SelectedProvider = provider;
                     _selectedProviderBinding.SelectedProvider = SelectedProvider;
                     _catalog = catalog;
                 }

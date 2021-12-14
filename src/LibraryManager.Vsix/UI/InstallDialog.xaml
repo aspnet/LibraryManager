@@ -64,7 +64,6 @@
                       Grid.Row="0"
                       Grid.Column="1"
                       Margin="0 0 0 9"
-                      SelectedIndex="0"
                       DisplayMemberPath="Id"
                       SelectedItem="{Binding SelectedProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       SelectionChanged="ProviderComboBox_SelectionChanged"
