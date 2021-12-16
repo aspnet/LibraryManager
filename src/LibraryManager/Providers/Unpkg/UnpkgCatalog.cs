@@ -43,6 +43,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
         public async Task<string> GetLatestVersion(string libraryName, bool includePreReleases, CancellationToken cancellationToken)
         {
+            if (includePreReleases)
+            {
+                // Unpkg by default only shows the latest release version, so for prereleases we need to fetch all versions.
+                // This is requires making an extra web request, so only do it if we need to consider prerelease versions.
+                var libraryGroup = new UnpkgLibraryGroup(_packageInfoFactory, libraryName);
+                string latest = (await libraryGroup.GetLibraryVersions(cancellationToken)).First();
+
+                return latest;
+            }
+            
             string latestVersion = null;
 
             try
