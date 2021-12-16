@@ -76,5 +76,31 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             Assert.AreEqual(StringHelper.NormalizeNewLines(expectedContents), StringHelper.NormalizeNewLines(contents));
         }
+
+        [TestMethod]
+        public void TestInit_UseDefault()
+        {
+            HostEnvironment.EnvironmentSettings.DefaultProvider = "unpkg";
+            InitCommand command = new InitCommand(HostEnvironment);
+
+            command.Configure(null);
+
+            int result = command.Execute("-y");
+
+            Assert.AreEqual(0, result);
+
+            string libmanFilePath = Path.Combine(WorkingDir, HostEnvironment.EnvironmentSettings.ManifestFileName);
+            Assert.IsTrue(File.Exists(libmanFilePath));
+
+            string contents = File.ReadAllText(libmanFilePath);
+
+            string expectedContents = @"{
+  ""version"": ""1.0"",
+  ""defaultProvider"": ""unpkg"",
+  ""libraries"": []
+}";
+
+            Assert.AreEqual(StringHelper.NormalizeNewLines(expectedContents), StringHelper.NormalizeNewLines(contents));
+        }
     }
 }

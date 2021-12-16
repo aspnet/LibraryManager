@@ -19,7 +19,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Text {
@@ -926,6 +926,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         internal static string UpdateLibraryToLatestFailed {
             get {
                 return ResourceManager.GetString("UpdateLibraryToLatestFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the default settings for the libman.json file.
+        /// </summary>
+        internal static string UseDefault {
+            get {
+                return ResourceManager.GetString("UseDefault", resourceCulture);
             }
         }
         
