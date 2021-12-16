@@ -275,7 +275,8 @@ namespace Microsoft.Web.LibraryManager
         /// Adds a library to the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="state">An instance of <see cref="ILibraryInstallationState"/> representing the library to add.</param>
-        internal void AddLibrary(ILibraryInstallationState state)
+        /// <param name="setDefaultProvider">Set the defaultProvider if it doesn't exist, using the added library's provider</param>
+        internal void AddLibrary(ILibraryInstallationState state, bool setDefaultProvider = true)
         {
             ILibraryInstallationState existing = _libraries.Find(p => p.Name == state.Name && p.Version == state.Version && p.ProviderId == state.ProviderId);
 
@@ -284,7 +285,7 @@ namespace Microsoft.Web.LibraryManager
                 _libraries.Remove(existing);
             }
 
-            if (state is LibraryInstallationState desiredState)
+            if (setDefaultProvider && state is LibraryInstallationState desiredState)
             {
                 _libraries.Add(SetDefaultProviderIfNeeded(desiredState));
             }
