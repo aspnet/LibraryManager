@@ -232,7 +232,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library {0} was successfuly added to project.
+        ///   Looks up a localized string similar to {0} was successfuly added to project.
         /// </summary>
         public static string LibraryAddedToProject {
             get {
@@ -241,7 +241,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Library {0} was successfuly deleted from project.
+        ///   Looks up a localized string similar to {0} was successfuly deleted from project.
         /// </summary>
         public static string LibraryDeletedFromProject {
             get {
