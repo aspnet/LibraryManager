@@ -30,7 +30,7 @@
 
     <UsingTask AssemblyFile="$(_LibraryTaskAssembly)" TaskName="Microsoft.Web.LibraryManager.Build.RestoreTask"/>
 
-    <Target Name="LibraryManagerRestore" Condition="'$(LibraryRestore)' != 'False'">
+    <Target Name="LibraryManagerRestore" Condition="'$(LibraryRestore)' != 'False' And '$(BuildingForLiveUnitTesting)' != 'true'">
 
         <Microsoft.Web.LibraryManager.Build.RestoreTask
             FileName="libman.json"
