@@ -122,7 +122,7 @@
     <comment>Add Client-Side Library</comment>
   </data>
   <data name="CleanLibrariesStarted" xml:space="preserve">
-    <value>Clean libraries started...</value>
+    <value>Clean libraries started</value>
     <comment>When the "Clean" command is being executed</comment>
   </data>
   <data name="CleanLibrariesSucceeded" xml:space="preserve">

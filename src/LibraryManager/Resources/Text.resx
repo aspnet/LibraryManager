@@ -159,7 +159,7 @@
     <value>{0} libraries failed to be deleted</value>
   </data>
   <data name="Clean_OperationStarted" xml:space="preserve">
-    <value>Clean libraries operation started...</value>
+    <value>Clean libraries operation started</value>
   </data>
   <data name="Clean_NumberOfLibrariesSucceeded" xml:space="preserve">
     <value>{0} libraries were successfully deleted in {1} secs</value>
@@ -175,7 +175,7 @@
     <value>Install library {0} failed</value>
   </data>
   <data name="Install_LibraryStarted" xml:space="preserve">
-    <value>Install library {0} started...</value>
+    <value>Install library {0} started</value>
   </data>
   <data name="Restore_LibraryRestoreSucceeded" xml:space="preserve">
     <value>Library {0}  was successfuly restored restored</value>
@@ -197,13 +197,13 @@
     <value>Time Elapsed: {0}</value>
   </data>
   <data name="Uninstall_LibraryStarted" xml:space="preserve">
-    <value>Uninstall of library {0} started...</value>
+    <value>Uninstall of library {0} started</value>
   </data>
   <data name="Update_LibraryFailed" xml:space="preserve">
     <value>Update library {0} failed</value>
   </data>
   <data name="Update_LibraryStarted" xml:space="preserve">
-    <value>Update of library {0} started... </value>
+    <value>Update of library {0} started</value>
   </data>
   <data name="Update_LibrarySucceeded" xml:space="preserve">
     <value>Update of library {0} succeeded</value>
@@ -227,7 +227,7 @@
     <value>Restore operation failed for {0} libraries</value>
   </data>
   <data name="Restore_OperationStarted" xml:space="preserve">
-    <value>Restore operation started...</value>
+    <value>Restore operation started</value>
   </data>
   <data name="Uninstall_LibrarySucceeded" xml:space="preserve">
     <value>Uninstall of library {0} succeeded</value>
