@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.Test.Apex.VisualStudio.Shell;
 using Microsoft.Test.Apex.VisualStudio.Shell.ToolWindows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.IntegrationTest.Services;
@@ -93,6 +94,25 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             {
                 installDialogTestExtenstion.Close();
             }
+        }
+
+        [TestMethod]
+        public void InstallClientSideLibraries_DefaultProviderIsSelectedOnDialogOpen()
+        {
+            _libmanConfig = _webProject[LibManManifestFile];
+            DocumentWindowTestExtension document = _libmanConfig.Open();
+
+            Editor.Caret.MoveToExpression("version");
+            Editor.Caret.MoveToEndOfLine();
+            Editor.KeyboardCommands.Enter();
+            Editor.Edit.InsertTextInBuffer(@"""defaultProvider"": ""jsdelivr"",");
+
+            InstallDialogTestExtension installDialogTestExtension = OpenWizardFromSolutionExplorerItem("wwwroot");
+
+            Verify.Strings.AreEqual("jsdelivr", installDialogTestExtension.Provider);
+            installDialogTestExtension.Close();
+
+            document.Close(saveIfDirty: false);
         }
 
         private void RemoveExistingManifest()

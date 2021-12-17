@@ -155,7 +155,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
                     selectedProviderBinding,
                     libraryNameBinding,
                     target,
-                    project);
+                    project,
+                    manifest.DefaultProvider);
 
                 var dialog = new UI.InstallDialog(dialogViewModel);
                 dialog.ShowModal();
