@@ -1,5 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -21,11 +126,28 @@
   <data name="CleanCommandRemarks" xml:space="preserve">
     <value>この操作の後、空になったフォルダーがあればすべて削除します。</value>
   </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>構成設定を取得または設定します</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>取得する設定の名前</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>キー {0} が見つかりません。</value>
+  </data>
   <data name="DefaultDestinationOptionDesc" xml:space="preserve">
     <value>指定されたライブラリに宛先が定義されていない場合、ライブラリ ファイルがインストールされる現在のディレクトリに対する相対パス。</value>
   </data>
   <data name="DefaultProviderOptionDesc" xml:space="preserve">
     <value>指定されたライブラリでプロバイダーが定義されていない場合に使用するプロバイダー (“cdnjs”、“filesystem” など)</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>このコンソールでユーザーの入力を要求することはできません。</value>
   </data>
   <data name="DestinationOptionDesc" xml:space="preserve">
     <value>ライブラリをインストールする場所 (指定しない場合、既定のインストール先の場所が使用されます)</value>
@@ -192,7 +314,7 @@
     <value>指定すると、指定されたプロバイダーのライブラリのみが更新されます</value>
   </data>
   <data name="CacheCleanedMessage" xml:space="preserve">
-    <value>キャッシュが消去されました。</value>
+    <value>キャッシュがクリーンアップされました。</value>
   </data>
   <data name="CacheCleanFailed" xml:space="preserve">
     <value>キャッシュを消去できませんでした: {0}</value>
@@ -204,7 +326,7 @@
     <value>(空)</value>
   </data>
   <data name="CacheForProviderCleanedMessage" xml:space="preserve">
-    <value>{0} キャッシュが消去されました。</value>
+    <value>{0} キャッシュがクリーンアップされました。</value>
   </data>
   <data name="CacheListFilesOptionDesc" xml:space="preserve">
     <value>各ライブラリのキャッシュされたファイルを一覧表示します</value>
@@ -229,7 +351,7 @@
     <value>プロバイダー "{0}" はインストールされていません</value>
   </data>
   <data name="SuggestedIdsMessage" xml:space="preserve">
-    <value>類似ライブラリ:</value>
+    <value>類似ライブラリ: </value>
   </data>
   <data name="FixManifestFile" xml:space="preserve">
     <value>libman.json ファイルを修正して、もう一度やり直してください</value>
@@ -283,28 +405,11 @@
   <data name="InitFailedUnknownProvider" xml:space="preserve">
     <value>Libman.json を初期化できませんでした。[{0}]: {1}</value>
   </data>
-  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
-    <value>このコンソールでユーザーの入力を要求することはできません。</value>
-  </data>
   <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
     <value>完全なライブラリ ID と、'--provider' オプションを使用してプロバイダーを指定してください。</value>
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>'--{1}' オプションを使って '{0}' を指定してください。</value>
-  </data>
-  <data name="ConfigCommand_Description" xml:space="preserve">
-    <value>構成設定を取得または設定します</value>
-  </data>
-  <data name="ConfigCommand_Examples" xml:space="preserve">
-    <value>    libman config http_proxy
-    libman config --set http_proxy=http://example
-    libman config --setEncrypted http_proxy.password=passwordText</value>
-  </data>
-  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
-    <value>取得する設定の名前</value>
-  </data>
-  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
-    <value>キー {0} が見つかりません。</value>
   </data>
   <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
     <value>同じ操作で設定の読み取りと書き込みを行うことはできません</value>
@@ -319,5 +424,8 @@
     <value>    設定を同じ操作で読み取り、保存することはできません。
     設定を削除するには、空の文字列 (--set key=) に設定します。
     暗号化された設定の暗号化解除された値の取得はサポートされていません。</value>
+  </data>
+  <data name="CacheLocationMessage" xml:space="preserve">
+    <value>キャッシュ ルート ディレクトリ:</value>
   </data>
 </root>

@@ -1,5 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -21,11 +126,28 @@
   <data name="CleanCommandRemarks" xml:space="preserve">
     <value>Удаляет любые папки, которые становятся пустыми после выполнения этой операции.</value>
   </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>Возвращает или задает параметры конфигурации.</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>Имя получаемого параметра</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>Ключ {0} не найден.</value>
+  </data>
   <data name="DefaultDestinationOptionDesc" xml:space="preserve">
     <value>Путь относительно текущего каталога, по которому должны быть установлены библиотеки, если для заданной библиотеки не указано место назначения.</value>
   </data>
   <data name="DefaultProviderOptionDesc" xml:space="preserve">
     <value>Поставщик, который будет использоваться, если поставщик для заданной библиотеки не установлен (например, "cdnjs", "filesystem")</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>Невозможно запросить входные данные у пользователя в этой консоли.</value>
   </data>
   <data name="DestinationOptionDesc" xml:space="preserve">
     <value>Расположение для установки библиотеки (если не указано, будет использоваться расположение по умолчанию)</value>
@@ -48,7 +170,7 @@
     libman install myCalendar --provider filesystem --files calendar.js --files calendar.css</value>
   </data>
   <data name="InstallCommandLibraryIdArgumentDesc" xml:space="preserve">
-    <value>Библиотека, которая будет установлена</value>
+    <value>Устанавливаемая библиотека</value>
   </data>
   <data name="InstallCommandProviderSpecificLogic" xml:space="preserve">
     <value>    Библиотеки CDNJS имеют формат идентификатора библиотеки "&lt;имя_библиотеки&gt;@&lt;версия_библиотеки&gt;"
@@ -64,13 +186,13 @@
     <value>Недопустимые аргументы для команды: {0}</value>
   </data>
   <data name="LibmanCommandDesc" xml:space="preserve">
-    <value>Диспетчер библиотек</value>
+    <value>Library Manager</value>
   </data>
   <data name="ProviderOptionDesc" xml:space="preserve">
     <value>Используемый поставщик (если не указан, будет использован поставщик по умолчанию)</value>
   </data>
   <data name="ProviderSpecificLogicHeader" xml:space="preserve">
-    <value>Логика для определенного поставщика:</value>
+    <value>Логика конкретного поставщика:</value>
   </data>
   <data name="RemarksHeader" xml:space="preserve">
     <value>Примечания:</value>
@@ -91,7 +213,7 @@
     libman uninstall jquery@3.3.1</value>
   </data>
   <data name="UninstallCommandLibraryIdArgumentDesc" xml:space="preserve">
-    <value>Библиотека, которая будет удалена</value>
+    <value>Библиотека, которую следует удалить</value>
   </data>
   <data name="UninstallCommandProviderOptionDesc" xml:space="preserve">
     <value>Поставщик библиотеки, который будет удален</value>
@@ -118,7 +240,7 @@
     <value>Не удалось восстановить "{0}"</value>
   </data>
   <data name="FileDeleted" xml:space="preserve">
-    <value>Файл {0} удален</value>
+    <value>Файл "{0}" удален.</value>
   </data>
   <data name="FileDeleteFail" xml:space="preserve">
     <value>Не удалось удалить {0}</value>
@@ -178,9 +300,9 @@
 </value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
-    <value>Ошибка при отсутствии файла libman.json в текущей папке
+    <value>Ошибка, если файл libman.json отсутствует в текущей папке
     Ошибка, если указанная библиотека не существует
-    При наличии нескольких библиотек с одинаковыми идентификаторами вам будет предложено выбрать библиотеку.</value>
+    При наличии нескольких библиотек с одним и тем же идентификатором вам будет предложено выбрать библиотеку.</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
     <value>Имя обновляемой библиотеки (без номера версии).</value>
@@ -192,7 +314,7 @@
     <value>Если этот параметр указан, будут обновлены только библиотеки от указанного поставщика</value>
   </data>
   <data name="CacheCleanedMessage" xml:space="preserve">
-    <value>Очистка кэша выполнена.</value>
+    <value>Кэш очищен.</value>
   </data>
   <data name="CacheCleanFailed" xml:space="preserve">
     <value>Не удалось очистить кэш: {0}</value>
@@ -204,7 +326,7 @@
     <value>(пусто)</value>
   </data>
   <data name="CacheForProviderCleanedMessage" xml:space="preserve">
-    <value>Очистка кэша {0} выполнена.</value>
+    <value>Кэш {0} очищен.</value>
   </data>
   <data name="CacheListFilesOptionDesc" xml:space="preserve">
     <value>Список кэшируемых файлов для каждой библиотеки</value>
@@ -229,13 +351,13 @@
     <value>Поставщик "{0}" не установлен</value>
   </data>
   <data name="SuggestedIdsMessage" xml:space="preserve">
-    <value>Похожие библиотеки:</value>
+    <value>Похожие библиотеки: </value>
   </data>
   <data name="FixManifestFile" xml:space="preserve">
     <value>Исправьте файл libman.json и повторите попытку.</value>
   </data>
   <data name="ChooseAnOption" xml:space="preserve">
-    <value>Выберите вариант:</value>
+    <value>Выберите параметр:</value>
   </data>
   <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
     <value>Библиотека "{0}" уже обновлена</value>
@@ -250,7 +372,7 @@
     <value>Библиотека "{0}" установлена в "{1}"</value>
   </data>
   <data name="UninstalledLibrary" xml:space="preserve">
-    <value>Библиотека "{0}" удалена</value>
+    <value>Библиотека "{0}" удалена.</value>
   </data>
   <data name="InvalidFilesForLibrary" xml:space="preserve">
     <value>Библиотека "{0}" не содержит следующих файлов: {1}</value>
@@ -283,28 +405,11 @@
   <data name="InitFailedUnknownProvider" xml:space="preserve">
     <value>Не удалось инициализировать файл libman.json. [{0}]: {1}</value>
   </data>
-  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
-    <value>Невозможно запросить входные данные у пользователя в этой консоли.</value>
-  </data>
   <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
     <value>Укажите полный идентификатор библиотеки, а также укажите поставщика с помощью параметра "--provider".</value>
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>Укажите "{0}" с помощью параметра "--{1}".</value>
-  </data>
-  <data name="ConfigCommand_Description" xml:space="preserve">
-    <value>Возвращает или задает параметры конфигурации.</value>
-  </data>
-  <data name="ConfigCommand_Examples" xml:space="preserve">
-    <value>    libman config http_proxy
-    libman config --set http_proxy=http://example
-    libman config --setEncrypted http_proxy.password=passwordText</value>
-  </data>
-  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
-    <value>Имя получаемого параметра</value>
-  </data>
-  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
-    <value>Ключ {0} не найден.</value>
   </data>
   <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
     <value>Невозможно считывать и записывать параметры в рамках одной и той же операции.</value>
@@ -319,5 +424,8 @@
     <value>    Невозможно считывать и сохранять параметры в рамках одной и той же операции.
     Чтобы удалить параметр, установите для него значение, равное пустой строке (--set key=).
     Получение расшифрованных значений для зашифрованных параметров не поддерживается.</value>
+  </data>
+  <data name="CacheLocationMessage" xml:space="preserve">
+    <value>Корневой каталог кэша:</value>
   </data>
 </root>

@@ -83,10 +83,13 @@
       </Item>
       <Item ItemId=";Clean_OperationStarted" ItemType="0;.resx" PsrId="211" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Clean libraries operation started...]]></Val>
+          <Val><![CDATA[Clean libraries operation started]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[已启动“清理库”操作...]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Clean libraries operation started...]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -155,10 +158,13 @@
       </Item>
       <Item ItemId=";Install_LibraryStarted" ItemType="0;.resx" PsrId="211" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Install library {0} started...]]></Val>
+          <Val><![CDATA[Install library {0} started]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[已启动库 {0} 的安装...]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Install library {0} started...]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -317,10 +323,13 @@
       </Item>
       <Item ItemId=";Restore_OperationStarted" ItemType="0;.resx" PsrId="211" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Restore operation started...]]></Val>
+          <Val><![CDATA[Restore operation started]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[已启动还原操作...]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Restore operation started...]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -371,10 +380,13 @@
       </Item>
       <Item ItemId=";Uninstall_LibraryStarted" ItemType="0;.resx" PsrId="211" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Uninstall of library {0} started...]]></Val>
+          <Val><![CDATA[Uninstall of library {0} started]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[已启动库 {0} 的卸载...]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Uninstall of library {0} started...]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -434,10 +446,13 @@
       </Item>
       <Item ItemId=";Update_LibraryStarted" ItemType="0;.resx" PsrId="211" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Update of library {0} started... ]]></Val>
+          <Val><![CDATA[Update of library {0} started]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[已启动库 {0} 的更新...]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Update of library {0} started... ]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>

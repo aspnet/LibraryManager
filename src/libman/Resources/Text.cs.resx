@@ -1,5 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -21,11 +126,28 @@
   <data name="CleanCommandRemarks" xml:space="preserve">
     <value>Odstraní všechny složky, které se po provedení této operace vyprázdní.</value>
   </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>Načte nebo nastaví nastavení konfigurace.</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>Název nastavení, které se má načíst</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>Klíč {0} se nenašel.</value>
+  </data>
   <data name="DefaultDestinationOptionDesc" xml:space="preserve">
     <value>Cesta, která je relativní k aktuálnímu adresáři a do které mají být nainstalovány soubory knihoven, pokud pro danou knihovnu není definován žádný cíl</value>
   </data>
   <data name="DefaultProviderOptionDesc" xml:space="preserve">
     <value>Poskytovatel, který se má použít, pokud pro danou knihovnu není definován žádný poskytovatel (např. cdnjs, filesystem)</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>V této konzole nejde vyzvat uživatele k zadání vstupu.</value>
   </data>
   <data name="DestinationOptionDesc" xml:space="preserve">
     <value>Umístění pro instalaci knihovny (Pokud není zadané, použije se výchozí cílové umístění.)</value>
@@ -118,7 +240,7 @@ Pokud existuje více než jedna knihovna se stejným libraryId, zobrazí se výz
     <value>Nepodařilo se obnovit {0}.</value>
   </data>
   <data name="FileDeleted" xml:space="preserve">
-    <value>Soubor {0} byl smazán.</value>
+    <value>Soubor {0} se odstranil.</value>
   </data>
   <data name="FileDeleteFail" xml:space="preserve">
     <value>Soubor {0} nebylo možné smazat.</value>
@@ -192,7 +314,7 @@ Pokud existuje více než jedna knihovna se stejným libraryId, zobrazí se výz
     <value>Pokud je zadaná tato možnost, aktualizují se jen knihovny od zadaného poskytovatele.</value>
   </data>
   <data name="CacheCleanedMessage" xml:space="preserve">
-    <value>Mezipaměť byla vyčištěna.</value>
+    <value>Mezipaměť se vyčistila.</value>
   </data>
   <data name="CacheCleanFailed" xml:space="preserve">
     <value>Nepodařilo se vyčistit mezipaměť: {0}</value>
@@ -201,10 +323,10 @@ Pokud existuje více než jedna knihovna se stejným libraryId, zobrazí se výz
     <value>Obsah mezipaměti:</value>
   </data>
   <data name="CacheEmptyMessage" xml:space="preserve">
-    <value>(prázdné)</value>
+    <value>(prázdná)</value>
   </data>
   <data name="CacheForProviderCleanedMessage" xml:space="preserve">
-    <value>Mezipaměť {0} byla vyčištěna.</value>
+    <value>Mezipaměť {0} se vyčistila.</value>
   </data>
   <data name="CacheListFilesOptionDesc" xml:space="preserve">
     <value>Vytvoří pro každou knihovnu seznam souborů, které jsou uložené v mezipaměti.</value>
@@ -283,28 +405,11 @@ Zadejte prosím jiný cíl.</value>
   <data name="InitFailedUnknownProvider" xml:space="preserve">
     <value>Libman.json se nepodařilo inicializovat. [{0}]: {1}</value>
   </data>
-  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
-    <value>V této konzole nejde vyzvat uživatele k zadání vstupu.</value>
-  </data>
   <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
     <value>Zadejte prosím úplné ID knihovny a také zprostředkovatele pomocí přepínače --provider.</value>
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>Zadejte prosím parametr {0} pomocí přepínače --{1}.</value>
-  </data>
-  <data name="ConfigCommand_Description" xml:space="preserve">
-    <value>Načte nebo nastaví nastavení konfigurace.</value>
-  </data>
-  <data name="ConfigCommand_Examples" xml:space="preserve">
-    <value>    libman config http_proxy
-    libman config --set http_proxy=http://example
-    libman config --setEncrypted http_proxy.password=passwordText</value>
-  </data>
-  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
-    <value>Název nastavení, které se má načíst</value>
-  </data>
-  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
-    <value>Klíč {0} se nenašel.</value>
   </data>
   <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
     <value>Nastavení nelze číst a zapisovat ve stejné operaci.</value>
@@ -319,5 +424,8 @@ Zadejte prosím jiný cíl.</value>
     <value>    Nastavení nelze číst a ukládat ve stejné operaci.
     Pokud chcete nastavení odebrat, nastavte je na prázdný řetězec (--set key=).
     Načítání dešifrovaných hodnot pro šifrované nastavení se nepodporuje.</value>
+  </data>
+  <data name="CacheLocationMessage" xml:space="preserve">
+    <value>Kořenový adresář mezipaměti:</value>
   </data>
 </root>
