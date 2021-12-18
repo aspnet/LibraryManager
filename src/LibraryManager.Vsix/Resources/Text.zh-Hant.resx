@@ -1,5 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -12,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>新增用戶端程式庫</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
   <data name="CleanLibrariesStarted" xml:space="preserve">
     <value>已開始清理程式庫...</value>
     <comment>When the "Clean" command is being executed</comment>
@@ -36,9 +145,9 @@
     <value>檢查更新</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="UninstallLibrary" xml:space="preserve">
-    <value>解除安裝 {0}</value>
-    <comment>Used in JSON editor light bulb</comment>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>目前找不到任何更新</value>
+    <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>將安裝 NuGet 套件，以擴大 MSBuild 處理序，但不會新增任何檔案到專案中。
@@ -49,10 +158,6 @@
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;鍵入以搜尋&gt;</value>
-  </data>
-  <data name="AddClientSideLibrary" xml:space="preserve">
-    <value>新增用戶端程式庫</value>
-    <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
     <value>&lt;請選擇程式庫，以選取要安裝的檔案&gt;</value>
@@ -73,13 +178,17 @@
     <value>無法將 NuGet 套件解除安裝</value>
   </data>
   <data name="Nuget_PackageInstalled" xml:space="preserve">
-    <value>已安裝 NuGet 套件</value>
+    <value>NuGet 套件已安裝</value>
   </data>
   <data name="Nuget_PackageUninstalled" xml:space="preserve">
-    <value>已將 NuGet 套件解除安裝</value>
+    <value>NuGet 套件已解除安裝</value>
   </data>
   <data name="Nuget_UninstallingPackage" xml:space="preserve">
-    <value>正在將 NuGet 套件解除安裝...</value>
+    <value>正在解除安裝 NuGet 套件...</value>
+  </data>
+  <data name="UninstallLibrary" xml:space="preserve">
+    <value>解除安裝 {0}</value>
+    <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
     <value>無法從專案刪除程式庫</value>
@@ -126,10 +235,6 @@
   <data name="Install" xml:space="preserve">
     <value>安裝(_I)</value>
   </data>
-  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
-    <value>目前找不到任何更新</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="Checked" xml:space="preserve">
     <value>已選取 {0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
@@ -149,7 +254,7 @@
     <comment>Title for SuggestedAction set</comment>
   </data>
   <data name="Indeterminate" xml:space="preserve">
-    <value>不確定 {0} {1}</value>
+    <value>不定的 {0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="File" xml:space="preserve">
@@ -157,5 +262,8 @@
   </data>
   <data name="Folder" xml:space="preserve">
     <value>資料夾</value>
+  </data>
+  <data name="CloseButtonText" xml:space="preserve">
+    <value>關閉</value>
   </data>
 </root>

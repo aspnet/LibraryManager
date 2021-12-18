@@ -1,5 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -21,11 +126,28 @@
   <data name="CleanCommandRemarks" xml:space="preserve">
     <value>Bu işlemden sonra boş olan klasörleri siler.</value>
   </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>Yapılandırma ayarlarını alır veya ayarlar</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://example
+    libman config --setEncrypted http_proxy.password=passwordText</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>Alınacak ayarın adı</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>{0} anahtarı bulunamadı.</value>
+  </data>
   <data name="DefaultDestinationOptionDesc" xml:space="preserve">
     <value>Geçerli dizine göre, belirli bir kitaplık için hedef tanımlanmadığında kitaplık dosyalarının yükleneceği yol</value>
   </data>
   <data name="DefaultProviderOptionDesc" xml:space="preserve">
     <value>Belirli bir kitaplık için herhangi bir sağlayıcı belirlenmediğinde kullanılacak sağlayıcı. (örneğin. “cdnjs”, “filesystem”)</value>
+  </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>Bu konsolda kullanıcı girdisi istenemez.</value>
   </data>
   <data name="DestinationOptionDesc" xml:space="preserve">
     <value>Kitaplığın yükleneceği konum (belirtilmezse, varsayılan hedef konumu kullanılır)</value>
@@ -64,7 +186,7 @@
     <value>Komut için geçersiz bağımsız değişkenler: {0}</value>
   </data>
   <data name="LibmanCommandDesc" xml:space="preserve">
-    <value>Kütüphane Yöneticisi</value>
+    <value>Kitaplık Yöneticisi</value>
   </data>
   <data name="ProviderOptionDesc" xml:space="preserve">
     <value>Kullanılacak sağlayıcı (belirtilmezse varsayılan sağlayıcı kullanılır)</value>
@@ -204,7 +326,7 @@
     <value>(boş)</value>
   </data>
   <data name="CacheForProviderCleanedMessage" xml:space="preserve">
-    <value>{0} önbellek temizlendi.</value>
+    <value>{0} önbelleği temizlendi.</value>
   </data>
   <data name="CacheListFilesOptionDesc" xml:space="preserve">
     <value>Her kitaplık için önbelleğe alınan dosyaları listeleyin</value>
@@ -235,7 +357,7 @@ Lütfen güncelleştirilmesi için sürüm bilgilerini içermeyen bir kitaplık 
     <value>Lütfen libman.json dosyasını düzeltin ve yeniden deneyin</value>
   </data>
   <data name="ChooseAnOption" xml:space="preserve">
-    <value>Bir seçenek belirleyin:</value>
+    <value>Seçenek belirleyin:</value>
   </data>
   <data name="LatestVersionAlreadyInstalled" xml:space="preserve">
     <value>"{0}" kitaplığı güncel durumda</value>
@@ -283,28 +405,11 @@ Lütfen farklı bir hedef belirtin.</value>
   <data name="InitFailedUnknownProvider" xml:space="preserve">
     <value>Libman.JSON başlatılamadı. [{0}]: {1}</value>
   </data>
-  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
-    <value>Bu konsolda kullanıcı girdisi istenemez.</value>
-  </data>
   <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
     <value>Lütfen kitaplık kimliğini eksiksiz olarak belirtin ve '--provider' seçeneğini kullanarak sağlayıcı bilgilerini verin.</value>
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>Lütfen '--{1}' seçeneğini kullanarak '{0}' öğesini belirtin.</value>
-  </data>
-  <data name="ConfigCommand_Description" xml:space="preserve">
-    <value>Yapılandırma ayarlarını alır veya ayarlar</value>
-  </data>
-  <data name="ConfigCommand_Examples" xml:space="preserve">
-    <value>    libman config http_proxy
-    libman config --set http_proxy=http://example
-    libman config --setEncrypted http_proxy.password=passwordText</value>
-  </data>
-  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
-    <value>Alınacak ayarın adı</value>
-  </data>
-  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
-    <value>{0} anahtarı bulunamadı.</value>
   </data>
   <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
     <value>Ayarlar aynı işlemde okunup yazılamaz</value>
@@ -319,5 +424,8 @@ Lütfen farklı bir hedef belirtin.</value>
     <value>    Ayarlar, aynı işlemde okunamaz ve depolanamaz.
     Bir ayarı kaldırmak için, boş bir dizeye ayarlayın (--set key=).
     Şifrelenmiş ayarlar için şifresi çözülmüş değerlerin alınması desteklenmiyor.</value>
+  </data>
+  <data name="CacheLocationMessage" xml:space="preserve">
+    <value>Önbellek kök dizini:</value>
   </data>
 </root>

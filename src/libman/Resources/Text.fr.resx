@@ -1,5 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -21,17 +126,34 @@
   <data name="CleanCommandRemarks" xml:space="preserve">
     <value>    Supprime tous les dossiers qui sont vides après cette opération. </value>
   </data>
+  <data name="ConfigCommand_Description" xml:space="preserve">
+    <value>Obtient ou définit les paramètres de configuration</value>
+  </data>
+  <data name="ConfigCommand_Examples" xml:space="preserve">
+    <value>    libman config http_proxy
+    libman config --set http_proxy=http://exemple
+    libman config --setEncrypted http_proxy.password=texteMotdepasse</value>
+  </data>
+  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
+    <value>Nom du paramètre à récupérer</value>
+  </data>
+  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
+    <value>Clé {0} introuvable.</value>
+  </data>
   <data name="DefaultDestinationOptionDesc" xml:space="preserve">
     <value>Chemin, relatif au répertoire actif, où les fichiers de la bibliothèque doivent être installés si aucune destination n'est définie pour une bibliothèque donnée.</value>
   </data>
   <data name="DefaultProviderOptionDesc" xml:space="preserve">
     <value>Fournisseur à utiliser si aucun fournisseur n'est défini pour une bibliothèque donnée (par exemple, "cdnjs", "filesystem")</value>
   </data>
+  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
+    <value>Impossible de demander l'entrée utilisateur dans cette console.</value>
+  </data>
   <data name="DestinationOptionDesc" xml:space="preserve">
     <value>Emplacement d'installation de la bibliothèque (si rien n'est spécifié, l'emplacement de destination par défaut est utilisé)</value>
   </data>
   <data name="ExamplesHeader" xml:space="preserve">
-    <value>Exemples:</value>
+    <value>Exemples :</value>
   </data>
   <data name="FilesOptionDesc" xml:space="preserve">
     <value>Fichiers de la bibliothèque spécifiée à installer (si rien n'est spécifié, tous les fichiers de la bibliothèque sont installés)</value>
@@ -176,7 +298,7 @@
 </value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
-    <value>Une erreur se produit si le dossier actif ne contient aucun fichier libman.json ou si la bibliothèque spécifiée n'existe pas. Si plusieurs bibliothèques ont le même libraryId, vous êtes invité à en choisir une.</value>
+    <value>Une erreur se produit si le dossier actif ne contient aucun fichier libman.json ou si la bibliothèque spécifiée n’existe pas. Si plusieurs bibliothèques ont le même libraryId, vous êtes invité à en choisir une.</value>
   </data>
   <data name="UpdateCommandLibraryArgumentDesc" xml:space="preserve">
     <value>Nom de la bibliothèque à mettre à jour (sans la version).</value>
@@ -200,7 +322,7 @@
     <value>(vide)</value>
   </data>
   <data name="CacheForProviderCleanedMessage" xml:space="preserve">
-    <value>Le cache {0} a été nettoyé.</value>
+    <value>Cache de {0} nettoyé.</value>
   </data>
   <data name="CacheListFilesOptionDesc" xml:space="preserve">
     <value>Répertorier les fichiers mis en cache pour chaque bibliothèque</value>
@@ -246,7 +368,7 @@ Spécifiez un nom de bibliothèque sans les informations de version.</value>
     <value>Bibliothèque "{0}" installée dans "{1}"</value>
   </data>
   <data name="UninstalledLibrary" xml:space="preserve">
-    <value>La bibliothèque "{0}" a été désinstallée</value>
+    <value>Bibliothèque "{0}" désinstallée</value>
   </data>
   <data name="InvalidFilesForLibrary" xml:space="preserve">
     <value>La bibliothèque "{0}" ne contient pas les fichiers suivants : {1}</value>
@@ -279,28 +401,11 @@ Spécifiez une destination différente.</value>
   <data name="InitFailedUnknownProvider" xml:space="preserve">
     <value>Échec d'initialisation du fichier libman.json. [{0}] : {1}</value>
   </data>
-  <data name="NonInteractiveConsoleMessage" xml:space="preserve">
-    <value>Impossible de demander l'entrée utilisateur dans cette console.</value>
-  </data>
   <data name="SpecifyDisabmiguatedLibrary" xml:space="preserve">
     <value>Spécifiez l'ID de bibliothèque complet ainsi que le fournisseur à l'aide de l'option '--provider'.</value>
   </data>
   <data name="SpecifyFieldUsingOption" xml:space="preserve">
     <value>Spécifiez '{0}' à l'aide de l'option '--{1}'.</value>
-  </data>
-  <data name="ConfigCommand_Description" xml:space="preserve">
-    <value>Obtient ou définit les paramètres de configuration</value>
-  </data>
-  <data name="ConfigCommand_Examples" xml:space="preserve">
-    <value>    libman config http_proxy
-    libman config --set http_proxy=http://exemple
-    libman config --setEncrypted http_proxy.password=texteMotdepasse</value>
-  </data>
-  <data name="ConfigCommand_ArgumentDescription" xml:space="preserve">
-    <value>Nom du paramètre à récupérer</value>
-  </data>
-  <data name="ConfigCommand_Error_KeyNotFound" xml:space="preserve">
-    <value>Clé {0} introuvable.</value>
   </data>
   <data name="ConfigCommand_Error_ConflictingParameters" xml:space="preserve">
     <value>Impossible de lire et d'écrire des paramètres dans la même opération</value>
@@ -315,5 +420,8 @@ Spécifiez une destination différente.</value>
     <value>    Impossible de lire et de stocker les paramètres dans la même opération.
     Pour supprimer un paramètre, affectez-lui une chaîne vide (--set key=).
     La récupération des valeurs déchiffrées pour les paramètres chiffrés n'est pas prise en charge.</value>
+  </data>
+  <data name="CacheLocationMessage" xml:space="preserve">
+    <value>Répertoire racine du cache :</value>
   </data>
 </root>
