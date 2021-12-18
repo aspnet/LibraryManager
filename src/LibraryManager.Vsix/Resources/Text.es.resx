@@ -1,5 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -12,8 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddClientSideLibrary" xml:space="preserve">
+    <value>Agregar biblioteca de lado del cliente</value>
+    <comment>Add Client-Side Library</comment>
+  </data>
   <data name="CleanLibrariesStarted" xml:space="preserve">
-    <value>Comenzó la limpieza de las bibliotecas...</value>
+    <value>Comenzó la limpieza de las bibliotecas</value>
     <comment>When the "Clean" command is being executed</comment>
   </data>
   <data name="CleanLibrariesSucceeded" xml:space="preserve">
@@ -36,9 +145,9 @@
     <value>Buscar actualizaciones</value>
     <comment>Used in JSON editor light bulb</comment>
   </data>
-  <data name="UninstallLibrary" xml:space="preserve">
-    <value>Desinstalar {0}</value>
-    <comment>Used in JSON editor light bulb</comment>
+  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
+    <value>No se han encontrado actualizaciones en este momento</value>
+    <comment>Used in message box when light bulb found no updates</comment>
   </data>
   <data name="NugetInstallPrompt" xml:space="preserve">
     <value>Se instalará un paquete NuGet para aumentar el proceso de MSBuild, pero no se agregará ningún archivo al proyecto.
@@ -49,10 +158,6 @@ Puede que se requiera una conexión a internet.
   </data>
   <data name="TypeToSearch" xml:space="preserve">
     <value>&lt;Escribir texto para buscar&gt;</value>
-  </data>
-  <data name="AddClientSideLibrary" xml:space="preserve">
-    <value>Agregar biblioteca de lado del cliente</value>
-    <comment>Add Client-Side Library</comment>
   </data>
   <data name="SelectLibraryToSelectFilesToInstall" xml:space="preserve">
     <value>&lt;Elegir una biblioteca para seleccionar los archivos que se van a instalar&gt;</value>
@@ -73,13 +178,17 @@ Puede que se requiera una conexión a internet.
     <value>No se pudo desinstalar el paquete de NuGet</value>
   </data>
   <data name="Nuget_PackageInstalled" xml:space="preserve">
-    <value>Paquete de NuGet instalado</value>
+    <value>Paquete NuGet instalado</value>
   </data>
   <data name="Nuget_PackageUninstalled" xml:space="preserve">
-    <value>Paquete de NuGet desinstalado</value>
+    <value>Paquete NuGet desinstalado</value>
   </data>
   <data name="Nuget_UninstallingPackage" xml:space="preserve">
-    <value>Desinstalando el paquete de NuGet...</value>
+    <value>Desinstalando el paquete NuGet...</value>
+  </data>
+  <data name="UninstallLibrary" xml:space="preserve">
+    <value>Desinstalar {0}</value>
+    <comment>Used in JSON editor light bulb</comment>
   </data>
   <data name="FailToDeleteLibrariesFromProject" xml:space="preserve">
     <value>No se pudieron eliminar bibliotecas del proyecto</value>
@@ -126,12 +235,8 @@ Puede que se requiera una conexión a internet.
   <data name="Install" xml:space="preserve">
     <value>_Instalar</value>
   </data>
-  <data name="SuggestedAction_Update_NoUpdatesFound" xml:space="preserve">
-    <value>No se han encontrado actualizaciones en este momento</value>
-    <comment>Used in message box when light bulb found no updates</comment>
-  </data>
   <data name="Checked" xml:space="preserve">
-    <value>Se ha activado {0} {1}</value>
+    <value>Se ha seleccionado {0} {1}</value>
     <comment>{0} indicates PackageItemType, which could be a file or a folder. {1} is the name of the file or folder</comment>
   </data>
   <data name="UnChecked" xml:space="preserve">
@@ -157,5 +262,8 @@ Puede que se requiera una conexión a internet.
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Carpeta</value>
+  </data>
+  <data name="CloseButtonText" xml:space="preserve">
+    <value>Cerrar</value>
   </data>
 </root>
