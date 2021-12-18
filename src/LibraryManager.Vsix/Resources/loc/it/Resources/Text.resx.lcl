@@ -56,10 +56,13 @@
       </Item>
       <Item ItemId=";CleanLibrariesStarted" ItemType="0;.resx" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Clean libraries started...]]></Val>
+          <Val><![CDATA[Clean libraries started]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pulizia delle librerie avviata...]]></Val>
+            <Val><![CDATA[Pulizia delle librerie avviata]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Clean libraries started...]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
