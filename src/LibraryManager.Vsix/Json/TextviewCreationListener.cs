@@ -30,7 +30,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
     internal class TextviewCreationListener : IVsTextViewCreationListener
     {
         private Manifest _manifest;
-        private IDependencies _dependencies;
         private Project _project;
         private ErrorListPropagator _errorList;
         private string _manifestPath;
@@ -68,10 +67,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             new CompletionController(textViewAdapter, textView, CompletionBroker);
 
-            _dependencies = DependenciesFactory.FromConfigFile(doc.FilePath);
+            IDependencies dependencies = DependenciesFactory.FromConfigFile(doc.FilePath);
 #pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
                                   // Justification: Manifest is free-threaded, don't need to use JTF here
-            _manifest = Manifest.FromFileAsync(doc.FilePath, _dependencies, CancellationToken.None).Result;
+            _manifest = Manifest.FromFileAsync(doc.FilePath, dependencies, CancellationToken.None).Result;
 #pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
             _manifestPath = doc.FilePath;
             _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);
@@ -81,7 +80,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             _ = Task.Run(async () =>
             {
-                IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, dependencies, CancellationToken.None).ConfigureAwait(false);
                 if (!results.All(r => r.Success))
                 {
                     AddErrorsToList(results);
@@ -105,8 +104,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                 {
                     try
                     {
-                        var newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), _dependencies);
-                        IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, _dependencies, CancellationToken.None).ConfigureAwait(false);
+                        IDependencies dependencies = DependenciesFactory.FromConfigFile(textDocument.FilePath);
+                        var newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), dependencies);
+                        IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, dependencies, CancellationToken.None).ConfigureAwait(false);
 
                         if (!results.All(r => r.Success))
                         {
