@@ -70,6 +70,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The library {0} did not match the naming scheme for provider {1}. {2}.
+        /// </summary>
+        public static string BadLibraryId {
+            get {
+                return ResourceManager.GetString("BadLibraryId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Cancel.
         /// </summary>
         public static string Cancel {

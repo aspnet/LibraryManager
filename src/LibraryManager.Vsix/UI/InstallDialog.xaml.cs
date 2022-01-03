@@ -53,7 +53,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
             {
                 DialogResult = res;
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             { }
 
             Close();

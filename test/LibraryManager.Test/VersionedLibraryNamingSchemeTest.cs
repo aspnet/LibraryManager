@@ -47,5 +47,25 @@ namespace Microsoft.Web.LibraryManager.Test
 
             Assert.AreEqual(expectedLibraryId, libraryId);
         }
+
+        [TestMethod]
+        [DataRow(null, false)]
+        [DataRow("", false)]
+        [DataRow("@", false)]
+        [DataRow("test", false)]
+        [DataRow("test@1", true)]
+        [DataRow("@test1", false)]
+        [DataRow("@test/1.0", false)]
+        [DataRow("@test1@1.0", true)]
+        [DataRow("test@input", true)]
+        [DataRow("@@@1.0", true)]     // kind of an odd case, but this translates to "@@" as the name
+        public void IsValidLibraryId(string libraryId, bool expected)
+        {
+            var namingScheme = new VersionedLibraryNamingScheme();
+
+            bool result = namingScheme.IsValidLibraryId(libraryId);
+
+            Assert.AreEqual(expected, result);
+        }
     }
 }

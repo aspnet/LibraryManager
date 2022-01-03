@@ -42,5 +42,20 @@ namespace Microsoft.Web.LibraryManager.Test
 
             Assert.AreEqual(expectedLibraryId, libraryId);
         }
+
+        [TestMethod]
+        [DataRow(null, false)]
+        [DataRow("", false)]
+        [DataRow("foobarbaz", true)]
+        [DataRow(":@#/\\|", true)]
+        [DataRow(" \t\r\n", true)]
+        public void IsValidLibraryId(string libraryId, bool expected)
+        {
+            var namingScheme = new SimpleLibraryNamingScheme();
+
+            bool result = namingScheme.IsValidLibraryId(libraryId);
+
+            Assert.AreEqual(expected, result);
+        }
     }
 }

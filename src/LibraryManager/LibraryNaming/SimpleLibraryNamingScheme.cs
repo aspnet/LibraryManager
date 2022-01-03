@@ -19,5 +19,11 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
         {
             return (libraryId ?? string.Empty, string.Empty);
         }
+
+        /// <inheritdoc />
+        public bool IsValidLibraryId(string libraryId)
+        {
+            return !string.IsNullOrEmpty(libraryId);
+        }
     }
 }

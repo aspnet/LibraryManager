@@ -110,6 +110,14 @@ namespace Microsoft.Web.LibraryManager.LibraryNaming
             return GetSchemeForProvider(providerId).GetLibraryId(name, version);
         }
 
+        /// <summary>
+        /// Returns whether the given library ID is of a valid form for the given provider
+        /// </summary>
+        public bool IsWellFormedLibraryId(string libraryId, string providerId)
+        {
+            return GetSchemeForProvider(providerId).IsValidLibraryId(libraryId);
+        }
+
         private ILibraryNamingScheme GetSchemeForProvider(string providerId)
         {
             lock (_syncObject)
