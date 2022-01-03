@@ -194,13 +194,15 @@ Do you want to continue?</value>
     <value>Could not delete libraries from project</value>
   </data>
   <data name="LibraryDeletedFromProject" xml:space="preserve">
-    <value>Library {0} was successfuly deleted from project</value>
+    <value>{0} was successfuly deleted from project</value>
+    <comment>{0} is a file path</comment>
   </data>
   <data name="FailToAddLibrariesToProject" xml:space="preserve">
     <value>Could not add libraries to project</value>
   </data>
   <data name="LibraryAddedToProject" xml:space="preserve">
-    <value>Library {0} was successfuly added to project</value>
+    <value>{0} was successfuly added to project</value>
+    <comment>{0} is a file path</comment>
   </data>
   <data name="OutputWindowTitle" xml:space="preserve">
     <value>Library Manager</value>
