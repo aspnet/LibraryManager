@@ -294,6 +294,27 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Unpkg
         }
 
         [TestMethod]
+        public async Task GetLatestVersion_Prerelease()
+        {
+            const string libraryName = "fakeLibrary";
+            var versions = new List<SemanticVersion>()
+            {
+                SemanticVersion.Parse("2.0.0-beta"),
+                SemanticVersion.Parse("1.0.0"),
+            };
+            var fakeCache = new Mock<ICacheService>();
+            fakeCache.SetupPackageVersions(libraryName);
+            var fakePackageInfoFactory = new Mock<INpmPackageInfoFactory>();
+            fakePackageInfoFactory.Setup(f => f.GetPackageInfoAsync(It.Is<string>(s => s == libraryName), It.IsAny<CancellationToken>()))
+                                  .Returns(Task.FromResult(new NpmPackageInfo(libraryName, "test package", "1.0.0", versions)));
+            UnpkgCatalog sut = SetupCatalog(fakeCache.Object, infoFactory: fakePackageInfoFactory.Object);
+
+            string result = await sut.GetLatestVersion(libraryName, includePreReleases: true, CancellationToken.None);
+
+            Assert.AreEqual("2.0.0-beta", result);
+        }
+
+        [TestMethod]
         public async Task GetLatestVersion_WebResponseFailedButNoCachedFile_ReturnsNull()
         {
             var fakeCache = new Mock<ICacheService>();
