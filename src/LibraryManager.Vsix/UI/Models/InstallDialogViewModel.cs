@@ -505,7 +505,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                         libraryInstallationState.Files = SelectedFiles.ToList();
                     }
 
-                    manifest.AddLibrary(libraryInstallationState);
+                    // When adding libraries via the wizard, always leave it as an explicit value on the individual library.
+                    // This doesn't set the default, but it's easier than generating a separate edit for the library entry
+                    // as well as the defaultProvider line.  Possibly worth re-visiting this in the future if we can make
+                    // both edits work well.
+                    manifest.AddLibrary(libraryInstallationState, setDefaultProvider: false);
 
                     await Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
