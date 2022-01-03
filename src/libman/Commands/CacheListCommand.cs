@@ -27,18 +27,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         /// </summary>
         public CommandOption Files { get; private set; }
 
-        /// <summary>
-        /// Option to restrict output to only library names.
-        /// </summary>
-        /// <remarks>This option is implicit if nothing is specified.</remarks>
-        public CommandOption Libraries { get; private set; }
-
         public override BaseCommand Configure(CommandLineApplication parent = null)
         {
             base.Configure(parent);
 
             Files = Option("--files", Resources.Text.CacheListFilesOptionDesc, CommandOptionType.NoValue);
-            Libraries = Option("--libraries", Resources.Text.CacheListLibrariesOptionDesc, CommandOptionType.NoValue);
 
             return this;
         }
