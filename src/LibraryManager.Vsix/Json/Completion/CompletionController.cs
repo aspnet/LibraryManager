@@ -14,6 +14,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 using Microsoft.WebTools.Languages.Json.Editor.Document;
 using Microsoft.WebTools.Languages.Json.Parser.Nodes;
+using Microsoft.WebTools.Languages.Shared.Parser;
 using Microsoft.WebTools.Languages.Shared.Parser.Nodes;
 
 using Task = System.Threading.Tasks.Task;
@@ -130,7 +131,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
                 return;
             }
 
-            Node node = JsonHelpers.GetNodeBeforePosition(_textView.Caret.Position.BufferPosition, doc.DocumentNode);
+            int caretPosition = _textView.Caret.Position.BufferPosition.Position;
+            Node node = JsonHelpers.GetNodeBeforePosition(caretPosition, doc.DocumentNode);
 
             if (node == null)
             {
@@ -143,6 +145,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
                 || (!memberNode.UnquotedNameText.Equals(ManifestConstants.Library, StringComparison.Ordinal)
                     && !memberNode.UnquotedNameText.Equals(ManifestConstants.Destination, StringComparison.Ordinal)
                     && memberNode.UnquotedValueText?.Length <= 1))
+            {
+                return;
+            }
+
+            // If we're outside a string value, this means the caret is past the close quote so don't retrigger.
+            // Something else will be responsible for triggering a new session when appropriate.
+            if (memberNode.Value.Kind is NodeKind.String && caretPosition >= memberNode.Value.End)
             {
                 return;
             }
