@@ -214,10 +214,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
         }
 
-        private void PositionCompletionPopup(int index)
+        private void PositionCompletionPopup()
         {
-            Rect r = SearchTextBox.GetRectFromCharacterIndex(index);
-            Flyout.HorizontalOffset = r.Left - 7;
+            Flyout.VerticalOffset = SearchTextBox.ActualHeight;
+            Flyout.HorizontalOffset = -SearchTextBox.ActualWidth;
             Options.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             Flyout.Width = Options.DesiredSize.Width;
         }
@@ -282,7 +282,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                         CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
                     }
 
-                    PositionCompletionPopup(completionSet.Length);
+                    PositionCompletionPopup();
 
                     if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
                     {

@@ -177,21 +177,46 @@
                 <platformUI:SystemDropShadowChrome x:Uid="Shdw" Name="Shdw" Color="Transparent"
                                                MinWidth="{Binding ElementName=templateRoot,Path=ActualWidth}"
                                                MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                    <Border x:Name="dropDownBorder" BorderBrush="{DynamicResource {x:Static platformUI:CommonControlsColors.ComboBoxBorderBrushKey}}" BorderThickness="1" Background="{DynamicResource {x:Static platformUI:CommonControlsColors.ComboBoxBackgroundBrushKey}}">
+                    <Border x:Name="dropDownBorder"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource {x:Static platformUI:CommonControlsColors.ComboBoxBorderBrushKey}}"
+                            Background="{DynamicResource {x:Static platformUI:CommonControlsColors.ComboBoxBackgroundBrushKey}}">
                         <ScrollViewer x:Name="DropDownScrollViewer">
                             <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
-                                <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
-                                    <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
+                                <Canvas x:Name="canvas"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Height="0"
+                                        Width="0">
+                                    <Rectangle x:Name="opaqueRect"
+                                               Fill="{Binding Background, ElementName=dropDownBorder}"
+                                               Height="{Binding ActualHeight, ElementName=dropDownBorder}"
+                                               Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
                                 </Canvas>
-                                <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <ItemsPresenter x:Name="ItemsPresenter"
+                                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </Grid>
                         </ScrollViewer>
                     </Border>
                 </platformUI:SystemDropShadowChrome>
             </Popup>
-            <ToggleButton x:Name="toggleButton" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}"/>
-            <Border x:Name="border" Background="{DynamicResource {x:Static platformUI:CommonControlsColors.ComboBoxBackgroundBrushKey}}" Margin="{TemplateBinding BorderThickness}">
-                <TextBox x:Name="PART_EditableTextBox" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Margin="{TemplateBinding Padding}" Style="{StaticResource ComboBoxEditableTextBox}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+            <ToggleButton x:Name="toggleButton"
+                          Grid.ColumnSpan="2"
+                          BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          Background="{TemplateBinding Background}"
+                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                          Style="{StaticResource ComboBoxToggleButton}"/>
+            <Border x:Name="border"
+                    Background="{DynamicResource {x:Static platformUI:CommonControlsColors.ComboBoxBackgroundBrushKey}}"
+                    Margin="{TemplateBinding BorderThickness}">
+                <TextBox x:Name="PART_EditableTextBox"
+                         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}"
+                         Margin="{TemplateBinding Padding}"
+                         Style="{StaticResource ComboBoxEditableTextBox}"
+                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
             </Border>
         </Grid>
         <ControlTemplate.Triggers>
