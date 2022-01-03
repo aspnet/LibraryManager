@@ -29,6 +29,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         /// </summary>
         public CommandOption DefaultDestination { get; private set; }
 
+        /// <summary>
+        /// Option to use all the default choices silently
+        /// </summary>
+        public CommandOption UseDefault { get; private set; }
+
 
         public override BaseCommand Configure(CommandLineApplication parent)
         {
@@ -36,23 +41,21 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             DefaultProvider = Option("--default-provider|-p", Resources.Text.DefaultProviderOptionDesc, CommandOptionType.SingleValue);
             DefaultDestination = Option("--default-destination|-d", Resources.Text.DefaultDestinationOptionDesc, CommandOptionType.SingleValue);
+            UseDefault = Option("--useDefault|-y", Resources.Text.UseDefault, CommandOptionType.NoValue);
 
             return this;
         }
 
         protected async override Task<int> ExecuteInternalAsync()
         {
-            await CreateManifestAsync(DefaultProvider.Value(), DefaultDestination.Value(), Settings, DefaultProvider.LongName, CancellationToken.None);
+            string defaultProvider = DefaultProvider.Value();
+            if (string.IsNullOrEmpty(defaultProvider) && UseDefault.HasValue())
+            {
+                defaultProvider = Settings.DefaultProvider;
+            }
+            await CreateManifestAsync(defaultProvider, DefaultDestination.Value(), Settings, DefaultProvider.LongName, CancellationToken.None);
 
             return 0;
-        }
-
-        private void FailIfLibmanJsonExists()
-        {
-            if (File.Exists(Settings.ManifestFileName))
-            {
-                throw new Exception(Resources.Text.InitFailedLibmanJsonFileExists);
-            }
         }
     }
 }
