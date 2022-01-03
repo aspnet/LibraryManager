@@ -228,7 +228,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             // We will invoke completion on text insertion and not deletion.
             // Also, we don't want to invoke completion on dialog load as we pre populate the target
             // location textbox with name of the folder when dialog is initially loaded.
-            if (textChange.AddedLength > 0 && SearchTextBox.CaretIndex > 0)
+            // In the case of deletion or replacement, if the completion flyout is already open, we
+            // should still update the list, as the filtered items have likely changed.
+            bool textInserted = textChange.AddedLength > 0 && SearchTextBox.CaretIndex > 0;
+            if (textInserted || Flyout.IsOpen)
             {
                 ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
