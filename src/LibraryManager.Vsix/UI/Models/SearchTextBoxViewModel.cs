@@ -73,14 +73,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             return Task.FromResult(input);
         }
 
-        public virtual Task<CompletionItem> GetRecommendedSelectedCompletionAsync(CompletionSet completionSet, CompletionItem? lastSelected)
+        public virtual Task<CompletionItem> GetRecommendedSelectedCompletionAsync(IEnumerable<CompletionItem> completions, CompletionItem? lastSelected)
         {
             // by default, try to select the same as before, else fall back on the first item in the list
             string lastSelectedText = lastSelected?.InsertionText;
-            CompletionItem selectedItem = completionSet.Completions.FirstOrDefault(x => x.InsertionText == lastSelectedText);
+            CompletionItem selectedItem = completions.FirstOrDefault(x => x.InsertionText == lastSelectedText);
             if (selectedItem == default(CompletionItem))
             {
-                selectedItem = completionSet.Completions.FirstOrDefault();
+                selectedItem = completions.FirstOrDefault();
             }
 
             return Task.FromResult(selectedItem);

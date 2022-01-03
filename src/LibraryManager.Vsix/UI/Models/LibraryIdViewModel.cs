@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
             return Task.FromResult(result);
         }
 
-        public override async Task<CompletionItem> GetRecommendedSelectedCompletionAsync(CompletionSet completionSet, CompletionItem? lastSelected)
+        public override async Task<CompletionItem> GetRecommendedSelectedCompletionAsync(IEnumerable<CompletionItem> completions, CompletionItem? lastSelected)
         {
             int atIndex = SearchText.IndexOf('@');
             var result = default(CompletionItem);
@@ -52,15 +52,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 // if we're in the version portion, try to select the first item that starts with the version
                 string versionPortion = SearchText.Substring(atIndex + 1);
                 Func<CompletionItem, bool> predicate = x => x.DisplayText.StartsWith(versionPortion, StringComparison.OrdinalIgnoreCase);
-                result = completionSet.Completions.FirstOrDefault(predicate);
+                result = completions.FirstOrDefault(predicate);
                 if (result == default(CompletionItem))
                 {
-                    result = completionSet.Completions.FirstOrDefault();
+                    result = completions.FirstOrDefault();
                 }
             }
             else
             {
-                result = await base.GetRecommendedSelectedCompletionAsync(completionSet, lastSelected);
+                result = await base.GetRecommendedSelectedCompletionAsync(completions, lastSelected);
             }
 
             return result;

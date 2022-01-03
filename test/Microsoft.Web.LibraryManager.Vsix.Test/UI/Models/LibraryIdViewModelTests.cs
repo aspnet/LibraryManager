@@ -126,19 +126,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
         public async Task GetRecommendedSelectedCompletionAsync_DoesNotContainAt_ReturnsFirstItem()
         {
             ILibraryCatalog testCatalog = CreateLibraryCatalogWithUnscopedLibrary();
-            
+
             var testObj = new LibraryIdViewModel(GetTestSearchService(testCatalog), "test");
-            var completionSet = new CompletionSet
-            {
-                Start = 0,
-                Length = 4,
-                Completions = new[] {
-                    new CompletionItem { DisplayText = "test@1.2" },
-                    new CompletionItem { DisplayText = "test@2.1" },
-                },
+            CompletionItem[] completions = new[] {
+                new CompletionItem { DisplayText = "test@1.2" },
+                new CompletionItem { DisplayText = "test@2.1" },
             };
 
-            CompletionItem result = await testObj.GetRecommendedSelectedCompletionAsync(completionSet, null);
+            CompletionItem result = await testObj.GetRecommendedSelectedCompletionAsync(completions, null);
 
             Assert.AreEqual("test@1.2", result.DisplayText);
         }
@@ -149,17 +144,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
             ILibraryCatalog testCatalog = CreateLibraryCatalogWithUnscopedLibrary();
 
             var testObj = new LibraryIdViewModel(GetTestSearchService(testCatalog), "test@2");
-            var completionSet = new CompletionSet
-            {
-                Start = 0,
-                Length = 4,
-                Completions = new[] {
-                    new CompletionItem { DisplayText = "1.2" },
-                    new CompletionItem { DisplayText = "2.1" },
-                },
+            CompletionItem[] completions = new[] {
+                new CompletionItem { DisplayText = "1.2" },
+                new CompletionItem { DisplayText = "2.1" },
             };
 
-            CompletionItem result = await testObj.GetRecommendedSelectedCompletionAsync(completionSet, null);
+            CompletionItem result = await testObj.GetRecommendedSelectedCompletionAsync(completions, null);
 
             Assert.AreEqual("2.1", result.DisplayText);
         }
@@ -170,17 +160,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.UI.Models
             ILibraryCatalog testCatalog = CreateLibraryCatalogWithUnscopedLibrary();
 
             var testObj = new LibraryIdViewModel(GetTestSearchService(testCatalog), "test@3");
-            var completionSet = new CompletionSet
-            {
-                Start = 0,
-                Length = 4,
-                Completions = new[] {
-                    new CompletionItem { DisplayText = "1.2" },
-                    new CompletionItem { DisplayText = "2.1" },
-                },
+            CompletionItem[] completions = new[] {
+                new CompletionItem { DisplayText = "1.2" },
+                new CompletionItem { DisplayText = "2.1" },
             };
 
-            CompletionItem result = await testObj.GetRecommendedSelectedCompletionAsync(completionSet, null);
+            CompletionItem result = await testObj.GetRecommendedSelectedCompletionAsync(completions, null);
 
             Assert.AreEqual("1.2", result.DisplayText);
         }
