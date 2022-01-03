@@ -15,6 +15,7 @@ using System.Windows.Input;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Vsix.Resources;
 using Microsoft.Web.LibraryManager.Vsix.UI.Controls.AutomationPeers;
 using Microsoft.Web.LibraryManager.Vsix.UI.Extensions;
 using Microsoft.Web.LibraryManager.Vsix.UI.Models;
@@ -105,7 +106,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void Commit(CompletionEntry completion)
         {
-            if (completion == null)
+            if (completion == null || completion.CompletionItem.InsertionText == null)
             {
                 return;
             }
@@ -258,7 +259,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     if (completionSet.Completions == null || !completionSet.Completions.Any())
                     {
                         Flyout.IsOpen = false;
-                        return;
+                        completionSet = new CompletionSet
+                        {
+                            Completions = new[]
+                            {
+                                new CompletionItem
+                                {
+                                    DisplayText = Text.NoMatchesFound,
+                                    InsertionText = null,
+                                }
+                            }
+                        };
                     }
 
                     // repopulate the completion list

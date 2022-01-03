@@ -277,6 +277,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No matches found.
+        /// </summary>
+        public static string NoMatchesFound {
+            get {
+                return ResourceManager.GetString("NoMatchesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Installing NuGet package containing MSBuild target....
         /// </summary>
         public static string Nuget_InstallingPackage {
