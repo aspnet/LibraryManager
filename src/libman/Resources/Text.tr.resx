@@ -428,4 +428,7 @@ Lütfen farklı bir hedef belirtin.</value>
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>Önbellek kök dizini:</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>libman.json dosyası için varsayılan ayarları kullan</value>
+  </data>
 </root>

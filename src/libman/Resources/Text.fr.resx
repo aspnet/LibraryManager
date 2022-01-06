@@ -424,4 +424,7 @@ Spécifiez une destination différente.</value>
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>Répertoire racine du cache :</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>Utiliser les paramètres par défaut du fichier libman.json</value>
+  </data>
 </root>

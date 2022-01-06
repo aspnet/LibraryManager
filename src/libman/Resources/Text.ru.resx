@@ -428,4 +428,7 @@
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>Корневой каталог кэша:</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>Используйте параметры по умолчанию для файла libman.json</value>
+  </data>
 </root>

@@ -428,4 +428,7 @@
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>快取根目錄:</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>使用 libman.json 檔案的預設設定</value>
+  </data>
 </root>
