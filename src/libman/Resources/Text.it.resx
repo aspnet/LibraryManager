@@ -428,4 +428,7 @@ Specificare una destinazione diversa.</value>
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>Directory radice della cache:</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>Usa le impostazioni predefinite per il file libman.json</value>
+  </data>
 </root>

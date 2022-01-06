@@ -428,4 +428,7 @@ Zadejte prosím jiný cíl.</value>
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>Kořenový adresář mezipaměti:</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>Použít výchozí nastavení pro soubor libman.json</value>
+  </data>
 </root>

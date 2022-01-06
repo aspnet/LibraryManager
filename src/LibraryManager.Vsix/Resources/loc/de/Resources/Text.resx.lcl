@@ -18,6 +18,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";BadLibraryId" ItemType="0;.resx" PsrId="211" InstFlg="true" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The library {0} did not match the naming scheme for provider {1}. {2}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Bibliothek {0} stimmte nicht mit dem Namensschema für den Anbieter {1} überein. {2}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cancel" ItemType="0;.resx" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[_Cancel]]></Val>
@@ -183,21 +192,27 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";LibraryAddedToProject" ItemType="0;.resx" PsrId="211" Leaf="true">
+      <Item ItemId=";LibraryAddedToProject" ItemType="0;.resx" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Library {0} was successfuly added to project]]></Val>
+          <Val><![CDATA[{0} was successfuly added to project]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die Bibliothek "{0}" wurde dem Projekt erfolgreich hinzugefügt.]]></Val>
+            <Val><![CDATA[{0} wurde dem Projekt erfolgreich hinzugefügt]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Library {0} was successfuly added to project]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";LibraryDeletedFromProject" ItemType="0;.resx" PsrId="211" Leaf="true">
+      <Item ItemId=";LibraryDeletedFromProject" ItemType="0;.resx" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Library {0} was successfuly deleted from project]]></Val>
+          <Val><![CDATA[{0} was successfuly deleted from project]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die Bibliothek "{0}" wurde erfolgreich aus dem Projekt gelöscht.]]></Val>
+            <Val><![CDATA[{0} wurde erfolgreich aus dem Projekt gelöscht]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Library {0} was successfuly deleted from project]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -224,6 +239,15 @@
           <Val><![CDATA[No files have been selected]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Es wurden keine Dateien ausgewählt.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";NoMatchesFound" ItemType="0;.resx" PsrId="211" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[No matches found]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Keine Übereinstimmungen gefunden]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

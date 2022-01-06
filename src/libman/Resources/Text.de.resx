@@ -428,4 +428,7 @@ Geben Sie ein anderes Ziel an.</value>
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>Stammverzeichnis für Cache:</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>Standardeinstellungen für die Datei "libman.json" verwenden</value>
+  </data>
 </root>

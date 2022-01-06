@@ -428,4 +428,7 @@ Especifique otro destino.</value>
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>Directorio raíz de caché:</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>Usar la configuración predeterminada para el archivo libman.json</value>
+  </data>
 </root>

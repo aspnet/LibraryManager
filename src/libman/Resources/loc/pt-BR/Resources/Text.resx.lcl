@@ -855,6 +855,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";UseDefault" ItemType="0;.resx" PsrId="211" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use the default settings for the libman.json file]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Usar as configurações padrão para o arquivo libman.json]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";UseProviderToDisambiguateMessage" ItemType="0;.resx" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Use --provider to disambiguate libraries of same name from different providers in the project]]></Val>

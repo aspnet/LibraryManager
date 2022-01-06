@@ -428,4 +428,7 @@ Określ inną lokalizację docelową.</value>
   <data name="CacheLocationMessage" xml:space="preserve">
     <value>Katalog główny pamięci podręcznej:</value>
   </data>
+  <data name="UseDefault" xml:space="preserve">
+    <value>Użyj ustawień domyślnych dla pliku libman.json</value>
+  </data>
 </root>
