@@ -1,5 +1,16 @@
 # Change log
 
+## 2.1.161
+Commit: abc97ecc7db29a48992d14f1585cc092acbf66aa
+- Packages updated on NuGet
+- Included in Visual Studio 17.1
+- Worked around restore issues during VS Live Unit Testing (#644)
+- Fixed issues with cross-polluting projects if multiple libman.json files were open in VS (#638)
+- Fixed Unpkg provider to show prerelease versions of libraries (#349)
+- Several small improvements to the Add New Client-Side Library dialog (#226, #397, #393, #508, #518, #531)
+- Some small cleanup of CLI commands (#369, #127)
+- Some resource string tweaks (#130, #212) and misc bug fixes (#222, #396)
+
 ## 2.1.113
 Commit: 422d40002e1fad0412a4bea45850227cf8eefa45
 - Packages updated on NuGet
@@ -7,7 +18,7 @@ Commit: 422d40002e1fad0412a4bea45850227cf8eefa45
 - Added caching for metadata from Cdnjs and jsDelivr providers
 - Fixed detection of latest version for Cdnjs provider
 - Implemented detection of pre-release and GitHub versions for jsDelivr provider
-- Improve CLI error message for unrecognized provider names 
+- Improve CLI error message for unrecognized provider names
   - Thanks @RobJohnston!
 - Implement theming support in the VS dialog
 - Various engineering and refactoring changes.
@@ -53,7 +64,7 @@ Commit: bc8a4b23ecda98996464bc3c23de9a41b0015dc3
 Commit: b7a1f9d9b081c2a9fd5442ccbb65a71c1b83ccd5
 - Packages updated on NuGet
 - Fixes issue #500
-  - Thanks @Danielku15 for contirbuting the fix!
+  - Thanks @Danielku15 for contributing the fix!
 
 ## 2.0.65
 Commit: 78c63892478b56cfb084ffd7f36aeec30f32d318
