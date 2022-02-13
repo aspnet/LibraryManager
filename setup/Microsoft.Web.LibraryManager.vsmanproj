@@ -11,14 +11,19 @@
     <ProductFamilyVersion>2016</ProductFamilyVersion>
     <ComputeRelativeUrls>true</ComputeRelativeUrls>
     <OutputPath>$(BaseOutputPath)\setup</OutputPath>
+
+    <SBOMSourceDirectory>$(ManifestOutputPath)\_manifest\spdx_2.2</SBOMSourceDirectory>
+    <SBOMDestinationDirectory>$(RepoRoot)\bin\sbom</SBOMDestinationDirectory>
   </PropertyGroup>
 
   <ItemGroup>
-    <MergeManifest Include="$(ManifestOutputPath)\*.json">
+    <MergeManifest Include="$(ManifestOutputPath)\*.json"
+                   SBOMFileLocation="$(SBOMSourceDirectory)\manifest.spdx.json"
+                   SBOMFileDestPath="$(SBOMDestinationDirectory)">
       <RelativeUrl>/</RelativeUrl>
     </MergeManifest>
   </ItemGroup>
 
-  <Import Project="$(MicroBuildPluginDirectory)\MicroBuild.Plugins.SwixBuild.*\build\MicroBuild.Plugins.SwixBuild.targets"/>
+  <Import Project="$(MicroBuildPluginDirectory)\Microsoft.VisualStudioEng.MicroBuild.Plugins.SwixBuild.*\build\Microsoft.VisualStudioEng.MicroBuild.Plugins.SwixBuild.targets"/>
 
 </Project>
