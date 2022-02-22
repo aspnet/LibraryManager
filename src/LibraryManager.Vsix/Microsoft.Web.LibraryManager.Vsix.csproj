@@ -255,9 +255,6 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="source.extension.ico">
-      <DependentUpon>source.extension.vsixmanifest</DependentUpon>
-    </Content>
     <EmbeddedResource Include="Resources\Text.cs.resx" />
     <EmbeddedResource Include="Resources\Text.de.resx" />
     <EmbeddedResource Include="Resources\Text.es.resx" />
