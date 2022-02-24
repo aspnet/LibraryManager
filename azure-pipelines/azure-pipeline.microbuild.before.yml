@@ -6,5 +6,5 @@ steps:
     zipSources: false
   displayName: Install MicroBuild Signing Plugin
 
-- task: MicroBuildSwixPlugin@3
+- task: MicroBuildSwixPlugin@4
   displayName: Install MicroBuild Swix Plugin
