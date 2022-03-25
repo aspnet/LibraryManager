@@ -31,7 +31,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             InitializeComponent();
 
-            Loaded += HandleLoaded;
             DataContextChanged += HandleDataContextChanged;
         }
 
@@ -62,29 +61,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 UIElementAutomationPeer.FromElement(SearchTextBox).RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
             });
-        }
-
-        private void HandleLoaded(object sender, RoutedEventArgs e)
-        {
-            var window = Window.GetWindow(this);
-
-            // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
-            // the dialog is dragged or resized.
-            // In the below section, we will bump up the HorizontalOffset property of the popup whenever the dialog window
-            // location is changed or window is resized so that the popup gets repositioned.
-            if (window != null)
-            {
-                window.LocationChanged += RepositionPopup;
-                window.SizeChanged += RepositionPopup;
-            }
-        }
-
-        private void RepositionPopup(object sender, EventArgs e)
-        {
-            double offset = Flyout.HorizontalOffset;
-
-            Flyout.HorizontalOffset = offset + 1;
-            Flyout.HorizontalOffset = offset;
         }
 
         public bool IsMouseOverFlyout => Options.IsMouseOver;
