@@ -55,7 +55,7 @@
         <!-- Fly out -->
         <Popup x:Name="Flyout"
                StaysOpen="False"
-               Placement="Left"
+               Placement="Bottom"
                PlacementTarget="{Binding ElementName=SearchTextBox}">
             <ListBox x:Name="Options"
                      SelectionMode="Single"

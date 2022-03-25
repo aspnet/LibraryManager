@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void NotifyScreenReaderOfTextChanged(object sender, EventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 UIElementAutomationPeer.FromElement(SearchTextBox).RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
@@ -214,14 +214,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
         }
 
-        private void PositionCompletionPopup()
-        {
-            Flyout.VerticalOffset = SearchTextBox.ActualHeight;
-            Flyout.HorizontalOffset = -SearchTextBox.ActualWidth;
-            Options.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            Flyout.Width = Options.DesiredSize.Width;
-        }
-
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextChange textChange = e.Changes.Last();
@@ -234,7 +226,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             bool textInserted = textChange.AddedLength > 0 && SearchTextBox.CaretIndex > 0;
             if (textInserted || Flyout.IsOpen)
             {
-                ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
                     // grab these WPF dependant things while we're still on the UI thread
                     int caretIndex = SearchTextBox.CaretIndex;
@@ -281,8 +273,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     {
                         CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
                     }
-
-                    PositionCompletionPopup();
 
                     if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
                     {
