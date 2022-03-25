@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  This .nuspec generates a package in a particular non-standard format, which is used for setting up the
+  test assets to be run in internal VS automation runs.  It provides no particular value to any parties
+  beyond validation of the features within this repo.
+-->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>VS.TestAssets.WebTools.LibMan</id>
+    <version>$version$</version>
+    <description>Integration test assets for Library Manager</description>
+    <authors>webtools</authors>
+
+  </metadata>
+  <files>
+    <file src="..\..\bin\Microsoft.Web.LibraryManager.IntegrationTest\$configuration$\net472\Microsoft.Web.LibraryManager.IntegrationTest.*" target="Assets" />
+    <file src="..\..\bin\Microsoft.Web.LibraryManager.IntegrationTest\$configuration$\net472\Omni.*.dll" target="Assets" />
+    <file src="..\..\bin\Microsoft.Web.LibraryManager.IntegrationTest\$configuration$\net472\Microsoft.Test.Apex.*.dll" target="Assets" />
+    <file src="..\..\bin\Microsoft.Web.LibraryManager.IntegrationTest\$configuration$\net472\*TestPlatform*.dll" target="Assets" />
+    <file src="..\..\bin\Microsoft.Web.LibraryManager.IntegrationTest\$configuration$\net472\TestSolution\**\*" target="Assets\TestSolution" />
+    <file src="..\..\bin\Microsoft.Web.LibraryManager.IntegrationTest\$configuration$\net472\RemoteInjectorBootstrapper64.exe" target="Assets" />
+    <file src="..\..\bin\Microsoft.Web.LibraryManager.IntegrationTest\$configuration$\net472\Microsoft.VisualStudio.RpcContracts.dll" target="Assets" />
+  </files>
+</package>
