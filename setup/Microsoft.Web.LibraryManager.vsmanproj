@@ -3,6 +3,9 @@
   <Import Project="..\build\MicroBuild.Plugins.props" />
 
   <PropertyGroup>
+    <!-- Needed to avoid build errors on VS2022, which doesn't support 4.0 (the default if TFV isn't specified) -->
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+
     <TargetType>build-manifest</TargetType>
     <FinalizeManifest>true</FinalizeManifest>
     <FinalizeSkipLayout>true</FinalizeSkipLayout>
