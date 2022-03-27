@@ -54,7 +54,7 @@ Right-click `libman.json` in Solution Explorer to access commands that help mana
 ### Intellisense
 Edit the libman.json file to install libraries. Every time the file is saved, Visual Studio will install/restore the packages.
 
-![libman.json](art/library.json%20typing.gif)
+![libman.json](art/libmanjsontyping.gif)
 
 See [libman.json reference](https://github.com/aspnet/LibraryManager/wiki/libman.json-reference) for more information.
 
