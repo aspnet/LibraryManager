@@ -47,7 +47,8 @@ steps:
   inputs:
     command: pack
     packagesToPack: test\VS.TestAssets.WebTools.LibMan\VS.TestAssets.WebTools.LibMan.nuspec
-    buildProperties: version=$(NBGV_NuGetPackageVersion)
+    # don't use $(NBGV_NugetPackageVersion) because the pipeline sets PublicRelease=true so the prerelease data wouldn't align
+    buildProperties: version=$(NBGV_SimpleVersion)
     packDestination: artifacts\Test
     arguments: -NoPackageAnalysis
 

@@ -16,7 +16,7 @@
     <WriteLinesToFile Overwrite="True" File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=InsertPayloadName]LibraryManager build $(BuildVersion)" />
     <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=InsertDescription]Commit: $(GitCommitId)" />
     <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=InsertJsonValues]Microsoft.Web.LibraryManager.vsman=$([MSBuild]::Escape($(ManifestName)))" />
-    <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=InsertConfigValues]VS.TestAssets.WebTools.LibMan=$(NuGetPackageVersion)" />
+    <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=InsertConfigValues]VS.TestAssets.WebTools.LibMan=$(PackageVersion)" />
     <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=VstsDropNames]$(MicroBuild_ManifestDropName)" />
     <WriteLinesToFile File="$(InsertionParamsFile)" Lines="##vso[task.setvariable variable=BuildVersion]$(BuildVersion)" />
 
