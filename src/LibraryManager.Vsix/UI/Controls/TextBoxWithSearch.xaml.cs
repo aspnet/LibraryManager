@@ -31,7 +31,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         {
             InitializeComponent();
 
-            Loaded += HandleLoaded;
             DataContextChanged += HandleDataContextChanged;
         }
 
@@ -57,34 +56,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void NotifyScreenReaderOfTextChanged(object sender, EventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 UIElementAutomationPeer.FromElement(SearchTextBox).RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
             });
-        }
-
-        private void HandleLoaded(object sender, RoutedEventArgs e)
-        {
-            var window = Window.GetWindow(this);
-
-            // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
-            // the dialog is dragged or resized.
-            // In the below section, we will bump up the HorizontalOffset property of the popup whenever the dialog window
-            // location is changed or window is resized so that the popup gets repositioned.
-            if (window != null)
-            {
-                window.LocationChanged += RepositionPopup;
-                window.SizeChanged += RepositionPopup;
-            }
-        }
-
-        private void RepositionPopup(object sender, EventArgs e)
-        {
-            double offset = Flyout.HorizontalOffset;
-
-            Flyout.HorizontalOffset = offset + 1;
-            Flyout.HorizontalOffset = offset;
         }
 
         public bool IsMouseOverFlyout => Options.IsMouseOver;
@@ -214,14 +190,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
         }
 
-        private void PositionCompletionPopup()
-        {
-            Flyout.VerticalOffset = SearchTextBox.ActualHeight;
-            Flyout.HorizontalOffset = -SearchTextBox.ActualWidth;
-            Options.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            Flyout.Width = Options.DesiredSize.Width;
-        }
-
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextChange textChange = e.Changes.Last();
@@ -234,7 +202,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             bool textInserted = textChange.AddedLength > 0 && SearchTextBox.CaretIndex > 0;
             if (textInserted || Flyout.IsOpen)
             {
-                ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
                     // grab these WPF dependant things while we're still on the UI thread
                     int caretIndex = SearchTextBox.CaretIndex;
@@ -281,8 +249,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     {
                         CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
                     }
-
-                    PositionCompletionPopup();
 
                     if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
                     {
