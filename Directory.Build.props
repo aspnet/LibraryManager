@@ -17,6 +17,8 @@
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/aspnet/LibraryManager</RepositoryUrl>
     <PackageOutputPath>$(RepoRoot)\artifacts\$(Configuration)</PackageOutputPath>
+    <HighEntropyVa>true</HighEntropyVa>
+    <CheckForOverflowUnderflow Condition=" '$(Configuration)' == 'Debug' ">true</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <ItemGroup>
