@@ -31,12 +31,14 @@ namespace Microsoft.Web.LibraryManager.Test
             _cacheService = new CacheService(new Mocks.WebRequestHandler());
 
             Directory.CreateDirectory(_projectFolder);
+            Directory.CreateDirectory(_cacheFolder);
         }
 
         [TestCleanup]
         public void Cleanup()
         {
             TestUtils.DeleteDirectoryWithRetries(_projectFolder);
+            TestUtils.DeleteDirectoryWithRetries(_cacheFolder);
         }
 
         [TestMethod]

@@ -20,7 +20,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         // TO DO: These should become Provider properties to be passed to CacheService
         private const string FileName = "cache.json";
         public const string CatalogUrl = "https://api.cdnjs.com/libraries?fields=name,description,version";
-        public const string MetaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}"; // https://aka.ms/goycwu/{0}
+        public const string MetaPackageUrlFormat =    "https://api.cdnjs.com/libraries/{0}?fields=filename,versions"; // {libraryName}
+        public const string PackageVersionUrlFormat = "https://api.cdnjs.com/libraries/{0}/{1}?fields=files";         // {libraryName}/{version}
 
         private readonly string _cacheFile;
         private readonly CdnjsProvider _provider;
@@ -84,9 +85,9 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                     completionSet.Start = at + 1;
                     completionSet.Length = value.Length - completionSet.Start;
 
-                    IEnumerable<Asset> assets = await GetAssetsAsync(name, CancellationToken.None).ConfigureAwait(false);
+                    IEnumerable<string> versions = await GetLibraryVersionsAsync(name, CancellationToken.None).ConfigureAwait(false);
 
-                    foreach (string version in assets.Select(a => a.Version))
+                    foreach (string version in versions)
                     {
                         var completion = new CompletionItem
                         {
@@ -149,20 +150,22 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
 
+            if (!(await GetLibraryVersionsAsync(libraryName, cancellationToken)).Contains(version))
+            {
+                throw new InvalidLibraryException(libraryId, _provider.Id);
+            }
+
             try
             {
-                IEnumerable<Asset> assets = await GetAssetsAsync(libraryName, cancellationToken).ConfigureAwait(false);
-                Asset asset = assets.FirstOrDefault(a => a.Version == version);
+                JObject groupMetadata = await GetLibraryGroupMetadataAsync(libraryName, cancellationToken);
+                string defaultFile = groupMetadata?["filename"].Value<string>() ?? string.Empty;
 
-                if (asset == null)
-                {
-                    throw new InvalidLibraryException(libraryId, _provider.Id);
-                }
+                IEnumerable<string> libraryFiles= await GetLibraryFilesAsync(libraryName, version, cancellationToken).ConfigureAwait(false);
 
                 return new CdnjsLibrary
                 {
                     Version = version,
-                    Files = asset.Files.ToDictionary(k => k, b => b == asset.DefaultFile),
+                    Files = libraryFiles.ToDictionary(k => k, b => b == defaultFile),
                     Name = libraryName,
                     ProviderId = _provider.Id,
                 };
@@ -171,7 +174,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             {
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
-
         }
 
         public async Task<string> GetLatestVersion(string libraryName, bool includePreReleases, CancellationToken cancellationToken)
@@ -268,37 +270,63 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
 
         private async Task<IEnumerable<string>> GetLibraryVersionsAsync(string groupName, CancellationToken cancellationToken)
         {
-            IEnumerable<Asset> assets = await GetAssetsAsync(groupName, cancellationToken).ConfigureAwait(false);
+            JObject root = await GetLibraryGroupMetadataAsync(groupName, cancellationToken).ConfigureAwait(false);
+            if (root != null && root["versions"] is JToken versionsToken)
+            {
+                return versionsToken.Values<string>();
+            }
 
-            return assets?.Select(a => a.Version);
+            return Array.Empty<string>();
         }
 
-        private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)
+        private async Task<JObject> GetLibraryGroupMetadataAsync(string groupName, CancellationToken cancellationToken)
         {
-            var assets = new List<Asset>();
             string localFile = Path.Combine(_provider.CacheFolder, groupName, "metadata.json");
             string url = string.Format(MetaPackageUrlFormat, groupName);
 
             try
             {
                 string json = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(url, localFile, cancellationToken).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(json))
+                {
+                    return JObject.Parse(json);
+                }
+            }
+            catch
+            {
+                throw new InvalidLibraryException(groupName, _provider.Id);
+            }
+
+            return null;
+        }
+
+        private async Task<IEnumerable<string>> GetLibraryFilesAsync(string libraryName, string version, CancellationToken cancellationToken)
+        {
+            string localFile = Path.Combine(_provider.CacheFolder, libraryName, $"{version}-metadata.json");
+            string url = string.Format(PackageVersionUrlFormat, libraryName, version);
+
+            IEnumerable<string> libraryFiles = Array.Empty<string>();
+            try
+            {
+
+                string json = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(url, localFile, cancellationToken).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(json))
                 {
-                    assets = ConvertToAssets(json);
+                    JObject root = JObject.Parse(json);
 
-                    if (assets == null)
+                    if (root != null && root["files"] is JArray array)
                     {
-                        throw new Exception();
+                        libraryFiles = root["files"].Values<string>();
                     }
                 }
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(groupName, _provider.Id);
+                throw new InvalidLibraryException(libraryName, _provider.Id);
             }
 
-            return assets;
+            return libraryFiles;
         }
 
         internal IEnumerable<CdnjsLibraryGroup> ConvertToLibraryGroups(string json)
@@ -316,38 +344,5 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return null;
             }
         }
-
-        internal List<Asset> ConvertToAssets(string json)
-        {
-            try
-            {
-                var assets = new List<Asset>();
-
-                var root = JObject.Parse(json);
-                if (root["assets"] != null)
-                {
-                    assets = JsonConvert.DeserializeObject<IEnumerable<Asset>>(root["assets"].ToString()).ToList();
-                    string defaultFileName = root["filename"]?.Value<string>();
-
-                    if (assets != null)
-                    {
-                        assets.ForEach(a => a.DefaultFile = defaultFileName);
-                    }
-                }
-
-                return assets;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-    }
-
-    internal class Asset
-    {
-        public string Version { get; set; }
-        public string[] Files { get; set; }
-        public string DefaultFile { get; set; }
     }
 }
