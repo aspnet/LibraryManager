@@ -1,8 +1,7 @@
 <Project>
-  <Import Project="$(MsbuildThisFileDirectory)\..\..\build\dependencies.props" />
   <Import Project="$(MsbuildThisFileDirectory)\..\..\build\tasks\RepoTasks.tasks" />
   <Import Project="$(MsbuildThisFileDirectory)\..\..\build\tasks\RepoInfo.props" />
-  <!-- 
+  <!--
   To call the ExtractAppHostToOutput, the following properties need to be set.
   - AppTargetFramework              (should be netcoreapp2.1 for now).
   - ShimOutputDirectory             (Output path for the shims.)
