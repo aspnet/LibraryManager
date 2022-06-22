@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -237,44 +238,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         }
 
         [TestMethod]
-        public void ConvertToAssets_ValidAsset()
-        {
-            CdnjsCatalog sut = SetupCatalog();
-            string json = @"{""name"":""jquery"",""filename"":""jquery.min.js"",""version"":""3.3.1"",""description"":""JavaScript library for DOM operations"",
-""homepage"":""http://jquery.com/"",""keywords"":[""jquery"",""library"",""ajax"",""framework"",""toolkit"",""popular""],""namespace"":""jQuery"",
-""repository"":{""type"":""git"",""url"":""https://github.com/jquery/jquery.git""},""license"":""MIT"",
-""author"":{""name"":""jQuery Foundation and other contributors"",""url"":""https://github.com/jquery/jquery/blob/master/AUTHORS.txt""},
-""autoupdate"":{""type"":""npm"",""target"":""jquery""},
-""assets"":[{""version"":""3.3.1"",""files"":[""core.js"",""jquery.js"",""jquery.min.js"",""jquery.min.map"",""jquery.slim.js"",""jquery.slim.min.js"",""jquery.slim.min.map""]}]}";
-
-            List<Asset> list = sut.ConvertToAssets(json);
-
-            Assert.AreEqual(1, list.Count());
-            Asset asset = list[0];
-            Assert.AreEqual("3.3.1", asset.Version);
-
-            string[] expectedFiles = new string[] { "core.js", "jquery.js", "jquery.min.js", "jquery.min.map", "jquery.slim.js", "jquery.slim.min.js", "jquery.slim.min.map" };
-            Assert.AreEqual(7, asset.Files.Count());
-            foreach(string file in expectedFiles)
-            {
-                Assert.IsTrue(asset.Files.Contains(file));
-            }
-
-            Assert.AreEqual("jquery.min.js", asset.DefaultFile);
-        }
-
-        [TestMethod]
-        public void ConvertToAssets_InvalidAsset()
-        {
-            string json = "abcd";
-            CdnjsCatalog sut = SetupCatalog();
-
-            List<Asset> list = sut.ConvertToAssets(json);
-
-            Assert.IsNull(list);
-        }
-
-        [TestMethod]
         public async Task SearchAsync_CacheDownloadFailsWhenNoCacheFileExists_FindsNoMatches()
         {
             var fakeCacheService = new Mock<ICacheService>();
@@ -308,6 +271,14 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
                                                                                It.IsAny<CancellationToken>()))
                         .Returns(Task.FromResult(FakeLibraryMetadata));
 
+            string libraryMetadataUrl = string.Format(CdnjsCatalog.PackageVersionUrlFormat, "sampleLibrary", "4.0.0-beta.1");
+            cacheService.Setup(x => x.GetContentsFromUriWithCacheFallbackAsync(It.Is<string>(s => s.Equals(libraryMetadataUrl, StringComparison.OrdinalIgnoreCase)),
+                                                                               It.IsAny<string>(),
+                                                                               It.IsAny<CancellationToken>()))
+                        .Returns(Task.FromResult(GenerateFakeLibraryFiles(
+                            "sample/js/sampleLibrary.js",
+                            "sample/js/sampleLibrary.min.js")));
+
             return cacheService;
         }
 
@@ -317,19 +288,19 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         public const string FakeCatalogContents = @"{
     ""results"": [
         {
-                ""name"": ""sampleLibrary"",
+            ""name"": ""sampleLibrary"",
             ""latest"": ""https://test-library.com/sample/js/sampleLibrary.min.js"",
             ""description"": ""A sample library for testing"",
             ""version"": ""3.1.4""
         },
         {
-                ""name"": ""test-library"",
+            ""name"": ""test-library"",
             ""latest"": ""https://test-library.com/test-library.min.js"",
             ""description"": ""A fake library for testing"",
             ""version"": ""1.0.0""
         },
         {
-                ""name"": ""test-library2"",
+            ""name"": ""test-library2"",
             ""latest"": ""https://test-library.com/test-library2.min.js"",
             ""description"": ""A second fake library for testing"",
             ""version"": ""2.0.0""
@@ -346,47 +317,23 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
     ""filename"": ""sample/js/sampleLibrary.min.js"",
     ""version"": ""3.1.4"",
     ""description"": ""Sample library for test input"",
-    ""assets"": [
-        {
-                ""version"": ""4.0.0-beta.1"",
-            ""files"": [
-                ""sample/js/sampleLibrary.js"",
-                ""sample/js/sampleLibrary.min.js"",
-                ""sample/betaFile.js""
-            ]
-        },
-        {
-            ""version"": ""4.0.0-beta.2"",
-            ""files"": [
-                ""sample/js/sampleLibrary.js"",
-                ""sample/js/sampleLibrary.min.js"",
-                ""sample/betaFile.js""
-            ]
-        },
-        {
-            ""version"": ""4.0.0-beta.10"",
-            ""files"": [
-                ""sample/js/sampleLibrary.js"",
-                ""sample/js/sampleLibrary.min.js"",
-                ""sample/betaFile.js""
-            ]
-        },
-        {
-            ""version"": ""3.1.4"",
-            ""files"": [
-                ""sample/js/sampleLibrary.js"",
-                ""sample/js/sampleLibrary.min.js""
-            ]
-        },
-        {
-            ""version"": ""2.0.0"",
-            ""files"": [
-                ""sample/js/sampleLibrary.js"",
-                ""sample/js/sampleLibrary.min.js"",
-                ""sample/outdatedFile.js""
-            ]
-        }
+    ""versions"": [
+        ""4.0.0-beta.1"",
+        ""4.0.0-beta.2"",
+        ""4.0.0-beta.10"",
+        ""3.1.4"",
+        ""2.0.0"",
     ]
 }";
+
+        public static string GenerateFakeLibraryFiles(params string[] filenames)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(@"{ ""files"": [ """);
+            sb.Append(string.Join(@""", """, filenames));
+            sb.Append(@""" ] }");
+
+            return sb.ToString();
+        }
     }
 }
