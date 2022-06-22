@@ -1,5 +1,5 @@
-Summary of the changes (Less than 80 chars)
+Summary of the changes
  - Detail 1
  - Detail 2
 
-Addresses #bugnumber (in this specific format)
+Resolves #bugnumber

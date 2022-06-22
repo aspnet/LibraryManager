@@ -2,7 +2,7 @@
 
 Install and consume 3rd-party client-side libraries with ease.
 
-[![Build Status](https://dev.azure.com/azure-public/vswebtools/_apis/build/status/aspnet.LibraryManager?branchName=master)](https://dev.azure.com/azure-public/vswebtools/_build/latest?definitionId=43&branchName=master)
+[![Build Status](https://dev.azure.com/azure-public/vswebtools/_apis/build/status/aspnet.LibraryManager?branchName=main)](https://dev.azure.com/azure-public/vswebtools/_build/latest?definitionId=43&branchName=main)
 
 ## Reasons to use LibMan
 1.	For apps not currently using another package manager
@@ -34,7 +34,7 @@ Install and consume 3rd-party client-side libraries with ease.
   - Click the Refresh button if the addin is not visible.
   - Click Install… to install the addin.
   - Restart Visual Studio for Mac.
- 
+
   Please read the [LibMan support in Visual Studio for Mac blog post](https://lastexitcode.com/blog/2019/07/13/LibManSupportInVisualStudioMac8-1/) for more details
 - Available as a dotnet global tool - [Microsoft.Web.LibraryManager.Cli](https://www.nuget.org/packages/Microsoft.Web.LibraryManager.Cli/)
 ## Getting started

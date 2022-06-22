@@ -327,15 +327,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
             Assert.AreEqual("jquery.min", provider.GetSuggestedDestination(library));
         }
 
-        [TestMethod]
-        private void GetCatalog()
-        {
-            IProvider provider = _dependencies.GetProvider("cdnjs");
-            ILibraryCatalog catalog = provider.GetCatalog();
-
-            Assert.IsNotNull(catalog);
-        }
-
         private string GetConfig()
         {
             string config = $@"{{
