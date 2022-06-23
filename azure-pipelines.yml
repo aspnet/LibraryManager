@@ -12,6 +12,6 @@ variables:
 jobs:
   - job: Windows
     pool:
-      vmImage: windows-latest
+      vmImage: windows-2019
     steps:
       - template: azure-pipelines/build.yml
