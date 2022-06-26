@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <TargetFrameworks>net5.0;net461</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,7 +9,7 @@
     <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="Microsoft.Build.Framework" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" />
-    <PackageReference Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
+    <PackageReference Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'net5.0'" />
   </ItemGroup>
 
   <ItemGroup>
