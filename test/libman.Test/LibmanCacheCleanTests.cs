@@ -43,7 +43,9 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), contents);
 
             var restoreCommand = new RestoreCommand(HostEnvironment);
-            restoreCommand.Configure(null).Execute();
+            int restoreResult = restoreCommand.Configure(null).Execute();
+
+            Assert.AreEqual(0, restoreResult, "Restore did not complete successfully");
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "core.js")));

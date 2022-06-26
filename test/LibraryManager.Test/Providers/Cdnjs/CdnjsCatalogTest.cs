@@ -51,7 +51,6 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             ILibrary library = await _catalog.GetLibraryAsync(libraryId.First(), token);
             Assert.IsTrue(library.Files.Count > 0);
             Assert.AreEqual(expectedId, library.Name);
-            Assert.AreEqual(1, library.Files.Count(f => f.Value));
             Assert.IsNotNull(library.Name);
             Assert.IsNotNull(library.Version);
             Assert.AreEqual(_provider.Id, library.ProviderId);
@@ -123,8 +122,8 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             Assert.AreEqual(7, result.Start);
             Assert.AreEqual(0, result.Length);
             Assert.IsTrue(result.Completions.Count() >= 69);
-            Assert.AreEqual("1.2.3", result.Completions.Last().DisplayText);
-            Assert.AreEqual("jquery@1.2.3", result.Completions.Last().InsertionText);
+            Assert.AreEqual("3.6.0", result.Completions.Last().DisplayText);
+            Assert.AreEqual("jquery@3.6.0", result.Completions.Last().InsertionText);
         }
 
         [TestMethod]

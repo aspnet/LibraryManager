@@ -68,7 +68,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ""defaultDestination"": ""wwwroot"",
   ""libraries"": [
     {
-      ""library"": ""jquery@3.3.1"",
+      ""library"": ""jquery@3.6.0"",
       ""files"": [
         ""jquery.min.js"",
         ""jquery.js""
@@ -139,7 +139,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
   ""defaultDestination"": ""wwwroot"",
   ""libraries"": [
     {
-      ""library"": ""jquery@3.3.1"",
+      ""library"": ""jquery@3.6.0"",
       ""files"": [ ""jquery.min.js"", ""jquery.js"" ]
     }
   ]
@@ -168,7 +168,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             var logger = HostEnvironment.Logger as TestLogger;
 
-            Assert.AreEqual("The library \"jquery@3.3.1\" is already up to date", logger.Messages.Last().Value);
+            Assert.AreEqual("The library \"jquery@3.6.0\" is already up to date", logger.Messages.Last().Value);
         }
 
         [TestMethod]
@@ -287,7 +287,8 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var restoreCommand = new RestoreCommand(HostEnvironment);
             restoreCommand.Configure(null);
 
-            restoreCommand.Execute();
+            int restoreResult = restoreCommand.Execute();
+            Assert.AreEqual(0, restoreResult, "Restore did not complete successfully");
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.js")));
