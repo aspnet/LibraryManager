@@ -60,6 +60,7 @@ namespace Microsoft.Web.LibraryManager.Cache
 #pragma warning restore CA2000 // Dispose objects before losing scope
             httpMessageHandler.Proxy = _proxySettings.GetProxy(new Uri(url));
             var httpClient = new HttpClient(httpMessageHandler);
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"LibraryManager/{ThisAssembly.AssemblyFileVersion}");
 
             return httpClient;
         }
