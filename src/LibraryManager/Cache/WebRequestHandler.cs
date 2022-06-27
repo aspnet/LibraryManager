@@ -58,6 +58,7 @@ namespace Microsoft.Web.LibraryManager.Cache
             var httpMessageHandler = new HttpClientHandler();
             httpMessageHandler.Proxy = _proxySettings.GetProxy(new Uri(url));
             var httpClient = new HttpClient(httpMessageHandler);
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"LibraryManager/{ThisAssembly.AssemblyFileVersion}");
 
             return httpClient;
         }
