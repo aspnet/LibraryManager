@@ -60,7 +60,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             // Get all libraries in group to display version list
             IEnumerable<string> libraryIds = await group.GetLibraryIdsAsync(CancellationToken.None);
             Assert.IsTrue(libraryIds.Count() >= 67);
-            Assert.AreEqual("jquery@1.2.3", libraryIds.Last(), "Library version mismatch");
+            Assert.IsTrue(libraryIds.Contains("jquery@3.6.0"));
 
             // Get the library to install
             ILibrary library = await catalog.GetLibraryAsync(libraryIds.First(), CancellationToken.None);

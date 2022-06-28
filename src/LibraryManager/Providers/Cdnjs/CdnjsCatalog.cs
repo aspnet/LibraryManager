@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Providers.Unpkg;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -187,17 +188,16 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 return null;
             }
 
-            var ids = (await GetLibraryIdsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false)).ToList();
-            string first = ids[0];
-
-            if (!includePreReleases)
-            {
-                first = ids.First(id => id.Substring(name.Length).Any(c => !char.IsLetter(c)));
-            }
+            string first = includePreReleases
+                ? (await GetLibraryVersionsAsync(group.DisplayName, cancellationToken).ConfigureAwait(false))
+                                                                                      .Select(v => SemanticVersion.Parse(v))
+                                                                                      .Max()
+                                                                                      .ToString()
+                : group.Version;
 
             if (!string.IsNullOrEmpty(first))
             {
-                return LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(first, _provider.Id).Version;
+                return first;
             }
 
             return null;
@@ -267,11 +267,18 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
             }
         }
 
-        private async Task<IEnumerable<string>> GetLibraryIdsAsync(string groupName, CancellationToken cancellationToken)
+        private async Task<IEnumerable<string>> GetLibraryVersionsAsync(string groupName, CancellationToken cancellationToken)
         {
             IEnumerable<Asset> assets = await GetAssetsAsync(groupName, cancellationToken).ConfigureAwait(false);
 
-            return assets?.Select(a => LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(groupName, a.Version, _provider.Id));
+            return assets.Select(a => a.Version);
+        }
+
+        private async Task<IEnumerable<string>> GetLibraryIdsAsync(string groupName, CancellationToken cancellationToken)
+        {
+            IEnumerable<string> versions = await GetLibraryVersionsAsync(groupName, cancellationToken).ConfigureAwait(false);
+
+            return versions.Select(v => LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(groupName, v, _provider.Id));
         }
 
         private async Task<IEnumerable<Asset>> GetAssetsAsync(string groupName, CancellationToken cancellationToken)

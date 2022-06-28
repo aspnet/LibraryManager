@@ -24,6 +24,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.FileSystem
         public void Setup()
         {
             _projectFolder = Path.Combine(Path.GetTempPath(), "LibraryManager");
+            // clean the test working folder so each test gets a clean state
+            if (Directory.Exists(_projectFolder))
+            {
+                Directory.Delete(_projectFolder, recursive: true);
+                Directory.CreateDirectory(_projectFolder);
+            }
 
             var hostInteraction = new HostInteraction(_projectFolder, "");
             var dependencies = new Dependencies(hostInteraction, new FileSystemProviderFactory());
