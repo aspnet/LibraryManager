@@ -20,6 +20,7 @@ namespace Microsoft.Web.LibraryManager
         {
             HttpClientHandler httpMessageHandler = new HttpClientHandler();
             _httpClient = new HttpClient(httpMessageHandler);
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"LibraryManager/{ThisAssembly.AssemblyFileVersion}");
         }
 
         public static IWebRequestHandler Instance { get; } = new WebRequestHandler();
