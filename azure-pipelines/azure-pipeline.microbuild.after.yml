@@ -34,6 +34,7 @@ steps:
 - task: MicroBuildUploadVstsDropFolder@1
   displayName: Upload artifacts to VSTS Drop
   inputs:
+    AccessToken: $(System.AccessToken)
     DropFolder: '$(Build.ArtifactStagingDirectory)/insertion'
     condition: and(succeeded(), eq(variables['SignType'], 'Real'))
 
