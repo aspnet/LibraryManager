@@ -19,6 +19,7 @@
     <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.0.31902.203" />
     <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="16.3.250" />
     <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.0.1600" />
+    <PackageVersion Include="Microsoft.WebTools.Languages.Json.VS" Version="17.4.211-preview-0003" />
     <PackageVersion Include="MiniMatch" Version="2.0.0" />
     <PackageVersion Include="Moq" Version="4.10.1" />
     <PackageVersion Include="NerdBank.GitVersioning" Version="3.3.37" />

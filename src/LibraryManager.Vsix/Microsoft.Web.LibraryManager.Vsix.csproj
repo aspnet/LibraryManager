@@ -158,25 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Css.dll">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.dll">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.Editor.dll">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.VS.dll">
-      <Private>False</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Shared.dll">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Shared.Editor.dll">
-      <Private>False</Private>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -196,6 +177,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" />
     <PackageReference Include="Microsoft.VisualStudio.Telemetry" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.WebTools.Languages.Json.VS" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Nuget.VisualStudio" />
   </ItemGroup>
