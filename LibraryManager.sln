@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28307.3004
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.32925.19
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3ABB42B4-4EF4-4CED-9A56-2B910DF710F8}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{A72570B1-99EF-4BDD-B629-321CD56C9F7F}"
 	ProjectSection(SolutionItems) = preProject
 		src\Directory.Build.targets = src\Directory.Build.targets
+		src\.globalconfig = src\.globalconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}"

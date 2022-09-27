@@ -1,0 +1,290 @@
+is_global = true
+
+
+# Analyzer failure.
+dotnet_diagnostic.AD0001.severity = none
+
+# Avoid async void.
+dotnet_diagnostic.Async001.severity = warning
+
+# Async method should end with Async.
+dotnet_diagnostic.Async002.severity = warning
+
+# Don't Pass Async Lambdas as Void Returning Delegate Types.
+dotnet_diagnostic.Async003.severity = warning
+
+# Don't Store Async Lambdas as Void Returning Delegate Types.
+dotnet_diagnostic.Async004.severity = warning
+
+# Propagate cancellation token when possible.
+dotnet_diagnostic.Async005.severity = suggestion
+
+# Do not declare static members on generic types.
+dotnet_diagnostic.CA1000.severity = silent
+
+# Types that own disposable fields should be disposable.
+dotnet_diagnostic.CA1001.severity = error
+
+# Do not expose generic lists.
+dotnet_diagnostic.CA1002.severity = suggestion
+
+# Use generic event handler instances.
+dotnet_diagnostic.CA1003.severity = warning
+
+# Generic methods should provide type parameter.
+dotnet_diagnostic.CA1004.severity = suggestion
+
+# Avoid excessive parameters on generic types.
+dotnet_diagnostic.CA1005.severity = suggestion
+
+# Use generics where appropriate. An externally visible method contains a reference parameter of type System.Object.
+dotnet_diagnostic.CA1007.severity = warning
+
+# Enums should have zero value.
+dotnet_diagnostic.CA1008.severity = warning
+
+# Collections should implement generic interface.
+dotnet_diagnostic.CA1010.severity = suggestion
+
+# Consider passing base types as parameters. A method declaration includes a formal parameter that is a derived type, and the method calls only members of the base type of the parameter.
+dotnet_diagnostic.CA1011.severity = warning
+
+# Abstract types should not have constructors.
+dotnet_diagnostic.CA1012.severity = warning
+
+# Overload operator equals on overloading add and subtract.
+dotnet_diagnostic.CA1013.severity = warning
+
+# Define accessors for attribute arguments.
+dotnet_diagnostic.CA1019.severity = warning
+
+# Indexers should not be multidimensional.
+dotnet_diagnostic.CA1023.severity = warning
+
+# Default parameters should not be used. An externally visible type contains an externally visible method that uses a default parameter.
+dotnet_diagnostic.CA1026.severity = suggestion
+
+# Mark enums with FlagsAttribute.
+dotnet_diagnostic.CA1027.severity = suggestion
+
+# Do not catch general exception types.
+dotnet_diagnostic.CA1031.severity = none
+
+# Nested types should not be visible.
+dotnet_diagnostic.CA1034.severity = suggestion
+
+# ICollection implementations have strongly typed members. A public or protected type implements System.Collections.ICollection but does not provide a strongly typed method for ICollection.CopyTo.
+dotnet_diagnostic.CA1035.severity = warning
+
+# Enumerators should be strongly typed. A public or protected type implements System.Collections.IEnumerator but does not provide a strongly typed version of the IEnumerator.Current property.
+dotnet_diagnostic.CA1038.severity = warning
+
+# Lists are strongly typed.
+dotnet_diagnostic.CA1039.severity = warning
+
+# Provide ObsoleteAttribute message.
+dotnet_diagnostic.CA1041.severity = suggestion
+
+# Do not pass types by reference.
+dotnet_diagnostic.CA1045.severity = suggestion
+
+# Do not declare protected members in sealed types.
+dotnet_diagnostic.CA1047.severity = error
+
+# Do not declare virtual members in sealed types.
+dotnet_diagnostic.CA1048.severity = error
+
+# Declare types in namespaces.
+dotnet_diagnostic.CA1050.severity = error
+
+# Static holder types should be sealed.
+dotnet_diagnostic.CA1052.severity = suggestion
+
+# Static holder types should not have constructors.
+dotnet_diagnostic.CA1053.severity = suggestion
+
+# URI parameters should not be strings.
+dotnet_diagnostic.CA1054.severity = none
+
+# URI return values should not be strings.
+dotnet_diagnostic.CA1055.severity = none
+
+# URI properties should not be strings.
+dotnet_diagnostic.CA1056.severity = none
+
+# String URI overloads call System.Uri overloads.
+dotnet_diagnostic.CA1057.severity = none
+
+# Types should not extend certain base types (non-generic old collections).
+dotnet_diagnostic.CA1058.severity = suggestion
+
+# The System.IDisposable interface is not implemented correctly. Note: Warning when https://github.com/dotnet/roslyn-analyzers/issues/1432 is fixed.
+dotnet_diagnostic.CA1063.severity = none
+
+# Specify CultureInfo.
+dotnet_diagnostic.CA1304.severity = warning
+
+# A method or constructor calls one or more members that have overloads that accept a System.IFormatProvider parameter.
+dotnet_diagnostic.CA1305.severity = none
+
+# A string comparison operation uses a method overload that does not set a StringComparison parameter.
+dotnet_diagnostic.CA1307.severity = warning
+
+# Normalize strings to uppercase
+dotnet_diagnostic.CA1308.severity = warning
+
+dotnet_diagnostic.CA1309.severity = warning
+
+dotnet_diagnostic.CA1401.severity = warning
+
+# Variable names should not match field names
+dotnet_diagnostic.CA1500.severity = suggestion
+
+# Identifiers should have correct suffix. Attribute, EventArgs etc.
+dotnet_diagnostic.CA1710.severity = none
+
+# Identifiers should not contain type names.
+dotnet_diagnostic.CA1720.severity = none
+
+# A method signature includes a parameter that is not used in the method body.
+dotnet_diagnostic.CA1801.severity = suggestion
+
+# Use Literals Where Appropriate.
+dotnet_diagnostic.CA1802.severity = suggestion
+
+# Do not ignore method results. COM and IVs
+dotnet_diagnostic.CA1806.severity = suggestion
+
+# Mark members as static. It changed incorrectly to complain about internal types too. TODO: make it warning later and followup with changes.
+dotnet_diagnostic.CA1822.severity = suggestion
+
+dotnet_diagnostic.CA2001.severity = warning
+
+# Alway use ConfigureAwait
+dotnet_diagnostic.CA2007.severity = none
+
+dotnet_diagnostic.CA2100.severity = error
+
+dotnet_diagnostic.CA2101.severity = warning
+
+dotnet_diagnostic.CA2102.severity = warning
+
+dotnet_diagnostic.CA2103.severity = warning
+
+dotnet_diagnostic.CA2104.severity = warning
+
+dotnet_diagnostic.CA2105.severity = warning
+
+dotnet_diagnostic.CA2106.severity = error
+
+dotnet_diagnostic.CA2107.severity = warning
+
+dotnet_diagnostic.CA2108.severity = warning
+
+dotnet_diagnostic.CA2109.severity = warning
+
+dotnet_diagnostic.CA2111.severity = error
+
+dotnet_diagnostic.CA2112.severity = warning
+
+dotnet_diagnostic.CA2114.severity = warning
+
+dotnet_diagnostic.CA2115.severity = warning
+
+dotnet_diagnostic.CA2116.severity = warning
+
+dotnet_diagnostic.CA2117.severity = error
+
+dotnet_diagnostic.CA2118.severity = error
+
+dotnet_diagnostic.CA2119.severity = error
+
+dotnet_diagnostic.CA2120.severity = error
+
+dotnet_diagnostic.CA2121.severity = warning
+
+dotnet_diagnostic.CA2122.severity = warning
+
+dotnet_diagnostic.CA2123.severity = error
+
+dotnet_diagnostic.CA2124.severity = error
+
+dotnet_diagnostic.CA2126.severity = error
+
+dotnet_diagnostic.CA2130.severity = error
+
+dotnet_diagnostic.CA2131.severity = error
+
+dotnet_diagnostic.CA2132.severity = error
+
+dotnet_diagnostic.CA2133.severity = error
+
+dotnet_diagnostic.CA2134.severity = error
+
+dotnet_diagnostic.CA2135.severity = error
+
+dotnet_diagnostic.CA2136.severity = error
+
+dotnet_diagnostic.CA2137.severity = error
+
+dotnet_diagnostic.CA2138.severity = error
+
+dotnet_diagnostic.CA2139.severity = error
+
+dotnet_diagnostic.CA2140.severity = error
+
+dotnet_diagnostic.CA2141.severity = error
+
+dotnet_diagnostic.CA2142.severity = error
+
+dotnet_diagnostic.CA2143.severity = error
+
+dotnet_diagnostic.CA2144.severity = error
+
+dotnet_diagnostic.CA2145.severity = error
+
+dotnet_diagnostic.CA2146.severity = error
+
+dotnet_diagnostic.CA2147.severity = error
+
+dotnet_diagnostic.CA2149.severity = error
+
+dotnet_diagnostic.CA2151.severity = error
+
+dotnet_diagnostic.CA5122.severity = error
+
+# Do not mix attributes from different versions of MEF.
+dotnet_diagnostic.RS0006.severity = none
+
+# All RS analizers here are specific to Analyzer authoring.
+dotnet_diagnostic.RS1001.severity = none
+
+dotnet_diagnostic.RS1004.severity = none
+
+dotnet_diagnostic.RS1009.severity = none
+
+dotnet_diagnostic.RS1010.severity = none
+
+dotnet_diagnostic.RS1011.severity = none
+
+dotnet_diagnostic.RS1016.severity = none
+
+dotnet_diagnostic.RS1017.severity = none
+
+dotnet_diagnostic.RS1018.severity = none
+
+dotnet_diagnostic.RS1019.severity = none
+
+dotnet_diagnostic.RS1021.severity = none
+
+# Visual Studio service should be used on main thread explicitly.
+dotnet_diagnostic.VSTHRD010.severity = none
+
+# Call async methods when in an async method.
+dotnet_diagnostic.VSTHRD103.severity = none
+
+# Thread affinity checks should be unconditional.
+dotnet_diagnostic.VSTHRD108.severity = none
+
+# Naming styles                              Task Open()                                         Task OpenAsync()
+dotnet_diagnostic.VSTHRD200.severity = none
