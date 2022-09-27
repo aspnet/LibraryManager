@@ -177,6 +177,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" />
     <PackageReference Include="Microsoft.VisualStudio.Telemetry" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.WebTools.Languages.Shared" />
+    <PackageReference Include="Microsoft.WebTools.Languages.Shared.Editor" />
+    <PackageReference Include="Microsoft.WebTools.Languages.Json" />
+    <PackageReference Include="Microsoft.WebTools.Languages.Json.Editor" />
     <PackageReference Include="Microsoft.WebTools.Languages.Json.VS" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Nuget.VisualStudio" />
