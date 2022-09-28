@@ -7,6 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <!-- needed at test runtime -->
+    <PackageReference Include="Microsoft.WebTools.Languages.Css" />
     <PackageReference Include="Moq" />
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
@@ -16,11 +18,6 @@
     <ProjectReference Include="..\..\src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj" />
     <ProjectReference Include="..\..\src\LibraryManager\Microsoft.Web.LibraryManager.csproj" />
     <ProjectReference Include="..\LibraryManager.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Css.dll" />
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Json.dll" />
-    <Reference Include="..\..\lib\Microsoft.WebTools.Languages.Shared.dll" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
