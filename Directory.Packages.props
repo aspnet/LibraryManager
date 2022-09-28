@@ -20,6 +20,7 @@
     <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.0.31902.203" />
     <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="16.3.250" />
     <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.0.1600" />
+    <PackageVersion Include="Microsoft.WebTools.Languages.Css" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Shared" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Shared.Editor" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Json" Version="$(WebToolsPackageVersion)" />
