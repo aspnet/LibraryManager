@@ -100,7 +100,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             if (e.FileActionType == FileActionTypes.ContentSavedToDisk && textDocument != null)
             {
-                _ = Task.Run(async () =>
+                _ = Task.Run(async () => await DoRestoreOnSaveAsync());
+
+                async Task DoRestoreOnSaveAsync()
                 {
                     try
                     {
@@ -151,7 +153,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         Logger.LogEvent(ex.ToString(), LogLevel.Error);
                         Telemetry.TrackException("RestoreOnSaveFailed", ex);
                     }
-                });
+                };
             }
         }
 

@@ -25,14 +25,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.ErrorList
 
         public bool HandleErrors(IEnumerable<ILibraryOperationResult> results)
         {
-            IEnumerable<string> json = File.Exists(ConfigFileName) ? File.ReadLines(ConfigFileName) : Array.Empty<string>();
+            string[] jsonLines = File.Exists(ConfigFileName) ? File.ReadLines(ConfigFileName).ToArray() : Array.Empty<string>();
 
             foreach (ILibraryOperationResult result in results)
             {
                 if (!result.Success)
                 {
                     DisplayError[] displayErrors = result.Errors.Select(error => new DisplayError(error)).ToArray();
-                    AddLineAndColumn(json, result.InstallationState, displayErrors);
+                    AddLineAndColumn(jsonLines, result.InstallationState, displayErrors);
 
                     Errors.AddRange(displayErrors);
                 }
@@ -42,7 +42,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.ErrorList
             return Errors.Count > 0;
         }
 
-        private static void AddLineAndColumn(IEnumerable<string> lines, ILibraryInstallationState state, DisplayError[] errors)
+        private static void AddLineAndColumn(string[] lines, ILibraryInstallationState state, DisplayError[] errors)
         {
             string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state?.Name, state?.Version, state?.ProviderId);
 
@@ -55,9 +55,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.ErrorList
             {
                 int index = 0;
 
-                for (int i = 0; i < lines.Count(); i++)
+                for (int i = 0; i < lines.Length; i++)
                 {
-                    string line = lines.ElementAt(i);
+                    string line = lines[i];
 
                     if (line.Trim() == "{")
                         index = i;
