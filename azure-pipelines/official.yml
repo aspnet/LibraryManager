@@ -9,7 +9,7 @@ variables:
   BuildConfiguration: Release
   BuildPlatform: Any CPU
   Packaging.EnableSBOMSigning: true
-  CodeQl.Enabled: true
+  Codeql.Enabled: true
 
 jobs:
   - job: Windows
