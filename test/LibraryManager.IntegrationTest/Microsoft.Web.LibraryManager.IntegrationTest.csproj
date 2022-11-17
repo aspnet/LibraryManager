@@ -9,7 +9,6 @@
     <PackageReference Include="Microsoft.WebTools.Languages.Json.VS" />
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
-    <PackageReference Include="Nerdbank.GitVersioning" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="TestSolution\**\*" />

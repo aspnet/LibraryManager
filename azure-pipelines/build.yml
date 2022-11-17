@@ -11,14 +11,14 @@ steps:
 - script: dotnet --info
   displayName: Show dotnet SDK info
 
-- task: DotNetCoreCLI@2
-  displayName: Restore
+- task: NuGetAuthenticate@1
+  displayName: 'Authenticate with NuGet'
+
+- task: PowerShell@2
+  displayName: 'dotnet restore'
   inputs:
-    command: restore
-    verbosityRestore: normal # detailed, normal, minimal
-    projects: LibraryManager.sln
-    feedsToUse: config
-    nugetConfigPath: nuget.config
+    targetType: 'inline'
+    script: 'dotnet restore --nologo'
 
 - task: MSBuild@1
   inputs:
