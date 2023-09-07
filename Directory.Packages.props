@@ -13,13 +13,13 @@
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
-    <PackageVersion Include="Microsoft.VisualStudio.Editor" Version="17.0.487" />
+    <PackageVersion Include="Microsoft.VisualStudio.Editor" Version="17.7.188" />
     <PackageVersion Include="Microsoft.VisualStudio.Internal.MicroBuild" Version="2.0.65" />
-    <PackageVersion Include="Microsoft.VisualStudio.Language.Intellisense" Version="17.0.487" />
-    <PackageVersion Include="Microsoft.VisualStudio.Settings.15.0" Version="17.0.31902.203" />
-    <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.0.31902.203" />
-    <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="16.3.250" />
-    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.0.1600" />
+    <PackageVersion Include="Microsoft.VisualStudio.Language.Intellisense" Version="17.7.188" />
+    <PackageVersion Include="Microsoft.VisualStudio.Settings.15.0" Version="17.5.33428.388" />
+    <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.7.37355" />
+    <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="17.7.57" />
+    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.7.2196" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Css" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Shared" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Shared.Editor" Version="$(WebToolsPackageVersion)" />
@@ -29,7 +29,7 @@
     <PackageVersion Include="MiniMatch" Version="2.0.0" />
     <PackageVersion Include="Moq" Version="4.10.1" />
     <PackageVersion Include="NerdBank.GitVersioning" Version="3.3.37" />
-    <PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Nuget.VisualStudio" Version="6.0.0" />
 
     <PackageVersion Include="System.Net.Http" Version="4.3.1" />

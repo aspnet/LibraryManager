@@ -119,7 +119,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                         state.DestinationPath = GetCanonicalizedValue(child);
                         break;
                     case ManifestConstants.Files:
-                        state.Files = (child.Value as ArrayNode)?.Elements.Select(e => GetCanonicalizedValue(e)).ToList();
+                        state.Files = (child.Value as ArrayNode)?.ElementNodes.Select(e => GetCanonicalizedValue(e)).ToList();
                         break;
                 }
             }

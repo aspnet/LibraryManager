@@ -124,7 +124,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         public static void ClearOutputWindow()
         {
             // Don't access _outputWindowPane through the property here so that we don't force creation
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 OutputWindowPaneValue?.Clear();
@@ -193,7 +193,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
         private static void LogToActivityLog(string message, __ACTIVITYLOG_ENTRYTYPE type)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 ActivityLog.LogEntry((uint)type, Vsix.Name, message);
@@ -202,7 +202,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
         private static void LogToStatusBar(string message)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 Statusbar.FreezeOutput(0);

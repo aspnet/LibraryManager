@@ -79,7 +79,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI
 
         private void InstallButton_Clicked(object sender, RoutedEventArgs e)
         {
-            Shell.ThreadHelper.JoinableTaskFactory.RunAsync(() => ClickInstallButtonAsync());
+            _ = Shell.ThreadHelper.JoinableTaskFactory.RunAsync(() => ClickInstallButtonAsync());
         }
 
         private async Task<bool> IsLibraryInstallationStateValidAsync()

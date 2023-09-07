@@ -22,7 +22,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.Restore);
             var cmd = new OleMenuCommand((s, e) => package.JoinableTaskFactory.RunAsync(() => ExecuteAsync(s, e)),
                                          cmdId);
-            cmd.BeforeQueryStatus += (s, e) => package.JoinableTaskFactory.RunAsync(() => BeforeQueryStatusAsync(s, e));
+            cmd.BeforeQueryStatus += (s, e) => _ = package.JoinableTaskFactory.RunAsync(() => BeforeQueryStatusAsync(s, e));
             commandService.AddCommand(cmd);
         }
 
