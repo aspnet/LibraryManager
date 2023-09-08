@@ -32,7 +32,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
             CommandID cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.InstallPackage);
             OleMenuCommand cmd = new OleMenuCommand((s, e) => _ = package.JoinableTaskFactory.RunAsync(() => ExecuteAsync(s, e)),
                                                     cmdId);
-            cmd.BeforeQueryStatus += (s, e) => package.JoinableTaskFactory.RunAsync(() => BeforeQueryStatusAsync(s, e));
+            cmd.BeforeQueryStatus += (s, e) => _ = package.JoinableTaskFactory.RunAsync(() => BeforeQueryStatusAsync(s, e));
             commandService.AddCommand(cmd);
 
             _libraryCommandService = libraryCommandService;
