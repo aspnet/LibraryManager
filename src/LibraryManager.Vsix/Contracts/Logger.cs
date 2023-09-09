@@ -19,8 +19,6 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         private static IVsOutputWindow OutputWindowValue;
         private static IVsActivityLog ActivityLogValue;
         private static IVsStatusbar StatusbarValue;
-
-        private static readonly object OutputWriterLock = new();
         private static OutputWindowTextWriter OutputWriterValue;
 
         public static void LogEvent(string message, LogLevel level)
@@ -153,15 +151,28 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         {
             get
             {
-                if (OutputWriterValue is null && OutputWindowPaneValue is not null)
+                if (OutputWriterValue is null)
                 {
-                    lock (OutputWriterLock)
-                    {
-                        if (OutputWriterValue is null)
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
                         {
+                            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                            if (OutputWriterValue is not null)
+                            {
+                                // This checks that no other requests have initialized the writer while
+                                // we waited the switch threads.
+                                // Since we're now running on the UI thread, we don't need a lock - multiple
+                                // attempts will run serially.
+                                return;
+                            }
+
+                            // this needs to be on the UI thread
+                            EnsurePane();
+
+                            // needs to be initialized on UI thread.
+                            // Internal bug: https://dev.azure.com/devdiv/DevDiv/_workitems/edit/1595387
                             OutputWriterValue = new OutputWindowTextWriter(OutputWindowPaneValue);
-                        }
-                    }
+                        });
                 }
 
                 return OutputWriterValue;
