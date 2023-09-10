@@ -20,6 +20,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         private static IVsActivityLog ActivityLogValue;
         private static IVsStatusbar StatusbarValue;
 
+        private static readonly object OutputWriterLock = new();
+        private static OutputWindowTextWriter OutputWriterValue;
+
         public static void LogEvent(string message, LogLevel level)
         {
             try
@@ -146,6 +149,25 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
             }
         }
 
+        private static OutputWindowTextWriter OutputWriter
+        {
+            get
+            {
+                if (OutputWriterValue is null && OutputWindowPaneValue is not null)
+                {
+                    lock (OutputWriterLock)
+                    {
+                        if (OutputWriterValue is null)
+                        {
+                            OutputWriterValue = new OutputWindowTextWriter(OutputWindowPaneValue);
+                        }
+                    }
+                }
+
+                return OutputWriterValue;
+            }
+        }
+
         private static IVsOutputWindow OutputWindow
         {
             get
@@ -213,11 +235,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
         private static void LogToOutputWindow(object message)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                OutputWindowPane?.OutputString(message + Environment.NewLine);
-            });
+            OutputWriter.WriteLine(message);
         }
 
         private static bool EnsurePane()
