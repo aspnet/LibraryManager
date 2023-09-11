@@ -19,6 +19,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         private static IVsOutputWindow OutputWindowValue;
         private static IVsActivityLog ActivityLogValue;
         private static IVsStatusbar StatusbarValue;
+        private static OutputWindowTextWriter OutputWriterValue;
 
         public static void LogEvent(string message, LogLevel level)
         {
@@ -124,7 +125,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         public static void ClearOutputWindow()
         {
             // Don't access _outputWindowPane through the property here so that we don't force creation
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 OutputWindowPaneValue?.Clear();
@@ -143,6 +144,38 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
                 }
 
                 return OutputWindowPaneValue;
+            }
+        }
+
+        private static OutputWindowTextWriter OutputWriter
+        {
+            get
+            {
+                if (OutputWriterValue is null)
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                        {
+                            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                            if (OutputWriterValue is not null)
+                            {
+                                // This checks that no other requests have initialized the writer while
+                                // we waited the switch threads.
+                                // Since we're now running on the UI thread, we don't need a lock - multiple
+                                // attempts will run serially.
+                                return;
+                            }
+
+                            // this needs to be on the UI thread
+                            EnsurePane();
+
+                            // needs to be initialized on UI thread.
+                            // Internal bug: https://dev.azure.com/devdiv/DevDiv/_workitems/edit/1595387
+                            OutputWriterValue = new OutputWindowTextWriter(OutputWindowPaneValue);
+                        });
+                }
+
+                return OutputWriterValue;
             }
         }
 
@@ -193,7 +226,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
         private static void LogToActivityLog(string message, __ACTIVITYLOG_ENTRYTYPE type)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 ActivityLog.LogEntry((uint)type, Vsix.Name, message);
@@ -202,7 +235,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
         private static void LogToStatusBar(string message)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 Statusbar.FreezeOutput(0);
@@ -213,11 +246,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
         private static void LogToOutputWindow(object message)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                OutputWindowPane?.OutputString(message + Environment.NewLine);
-            });
+            OutputWriter.WriteLine(message);
         }
 
         private static bool EnsurePane()

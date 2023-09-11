@@ -118,7 +118,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
             if (array == null)
                 yield break;
 
-            foreach (ArrayElementNode arrayElement in array.Elements)
+            foreach (ArrayElementNode arrayElement in array.ElementNodes)
             {
                 if (arrayElement.Value is TokenNode token && token.Text != context.ContextNode.GetText())
                 {

@@ -63,7 +63,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
                 _ = RetriggerAsync(true);
             }
 
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 if (_currentSession == null && _broker.IsCompletionActive(_textView))

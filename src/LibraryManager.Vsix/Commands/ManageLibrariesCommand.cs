@@ -25,7 +25,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
             _dependenciesFactory = dependenciesFactory;
 
             var cmdId = new CommandID(PackageGuids.guidLibraryManagerPackageCmdSet, PackageIds.ManageLibraries);
-            var cmd = new OleMenuCommand((s, e) => package.JoinableTaskFactory.RunAsync(() => ExecuteAsync(s, e)),
+            var cmd = new OleMenuCommand((s, e) => _ = package.JoinableTaskFactory.RunAsync(() => ExecuteAsync(s, e)),
                                          cmdId);
             cmd.BeforeQueryStatus += BeforeQueryStatus;
             commandService.AddCommand(cmd);
