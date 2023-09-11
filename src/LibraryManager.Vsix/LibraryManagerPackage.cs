@@ -4,13 +4,16 @@
 using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.ServiceBroker;
 using Microsoft.Web.LibraryManager.Vsix.Commands;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
+using NuGet.VisualStudio.Contracts;
 using Tasks = System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Vsix
@@ -32,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Vsix
             "ActiveProjectFlavor:" + Constants.WebsiteProject,
             "ActiveProjectCapability:" + Constants.DotNetCoreWebCapability,
             "HierSingleSelectionName:" + Constants.ConfigFileName + "$" })]
-    [ProvideUIContextRule(PackageGuids.guidUiContextString, 
+    [ProvideUIContextRule(PackageGuids.guidUiContextString,
         name: Vsix.Name,
         expression: "(WAP | WebSite | DotNetCoreWeb )",
         termNames: new string[] {
@@ -53,6 +56,9 @@ namespace Microsoft.Web.LibraryManager.Vsix
         [Import]
         internal IDependenciesFactory DependenciesFactory { get; private set; }
 
+        [SuppressMessage("Reliability", "ISB001:Dispose of proxies", Justification = "It is in Dispose()")]
+        public INuGetProjectService NugetProjectService { get; private set; }
+
         protected override async Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -60,6 +66,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
             var componentModel = GetService(typeof(SComponentModel)) as IComponentModel;
             Assumes.Present(componentModel);
             componentModel.DefaultCompositionService.SatisfyImportsOnce(this);
+
+            IAsyncServiceProvider asyncServiceProvider = this;
+            IBrokeredServiceContainer brokeredServiceContainer = await asyncServiceProvider.GetServiceAsync<SVsBrokeredServiceContainer, IBrokeredServiceContainer>();
+            ServiceHub.Framework.IServiceBroker serviceBroker = brokeredServiceContainer.GetFullAccessServiceBroker();
+#pragma warning disable ISB001 // Dispose of proxies
+            NugetProjectService = await serviceBroker.GetProxyAsync<INuGetProjectService>(NuGetServices.NuGetProjectServiceV1);
+#pragma warning restore ISB001 // Dispose of proxies
 
             var commandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
 
@@ -72,6 +85,13 @@ namespace Microsoft.Web.LibraryManager.Vsix
                 RestoreOnBuildCommand.Initialize(this, commandService, DependenciesFactory);
                 ManageLibrariesCommand.Initialize(this, commandService, LibraryCommandService, DependenciesFactory);
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            (NugetProjectService as IDisposable)?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

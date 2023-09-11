@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
@@ -13,7 +15,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 using NuGet.VisualStudio;
-using Task = System.Threading.Tasks.Task;
+using NuGet.VisualStudio.Contracts;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Commands
 {
@@ -21,10 +23,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
     {
         private bool _isPackageInstalled;
         private readonly IComponentModel _componentModel;
-        private readonly AsyncPackage _package;
+        private readonly LibraryManagerPackage _package;
         private readonly IDependenciesFactory _dependenciesFactory;
 
-        private RestoreOnBuildCommand(AsyncPackage package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
+        private RestoreOnBuildCommand(LibraryManagerPackage package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
         {
             _package = package;
             _componentModel = VsHelpers.GetService<SComponentModel, IComponentModel>();
@@ -44,7 +46,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
             get { return _package; }
         }
 
-        public static void Initialize(AsyncPackage package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
+        public static void Initialize(LibraryManagerPackage package, OleMenuCommandService commandService, IDependenciesFactory dependenciesFactory)
         {
             Instance = new RestoreOnBuildCommand(package, commandService, dependenciesFactory);
         }
@@ -66,7 +68,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
 
-                _isPackageInstalled = IsPackageInstalled(item.ContainingProject);
+                _isPackageInstalled = await IsPackageInstalledAsync(item.ContainingProject);
 
                 if (_isPackageInstalled)
                 {
@@ -165,11 +167,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
             return answer == 6; // 6 = Yes
         }
 
-        private bool IsPackageInstalled(Project project)
+        private async Task<bool> IsPackageInstalledAsync(Project project)
         {
-            IVsPackageInstallerServices installerServices = _componentModel.GetService<IVsPackageInstallerServices>();
+            Guid projectGuid = VsHelpers.GetProjectGuid(project);
+            InstalledPackagesResult installedPackages = await _package.NugetProjectService.GetInstalledPackagesAsync(projectGuid, CancellationToken.None);
 
-            return installerServices.IsPackageInstalled(project, Constants.MainNuGetPackageId);
+            return installedPackages.Packages.Any(p => p.Id == Constants.MainNuGetPackageId);
         }
     }
 }
