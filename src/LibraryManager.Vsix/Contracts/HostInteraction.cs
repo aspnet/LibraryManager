@@ -85,9 +85,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
             //Delete from project
             Project project = VsHelpers.GetDTEProjectFromConfig(_configFilePath);
-            bool isCoreProject = await VsHelpers.IsDotNetCoreWebProjectAsync(project);
+            bool isCpsProject = await VsHelpers.IsCpsProject(project);
 
-            if (!isCoreProject)
+            if (!isCpsProject)
             {
                 var logAction = new Action<string, LogLevel>((message, level) => { Logger.Log(message, level); });
                 bool deleteFromProject = await VsHelpers.DeleteFilesFromProjectAsync(project, absolutePaths, logAction, cancellationToken);

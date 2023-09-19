@@ -109,7 +109,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            if (IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
+            if (IsCapabilityMatch(project, Constants.CpsCapability))
             {
                 return;
             }
@@ -140,7 +140,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-            if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
+            if (project == null || IsCapabilityMatch(project, Constants.CpsCapability))
             {
                 return;
             }
@@ -244,11 +244,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
             return false;
         }
 
-        public static async Task<bool> IsDotNetCoreWebProjectAsync(Project project)
+        /// <summary>
+        /// Returns whether the DTE project is a CPS-based project
+        /// </summary>
+        public static async Task<bool> IsCpsProject(Project project)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            if (project == null || IsCapabilityMatch(project, Constants.DotNetCoreWebCapability))
+            if (project == null || IsCapabilityMatch(project, Constants.CpsCapability))
             {
                 return true;
             }
