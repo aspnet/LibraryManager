@@ -47,37 +47,28 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
         }
 
         [TestMethod]
-        public void Constructor_FileDoesNotExist_WhenInitialized_CreateNewFile()
+        public void Constructor_FileDoesNotExist()
         {
             if (File.Exists(TestFilePath))
             {
                 File.Delete(TestFilePath);
             }
 
-            _ = new TestSettings(TestFilePath);
+            var settings = new TestSettings(TestFilePath);
 
-            Assert.IsTrue(File.Exists(TestFilePath));
+            // verify settings does not throw, does not have a well-known value
+            Assert.IsFalse(settings.TryGetValue(Constants.HttpsProxy, out _));
         }
 
         [TestMethod]
-        public void Constructor_FileExistsButEmpty_WhenInitialized_PopulateFile()
+        public void Constructor_FileExistsButEmpty()
         {
             File.WriteAllText(TestFilePath, "");
 
-            _ = new TestSettings(TestFilePath);
+            var settings = new TestSettings(TestFilePath);
 
-            Assert.IsTrue(new FileInfo(TestFilePath).Length > 0);
-        }
-
-        [TestMethod]
-        public void Constructor_FileExistsAndIsValid_WhenInitialized_DoNotModify()
-        {
-            string fileText = @"{ ""foo"": {} }";
-            File.WriteAllText(TestFilePath, fileText);
-
-            _ = new TestSettings(TestFilePath);
-
-            Assert.AreEqual(fileText, File.ReadAllText(TestFilePath));
+            // verify settings does not throw, does not have a well-known value
+            Assert.IsFalse(settings.TryGetValue(Constants.HttpsProxy, out _));
         }
 
         [TestMethod]
@@ -86,14 +77,10 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
             string fileText = @"[]"; // valid JSON, but not an object
             File.WriteAllText(TestFilePath, fileText);
 
-            _ = new TestSettings(TestFilePath);
+            var settings = new TestSettings(TestFilePath);
 
-            string actual = File.ReadAllText(TestFilePath);
-            string expected = @"{
-  ""config"": {}
-}";
-
-            Assert.AreEqual(StringUtility.NormalizeNewLines(expected), StringUtility.NormalizeNewLines(actual));
+            // verify settings does not throw, does not have a well-known value
+            Assert.IsFalse(settings.TryGetValue(Constants.HttpsProxy, out _));
         }
 
         [TestMethod]
@@ -121,19 +108,7 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
         }
 
         [TestMethod]
-        public void TryGetValue_ValueExists_ReturnTrueWithValue()
-        {
-            string fileText = @"{ ""config"": { ""testKey"": ""testValue"" } }";
-            File.WriteAllText(TestFilePath, fileText);
-
-            bool success = new TestSettings(TestFilePath).TryGetValue("testKey", out string value);
-
-            Assert.IsTrue(success);
-            Assert.AreEqual("testValue", value);
-        }
-
-        [TestMethod]
-        public void TryGetValue_ValueExistsInDifferentCase_ReturnFalse()
+        public void TryGetValue_SettingsNameIsCaseSensitive()
         {
             string fileText = @"{ ""config"": { ""testKey"": ""testValue"" } }";
             File.WriteAllText(TestFilePath, fileText);
@@ -212,7 +187,7 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
         }
 
         [TestMethod]
-        public void SetEncyptedValue_ValueIsDifferentFromOriginal()
+        public void SetEncryptedValue_ValueIsDifferentFromOriginal()
         {
             var ut = new TestSettings(TestFilePath);
 

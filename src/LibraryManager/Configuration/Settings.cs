@@ -64,22 +64,16 @@ namespace Microsoft.Web.LibraryManager.Configuration
                 }
                 catch (JsonReaderException)
                 {
-                    // If there were any errors, we'll reset the file
+                    // If there were any errors, we'll take the defaults
+                    // TODO: log a warning
                 }
             }
 
             if (_rootObject is null)
             {
-                InitSettingsFile(ConfigFilePath);
+                _rootObject = new JObject(new JProperty("config", new JObject()));
+                _configObject = _rootObject["config"] as JObject;
             }
-        }
-
-        private void InitSettingsFile(string configFilePath)
-        {
-            _rootObject = new JObject(new JProperty("config", new JObject()));
-            _configObject = _rootObject["config"] as JObject;
-
-            SaveSettingsFile(configFilePath, _rootObject);
         }
 
         /// <inheritdoc />
