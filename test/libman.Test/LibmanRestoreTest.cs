@@ -4,6 +4,7 @@
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Tools.Commands;
 
 namespace Microsoft.Web.LibraryManager.Tools.Test
@@ -44,7 +45,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), contents);
 
             int result = command.Execute();
-            Assert.AreEqual(0, result);
+            Assert.AreEqual((int)ExitCode.Success, result);
 
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "wwwroot", "core.js")));
@@ -71,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), contents);
 
             int result = command.Execute();
-            Assert.AreEqual(0, result);
+            Assert.AreEqual((int)ExitCode.Failure, result);
 
             Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "jquery.min.js")));
             Assert.IsFalse(File.Exists(Path.Combine(WorkingDir, "wwwroot", "core.js")));
