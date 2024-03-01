@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
 		CHANGELOG.md = CHANGELOG.md
 		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
 		LibraryManager.Settings.targets = LibraryManager.Settings.targets
 		README.md = README.md
 		version.json = version.json
@@ -18,14 +18,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{A72570B1-99EF-4BDD-B629-321CD56C9F7F}"
 	ProjectSection(SolutionItems) = preProject
-		src\Directory.Build.targets = src\Directory.Build.targets
 		src\.globalconfig = src\.globalconfig
+		src\Directory.Build.targets = src\Directory.Build.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{FFCD12F4-5CE2-4CC2-A2C4-EACC8F387D7A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E67307E3-04FF-498B-97C7-4F508299DF4D}"
 	ProjectSection(SolutionItems) = preProject
+		build\CreateInsertionMetadata.proj = build\CreateInsertionMetadata.proj
 		build\PackageVersions.targets = build\PackageVersions.targets
 	EndProjectSection
 EndProject
@@ -34,13 +35,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManage
 		{FF466454-426B-4AD7-8B00-D50011BE716F} = {FF466454-426B-4AD7-8B00-D50011BE716F}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryManager.Vsix", "src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Test", "test\LibraryManager.Test\Microsoft.Web.LibraryManager.Test.csproj", "{08C91CC3-4057-4D76-8B9A-B6A0557B64EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Contracts", "src\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj", "{FF466454-426B-4AD7-8B00-D50011BE716F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Mocks", "test\LibraryManager.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj", "{18F82568-446D-4729-B65E-EB9DF21C3636}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryManager.Vsix", "src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Build", "src\LibraryManager.Build\Microsoft.Web.LibraryManager.Build.csproj", "{7536DF26-B808-4AC2-A9DA-58E408A1E05B}"
 EndProject
