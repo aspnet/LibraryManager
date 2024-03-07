@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;$(NetFxTFM)</TargetFrameworks>
     <PackageTags>library, package, client-side</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -13,7 +13,7 @@
   <Target Name="GetCopyToOutputDirectoryItems" />
   <Target Name="SatelliteDllsProjectOutputGroup" />
   <Target Name="DebugSymbolsProjectOutputGroup" />
-  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
+  <ItemGroup Condition="'$(TargetFramework)'=='$(NetFxTFM)'">
     <Reference Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
@@ -35,7 +35,7 @@
         in the package from their $(OutputPath). -->
   <Target Name="FixWinFXSatelliteDllsProjectOutputGroup"
           AfterTargets="SatelliteDllsProjectOutputGroup"
-          Condition="'$(TargetFramework)'=='net472'">
+          Condition="'$(TargetFramework)'=='$(NetFxTFM)'">
     <ItemGroup>
       <SatelliteDllsProjectOutputGroupOutput Condition="'%(SatelliteDllsProjectOutputGroupOutput.FinalOutputPath)'==''">
         <FinalOutputPath>$(TargetDir)%(SatelliteDllsProjectOutputGroupOutput.TargetPath)</FinalOutputPath>

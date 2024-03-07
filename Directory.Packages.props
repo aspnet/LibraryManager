@@ -13,7 +13,6 @@
     <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="16.9.0" />
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Editor" Version="17.7.188" />
     <PackageVersion Include="Microsoft.VisualStudio.Internal.MicroBuild" Version="2.0.65" />
     <PackageVersion Include="Microsoft.VisualStudio.Language.Intellisense" Version="17.7.188" />

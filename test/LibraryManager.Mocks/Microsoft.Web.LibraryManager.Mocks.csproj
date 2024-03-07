@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;$(NetFxTFM)</TargetFrameworks>
         <PackageTags>mocks, unit test, library, client-side, package</PackageTags>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>

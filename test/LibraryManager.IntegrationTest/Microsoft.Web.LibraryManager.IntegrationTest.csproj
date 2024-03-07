@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>$(NetFxTFM)</TargetFrameworks>
     <!-- Suppress the architecture mismatch warning from the apex package -->
     <NoWarn>$(NoWarn);MSB3270</NoWarn>
   </PropertyGroup>

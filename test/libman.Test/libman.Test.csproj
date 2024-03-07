@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>$(NetCoreTFM)</TargetFramework>
     <RootNamespace>Microsoft.Web.LibraryManager.Tools.Test</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Src\libman\libman.csproj" />
+    <ProjectReference Include="..\..\src\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
     <ProjectReference Include="..\LibraryManager.Mocks\Microsoft.Web.LibraryManager.Mocks.csproj" />
   </ItemGroup>
 
