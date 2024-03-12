@@ -4,7 +4,6 @@
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Tools.Commands;
 
 namespace Microsoft.Web.LibraryManager.Tools.Test
