@@ -20,7 +20,7 @@
     <HighEntropyVa>true</HighEntropyVa>
     <CheckForOverflowUnderflow Condition=" '$(Configuration)' == 'Debug' ">true</CheckForOverflowUnderflow>
     <NetFxTFM>net481</NetFxTFM>
-    <NetCoreTFM>net8</NetCoreTFM>
+    <NetCoreTFM>net8.0</NetCoreTFM>
   </PropertyGroup>
 
   <ItemGroup>

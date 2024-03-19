@@ -16,7 +16,7 @@ using Logger = Microsoft.Web.LibraryManager.Build.Contracts.Logger;
 namespace Microsoft.Web.LibraryManager.Build
 {
     public class RestoreTask
-#if NET481
+#if NETFRAMEWORK
         : AppDomainIsolatedTask
 #else
         : Task
