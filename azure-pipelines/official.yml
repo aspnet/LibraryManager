@@ -11,8 +11,65 @@ variables:
   Packaging.EnableSBOMSigning: true
   Codeql.Enabled: true
 
-jobs:
-  - job: Windows
-    pool: VSEngSS-MicroBuild2022-1ES
-    steps:
-      - template: build.yml
+resources:
+  repositories:
+  - repository: MicroBuildTemplate
+    type: git
+    name: 1ESPipelineTemplates/MicroBuildTemplate
+    ref: refs/tags/release
+
+extends:
+  template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
+  parameters:
+    sdl:
+      sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
+    pool:
+      name: AzurePipelines-EO
+      image: AzurePipelinesWindows2022compliantGPT
+      os: windows
+    customBuildTags:
+    - ES365AIMigrationTooling
+    stages:
+    - stage: stage
+      jobs:
+      - job: Windows
+        pool: VSEngSS-MicroBuild2022-1ES
+        templateContext:
+          mb:
+            signing:
+              enabled: true
+              signType: $(SignType)
+              zipSources: false
+            swix:
+              enabled: true
+          outputParentDirectory: $(Build.ArtifactStagingDirectory)
+          outputs:
+          - ${{ if eq(variables['system.collectionId'], '011b8bdf-6d56-4f87-be0d-0092136884d9') }}:
+            - output: pipelineArtifact
+              displayName: 'Publish artifacts'
+              targetPath: '$(Build.ArtifactStagingDirectory)/locAssets'
+              artifactName: locAssets
+              artifactType: Container
+          - output: pipelineArtifact
+            displayName: 'Publish artifacts'
+            targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+            artifactName: artifacts
+            artifactType: Container
+          - output: pipelineArtifact
+            displayName: 'Publish build_logs artifacts'
+            condition: succeededOrFailed()
+            targetPath: $(Build.ArtifactStagingDirectory)/build_logs
+            artifactName: build_logs
+            artifactType: Container
+          - output: pipelineArtifact
+            displayName: 'Publish insertion artifacts'
+            targetPath: $(Build.ArtifactStagingDirectory)/insertion
+            artifactName: VSInsertion
+            artifactType: Container           
+          - output: pipelineArtifact
+            displayName: 'Publish symbols as Azure DevOps artifacts'
+            targetPath: $(Build.ArtifactStagingDirectory)/symbols
+            artifactName: symbols
+            artifactType: Container
+        steps:
+        - template: /azure-pipelines/build.yml@self

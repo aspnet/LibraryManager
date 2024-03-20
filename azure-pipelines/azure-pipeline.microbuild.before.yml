@@ -1,10 +1,1 @@
-steps:
-
-- task: MicroBuildSigningPlugin@3
-  inputs:
-    signType: $(SignType)
-    zipSources: false
-  displayName: Install MicroBuild Signing Plugin
-
-- task: MicroBuildSwixPlugin@4
-  displayName: Install MicroBuild Swix Plugin
+steps: []
