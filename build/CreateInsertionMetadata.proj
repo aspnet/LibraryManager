@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="GenerateInsertionParameters">
+<Project Sdk="Microsoft.Build.NoTargets/1.0.94" DefaultTargets="GenerateInsertionParameters">
 
   <PropertyGroup>
     <TargetFramework>$(NetCoreTFM)</TargetFramework>
