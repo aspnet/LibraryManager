@@ -29,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-#if NET472
+#if NETFRAMEWORK
             TestFilePath = Path.Combine(context.DeploymentDirectory, "SettingsTest", "libman.config.json");
 #else
             TestFilePath = Environment.ExpandEnvironmentVariables(@"%localappdata%\Microsoft\Library\libman.config.json");
@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryManager.Test.Configuration
         [ClassCleanup]
         public static void Cleanup()
         {
-#if !NET472
+#if !NETFRAMEWORK
             // cleanup when we're leaving files behind not under the test DeploymentDirectory
             Directory.Delete(Path.GetDirectoryName(TestFilePath), true);
 #endif
