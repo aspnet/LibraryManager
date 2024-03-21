@@ -3,6 +3,7 @@ steps:
   displayName: 'Generate SBOM For VSIX Insertion'
   inputs:
     BuildDropPath: '$(Build.SourcesDirectory)\bin\Microsoft.Web.LibraryManager.Vsix\Release'
+
 - task: MSBuild@1
   displayName: Build VS Installer Manifest
   inputs:
@@ -29,29 +30,6 @@ steps:
     flattenFolders: true
   displayName: Collecting VS Insertion artifacts
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: $(Build.ArtifactStagingDirectory)/insertion
-    ArtifactName: VSInsertion
-    ArtifactType: Container
-  displayName: Publish insertion artifacts
-
-- task: MicroBuildUploadVstsDropFolder@1
-  displayName: Upload artifacts to VSTS Drop
-  inputs:
-    AccessToken: $(System.AccessToken)
-    DropFolder: '$(Build.ArtifactStagingDirectory)/insertion'
-    condition: and(succeeded(), eq(variables['SignType'], 'Real'))
-
-- task: MicroBuildCleanup@1
-  condition: succeededOrFailed()
-  displayName: MicroBuild Cleanup
-
-- task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-  displayName: Component Detection
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-
-# The Convert-PDB.ps1 script uses nuget.exe at the cmdline, so make sure it's on our PATH
 - task: NuGetToolInstaller@0
   inputs:
     versionSpec: 5.4.0
@@ -87,13 +65,6 @@ steps:
       bin/Microsoft.Web.LibraryManager.Vsix/$(BuildConfiguration)/**/Microsoft.Web.LibraryManager.Vsix.pdb
     TargetFolder: $(Build.ArtifactStagingDirectory)/symbols
   displayName: Collecting symbols artifacts
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: $(Build.ArtifactStagingDirectory)/symbols
-    ArtifactName: symbols
-    ArtifactType: Container
-  displayName: Publish symbols as Azure DevOps artifacts
 
 - task: PublishSymbols@2
   inputs:
