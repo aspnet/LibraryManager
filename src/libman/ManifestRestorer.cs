@@ -22,11 +22,11 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// <param name="logger"></param>
         /// <param name="cancelToken"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<ILibraryOperationResult>> RestoreManifestAsync(Manifest manifest, ILogger logger, CancellationToken cancelToken)
+        public static async Task<IList<ILibraryOperationResult>> RestoreManifestAsync(Manifest manifest, ILogger logger, CancellationToken cancelToken)
         {
-            IEnumerable<ILibraryOperationResult> results = await manifest.RestoreAsync(cancelToken);
+            IList<ILibraryOperationResult> results = await manifest.RestoreAsync(cancelToken);
 
-            IEnumerable<ILibraryOperationResult> failures = results.Where(r => r.Errors.Any());
+            IList<ILibraryOperationResult> failures = results.Where(r => r.Errors.Any()).ToList();
             if (failures.Any())
             {
                 var librarySpecificErrors = new StringBuilder();

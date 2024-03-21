@@ -14,6 +14,7 @@ namespace Microsoft.Web.LibraryManager.Tools
     {
         static void Main(string[] args)
         {
+            Environment.ExitCode = (int)ExitCode.Failure;
 #if DEBUG
             int debugIndex = args.ToList().FindIndex(a => a.Equals("--debug", StringComparison.OrdinalIgnoreCase));
             if (debugIndex > 0)
@@ -32,7 +33,7 @@ namespace Microsoft.Web.LibraryManager.Tools
             app.Configure();
             try
             {
-                app.Execute(args);
+                Environment.ExitCode = app.Execute(args);
             }
             catch (CommandParsingException cpe)
             {
