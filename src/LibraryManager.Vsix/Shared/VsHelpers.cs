@@ -548,5 +548,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
                 }
             }
         }
+
+        public static Guid GetProjectGuid(Project project)
+        {
+            string uniqueName = project.UniqueName;
+            IVsSolution solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
+            solution.GetProjectOfUniqueName(uniqueName, out IVsHierarchy hierarchy);
+            hierarchy.GetGuidProperty(
+                (uint)VSConstants.VSITEMID.Root,
+                (int)__VSHPROPID.VSHPROPID_ProjectIDGuid,
+                out Guid projectGuid);
+            return projectGuid;
+        }
     }
 }
