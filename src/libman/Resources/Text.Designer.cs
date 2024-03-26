@@ -855,7 +855,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
         /// <summary>
         ///   Looks up a localized string similar to     libman update jquery
         ///    libman update jquery --to 3.3.1
-        ///    libman update jquery -pre
+        ///    libman update jquery --pre
         ///.
         /// </summary>
         internal static string UpdateCommandExamples {

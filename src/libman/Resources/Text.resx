@@ -296,7 +296,7 @@
   <data name="UpdateCommandExamples" xml:space="preserve">
     <value>    libman update jquery
     libman update jquery --to 3.3.1
-    libman update jquery -pre
+    libman update jquery --pre
 </value>
   </data>
   <data name="UpdateCommandRemarks" xml:space="preserve">
