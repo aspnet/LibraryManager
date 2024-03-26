@@ -54,7 +54,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             LibraryName = Argument("libraryName", Resources.Text.UpdateCommandLibraryArgumentDesc, multipleValues: false);
             Provider = Option("--provider|-p", Resources.Text.UpdateCommandProviderOptionDesc, CommandOptionType.SingleValue);
-            PreRelease = Option("-pre", Resources.Text.UpdateCommandPreReleaseOptionDesc, CommandOptionType.NoValue);
+            PreRelease = Option("--pre", Resources.Text.UpdateCommandPreReleaseOptionDesc, CommandOptionType.NoValue);
             ToVersion = Option("--to", Resources.Text.UpdateCommandToVersionOptionDesc, CommandOptionType.SingleValue);
 
             // Reserve this.
