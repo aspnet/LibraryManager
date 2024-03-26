@@ -48,6 +48,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         /// <remarks>Needs the full library id.</remarks>
         public CommandOption ToVersion { get; private set; }
 
+        /// <summary>
+        /// Option to specify if this should print the operation that would be carried out, but not make changes.
+        /// </summary>
+        public CommandOption WhatIf { get; private set; }
+
         public override BaseCommand Configure(CommandLineApplication parent = null)
         {
             base.Configure(parent);
@@ -56,6 +61,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             Provider = Option("--provider|-p", Resources.Text.UpdateCommandProviderOptionDesc, CommandOptionType.SingleValue);
             PreRelease = Option("-pre", Resources.Text.UpdateCommandPreReleaseOptionDesc, CommandOptionType.NoValue);
             ToVersion = Option("--to", Resources.Text.UpdateCommandToVersionOptionDesc, CommandOptionType.SingleValue);
+            WhatIf = Option("--whatif", Resources.Text.WhatIfOptionDesc, CommandOptionType.NoValue);
 
             // Reserve this.
             Provider.ShowInHelpText = false;
@@ -103,6 +109,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (newVersion == null || newVersion == libraryToUpdate.Version)
             {
                 Logger.Log(string.Format(Resources.Text.LatestVersionAlreadyInstalled, libraryToUpdate.Name), LogLevel.Operation);
+                return 0;
+            }
+
+            if (WhatIf.HasValue())
+            {
+                Logger.Log(string.Format(Resources.Text.WhatIfOutputMessage, libraryToUpdate.Name, newVersion), LogLevel.Operation);
                 return 0;
             }
 

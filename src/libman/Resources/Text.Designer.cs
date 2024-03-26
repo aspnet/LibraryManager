@@ -955,5 +955,23 @@ namespace Microsoft.Web.LibraryManager.Tools.Resources {
                 return ResourceManager.GetString("VerbosityOptionDesc", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print what operations would be carried out, without making any changes..
+        /// </summary>
+        internal static string WhatIfOptionDesc {
+            get {
+                return ResourceManager.GetString("WhatIfOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library &quot;{0}&quot; would be updated to latest version &quot;{1}&quot;.
+        /// </summary>
+        internal static string WhatIfOutputMessage {
+            get {
+                return ResourceManager.GetString("WhatIfOutputMessage", resourceCulture);
+            }
+        }
     }
 }
