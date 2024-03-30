@@ -54,7 +54,7 @@ namespace Microsoft.Web.LibraryManager.Build
 
             CancellationToken token = CancellationToken.None;
 
-            Log.LogMessage(MessageImportance.High, Environment.NewLine + Resources.Text.Restore_OperationStarted);
+            Log.LogMessage(MessageImportance.Normal, Environment.NewLine + Resources.Text.Restore_OperationStarted);
 
             var dependencies = Dependencies.FromTask(ProjectDirectory, ProviderAssemblies.Select(pa => new FileInfo(pa.ItemSpec).FullName));
             Manifest manifest = Manifest.FromFileAsync(configFilePath.FullName, dependencies, token).Result;
@@ -117,11 +117,11 @@ namespace Microsoft.Web.LibraryManager.Build
                 if (fileCount > 0)
                 {
                     string text = string.Format(Resources.Text.Restore_NumberOfLibrariesSucceeded, results.Count(), Math.Round(sw.Elapsed.TotalSeconds, 2));
-                    Log.LogMessage(MessageImportance.High, Environment.NewLine + text + Environment.NewLine);
+                    Log.LogMessage(MessageImportance.Normal, Environment.NewLine + text + Environment.NewLine);
                 }
                 else
                 {
-                    Log.LogMessage(MessageImportance.High, Environment.NewLine + "Restore completed. Files already up-to-date" + Environment.NewLine);
+                    Log.LogMessage(MessageImportance.Normal, Environment.NewLine + "Restore completed. Files already up-to-date" + Environment.NewLine);
                 }
             }
         }
