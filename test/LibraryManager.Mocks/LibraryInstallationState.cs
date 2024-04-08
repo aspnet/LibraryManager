@@ -46,5 +46,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
         /// Indicates whether the library is using the default provider.
         /// </summary>
         public bool IsUsingDefaultProvider { get; set; }
+
+        public IReadOnlyList<FileMapping> FileMappings => throw new System.NotImplementedException();
     }
 }
