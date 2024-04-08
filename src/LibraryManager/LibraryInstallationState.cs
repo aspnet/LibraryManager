@@ -46,6 +46,11 @@ namespace Microsoft.Web.LibraryManager
         /// </summary>
         public string Version { get; set; }
 
+        /// <summary>
+        /// Mappings for multiple different files within the library to different destinations.
+        /// </summary>
+        public IReadOnlyList<FileMapping> FileMappings { get; set; }
+
         /// <summary>Internal use only</summary>
         public static LibraryInstallationState FromInterface(ILibraryInstallationState state,
                                                              string defaultProviderId = null,
