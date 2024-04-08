@@ -28,7 +28,6 @@
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
     <!-- Live Unit Testing workarounds -->
     <CreateVsixContainer Condition="'$(BuildingForLiveUnitTesting)' == 'true'">false</CreateVsixContainer>
-    <LangVersion>11</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
