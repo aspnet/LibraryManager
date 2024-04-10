@@ -132,15 +132,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 destinationToUse = InstallDestination;
             }
 
-            IEnumerable<ILibraryOperationResult> results = await _manifest.InstallLibraryAsync(
-                                                                library.Name,
-                                                                library.Version,
-                                                                providerIdToUse,
-                                                                files,
-                                                                destinationToUse,
-                                                                CancellationToken.None);
+            ILibraryOperationResult result = await _manifest.InstallLibraryAsync(
+                library.Name,
+                library.Version,
+                providerIdToUse,
+                files,
+                destinationToUse,
+                CancellationToken.None);
 
-            if (results.All(r => r.Success))
+            if (result.Success)
             {
                 await _manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
                 Logger.Log(string.Format(Resources.Text.InstalledLibrary, libraryId, InstallDestination), LogLevel.Operation);
@@ -149,15 +149,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             {
                 bool isFileConflicts = false;
                 Logger.Log(string.Format(Resources.Text.InstallLibraryFailed, libraryId), LogLevel.Error);
-                foreach (ILibraryOperationResult result in results)
+                foreach (IError error in result.Errors)
                 {
-                    foreach (IError error in result.Errors)
+                    Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
+                    if (error.Code == PredefinedErrors.ConflictingFilesInManifest("", new List<string>()).Code)
                     {
-                        Logger.Log(string.Format("[{0}]: {1}", error.Code, error.Message), LogLevel.Error);
-                        if(error.Code == PredefinedErrors.ConflictingFilesInManifest("", new List<string>()).Code)
-                        {
-                            isFileConflicts = true;
-                        }
+                        isFileConflicts = true;
                     }
                 }
 
