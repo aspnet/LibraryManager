@@ -3,12 +3,14 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryManager.Contracts
 {
     /// <summary>
-    /// Represents the outcome of an operation, including an output, a state of completion, and any applicable errors.
+    /// Represents the output of an operation, including cancellation status, up-to-date status, and any applicable errors.
+    /// If the result is null, the operation is considered to be unsuccessful.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class OperationResult<T>
@@ -54,7 +56,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <remarks>
         /// The value is <c>True</c> if the <see cref="Errors"/> list is empty and the operation was not cancelled.
         /// </remarks>
-        public bool Success => !Cancelled && Errors.Count == 0;
+        public bool Success => !Cancelled && Errors.Count == 0 && Result is not null;
 
         /// <summary>
         /// <c>True</c> if the library is up to date; otherwise <c>False</c>.
@@ -69,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         public IList<IError> Errors { get; }
 
         /// <summary>
-        /// The output of the operation, if any.
+        /// The output of the operation, if available.  A null result indicates a failed operation.
         /// </summary>
         public T? Result { get; set; }
 
@@ -96,6 +98,17 @@ namespace Microsoft.Web.LibraryManager.Contracts
         public static OperationResult<T> FromError(IError error)
         {
             return new OperationResult<T>(error);
+        }
+
+        /// <summary>Create an OperationResult from a list of errors</summary>
+        public static OperationResult<T> FromErrors(params IError[] errors)
+        {
+            if (errors.Length == 0)
+            {
+                throw new InvalidOperationException("Must specify at least one error");
+            }
+
+            return new OperationResult<T>(errors);
         }
 
         /// <summary>Create an up-to-date outcome for the specified output.</summary>
