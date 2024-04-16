@@ -41,6 +41,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
         {
             foreach (KeyValuePair<string, string> kvp in InstalledFiles)
             {
+                // If the source file is a remote Uri, we have no way to determine if it matches the installed file.
+                // So we will always reinstall the library in this case.
+                if (FileHelpers.IsHttpUri(kvp.Value))
+                {
+                    return false;
+                }
+
                 var destinationFile = new FileInfo(kvp.Key);
                 var cacheFile = new FileInfo(kvp.Value);
 

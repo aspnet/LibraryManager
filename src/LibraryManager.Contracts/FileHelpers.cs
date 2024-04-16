@@ -387,6 +387,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 return path;
             }
 
+            // If the path is a URI, we don't want to normalize it
+            if (IsHttpUri(path))
+            {
+                return path;
+            }
+
             // net451 does not have the OSPlatform apis to determine if the OS is windows or not.
             // This also does not handle the fact that MacOS can be configured to be either sensitive or insenstive 
             // to the casing.
@@ -399,6 +405,15 @@ namespace Microsoft.Web.LibraryManager.Contracts
             }
 
             return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Determines if the path is an HTTP or HTTPS Uri
+        /// </summary>
+        public static bool IsHttpUri(string path)
+        {
+            return Uri.TryCreate(path, UriKind.Absolute, out Uri uri)
+                && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
         }
     }
 }
