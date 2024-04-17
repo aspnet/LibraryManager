@@ -60,10 +60,25 @@ namespace Microsoft.Web.LibraryManager.Providers
                 return LibraryOperationResult.FromCancelled(desiredState);
             }
 
-            ILibraryCatalog catalog = GetCatalog();
-            ILibrary library = await catalog.GetLibraryAsync(desiredState.Name, desiredState.Version, cancellationToken).ConfigureAwait(false);
+            OperationResult<ILibrary> getLibrary = await GetLibraryForInstallationState(desiredState, cancellationToken).ConfigureAwait(false);
+            if (!getLibrary.Success)
+            {
+                return new LibraryOperationResult(desiredState, [.. getLibrary.Errors])
+                {
+                    Cancelled = getLibrary.Cancelled,
+                };
+            }
 
-            LibraryInstallationGoalState goalState = GenerateGoalState(desiredState, library);
+            OperationResult<LibraryInstallationGoalState> getGoalState = GenerateGoalState(desiredState, getLibrary.Result);
+            if (!getGoalState.Success)
+            {
+                return new LibraryOperationResult(desiredState, [.. getGoalState.Errors])
+                {
+                    Cancelled = getGoalState.Cancelled,
+                };
+            }
+
+            LibraryInstallationGoalState goalState = getGoalState.Result;
 
             if (!IsSourceCacheReady(goalState))
             {
@@ -83,8 +98,30 @@ namespace Microsoft.Web.LibraryManager.Providers
 
         }
 
-        private async Task<LibraryOperationResult> InstallFiles(LibraryInstallationGoalState goalState, CancellationToken cancellationToken)
+        private async Task<OperationResult<ILibrary>> GetLibraryForInstallationState(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        {
+            ILibrary library;
+            try
             {
+                ILibraryCatalog catalog = GetCatalog();
+                library = await catalog.GetLibraryAsync(desiredState.Name, desiredState.Version, cancellationToken).ConfigureAwait(false);
+            }
+            catch (InvalidLibraryException)
+            {
+                string libraryId = LibraryNamingScheme.GetLibraryId(desiredState.Name, desiredState.Version);
+                return OperationResult<ILibrary>.FromError(PredefinedErrors.UnableToResolveSource(libraryId, desiredState.ProviderId));
+            }
+            catch (Exception ex)
+            {
+                HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
+                return OperationResult<ILibrary>.FromError(PredefinedErrors.UnknownException());
+            }
+
+            return OperationResult<ILibrary>.FromSuccess(library);
+        }
+
+        private async Task<LibraryOperationResult> InstallFiles(LibraryInstallationGoalState goalState, CancellationToken cancellationToken)
+        {
             try
             {
                 foreach (KeyValuePair<string, string> kvp in goalState.InstalledFiles)
@@ -196,9 +233,16 @@ namespace Microsoft.Web.LibraryManager.Providers
 
         #endregion
 
-        public LibraryInstallationGoalState GenerateGoalState(ILibraryInstallationState desiredState, ILibrary library)
+        private OperationResult<LibraryInstallationGoalState> GenerateGoalState(ILibraryInstallationState desiredState, ILibrary library)
         {
             var goalState = new LibraryInstallationGoalState(desiredState);
+            List<IError> errors = null;
+
+            if (string.IsNullOrEmpty(desiredState.DestinationPath))
+            {
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.DestinationNotSpecified(desiredState.Name));
+            }
+
             IEnumerable<string> outFiles;
             if (desiredState.Files == null || desiredState.Files.Count == 0)
             {
@@ -209,20 +253,39 @@ namespace Microsoft.Web.LibraryManager.Providers
                 outFiles = FileGlobbingUtility.ExpandFileGlobs(desiredState.Files, library.Files.Keys);
             }
 
+            if (library.GetInvalidFiles(outFiles.ToList()) is IReadOnlyList<string> invalidFiles
+                && invalidFiles.Count > 0)
+            {
+                errors ??= [];
+                errors.Add(PredefinedErrors.InvalidFilesInLibrary(desiredState.Name, invalidFiles, library.Files.Keys));
+            }
+
             foreach (string outFile in outFiles)
             {
                 // strip the source prefix
                 string destinationFile = Path.Combine(HostInteraction.WorkingDirectory, desiredState.DestinationPath, outFile);
+                if (!FileHelpers.IsUnderRootDirectory(destinationFile, HostInteraction.WorkingDirectory))
+                {
+                    errors ??= [];
+                    errors.Add(PredefinedErrors.PathOutsideWorkingDirectory());
+                }
+                destinationFile = FileHelpers.NormalizePath(destinationFile);
 
                 // don't forget to include the cache folder in the path
                 string sourceFile = GetCachedFileLocalPath(desiredState, outFile);
+                sourceFile = FileHelpers.NormalizePath(sourceFile);
 
                 // TODO: make goalState immutable
                 // map destination back to the library-relative file it originated from
                 goalState.InstalledFiles.Add(destinationFile, sourceFile);
             }
 
-            return goalState;
+            if (errors is not null)
+            {
+                return OperationResult<LibraryInstallationGoalState>.FromErrors([.. errors]);
+            }
+
+            return OperationResult<LibraryInstallationGoalState>.FromSuccess(goalState);
         }
 
         public bool IsSourceCacheReady(LibraryInstallationGoalState goalState)

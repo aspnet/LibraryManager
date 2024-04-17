@@ -88,6 +88,15 @@ namespace Microsoft.Web.LibraryManager.Contracts.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &quot;{0}&quot; library is missing a destination..
+        /// </summary>
+        internal static string ErrorDestinationNotSpecified {
+            get {
+                return ResourceManager.GetString("ErrorDestinationNotSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; destination file path has invalid characters.
         /// </summary>
         internal static string ErrorDestinationPathHasInvalidCharacter {

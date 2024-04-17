@@ -374,7 +374,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 && normalizedFilePath.StartsWith(normalizedRootDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
-        internal static string NormalizePath(string path)
+        /// <summary>
+        /// Normalizes the path string so it can be easily compared.
+        /// </summary>
+        /// <remarks>
+        /// Result will be lowercase and have any trailing slashes removed.
+        /// </remarks>
+        public static string NormalizePath(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
