@@ -206,5 +206,28 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         {
             throw new NotSupportedException();
         }
+
+        protected override string GetCachedFileLocalPath(ILibraryInstallationState state, string sourceFile)
+        {
+            // FileSystemProvider pulls files directly, no caching.  So here we need to build a full
+            // path or URI to the file.
+
+            // For HTTP files, the state.Name is the full URL to a single file
+            if (FileHelpers.IsHttpUri(state.Name))
+            {
+                return state.Name;
+            }
+
+            // For other filesystem libraries, the state.Name may be a either a file or folder
+            // TODO: abstract file system
+            if (File.Exists(state.Name))
+            {
+                return state.Name;
+            }
+
+            // as a fallback, assume state.Name is a directory.  If this path doesn't exist, it will
+            // be handled elsewhere.
+            return Path.Combine(state.Name, sourceFile);
+        }
     }
 }

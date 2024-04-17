@@ -387,7 +387,7 @@ namespace Microsoft.Web.LibraryManager.Providers
         /// Gets the expected local path for a file from the file cache
         /// </summary>
         /// <returns></returns>
-        private string GetCachedFileLocalPath(ILibraryInstallationState state, string sourceFile)
+        protected virtual string GetCachedFileLocalPath(ILibraryInstallationState state, string sourceFile)
         {
             return Path.Combine(CacheFolder, state.Name, state.Version, sourceFile.Trim('/'));
         }
