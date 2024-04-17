@@ -204,8 +204,6 @@ namespace Microsoft.Web.LibraryManager
             string destination,
             CancellationToken cancellationToken)
         {
-            ILibraryOperationResult result;
-
             var desiredState = new LibraryInstallationState()
             {
                 Name = libraryName,
@@ -236,14 +234,14 @@ namespace Microsoft.Web.LibraryManager
                 return conflictResults;
             }
 
-            result = await provider.InstallAsync(desiredState, cancellationToken).ConfigureAwait(false);
+            ILibraryOperationResult installResult = await provider.InstallAsync(desiredState, cancellationToken);
 
-            if (result.Success)
+            if (installResult.Success)
             {
                 AddLibrary(desiredState);
             }
 
-            return result;
+            return installResult;
         }
 
         private ILibraryInstallationState SetDefaultProviderIfNeeded(LibraryInstallationState desiredState)
@@ -510,7 +508,7 @@ namespace Microsoft.Web.LibraryManager
                 return allFiles.SelectMany(f => f).Distinct();
             }
 
-           return new List<FileIdentifier>();
+            return new List<FileIdentifier>();
         }
 
         private async Task<IEnumerable<FileIdentifier>> GetFilesWithVersionsAsync(ILibraryInstallationState state)
@@ -567,41 +565,31 @@ namespace Microsoft.Web.LibraryManager
             try
             {
                 IProvider provider = _dependencies.GetProvider(state.ProviderId);
-                ILibraryOperationResult updatedStateResult = await provider.UpdateStateAsync(state, CancellationToken.None).ConfigureAwait(false);
-
-                if (updatedStateResult.Success)
+                OperationResult<LibraryInstallationGoalState> getGoalState = await provider.GetInstallationGoalStateAsync(state, cancellationToken).ConfigureAwait(false);
+                if (!getGoalState.Success)
                 {
-                    List<string> filesToDelete = new List<string>();
-                    state = updatedStateResult.InstallationState;
-
-                    foreach (string file in state.Files)
+                    return new LibraryOperationResult(state, [.. getGoalState.Errors])
                     {
-                        var url = new Uri(file, UriKind.RelativeOrAbsolute);
-
-                        if (!url.IsAbsoluteUri)
-                        {
-                            string relativePath = Path.Combine(state.DestinationPath, file).Replace('\\', '/');
-                            filesToDelete.Add(relativePath);
-                        }
-                    }
-
-                    bool success = true;
-                    if (deleteFilesFunction != null)
-                    {
-                        success = await deleteFilesFunction.Invoke(filesToDelete).ConfigureAwait(false);
-                    }
-
-                    if (success)
-                    {
-                        return LibraryOperationResult.FromSuccess(updatedStateResult.InstallationState);
-                    }
-                    else
-                    {
-                        return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(libraryId));
-                    }
+                        Cancelled = getGoalState.Cancelled,
+                    };
                 }
 
-                return updatedStateResult;
+                LibraryInstallationGoalState goalState = getGoalState.Result;
+
+                bool success = true;
+                if (deleteFilesFunction != null)
+                {
+                    success = await deleteFilesFunction.Invoke(goalState.InstalledFiles.Keys).ConfigureAwait(false);
+                }
+
+                if (success)
+                {
+                    return LibraryOperationResult.FromSuccess(goalState.InstallationState);
+                }
+                else
+                {
+                    return LibraryOperationResult.FromError(PredefinedErrors.CouldNotDeleteLibrary(libraryId));
+                }
             }
             catch (OperationCanceledException)
             {

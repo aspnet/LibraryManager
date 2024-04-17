@@ -82,7 +82,7 @@ namespace Microsoft.Web.LibraryManager.Providers
 
             if (!IsSourceCacheReady(goalState))
             {
-                ILibraryOperationResult updateCacheResult = await RefreshCacheAsync(desiredState, library, cancellationToken);
+                ILibraryOperationResult updateCacheResult = await RefreshCacheAsync(desiredState, getLibrary.Result, cancellationToken);
                 if (!updateCacheResult.Success)
                 {
                     return updateCacheResult;
@@ -229,6 +229,18 @@ namespace Microsoft.Web.LibraryManager.Providers
             }
 
             return LibraryOperationResult.FromSuccess(desiredState);
+        }
+
+        public async Task<OperationResult<LibraryInstallationGoalState>> GetInstallationGoalStateAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        {
+            // get the library from the catalog
+            OperationResult<ILibrary> getLibrary = await GetLibraryForInstallationState(desiredState, cancellationToken).ConfigureAwait(false);
+            if (!getLibrary.Success)
+            {
+                return OperationResult<LibraryInstallationGoalState>.FromErrors([.. getLibrary.Errors]);
+            }
+
+            return GenerateGoalState(desiredState, getLibrary.Result);
         }
 
         #endregion

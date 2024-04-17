@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Web.LibraryManager.Cache;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -17,6 +19,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
     {
         private IHostInteraction _hostInteraction;
         private ILibrary _library;
+        private readonly Mocks.LibraryCatalog _catalog;
 
         public BaseProviderTest()
         {
@@ -39,10 +42,12 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
                 },
             };
 
+            _catalog = new Mocks.LibraryCatalog()
+                .AddLibrary(_library);
         }
 
         [TestMethod]
-        public void GenerateGoalState_NoFileMapping_SpecifyFilesAtLibraryLevel()
+        public async Task GenerateGoalState_NoFileMapping_SpecifyFilesAtLibraryLevel()
         {
             ILibraryInstallationState installState = new LibraryInstallationState
             {
@@ -52,12 +57,17 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
                 DestinationPath = "lib/test",
                 Files = ["folder/*.txt"],
             };
-            BaseProvider provider = new TestProvider(_hostInteraction, cacheService: null);
+            BaseProvider provider = new TestProvider(_hostInteraction, cacheService: null)
+            {
+                Catalog = _catalog,
+            };
             string expectedDestinationFile1 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.WorkingDirectory, "lib/test/folder/file3.txt"));
             string expectedSourceFile1 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.CacheDirectory, "TestProvider/test/1.0/folder/file3.txt"));
 
-            LibraryInstallationGoalState goalState = provider.GenerateGoalState(installState, _library);
+            OperationResult<LibraryInstallationGoalState> getGoalState = await provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
 
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
             Assert.IsNotNull(goalState);
             Assert.AreEqual(1, goalState.InstalledFiles.Count);
             Assert.IsTrue(goalState.InstalledFiles.TryGetValue(expectedDestinationFile1, out string file1));
@@ -65,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
         }
 
         [TestMethod]
-        public void GenerateGoalState_NoFileMapping_NoFilesAtLibraryLevel()
+        public async Task GenerateGoalState_NoFileMapping_NoFilesAtLibraryLevel()
         {
             ILibraryInstallationState installState = new LibraryInstallationState
             {
@@ -74,7 +84,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
                 ProviderId = "TestProvider",
                 DestinationPath = "lib/test",
             };
-            BaseProvider provider = new TestProvider(_hostInteraction, cacheService: null);
+            BaseProvider provider = new TestProvider(_hostInteraction, cacheService: null)
+            {
+                Catalog = _catalog,
+            };
             string expectedDestinationFile1 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.WorkingDirectory, "lib/test/file1.txt"));
             string expectedSourceFile1 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.CacheDirectory, "TestProvider/test/1.0/file1.txt"));
             string expectedDestinationFile2 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.WorkingDirectory, "lib/test/file2.txt"));
@@ -82,7 +95,10 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
             string expectedDestinationFile3 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.WorkingDirectory, "lib/test/folder/file3.txt"));
             string expectedSourceFile3 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.CacheDirectory, "TestProvider/test/1.0/folder/file3.txt"));
 
-            LibraryInstallationGoalState goalState = provider.GenerateGoalState(installState, _library);
+            OperationResult<LibraryInstallationGoalState> getGoalState = await provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
 
             Assert.IsNotNull(goalState);
             Assert.AreEqual(3, goalState.InstalledFiles.Count);
@@ -105,10 +121,9 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
 
             public override string LibraryIdHintText => Text.CdnjsLibraryIdHintText;
 
-            public override ILibraryCatalog GetCatalog()
-            {
-                throw new NotImplementedException();
-            }
+            public ILibraryCatalog Catalog { get; set; }
+
+            public override ILibraryCatalog GetCatalog() => Catalog;
 
             public override string GetSuggestedDestination(ILibrary library)
             {

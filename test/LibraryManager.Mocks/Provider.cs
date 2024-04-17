@@ -59,6 +59,11 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public virtual ILibraryOperationResult Result { get; set; }
 
         /// <summary>
+        /// Gets or sets the goal state to return from <see cref="GetInstallationGoalStateAsync(ILibraryInstallationState, CancellationToken)"/>
+        /// </summary>
+        public LibraryInstallationGoalState GoalState { get; set; }
+
+        /// <summary>
         /// Indicates whether libraries with versions are supported.
         /// </summary>
         public bool SupportsLibraryVersions { get; set; }
@@ -104,6 +109,14 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public string GetSuggestedDestination(ILibrary library)
         {
             return library?.Name;
+        }
+
+        /// <summary>
+        /// Returns a stubbed value
+        /// </summary>
+        public Task<OperationResult<LibraryInstallationGoalState>> GetInstallationGoalStateAsync(ILibraryInstallationState installationState, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(OperationResult<LibraryInstallationGoalState>.FromSuccess(GoalState));
         }
     }
 }

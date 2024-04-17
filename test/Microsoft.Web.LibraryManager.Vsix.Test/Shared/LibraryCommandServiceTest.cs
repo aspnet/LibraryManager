@@ -28,6 +28,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.Shared
             var mockTaskStatusCenterService = new Mock<ITaskStatusCenterService>();
             mockTaskStatusCenterService.Setup(m => m.CreateTaskHandlerAsync(It.IsAny<string>()))
                                        .Returns(Task.FromResult(new Mock<ITaskHandler>().Object));
+            var testInstallationState = new LibraryInstallationState
+            {
+                ProviderId = "testProvider",
+                Files = new[] { "test.js" },
+                DestinationPath = "testDestination",
+            };
+            var testGoalState = new LibraryInstallationGoalState(testInstallationState);
+            testGoalState.InstalledFiles.Add(Path.Combine(mockInteraction.WorkingDirectory, "testDestination", "test.js"), Path.Combine(mockInteraction.WorkingDirectory, "test.js"));
             var mockDependencies = new Dependencies(mockInteraction, new IProvider[]
             {
                 new Mocks.Provider(mockInteraction)
@@ -36,13 +44,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.Shared
                     Catalog = new Mocks.LibraryCatalog(),
                     Result = new LibraryOperationResult
                     {
-                        InstallationState = new LibraryInstallationState
-                        {
-                            ProviderId = "testProvider",
-                            Files = new [] { "test.js" },
-                            DestinationPath = "testDestination",
-                        }
+                        InstallationState = testInstallationState
                     },
+                    GoalState = testGoalState,
                     SupportsLibraryVersions = true,
                 }
             });
