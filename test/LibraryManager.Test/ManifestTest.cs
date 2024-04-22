@@ -366,55 +366,54 @@ namespace Microsoft.Web.LibraryManager.Test
             var manifest = Manifest.FromJson("{}", _dependencies);
 
             // Null LibraryId
-            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync(null, null,"cdnjs", null, "wwwroot", CancellationToken.None);
-            Assert.IsFalse(results.First().Success);
-            Assert.AreEqual(1, results.First().Errors.Count);
-            Assert.AreEqual("LIB006", results.First().Errors[0].Code);
+            ILibraryOperationResult result = await manifest.InstallLibraryAsync(null, null,"cdnjs", null, "wwwroot", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB006", result.Errors[0].Code);
 
             // Empty ProviderId
-            results = await manifest.InstallLibraryAsync("jquery", "3.2.1", "", null, "wwwroot", CancellationToken.None);
-            Assert.IsFalse(results.First().Success);
-            Assert.AreEqual(1, results.First().Errors.Count);
-            Assert.AreEqual("LIB007", results.First().Errors[0].Code);
+            result = await manifest.InstallLibraryAsync("jquery", "3.2.1", "", null, "wwwroot", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB007", result.Errors[0].Code);
 
             // Null destination
-            results = await manifest.InstallLibraryAsync("jquery", "3.2.1", "cdnjs", null, null, CancellationToken.None);
+            result = await manifest.InstallLibraryAsync("jquery", "3.2.1", "cdnjs", null, null, CancellationToken.None);
 
-            Assert.IsFalse(results.First().Success);
-            Assert.AreEqual(1, results.First().Errors.Count);
-            Assert.AreEqual("LIB005", results.First().Errors[0].Code);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB005", result.Errors[0].Code);
 
 
             // Valid Options all files.
-            results = await manifest.InstallLibraryAsync("jquery", "3.3.1", "cdnjs", null, "wwwroot", CancellationToken.None);
+            result = await manifest.InstallLibraryAsync("jquery", "3.3.1", "cdnjs", null, "wwwroot", CancellationToken.None);
 
-            Assert.IsTrue(results.First().Success);
-            Assert.AreEqual("wwwroot", results.First().InstallationState.DestinationPath);
-            Assert.AreEqual("jquery", results.First().InstallationState.Name);
-            Assert.AreEqual("3.3.1", results.First().InstallationState.Version);
-            Assert.AreEqual("cdnjs", results.First().InstallationState.ProviderId);
-            Assert.IsNotNull(results.First().InstallationState.Files);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual("wwwroot", result.InstallationState.DestinationPath);
+            Assert.AreEqual("jquery", result.InstallationState.Name);
+            Assert.AreEqual("3.3.1", result.InstallationState.Version);
+            Assert.AreEqual("cdnjs", result.InstallationState.ProviderId);
 
             // Valid parameters and files.
             var files = new List<string>() { "jquery.min.js" };
-            results = await manifest.InstallLibraryAsync("jquery", "2.2.0", "cdnjs", files, "wwwroot2", CancellationToken.None);
-            Assert.IsFalse(results.First().Success);
-            Assert.AreEqual(1, results.First().Errors.Count);
-            Assert.AreEqual("LIB019", results.First().Errors[0].Code);
+            result = await manifest.InstallLibraryAsync("jquery", "2.2.0", "cdnjs", files, "wwwroot2", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB019", result.Errors[0].Code);
 
             // Valid parameters invalid files
             files.Add("abc.js");
-            results = await manifest.InstallLibraryAsync("twitter-bootstrap", "4.1.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
-            Assert.IsFalse(results.First().Success);
-            Assert.AreEqual(1, results.First().Errors.Count);
-            Assert.AreEqual("LIB018", results.First().Errors[0].Code);
+            result = await manifest.InstallLibraryAsync("twitter-bootstrap", "4.1.1", "cdnjs", files, "wwwroot3", CancellationToken.None);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(1, result.Errors.Count);
+            Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
 
         [TestMethod]
         public async Task InstallLibraryAsync_SetsDefaultProvider()
         {
             var manifest = Manifest.FromJson(_emptyLibmanJson, _dependencies);
-            IEnumerable<ILibraryOperationResult> results = await manifest.InstallLibraryAsync("jquery", "3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
+            _ = await manifest.InstallLibraryAsync("jquery", "3.2.1", "cdnjs", null, "wwwroot", CancellationToken.None);
 
             Assert.AreEqual("cdnjs", manifest.DefaultProvider);
             var libraryState = manifest.Libraries.First() as LibraryInstallationState;

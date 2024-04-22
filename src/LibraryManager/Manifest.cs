@@ -196,7 +196,7 @@ namespace Microsoft.Web.LibraryManager
         /// <param name="destination"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ILibraryOperationResult>> InstallLibraryAsync(
+        public async Task<ILibraryOperationResult> InstallLibraryAsync(
             string libraryName,
             string version,
             string providerId,
@@ -208,7 +208,7 @@ namespace Microsoft.Web.LibraryManager
 
             var desiredState = new LibraryInstallationState()
             {
-                Name =  libraryName,
+                Name = libraryName,
                 Version = version,
                 Files = files,
                 ProviderId = providerId,
@@ -220,18 +220,18 @@ namespace Microsoft.Web.LibraryManager
             ILibraryOperationResult validationResult = await desiredState.IsValidAsync(_dependencies);
             if (!validationResult.Success)
             {
-                return new [] { validationResult };
+                return validationResult;
             }
 
             IProvider provider = _dependencies.GetProvider(desiredState.ProviderId);
             if (provider == null)
             {
-                return new [] { new LibraryOperationResult(desiredState, new IError[] { PredefinedErrors.ProviderUnknown(desiredState.ProviderId) })};
+                return new LibraryOperationResult(desiredState, new IError[] { PredefinedErrors.ProviderUnknown(desiredState.ProviderId) });
             }
 
-            IEnumerable<ILibraryOperationResult> conflictResults = await CheckLibraryForConflictsAsync(desiredState, cancellationToken).ConfigureAwait(false);
+            ILibraryOperationResult conflictResults = await CheckLibraryForConflictsAsync(desiredState, cancellationToken).ConfigureAwait(false);
 
-            if (!conflictResults.All(r => r.Success))
+            if (!conflictResults.Success)
             {
                 return conflictResults;
             }
@@ -243,7 +243,7 @@ namespace Microsoft.Web.LibraryManager
                 AddLibrary(desiredState);
             }
 
-            return new [] { result };
+            return result;
         }
 
         private ILibraryInstallationState SetDefaultProviderIfNeeded(LibraryInstallationState desiredState)
@@ -261,14 +261,15 @@ namespace Microsoft.Web.LibraryManager
             return desiredState;
         }
 
-        private async Task<IEnumerable<ILibraryOperationResult>> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        private async Task<ILibraryOperationResult> CheckLibraryForConflictsAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             var libraries = new List<ILibraryInstallationState>(Libraries);
             libraries.Add(desiredState);
 
             IEnumerable<ILibraryOperationResult> fileConflicts = await LibrariesValidator.GetLibrariesErrorsAsync(libraries, _dependencies, DefaultDestination, DefaultProvider, cancellationToken).ConfigureAwait(false);
 
-            return fileConflicts;
+            // consolidate all the errors in one result
+            return new LibraryOperationResult(desiredState, fileConflicts.SelectMany(r => r.Errors).ToArray());
         }
 
         /// <summary>
