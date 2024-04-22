@@ -142,7 +142,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         {
             try
             {
-                using (FileStream sourceStream = File.Open(sourceFile, FileMode.Open))
+                using (FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read))
                 {
                     await WriteToFileAsync(destinationFile, sourceStream, cancellationToken);
                 }
