@@ -21,6 +21,7 @@
     <CheckForOverflowUnderflow Condition=" '$(Configuration)' == 'Debug' ">true</CheckForOverflowUnderflow>
     <NetFxTFM>net481</NetFxTFM>
     <NetCoreTFM>net8.0</NetCoreTFM>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
