@@ -35,14 +35,14 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 sw.Stop();
                 LogErrors(validationResults.SelectMany(r => r.Errors));
 
-                return 0;
+                return (int)ExitCode.Failure;
             }
 
-            IEnumerable<ILibraryOperationResult> results = await ManifestRestorer.RestoreManifestAsync(manifest, Logger, CancellationToken.None);
+            IList<ILibraryOperationResult> results = await ManifestRestorer.RestoreManifestAsync(manifest, Logger, CancellationToken.None);
             sw.Stop();
             LogResultsSummary(results, OperationType.Restore, sw.Elapsed);
 
-            return 0;
+            return results.Any(r => r.Errors.Any()) ? (int)ExitCode.Failure : (int)ExitCode.Success;
         }
     }
 }

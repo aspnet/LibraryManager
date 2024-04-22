@@ -309,7 +309,7 @@ namespace Microsoft.Web.LibraryManager
         /// Restores all libraries in the <see cref="Libraries"/> collection.
         /// </summary>
         /// <param name="cancellationToken">A token that allows for cancellation of the operation.</param>
-        public async Task<IEnumerable<ILibraryOperationResult>> RestoreAsync(CancellationToken cancellationToken)
+        public async Task<IList<ILibraryOperationResult>> RestoreAsync(CancellationToken cancellationToken)
         {
             //TODO: This should have an "undo scope"
             var results = new List<ILibraryOperationResult>();
