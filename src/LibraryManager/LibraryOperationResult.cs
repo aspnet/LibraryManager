@@ -1,6 +1,8 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Microsoft.Web.LibraryManager.Contracts;
@@ -29,11 +31,7 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>Internal use only</summary>
         public LibraryOperationResult(params IError[] error)
         {
-            Errors = new List<IError>();
-            foreach (IError e in error)
-            {
-                Errors.Add(e);
-            }
+            Errors = new List<IError>(error);
         }
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace Microsoft.Web.LibraryManager
         public bool UpToDate { get; set; }
 
         /// <summary>
-        /// <code>True</code> if the install was successfull; otherwise <code>False</code>.
+        /// <code>True</code> if the install was successful; otherwise <code>False</code>.
         /// </summary>
         /// <remarks>
         /// The value is usually <code>True</code> if the <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult.Errors" /> list is empty.
@@ -66,7 +64,7 @@ namespace Microsoft.Web.LibraryManager
         /// The <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryInstallationState" /> object passed to the
         /// <see cref="Microsoft.Web.LibraryManager.Contracts.IProvider" /> for installation.
         /// </summary>
-        public ILibraryInstallationState InstallationState { get; set; }
+        public ILibraryInstallationState? InstallationState { get; set; }
 
         /// <summary>Internal use only</summary>
         public static LibraryOperationResult FromSuccess(ILibraryInstallationState installationState)
