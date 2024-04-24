@@ -14,10 +14,7 @@
                  mc:Ignorable="d" d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=models:InstallDialogViewModel}"
                  xmlns:ui="clr-namespace:Microsoft.Web.LibraryManager.Vsix.UI.Theming"
                  Title="{x:Static resources:Text.AddClientSideLibrary}"
-                 Height="350" Width="500"
-                 ShowInTaskbar="False"
-                 ResizeMode="CanResizeWithGrip"
-                 WindowStartupLocation="CenterOwner">
+                 Height="350" Width="500">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
@@ -53,12 +50,6 @@
                    Target="{Binding ElementName=ProviderComboBox}">
                 <AccessText Text="{x:Static resources:Text.Provider}" />
             </Label>
-            <Label Name="LibraryId"
-                   Grid.Row="1"
-                   Grid.Column="0"
-                   Target="{Binding ElementName=LibrarySearchBox}">
-                <AccessText Text="{x:Static resources:Text.Library}" />
-            </Label>
             <ComboBox x:Name="ProviderComboBox"
                       AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.Provider}, _}"
                       Grid.Row="0"
@@ -67,16 +58,22 @@
                       DisplayMemberPath="Id"
                       SelectedItem="{Binding SelectedProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       SelectionChanged="ProviderComboBox_SelectionChanged"
-                      ItemsSource="{Binding Providers}"
+                      ItemsSource="{Binding Providers, Mode=OneWay}"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Center"
-                      Width="auto">
+                      Width="Auto">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
-                        <Setter Property="AutomationProperties.Name" Value="{Binding Id}"/>
+                        <Setter Property="AutomationProperties.Name" Value="{Binding Id, Mode=OneWay}"/>
                     </Style>
                 </ComboBox.ItemContainerStyle>
             </ComboBox>
+            <Label Name="LibraryId"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   Target="{Binding ElementName=LibrarySearchBox}">
+                <AccessText Text="{x:Static resources:Text.Library}" />
+            </Label>
             <DockPanel Grid.Row="1"
                        Grid.Column="1"
                        KeyboardNavigation.TabNavigation="Local"

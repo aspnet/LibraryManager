@@ -82,12 +82,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Theming
             {
                 LastChildFill = true,
             };
-            _dockPanel.SetResourceReference(Border.BorderBrushProperty, EnvironmentColors.MainWindowActiveDefaultBorderBrushKey);
+
             _dockPanel.SetResourceReference(Border.BackgroundProperty, EnvironmentColors.StartPageTabBackgroundBrushKey);
 
             _dockPanel.Children.Add(titlebar);
 
-            Content = _dockPanel;
+            Border borderedContainer = new Border();
+            borderedContainer.SetResourceReference(Border.BorderBrushProperty, EnvironmentColors.MainWindowActiveDefaultBorderBrushKey);
+            borderedContainer.SetValue(Border.BorderThicknessProperty, new Thickness(1));
+            borderedContainer.Child = _dockPanel;
+
+            Content = borderedContainer;
 
             // merge resource dictionaries before applying styles
             this.ShouldBeThemed();
