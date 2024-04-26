@@ -35,7 +35,7 @@ namespace Microsoft.Web.LibraryManager.Json
                 ProviderId = provider,
                 DestinationPath = destination,
                 Files = stateOnDisk.Files,
-                FileMappings = stateOnDisk.FileMappings.Select(f => new Contracts.FileMapping { Destination = f.Destination, Root = f.Root, Files = f.Files }).ToList(),
+                FileMappings = stateOnDisk.FileMappings?.Select(f => new Contracts.FileMapping { Destination = f.Destination, Root = f.Root, Files = f.Files }).ToList(),
             };
 
             (state.Name, state.Version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(stateOnDisk.LibraryId, provider);
