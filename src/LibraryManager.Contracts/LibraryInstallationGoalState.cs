@@ -14,9 +14,10 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// Initialize a new goal state from the desired installation state.
         /// </summary>
-        public LibraryInstallationGoalState(ILibraryInstallationState installationState)
+        public LibraryInstallationGoalState(ILibraryInstallationState installationState, Dictionary<string, string> installedFiles)
         {
             InstallationState = installationState;
+            InstalledFiles = installedFiles;
         }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <summary>
         /// Mapping from destination file to source file
         /// </summary>
-        public IDictionary<string, string> InstalledFiles { get; } = new Dictionary<string, string>();
+        public IDictionary<string, string> InstalledFiles { get; }
 
         /// <summary>
         /// Returns whether the goal is in an achieved state - that is, all files are up to date.

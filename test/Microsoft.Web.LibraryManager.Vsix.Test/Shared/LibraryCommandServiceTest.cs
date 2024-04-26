@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -34,8 +35,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.Shared
                 Files = new[] { "test.js" },
                 DestinationPath = "testDestination",
             };
-            var testGoalState = new LibraryInstallationGoalState(testInstallationState);
-            testGoalState.InstalledFiles.Add(Path.Combine(mockInteraction.WorkingDirectory, "testDestination", "test.js"), Path.Combine(mockInteraction.WorkingDirectory, "test.js"));
+            Dictionary<string, string> installedFiles = new()
+            {
+                { Path.Combine(mockInteraction.WorkingDirectory, "testDestination", "test.js"), Path.Combine(mockInteraction.WorkingDirectory, "test.js")}
+            };
+            var testGoalState = new LibraryInstallationGoalState(testInstallationState, installedFiles);
             var mockDependencies = new Dependencies(mockInteraction, new IProvider[]
             {
                 new Mocks.Provider(mockInteraction)

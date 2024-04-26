@@ -247,7 +247,6 @@ namespace Microsoft.Web.LibraryManager.Providers
 
         private OperationResult<LibraryInstallationGoalState> GenerateGoalState(ILibraryInstallationState desiredState, ILibrary library)
         {
-            var goalState = new LibraryInstallationGoalState(desiredState);
             List<IError> errors = null;
 
             if (string.IsNullOrEmpty(desiredState.DestinationPath))
@@ -265,6 +264,7 @@ namespace Microsoft.Web.LibraryManager.Providers
                 outFiles = FileGlobbingUtility.ExpandFileGlobs(desiredState.Files, library.Files.Keys);
             }
 
+            Dictionary<string, string> installFiles = new();
             if (library.GetInvalidFiles(outFiles.ToList()) is IReadOnlyList<string> invalidFiles
                 && invalidFiles.Count > 0)
             {
@@ -287,9 +287,8 @@ namespace Microsoft.Web.LibraryManager.Providers
                 string sourceFile = GetCachedFileLocalPath(desiredState, outFile);
                 sourceFile = FileHelpers.NormalizePath(sourceFile);
 
-                // TODO: make goalState immutable
                 // map destination back to the library-relative file it originated from
-                goalState.InstalledFiles.Add(destinationFile, sourceFile);
+                installFiles.Add(destinationFile, sourceFile);
             }
 
             if (errors is not null)
@@ -297,6 +296,7 @@ namespace Microsoft.Web.LibraryManager.Providers
                 return OperationResult<LibraryInstallationGoalState>.FromErrors([.. errors]);
             }
 
+            var goalState = new LibraryInstallationGoalState(desiredState, installFiles);
             return OperationResult<LibraryInstallationGoalState>.FromSuccess(goalState);
         }
 
