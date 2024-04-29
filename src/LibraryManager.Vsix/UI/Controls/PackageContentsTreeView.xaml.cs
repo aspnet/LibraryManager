@@ -31,7 +31,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
                 if (packageItem != null)
                 {
-                    packageItem.IsChecked = !packageItem.IsChecked;
+                    if (packageItem.IsChecked.HasValue)
+                    {
+                        packageItem.IsChecked = !packageItem.IsChecked;
+                    }
+                    else
+                    {
+                        // if it is partially checked, clear all selections, just like clicking with the mouse
+                        packageItem.IsChecked = false;
+                    }
                     e.Handled = true;
                 }
             }
