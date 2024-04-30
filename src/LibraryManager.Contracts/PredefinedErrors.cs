@@ -199,6 +199,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
             => new Error("LIB020", string.Format(Text.ErrorFilePathIsEmpty, libraryId));
 
         /// <summary>
+        /// The manifest must specify a version
+        /// </summary>
+        public static IError MissingManifestVersion()
+            => new Error("LIB022", Text.ErrorMissingManifestVersion);
+
+        /// <summary>
         /// Unknown error occurred
         /// </summary>
         /// <returns></returns>

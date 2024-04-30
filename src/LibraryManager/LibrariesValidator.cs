@@ -80,12 +80,17 @@ namespace Microsoft.Web.LibraryManager
 
             if (manifest == null)
             {
-                return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.ManifestMalformed()) };
+                return [LibraryOperationResult.FromError(PredefinedErrors.ManifestMalformed())];
+            }
+
+            if (string.IsNullOrEmpty(manifest.Version))
+            {
+                return [LibraryOperationResult.FromError(PredefinedErrors.MissingManifestVersion())];
             }
 
             if (!IsValidManifestVersion(manifest.Version))
             {
-                return new ILibraryOperationResult[] { LibraryOperationResult.FromError(PredefinedErrors.VersionIsNotSupported(manifest.Version)) };
+                return [LibraryOperationResult.FromError(PredefinedErrors.VersionIsNotSupported(manifest.Version))];
             }
 
             return await GetLibrariesErrorsAsync(manifest.Libraries, dependencies, manifest.DefaultDestination, manifest.DefaultProvider, cancellationToken);
