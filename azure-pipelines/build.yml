@@ -58,7 +58,7 @@ steps:
       prSourceBranchPrefix: 'locfiles'
       isAutoCompletePrSelected: false
       packageSourceAuth: patAuth
-      patVariable: '$(OneLocBuildPat)'
+      dependencyPackageSource: $(LocDependencyPackageSource)
     condition: ne(variables['Build.Reason'], 'PullRequest')
 
 - task: CopyFiles@1
