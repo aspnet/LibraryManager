@@ -37,9 +37,6 @@
     <!-- For NuGet packaging, files get put in $(PublishDir) and should be signed there instead of $(OutputDir) -->
     <!-- Also note, it uses @(PublishedFilesToSign) instead of @(FilesToSign).  See target SignPublishedFiles -->
     <ItemGroup>
-      <PublishedFilesToSign Include="$(PublishDir)\Minimatch.dll">
-        <Authenticode>3PartySHA2</Authenticode>
-      </PublishedFilesToSign>
       <PublishedFilesToSign Include="$(PublishDir)\Newtonsoft.Json.dll">
         <Authenticode>3PartySHA2</Authenticode>
       </PublishedFilesToSign>
