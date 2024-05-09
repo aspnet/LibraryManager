@@ -119,7 +119,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             InstallDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
             if (string.IsNullOrWhiteSpace(InstallDestination))
             {
-                string destinationHint = Path.Combine(Settings.DefaultDestinationRoot, ProviderToUse.GetSuggestedDestination(library));
+                string destinationHint = string.Join('/', Settings.DefaultDestinationRoot, ProviderToUse.GetSuggestedDestination(library));
                 InstallDestination = GetUserInputWithDefault(
                     fieldName: nameof(Destination),
                     defaultFieldValue: destinationHint,
@@ -130,6 +130,12 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             if (string.IsNullOrWhiteSpace(_manifest.DefaultDestination) && string.IsNullOrWhiteSpace(destinationToUse))
             {
                 destinationToUse = InstallDestination;
+            }
+
+            if (destinationToUse is not null)
+            {
+                // in case the user changed the suggested default, normalize separator to /
+                destinationToUse = destinationToUse.Replace('\\', '/');
             }
 
             ILibraryOperationResult result = await _manifest.InstallLibraryAsync(
