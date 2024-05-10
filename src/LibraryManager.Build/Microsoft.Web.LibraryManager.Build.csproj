@@ -55,7 +55,7 @@
         but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
         -->
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\**\Microsoft.Web.LibraryManager*.dll;$(OutputPath)\**\Minimatch.dll;$(OutputPath)\**\Newtonsoft.Json.dll" Exclude="$(OutputPath)\**\Microsoft.Web.LibraryManager.Build.dll">
+      <_PackageFiles Include="$(OutputPath)\**\Microsoft.Web.LibraryManager*.dll;$(OutputPath)\**\Newtonsoft.Json.dll" Exclude="$(OutputPath)\**\Microsoft.Web.LibraryManager.Build.dll">
         <PackagePath>tools\%(RecursiveDir)</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
