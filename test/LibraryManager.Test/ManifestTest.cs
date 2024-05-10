@@ -235,7 +235,7 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        public async Task RestorAsync_ConflictingLibraries_Validate()
+        public async Task RestoreAsync_ConflictingLibraries_Validate()
         {
             var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
 
@@ -246,7 +246,7 @@ namespace Microsoft.Web.LibraryManager.Test
         }
 
         [TestMethod]
-        public async Task RestorAsync_ConflictingLibraries_Restore()
+        public async Task RestoreAsync_ConflictingLibraries_Restore()
         {
             var manifest = Manifest.FromJson(_docConflictingLibraries, _dependencies);
 
@@ -261,6 +261,19 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             var manifest = Manifest.FromJson("{", _dependencies);
             Assert.IsNull(manifest);
+        }
+
+        [TestMethod]
+        public async Task FromJson_MissingManifestVersion()
+        {
+            var manifest = Manifest.FromJson("{}", _dependencies);
+
+            List<ILibraryOperationResult> result = (await manifest.GetValidationResultsAsync(CancellationToken.None)).ToList();
+
+            Assert.AreEqual(1, result.Count);
+            Assert.IsFalse(result[0].Success);
+            Assert.AreEqual(1, result[0].Errors.Count);
+            Assert.AreEqual("LIB022", result[0].Errors[0].Code);
         }
 
         [TestMethod]

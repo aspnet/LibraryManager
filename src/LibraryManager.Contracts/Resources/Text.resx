@@ -187,4 +187,7 @@ Valid files are {2}</value>
   <data name="ErrorFilePathIsEmpty" xml:space="preserve">
     <value>The library "{0}" cannot specify a file with an empty name</value>
   </data>
+  <data name="ErrorMissingManifestVersion" xml:space="preserve">
+    <value>The Library Manager manifest must specify a version.</value>
+  </data>
 </root>
