@@ -7,7 +7,6 @@
     <PackageId>Microsoft.Web.LibraryManager</PackageId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Minimatch" NoWarn="NU1603" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" />
     <PackageReference Include="System.ValueTuple" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
