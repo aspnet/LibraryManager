@@ -385,7 +385,6 @@
   <ItemGroup>
     <ThirdPartyAssemblies Include="$(OutputPath)\MessagePack.dll" />
     <ThirdPartyAssemblies Include="$(OutputPath)\MessagePack.Annotations.dll" />
-    <ThirdPartyAssemblies Include="$(OutputPath)\Minimatch.dll" />
     <ThirdPartyAssemblies Include="$(OutputPath)\Nerdbank.Streams.dll" />
     <FilesToSign Include="@(ThirdPartyAssemblies)">
       <Authenticode>3PartySHA2</Authenticode>

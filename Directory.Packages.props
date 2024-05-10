@@ -28,7 +28,6 @@
     <PackageVersion Include="Microsoft.WebTools.Languages.Json" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Json.Editor" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Json.VS" Version="$(WebToolsPackageVersion)" />
-    <PackageVersion Include="MiniMatch" Version="2.0.0" />
     <PackageVersion Include="Moq" Version="4.10.1" />
     <PackageVersion Include="NerdBank.GitVersioning" Version="3.3.37" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
