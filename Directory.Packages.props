@@ -14,7 +14,7 @@
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
     <PackageVersion Include="Microsoft.VisualStudio.Editor" Version="17.7.188" />
-    <PackageVersion Include="Microsoft.VisualStudio.Internal.MicroBuild" Version="2.0.65" />
+    <PackageVersion Include="Microsoft.VisualStudio.Internal.MicroBuild" Version="2.0.66" />
     <PackageVersion Include="Microsoft.VisualStudio.Language.Intellisense" Version="17.7.188" />
     <PackageVersion Include="Microsoft.VisualStudio.Settings.15.0" Version="17.5.33428.388" />
     <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.7.37355" />
@@ -28,10 +28,10 @@
     <PackageVersion Include="Microsoft.WebTools.Languages.Json" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Json.Editor" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Json.VS" Version="$(WebToolsPackageVersion)" />
-    <PackageVersion Include="Moq" Version="4.10.1" />
-    <PackageVersion Include="NerdBank.GitVersioning" Version="3.3.37" />
+    <PackageVersion Include="Moq" Version="4.20.70" />
+    <PackageVersion Include="NerdBank.GitVersioning" Version="3.6.133" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageVersion Include="Nuget.VisualStudio" Version="6.0.0" />
+    <PackageVersion Include="Nuget.VisualStudio" Version="17.7.1" />
 
     <PackageVersion Include="System.Collections.Immutable" Version="7.0.0" />
     <PackageVersion Include="System.Memory" Version="4.5.5" />
@@ -45,7 +45,7 @@
 
     <!-- Test references -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
-    <PackageVersion Include="Microsoft.Test.Apex.VisualStudio" Version="17.7.34031.279" />
+    <PackageVersion Include="Microsoft.Test.Apex.VisualStudio" Version="17.10.34923.60" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.0.3" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.0.3" />
 

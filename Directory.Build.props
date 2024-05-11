@@ -31,6 +31,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Internal.MicroBuild" PrivateAssets="All" />
-    <PackageReference Include="NerdBank.GitVersioning" PrivateAssets="All" />
+    <PackageReference Include="NerdBank.GitVersioning" PrivateAssets="All" Condition="!Exists('packages.config')" />
   </ItemGroup>
 </Project>

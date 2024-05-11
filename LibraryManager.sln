@@ -30,12 +30,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E67307E3
 		build\PackageVersions.targets = build\PackageVersions.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryManager.Vsix", "src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager", "src\LibraryManager\Microsoft.Web.LibraryManager.csproj", "{707356DD-96B9-49F6-AF2A-9D23B857A1E2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FF466454-426B-4AD7-8B00-D50011BE716F} = {FF466454-426B-4AD7-8B00-D50011BE716F}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.LibraryManager.Vsix", "src\LibraryManager.Vsix\Microsoft.Web.LibraryManager.Vsix.csproj", "{EDA2179C-D952-449F-9A3D-8B3A152D6E5A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Web.LibraryManager.Test", "test\LibraryManager.Test\Microsoft.Web.LibraryManager.Test.csproj", "{08C91CC3-4057-4D76-8B9A-B6A0557B64EB}"
 EndProject
