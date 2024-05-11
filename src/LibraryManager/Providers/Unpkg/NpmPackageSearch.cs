@@ -67,7 +67,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     //      {
                     //          "package": {
                     //              "name":"@types/d3-selection",
-                    //              /* lots of other crap */
+                    //              /* lots of other content */
                     //          }
                     //      },
                     //      {
