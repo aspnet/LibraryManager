@@ -98,6 +98,18 @@ namespace Microsoft.Web.LibraryManager.Providers
             try
             {
                 ILibraryCatalog catalog = GetCatalog();
+
+                if (string.Equals(desiredState.Version, ManifestConstants.LatestVersion, StringComparison.Ordinal))
+                {
+                    // replace the @latest version with the latest version from the catalog.  This redirect
+                    // ensures that as new versions are released, we will not reuse stale "latest" assets
+                    // from the cache.
+                    string latestVersion = await catalog.GetLatestVersion(libraryId, includePreReleases: false, cancellationToken).ConfigureAwait(false);
+                    LibraryInstallationState newState = LibraryInstallationState.FromInterface(desiredState);
+                    newState.Version = latestVersion;
+                    desiredState = newState;
+                }
+
                 ILibrary library = await catalog.GetLibraryAsync(desiredState.Name, desiredState.Version, cancellationToken).ConfigureAwait(false);
 
                 if (library == null)

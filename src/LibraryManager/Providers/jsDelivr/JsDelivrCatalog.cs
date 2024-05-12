@@ -23,7 +23,6 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
         public const string LatestLibraryVersionUrl = "https://data.jsdelivr.com/v1/package/npm/{0}";
         public const string LibraryFileListUrlFormatGH = "https://data.jsdelivr.com/v1/package/gh/{0}/flat";
         public const string LatestLibraryVersionUrlGH = "https://data.jsdelivr.com/v1/package/gh/{0}";
-        public const string LatestVersionTag = "latest";
 
         private readonly INpmPackageInfoFactory _packageInfoFactory;
         private readonly INpmPackageSearch _packageSearch;
@@ -61,7 +60,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                 bool isGitHub = IsGitHub(libraryId);
                 string latestLibraryVersionUrl = string.Format(isGitHub ? LatestLibraryVersionUrlGH : LatestLibraryVersionUrl, name);
                 string cacheFileType = isGitHub ? "github" : "npm";
-                string latestLibraryVersionCacheFile = Path.Combine(_cacheFolder, name, $"{cacheFileType}-{LatestVersionTag}.json");
+                string latestLibraryVersionCacheFile = Path.Combine(_cacheFolder, name, $"{cacheFileType}-{ManifestConstants.LatestVersion}.json");
 
                 string latestVersionContent = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(latestLibraryVersionUrl,
                                                                                                            latestLibraryVersionCacheFile,
@@ -116,7 +115,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             }
 
             string libraryId = _libraryNamingScheme.GetLibraryId(name, version);
-            if (string.Equals(version, LatestVersionTag, StringComparison.Ordinal))
+            if (string.Equals(version, ManifestConstants.LatestVersion, StringComparison.Ordinal))
             {
                 string latestVersion = await GetLatestVersion(libraryId, includePreReleases: false, cancellationToken).ConfigureAwait(false);
                 libraryId = _libraryNamingScheme.GetLibraryId(name, latestVersion);
@@ -288,8 +287,8 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
                     // support @latest version
                     completions.Add(new CompletionItem
                     {
-                        DisplayText = LatestVersionTag,
-                        InsertionText = _libraryNamingScheme.GetLibraryId(name, LatestVersionTag),
+                        DisplayText = ManifestConstants.LatestVersion,
+                        InsertionText = _libraryNamingScheme.GetLibraryId(name, ManifestConstants.LatestVersion),
                     });
 
                     completionSet.CompletionType = CompletionSortOrder.Version;

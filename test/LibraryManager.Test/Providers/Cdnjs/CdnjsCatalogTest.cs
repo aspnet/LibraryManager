@@ -135,6 +135,19 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
         }
 
         [TestMethod]
+        public async Task GetLibraryAsync_LatestVersion_Success()
+        {
+            CdnjsCatalog sut = SetupCatalog();
+
+            ILibrary library = await sut.GetLibraryAsync("sampleLibrary", "latest", CancellationToken.None);
+
+            Assert.IsNotNull(library);
+            Assert.AreEqual("sampleLibrary", library.Name);
+            Assert.AreEqual("3.1.4", library.Version);
+            Assert.IsNotNull(library.Files);
+        }
+
+        [TestMethod]
         public async Task GetLibraryAsync_InvalidLibraryId()
         {
             CdnjsCatalog sut = SetupCatalog();

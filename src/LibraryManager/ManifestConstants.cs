@@ -48,5 +48,10 @@ namespace Microsoft.Web.LibraryManager
         /// libman.json files element 
         /// </summary>
         public const string Files = "files";
+
+        /// <summary>
+        /// For providers that support versioned libraries, this represents the evergreen latest version
+        /// </summary>
+        public const string LatestVersion = "latest";
     }
 }
