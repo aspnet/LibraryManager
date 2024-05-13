@@ -62,7 +62,7 @@ namespace Microsoft.Web.LibraryManager.Cache
 #pragma warning disable CA2000 // Dispose objects before losing scope
             var httpMessageHandler = new HttpClientHandler();
 #pragma warning restore CA2000 // Dispose objects before losing scope
-            if (_settings.TryGetValue("forcetls12", out string value) && value.Length > 0)
+            if (_settings.TryGetValue(Constants.ForceTls12, out string value) && value.Length > 0)
             {
                 httpMessageHandler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
             }

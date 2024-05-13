@@ -17,5 +17,6 @@ namespace Microsoft.Web.LibraryManager.Configuration
         public const string HttpsProxyPassword = "https_proxy.password";
         public const string HttpsProxyBypass = "https_proxy.bypass";
 
+        public const string ForceTls12 = "forcetls12";
     }
 }
