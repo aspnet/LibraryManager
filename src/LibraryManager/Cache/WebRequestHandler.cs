@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Configuration;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Contracts.Configuration;
 using Microsoft.Web.LibraryManager.Helpers;
 
 namespace Microsoft.Web.LibraryManager.Cache
@@ -20,12 +21,14 @@ namespace Microsoft.Web.LibraryManager.Cache
     {
         private readonly ConcurrentDictionary<string, HttpClient> _cachedHttpClients = new ConcurrentDictionary<string, HttpClient>();
 
-        public static IWebRequestHandler Instance { get; } = new WebRequestHandler(ProxySettings.Default);
+        public static IWebRequestHandler Instance { get; } = new WebRequestHandler(ProxySettings.Default, Settings.DefaultSettings);
         private readonly ProxySettings _proxySettings;
+        private readonly ISettings _settings;
 
-        public WebRequestHandler(ProxySettings proxySettings)
+        public WebRequestHandler(ProxySettings proxySettings, ISettings settings)
         {
             _proxySettings = proxySettings;
+            _settings = settings;
         }
 
         public void Dispose()
@@ -55,9 +58,14 @@ namespace Microsoft.Web.LibraryManager.Cache
 
         private HttpClient CreateHttpClient(string url)
         {
+            
 #pragma warning disable CA2000 // Dispose objects before losing scope
             var httpMessageHandler = new HttpClientHandler();
 #pragma warning restore CA2000 // Dispose objects before losing scope
+            if (_settings.TryGetValue(Constants.ForceTls12, out string value) && value.Length > 0)
+            {
+                httpMessageHandler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+            }
             httpMessageHandler.Proxy = _proxySettings.GetProxy(new Uri(url));
             var httpClient = new HttpClient(httpMessageHandler);
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"LibraryManager/{ThisAssembly.AssemblyFileVersion}");
