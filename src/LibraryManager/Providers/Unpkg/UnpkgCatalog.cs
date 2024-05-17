@@ -20,7 +20,6 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         public const string CacheFileName = "cache.json";
         public const string LibraryFileListUrlFormat = "https://unpkg.com/{0}@{1}/?meta"; // e.g. https://unpkg.com/jquery@3.3.1/?meta
         public const string LatestLibraryVersonUrl = "https://unpkg.com/{0}/package.json"; // e.g. https://unpkg.com/jquery/package.json
-        public const string LatestVersionTag = "latest";
 
         private readonly INpmPackageInfoFactory _packageInfoFactory;
         private readonly INpmPackageSearch _packageSearch;
@@ -58,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             try
             {
                 string latestLibraryVersionUrl = string.Format(LatestLibraryVersonUrl, libraryName);
-                string latestCacheFile = Path.Combine(_cacheFolder, libraryName, $"{LatestVersionTag}.json");
+                string latestCacheFile = Path.Combine(_cacheFolder, libraryName, $"{ManifestConstants.LatestVersion}.json");
 
                 string latestJson = await _cacheService.GetContentsFromUriWithCacheFallbackAsync(latestLibraryVersionUrl,
                                                                                                  latestCacheFile,
@@ -88,7 +87,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
             }
 
             string libraryId = _libraryNamingScheme.GetLibraryId(libraryName, version);
-            if (string.Equals(version, LatestVersionTag, StringComparison.Ordinal))
+            if (string.Equals(version, ManifestConstants.LatestVersion, StringComparison.Ordinal))
             {
                 string latestVersion = await GetLatestVersion(libraryId, includePreReleases: false, cancellationToken).ConfigureAwait(false);
                 libraryId = _libraryNamingScheme.GetLibraryId(libraryName, latestVersion);
@@ -263,8 +262,8 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     // support @latest version
                     completions.Add(new CompletionItem
                     {
-                        DisplayText = LatestVersionTag,
-                        InsertionText = _libraryNamingScheme.GetLibraryId(name, LatestVersionTag),
+                        DisplayText = ManifestConstants.LatestVersion,
+                        InsertionText = _libraryNamingScheme.GetLibraryId(name, ManifestConstants.LatestVersion),
                     });
 
                     completionSet.CompletionType = CompletionSortOrder.Version;

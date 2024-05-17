@@ -20,7 +20,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
         // TO DO: These should become Provider properties to be passed to CacheService
         private const string FileName = "cache.json";
         public const string CatalogUrl = "https://api.cdnjs.com/libraries?fields=name,description,version";
-        public const string MetaPackageUrlFormat =    "https://api.cdnjs.com/libraries/{0}?fields=filename,versions"; // {libraryName}
+        public const string MetaPackageUrlFormat = "https://api.cdnjs.com/libraries/{0}?fields=filename,versions"; // {libraryName}
         public const string PackageVersionUrlFormat = "https://api.cdnjs.com/libraries/{0}/{1}?fields=files";         // {libraryName}/{version}
 
         private readonly string _cacheFile;
@@ -150,7 +150,13 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
 
-            if (!(await GetLibraryVersionsAsync(libraryName, cancellationToken)).Contains(version))
+            if (string.Equals(version, ManifestConstants.LatestVersion, StringComparison.Ordinal))
+            {
+                version = await GetLatestVersion(libraryName, includePreReleases: false, cancellationToken);
+            }
+
+            IEnumerable<string> enumerable = await GetLibraryVersionsAsync(libraryName, cancellationToken);
+            if (!enumerable.Contains(version))
             {
                 throw new InvalidLibraryException(libraryId, _provider.Id);
             }
@@ -160,7 +166,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 JObject groupMetadata = await GetLibraryGroupMetadataAsync(libraryName, cancellationToken);
                 string defaultFile = groupMetadata?["filename"].Value<string>() ?? string.Empty;
 
-                IEnumerable<string> libraryFiles= await GetLibraryFilesAsync(libraryName, version, cancellationToken).ConfigureAwait(false);
+                IEnumerable<string> libraryFiles = await GetLibraryFilesAsync(libraryName, version, cancellationToken).ConfigureAwait(false);
 
                 return new CdnjsLibrary
                 {
