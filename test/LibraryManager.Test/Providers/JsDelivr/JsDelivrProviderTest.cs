@@ -100,8 +100,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
 
-            // Unknown exception. We no longer validate ILibraryState at the provider level
-            Assert.AreEqual("LIB000", result.Errors[0].Code);
+            Assert.AreEqual("LIB021", result.Errors[0].Code);
         }
 
         [TestMethod]
@@ -148,10 +147,17 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
                 Files = new[] { "dist/*.js", "!dist/*min*" },
             };
 
+            // Verify expansion of Files
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(desiredState, CancellationToken.None);
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
+            // Remove the project folder and "/lib/" from the file paths
+            List<string> installedFiles = goalState.InstalledFiles.Keys.Select(f => f.Substring(_projectFolder.Length + 5).Replace("\\", "/")).ToList();
+            CollectionAssert.AreEquivalent(new[] { "dist/core.js", "dist/jquery.js", "dist/jquery.slim.js" }, installedFiles);
+
             // Install library
             ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
-            CollectionAssert.AreEquivalent(new[] { "dist/core.js", "dist/jquery.js", "dist/jquery.slim.js" }, result.InstallationState.Files.ToList());
         }
 
         [TestMethod]

@@ -17,11 +17,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
     public static class PredefinedErrors
     {
         /// <summary>
-        /// Represents an unhandled exception that occured in the provider.
+        /// Represents an unhandled exception that occurred in the provider.
         /// </summary>
         /// <remarks>
         /// An <see cref="IProvider.InstallAsync"/> should never throw and this error
-        /// should be used as when catching generic exeptions.
+        /// should be used as when catching generic exceptions.
         /// </remarks>
         /// <returns>The error code LIB000</returns>
         public static IError UnknownException()
@@ -197,6 +197,12 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         public static IError FileNameMustNotBeEmpty(string libraryId)
             => new Error("LIB020", string.Format(Text.ErrorFilePathIsEmpty, libraryId));
+
+        /// <summary>
+        /// A library mapping does not have a destination specified
+        /// </summary>
+        public static IError DestinationNotSpecified(string libraryId)
+            => new Error("LIB021", string.Format(Text.ErrorDestinationNotSpecified, libraryId));
 
         /// <summary>
         /// The manifest must specify a version

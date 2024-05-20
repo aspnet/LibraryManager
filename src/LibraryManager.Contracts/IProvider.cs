@@ -66,5 +66,10 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         /// <param name="library"></param>
         string GetSuggestedDestination(ILibrary library);
+
+        /// <summary>
+        /// Gets the goal state of the library installation.  Does not imply actual installation.
+        /// </summary>
+        Task<OperationResult<LibraryInstallationGoalState>> GetInstallationGoalStateAsync(ILibraryInstallationState installationState, CancellationToken cancellationToken);
     }
 }

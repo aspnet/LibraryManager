@@ -100,8 +100,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
             ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
 
-            // Unknown exception. We no longer validate ILibraryState at the provider level
-            Assert.AreEqual("LIB000", result.Errors[0].Code);
+            Assert.AreEqual("LIB021", result.Errors[0].Code);
         }
 
         [TestMethod]
@@ -148,11 +147,16 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.Cdnjs
                 Files = new[] { "*.js", "!*.min.js" },
             };
 
+            // Verify expansion of Files
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(desiredState, CancellationToken.None);
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
+            Assert.AreEqual(1, goalState.InstalledFiles.Count);
+            Assert.AreEqual("jquery.js", Path.GetFileName(goalState.InstalledFiles.Keys.First()));
+
             // Install library
             ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(result.InstallationState.Files.Count == 1); // jquery.min.js file was excluded
-            Assert.AreEqual("jquery.js", result.InstallationState.Files.First());
         }
 
         [TestMethod]

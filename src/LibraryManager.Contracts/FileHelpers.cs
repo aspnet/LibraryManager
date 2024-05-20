@@ -374,9 +374,21 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 && normalizedFilePath.StartsWith(normalizedRootDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
-        internal static string NormalizePath(string path)
+        /// <summary>
+        /// Normalizes the path string so it can be easily compared.
+        /// </summary>
+        /// <remarks>
+        /// Result will be lowercase and have any trailing slashes removed.
+        /// </remarks>
+        public static string NormalizePath(string path)
         {
             if (string.IsNullOrEmpty(path))
+            {
+                return path;
+            }
+
+            // If the path is a URI, we don't want to normalize it
+            if (IsHttpUri(path))
             {
                 return path;
             }
@@ -393,6 +405,15 @@ namespace Microsoft.Web.LibraryManager.Contracts
             }
 
             return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Determines if the path is an HTTP or HTTPS Uri
+        /// </summary>
+        public static bool IsHttpUri(string path)
+        {
+            return Uri.TryCreate(path, UriKind.Absolute, out Uri uri)
+                && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
         }
     }
 }
