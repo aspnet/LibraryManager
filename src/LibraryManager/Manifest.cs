@@ -26,7 +26,7 @@ namespace Microsoft.Web.LibraryManager
         /// <summary>
         /// Supported versions of Library Manager
         /// </summary>
-        public static readonly Version[] SupportedVersions = { new Version("1.0") };
+        public static readonly Version[] SupportedVersions = { new Version("1.0"), new Version("3.0") };
         private IHostInteraction _hostInteraction;
         private readonly List<ILibraryInstallationState> _libraries;
         private IDependencies _dependencies;
