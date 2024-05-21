@@ -183,7 +183,8 @@
     <PackageReference Include="Microsoft.WebTools.Languages.Json.Editor" />
     <PackageReference Include="Microsoft.WebTools.Languages.Json.VS" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="Nuget.VisualStudio" />
+    <PackageReference Include="NuGet.VisualStudio" />
+    <PackageReference Include="NuGet.VisualStudio.Contracts" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="Commands\CommandTable\VSCommandTable.en.vsct">
