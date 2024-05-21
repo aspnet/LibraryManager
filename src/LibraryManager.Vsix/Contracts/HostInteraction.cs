@@ -121,7 +121,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
             }
 
             await VsHelpers.CheckFileOutOfSourceControlAsync(absoluteDestinationPath);
-            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
+            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, Logger, cancellationToken);
 
             if (result)
             {

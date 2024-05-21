@@ -83,7 +83,7 @@ namespace Microsoft.Web.LibraryManager.Build.Contracts
                 throw new UnauthorizedAccessException();
             }
 
-            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
+            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, Logger, cancellationToken);
             if (result)
             {
                 Logger.Log(string.Format(Resources.Text.FileWrittenToDisk, destinationPath.Replace('\\', '/')), LogLevel.Operation);

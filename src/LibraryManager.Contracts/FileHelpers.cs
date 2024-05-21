@@ -136,21 +136,22 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         /// <param name="sourceFile">Full path to the source file</param>
         /// <param name="destinationFile">Full path to the destination file</param>
+        /// <param name="logger">Pass logger to log errors.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A boolean indicating whether the file was copied successfully</returns>
-        public static async Task<bool> CopyFileAsync(string sourceFile, string destinationFile, CancellationToken cancellationToken)
+        public static async Task<bool> CopyFileAsync(string sourceFile, string destinationFile, ILogger logger, CancellationToken cancellationToken)
         {
             try
             {
-                using (FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read))
-                {
-                    await WriteToFileAsync(destinationFile, sourceStream, cancellationToken);
-                }
+                using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read);
+
+                await WriteToFileAsync(destinationFile, sourceStream, cancellationToken);
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                logger.Log($"Error during copying file {exception}", LogLevel.Error);
                 return false;
             }
         }
