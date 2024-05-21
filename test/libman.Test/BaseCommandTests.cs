@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             command.DefaultProvider = "cdnjs";
             command.Execute();
 
-            Assert.AreEqual("1.0", command.Manifest.Version);
+            Assert.AreEqual("3.0", command.Manifest.Version);
 
         }
 
