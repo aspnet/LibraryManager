@@ -141,19 +141,23 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// <returns>A boolean indicating whether the file was copied successfully</returns>
         public static async Task<bool> CopyFileAsync(string sourceFile, string destinationFile, ILogger logger, CancellationToken cancellationToken)
         {
-            try
+            //Sometimes it flaky. Let's retry
+            for (int i=0; i<2;i++)
             {
-                using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read);
+                try
+                {
+                    using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read);
 
-                await WriteToFileAsync(destinationFile, sourceStream, cancellationToken);
+                    await WriteToFileAsync(destinationFile, sourceStream, cancellationToken);
 
-                return true;
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    logger.Log($"Error during copying file {exception}", LogLevel.Error);
+                }
             }
-            catch (Exception exception)
-            {
-                logger.Log($"Error during copying file {exception}", LogLevel.Error);
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
