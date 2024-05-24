@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Test.Apex.Editor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NuGet;
 
 namespace Microsoft.Web.LibraryManager.IntegrationTest
 {
