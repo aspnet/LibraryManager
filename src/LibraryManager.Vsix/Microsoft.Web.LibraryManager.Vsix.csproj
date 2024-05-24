@@ -382,14 +382,6 @@
   <ItemGroup>
     <None Include="Commands\CommandTable\LocalizationFiles\VSCommandTable.*.xlf" />
   </ItemGroup>
-  <ItemGroup>
-    <ThirdPartyAssemblies Include="$(OutputPath)\MessagePack.dll" />
-    <ThirdPartyAssemblies Include="$(OutputPath)\MessagePack.Annotations.dll" />
-    <ThirdPartyAssemblies Include="$(OutputPath)\Nerdbank.Streams.dll" />
-    <FilesToSign Include="@(ThirdPartyAssemblies)">
-      <Authenticode>3PartySHA2</Authenticode>
-    </FilesToSign>
-  </ItemGroup>
   <Target Name="PreCreateVsixContainer" BeforeTargets="CreateVsixContainer">
     <ItemGroup>
       <VSIXSourceItem Include="$(OutputPath)%(DstLocales.Identity)\Microsoft.Web.LibraryManager.resources.dll" Condition="Exists('$(OutputPath)\%(DstLocales.Identity)\Microsoft.Web.LibraryManager.resources.dll')">
@@ -411,7 +403,7 @@
     </ItemGroup>
     <ItemGroup>
       <ReferencePath Condition="&#xD;&#xA;              '%(FileName)' == 'Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime'&#xD;&#xA;              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.12.0'&#xD;&#xA;              or '%(FileName)' == 'Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime'&#xD;&#xA;              or '%(FileName)' == 'Nuget.VisualStudio'&#xD;&#xA;              ">
-        <EmbedInteropTypes>true</EmbedInteropTypes>
+        <EmbedInteropTypes>false</EmbedInteropTypes>
       </ReferencePath>
     </ItemGroup>
   </Target>
@@ -423,7 +415,6 @@
       </_VsixSourceItemsFromNuGet>
       <!-- Replace the existing VSIX source items as they are picked up before any signing can occur on them -->
       <VSIXSourceItem Remove="@(_VsixSourceItemsFromNuGet)" />
-      <VSIXSourceItem Include="$(OutputPath)\%(_VsixSourceItemsFromNuGet.FileName)%(_VsixSourceItemsFromNuGet.Extension)" Condition="Exists('$(OutputPath)\%(_VsixSourceItemsFromNuGet.FileName)%(_VsixSourceItemsFromNuGet.Extension)')" />
     </ItemGroup>
   </Target>
 </Project>
