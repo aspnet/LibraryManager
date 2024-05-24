@@ -152,7 +152,7 @@ namespace Microsoft.Web.LibraryManager.Mocks
                 throw new UnauthorizedAccessException();
             }
 
-            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, cancellationToken);
+            bool result = await FileHelpers.CopyFileAsync(sourcePath, absoluteDestinationPath, Logger, cancellationToken);
 
             return result;
         }
