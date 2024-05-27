@@ -48,6 +48,7 @@
     <Compile Include="Commands\InstallLibraryCommand.cs" />
     <Compile Include="Contracts\DependenciesFactory.cs" />
     <Compile Include="Contracts\IDependenciesFactory.cs" />
+    <Compile Include="Json\Completion\FileMappingRootCompletionProvider.cs" />
     <Compile Include="Search\ISearchService.cs" />
     <Compile Include="Search\LocationSearchService.cs" />
     <Compile Include="Search\ProviderCatalogSearchService.cs" />
