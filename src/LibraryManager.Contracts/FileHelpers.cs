@@ -375,7 +375,9 @@ namespace Microsoft.Web.LibraryManager.Contracts
             string normalizedFilePath = NormalizePath(filePath);
             string normalizedRootDirectory = NormalizePath(rootDirectory);
 
-            return normalizedFilePath.Length > normalizedRootDirectory.Length
+            return normalizedFilePath.Length > normalizedRootDirectory.Length + 1
+                // normalization has edge cases where either / or \ may be retained
+                && normalizedFilePath[normalizedRootDirectory.Length] is '/' or '\\'
                 && normalizedFilePath.StartsWith(normalizedRootDirectory, StringComparison.OrdinalIgnoreCase);
         }
 

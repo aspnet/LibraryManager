@@ -14,9 +14,11 @@ namespace Microsoft.Web.LibraryManager.Test
         [DataRow("C:\\dir\\file1.js", "C:\\dir", true)]
         [DataRow("C:\\dir\\", "C:\\dir\\", false)]
         [DataRow("/abc/def/ghi", "\\abc\\def", true)]
-        public void UnderRootDirectory(string path1, string path2, bool expectedResult)
+        [DataRow("abc/def", "abc", true)]
+        [DataRow("abcdef", "abc", false)]
+        public void UnderRootDirectory(string file, string directory, bool expectedResult)
         {
-            Assert.AreEqual(expectedResult, FileHelpers.IsUnderRootDirectory(path1, path2));
+            Assert.AreEqual(expectedResult, FileHelpers.IsUnderRootDirectory(file, directory));
         }
     }
 }
