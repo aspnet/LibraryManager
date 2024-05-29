@@ -73,3 +73,11 @@ extends:
             artifactType: Container
         steps:
         - template: /azure-pipelines/build.yml@self
+
+        - task: 1ES.MicroBuildVstsDrop@1
+          displayName: Upload artifacts to VSTS Drop
+          inputs:
+            dropName: Products/$(System.TeamProject)/$(Build.Repository.Name)/$(Build.SourceBranchName)/$(Build.BuildNumber)
+            dropFolder: '$(Build.ArtifactStagingDirectory)/insertion'
+            accessToken: $(System.AccessToken)
+          condition: and(succeeded(), eq(variables['SignType'], 'Real'))
