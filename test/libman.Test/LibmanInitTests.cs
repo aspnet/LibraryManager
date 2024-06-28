@@ -39,7 +39,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             string contents = File.ReadAllText(libmanFilePath);
 
             string expectedContents = @"{
-  ""version"": ""1.0"",
+  ""version"": ""3.0"",
   ""defaultProvider"": ""cdnjs"",
   ""defaultDestination"": ""wwwroot"",
   ""libraries"": []
@@ -69,7 +69,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             string contents = File.ReadAllText(libmanFilePath);
 
             string expectedContents = @"{
-  ""version"": ""1.0"",
+  ""version"": ""3.0"",
   ""defaultProvider"": ""cdnjs"",
   ""libraries"": []
 }";
@@ -95,7 +95,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             string contents = File.ReadAllText(libmanFilePath);
 
             string expectedContents = @"{
-  ""version"": ""1.0"",
+  ""version"": ""3.0"",
   ""defaultProvider"": ""unpkg"",
   ""libraries"": []
 }";

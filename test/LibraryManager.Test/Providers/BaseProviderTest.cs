@@ -20,6 +20,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
         private IHostInteraction _hostInteraction;
         private ILibrary _library;
         private readonly Mocks.LibraryCatalog _catalog;
+        private readonly BaseProvider _provider;
 
         public BaseProviderTest()
         {
@@ -39,15 +40,21 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
                     { "file1.txt", true },
                     { "file2.txt", false },
                     { "folder/file3.txt", false },
+                    { "folder/subfolder/file4.txt", false },
                 },
             };
 
             _catalog = new Mocks.LibraryCatalog()
                 .AddLibrary(_library);
+
+            _provider = new TestProvider(_hostInteraction, cacheService: null)
+            {
+                Catalog = _catalog,
+            };
         }
 
         [TestMethod]
-        public async Task GenerateGoalState_NoFileMapping_SpecifyFilesAtLibraryLevel()
+        public async Task GetInstallationGoalStateAsync_NoFileMapping_SpecifyFilesAtLibraryLevel()
         {
             ILibraryInstallationState installState = new LibraryInstallationState
             {
@@ -57,25 +64,21 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
                 DestinationPath = "lib/test",
                 Files = ["folder/*.txt"],
             };
-            BaseProvider provider = new TestProvider(_hostInteraction, cacheService: null)
+            Dictionary<string, string> expectedFiles = new()
             {
-                Catalog = _catalog,
+                { "lib/test/folder/file3.txt", "TestProvider/test/1.0/folder/file3.txt" },
             };
-            string expectedDestinationFile1 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.WorkingDirectory, "lib/test/folder/file3.txt"));
-            string expectedSourceFile1 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.CacheDirectory, "TestProvider/test/1.0/folder/file3.txt"));
 
-            OperationResult<LibraryInstallationGoalState> getGoalState = await provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
 
             Assert.IsTrue(getGoalState.Success);
             LibraryInstallationGoalState goalState = getGoalState.Result;
             Assert.IsNotNull(goalState);
-            Assert.AreEqual(1, goalState.InstalledFiles.Count);
-            Assert.IsTrue(goalState.InstalledFiles.TryGetValue(expectedDestinationFile1, out string file1));
-            Assert.AreEqual(expectedSourceFile1, file1);
+            VerifyGoalStateMappings(goalState, expectedFiles);
         }
 
         [TestMethod]
-        public async Task GenerateGoalState_NoFileMapping_NoFilesAtLibraryLevel()
+        public async Task GetInstallationGoalStateAsync_NoFileMapping_NoFilesAtLibraryLevel()
         {
             ILibraryInstallationState installState = new LibraryInstallationState
             {
@@ -84,30 +87,304 @@ namespace Microsoft.Web.LibraryManager.Test.Providers
                 ProviderId = "TestProvider",
                 DestinationPath = "lib/test",
             };
-            BaseProvider provider = new TestProvider(_hostInteraction, cacheService: null)
+            Dictionary<string, string> expectedFiles = new()
             {
-                Catalog = _catalog,
+                { "lib/test/file1.txt", "TestProvider/test/1.0/file1.txt" },
+                { "lib/test/file2.txt", "TestProvider/test/1.0/file2.txt" },
+                { "lib/test/folder/file3.txt", "TestProvider/test/1.0/folder/file3.txt" },
+                { "lib/test/folder/subfolder/file4.txt", "TestProvider/test/1.0/folder/subfolder/file4.txt" },
             };
-            string expectedDestinationFile1 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.WorkingDirectory, "lib/test/file1.txt"));
-            string expectedSourceFile1 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.CacheDirectory, "TestProvider/test/1.0/file1.txt"));
-            string expectedDestinationFile2 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.WorkingDirectory, "lib/test/file2.txt"));
-            string expectedSourceFile2 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.CacheDirectory, "TestProvider/test/1.0/file2.txt"));
-            string expectedDestinationFile3 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.WorkingDirectory, "lib/test/folder/file3.txt"));
-            string expectedSourceFile3 = FileHelpers.NormalizePath(Path.Combine(provider.HostInteraction.CacheDirectory, "TestProvider/test/1.0/folder/file3.txt"));
 
-            OperationResult<LibraryInstallationGoalState> getGoalState = await provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
 
             Assert.IsTrue(getGoalState.Success);
             LibraryInstallationGoalState goalState = getGoalState.Result;
-
             Assert.IsNotNull(goalState);
-            Assert.AreEqual(3, goalState.InstalledFiles.Count);
-            Assert.IsTrue(goalState.InstalledFiles.TryGetValue(expectedDestinationFile1, out string file1));
-            Assert.AreEqual(expectedSourceFile1, file1);
-            Assert.IsTrue(goalState.InstalledFiles.TryGetValue(expectedDestinationFile2, out string file2));
-            Assert.AreEqual(expectedSourceFile2, file2);
-            Assert.IsTrue(goalState.InstalledFiles.TryGetValue(expectedDestinationFile3, out string file3));
-            Assert.AreEqual(expectedSourceFile3, file3);
+            VerifyGoalStateMappings(goalState, expectedFiles);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_NoRootPath_LiteralFile()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Files = ["file1.txt"],
+                    },
+                ],
+            };
+            Dictionary<string, string> expectedFiles = new()
+            {
+                { "lib/test/file1.txt", "TestProvider/test/1.0/file1.txt" },
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
+            Assert.IsNotNull(goalState);
+            VerifyGoalStateMappings(goalState, expectedFiles);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_NoRootPath_FileGlob()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Files = ["*.txt"],
+                    },
+                ],
+            };
+            Dictionary<string, string> expectedFiles = new()
+            {
+                { "lib/test/file1.txt", "TestProvider/test/1.0/file1.txt" },
+                { "lib/test/file2.txt", "TestProvider/test/1.0/file2.txt" },
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
+            Assert.IsNotNull(goalState);
+            VerifyGoalStateMappings(goalState, expectedFiles);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_NoRootPath_FileGlobExclude()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Files = ["**/*.txt", "!file2.txt"],
+                    },
+                ],
+            };
+            Dictionary<string, string> expectedFiles = new()
+            {
+                { "lib/test/file1.txt", "TestProvider/test/1.0/file1.txt" },
+                { "lib/test/folder/file3.txt", "TestProvider/test/1.0/folder/file3.txt" },
+                { "lib/test/folder/subfolder/file4.txt", "TestProvider/test/1.0/folder/subfolder/file4.txt" },
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
+            Assert.IsNotNull(goalState);
+            VerifyGoalStateMappings(goalState, expectedFiles);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_WithRootPath_Glob()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Root = "folder",
+                        Files = ["file3.txt"],
+                    },
+                ],
+            };
+            Dictionary<string, string> expectedFiles = new()
+            {
+                { "lib/test/file3.txt", "TestProvider/test/1.0/folder/file3.txt" },
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
+            Assert.IsNotNull(goalState);
+            VerifyGoalStateMappings(goalState, expectedFiles);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_WithRootPath()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Root = "folder",
+                        Files = ["**/*.txt"],
+                    },
+                ],
+            };
+            Dictionary<string, string> expectedFiles = new()
+            {
+                { "lib/test/file3.txt", "TestProvider/test/1.0/folder/file3.txt" },
+                { "lib/test/subfolder/file4.txt", "TestProvider/test/1.0/folder/subfolder/file4.txt" },
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
+            Assert.IsNotNull(goalState);
+            VerifyGoalStateMappings(goalState, expectedFiles);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_SeparateDestinations()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Files = ["file1.txt"],
+                        Destination = "dest1",
+                    },
+                    new FileMapping
+                    {
+                        Files = ["*.txt"],
+                        Destination = "dest2",
+                    },
+                ],
+            };
+            Dictionary<string, string> expectedFiles = new()
+            {
+                { "dest1/file1.txt", "TestProvider/test/1.0/file1.txt" },
+                { "dest2/file1.txt", "TestProvider/test/1.0/file1.txt" },
+                { "dest2/file2.txt", "TestProvider/test/1.0/file2.txt" },
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsTrue(getGoalState.Success);
+            LibraryInstallationGoalState goalState = getGoalState.Result;
+            Assert.IsNotNull(goalState);
+            VerifyGoalStateMappings(goalState, expectedFiles);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_BadFile_Fails()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Files = ["file1.txt", "file4.txt"],
+                    },
+                ],
+            };
+            Dictionary<string, string> expectedFiles = new()
+            {
+                { "lib/test/file1.txt", "TestProvider/test/1.0/file1.txt" },
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsFalse(getGoalState.Success);
+            Assert.AreEqual("LIB018", getGoalState.Errors[0].Code);
+            Assert.IsNull(getGoalState.Result);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_InvalidDestination_Fails()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Files = ["file1.txt"],
+                        Destination = "../file1.txt",
+                    },
+                ],
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsFalse(getGoalState.Success);
+            Assert.AreEqual("LIB008", getGoalState.Errors[0].Code);
+            Assert.IsNull(getGoalState.Result);
+        }
+
+        [TestMethod]
+        public async Task GetInstallationGoalStateAsync_FileMapping_DestinationConflict_Fails()
+        {
+            ILibraryInstallationState installState = new LibraryInstallationState
+            {
+                Name = "test",
+                Version = "1.0",
+                ProviderId = "TestProvider",
+                DestinationPath = "lib/test",
+                FileMappings = [
+                    new FileMapping
+                    {
+                        Files = ["file1.txt"],
+                    },
+                    new FileMapping
+                    {
+                        // this will conflict with file1.txt
+                        Files = ["*.txt"],
+                    },
+                ],
+            };
+
+            OperationResult<LibraryInstallationGoalState> getGoalState = await _provider.GetInstallationGoalStateAsync(installState, CancellationToken.None);
+
+            Assert.IsFalse(getGoalState.Success);
+            Assert.AreEqual("LIB017", getGoalState.Errors[0].Code);
+            Assert.IsNull(getGoalState.Result);
+        }
+
+        private void VerifyGoalStateMappings(LibraryInstallationGoalState goalState, Dictionary<string, string> expectedFiles)
+        {
+            Assert.AreEqual(expectedFiles.Count, goalState.InstalledFiles.Count);
+
+            foreach (KeyValuePair<string, string> kvp in expectedFiles)
+            {
+                string expectedDestinationFile = FileHelpers.NormalizePath(Path.Combine(_provider.HostInteraction.WorkingDirectory, kvp.Key));
+                string expectedSourceFile = FileHelpers.NormalizePath(Path.Combine(_provider.HostInteraction.CacheDirectory, kvp.Value));
+
+                Assert.IsTrue(goalState.InstalledFiles.TryGetValue(expectedDestinationFile, out string file), $"failed to find expected destination file: {expectedDestinationFile}");
+                Assert.AreEqual(expectedSourceFile, file);
+            }
         }
 
         private class TestProvider : BaseProvider

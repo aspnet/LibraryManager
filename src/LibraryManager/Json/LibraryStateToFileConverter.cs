@@ -1,4 +1,5 @@
-﻿using Microsoft.Web.LibraryManager.Contracts;
+﻿using System.Linq;
+using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 
 namespace Microsoft.Web.LibraryManager.Json
@@ -30,7 +31,8 @@ namespace Microsoft.Web.LibraryManager.Json
                 IsUsingDefaultProvider = string.IsNullOrEmpty(stateOnDisk.ProviderId),
                 ProviderId = provider,
                 DestinationPath = destination,
-                Files = stateOnDisk.Files
+                Files = stateOnDisk.Files,
+                FileMappings = stateOnDisk.FileMappings?.Select(f => new Contracts.FileMapping { Destination = f.Destination, Root = f.Root, Files = f.Files }).ToList(),
             };
 
             (state.Name, state.Version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(stateOnDisk.LibraryId, provider);
@@ -46,13 +48,22 @@ namespace Microsoft.Web.LibraryManager.Json
             }
 
             string provider = string.IsNullOrEmpty(state.ProviderId) ? _defaultProvider : state.ProviderId;
-            return new LibraryInstallationStateOnDisk()
+            var serializeState = new LibraryInstallationStateOnDisk()
             {
                 ProviderId = state.IsUsingDefaultProvider ? null : state.ProviderId,
                 DestinationPath = state.IsUsingDefaultDestination ? null : state.DestinationPath,
                 Files = state.Files,
-                LibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, provider)
+                LibraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, provider),
+                FileMappings = state.FileMappings?.Select(f => new FileMapping { Destination = f.Destination, Root = f.Root, Files = f.Files }).ToList(),
             };
+
+            if (serializeState is { FileMappings: { Count: 0} })
+            {
+                // if FileMappings is empty, omit it from serialization
+                serializeState.FileMappings = null;
+            }
+
+            return serializeState;
         }
     }
 }
