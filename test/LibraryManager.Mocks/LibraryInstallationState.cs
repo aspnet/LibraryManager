@@ -12,41 +12,28 @@ namespace Microsoft.Web.LibraryManager.Mocks
     /// <seealso cref="LibraryManager.Contracts.ILibraryInstallationState" />
     public class LibraryInstallationState : ILibraryInstallationState
     {
-        /// <summary>
-        /// The unique identifier of the provider.
-        /// </summary>
+        /// <inheritdoc />
         public virtual string ProviderId { get; set; }
 
-        /// <summary>
-        /// The list of file names to install
-        /// </summary>
+        /// <inheritdoc />
         public virtual IReadOnlyList<string> Files { get; set; }
 
-        /// <summary>
-        /// The path relative to the working directory to copy the files to.
-        /// </summary>
+        /// <inheritdoc />
         public virtual string DestinationPath { get; set; }
 
-        /// <summary>
-        /// Name of the library.
-        /// </summary>
+        /// <inheritdoc />
         public string Name { get; set; }
 
-        /// <summary>
-        /// Version of the library.
-        /// </summary>
+        /// <inheritdoc />
         public string Version { get; set; }
 
-        /// <summary>
-        /// Indicates whether the library is using the default destination
-        /// </summary>
+        /// <inheritdoc />
         public bool IsUsingDefaultDestination { get; set; }
 
-        /// <summary>
-        /// Indicates whether the library is using the default provider.
-        /// </summary>
+        /// <inheritdoc />
         public bool IsUsingDefaultProvider { get; set; }
 
+        /// <inheritdoc />
         public IReadOnlyList<FileMapping> FileMappings => throw new System.NotImplementedException();
     }
 }
