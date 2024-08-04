@@ -140,8 +140,13 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// </summary>
         public override int GetHashCode()
         {
+#if NET8_0_OR_GREATER
+            return HashCode.Combine(InsertionText, Description);
+#else
             // Much of the time, InsertionText == DisplayText, so XORing those would just cancel out.
+            // So don't include DisplayText in the hash code.
             return InsertionText.GetHashCode() ^ Description.GetHashCode();
+#endif
         }
 
         /// <summary>
