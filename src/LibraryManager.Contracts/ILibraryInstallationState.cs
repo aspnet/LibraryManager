@@ -31,6 +31,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         IReadOnlyList<string> Files { get; }
 
         /// <summary>
+        /// List of mappings of a portion of library assets to a unique destination.
+        /// </summary>
+        IReadOnlyList<FileMapping> FileMappings { get; }
+
+        /// <summary>
         /// The path relative to the working directory to copy the files to.
         /// </summary>
         string DestinationPath { get; }

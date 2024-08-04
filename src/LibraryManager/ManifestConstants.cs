@@ -13,44 +13,54 @@ namespace Microsoft.Web.LibraryManager
     public static class ManifestConstants
     {
         /// <summary>
-        /// libman.json libraries element 
+        /// libman.json libraries element
         /// </summary>
         public const string Version = "version";
 
         /// <summary>
-        /// libman.json libraries element 
+        /// libman.json libraries element
         /// </summary>
         public const string Libraries = "libraries";
 
         /// <summary>
-        /// libman.json library element 
+        /// libman.json library element
         /// </summary>
         public const string Library = "library";
 
         /// <summary>
-        /// libman.json destination element 
+        /// libman.json destination element
         /// </summary>
         public const string Destination = "destination";
 
         /// <summary>
-        /// libman.json defaultDestination element 
+        /// libman.json defaultDestination element
         /// </summary>
         public const string DefaultDestination = "defaultDestination";
 
         /// <summary>
-        /// libman.json provider element 
+        /// libman.json provider element
         /// </summary>
         public const string Provider = "provider";
 
         /// <summary>
-        /// libman.json defaultProvider element 
+        /// libman.json defaultProvider element
         /// </summary>
         public const string DefaultProvider = "defaultProvider";
 
         /// <summary>
-        /// libman.json files element 
+        /// libman.json files element
         /// </summary>
         public const string Files = "files";
+
+        /// <summary>
+        /// libman.json fileMappings element
+        /// </summary>
+        public const string FileMappings = "fileMappings";
+
+        /// <summary>
+        /// libman.json root element
+        /// </summary>
+        public const string Root = "root";
 
         /// <summary>
         /// For providers that support versioned libraries, this represents the evergreen latest version

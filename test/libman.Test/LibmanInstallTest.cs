@@ -36,7 +36,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             string text = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
             string expectedText = @"{
-  ""version"": ""1.0"",
+  ""version"": ""3.0"",
   ""defaultProvider"": ""cdnjs"",
   ""libraries"": [
     {
@@ -64,7 +64,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             string text = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
             string expectedText = @"{
-  ""version"": ""1.0"",
+  ""version"": ""3.0"",
   ""defaultProvider"": ""cdnjs"",
   ""libraries"": [
     {
