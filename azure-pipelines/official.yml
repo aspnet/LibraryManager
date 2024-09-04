@@ -4,6 +4,18 @@ trigger:
   paths:
     exclude: ["*.md"]
 
+schedules:
+  - cron: "0 8 23-29 * 0"
+    displayName: "Monthly build check"
+    branches:
+      include: 
+        - main
+        - rel/*
+      exclude: 
+        - ""
+    always: true # Run even if there have been no source code changes since the last successful scheduled run
+    batch: false # Do not run the pipeline if the previously scheduled run is in-progress
+
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   BuildConfiguration: Release
