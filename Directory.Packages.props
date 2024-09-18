@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <!-- This is due to noise caused from the Minimatch package, tracked at https://github.com/SLaks/Minimatch/issues/12 -->
     <NoWarn>$(NoWarn);NU1603</NoWarn>
     <WebToolsPackageVersion>17.7.273</WebToolsPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Build.Framework" Version="17.8.3" />
     <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="17.8.3" />
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.8.3" />
@@ -22,7 +23,7 @@
     <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="17.7.57" />
     <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.7.30" />
     <PackageVersion Include="Microsoft.VisualStudio.Validation" Version="17.6.11" />
-    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.7.2196" />
+    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.10.2185" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Css" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Shared" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Shared.Editor" Version="$(WebToolsPackageVersion)" />
@@ -41,10 +42,11 @@
     <PackageVersion Include="System.Runtime" Version="4.3.0" />
     <PackageVersion Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
     <PackageVersion Include="System.Runtime.Loader" Version="4.3.0" />
-    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="4.5.0" />
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="7.0.0" />
+    <PackageVersion Include="System.Security.Permissions" Version="7.0.0" />
     <PackageVersion Include="System.Text.Json" Version="8.0.4" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4"/>
-    <PackageVersion Include="System.ValueTuple" Version="4.3.0" />
+    <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
 
     <!-- Test references -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />

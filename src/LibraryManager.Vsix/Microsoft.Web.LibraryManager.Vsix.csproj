@@ -172,7 +172,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.IO.Redist" Condition="'$(TargetFramework)' == '$(NetFxTFM)'" />
     <PackageReference Include="Microsoft.VisualStudio.Editor" />
     <PackageReference Include="Microsoft.VisualStudio.Language.Intellisense" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" />
@@ -185,8 +184,7 @@
     <PackageReference Include="Microsoft.WebTools.Languages.Json.VS" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Nuget.VisualStudio" />
-    <PackageReference Include="System.Text.Json" />
-  </ItemGroup>
+   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="Commands\CommandTable\VSCommandTable.en.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
