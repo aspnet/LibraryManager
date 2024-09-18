@@ -5,7 +5,7 @@ trigger:
     exclude: ["*.md"]
 
 schedules:
-  - cron: "0 8 23-29 * 0"
+  - cron: "0 8 22-28 * 0" # Fourth Sunday of each month at 8:00 UTC
     displayName: "Monthly build check"
     branches:
       include: 
