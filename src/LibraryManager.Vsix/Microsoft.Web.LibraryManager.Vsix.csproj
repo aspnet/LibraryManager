@@ -184,7 +184,7 @@
     <PackageReference Include="Microsoft.WebTools.Languages.Json.VS" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Nuget.VisualStudio" />
-   </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="Commands\CommandTable\VSCommandTable.en.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
