@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 
@@ -25,10 +27,14 @@ namespace Microsoft.Web.LibraryManager.Json
             }
 
             string provider = string.IsNullOrEmpty(stateOnDisk.ProviderId) ? _defaultProvider : stateOnDisk.ProviderId;
-            string destination = string.IsNullOrEmpty(stateOnDisk.DestinationPath) ? _defaultDestination : stateOnDisk.DestinationPath;
+
+            (string name, string version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(stateOnDisk.LibraryId, provider);
+            string destination = string.IsNullOrEmpty(stateOnDisk.DestinationPath) ? ExpandDestination(_defaultDestination, name, version) : stateOnDisk.DestinationPath;
 
             var state = new LibraryInstallationState()
             {
+                Name = name,
+                Version = version,
                 IsUsingDefaultDestination = string.IsNullOrEmpty(stateOnDisk.DestinationPath),
                 IsUsingDefaultProvider = string.IsNullOrEmpty(stateOnDisk.ProviderId),
                 ProviderId = provider,
@@ -36,9 +42,32 @@ namespace Microsoft.Web.LibraryManager.Json
                 Files = stateOnDisk.Files
             };
 
-            (state.Name, state.Version) = LibraryIdToNameAndVersionConverter.Instance.GetLibraryNameAndVersion(stateOnDisk.LibraryId, provider);
-
             return state;
+        }
+
+        /// <summary>
+        /// Expands [Name] and [Version] tokens in the DefaultDestination
+        /// </summary>
+        /// <param name="destination">The default destination string</param>
+        /// <param name="name">Package name</param>
+        /// <param name="version">Package version</param>
+        /// <returns></returns>
+        [SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "Not available on net481, not needed here (caseless)")]
+        private string ExpandDestination(string destination, string name, string version)
+        {
+            if (!destination.Contains("["))
+            {
+                return destination;
+            }
+
+            // if the name contains a slash (either filesystem or scoped packages),
+            // trim that and only take the last segment.
+            int cutIndex = name.LastIndexOfAny(['/', '\\']);
+
+            StringBuilder stringBuilder = new StringBuilder(destination);
+            stringBuilder.Replace("[Name]", cutIndex == -1 ? name : name.Substring(cutIndex + 1));
+            stringBuilder.Replace("[Version]", version);
+            return stringBuilder.ToString();
         }
 
         public LibraryInstallationStateOnDisk ConvertToLibraryInstallationStateOnDisk(ILibraryInstallationState state)
