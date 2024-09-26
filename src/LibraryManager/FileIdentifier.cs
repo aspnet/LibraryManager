@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
-using System.Collections.Generic;
 
 namespace Microsoft.Web.LibraryManager
 {
@@ -35,10 +34,14 @@ namespace Microsoft.Web.LibraryManager
 
         public override int GetHashCode()
         {
+#if NET8_0_OR_GREATER
+            return HashCode.Combine(Path, Version);
+#else
             int hashPath = Path == null ? 0 : Path.GetHashCode();
             int hashVersion = Version == null ? 0 : Version.GetHashCode();
 
             return hashPath ^ hashVersion;
+#endif
         }
     }
 }
