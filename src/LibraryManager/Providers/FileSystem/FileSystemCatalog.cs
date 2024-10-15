@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -37,6 +38,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <param name="value">The current state of the library ID.</param>
         /// <param name="caretPosition">The caret position inside the <paramref name="value" />.</param>
         /// <returns></returns>
+        [SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "Searching for characters which are not cased")]
         public Task<CompletionSet> GetLibraryCompletionSetAsync(string value, int caretPosition)
         {
             if (value.Contains("://"))
@@ -122,6 +124,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <returns>
         /// An instance of <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryGroup" /> or <code>null</code>.
         /// </returns>
+        [SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "Searching for characters which are not cased")]
         public async Task<ILibrary> GetLibraryAsync(string libraryName, string version, CancellationToken cancellationToken)
         {
             ILibrary library;

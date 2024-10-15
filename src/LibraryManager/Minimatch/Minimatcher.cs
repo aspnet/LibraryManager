@@ -825,7 +825,13 @@ namespace Minimatch
             // On other platforms, \ is a valid (albeit bad) filename char.
 
             if (options.AllowWindowsPaths)
+            {
+#if NET8_0_OR_GREATER
+                input = input.Replace("\\", "/", StringComparison.Ordinal);
+#else
                 input = input.Replace("\\", "/");
+#endif
+            }
 
             // treat the test path as a set of pathparts.
             var f = slashSplit.Split(input);

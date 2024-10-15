@@ -46,7 +46,11 @@ namespace Microsoft.Web.LibraryManager.Cache
         /// <inheritdoc />
         public override int GetHashCode()
         {
+#if NET8_0_OR_GREATER
+            return DestinationPath.GetHashCode(StringComparison.Ordinal); // this should be a unique identifier
+#else
             return DestinationPath.GetHashCode(); // this should be a unique identifier
+#endif
         }
     }
 }
