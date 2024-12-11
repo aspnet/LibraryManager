@@ -30,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             };
 
             string manifestContents = @"{
-  ""version"": ""1.0"",
+  ""version"": ""3.0"",
   ""defaultProvider"": ""cdnjs"",
   ""libraries"": [
     {
@@ -61,7 +61,7 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             };
 
             string manifestContents = @"{
-  ""version"": ""1.0"",
+  ""version"": ""3.0"",
   ""defaultProvider"": ""cdnjs"",
   ""libraries"": [
     {

@@ -57,7 +57,7 @@ namespace Microsoft.Web.LibraryManager.Json
         [SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "Not available on net481, not needed here (caseless)")]
         private string ExpandDestination(string destination, string name, string version)
         {
-            if (!destination.Contains("["))
+            if (destination is null || !destination.Contains("["))
             {
                 return destination;
             }
