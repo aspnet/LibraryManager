@@ -440,6 +440,7 @@ namespace Microsoft.Web.LibraryManager.Providers
         /// Copies ILibraryInstallationState files to cache
         /// </summary>
         /// <param name="state"></param>
+        /// <param name="library"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         private async Task<ILibraryOperationResult> RefreshCacheAsync(ILibraryInstallationState state, ILibrary library, CancellationToken cancellationToken)
