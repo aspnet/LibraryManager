@@ -180,12 +180,12 @@ namespace Microsoft.Web.LibraryManager.IntegrationTest
             Editor.KeyboardCommands.Enter();
 
             Editor.KeyboardCommands.Type("\"library\":");
-            Editor.KeyboardCommands.Type("bootstr");
-            Helpers.Completion.WaitForCompletionEntries(Editor, new[] { "bootstrap" }, caseInsensitive: true, timeout: 5000);
+            Editor.KeyboardCommands.Type("react");
+            Helpers.Completion.WaitForCompletionEntries(Editor, new[] { "react-redux" }, caseInsensitive: true, timeout: 5000);
 
-            Editor.KeyboardCommands.Backspace(7);
+            Editor.KeyboardCommands.Backspace(5);
             Editor.KeyboardCommands.Type("jque");
-            Helpers.Completion.WaitForCompletionEntries(Editor, new[] { "jquery" }, caseInsensitive: true, timeout: 5000);
+            Helpers.Completion.WaitForCompletionEntries(Editor, new[] { "jquery-csswatch" }, caseInsensitive: true, timeout: 5000);
         }
 
         [TestMethod]
