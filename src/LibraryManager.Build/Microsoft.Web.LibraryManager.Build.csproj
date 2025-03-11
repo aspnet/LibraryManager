@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" />
+    <ProjectReference Include="..\LibraryManager.Contracts\Microsoft.Web.LibraryManager.Contracts.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\LibraryManager\Microsoft.Web.LibraryManager.csproj" PrivateAssets="all" />
   </ItemGroup>
 
