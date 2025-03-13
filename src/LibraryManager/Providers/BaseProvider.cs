@@ -259,7 +259,7 @@ namespace Microsoft.Web.LibraryManager.Providers
                 mappings.Add(new FileMapping { Destination = desiredState.DestinationPath });
             }
 
-            Dictionary<string, string> installFiles = new();
+            Dictionary<string, string> installFiles = new(StringComparer.OrdinalIgnoreCase);
 
             foreach (FileMapping fileMapping in mappings)
             {

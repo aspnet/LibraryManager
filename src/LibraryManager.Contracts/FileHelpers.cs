@@ -385,7 +385,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
         /// Normalizes the path string so it can be easily compared.
         /// </summary>
         /// <remarks>
-        /// Result will be lowercase and have any trailing slashes removed.
+        /// Result will be resolved to an absolute path and have any trailing slashes removed.
         /// </remarks>
         public static string NormalizePath(string path)
         {
@@ -398,17 +398,6 @@ namespace Microsoft.Web.LibraryManager.Contracts
             if (IsHttpUri(path))
             {
                 return path;
-            }
-
-            // net451 does not have the OSPlatform apis to determine if the OS is windows or not.
-            // This also does not handle the fact that MacOS can be configured to be either sensitive or insenstive 
-            // to the casing.
-            if (Path.DirectorySeparatorChar == '\\')
-            {
-#pragma warning disable CA1308 // Normalize strings to uppercase
-                               // Reason: we prefer lowercase names for file paths
-                path = path.ToLowerInvariant();
-#pragma warning restore CA1308 // Normalize strings to uppercase
             }
 
             return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
