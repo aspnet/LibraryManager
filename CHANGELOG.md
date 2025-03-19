@@ -1,7 +1,10 @@
 # Change log
 
 ## Upcoming Release
-Commit: TBD
+
+
+## 3.0.67
+Commit: bf89ce8604f12f45893ad13f3fe6aaf56c1deed4
 - Packages updated on NuGet
 - Included in Visual Studio 17.13
 - Update to .NET 8 (#729)
