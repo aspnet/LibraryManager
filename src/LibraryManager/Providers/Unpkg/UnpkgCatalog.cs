@@ -51,7 +51,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
                 return latest;
             }
-            
+
             string latestVersion = null;
 
             try
@@ -71,7 +71,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     latestVersion = versionValue?.Value as string;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Log(ex.ToString(), LogLevel.Error);
             }
@@ -135,31 +135,30 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
         private void GetFiles(JObject fileObject, List<string> files)
         {
             // Parse JSON document returned by unpkg.com/libraryname@version/?meta
-            // It looks something like
+            // It's a flat list of all files, something like
             // {
-            //   "type" : "directory",
-            //   "path" : "/"
-            //   "files" : [
+            //   "package": "jquery",
+            //   "version": "3.6.0",
+            //   "prefix": "/",
+            //   "files": [
             //     {
-            //       "type" : "directory"
-            //       "path" : "/umd"
-            //       "files" : [
-            //         {
-            //           "type" : "file",
-            //           "path" : "/umd/react.development.js"
-            //         },
-            //         {
-            //           "type" : "file",
-            //           "path" : "/umd/react.production.min.js"
-            //         }
-            //       ]
+            //       "path": "/src/manipulation/_evalUrl.js",
+            //       "size": 686,
+            //       "type": "text/javascript",
+            //       "integrity": "sha256-MSm8lidjXsHCKpftqTiXMOa+oa/RVxVwMB9FdCeV9oc="
             //     },
             //     {
-            //       "type" : "file",
-            //       "path" : "/index.js"
-            //     }
-            //   ]
-            // }
+            //       "path": "/src/data/var/acceptData.js",
+            //       "size": 318,
+            //       "type": "text/javascript",
+            //       "integrity": "sha256-35uwg+OJk5cSTc7P7t5DWnbHmfRRVw3fma2nnvsfo3Q="
+            //     },
+            //     {
+            //       "path": "/src/core/access.js",
+            //       "size": 1314,
+            //       "type": "text/javascript",
+            //       "integrity": "sha256-yL5IraumlPZeArOjnjHXxhmcEmlvbBF3YrEhg4nKhM0="
+            //     },
 
             if (files == null)
             {
@@ -168,26 +167,21 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
 
             if (fileObject != null)
             {
-                var type = fileObject["type"] as JValue; // will be either "file" or "directory"
-                if (type.Value as string == "file")
-                {
-                    var pathValue = fileObject["path"] as JValue;
+                var filesArray = fileObject["files"] as JArray;
 
-                    if (pathValue?.Value is string path && path.Length > 0)
+                if (filesArray?.Count > 0)
+                {
+                    foreach (JObject file in filesArray.Cast<JObject>())
                     {
-                        // Don't include the leading "/" in the file paths, do you get dist/jquery.js rather than /dist/jquery.js
+                        string path = file["path"]?.Value<string>();
+                        if (string.IsNullOrEmpty(path))
+                        {
+                            continue;
+                        }
+
+                        // Don't include the leading "/" in the file paths, so you get dist/jquery.js rather than /dist/jquery.js
                         // We will want the user to always specify a relative path in the "Files" array of the library entry
                         files.Add(path.Substring(1));
-                    }
-                }
-                else if (type.Value as string == "directory")
-                {
-                    if (fileObject["files"] is JArray filesArray)
-                    {
-                        foreach (JObject childFileObject in filesArray)
-                        {
-                            GetFiles(childFileObject, files);
-                        }
                     }
                 }
             }
