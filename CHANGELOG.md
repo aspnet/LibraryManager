@@ -2,6 +2,16 @@
 
 ## Upcoming Release
 Commit: TBD
+
+## 3.0.71
+Commit: 33c04f70a4f55f1cddbaddad60fc78a282b298d3
+- Packages updated on NuGet
+- Included in Visual Studio 17.14
+- Addressed a change in Unpkg APIs that broke the provider (#787)
+- Fixed a NullReferenceException in the RestoreTask (#784)
+
+## 3.0.67
+Commit: bf89ce8604f12f45893ad13f3fe6aaf56c1deed4
 - Packages updated on NuGet
 - Included in Visual Studio 17.13
 - Update to .NET 8 (#729)
