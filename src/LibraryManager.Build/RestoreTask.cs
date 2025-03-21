@@ -73,7 +73,7 @@ namespace Microsoft.Web.LibraryManager.Build
             if (!validationResults.All(r => r.Success))
             {
                 sw.Stop();
-                LogErrors(validationResults.SelectMany(r =>r.Errors));
+                LogErrors(validationResults.SelectMany(r => r.Errors));
 
                 return false;
             }
@@ -82,7 +82,7 @@ namespace Microsoft.Web.LibraryManager.Build
 
             sw.Stop();
             FlushLogger(logger);
-            PopulateFilesWritten(results, dependencies.GetHostInteractions());
+            PopulateFilesWritten(results, dependencies);
             LogResults(sw, results);
 
             return !Log.HasLoggedErrors;
@@ -113,8 +113,7 @@ namespace Microsoft.Web.LibraryManager.Build
             }
             else
             {
-                int fileCount = results.Where(r => r.Success).Sum(r => r.InstallationState.Files.Count);
-                if (fileCount > 0)
+                if (FilesWritten.Length > 0)
                 {
                     string text = string.Format(Resources.Text.Restore_NumberOfLibrariesSucceeded, results.Count(), Math.Round(sw.Elapsed.TotalSeconds, 2));
                     Log.LogMessage(MessageImportance.Normal, Environment.NewLine + text + Environment.NewLine);
@@ -137,23 +136,18 @@ namespace Microsoft.Web.LibraryManager.Build
             Log.LogMessage(MessageImportance.High, Environment.NewLine + text + Environment.NewLine);
         }
 
-        private void PopulateFilesWritten(IEnumerable<ILibraryOperationResult> results, IHostInteraction hostInteraction)
+        private void PopulateFilesWritten(IEnumerable<ILibraryOperationResult> results, Dependencies dependencies)
         {
             IEnumerable<ILibraryInstallationState> states = results.Where(r => r.Success).Select(r => r.InstallationState);
             var list = new List<ITaskItem>();
 
             foreach (ILibraryInstallationState state in states)
             {
-                foreach (string file in state.Files)
+                IProvider provider = dependencies.GetProvider(state.ProviderId);
+                OperationResult<LibraryInstallationGoalState> goalStateResult = provider.GetInstallationGoalStateAsync(state, CancellationToken.None).Result;
+                if (goalStateResult.Success)
                 {
-                    string absolutePath = Path.Combine(hostInteraction.WorkingDirectory, state.DestinationPath, file);
-                    var absolute = new FileInfo(absolutePath);
-
-                    if (absolute.Exists)
-                    {
-                        string relative = absolute.FullName.Replace(ProjectDirectory, string.Empty).TrimStart('/', '\\');
-                        list.Add(new TaskItem(relative));
-                    }
+                    list.AddRange(goalStateResult.Result.InstalledFiles.Select(f => new TaskItem(f.Key)));
                 }
             }
 
