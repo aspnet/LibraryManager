@@ -2,6 +2,9 @@
 
 ## Upcoming Release
 Commit: TBD
+
+## 3.0.71
+Commit: 33c04f70a4f55f1cddbaddad60fc78a282b298d3
 - Packages updated on NuGet
 - Included in Visual Studio 17.14
 - Addressed a change in Unpkg APIs that broke the provider (#787)
