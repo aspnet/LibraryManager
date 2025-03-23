@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreTFM)</TargetFramework>
+    <RootNamespace>Microsoft.Web.LibraryManager.Cli.IntegrationTest</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- set build dependency so the nupkg is built for tests to consume -->
+    <ProjectReference Include="..\..\src\libman\libman.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <!-- Copy the nupkgs needed to run CLI and Build package integration tests -->
+  <Target Name="CopyNupkgFiles" AfterTargets="Build" DependsOnTargets="GetBuildVersion">
+    <PropertyGroup>
+      
+    </PropertyGroup>
+    <ItemGroup>
+      <LibmanNupkg Include="..\..\artifacts\$(Configuration)\Microsoft.Web.LibraryManager.Cli.$(PackageVersion).nupkg" />
+    </ItemGroup>
+    <Copy SourceFiles="@(LibmanNupkg)" DestinationFolder="$(OutputPath)\TestPackages" />
+  </Target>
+
+</Project>

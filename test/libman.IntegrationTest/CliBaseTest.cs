@@ -1,0 +1,120 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+
+namespace Microsoft.Web.LibraryManager.Cli.IntegrationTest;
+
+[TestClass]
+[DeploymentItem(@"TestPackages", "TestPackages")]
+public class CliTestBase
+{
+    private const string CliPackageName = "Microsoft.Web.LibraryManager.Cli";
+    private const string ToolInstallPath = "./TestInstallPath";
+    private const string ManifestFileName = "libman.json";
+    private string _testDirectory;
+
+    [TestInitialize]
+    public async Task TestInitialize()
+    {
+        _testDirectory = Path.Combine(Path.GetTempPath(), "LibmanTest" + Guid.NewGuid().ToString());
+        Directory.CreateDirectory(_testDirectory);
+
+        // create an empty nuget.config with only our package source
+        await RunDotnetCommandLineAsync("new nugetconfig");
+        await RunDotnetCommandLineAsync("nuget remove source nuget");
+        await RunDotnetCommandLineAsync("nuget add source ./TestPackages");
+
+        await InstallCliToolAsync();
+    }
+
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        if (Directory.Exists(_testDirectory))
+        {
+            Directory.Delete(_testDirectory, true);
+        }
+
+        if (File.Exists("nuget.config"))
+        {
+            File.Delete("nuget.config");
+        }
+    }
+
+    private async Task RunDotnetCommandLineAsync(string arguments)
+    {
+        var processStartInfo = new ProcessStartInfo("dotnet", arguments)
+        {
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+
+        using (var process = Process.Start(processStartInfo))
+        {
+            await WaitForExitAsync(process);
+            if (process.ExitCode != 0)
+            {
+                string output = await process.StandardError.ReadToEndAsync() + await process.StandardOutput.ReadToEndAsync();
+                throw new InvalidOperationException($"Failed to run command line `dotnet {arguments}`.\r\nOutput: {output}");
+            }
+        }
+    }
+
+    private async Task InstallCliToolAsync()
+    {
+        await RunDotnetCommandLineAsync($"tool install {CliPackageName} --no-cache --prerelease --tool-path {ToolInstallPath}");
+    }
+
+    protected async Task CreateManifestFileAsync(string content)
+    {
+        string manifestFilePath = Path.Combine(_testDirectory, ManifestFileName);
+        await Task.Run(() => File.WriteAllText(manifestFilePath, content));
+    }
+
+    protected async Task ExecuteCliToolAsync(string arguments)
+    {
+        var processStartInfo = new ProcessStartInfo($"{ToolInstallPath}\\libman.exe", arguments)
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            WorkingDirectory = _testDirectory,
+        };
+
+        using (var process = Process.Start(processStartInfo))
+        {
+            await WaitForExitAsync(process);
+            if (process.ExitCode != 0)
+            {
+                string output = await process.StandardError.ReadToEndAsync() + await process.StandardOutput.ReadToEndAsync();
+                throw new InvalidOperationException($"CLI tool execution failed with arguments: {arguments}.\r\nOutput: {output}");
+            }
+        }
+    }
+
+    private Task WaitForExitAsync(Process process)
+    {
+        var tcs = new TaskCompletionSource<bool>();
+        process.Exited += (sender, args) => tcs.SetResult(true);
+        process.EnableRaisingEvents = true;
+        if (process.HasExited && !tcs.Task.IsCompleted)
+        {
+            tcs.SetResult(true);
+        }
+        return tcs.Task;
+    }
+
+    protected void AssertFileExists(string relativeFilePath)
+    {
+        string filePath = Path.Combine(_testDirectory, relativeFilePath);
+        Assert.IsTrue(File.Exists(filePath), $"Expected file '{relativeFilePath}' does not exist.");
+    }
+}
