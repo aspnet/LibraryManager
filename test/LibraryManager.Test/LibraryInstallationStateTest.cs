@@ -157,9 +157,8 @@ namespace Microsoft.Web.LibraryManager.Test
 
             OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
-            // IsValidAsync does not validate library files
-            // Issue https://github.com/aspnet/LibraryManager/issues/254 should fix that
-            Assert.IsTrue(result.Success);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
 
         [TestMethod]
