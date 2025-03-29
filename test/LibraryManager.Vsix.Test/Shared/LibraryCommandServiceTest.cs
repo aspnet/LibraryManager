@@ -46,9 +46,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Test.Shared
                 {
                     Id = "testProvider",
                     Catalog = new Mocks.LibraryCatalog(),
-                    Result = new LibraryOperationResult
+                    Result = new OperationResult<LibraryInstallationGoalState>
                     {
-                        InstallationState = testInstallationState
+                        Result = testGoalState,
                     },
                     GoalState = testGoalState,
                     SupportsLibraryVersions = true,
