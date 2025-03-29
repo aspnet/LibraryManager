@@ -23,16 +23,16 @@ namespace Microsoft.Web.LibraryManager.Vsix.ErrorList
         public string ConfigFileName { get; set; }
         public List<DisplayError> Errors { get; }
 
-        public bool HandleErrors(IEnumerable<ILibraryOperationResult> results)
+        public bool HandleErrors(IEnumerable<OperationResult<LibraryInstallationGoalState>> results)
         {
             string[] jsonLines = File.Exists(ConfigFileName) ? File.ReadLines(ConfigFileName).ToArray() : Array.Empty<string>();
 
-            foreach (ILibraryOperationResult result in results)
+            foreach (OperationResult<LibraryInstallationGoalState> goalStateResult in results)
             {
-                if (!result.Success)
+                if (!goalStateResult.Success)
                 {
-                    DisplayError[] displayErrors = result.Errors.Select(error => new DisplayError(error)).ToArray();
-                    AddLineAndColumn(jsonLines, result.InstallationState, displayErrors);
+                    DisplayError[] displayErrors = goalStateResult.Errors.Select(error => new DisplayError(error)).ToArray();
+                    AddLineAndColumn(jsonLines, goalStateResult.Result?.InstallationState, displayErrors);
 
                     Errors.AddRange(displayErrors);
                 }

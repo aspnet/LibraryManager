@@ -195,15 +195,15 @@ namespace Microsoft.Web.LibraryManager.Logging
         /// <summary>
         /// Gets the operation summary string based on number of successful and failure operations.
         /// </summary>
-        public static string GetOperationSummaryString(IEnumerable<ILibraryOperationResult> results, OperationType operation, TimeSpan elapsedTime)
+        public static string GetOperationSummaryString(IEnumerable<OperationResult<LibraryInstallationGoalState>> results, OperationType operation, TimeSpan elapsedTime)
         {
             if (results != null && results.Any())
             {
                 int totalResultsCounts = results.Count();
-                IEnumerable<ILibraryOperationResult> successfulResults = results.Where(r => r.Success && !r.UpToDate);
-                IEnumerable<ILibraryOperationResult> failedResults = results.Where(r => r.Errors.Any());
-                IEnumerable<ILibraryOperationResult> cancelledRessults = results.Where(r => r.Cancelled);
-                IEnumerable<ILibraryOperationResult> upToDateResults = results.Where(r => r.UpToDate);
+                IEnumerable<OperationResult<LibraryInstallationGoalState>> successfulResults = results.Where(r => r.Success && !r.UpToDate);
+                IEnumerable<OperationResult<LibraryInstallationGoalState>> failedResults = results.Where(r => r.Errors.Any());
+                IEnumerable<OperationResult<LibraryInstallationGoalState>> cancelledRessults = results.Where(r => r.Cancelled);
+                IEnumerable<OperationResult<LibraryInstallationGoalState>> upToDateResults = results.Where(r => r.UpToDate);
 
                 bool allSuccess = successfulResults.Count() == totalResultsCounts;
                 bool allFailed = failedResults.Count() == totalResultsCounts;
@@ -244,13 +244,13 @@ namespace Microsoft.Web.LibraryManager.Logging
             return string.Empty;
         }
 
-        private static string GetLibraryId(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation)
+        private static string GetLibraryId(IEnumerable<OperationResult<LibraryInstallationGoalState>> totalResults, OperationType operation)
         {
             if (operation == OperationType.Uninstall || operation == OperationType.Upgrade)
             {
                 if (totalResults != null && totalResults.Count() == 1)
                 {
-                    ILibraryInstallationState state = totalResults.First().InstallationState;
+                    ILibraryInstallationState state = totalResults.First().Result.InstallationState;
                     return LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(state.Name, state.Version, state.ProviderId);
                 }
             }

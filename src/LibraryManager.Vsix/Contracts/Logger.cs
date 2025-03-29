@@ -77,7 +77,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         /// <param name="operationType"></param>
         /// <param name="elapsedTime"></param>
         /// <param name="endOfMessage"></param>
-        public static void LogEventsSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operationType, TimeSpan elapsedTime, bool endOfMessage = true)
+        public static void LogEventsSummary(IEnumerable<OperationResult<LibraryInstallationGoalState>> totalResults, OperationType operationType, TimeSpan elapsedTime, bool endOfMessage = true)
         {
             LogErrors(totalResults);
             LogEvent(LogMessageGenerator.GetSummaryHeaderString(operationType), LogLevel.Task);
@@ -116,7 +116,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
         /// <param name="results">Operation results</param>
         /// <param name="operationType"><see cref="OperationType"/></param>
         /// <param name="endOfMessage">Whether or not to log end of message lines</param>
-        public static void LogErrorsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operationType, bool endOfMessage = true)
+        public static void LogErrorsSummary(IEnumerable<OperationResult<LibraryInstallationGoalState>> results, OperationType operationType, bool endOfMessage = true)
         {
             List<string> errorStrings = GetErrorStrings(results);
             LogErrorsSummary(errorStrings, operationType, endOfMessage);
@@ -271,7 +271,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
             return OutputWindowPaneValue != null;
         }
 
-        private static void LogOperationSummary(IEnumerable<ILibraryOperationResult> totalResults, OperationType operation, TimeSpan elapsedTime)
+        private static void LogOperationSummary(IEnumerable<OperationResult<LibraryInstallationGoalState>> totalResults, OperationType operation, TimeSpan elapsedTime)
         {
             string messageText = LogMessageGenerator.GetOperationSummaryString(totalResults, operation, elapsedTime);
 
@@ -281,9 +281,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
             }
         }
 
-        private static void LogErrors(IEnumerable<ILibraryOperationResult> results)
+        private static void LogErrors(IEnumerable<OperationResult<LibraryInstallationGoalState>> results)
         {
-            foreach (ILibraryOperationResult result in results)
+            foreach (OperationResult<LibraryInstallationGoalState> result in results)
             {
                 foreach (IError error in result.Errors)
                 {
@@ -292,11 +292,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
             }
         }
 
-        private static List<string> GetErrorStrings(IEnumerable<ILibraryOperationResult> results)
+        private static List<string> GetErrorStrings(IEnumerable<OperationResult<LibraryInstallationGoalState>> results)
         {
             List<string> errorStrings = new List<string>();
 
-            foreach (ILibraryOperationResult result in results)
+            foreach (OperationResult<LibraryInstallationGoalState> result in results)
             {
                 foreach (IError error in result.Errors)
                 {

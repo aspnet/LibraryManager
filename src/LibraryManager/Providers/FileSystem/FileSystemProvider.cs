@@ -54,36 +54,33 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <param name="desiredState">The details about the library to install.</param>
         /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
         /// <returns>
-        /// The <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult" /> from the installation process.
+        /// The <see cref="OperationResult{LibraryInstallationGoalState}" /> from the installation process.
         /// </returns>
-        public override async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        public override async Task<OperationResult<LibraryInstallationGoalState>> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return LibraryOperationResult.FromCancelled(desiredState);
+                return OperationResult<LibraryInstallationGoalState>.FromCancelled(null);
             }
 
             try
             {
-                ILibraryOperationResult result = await UpdateStateAsync(desiredState, cancellationToken);
-
-                if (!result.Success)
+                OperationResult<LibraryInstallationGoalState> goalStateResult = await GetInstallationGoalStateAsync(desiredState, cancellationToken).ConfigureAwait(false);
+                if (!goalStateResult.Success)
                 {
-                    return result;
+                    return goalStateResult;
                 }
-
-                desiredState = result.InstallationState;
 
                 foreach (string file in desiredState.Files)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        return LibraryOperationResult.FromCancelled(desiredState);
+                        return OperationResult<LibraryInstallationGoalState>.FromCancelled(goalStateResult.Result);
                     }
 
                     if (string.IsNullOrEmpty(file))
                     {
-                        return new LibraryOperationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
+                        return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.CouldNotWriteFile(file));
                     }
 
                     string path = Path.Combine(desiredState.DestinationPath, file);
@@ -92,30 +89,25 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
                     if (!writeOk)
                     {
-                        return new LibraryOperationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
+                        return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.CouldNotWriteFile(file));
                     }
                 }
+
+                return OperationResult<LibraryInstallationGoalState>.FromSuccess(goalStateResult.Result);
             }
             catch (UnauthorizedAccessException)
             {
-                return new LibraryOperationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.PathOutsideWorkingDirectory());
             }
             catch (ResourceDownloadException ex)
             {
-                return new LibraryOperationResult(desiredState, PredefinedErrors.FailedToDownloadResource(ex.Url));
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.FailedToDownloadResource(ex.Url));
             }
             catch (Exception ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
-                return new LibraryOperationResult(desiredState, PredefinedErrors.UnknownException());
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.UnknownException());
             }
-
-            return LibraryOperationResult.FromSuccess(desiredState);
-        }
-
-        protected override ILibraryOperationResult CheckForInvalidFiles(ILibraryInstallationState desiredState, string libraryId, ILibrary library)
-        {
-            return LibraryOperationResult.FromSuccess(desiredState);
         }
 
         /// <summary>
