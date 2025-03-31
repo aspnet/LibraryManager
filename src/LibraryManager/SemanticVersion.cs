@@ -48,7 +48,7 @@ namespace Microsoft.Web.LibraryManager
             OriginalText = originalText;
         }
 
-        internal static SemanticVersion Parse(string value)
+        public static SemanticVersion Parse(string value)
         {
             SemanticVersion ver = new SemanticVersion(value);
 
