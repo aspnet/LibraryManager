@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -220,6 +221,26 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             // as a fallback, assume state.Name is a directory.  If this path doesn't exist, it will
             // be handled elsewhere.
             return Path.Combine(state.Name, sourceFile);
+        }
+
+        /// <inheritdoc />
+        protected override Dictionary<string, string> GetFileMappings(ILibrary library, IReadOnlyList<string> fileFilters, string mappingRoot, string destination, ILibraryInstallationState desiredState, List<IError> errors)
+        {
+            Dictionary<string, string> fileMappings = new();
+            // Handle single-file edge cases for FileSystem
+            if (library.Files.Count == 1
+                && fileFilters.Count == 1
+                && GetCachedFileLocalPath(desiredState, library.Files.Keys.First()) == library.Name)
+            {
+                // direct 1:1 file mapping, allowing file rename
+                string destinationFile = Path.Combine(HostInteraction.WorkingDirectory, destination, fileFilters[0]);
+                destinationFile = FileHelpers.NormalizePath(destinationFile);
+
+                fileMappings.Add(destinationFile, library.Files.Keys.First());
+                return fileMappings;
+            }
+
+            return base.GetFileMappings(library, fileFilters, mappingRoot, destination, desiredState, errors);
         }
     }
 }

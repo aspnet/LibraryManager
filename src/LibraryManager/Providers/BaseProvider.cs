@@ -165,6 +165,13 @@ namespace Microsoft.Web.LibraryManager.Providers
 
         #endregion
 
+        /// <summary>
+        /// Generates the goal state for library installation based on the desired state and library information.
+        /// </summary>
+        /// <param name="desiredState">Specifies the target state for the library installation, including file mappings and destination paths.</param>
+        /// <param name="library">Represents the library from which files are being installed, containing file information and validation
+        /// methods.</param>
+        /// <returns>Returns an operation result containing the goal state or errors encountered during the generation process.</returns>
         private OperationResult<LibraryInstallationGoalState> GenerateGoalState(ILibraryInstallationState desiredState, ILibrary library)
         {
             var mappings = new List<FileMapping>(desiredState.FileMappings ?? []);
@@ -212,32 +219,25 @@ namespace Microsoft.Web.LibraryManager.Providers
                     fileFilters = fileFilters.Select(f => $"{mappingRoot}/{f}").ToList();
                 }
 
-                List<string> outFiles = FileGlobbingUtility.ExpandFileGlobs(fileFilters, library.Files.Keys).ToList();
+                List<string> filteredFiles = FileGlobbingUtility.ExpandFileGlobs(fileFilters, library.Files.Keys).ToList();
 
-                if (library.GetInvalidFiles(outFiles) is IReadOnlyList<string> invalidFiles
-    && invalidFiles.Count > 0)
+                if (library.GetInvalidFiles(filteredFiles) is IReadOnlyList<string> { Count: > 0 } invalidFiles)
                 {
                     errors ??= [];
                     errors.Add(PredefinedErrors.InvalidFilesInLibrary(desiredState.Name, invalidFiles, library.Files.Keys));
+                    filteredFiles.RemoveAll(file => invalidFiles.Contains(file));
                 }
 
-                foreach (string outFile in outFiles)
-                {
-                    // strip the source prefix
-                    string relativeOutFile = mappingRoot.Length > 0 ? outFile.Substring(mappingRoot.Length + 1) : outFile;
-                    string destinationFile = Path.Combine(HostInteraction.WorkingDirectory, destination, relativeOutFile);
-                    destinationFile = FileHelpers.NormalizePath(destinationFile);
+                Dictionary<string, string> fileMappings = GetFileMappings(library, filteredFiles, mappingRoot, destination, desiredState, errors);
 
+                foreach ((string destinationFile, string sourceFile) in fileMappings)
+                {
                     if (!FileHelpers.IsUnderRootDirectory(destinationFile, HostInteraction.WorkingDirectory))
                     {
                         errors ??= [];
                         errors.Add(PredefinedErrors.PathOutsideWorkingDirectory());
                         continue;
                     }
-
-                    // include the cache folder in the path
-                    string sourceFile = GetCachedFileLocalPath(desiredState, outFile);
-                    sourceFile = FileHelpers.NormalizePath(sourceFile);
 
                     // map destination back to the library-relative file it originated from
                     if (installFiles.ContainsKey(destinationFile))
@@ -248,10 +248,8 @@ namespace Microsoft.Web.LibraryManager.Providers
                         errors.Add(PredefinedErrors.LibraryCannotBeInstalledDueToConflicts(destinationFile, [libraryId]));
                         continue;
                     }
-                    else
-                    {
-                        installFiles.Add(destinationFile, sourceFile);
-                    }
+
+                    installFiles.Add(destinationFile, sourceFile);
                 }
             }
 
@@ -262,6 +260,28 @@ namespace Microsoft.Web.LibraryManager.Providers
 
             var goalState = new LibraryInstallationGoalState(desiredState, installFiles);
             return OperationResult<LibraryInstallationGoalState>.FromSuccess(goalState);
+        }
+
+
+        protected virtual Dictionary<string, string> GetFileMappings(ILibrary library, IReadOnlyList<string> libraryFiles, string mappingRoot, string destination, ILibraryInstallationState desiredState, List<IError> errors)
+        {
+            Dictionary<string, string> installFiles = new(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string file in libraryFiles)
+            {
+                // strip the source prefix
+                string relativeOutFile = mappingRoot.Length > 0 ? file.Substring(mappingRoot.Length + 1) : file;
+                string destinationFile = Path.Combine(HostInteraction.WorkingDirectory, destination, relativeOutFile);
+                destinationFile = FileHelpers.NormalizePath(destinationFile);
+
+                // include the cache folder in the path
+                string sourceFile = GetCachedFileLocalPath(desiredState, file);
+                sourceFile = FileHelpers.NormalizePath(sourceFile);
+
+                installFiles.Add(destinationFile, sourceFile);
+            }
+
+            return installFiles;
         }
 
         public bool IsSourceCacheReady(LibraryInstallationGoalState goalState)
