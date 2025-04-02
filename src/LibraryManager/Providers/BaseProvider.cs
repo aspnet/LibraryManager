@@ -224,7 +224,8 @@ namespace Microsoft.Web.LibraryManager.Providers
                 if (library.GetInvalidFiles(filteredFiles) is IReadOnlyList<string> { Count: > 0 } invalidFiles)
                 {
                     errors ??= [];
-                    errors.Add(PredefinedErrors.InvalidFilesInLibrary(desiredState.Name, invalidFiles, library.Files.Keys));
+                    string libraryId = LibraryNamingScheme.GetLibraryId(desiredState.Name, desiredState.Version);
+                    errors.Add(PredefinedErrors.InvalidFilesInLibrary(libraryId, invalidFiles, library.Files.Keys));
                     filteredFiles.RemoveAll(file => invalidFiles.Contains(file));
                 }
 
