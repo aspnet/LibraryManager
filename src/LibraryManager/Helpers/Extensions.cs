@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.FileSystem;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -108,6 +109,16 @@ namespace Microsoft.Web.LibraryManager.Helpers
 
             var invalidFiles = new List<string>();
 
+            if (library.ProviderId == FileSystemProvider.IdText
+                && library.Files.Count == 1)
+            {
+                // Ideally this would be in the FileSystemLibrary, but this is an extension method.
+                // For FileSystem provider, if a single file is specified, it is always valid.
+                // It can be mapped to a different file name at the destination.
+                // This is valid for FileSystem but not for any other provider.
+                return invalidFiles;
+            }
+
             if (files == null || !files.Any())
             {
                 return invalidFiles;
@@ -172,5 +183,15 @@ namespace Microsoft.Web.LibraryManager.Helpers
             return propertyValue;
         }
 
+#if NETFRAMEWORK
+        /// <summary>
+        /// Destructs the KeyValuePair into separate values for key and value.
+        /// </summary>
+        public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> pair, out T1 key, out T2 value)
+        {
+            key = pair.Key;
+            value = pair.Value;
+        }
+#endif
     }
 }

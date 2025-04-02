@@ -17,6 +17,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
     /// <summary>Internal use only</summary>
     internal sealed class FileSystemProvider : BaseProvider
     {
+        public const string IdText = "filesystem";
         private FileSystemCatalog _catalog;
 
         /// <summary>Internal use only</summary>
@@ -28,7 +29,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
-        public override string Id => "filesystem";
+        public override string Id => IdText;
 
         /// <summary>
         /// Hint text for the library id.
