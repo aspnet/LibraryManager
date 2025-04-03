@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Resources;
 
@@ -73,25 +74,25 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                     return goalStateResult;
                 }
 
-                foreach (string file in desiredState.Files)
+                foreach ((string destFile, string sourceFile) in goalStateResult.Result.InstalledFiles)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
                         return OperationResult<LibraryInstallationGoalState>.FromCancelled(goalStateResult.Result);
                     }
 
-                    if (string.IsNullOrEmpty(file))
+                    if (string.IsNullOrEmpty(destFile))
                     {
-                        return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.CouldNotWriteFile(file));
+                        return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.CouldNotWriteFile(destFile));
                     }
 
-                    string path = Path.Combine(desiredState.DestinationPath, file);
-                    var sourceStream = new Func<Stream>(() => GetStreamAsync(desiredState, file, cancellationToken).Result);
-                    bool writeOk = await HostInteraction.WriteFileAsync(path, sourceStream, desiredState, cancellationToken).ConfigureAwait(false);
+                    string libraryName = LibraryNamingScheme.GetLibraryId(desiredState.Name, desiredState.Version);
+                    var sourceStream = new Func<Stream>(() => GetStreamAsync(sourceFile, libraryName, cancellationToken).Result);
+                    bool writeOk = await HostInteraction.WriteFileAsync(destFile, sourceStream, desiredState, cancellationToken).ConfigureAwait(false);
 
                     if (!writeOk)
                     {
-                        return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.CouldNotWriteFile(file));
+                        return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.CouldNotWriteFile(destFile));
                     }
                 }
 
@@ -135,10 +136,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             return string.Empty;
         }
 
-        private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string file, CancellationToken cancellationToken)
+        private async Task<Stream> GetStreamAsync(string sourceFile, string libraryName, CancellationToken cancellationToken)
         {
-            string sourceFile = state.Name;
-
             try
             {
                 if (!Uri.TryCreate(sourceFile, UriKind.RelativeOrAbsolute, out Uri url))
@@ -154,14 +153,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 // File
                 if (url.IsFile)
                 {
-                    if (Directory.Exists(url.OriginalString))
-                    {
-                        return await FileHelpers.ReadFileAsStreamAsync(Path.Combine(url.OriginalString, file), cancellationToken).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        return await FileHelpers.ReadFileAsStreamAsync(sourceFile, cancellationToken).ConfigureAwait(false);
-                    }
+                    return await FileHelpers.ReadFileAsStreamAsync(sourceFile, cancellationToken).ConfigureAwait(false);
                 }
                 // Url
                 else
@@ -175,7 +167,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(state.Name, state.ProviderId);
+                throw new InvalidLibraryException(libraryName, Id);
             }
         }
 
