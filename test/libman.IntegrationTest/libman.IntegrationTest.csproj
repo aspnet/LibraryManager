@@ -20,6 +20,17 @@
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="TestFiles\**\*" />
+    <None Remove="TestFiles\**\*" />
+    <Content Remove="TestFiles\**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestFiles\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
   <!-- Copy the nupkgs needed to run CLI and Build package integration tests -->
   <Target Name="CopyNupkgFiles" AfterTargets="Build" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>
