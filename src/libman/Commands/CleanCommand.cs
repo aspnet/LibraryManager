@@ -30,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             Manifest manifest = await GetManifestAsync();
             Task<bool> deleteFileAction(IEnumerable<string> s) => HostInteractions.DeleteFilesAsync(s, CancellationToken.None);
-            IEnumerable<ILibraryOperationResult> validationResults = await manifest.GetValidationResultsAsync(CancellationToken.None);
+            IEnumerable<OperationResult<LibraryInstallationGoalState>> validationResults = await manifest.GetValidationResultsAsync(CancellationToken.None);
 
             if (!validationResults.All(r => r.Success))
             {
@@ -40,7 +40,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 return 0;
             }
 
-            IEnumerable<ILibraryOperationResult> results = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
+            IEnumerable<OperationResult<LibraryInstallationGoalState>> results = await manifest.CleanAsync(deleteFileAction, CancellationToken.None);
             sw.Stop();
             LogResultsSummary(results, OperationType.Clean, sw.Elapsed);
 

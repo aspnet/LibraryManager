@@ -75,7 +75,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
 
             string libraryId = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(libraryToUninstall.Name, libraryToUninstall.Version, libraryToUninstall.ProviderId);
 
-            ILibraryOperationResult result = await manifest.UninstallAsync(libraryToUninstall.Name, libraryToUninstall.Version, deleteFileAction, CancellationToken.None);
+            OperationResult<LibraryInstallationGoalState> result = await manifest.UninstallAsync(libraryToUninstall.Name, libraryToUninstall.Version, deleteFileAction, CancellationToken.None);
 
             if (result.Success)
             {

@@ -138,7 +138,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 destinationToUse = destinationToUse.Replace('\\', '/');
             }
 
-            ILibraryOperationResult result = await _manifest.InstallLibraryAsync(
+            OperationResult<LibraryInstallationGoalState> result = await _manifest.InstallLibraryAsync(
                 library.Name,
                 library.Version,
                 providerIdToUse,
