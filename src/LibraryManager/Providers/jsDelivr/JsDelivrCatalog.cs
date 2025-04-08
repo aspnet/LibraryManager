@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -343,6 +344,7 @@ namespace Microsoft.Web.LibraryManager.Providers.jsDelivr
             return versions;
         }
 
+        [SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "Searching for characters which are not cased")]
         public static bool IsGitHub(string libraryId)
         {
             if (libraryId == null || libraryId.StartsWith("@", StringComparison.Ordinal))

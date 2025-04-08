@@ -44,7 +44,11 @@ namespace Microsoft.Web.LibraryManager
 
         private SemanticVersion(string originalText)
         {
+#if NET8_0_OR_GREATER
+            _hashCode = originalText?.GetHashCode(StringComparison.Ordinal) ?? 0;
+#else
             _hashCode = originalText?.GetHashCode() ?? 0;
+#endif
             OriginalText = originalText;
         }
 
@@ -57,8 +61,13 @@ namespace Microsoft.Web.LibraryManager
                 return ver;
             }
 
+#if NET8_0_OR_GREATER
+            int prereleaseStart = value.IndexOf('-', StringComparison.Ordinal);
+            int buildMetadataStart = value.IndexOf('+', StringComparison.Ordinal);
+#else
             int prereleaseStart = value.IndexOf('-');
             int buildMetadataStart = value.IndexOf('+');
+#endif
 
             //If the index of the build metadata marker (+) is greater than the index of the prerelease marker (-)
             //  then it is necessarily found in the string because if both were not found they'd be equal
@@ -197,7 +206,7 @@ namespace Microsoft.Web.LibraryManager
         }
 
         /// <summary>
-        /// Returns whether the semantic verisons are equal.  This includes comparing the build metadata, and does not provide semantic equivalence.
+        /// Returns whether the semantic versions are equal.  This includes comparing the build metadata, and does not provide semantic equivalence.
         /// </summary>
         public bool Equals(SemanticVersion other)
         {

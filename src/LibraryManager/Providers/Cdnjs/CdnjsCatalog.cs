@@ -50,7 +50,11 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                 Length = value.Length
             };
 
+#if NET8_0_OR_GREATER
+            int at = value.IndexOf('@', StringComparison.Ordinal);
+#else
             int at = value.IndexOf('@');
+#endif
             string name = at > -1 ? value.Substring(0, at) : value;
 
             var completions = new List<CompletionItem>();

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -37,7 +38,11 @@ namespace Microsoft.Web.LibraryManager
         /// <inheritdoc />
         public int GetHashCode(string obj)
         {
+#if NET8_0_OR_GREATER
+            return NormalizePath(obj)?.GetHashCode(StringComparison.Ordinal) ?? 0;
+#else
             return NormalizePath(obj)?.GetHashCode() ?? 0;
+#endif
         }
 
         private string NormalizePath(string path)
