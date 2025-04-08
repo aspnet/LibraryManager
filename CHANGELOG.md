@@ -1,5 +1,44 @@
 # Change log
 
+## Upcoming Release
+Commit: TBD
+
+## 3.0.71
+Commit: 33c04f70a4f55f1cddbaddad60fc78a282b298d3
+- Packages updated on NuGet
+- Included in Visual Studio 17.14
+- Addressed a change in Unpkg APIs that broke the provider (#787)
+- Fixed a NullReferenceException in the RestoreTask (#784)
+
+## 3.0.67
+Commit: bf89ce8604f12f45893ad13f3fe6aaf56c1deed4
+- Packages updated on NuGet
+- Included in Visual Studio 17.13
+- Update to .NET 8 (#729)
+- Convert to MIT license (#761)
+- Add new "fileMappings" feature (#756)
+- Support any CPS project type in Visual Studio (#717)
+- Add non-zero exit code on general exception and on error in Restore command (#682)
+  - Thanks @mvsprogs!
+- Fixed sporadic file read errors (#722)
+  - Thanks @AlexanderSchulz-Siemens!
+- Change -pre to --pre for CLI update command (#733)
+- Lower MSBuild output to Normal verbosity (#734)
+- Spacebar on the "Files" node should toggle state (#741)
+- Add a --whatif option to CLI update command (#732)
+- Add setting to force TLS 1.2 (#751)
+- Log errors that happen during file copy and retry file copying (#753)
+  - Thanks @leotsarev!
+- Add variable expansion in defaultDestination (#759)
+
+## 2.1.175
+Commit: 29a28921bd59084a6906037ddfd55e106ba3ee19
+- Packages updated on NuGet
+- Included in Visual Studio 17.3
+- Adapt to Cdnjs API breaking changes (#687)
+- Add User-Agent header to requests (#694)
+- Fix position of completion flyout in VS (#674)
+
 ## 2.1.161
 Commit: abc97ecc7db29a48992d14f1585cc092acbf66aa
 - Packages updated on NuGet

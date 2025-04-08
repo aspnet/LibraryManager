@@ -247,48 +247,92 @@ namespace Microsoft.Web.LibraryManager.Providers
 
         private OperationResult<LibraryInstallationGoalState> GenerateGoalState(ILibraryInstallationState desiredState, ILibrary library)
         {
+            var mappings = new List<FileMapping>(desiredState.FileMappings ?? []);
             List<IError> errors = null;
-
-            if (string.IsNullOrEmpty(desiredState.DestinationPath))
+            if (desiredState.Files is { Count: > 0 })
             {
-                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.DestinationNotSpecified(desiredState.Name));
+                mappings.Add(new FileMapping { Destination = desiredState.DestinationPath, Files = desiredState.Files });
+            }
+            else if (desiredState.FileMappings is null or { Count: 0 })
+            {
+                // no files specified and no file mappings => include all files
+                mappings.Add(new FileMapping { Destination = desiredState.DestinationPath });
             }
 
-            IEnumerable<string> outFiles;
-            if (desiredState.Files == null || desiredState.Files.Count == 0)
-            {
-                outFiles = library.Files.Keys;
-            }
-            else
-            {
-                outFiles = FileGlobbingUtility.ExpandFileGlobs(desiredState.Files, library.Files.Keys);
-            }
+            Dictionary<string, string> installFiles = new(StringComparer.OrdinalIgnoreCase);
 
-            Dictionary<string, string> installFiles = new();
-            if (library.GetInvalidFiles(outFiles.ToList()) is IReadOnlyList<string> invalidFiles
-                && invalidFiles.Count > 0)
+            foreach (FileMapping fileMapping in mappings)
             {
-                errors ??= [];
-                errors.Add(PredefinedErrors.InvalidFilesInLibrary(desiredState.Name, invalidFiles, library.Files.Keys));
-            }
+                // if Root is not specified, assume it's the root of the library
+                string mappingRoot = fileMapping.Root ?? string.Empty;
+                // if Destination is not specified, inherit from the library entry
+                string destination = fileMapping.Destination ?? desiredState.DestinationPath;
 
-            foreach (string outFile in outFiles)
-            {
-                // strip the source prefix
-                string destinationFile = Path.Combine(HostInteraction.WorkingDirectory, desiredState.DestinationPath, outFile);
-                if (!FileHelpers.IsUnderRootDirectory(destinationFile, HostInteraction.WorkingDirectory))
+                if (destination is null)
                 {
                     errors ??= [];
-                    errors.Add(PredefinedErrors.PathOutsideWorkingDirectory());
+                    string libraryId = LibraryNamingScheme.GetLibraryId(desiredState.Name, desiredState.Version);
+                    errors.Add(PredefinedErrors.DestinationNotSpecified(libraryId));
+                    continue;
                 }
-                destinationFile = FileHelpers.NormalizePath(destinationFile);
 
-                // don't forget to include the cache folder in the path
-                string sourceFile = GetCachedFileLocalPath(desiredState, outFile);
-                sourceFile = FileHelpers.NormalizePath(sourceFile);
+                IReadOnlyList<string> fileFilters;
+                if (fileMapping.Files is { Count: > 0 })
+                {
+                    fileFilters = fileMapping.Files;
+                }
+                else
+                {
+                    fileFilters = ["**"];
+                }
 
-                // map destination back to the library-relative file it originated from
-                installFiles.Add(destinationFile, sourceFile);
+                if (mappingRoot.Length > 0)
+                {
+                    // prefix mappingRoot to each fileFilter item
+                    fileFilters = fileFilters.Select(f => $"{mappingRoot}/{f}").ToList();
+                }
+
+                List<string> outFiles = FileGlobbingUtility.ExpandFileGlobs(fileFilters, library.Files.Keys).ToList();
+
+                if (library.GetInvalidFiles(outFiles) is IReadOnlyList<string> invalidFiles
+    && invalidFiles.Count > 0)
+                {
+                    errors ??= [];
+                    errors.Add(PredefinedErrors.InvalidFilesInLibrary(desiredState.Name, invalidFiles, library.Files.Keys));
+                }
+
+                foreach (string outFile in outFiles)
+                {
+                    // strip the source prefix
+                    string relativeOutFile = mappingRoot.Length > 0 ? outFile.Substring(mappingRoot.Length + 1) : outFile;
+                    string destinationFile = Path.Combine(HostInteraction.WorkingDirectory, destination, relativeOutFile);
+                    destinationFile = FileHelpers.NormalizePath(destinationFile);
+
+                    if (!FileHelpers.IsUnderRootDirectory(destinationFile, HostInteraction.WorkingDirectory))
+                    {
+                        errors ??= [];
+                        errors.Add(PredefinedErrors.PathOutsideWorkingDirectory());
+                        continue;
+                    }
+
+                    // include the cache folder in the path
+                    string sourceFile = GetCachedFileLocalPath(desiredState, outFile);
+                    sourceFile = FileHelpers.NormalizePath(sourceFile);
+
+                    // map destination back to the library-relative file it originated from
+                    if (installFiles.ContainsKey(destinationFile))
+                    {
+                        // this file is already being installed from another mapping
+                        errors ??= [];
+                        string libraryId = LibraryNamingScheme.GetLibraryId(desiredState.Name, desiredState.Version);
+                        errors.Add(PredefinedErrors.LibraryCannotBeInstalledDueToConflicts(destinationFile, [libraryId]));
+                        continue;
+                    }
+                    else
+                    {
+                        installFiles.Add(destinationFile, sourceFile);
+                    }
+                }
             }
 
             if (errors is not null)
