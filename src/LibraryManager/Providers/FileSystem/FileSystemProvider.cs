@@ -206,13 +206,22 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
             // For other filesystem libraries, the state.Name may be a either a file or folder
             // TODO: abstract file system
-            if (File.Exists(state.Name))
+            (bool isFile, string resolvedFilePath) = LibraryNameIsFile(state.Name);
+            
+            if (isFile)
             {
-                return state.Name;
+                return resolvedFilePath;
             }
 
             // as a fallback, assume state.Name is a directory.  If this path doesn't exist, it will
             // be handled elsewhere.
+
+            // root relative paths to the libman working directory
+            if (!Path.IsPathRooted(state.Name))
+            {
+                return Path.GetFullPath(Path.Combine(HostInteraction.WorkingDirectory, state.Name, sourceFile));
+            }
+
             return Path.Combine(state.Name, sourceFile);
         }
 
@@ -221,19 +230,41 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         {
             Dictionary<string, string> fileMappings = new();
             // Handle single-file edge cases for FileSystem
-            if (library.Files.Count == 1
-                && fileFilters.Count == 1
-                && GetCachedFileLocalPath(desiredState, library.Files.Keys.First()) == library.Name)
+            (bool librarySpecifiedIsFile, string resolvedFilePath) = LibraryNameIsFile(library.Name);
+            if (librarySpecifiedIsFile && fileFilters.Count == 1)
             {
                 // direct 1:1 file mapping, allowing file rename
                 string destinationFile = Path.Combine(HostInteraction.WorkingDirectory, destination, fileFilters[0]);
                 destinationFile = FileHelpers.NormalizePath(destinationFile);
 
-                fileMappings.Add(destinationFile, library.Files.Keys.First());
+                // the library specified is a single file, so use that as the source directly
+                fileMappings.Add(destinationFile, resolvedFilePath);
                 return fileMappings;
             }
 
             return base.GetFileMappings(library, fileFilters, mappingRoot, destination, desiredState, errors);
+        }
+
+        /// <summary>
+        /// Checks if a specified library name corresponds to an existing file and returns the result along with the
+        /// file path.
+        /// </summary>
+        /// <param name="libraryName">The name of the library being checked for existence as a file.</param>
+        /// <returns>A tuple containing a boolean indicating if the file exists and the resolved file path.</returns>
+        private (bool, string) LibraryNameIsFile(string libraryName)
+        {
+            string filePath = libraryName;
+            if (FileHelpers.IsHttpUri(filePath))
+            {
+                return (true, filePath);
+            }
+
+            if (!Path.IsPathRooted(filePath))
+            {
+                filePath = Path.Combine(HostInteraction.WorkingDirectory, filePath);
+            }
+
+            return (File.Exists(filePath), filePath);
         }
     }
 }
