@@ -22,20 +22,20 @@ namespace Microsoft.Web.LibraryManager.Tools
         /// <param name="logger"></param>
         /// <param name="cancelToken"></param>
         /// <returns></returns>
-        public static async Task<IList<ILibraryOperationResult>> RestoreManifestAsync(Manifest manifest, ILogger logger, CancellationToken cancelToken)
+        public static async Task<IList<OperationResult<LibraryInstallationGoalState>>> RestoreManifestAsync(Manifest manifest, ILogger logger, CancellationToken cancelToken)
         {
-            IList<ILibraryOperationResult> results = await manifest.RestoreAsync(cancelToken);
+            IList<OperationResult<LibraryInstallationGoalState>> results = await manifest.RestoreAsync(cancelToken);
 
-            IList<ILibraryOperationResult> failures = results.Where(r => r.Errors.Any()).ToList();
+            IList<OperationResult<LibraryInstallationGoalState>> failures = results.Where(r => r.Errors.Any()).ToList();
             if (failures.Any())
             {
                 var librarySpecificErrors = new StringBuilder();
                 var otherErrors = new StringBuilder();
-                foreach (ILibraryOperationResult f in failures)
+                foreach (OperationResult<LibraryInstallationGoalState> f in failures)
                 {
-                    if (f.InstallationState != null)
+                    if (f.Result?.InstallationState is ILibraryInstallationState installState)
                     {
-                        librarySpecificErrors.AppendLine(string.Format(Resources.Text.FailedToRestoreLibraryMessage, f.InstallationState.ToConsoleDisplayString()));
+                        librarySpecificErrors.AppendLine(string.Format(Resources.Text.FailedToRestoreLibraryMessage, installState.ToConsoleDisplayString()));
                         foreach (IError e in f.Errors)
                         {
                             librarySpecificErrors.AppendLine($"  - [{e.Code}]: {e.Message}");

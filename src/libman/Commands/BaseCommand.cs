@@ -204,7 +204,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             return manifest;
         }
 
-        protected void LogResultsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operation, TimeSpan elapsedTime)
+        protected void LogResultsSummary(IEnumerable<OperationResult<LibraryInstallationGoalState>> results, OperationType operation, TimeSpan elapsedTime)
         {
             string messageText = LogMessageGenerator.GetOperationSummaryString(results, operation, elapsedTime);
 

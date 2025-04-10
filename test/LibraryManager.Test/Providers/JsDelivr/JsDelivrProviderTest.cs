@@ -60,7 +60,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             };
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            OperationResult<LibraryInstallationGoalState> result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
         }
 
@@ -76,7 +76,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             };
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            OperationResult<LibraryInstallationGoalState> result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
 
             foreach (string file in new[] { "dist/jquery.js", "dist/jquery.min.js" })
@@ -97,7 +97,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             };
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            OperationResult<LibraryInstallationGoalState> result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
 
             Assert.AreEqual("LIB021", result.Errors[0].Code);
@@ -114,7 +114,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             };
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            OperationResult<LibraryInstallationGoalState> result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
         }
 
@@ -131,7 +131,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             };
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            OperationResult<LibraryInstallationGoalState> result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
@@ -156,7 +156,7 @@ namespace Microsoft.Web.LibraryManager.Test.Providers.JsDelivr
             CollectionAssert.AreEquivalent(new[] { "dist/core.js", "dist/jquery.js", "dist/jquery.slim.js" }, installedFiles);
 
             // Install library
-            ILibraryOperationResult result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
+            OperationResult<LibraryInstallationGoalState> result = await _provider.InstallAsync(desiredState, CancellationToken.None).ConfigureAwait(false);
             Assert.IsTrue(result.Success);
         }
 

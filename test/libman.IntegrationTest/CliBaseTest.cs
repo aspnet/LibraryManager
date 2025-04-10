@@ -2,14 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Microsoft.Web.LibraryManager.Cli.IntegrationTest;
 
 [TestClass]
 [DeploymentItem(@"TestPackages", "TestPackages")]
+[DeploymentItem("TestFiles", "TestFiles")]
 public class CliTestBase
 {
     private const string CliPackageName = "Microsoft.Web.LibraryManager.Cli";
@@ -116,5 +119,25 @@ public class CliTestBase
     {
         string filePath = Path.Combine(_testDirectory, relativeFilePath);
         Assert.IsTrue(File.Exists(filePath), $"Expected file '{relativeFilePath}' does not exist.");
+    }
+
+    protected void AssertDirectoryContents(string directoryPath, IEnumerable<string> expectedFiles, bool failOnExtraFiles = false)
+    {
+        string fullPath = Path.Combine(_testDirectory, directoryPath);
+        Assert.IsTrue(Directory.Exists(fullPath), $"Expected directory '{directoryPath}' does not exist.");
+        HashSet<string> actualFiles = Directory.GetFiles(fullPath, "*", SearchOption.AllDirectories)
+            .Select(file => Path.GetRelativePath(fullPath, file))
+            .ToHashSet();
+
+        foreach (string file in expectedFiles)
+        {
+            Assert.IsTrue(actualFiles.Contains(file), $"Directory contents do not match. Expected: {string.Join(", ", expectedFiles)}. Actual: {string.Join(", ", actualFiles)}");
+        }
+
+        if (failOnExtraFiles)
+        {
+            List<string> extraFiles = actualFiles.Except(expectedFiles).Order().ToList();
+            Assert.IsFalse(extraFiles.Any(), $"Unexpected files found in directory '{directoryPath}': {string.Join(", ", extraFiles)}");
+        }
     }
 }

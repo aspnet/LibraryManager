@@ -28,7 +28,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             sw.Start();
 
             Manifest manifest = await GetManifestAsync();
-            IEnumerable<ILibraryOperationResult> validationResults = await manifest.GetValidationResultsAsync(CancellationToken.None);
+            IEnumerable<OperationResult<LibraryInstallationGoalState>> validationResults = await manifest.GetValidationResultsAsync(CancellationToken.None);
 
             if (!validationResults.All(r => r.Success))
             {
@@ -38,7 +38,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 return (int)ExitCode.Failure;
             }
 
-            IList<ILibraryOperationResult> results = await ManifestRestorer.RestoreManifestAsync(manifest, Logger, CancellationToken.None);
+            IList<OperationResult<LibraryInstallationGoalState>> results = await ManifestRestorer.RestoreManifestAsync(manifest, Logger, CancellationToken.None);
             sw.Stop();
             LogResultsSummary(results, OperationType.Restore, sw.Elapsed);
 

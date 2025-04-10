@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Helpers;
 using Microsoft.Web.LibraryManager.LibraryNaming;
 using Microsoft.Web.LibraryManager.Resources;
 
@@ -16,6 +18,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
     /// <summary>Internal use only</summary>
     internal sealed class FileSystemProvider : BaseProvider
     {
+        public const string IdText = "filesystem";
         private FileSystemCatalog _catalog;
 
         /// <summary>Internal use only</summary>
@@ -27,7 +30,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <summary>
         /// The unique identifier of the provider.
         /// </summary>
-        public override string Id => "filesystem";
+        public override string Id => IdText;
 
         /// <summary>
         /// Hint text for the library id.
@@ -54,68 +57,60 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
         /// <param name="desiredState">The details about the library to install.</param>
         /// <param name="cancellationToken">A token that allows for the operation to be cancelled.</param>
         /// <returns>
-        /// The <see cref="Microsoft.Web.LibraryManager.Contracts.ILibraryOperationResult" /> from the installation process.
+        /// The <see cref="OperationResult{LibraryInstallationGoalState}" /> from the installation process.
         /// </returns>
-        public override async Task<ILibraryOperationResult> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
+        public override async Task<OperationResult<LibraryInstallationGoalState>> InstallAsync(ILibraryInstallationState desiredState, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return LibraryOperationResult.FromCancelled(desiredState);
+                return OperationResult<LibraryInstallationGoalState>.FromCancelled(null);
             }
 
             try
             {
-                ILibraryOperationResult result = await UpdateStateAsync(desiredState, cancellationToken);
-
-                if (!result.Success)
+                OperationResult<LibraryInstallationGoalState> goalStateResult = await GetInstallationGoalStateAsync(desiredState, cancellationToken).ConfigureAwait(false);
+                if (!goalStateResult.Success)
                 {
-                    return result;
+                    return goalStateResult;
                 }
 
-                desiredState = result.InstallationState;
-
-                foreach (string file in desiredState.Files)
+                foreach ((string destFile, string sourceFile) in goalStateResult.Result.InstalledFiles)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        return LibraryOperationResult.FromCancelled(desiredState);
+                        return OperationResult<LibraryInstallationGoalState>.FromCancelled(goalStateResult.Result);
                     }
 
-                    if (string.IsNullOrEmpty(file))
+                    if (string.IsNullOrEmpty(destFile))
                     {
-                        return new LibraryOperationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
+                        return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.CouldNotWriteFile(destFile));
                     }
 
-                    string path = Path.Combine(desiredState.DestinationPath, file);
-                    var sourceStream = new Func<Stream>(() => GetStreamAsync(desiredState, file, cancellationToken).Result);
-                    bool writeOk = await HostInteraction.WriteFileAsync(path, sourceStream, desiredState, cancellationToken).ConfigureAwait(false);
+                    string libraryName = LibraryNamingScheme.GetLibraryId(desiredState.Name, desiredState.Version);
+                    var sourceStream = new Func<Stream>(() => GetStreamAsync(sourceFile, libraryName, cancellationToken).Result);
+                    bool writeOk = await HostInteraction.WriteFileAsync(destFile, sourceStream, desiredState, cancellationToken).ConfigureAwait(false);
 
                     if (!writeOk)
                     {
-                        return new LibraryOperationResult(desiredState, PredefinedErrors.CouldNotWriteFile(file));
+                        return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.CouldNotWriteFile(destFile));
                     }
                 }
+
+                return OperationResult<LibraryInstallationGoalState>.FromSuccess(goalStateResult.Result);
             }
             catch (UnauthorizedAccessException)
             {
-                return new LibraryOperationResult(desiredState, PredefinedErrors.PathOutsideWorkingDirectory());
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.PathOutsideWorkingDirectory());
             }
             catch (ResourceDownloadException ex)
             {
-                return new LibraryOperationResult(desiredState, PredefinedErrors.FailedToDownloadResource(ex.Url));
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.FailedToDownloadResource(ex.Url));
             }
             catch (Exception ex)
             {
                 HostInteraction.Logger.Log(ex.ToString(), LogLevel.Error);
-                return new LibraryOperationResult(desiredState, PredefinedErrors.UnknownException());
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.UnknownException());
             }
-
-            return LibraryOperationResult.FromSuccess(desiredState);
-        }
-
-        protected override ILibraryOperationResult CheckForInvalidFiles(ILibraryInstallationState desiredState, string libraryId, ILibrary library)
-        {
-            return LibraryOperationResult.FromSuccess(desiredState);
         }
 
         /// <summary>
@@ -141,10 +136,8 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             return string.Empty;
         }
 
-        private async Task<Stream> GetStreamAsync(ILibraryInstallationState state, string file, CancellationToken cancellationToken)
+        private async Task<Stream> GetStreamAsync(string sourceFile, string libraryName, CancellationToken cancellationToken)
         {
-            string sourceFile = state.Name;
-
             try
             {
                 if (!Uri.TryCreate(sourceFile, UriKind.RelativeOrAbsolute, out Uri url))
@@ -160,14 +153,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
                 // File
                 if (url.IsFile)
                 {
-                    if (Directory.Exists(url.OriginalString))
-                    {
-                        return await FileHelpers.ReadFileAsStreamAsync(Path.Combine(url.OriginalString, file), cancellationToken).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        return await FileHelpers.ReadFileAsStreamAsync(sourceFile, cancellationToken).ConfigureAwait(false);
-                    }
+                    return await FileHelpers.ReadFileAsStreamAsync(sourceFile, cancellationToken).ConfigureAwait(false);
                 }
                 // Url
                 else
@@ -181,7 +167,7 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
             }
             catch (Exception)
             {
-                throw new InvalidLibraryException(state.Name, state.ProviderId);
+                throw new InvalidLibraryException(libraryName, Id);
             }
         }
 
@@ -220,14 +206,65 @@ namespace Microsoft.Web.LibraryManager.Providers.FileSystem
 
             // For other filesystem libraries, the state.Name may be a either a file or folder
             // TODO: abstract file system
-            if (File.Exists(state.Name))
+            (bool isFile, string resolvedFilePath) = LibraryNameIsFile(state.Name);
+            
+            if (isFile)
             {
-                return state.Name;
+                return resolvedFilePath;
             }
 
             // as a fallback, assume state.Name is a directory.  If this path doesn't exist, it will
             // be handled elsewhere.
+
+            // root relative paths to the libman working directory
+            if (!Path.IsPathRooted(state.Name))
+            {
+                return Path.GetFullPath(Path.Combine(HostInteraction.WorkingDirectory, state.Name, sourceFile));
+            }
+
             return Path.Combine(state.Name, sourceFile);
+        }
+
+        /// <inheritdoc />
+        protected override Dictionary<string, string> GetFileMappings(ILibrary library, IReadOnlyList<string> fileFilters, string mappingRoot, string destination, ILibraryInstallationState desiredState, List<IError> errors)
+        {
+            Dictionary<string, string> fileMappings = new();
+            // Handle single-file edge cases for FileSystem
+            (bool librarySpecifiedIsFile, string resolvedFilePath) = LibraryNameIsFile(library.Name);
+            if (librarySpecifiedIsFile && fileFilters.Count == 1)
+            {
+                // direct 1:1 file mapping, allowing file rename
+                string destinationFile = Path.Combine(HostInteraction.WorkingDirectory, destination, fileFilters[0]);
+                destinationFile = FileHelpers.NormalizePath(destinationFile);
+
+                // the library specified is a single file, so use that as the source directly
+                fileMappings.Add(destinationFile, resolvedFilePath);
+                return fileMappings;
+            }
+
+            return base.GetFileMappings(library, fileFilters, mappingRoot, destination, desiredState, errors);
+        }
+
+        /// <summary>
+        /// Checks if a specified library name corresponds to an existing file and returns the result along with the
+        /// file path.
+        /// </summary>
+        /// <param name="libraryName">The name of the library being checked for existence as a file.</param>
+        /// <returns>A tuple containing a boolean indicating if the file exists and the resolved file path.</returns>
+        private (bool, string) LibraryNameIsFile(string libraryName)
+        {
+            string filePath = libraryName;
+            if (FileHelpers.IsHttpUri(filePath))
+            {
+                return (true, filePath);
+            }
+
+            if (!Path.IsPathRooted(filePath))
+            {
+                filePath = Path.Combine(HostInteraction.WorkingDirectory, filePath);
+            }
+
+            return (File.Exists(filePath), filePath);
         }
     }
 }

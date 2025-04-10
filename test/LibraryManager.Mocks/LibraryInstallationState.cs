@@ -34,6 +34,6 @@ namespace Microsoft.Web.LibraryManager.Mocks
         public bool IsUsingDefaultProvider { get; set; }
 
         /// <inheritdoc />
-        public IReadOnlyList<FileMapping> FileMappings => throw new System.NotImplementedException();
+        public IReadOnlyList<FileMapping> FileMappings { get; set; }
     }
 }

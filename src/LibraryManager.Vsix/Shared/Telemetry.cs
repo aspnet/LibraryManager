@@ -49,13 +49,13 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
             TelemetryService.DefaultSession.PostFault(Namespace + actualName, exception.Message, exception);
         }
 
-        internal static void LogEventsSummary(IEnumerable<ILibraryOperationResult> results, OperationType operation, TimeSpan elapsedTime)
+        internal static void LogEventsSummary(IEnumerable<OperationResult<LibraryInstallationGoalState>> results, OperationType operation, TimeSpan elapsedTime)
         {
             Dictionary<string, object> telResult = new Dictionary<string, object>();
             double elapsedTimeRounded = Math.Round(elapsedTime.TotalSeconds, 2);
             string elapsedTimeStr = elapsedTimeRounded.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            List<string> generalErrorCodes = GetErrorCodes(results.Where(r => r.InstallationState == null && r.Errors.Any()));
-            IEnumerable<string> providers = results.Select(r => r.InstallationState?.ProviderId).Distinct(StringComparer.OrdinalIgnoreCase);
+            List<string> generalErrorCodes = GetErrorCodes(results.Where(r => r.Result?.InstallationState == null && r.Errors.Any()));
+            IEnumerable<string> providers = results.Select(r => r.Result?.InstallationState?.ProviderId).Distinct(StringComparer.OrdinalIgnoreCase);
 
             telResult.Add("LibrariesCount", results.Count());
             telResult.Add($"{operation}_time", elapsedTimeStr);
@@ -67,15 +67,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
             foreach (string provider in providers)
             {
-                List<ILibraryOperationResult> successfulProviderResults = new List<ILibraryOperationResult>();
-                List<ILibraryOperationResult> failedProviderResults = new List<ILibraryOperationResult>();
-                List<ILibraryOperationResult> cancelledProviderResults = new List<ILibraryOperationResult>();
-                List<ILibraryOperationResult> uptodateProviderResults = new List<ILibraryOperationResult>();
+                List<OperationResult<LibraryInstallationGoalState>> successfulProviderResults = new();
+                List<OperationResult<LibraryInstallationGoalState>> failedProviderResults = new();
+                List<OperationResult<LibraryInstallationGoalState>> cancelledProviderResults = new();
+                List<OperationResult<LibraryInstallationGoalState>> uptodateProviderResults = new();
 
-                foreach (ILibraryOperationResult result in results)
+                foreach (OperationResult<LibraryInstallationGoalState> result in results)
                 {
-                    if (result.InstallationState != null &&
-                        result.InstallationState.ProviderId.Equals(provider, StringComparison.OrdinalIgnoreCase))
+                    if (result.Result?.InstallationState != null &&
+                        result.Result.InstallationState.ProviderId.Equals(provider, StringComparison.OrdinalIgnoreCase))
                     {
                         if (result.Success && !result.UpToDate)
                         {
@@ -123,17 +123,17 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
             TrackUserTask($@"{operation}_Operation", TelemetryResult.None, telResult.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).ToArray());
         }
 
-        internal static void LogErrors(string eventName, IEnumerable<ILibraryOperationResult> results)
+        internal static void LogErrors(string eventName, IEnumerable<OperationResult<LibraryInstallationGoalState>> results)
         {
             List<string> errorCodes = GetErrorCodes(results.Where(r => r.Errors.Any()));
             TrackUserTask(eventName, TelemetryResult.Failure, new KeyValuePair<string, object>("Errorcode", string.Join(":", errorCodes)));
         }
 
-        private static List<string> GetErrorCodes(IEnumerable<ILibraryOperationResult> results)
+        private static List<string> GetErrorCodes(IEnumerable<OperationResult<LibraryInstallationGoalState>> results)
         {
             List<string> errorCodes = new List<string>();
 
-            foreach (ILibraryOperationResult result in results)
+            foreach (OperationResult<LibraryInstallationGoalState> result in results)
             {
                 errorCodes.AddRange(result.Errors.Select(e => e.Code));
             }
