@@ -32,7 +32,14 @@ extends:
   template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
   parameters:
     sdl:
-      sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
+       sourceAnalysisPool:
+         name: VSEngSS-MicroBuild2022-1ES
+         os: windows
+       policheck:
+         enabled: true
+       tsa:
+         enabled: true
+         configFile: '$(Build.SourcesDirectory)/.context/TSAConfig.gdntsa'
     pool:
       name: AzurePipelines-EO
       image: AzurePipelinesWindows2022compliantGPT
