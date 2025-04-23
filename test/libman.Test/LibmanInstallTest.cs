@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,16 +34,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
             string text = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
-            string expectedText = @"{
-  ""version"": ""3.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.2.1"",
-      ""destination"": ""wwwroot""
-    }
-  ]
-}";
+            string expectedText = """
+                {
+                  "version": "3.0",
+                  "defaultProvider": "cdnjs",
+                  "libraries": [
+                    {
+                      "library": "jquery@3.2.1",
+                      "destination": "wwwroot"
+                    }
+                  ]
+                }
+                """;
             Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(text));
         }
 
@@ -63,16 +64,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
             string text = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
-            string expectedText = @"{
-  ""version"": ""3.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.2.1"",
-      ""destination"": ""wwwroot""
-    }
-  ]
-}";
+            string expectedText = """
+                {
+                  "version": "3.0",
+                  "defaultProvider": "cdnjs",
+                  "libraries": [
+                    {
+                      "library": "jquery@3.2.1",
+                      "destination": "wwwroot"
+                    }
+                  ]
+                }
+                """;
             Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(text));
         }
 
@@ -83,11 +86,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
 
             testInputReader.Inputs.Add("ProviderId", "cdnjs");
 
-            string initialContent = @"{
-  ""version"": ""1.0"",
-  ""libraries"": [
-  ]
-}";
+            string initialContent = """
+                {
+                  "version": "1.0",
+                  "libraries": [
+                  ]
+                }
+                """;
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
             var command = new InstallCommand(HostEnvironment);
@@ -98,16 +103,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
             string text = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
-            string expectedText = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.2.1"",
-      ""destination"": ""wwwroot""
-    }
-  ]
-}";
+            string expectedText = """
+                {
+                  "version": "1.0",
+                  "defaultProvider": "cdnjs",
+                  "libraries": [
+                    {
+                      "library": "jquery@3.2.1",
+                      "destination": "wwwroot"
+                    }
+                  ]
+                }
+                """;
             Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(text));
         }
 
@@ -118,13 +125,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var command = new InstallCommand(HostEnvironment);
             command.Configure(null);
 
-            string initialContent = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""defaultDestination"": ""wwwroot"",
-  ""libraries"": [
-  ]
-}";
+            string initialContent = """
+                {
+                  "version": "1.0",
+                  "defaultProvider": "cdnjs",
+                  "defaultDestination": "wwwroot",
+                  "libraries": [
+                  ]
+                }
+                """;
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
 
@@ -133,16 +142,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
             string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
-            string expectedText = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""defaultDestination"": ""wwwroot"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.2.1""
-    }
-  ]
-}";
+            string expectedText = """
+                {
+                  "version": "1.0",
+                  "defaultProvider": "cdnjs",
+                  "defaultDestination": "wwwroot",
+                  "libraries": [
+                    {
+                      "library": "jquery@3.2.1"
+                    }
+                  ]
+                }
+                """;
             Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
         }
 
@@ -152,16 +163,18 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var command = new InstallCommand(HostEnvironment);
             command.Configure(null);
 
-            string initialContent = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""defaultDestination"": ""wwwroot"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.2.1""
-    }
-  ]
-}";
+            string initialContent = """
+                {
+                  "version": "1.0",
+                  "defaultProvider": "cdnjs",
+                  "defaultDestination": "wwwroot",
+                  "libraries": [
+                    {
+                      "library": "jquery@3.2.1"
+                    }
+                  ]
+                }
+                """;
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
 
@@ -177,13 +190,15 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var command = new InstallCommand(HostEnvironment);
             command.Configure(null);
 
-            string initialContent = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""defaultDestination"": ""wwwroot"",
-  ""libraries"": [
-  ]
-}";
+            string initialContent = """
+                {
+                  "version": "1.0",
+                  "defaultProvider": "cdnjs",
+                  "defaultDestination": "wwwroot",
+                  "libraries": [
+                  ]
+                }
+                """;
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
             command.Execute("jquery@3.2.1", "--files", "jquery.min.js");
@@ -191,19 +206,21 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             Assert.IsTrue(File.Exists(Path.Combine(WorkingDir, "libman.json")));
 
             string actualText = File.ReadAllText(Path.Combine(WorkingDir, "libman.json"));
-            string expectedText = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""defaultDestination"": ""wwwroot"",
-  ""libraries"": [
-    {
-      ""library"": ""jquery@3.2.1"",
-      ""files"": [
-        ""jquery.min.js""
-      ]
-    }
-  ]
-}";
+            string expectedText = """
+                {
+                  "version": "1.0",
+                  "defaultProvider": "cdnjs",
+                  "defaultDestination": "wwwroot",
+                  "libraries": [
+                    {
+                      "library": "jquery@3.2.1",
+                      "files": [
+                        "jquery.min.js"
+                      ]
+                    }
+                  ]
+                }
+                """;
             Assert.AreEqual(StringHelper.NormalizeNewLines(expectedText), StringHelper.NormalizeNewLines(actualText));
         }
 
@@ -213,18 +230,22 @@ namespace Microsoft.Web.LibraryManager.Tools.Test
             var command = new InstallCommand(HostEnvironment);
             command.Configure(null);
 
-            string initialContent = @"{
-  ""version"": ""1.0"",
-  ""defaultProvider"": ""cdnjs"",
-  ""defaultDestination"": ""wwwroot"",
-  ""libraries"": [
-  ]
-}";
+            string initialContent = """
+                {
+                  "version": "1.0",
+                  "defaultProvider": "cdnjs",
+                  "defaultDestination": "wwwroot",
+                  "libraries": [
+                  ]
+                }
+                """;
 
             File.WriteAllText(Path.Combine(WorkingDir, "libman.json"), initialContent);
             command.Execute("jquery@3.5.0", "--files", "abc.js");
-            string expectedMessage = @"[LIB018]: ""jquery@3.5.0"" does not contain the following: abc.js
-Valid files are jquery.js, jquery.min.js, jquery.min.map, jquery.slim.js, jquery.slim.min.js, jquery.slim.min.map";
+            string expectedMessage = """
+                [LIB018]: "jquery@3.5.0" does not contain the following: abc.js
+                Valid files are jquery.js, jquery.min.js, jquery.min.map, jquery.slim.js, jquery.slim.min.js, jquery.slim.min.map
+                """;
 
             var logger = HostEnvironment.Logger as TestLogger;
             Assert.AreEqual(expectedMessage, logger.Messages.Last().Value);

@@ -69,7 +69,7 @@ namespace Microsoft.Web.LibraryManager.Build
                 return false;
             }
 
-            IEnumerable<ILibraryOperationResult> validationResults = manifest.GetValidationResultsAsync(token).Result;
+            IEnumerable<OperationResult<LibraryInstallationGoalState>> validationResults = manifest.GetValidationResultsAsync(token).Result;
             if (!validationResults.All(r => r.Success))
             {
                 sw.Stop();
@@ -78,7 +78,7 @@ namespace Microsoft.Web.LibraryManager.Build
                 return false;
             }
 
-            IEnumerable<ILibraryOperationResult> results = manifest.RestoreAsync(token).Result;
+            IList<OperationResult<LibraryInstallationGoalState>> results = manifest.RestoreAsync(token).Result;
 
             sw.Stop();
             FlushLogger(logger);
@@ -103,7 +103,7 @@ namespace Microsoft.Web.LibraryManager.Build
             }
         }
 
-        private void LogResults(Stopwatch sw, IEnumerable<ILibraryOperationResult> results)
+        private void LogResults(Stopwatch sw, IEnumerable<OperationResult<LibraryInstallationGoalState>> results)
         {
             bool hasErrors = results.Any(r => !r.Success);
 
@@ -136,19 +136,14 @@ namespace Microsoft.Web.LibraryManager.Build
             Log.LogMessage(MessageImportance.High, Environment.NewLine + text + Environment.NewLine);
         }
 
-        private void PopulateFilesWritten(IEnumerable<ILibraryOperationResult> results, Dependencies dependencies)
+        private void PopulateFilesWritten(IEnumerable<OperationResult<LibraryInstallationGoalState>> results, Dependencies dependencies)
         {
-            IEnumerable<ILibraryInstallationState> states = results.Where(r => r.Success).Select(r => r.InstallationState);
+            IEnumerable<LibraryInstallationGoalState> goalStates = results.Where(r => r.Success).Select(r => r.Result);
             var list = new List<ITaskItem>();
 
-            foreach (ILibraryInstallationState state in states)
+            foreach (LibraryInstallationGoalState goalState in goalStates)
             {
-                IProvider provider = dependencies.GetProvider(state.ProviderId);
-                OperationResult<LibraryInstallationGoalState> goalStateResult = provider.GetInstallationGoalStateAsync(state, CancellationToken.None).Result;
-                if (goalStateResult.Success)
-                {
-                    list.AddRange(goalStateResult.Result.InstalledFiles.Select(f => new TaskItem(f.Key)));
-                }
+                list.AddRange(goalState.InstalledFiles.Select(f => new TaskItem(f.Key)));
             }
 
             FilesWritten = list.ToArray();

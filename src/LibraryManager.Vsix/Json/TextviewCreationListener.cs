@@ -80,7 +80,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
             _ = Task.Run(async () =>
             {
-                IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, dependencies, CancellationToken.None).ConfigureAwait(false);
+                IEnumerable<OperationResult<LibraryInstallationGoalState>> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, dependencies, CancellationToken.None).ConfigureAwait(false);
                 if (!results.All(r => r.Success))
                 {
                     AddErrorsToList(results);
@@ -108,7 +108,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
                     {
                         IDependencies dependencies = DependenciesFactory.FromConfigFile(textDocument.FilePath);
                         var newManifest = Manifest.FromJson(textDocument.TextBuffer.CurrentSnapshot.GetText(), dependencies);
-                        IEnumerable<ILibraryOperationResult> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, dependencies, CancellationToken.None).ConfigureAwait(false);
+                        IEnumerable<OperationResult<LibraryInstallationGoalState>> results = await LibrariesValidator.GetManifestErrorsAsync(newManifest, dependencies, CancellationToken.None).ConfigureAwait(false);
 
                         if (!results.All(r => r.Success))
                         {
@@ -170,7 +170,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             _errorList?.ClearErrors();
         }
 
-        private void AddErrorsToList(IEnumerable<ILibraryOperationResult> errors)
+        private void AddErrorsToList(IEnumerable<OperationResult<LibraryInstallationGoalState>> errors)
         {
             _errorList = new ErrorListPropagator(_project?.Name, _manifestPath);
             _errorList.HandleErrors(errors);

@@ -182,11 +182,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
                 Project project = VsHelpers.GetDTEProjectFromConfig(configFileName);
 
                 Manifest manifest = await Manifest.FromFileAsync(configFileName, dependencies, CancellationToken.None).ConfigureAwait(false);
-                IEnumerable<ILibraryOperationResult> results = new List<ILibraryOperationResult>();
+                IEnumerable<OperationResult<LibraryInstallationGoalState>> results = new List<OperationResult<LibraryInstallationGoalState>>();
 
                 if (manifest != null)
                 {
-                    IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(manifest, dependencies, cancellationToken).ConfigureAwait(false);
+                    IEnumerable<OperationResult<LibraryInstallationGoalState>> validationResults = await LibrariesValidator.GetManifestErrorsAsync(manifest, dependencies, cancellationToken).ConfigureAwait(false);
 
                     if (!validationResults.All(r => r.Success))
                     {
@@ -234,7 +234,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
                     Logger.LogEvent(string.Format(LibraryManager.Resources.Text.Restore_LibrariesForProject, project?.Name), LogLevel.Operation);
 
-                    IEnumerable<ILibraryOperationResult> validationResults = await LibrariesValidator.GetManifestErrorsAsync(manifest.Value, dependencies, cancellationToken).ConfigureAwait(false);
+                    IEnumerable<OperationResult<LibraryInstallationGoalState>> validationResults = await LibrariesValidator.GetManifestErrorsAsync(manifest.Value, dependencies, cancellationToken).ConfigureAwait(false);
                     if (!validationResults.All(r => r.Success))
                     {
                         swLocal.Stop();
@@ -244,7 +244,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
                     }
                     else
                     {
-                        IEnumerable<ILibraryOperationResult> results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
+                        var results = await RestoreLibrariesAsync(manifest.Value, cancellationToken).ConfigureAwait(false);
                         await AddFilesToProjectAsync(manifest.Key, project, results.Where(r =>r.Success && !r.UpToDate), cancellationToken).ConfigureAwait(false);
 
                         swLocal.Stop();
@@ -264,7 +264,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
             }
         }
 
-        private async Task<IEnumerable<ILibraryOperationResult>> RestoreLibrariesAsync(Manifest manifest, CancellationToken cancellationToken)
+        private async Task<IEnumerable<OperationResult<LibraryInstallationGoalState>>> RestoreLibrariesAsync(Manifest manifest, CancellationToken cancellationToken)
         {
             return await manifest.RestoreAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -281,11 +281,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
                 var dependencies = _dependenciesFactory.FromConfigFile(configFilePath);
                 Manifest manifest = await Manifest.FromFileAsync(configFilePath, dependencies, cancellationToken).ConfigureAwait(false);
-                ILibraryOperationResult result = null;
+                OperationResult<LibraryInstallationGoalState> result = null;
 
                 if (manifest == null)
                 {
-                    result = LibraryOperationResult.FromError(PredefinedErrors.ManifestMalformed());
+                    result = OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.ManifestMalformed());
                 }
                 else
                 {
@@ -297,14 +297,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
 
                 if (result.Errors.Any())
                 {
-                    Logger.LogErrorsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall);
+                    Logger.LogErrorsSummary(new List<OperationResult<LibraryInstallationGoalState>> { result }, OperationType.Uninstall);
                 }
                 else
                 {
-                    Logger.LogEventsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall, sw.Elapsed);
+                    Logger.LogEventsSummary(new List<OperationResult<LibraryInstallationGoalState>> { result }, OperationType.Uninstall, sw.Elapsed);
                 }
 
-                Telemetry.LogEventsSummary(new List<ILibraryOperationResult> { result }, OperationType.Uninstall, sw.Elapsed);
+                Telemetry.LogEventsSummary(new List<OperationResult<LibraryInstallationGoalState>> { result }, OperationType.Uninstall, sw.Elapsed);
             }
             catch (OperationCanceledException ex)
             {
@@ -333,26 +333,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.Shared
             return string.Empty;
         }
 
-        private void AddErrorsToErrorList(string projectName, string configFile, IEnumerable<ILibraryOperationResult> results)
+        private void AddErrorsToErrorList(string projectName, string configFile, IEnumerable<OperationResult<LibraryInstallationGoalState>> results)
         {
             var errorList = new ErrorListPropagator(projectName, configFile);
             errorList.HandleErrors(results);
         }
 
-        private async Task AddFilesToProjectAsync(string configFilePath, Project project, IEnumerable<ILibraryOperationResult> results, CancellationToken cancellationToken)
+        private async Task AddFilesToProjectAsync(string configFilePath, Project project, IEnumerable<OperationResult<LibraryInstallationGoalState>> results, CancellationToken cancellationToken)
         {
             string workingDirectory = Path.GetDirectoryName(configFilePath);
             var files = new List<string>();
 
             if (project != null)
             {
-                foreach (ILibraryOperationResult state in results)
+                foreach (OperationResult<LibraryInstallationGoalState> goalStateResult in results)
                 {
-                    if (state.Success && !state.UpToDate && state.InstallationState.Files != null)
+                    if (goalStateResult.Success && !goalStateResult.UpToDate && goalStateResult.Result.InstallationState.Files != null)
                     {
-                        IEnumerable<string> absoluteFiles = state.InstallationState.Files
-                            .Select(file => Path.Combine(workingDirectory, state.InstallationState.DestinationPath, file)
-                            .Replace('/', Path.DirectorySeparatorChar));
+                        IEnumerable<string> absoluteFiles = goalStateResult.Result.InstalledFiles.Keys;
                         files.AddRange(absoluteFiles);
                     }
                 }

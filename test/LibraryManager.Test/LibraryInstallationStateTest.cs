@@ -66,7 +66,7 @@ namespace Microsoft.Web.LibraryManager.Test
         {
             ILibraryInstallationState state = null;
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
@@ -84,7 +84,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new List<string>() { "a", "b" },
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
@@ -101,7 +101,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new List<string>() { "a", "b" },
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
@@ -118,7 +118,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new List<string>() { "a", "b" },
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
@@ -136,7 +136,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new List<string>() { "a", "b" },
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
@@ -155,11 +155,10 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new List<string>() { "a", "b" },
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
-            // IsValidAsync does not validate library files
-            // Issue https://github.com/aspnet/LibraryManager/issues/254 should fix that
-            Assert.IsTrue(result.Success);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual("LIB018", result.Errors[0].Code);
         }
 
         [TestMethod]
@@ -173,7 +172,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new List<string>() { "a", "b" },
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
@@ -190,7 +189,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 DestinationPath = "lib",
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);
@@ -208,7 +207,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 Files = new[] { "foo.png" }
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             // FileSystemProvider supports renaming, therefore validation does not fail
             Assert.IsTrue(result.Success);
@@ -224,7 +223,7 @@ namespace Microsoft.Web.LibraryManager.Test
                 DestinationPath = "|lib"
             };
 
-            ILibraryOperationResult result = await state.IsValidAsync(_dependencies);
+            OperationResult<LibraryInstallationGoalState> result = await state.IsValidAsync(_dependencies);
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual(result.Errors.Count, 1);

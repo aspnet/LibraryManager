@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.LibraryManager.Contracts;
+using Microsoft.Web.LibraryManager.Providers.FileSystem;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -23,23 +24,23 @@ namespace Microsoft.Web.LibraryManager.Helpers
         /// </summary>
         /// <param name="state">The <see cref="ILibraryInstallationState"/> to validate.</param>
         /// <param name="dependencies">The <see cref="IDependencies"/> used to validate <see cref="ILibraryInstallationState"/></param>
-        /// <returns><see cref="ILibraryOperationResult"/> with the result of the validation</returns>
-        public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IDependencies dependencies)
+        /// <returns><see cref="OperationResult{LibraryInstallationGoalState}"/> with the result of the validation</returns>
+        public static async Task<OperationResult<LibraryInstallationGoalState>> IsValidAsync(this ILibraryInstallationState state, IDependencies dependencies)
         {
             if (state == null)
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.UnknownError() });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.UnknownError());
             }
 
             if (string.IsNullOrEmpty(state.ProviderId))
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderIsUndefined() });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.ProviderIsUndefined());
             }
 
             IProvider provider = dependencies?.GetProvider(state.ProviderId);
             if (provider == null)
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderUnknown(state.ProviderId) });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.ProviderUnknown(state.ProviderId));
             }
 
             return await IsValidAsync(state, provider).ConfigureAwait(false);
@@ -50,22 +51,22 @@ namespace Microsoft.Web.LibraryManager.Helpers
         /// </summary>
         /// <param name="state">The <see cref="ILibraryInstallationState"/> to validate.</param>
         /// <param name="provider">The <see cref="IProvider"/> used to validate <see cref="ILibraryInstallationState"/></param>
-        /// <returns><see cref="ILibraryOperationResult"/> with the result of the validation</returns>
-        public static async Task<ILibraryOperationResult> IsValidAsync(this ILibraryInstallationState state, IProvider provider)
+        /// <returns><see cref="OperationResult{LibraryInstallationGoalState}"/> with the result of the validation</returns>
+        public static async Task<OperationResult<LibraryInstallationGoalState>> IsValidAsync(this ILibraryInstallationState state, IProvider provider)
         {
             if (state == null)
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.UnknownError() });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.UnknownError());
             }
 
             if (provider == null)
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.ProviderUnknown(string.Empty) });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.ProviderUnknown(string.Empty));
             }
 
             if (string.IsNullOrEmpty(state.Name))
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.LibraryIdIsUndefined() });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.LibraryIdIsUndefined());
             }
 
             ILibraryCatalog catalog = provider.GetCatalog();
@@ -75,20 +76,22 @@ namespace Microsoft.Web.LibraryManager.Helpers
             }
             catch
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.UnableToResolveSource(state.Name, state.Version, provider.Id) });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.UnableToResolveSource(state.Name, state.Version, provider.Id));
             }
 
             if (string.IsNullOrEmpty(state.DestinationPath))
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.PathIsUndefined() });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.PathIsUndefined());
             }
 
             if (state.DestinationPath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
             {
-                return new LibraryOperationResult(state, new[] { PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath) });
+                return OperationResult<LibraryInstallationGoalState>.FromError(PredefinedErrors.DestinationPathHasInvalidCharacters(state.DestinationPath));
             }
 
-            return LibraryOperationResult.FromSuccess(state);
+            OperationResult<LibraryInstallationGoalState> goalStateResult = await provider.GetInstallationGoalStateAsync(state, CancellationToken.None);
+
+            return goalStateResult;
         }
 
         /// <summary>
@@ -105,6 +108,16 @@ namespace Microsoft.Web.LibraryManager.Helpers
             }
 
             var invalidFiles = new List<string>();
+
+            if (library.ProviderId == FileSystemProvider.IdText
+                && library.Files.Count == 1)
+            {
+                // Ideally this would be in the FileSystemLibrary, but this is an extension method.
+                // For FileSystem provider, if a single file is specified, it is always valid.
+                // It can be mapped to a different file name at the destination.
+                // This is valid for FileSystem but not for any other provider.
+                return invalidFiles;
+            }
 
             if (files == null || !files.Any())
             {
@@ -170,5 +183,15 @@ namespace Microsoft.Web.LibraryManager.Helpers
             return propertyValue;
         }
 
+#if NETFRAMEWORK
+        /// <summary>
+        /// Destructs the KeyValuePair into separate values for key and value.
+        /// </summary>
+        public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> pair, out T1 key, out T2 value)
+        {
+            key = pair.Key;
+            value = pair.Value;
+        }
+#endif
     }
 }

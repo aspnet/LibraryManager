@@ -72,7 +72,7 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         protected override async Task<int> ExecuteInternalAsync()
         {
             Manifest manifest = await GetManifestAsync();
-            IEnumerable<ILibraryOperationResult> validationResults = await manifest.GetValidationResultsAsync(CancellationToken.None);
+            IEnumerable<OperationResult<LibraryInstallationGoalState>> validationResults = await manifest.GetValidationResultsAsync(CancellationToken.None);
 
             if (!validationResults.All(r => r.Success))
             {
@@ -125,11 +125,11 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
             // Delete files from old version of the library.
             await backup.RemoveUnwantedFilesAsync(manifest, CancellationToken.None);
 
-            IEnumerable<ILibraryOperationResult> results = await manifest.RestoreAsync(CancellationToken.None);
+            IEnumerable<OperationResult<LibraryInstallationGoalState>> results = await manifest.RestoreAsync(CancellationToken.None);
 
-            ILibraryOperationResult result = null;
+            OperationResult<LibraryInstallationGoalState> result = null;
 
-            foreach (ILibraryOperationResult r in results)
+            foreach (OperationResult<LibraryInstallationGoalState> r in results)
             {
                 if (!r.Success && r.Errors.Any(e => e.Message.Contains(libraryToUpdate.Name, StringComparison.OrdinalIgnoreCase)))
                 {
@@ -137,9 +137,10 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                     break;
                 }
                 else if (r.Success
-                    && r.InstallationState.Name  == libraryToUpdate.Name
-                    && r.InstallationState.ProviderId == libraryToUpdate.ProviderId
-                    && r.InstallationState.DestinationPath == libraryToUpdate.DestinationPath)
+                    && r.Result != null
+                    && r.Result.InstallationState.Name  == libraryToUpdate.Name
+                    && r.Result.InstallationState.ProviderId == libraryToUpdate.ProviderId
+                    && r.Result.InstallationState.DestinationPath == libraryToUpdate.DestinationPath)
                 {
                     result = r;
                     break;

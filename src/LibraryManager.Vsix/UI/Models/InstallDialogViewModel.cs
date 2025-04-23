@@ -419,7 +419,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Models
                 Files = SelectedFiles?.ToList()
             };
 
-            ILibraryOperationResult libraryOperationResult = await libraryInstallationState.IsValidAsync(SelectedProvider).ConfigureAwait(false);
+            OperationResult<LibraryInstallationGoalState> libraryOperationResult = await libraryInstallationState.IsValidAsync(SelectedProvider).ConfigureAwait(false);
             IList<IError> errors = libraryOperationResult.Errors;
 
             ErrorMessage = string.Empty;
