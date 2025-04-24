@@ -1,0 +1,15 @@
+﻿{
+    "codebaseName": "Library-Manager-GitHub",
+    "notificationAliases": [
+        "dotnetdevexwlp@microsoft.com"
+    ],
+    "codebaseAdmins": [
+        "REDMOND\\alexgav",
+        "REDMOND\\phillipa"
+    ],
+    "instanceUrl": "https://devdiv.visualstudio.com",
+    "projectName": "DevDiv",
+    "areaPath": "DevDiv\\NET Developer Experience\\Web\\Library Manager",
+    "iterationPath": "DevDiv",
+    "allTools": true
+}
