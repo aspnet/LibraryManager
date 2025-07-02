@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
@@ -56,11 +57,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void NotifyScreenReaderOfTextChanged(object sender, EventArgs e)
         {
-            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                UIElementAutomationPeer.FromElement(SearchTextBox).RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
-            });
+            _ = NotifyScreenReaderOfTextChangedAsync(sender, e, CancellationToken.None);
+        }
+
+        private async Task NotifyScreenReaderOfTextChangedAsync(object sender, EventArgs e, CancellationToken cancellationToken)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            UIElementAutomationPeer.FromElement(SearchTextBox).RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
         }
 
         public bool IsMouseOverFlyout => Options.IsMouseOver;

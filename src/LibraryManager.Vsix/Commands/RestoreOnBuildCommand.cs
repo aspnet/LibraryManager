@@ -5,15 +5,25 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Threading;
 using EnvDTE;
+using Microsoft.ServiceHub.Framework;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Shell.ServiceBroker;
 using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Contracts;
 using Microsoft.Web.LibraryManager.Vsix.Shared;
 using NuGet.VisualStudio;
+using NuGet.VisualStudio.Contracts;
 using Task = System.Threading.Tasks.Task;
+using System.Threading.Tasks;
+using Microsoft;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OperationProgress;
+using Microsoft.VisualStudio.Threading;
+using StreamJsonRpc;
 
 namespace Microsoft.Web.LibraryManager.Vsix.Commands
 {
@@ -66,7 +76,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
                 button.Visible = true;
                 button.Enabled = KnownUIContexts.SolutionExistsAndNotBuildingAndNotDebuggingContext.IsActive;
 
-                _isPackageInstalled = IsPackageInstalled(item.ContainingProject);
+                _isPackageInstalled = await IsPackageInstalledAsync(item.ContainingProject, CancellationToken.None);
 
                 if (_isPackageInstalled)
                 {
@@ -135,7 +145,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
 
                             Telemetry.TrackUserTask("Uninstall-NugetPackage");
                             Logger.LogEvent(Resources.Text.Nuget_PackageUninstalled, LogLevel.Status);
-                        }            
+                        }
                         catch (Exception ex)
                         {
                             Telemetry.TrackException(nameof(RestoreOnBuildCommand), ex);
@@ -165,11 +175,47 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
             return answer == 6; // 6 = Yes
         }
 
-        private bool IsPackageInstalled(Project project)
+        private async Task<bool> IsPackageInstalledAsync(Project project, CancellationToken cancellationToken)
         {
-            IVsPackageInstallerServices installerServices = _componentModel.GetService<IVsPackageInstallerServices>();
+            INuGetProjectService installerServices = _package.GetServiceAsync(typeof(INuGetProjectService)) as INuGetProjectService;
+            IVsSolution solution = await _package.GetServiceAsync<SVsSolution, IVsSolution>();
+            solution.GetProjectOfUniqueName(project.FullName, out IVsHierarchy vsHierarchyItem);
+            var buildStorageProperty = vsHierarchyItem as IVsBuildPropertyStorage;
 
-            return installerServices.IsPackageInstalled(project, Constants.MainNuGetPackageId);
+            if (vsHierarchyItem != null)
+            {
+                Guid projectId = Guid.Empty;
+
+                vsHierarchyItem.GetGuidProperty(
+                            VSConstants.VSITEMID_ROOT,
+                            (int)__VSHPROPID.VSHPROPID_ProjectIDGuid,
+                            out projectId);
+
+                object serviceContainer = await AsyncServiceProvider.GlobalProvider.GetServiceAsync(typeof(SVsBrokeredServiceContainer)).ConfigureAwait(false);
+                var serviceContainerInterface = serviceContainer as IBrokeredServiceContainer;
+                IServiceBroker serviceBroker = serviceContainerInterface?.GetFullAccessServiceBroker();
+                if (serviceBroker == null)
+                {
+                    return default;
+                }
+
+                INuGetProjectService nugetService = await serviceBroker.GetProxyAsync<INuGetProjectService>(NuGetServices.NuGetProjectServiceV1, cancellationToken: cancellationToken);
+                using (nugetService as IDisposable)
+                {
+                    if (nugetService == null)
+                    {
+                        return default;
+                    }
+
+                    InstalledPackagesResult installedPackages = await nugetService.GetInstalledPackagesAsync(projectId, cancellationToken);
+                    return installedPackages.Packages.Any(p => p.Id == Constants.MainNuGetPackageId);
+
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

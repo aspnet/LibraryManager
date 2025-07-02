@@ -185,6 +185,7 @@
     <PackageReference Include="Microsoft.WebTools.Languages.Json.VS" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Nuget.VisualStudio" />
+    <PackageReference Include="Nuget.VisualStudio.Contracts" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="Commands\CommandTable\VSCommandTable.en.vsct">

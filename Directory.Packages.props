@@ -35,6 +35,7 @@
     <PackageVersion Include="NerdBank.GitVersioning" Version="3.6.133" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Nuget.VisualStudio" Version="17.7.1" />
+    <PackageVersion Include="Nuget.VisualStudio.Contracts" Version="17.7.1" />
     
     <PackageVersion Include="System.Collections.Immutable" Version="7.0.0" />
     <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
