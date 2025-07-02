@@ -52,6 +52,11 @@ namespace Microsoft.Web.LibraryManager
             OriginalText = originalText;
         }
 
+        /// <summary>
+        /// Parses a string into a SemanticVersion object.  If the string is not a valid semantic version, the object will be created with the originalText value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static SemanticVersion Parse(string value)
         {
             SemanticVersion ver = new SemanticVersion(value);

@@ -1,5 +1,5 @@
 <Project>
-
+  
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
@@ -7,13 +7,13 @@
     <NoWarn>$(NoWarn);NU1603</NoWarn>
     <WebToolsPackageVersion>17.7.273</WebToolsPackageVersion>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageVersion Include="MessagePack" Version="2.5.187"/>
+    <PackageVersion Include="MessagePack" Version="2.5.187" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Build.Framework" Version="17.8.3" />
-    <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="17.8.3" />
-    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.8.3" />
+    <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="17.8.29" />
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.8.29" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
     <PackageVersion Include="Microsoft.IO.Redist" Version="6.0.1" />
     <PackageVersion Include="Microsoft.VisualStudio.Editor" Version="17.7.188" />
@@ -35,7 +35,7 @@
     <PackageVersion Include="NerdBank.GitVersioning" Version="3.6.133" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Nuget.VisualStudio" Version="17.7.1" />
-
+    
     <PackageVersion Include="System.Collections.Immutable" Version="7.0.0" />
     <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
     <PackageVersion Include="System.Memory" Version="4.5.5" />
@@ -46,20 +46,20 @@
     <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="7.0.0" />
     <PackageVersion Include="System.Security.Permissions" Version="7.0.0" />
     <PackageVersion Include="System.Text.Json" Version="8.0.5" />
-    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4"/>
+    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
-
+    
     <!-- Test references -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
-    <PackageVersion Include="Microsoft.Test.Apex.VisualStudio" Version="17.10.34923.60" />
+    <PackageVersion Include="Microsoft.Test.Apex.VisualStudio" Version="17.14.36217.32" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.0.3" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.0.3" />
-
+    
     <!-- CommandLine utils -->
     <!-- This version should be kept in sync with the value of RuntimeFrameworkVersion where this package is consumed -->
     <PackageVersion Include="Microsoft.Extensions.CommandLineUtils.Sources" Version="2.1.0" />
     <PackageVersion Include="Microsoft.NETCore.DotnetAppHost" Version="2.1.0" />
-
+    
   </ItemGroup>
-
+  
 </Project>
