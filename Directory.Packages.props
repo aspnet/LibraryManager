@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageVersion Include="MessagePack" Version="2.5.187" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Build.Framework" Version="17.8.3" />
+    <PackageVersion Include="Microsoft.Build.Framework" Version="17.8.29" />
     <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="17.8.29" />
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.8.29" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
