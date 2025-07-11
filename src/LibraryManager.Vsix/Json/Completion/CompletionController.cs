@@ -63,18 +63,20 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.Completion
                 _ = RetriggerAsync(true);
             }
 
-            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                if (_currentSession == null && _broker.IsCompletionActive(_textView))
-                {
-                    _currentSession = _broker.GetSessions(_textView)[0];
-                    _currentSession.Committed += OnCommitted;
-                    _currentSession.Dismissed += OnDismissed;
-                }
-            });
+            _ = ListenToEventsOfActiveCompletionAsync();
 
             return _nextCommandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+        }
+
+        private async Task ListenToEventsOfActiveCompletionAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            if (_currentSession == null && _broker.IsCompletionActive(_textView))
+            {
+                _currentSession = _broker.GetSessions(_textView)[0];
+                _currentSession.Committed += OnCommitted;
+                _currentSession.Dismissed += OnDismissed;
+            }
         }
 
         private void OnDismissed(object sender, EventArgs e)

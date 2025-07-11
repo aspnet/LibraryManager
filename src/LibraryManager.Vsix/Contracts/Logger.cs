@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -124,12 +125,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
         public static void ClearOutputWindow()
         {
+            _ = ClearOutputWindowAsync();
+        }
+
+        private static async Task ClearOutputWindowAsync()
+        {
             // Don't access _outputWindowPane through the property here so that we don't force creation
-            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                OutputWindowPaneValue?.Clear();
-            });
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            OutputWindowPaneValue?.Clear();
         }
 
         private static IVsOutputWindowPane OutputWindowPane
@@ -226,22 +229,26 @@ namespace Microsoft.Web.LibraryManager.Vsix.Contracts
 
         private static void LogToActivityLog(string message, __ACTIVITYLOG_ENTRYTYPE type)
         {
-            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                ActivityLog.LogEntry((uint)type, Vsix.Name, message);
-            });
+            _ = LogToActivityLogAsync(message, type);
+        }
+
+        private static async Task LogToActivityLogAsync(string message, __ACTIVITYLOG_ENTRYTYPE type)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            ActivityLog.LogEntry((uint)type, Vsix.Name, message);
         }
 
         private static void LogToStatusBar(string message)
         {
-            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                Statusbar.FreezeOutput(0);
-                Statusbar.SetText(message);
-                Statusbar.FreezeOutput(1);
-            });
+            _ = LogToStatusBarAsync(message);
+        }
+
+        private static async Task LogToStatusBarAsync(string message)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            Statusbar.FreezeOutput(0);
+            Statusbar.SetText(message);
+            Statusbar.FreezeOutput(1);
         }
 
         private static void LogToOutputWindow(object message)

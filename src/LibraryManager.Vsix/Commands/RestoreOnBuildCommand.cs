@@ -96,7 +96,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
 
             try
             {
-                var dependencies = _dependenciesFactory.FromConfigFile(projectItem.get_FileNames(1));
+                IDependencies dependencies = _dependenciesFactory.FromConfigFile(projectItem.get_FileNames(1));
                 IEnumerable<string> packageIds = dependencies.Providers
                                                              .Where(p => p.NuGetPackageId != null)
                                                              .Select(p => p.NuGetPackageId)
@@ -177,10 +177,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
 
         private async Task<bool> IsPackageInstalledAsync(Project project, CancellationToken cancellationToken)
         {
-            INuGetProjectService installerServices = _package.GetServiceAsync(typeof(INuGetProjectService)) as INuGetProjectService;
             IVsSolution solution = await _package.GetServiceAsync<SVsSolution, IVsSolution>();
             solution.GetProjectOfUniqueName(project.FullName, out IVsHierarchy vsHierarchyItem);
-            var buildStorageProperty = vsHierarchyItem as IVsBuildPropertyStorage;
 
             if (vsHierarchyItem != null)
             {
@@ -191,7 +189,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
                             (int)__VSHPROPID.VSHPROPID_ProjectIDGuid,
                             out projectId);
 
-                object serviceContainer = await AsyncServiceProvider.GlobalProvider.GetServiceAsync(typeof(SVsBrokeredServiceContainer)).ConfigureAwait(false);
+                object serviceContainer = await _package.GetServiceAsync<SVsBrokeredServiceContainer, IBrokeredServiceContainer>();
                 var serviceContainerInterface = serviceContainer as IBrokeredServiceContainer;
                 IServiceBroker serviceBroker = serviceContainerInterface?.GetFullAccessServiceBroker();
                 if (serviceBroker == null)
@@ -199,7 +197,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
                     return default;
                 }
 
-                INuGetProjectService nugetService = await serviceBroker.GetProxyAsync<INuGetProjectService>(NuGetServices.NuGetProjectServiceV1, cancellationToken: cancellationToken);
+                INuGetProjectService nugetService = await serviceBroker.GetProxyAsync<INuGetProjectService>(NuGetServices.NuGetProjectServiceV1, cancellationToken);
                 using (nugetService as IDisposable)
                 {
                     if (nugetService == null)
@@ -209,12 +207,11 @@ namespace Microsoft.Web.LibraryManager.Vsix.Commands
 
                     InstalledPackagesResult installedPackages = await nugetService.GetInstalledPackagesAsync(projectId, cancellationToken);
                     return installedPackages.Packages.Any(p => p.Id == Constants.MainNuGetPackageId);
-
                 }
             }
             else
             {
-                return false;
+                return default;
             }
         }
     }

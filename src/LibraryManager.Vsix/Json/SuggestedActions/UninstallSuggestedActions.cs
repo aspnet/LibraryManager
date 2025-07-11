@@ -50,10 +50,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json.SuggestedActions
 
         public override void Invoke(CancellationToken cancellationToken)
         {
-            _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                await InvokeAsync(cancellationToken);
-            });
+            _ = InvokeAsync(cancellationToken);
         }
 
         private async Task InvokeAsync(CancellationToken cancellationToken)

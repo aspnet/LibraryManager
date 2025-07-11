@@ -206,66 +206,68 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             bool textInserted = textChange.AddedLength > 0 && SearchTextBox.CaretIndex > 0;
             if (textInserted || Flyout.IsOpen)
             {
-                _ = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                _ = RecalculateSearchCompletionItemsAsync();
+            }
+        }
+
+        private async Task RecalculateSearchCompletionItemsAsync()
+        {
+            // grab these WPF dependant things while we're still on the UI thread
+            int caretIndex = SearchTextBox.CaretIndex;
+            SearchTextBoxViewModel viewModel = ViewModel;
+
+            string textBeforeGetCompletion = SearchTextBox.Text;
+
+            // Switch to a background thread to not block the UI thread, as this operation can take
+            // a while for slow network connections
+            await TaskScheduler.Default;
+            CompletionSet completionSet = await viewModel.GetCompletionSetAsync(caretIndex);
+
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            // If the value has changed then this request is out of date.
+            // If focus is elsewhere the work below won't be used anyway
+            if (textBeforeGetCompletion != SearchTextBox.Text || !SearchTextBox.IsFocused)
+            {
+                return;
+            }
+
+            if (completionSet.Completions == null || !completionSet.Completions.Any())
+            {
+                Flyout.IsOpen = false;
+                completionSet = new CompletionSet
                 {
-                    // grab these WPF dependant things while we're still on the UI thread
-                    int caretIndex = SearchTextBox.CaretIndex;
-                    SearchTextBoxViewModel viewModel = ViewModel;
-
-                    string textBeforeGetCompletion = SearchTextBox.Text;
-
-                    // Switch to a background thread to not block the UI thread, as this operation can take
-                    // a while for slow network connections
-                    await TaskScheduler.Default;
-                    CompletionSet completionSet = await viewModel.GetCompletionSetAsync(caretIndex);
-
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-                    // If the value has changed then this request is out of date.
-                    // If focus is elsewhere the work below won't be used anyway
-                    if (textBeforeGetCompletion != SearchTextBox.Text || !SearchTextBox.IsFocused)
+                    Completions = new[]
                     {
-                        return;
-                    }
-
-                    if (completionSet.Completions == null || !completionSet.Completions.Any())
-                    {
-                        Flyout.IsOpen = false;
-                        completionSet = new CompletionSet
-                        {
-                            Completions = new[]
-                            {
                                 new CompletionItem
                                 {
                                     DisplayText = Text.NoMatchesFound,
                                     InsertionText = null,
                                 }
                             }
-                        };
-                    }
-
-                    // repopulate the completion list
-                    CompletionEntries.Clear();
-
-                    List<CompletionItem> completions = GetSortedCompletionItems(completionSet);
-
-                    foreach (CompletionItem entry in completions)
-                    {
-                        CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
-                    }
-
-                    if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
-                    {
-                        CompletionItem selectionCandidate = await ViewModel.GetRecommendedSelectedCompletionAsync(
-                            completions: completions,
-                            lastSelected: SelectedItem?.CompletionItem);
-                        SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == selectionCandidate.InsertionText) ?? CompletionEntries[0];
-                        Options.ScrollIntoView(SelectedItem);
-                    }
-
-                    Flyout.IsOpen = true;
-                });
+                };
             }
+
+            // repopulate the completion list
+            CompletionEntries.Clear();
+
+            List<CompletionItem> completions = GetSortedCompletionItems(completionSet);
+
+            foreach (CompletionItem entry in completions)
+            {
+                CompletionEntries.Add(new CompletionEntry(entry, completionSet.Start, completionSet.Length));
+            }
+
+            if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
+            {
+                CompletionItem selectionCandidate = await ViewModel.GetRecommendedSelectedCompletionAsync(
+                    completions: completions,
+                    lastSelected: SelectedItem?.CompletionItem);
+                SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.InsertionText == selectionCandidate.InsertionText) ?? CompletionEntries[0];
+                Options.ScrollIntoView(SelectedItem);
+            }
+
+            Flyout.IsOpen = true;
         }
 
         private List<CompletionItem> GetSortedCompletionItems(CompletionSet completionSet)
