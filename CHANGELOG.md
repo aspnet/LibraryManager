@@ -2,6 +2,10 @@
 
 ## Upcoming Release
 Commit: TBD
+- Adds Intellisense completion for files in fileMappings
+- Adds fileMappings support for filesystem provider
+- Fixes LIB016 error when using fileMappings
+- Fixes issue where restore-on-save in one project in VS removes files restored in a separate project
 
 ## 3.0.71
 Commit: 33c04f70a4f55f1cddbaddad60fc78a282b298d3
