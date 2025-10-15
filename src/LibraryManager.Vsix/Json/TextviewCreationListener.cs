@@ -29,10 +29,10 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
     [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
     internal class TextviewCreationListener : IVsTextViewCreationListener
     {
-        private Manifest _manifest;
-        private Project _project;
         private ErrorListPropagator _errorList;
-        private string _manifestPath;
+
+        private readonly object _manifestPropertyKey = "LibManManifest";
+        private readonly object _manifestProjectPropertyKey = "LibManProject";
 
         [Import]
         public ITextDocumentFactoryService DocumentService { get; set; }
@@ -70,20 +70,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             IDependencies dependencies = DependenciesFactory.FromConfigFile(doc.FilePath);
 #pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
                                   // Justification: Manifest is free-threaded, don't need to use JTF here
-            _manifest = Manifest.FromFileAsync(doc.FilePath, dependencies, CancellationToken.None).Result;
+            Manifest manifest = Manifest.FromFileAsync(doc.FilePath, dependencies, CancellationToken.None).Result;
 #pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
-            _manifestPath = doc.FilePath;
-            _project = VsHelpers.GetDTEProjectFromConfig(_manifestPath);
+            Project project = VsHelpers.GetDTEProjectFromConfig(doc.FilePath);
+
+            // Save these for later reference.  Must be document-specific to avoid cross-contamination.
+            // See https://github.com/aspnet/LibraryManager/issues/800
+            doc.TextBuffer.Properties[_manifestPropertyKey] = manifest;
+            doc.TextBuffer.Properties[_manifestProjectPropertyKey] = project;
 
             doc.FileActionOccurred += OnFileSaved;
             textView.Closed += OnViewClosed;
 
             _ = Task.Run(async () =>
             {
-                IEnumerable<OperationResult<LibraryInstallationGoalState>> results = await LibrariesValidator.GetManifestErrorsAsync(_manifest, dependencies, CancellationToken.None).ConfigureAwait(false);
+                IEnumerable<OperationResult<LibraryInstallationGoalState>> results = await LibrariesValidator.GetManifestErrorsAsync(manifest, dependencies, CancellationToken.None).ConfigureAwait(false);
                 if (!results.All(r => r.Success))
                 {
-                    AddErrorsToList(results);
+                    AddErrorsToList(results, project.Name, doc.FilePath);
                     Telemetry.LogErrors("Fail-ManifestFileOpenWithErrors", results);
                 }
             });
@@ -112,17 +116,19 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
 
                         if (!results.All(r => r.Success))
                         {
-                            AddErrorsToList(results);
+                            string projectName = (textDocument.TextBuffer.Properties[_manifestProjectPropertyKey] as Project)?.Name ?? string.Empty;
+                            AddErrorsToList(results, projectName, textDocument.FilePath);
                             Logger.LogErrorsSummary(results, OperationType.Restore);
                             Telemetry.LogErrors("Fail-ManifestFileSaveWithErrors", results);
                         }
                         else
                         {
-                            if (_manifest == null || await _manifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
+                            Manifest oldManifest = textDocument.TextBuffer.Properties[_manifestPropertyKey] as Manifest;
+                            if (oldManifest == null || await oldManifest.RemoveUnwantedFilesAsync(newManifest, CancellationToken.None).ConfigureAwait(false))
                             {
-                                _manifest = newManifest;
+                                textDocument.TextBuffer.Properties[_manifestPropertyKey] = newManifest;
 
-                                await LibraryCommandService.RestoreAsync(textDocument.FilePath, _manifest, CancellationToken.None).ConfigureAwait(false);
+                                await LibraryCommandService.RestoreAsync(textDocument.FilePath, newManifest, CancellationToken.None).ConfigureAwait(false);
                                 Telemetry.TrackUserTask("Invoke-RestoreOnSave");
                             }
                             else
@@ -170,9 +176,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.Json
             _errorList?.ClearErrors();
         }
 
-        private void AddErrorsToList(IEnumerable<OperationResult<LibraryInstallationGoalState>> errors)
+        private void AddErrorsToList(IEnumerable<OperationResult<LibraryInstallationGoalState>> errors, string projectName, string manifestPath)
         {
-            _errorList = new ErrorListPropagator(_project?.Name, _manifestPath);
+            _errorList = new ErrorListPropagator(projectName, manifestPath);
             _errorList.HandleErrors(errors);
         }
     }
