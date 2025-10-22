@@ -16,8 +16,6 @@ variables:
   value: VS
 - name: SymbolsAgentPath
   value: $(System.DefaultWorkingDirectory)\_LibraryManager-Official\symbols\bin
-- name: SymbolsUncPath
-  value: \\vwdbuild01\drops\LibraryManager\$(BuildVersion)
 - name: TeamName
   value: WebTools
 - group: WebTools
@@ -50,7 +48,7 @@ extends:
           - input: pipelineArtifact
             pipeline: '_LibraryManager-Official'
             artifactName: 'symbols'
-            targetPath: '$(Pipeline.Workspace)/symbols'
+            targetPath: '$(SymbolsAgentPath)'
           - input: pipelineArtifact
             pipeline: '_LibraryManager-Official'
             artifactName: 'VSInsertion'
