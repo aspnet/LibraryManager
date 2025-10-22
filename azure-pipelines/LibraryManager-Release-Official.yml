@@ -1,0 +1,136 @@
+trigger: none
+pr: none
+name: $(Date:yyyyMMdd).$(Rev:r)
+variables:
+- name: InsertReviewers
+  value: venuscr@microsoft.com;Razor - Web - Hot Reload
+- name: InsertTargetBranch
+  value: main
+- name: InsertTeamEmail
+  value: venuseng@microsoft.com
+- name: InsertTeamName
+  value: WebTools
+- name: SymbolsFeatureName
+  value: WebTools-LibraryManager
+- name: SymbolsProject
+  value: VS
+- name: SymbolsAgentPath
+  value: $(System.DefaultWorkingDirectory)\_LibraryManager-Official\symbols\bin
+- name: TeamName
+  value: WebTools
+- group: WebTools
+resources:
+  pipelines:
+  - pipeline: '_LibraryManager-Official'
+    project: 'DevDiv'
+    source: 'WebTools\LibraryManager-Official'
+  repositories:
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool:
+      name: VSEngSS-MicroBuild2022-1ES
+      os: windows
+    stages:
+    - stage: Stage_1
+      displayName: VS Insertion
+      jobs:
+      - job: Job_1
+        displayName: Agent job
+        condition: succeeded()
+        timeoutInMinutes: 0
+        templateContext:
+          inputs:
+          - input: pipelineArtifact
+            pipeline: '_LibraryManager-Official'
+            artifactName: 'symbols'
+            targetPath: '$(SymbolsAgentPath)'
+          - input: pipelineArtifact
+            pipeline: '_LibraryManager-Official'
+            artifactName: 'VSInsertion'
+            targetPath: '$(Pipeline.Workspace)/VSInsertion'
+        steps:
+        - checkout: none
+        - task: PowerShell@2
+          displayName: Load insertion variables
+          inputs:
+            targetType: inline
+            script: |
+              Get-Content .\_LibraryManager-Official\VSInsertion\InsertionParameters.txt
+        - task: PowerShell@2
+          displayName: Print out task variables
+          inputs:
+            targetType: inline
+            script: |-
+              Write-Host "InsertAccessToken: $env:InsertAccessToken"
+              Write-Host "InsertAutoComplete: $env:InsertAutoComplete"
+              Write-Host "InsertBuildPolicy: $env:InsertBuildPolicy"
+              Write-Host "InsertConfigValues: $env:InsertConfigValues"
+              Write-Host "InsertCustomScriptExecutionCommand: $env:InsertCustomScriptExecutionCommand"
+              Write-Host "InsertDescription: $env:InsertDescription"
+              Write-Host "InsertJsonValues: $env:InsertJsonValues"
+              Write-Host "InsertPayloadName: $env:InsertPayloadName"
+              Write-Host "InsertReviewers: $env:InsertReviewers"
+              Write-Host "InsertRevisionFiles: $env:InsertRevisionFiles"
+              Write-Host "InsertTargetBranch: $env:InsertTargetBranch"
+              Write-Host "InsertTeamEmail: $env:InsertTeamEmail"
+              Write-Host "InsertTeamName: $env:InsertTeamName"
+              Write-Host "InsertTopicBranch: $env:InsertTopicBranch"
+              Write-Host "InsertVersionsValues: $env:InsertVersionsValues"
+              Write-Host "InsertWaitMinutes: $env:InsertWaitMinutes"
+              Write-Host "SymbolsAgentPath: $env:SymbolsAgentPath"
+              Write-Host "SymbolsEmailContacts: $env:SymbolsEmailContacts"
+              Write-Host "SymbolsFeatureName: $env:SymbolsFeatureName"
+              Write-Host "SymbolsSymwebProject: $env:SymbolsSymwebProject"
+              Write-Host "SymbolsUncPath: $env:SymbolsUncPath"
+              Write-Host "VstsDropNames: $env:VstsDropNames"
+              Write-Host "Build_Reason: $env:Build_Reason"
+              Write-Host "BuildVersion: $env:BuildVersion"
+        - template: common-release.yml@self
+          parameters:
+            InsertBuildPolicies: Request Perf DDRITs
+    - stage: Stage_2
+      displayName: Publish Nuget.org Packages
+      trigger: manual
+      jobs:
+      - job: PreDeploymentApprovalJob
+        displayName: Pre-Deployment Approval
+        condition: succeeded()
+        timeoutInMinutes: 43200
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: |-
+              devinb@microsoft.com,
+              phillipa@microsoft.com,
+            approvers: |-
+              devinb@microsoft.com
+              phillipa@microsoft.com,
+      - job: Job_1
+        displayName: Agent job
+        dependsOn: PreDeploymentApprovalJob
+        condition: succeeded()
+        timeoutInMinutes: 0
+        templateContext:
+          inputs:
+          - input: pipelineArtifact
+            pipeline: '_LibraryManager-Official'
+            artifactName: 'artifacts'
+            targetPath: '$(Pipeline.Workspace)/artifacts'
+        steps:
+        - task: NuGetToolInstaller@1
+          displayName: Use NuGet >=5.0
+          inputs:
+            versionSpec: '>=5.0'
+        - task: 1ES.PublishNuGet@1
+          displayName: 'NuGet push'
+          inputs:
+            packageParentPath: '$(Build.ArtifactStagingDirectory)'
+            packagesToPush: $(System.DefaultWorkingDirectory)\_LibraryManager-Official\artifacts\Microsoft.Web.LibraryManager.Build.*.nupkg;$(System.DefaultWorkingDirectory)\_LibraryManager-Official\artifacts\Microsoft.Web.LibraryManager.Cli.*.nupkg
+            nuGetFeedType: external
+            externalEndpoint: LibraryManager-Nuget-Push

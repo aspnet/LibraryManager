@@ -1,0 +1,91 @@
+parameters:
+- name: InsertAccessToken
+  type: string
+  default: $(InsertAccessToken)
+- name: InsertBuildPolicies
+  type: string
+  default: $(InsertBuildPolicies)
+- name: InsertComponentSWRFiles
+  type: string
+  default: $(InsertComponentSWRFiles)
+- name: InsertConfigValues
+  type: string
+  default: $(InsertConfigValues)
+- name: InsertCustomScriptExecutionCommand
+  type: string
+  default: $(InsertCustomScriptExecutionCommand)
+- name: InsertDescription
+  type: string
+  default: $(InsertDescription)
+- name: InsertJsonValues
+  type: string
+  default: $(InsertJsonValues)
+- name: InsertPayloadName
+  type: string
+  default: $(InsertPayloadName)
+- name: InsertPropsValues
+  type: string
+  default: $(InsertPropsValues)
+- name: InsertPRTitle
+  type: string
+  default: $(InsertPRTitle)
+- name: InsertReviewers
+  type: string
+  default: $(InsertReviewers)
+- name: InsertRevisionFiles
+  type: string
+  default: $(InsertRevisionFiles)
+- name: InsertTargetBranch
+  type: string
+  default: $(InsertTargetBranch)
+- name: InsertTopicBranch
+  type: string
+  default: $(InsertTopicBranch)
+- name: InsertVersionsValues
+  type: string
+  default: $(InsertVersionsValues)
+- name: InsertWaitMinutes
+  type: string
+  default: $(InsertWaitMinutes)
+- name: SymbolsAgentPath
+  type: string
+  default: $(SymbolsAgentPath)
+- name: SymbolsFeatureName
+  type: string
+  default: $(SymbolsFeatureName)
+- name: SymbolsProject
+  type: string
+  default: $(SymbolsProject)
+- name: TeamEmail
+  type: string
+  default: $(InsertTeamEmail)
+- name: TeamName
+  type: string
+  default: $(InsertTeamName)
+- name: VstsDropNames
+  type: string
+  default: $(VstsDropNames)
+steps:
+- task: MicroBuildArchiveSymbols@6
+  displayName: "Upload Symbols to Symweb/MSDL"
+  inputs:
+    azureSubscription: "VSEng-SymbolsUpload"
+    SymbolsFeatureName: $(SymbolsFeatureName)
+    SymbolsProject: $(SymbolsProject)
+    SymbolsAgentPath: $(SymbolsAgentPath)
+  env:
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+- task: MicroBuildRetainVstsDrops@1
+  displayName: Retain Azure Artifact Drops
+  inputs:
+    AccessToken: '$(System.AccessToken)'
+    DropServiceUri: https://artifacts.dev.azure.com/devdiv
+    DropRetentionDays: 1825
+- task: MicroBuildInsertVsPayload@5
+  displayName: Insert VS Payload
+  inputs:
+    TeamName: ${{parameters.TeamName}}
+    TeamEmail: ${{parameters.TeamEmail}}
+    AutoCompleteMergeStrategy: Squash
+    InsertionBuildPolicies: Request Perf DDRITs
+    AllowTopicBranchUpdate: true
