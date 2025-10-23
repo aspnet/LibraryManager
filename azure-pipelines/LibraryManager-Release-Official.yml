@@ -90,7 +90,7 @@ extends:
               Write-Host "VstsDropNames: $env:VstsDropNames"
               Write-Host "Build_Reason: $env:Build_Reason"
               Write-Host "BuildVersion: $env:BuildVersion"
-        - template: common-release.yml@self
+        - template: /azure-pipelines/common-release.yml@self
           parameters:
             InsertBuildPolicies: Request Perf DDRITs
     - stage: Stage_2
