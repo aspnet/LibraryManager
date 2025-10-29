@@ -52,6 +52,7 @@ extends:
       jobs:
       - job: Windows
         pool: VSEngSS-MicroBuild2022-1ES
+        timeoutInMinutes: 120
         templateContext:
           mb:
             signing:
