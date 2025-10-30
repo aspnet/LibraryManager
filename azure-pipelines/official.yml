@@ -58,6 +58,7 @@ extends:
             signing:
               enabled: true
               signType: $(SignType)
+              signWithProd: true
               zipSources: false
             swix:
               enabled: true
