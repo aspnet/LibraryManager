@@ -1,5 +1,5 @@
 <Project>
-  
+
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
@@ -7,7 +7,7 @@
     <NoWarn>$(NoWarn);NU1603</NoWarn>
     <WebToolsPackageVersion>17.7.273</WebToolsPackageVersion>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageVersion Include="MessagePack" Version="2.5.187" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
@@ -32,10 +32,10 @@
     <PackageVersion Include="Microsoft.WebTools.Languages.Json.Editor" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Microsoft.WebTools.Languages.Json.VS" Version="$(WebToolsPackageVersion)" />
     <PackageVersion Include="Moq" Version="4.20.70" />
-    <PackageVersion Include="NerdBank.GitVersioning" Version="3.6.133" />
+    <PackageVersion Include="NerdBank.GitVersioning" Version="3.7.115" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Nuget.VisualStudio" Version="17.7.1" />
-    
+
     <PackageVersion Include="System.Collections.Immutable" Version="7.0.0" />
     <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
     <PackageVersion Include="System.Memory" Version="4.5.5" />
@@ -48,18 +48,18 @@
     <PackageVersion Include="System.Text.Json" Version="8.0.5" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
-    
+
     <!-- Test references -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
     <PackageVersion Include="Microsoft.Test.Apex.VisualStudio" Version="17.14.36217.32" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.0.3" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.0.3" />
-    
+
     <!-- CommandLine utils -->
     <!-- This version should be kept in sync with the value of RuntimeFrameworkVersion where this package is consumed -->
     <PackageVersion Include="Microsoft.Extensions.CommandLineUtils.Sources" Version="2.1.0" />
     <PackageVersion Include="Microsoft.NETCore.DotnetAppHost" Version="2.1.0" />
-    
+
   </ItemGroup>
-  
+
 </Project>
