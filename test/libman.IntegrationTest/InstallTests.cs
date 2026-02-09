@@ -15,4 +15,21 @@ public class InstallTests : CliTestBase
 
         AssertFileExists("test/jquery/jquery.min.js");
     }
+
+    [TestMethod]
+    public async Task Install_UsingTemplateInDefaultDestination()
+    {
+        string manifest = """
+            {
+                "version": "3.0",
+                "defaultProvider": "cdnjs",
+                "defaultDestination": "wwwroot/lib/[Name]/"
+            }
+            """;
+        await CreateManifestFileAsync(manifest);
+
+        await ExecuteCliToolAsync("install bootstrap@5.3.2 --provider cdnjs --files css/bootstrap.min.css --files js/bootstrap.bundle.min.js");
+        AssertFileExists("wwwroot/lib/bootstrap/css/bootstrap.min.css");
+        AssertFileExists("wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js");
+    }
 }

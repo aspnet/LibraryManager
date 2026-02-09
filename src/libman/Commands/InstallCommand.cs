@@ -52,7 +52,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         private IProvider _provider;
         private ILibraryCatalog _catalog;
 
-        private string InstallDestination { get; set; }
         private string ProviderId { get; set; }
 
         private IProvider ProviderToUse
@@ -116,26 +115,21 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 _manifest.DefaultProvider = ProviderId;
             }
 
-            InstallDestination = Destination.HasValue() ? Destination.Value() : _manifest.DefaultDestination;
-            if (string.IsNullOrWhiteSpace(InstallDestination))
+            string installDestination = Destination.Value();
+            if (string.IsNullOrWhiteSpace(installDestination) && string.IsNullOrWhiteSpace(_manifest.DefaultDestination))
             {
+                // if there isn't a usable destination, prompt the user for one
                 string destinationHint = string.Join('/', Settings.DefaultDestinationRoot, ProviderToUse.GetSuggestedDestination(library));
-                InstallDestination = GetUserInputWithDefault(
+                installDestination = GetUserInputWithDefault(
                     fieldName: nameof(Destination),
                     defaultFieldValue: destinationHint,
                     optionLongName: Destination.LongName);
             }
 
-            string destinationToUse = Destination.Value();
-            if (string.IsNullOrWhiteSpace(_manifest.DefaultDestination) && string.IsNullOrWhiteSpace(destinationToUse))
-            {
-                destinationToUse = InstallDestination;
-            }
-
-            if (destinationToUse is not null)
+            if (installDestination is not null)
             {
                 // in case the user changed the suggested default, normalize separator to /
-                destinationToUse = destinationToUse.Replace('\\', '/');
+                installDestination = installDestination.Replace('\\', '/');
             }
 
             OperationResult<LibraryInstallationGoalState> result = await _manifest.InstallLibraryAsync(
@@ -143,13 +137,13 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
                 library.Version,
                 providerIdToUse,
                 files,
-                destinationToUse,
+                installDestination,
                 CancellationToken.None);
 
             if (result.Success)
             {
                 await _manifest.SaveAsync(Settings.ManifestFileName, CancellationToken.None);
-                Logger.Log(string.Format(Resources.Text.InstalledLibrary, libraryId, InstallDestination), LogLevel.Operation);
+                Logger.Log(string.Format(Resources.Text.InstalledLibrary, libraryId, installDestination), LogLevel.Operation);
             }
             else
             {

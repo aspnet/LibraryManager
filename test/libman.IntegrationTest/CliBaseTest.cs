@@ -23,14 +23,34 @@ public class CliTestBase
     [TestInitialize]
     public async Task TestInitialize()
     {
+        // Create a test directory for the project where we'll run the tool.  This isolates it from
+        // inheriting any build settings from our solution.
         _testDirectory = Path.Combine(Path.GetTempPath(), "LibmanTest" + Guid.NewGuid().ToString());
         Directory.CreateDirectory(_testDirectory);
 
-        // create an empty nuget.config with only our package source
-        await RunDotnetCommandLineAsync("new nugetconfig");
-        await RunDotnetCommandLineAsync("nuget remove source nuget");
-        await RunDotnetCommandLineAsync("nuget add source ./TestPackages");
+        // Create an empty nuget.config with only our package source
+        // We need to set packageSourceMappings to override the defaults.
+        // This is needed because external devs may need to override the root nuget.config
+        // to build (see https://github.com/aspnet/LibraryManager/issues/728), and those
+        // settings are inherited in the test directory.
+        string nugetConfigContent = """
+            <?xml version="1.0" encoding="utf-8"?>
+            <configuration>
+              <packageSources>
+                <clear />
+                <add key="LocalPackages" value="./TestPackages" />
+              </packageSources>
+              <packageSourceMapping>
+                <packageSource key="LocalPackages">
+                  <package pattern="Microsoft.*" />
+                </packageSource>
+              </packageSourceMapping>
+            </configuration>
+            """;
+        File.WriteAllText("nuget.config", nugetConfigContent);
 
+        // This installs the tool in the current (test) working directory, not the project directory
+        // created above.
         await InstallCliToolAsync();
     }
 
