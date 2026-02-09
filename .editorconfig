@@ -82,7 +82,7 @@ dotnet_naming_style.start_underscore_style.required_prefix      = _
 [*.cs]
 # Don't prefer "var" when not apparent
 csharp_style_var_for_built_in_types                   = false : warning
-csharp_style_var_when_type_is_apparent                = true : suggestion
+csharp_style_var_when_type_is_apparent                = false : silent
 csharp_style_var_elsewhere                            = false : warning
 
 # Prefer method-like constructs to have a block body
