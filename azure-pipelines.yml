@@ -4,6 +4,12 @@ trigger:
   paths:
     exclude: ["*.md"]
 
+pr:
+  branches:
+    include: ["main", "rel/*"]
+  paths:
+    exclude: ["*.md"]
+
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   BuildConfiguration: Release
