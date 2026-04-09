@@ -25,7 +25,7 @@ Install and consume 3rd-party client-side libraries with ease.
 - Very fast
 
 ## Installation
-- Fully integrated into Visual Studio 2017 and newer
+- Integrated into Visual Studio 2017 and newer
 - Available as an add-in for Visual Studio for Mac
   - From the main menu, open the Extensions Manager dialog.
   - Select the Gallery tab.
