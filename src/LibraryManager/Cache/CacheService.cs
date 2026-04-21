@@ -19,6 +19,8 @@ namespace Microsoft.Web.LibraryManager.Cache
     {
         private const int DefaultCacheExpiresAfterDays = 1;
         private const int MaxConcurrentDownloads = 10;
+        private const int DownloadAttempts = 5;
+        private const int DelayBetweenDownloadAttemptsInMs = 1000;
 
         private readonly IWebRequestHandler _requestHandler;
 
@@ -83,7 +85,7 @@ namespace Microsoft.Web.LibraryManager.Cache
                     }
                 }
 
-                await Task.Delay(200, cancellationToken).ConfigureAwait(false);
+                await Task.Delay(DelayBetweenDownloadAttemptsInMs, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -93,7 +95,7 @@ namespace Microsoft.Web.LibraryManager.Cache
 
             if (!File.Exists(localFile) || File.GetLastWriteTime(localFile) < DateTime.Now.AddDays(-expiration))
             {
-                await DownloadToFileAsync(url, localFile, attempts: 1, cancellationToken: cancellationToken).ConfigureAwait(false);
+                await DownloadToFileAsync(url, localFile, DownloadAttempts, cancellationToken: cancellationToken).ConfigureAwait(false);
             }
 
             return await FileHelpers.ReadFileAsTextAsync(localFile, cancellationToken).ConfigureAwait(false);
@@ -111,7 +113,7 @@ namespace Microsoft.Web.LibraryManager.Cache
                 if (!File.Exists(metadata.DestinationPath))
                 {
                     logger.Log(string.Format(Resources.Text.DownloadingFile, metadata.Source), LogLevel.Operation);
-                    await DownloadToFileAsync(metadata.Source, metadata.DestinationPath, attempts: 5, cancellationToken: cancellationToken).ConfigureAwait(false);
+                    await DownloadToFileAsync(metadata.Source, metadata.DestinationPath, DownloadAttempts, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
             }
         }
