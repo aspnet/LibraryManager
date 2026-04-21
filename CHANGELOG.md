@@ -6,6 +6,7 @@ Commit: TBD
 - Adds fileMappings support for filesystem provider
 - Fixes LIB016 error when using fileMappings
 - Fixes issue where restore-on-save in one project in VS removes files restored in a separate project
+- Fixes issue where CLI install command did not expand templated expressions in defaultDestination
 
 ## 3.0.71
 Commit: 33c04f70a4f55f1cddbaddad60fc78a282b298d3

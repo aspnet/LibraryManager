@@ -12,6 +12,7 @@ using Microsoft.Web.LibraryManager.Contracts;
 using Microsoft.Web.LibraryManager.Helpers;
 using Microsoft.Web.LibraryManager.Json;
 using Microsoft.Web.LibraryManager.LibraryNaming;
+using Microsoft.Web.LibraryManager.Utilities;
 using Newtonsoft.Json;
 
 namespace Microsoft.Web.LibraryManager
@@ -150,7 +151,7 @@ namespace Microsoft.Web.LibraryManager
 
             if (libraryState.DestinationPath == null)
             {
-                libraryState.DestinationPath = defaultDestination;
+                libraryState.DestinationPath = PathTemplateUtility.ExpandPathTemplate(defaultDestination, state.Name, state.Version);
                 libraryState.IsUsingDefaultDestination = true;
             }
         }
