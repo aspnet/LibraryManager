@@ -109,7 +109,7 @@ extends:
               devinb@microsoft.com,
               phillipa@microsoft.com,
             approvers: |-
-              devinb@microsoft.com
+              devinb@microsoft.com,
               phillipa@microsoft.com,
       - job: Job_1
         displayName: Agent job
