@@ -130,7 +130,7 @@ extends:
         - task: 1ES.PublishNuGet@1
           displayName: 'NuGet push'
           inputs:
-            packageParentPath: '$(Build.ArtifactStagingDirectory)'
-            packagesToPush: $(System.DefaultWorkingDirectory)\_LibraryManager-Official\artifacts\Microsoft.Web.LibraryManager.Build.*.nupkg;$(System.DefaultWorkingDirectory)\_LibraryManager-Official\artifacts\Microsoft.Web.LibraryManager.Cli.*.nupkg
+            packageParentPath: '$(Pipeline.Workspace)'
+            packagesToPush: $(Pipeline.Workspace)/artifacts/Microsoft.Web.LibraryManager.Build.*.nupkg;$(Pipeline.Workspace)/artifacts/Microsoft.Web.LibraryManager.Cli.*.nupkg
             nuGetFeedType: external
             externalEndpoint: LibraryManager-Nuget-Push
