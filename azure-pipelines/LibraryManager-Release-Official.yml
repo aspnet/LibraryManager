@@ -133,4 +133,4 @@ extends:
             packageParentPath: '$(Pipeline.Workspace)'
             packagesToPush: $(Pipeline.Workspace)/artifacts/Microsoft.Web.LibraryManager.Build.*.nupkg;$(Pipeline.Workspace)/artifacts/Microsoft.Web.LibraryManager.Cli.*.nupkg
             nuGetFeedType: external
-            publishFeedCredentials: LibraryManager-Nuget-Push
+            publishFeedCredentials: 'DevDiv - VS package feed'
