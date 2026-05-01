@@ -25,24 +25,18 @@ Install and consume 3rd-party client-side libraries with ease.
 - Very fast
 
 ## Installation
-- Fully integrated into Visual Studio 2017 and newer
-- Available as an add-in for Visual Studio for Mac
-  - From the main menu, open the Extensions Manager dialog.
-  - Select the Gallery tab.
-  - Expand IDE extensions.
-  - Select the Library Manager addin
-  - Click the Refresh button if the addin is not visible.
-  - Click Install… to install the addin.
-  - Restart Visual Studio for Mac.
-
-  Please read the [LibMan support in Visual Studio for Mac blog post](https://lastexitcode.com/blog/2019/07/13/LibManSupportInVisualStudioMac8-1/) for more details
+- IDE integration pre-installed with Visual Studio 2017 and newer
 - Available as a dotnet global tool - [Microsoft.Web.LibraryManager.Cli](https://www.nuget.org/packages/Microsoft.Web.LibraryManager.Cli/)
+- MSBuild integration as a NuGet package - [Microsoft.Web.LibraryManager.Build](https://www.nuget.org/packages/Microsoft.Web.LibraryManager.Build)
+
 ## Getting started
-Right-click any web project in Solution Explorer and hit **Manage Client-side Libraries...**.
+In Visual Studio, right-click any web project in Solution Explorer and hit **Manage Client-side Libraries...**.
 
 ![Context menu](art/context-menu-project.png)
 
 This will create a `libman.json` file in the root of the project.
+
+Or with the CLI tool, run `libman init` to create a libman.json in the current folder.
 
 ## libman.json
 
