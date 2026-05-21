@@ -34,7 +34,6 @@ namespace Microsoft.Web.LibraryManager.Tools.Commands
         /// </summary>
         public CommandOption UseDefault { get; private set; }
 
-
         public override BaseCommand Configure(CommandLineApplication parent)
         {
             base.Configure(parent);
