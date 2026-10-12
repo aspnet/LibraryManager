@@ -146,7 +146,7 @@ namespace Microsoft.Web.LibraryManager.Contracts
             {
                 try
                 {
-                    using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read);
+                    using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read);
 
                     await WriteToFileAsync(destinationFile, sourceStream, cancellationToken);
 
@@ -154,7 +154,8 @@ namespace Microsoft.Web.LibraryManager.Contracts
                 }
                 catch (Exception exception)
                 {
-                    logger.Log($"Error during copying file {exception}", LogLevel.Error);
+                    logger.Log($"Error during copying file {exception}, attempt {i+1}", LogLevel.Error);
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
                 }
             }
             return false;
